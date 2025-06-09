@@ -202,8 +202,8 @@ export function PersonalInfoDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="overflow-hidden md:max-h-[600px] md:max-w-[800px]">
-        <DialogHeader className="md:hidden">
+      <DialogContent className="overflow-hidden md:max-h-[750px] md:max-w-[960px]">
+        <DialogHeader>
           <DialogTitle>Personal Information</DialogTitle>
         </DialogHeader>
         <SidebarProvider className="items-start">
@@ -237,7 +237,7 @@ export function PersonalInfoDialog({
               </SidebarGroup>
             </SidebarContent>
           </Sidebar>
-          <main className="flex h-[500px] flex-1 flex-col overflow-y-auto p-4">
+          <main className="flex h-[650px] flex-1 flex-col overflow-y-auto p-4">
             {section === "basic" && (
               <form className="grid gap-4" onSubmit={handleSave}>
                 <div className="grid gap-2">
