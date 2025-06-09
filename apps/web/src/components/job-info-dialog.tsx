@@ -54,7 +54,7 @@ export function JobInfoDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="overflow-hidden p-0 md:max-h-[600px] md:max-w-[800px]">
+      <DialogContent className="overflow-hidden p-0 md:max-h-[750px] md:max-w-[960px]">
         <DialogHeader>
           <DialogTitle>Job Information</DialogTitle>
         </DialogHeader>
@@ -82,7 +82,7 @@ export function JobInfoDialog({
               </SidebarGroup>
             </SidebarContent>
           </Sidebar>
-          <main className="flex h-[500px] flex-1 flex-col overflow-y-auto p-4">
+          <main className="flex h-[650px] flex-1 flex-col overflow-y-auto p-4">
             {section === "details" && (
               <form className="grid gap-4" onSubmit={handleSubmit}>
                 <div className="grid gap-2">
