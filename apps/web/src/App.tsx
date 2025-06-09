@@ -1,12 +1,20 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import {
   SidebarProvider,
   Sidebar,
   SidebarContent,
   SidebarInset,
   SidebarRail,
-} from "@/components/ui/sidebar";
+} from "@/components/ui/sidebar"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import logo from "@/assets/logo_dark.png";
 
 function PdfViewer() {
@@ -19,8 +27,71 @@ function PdfViewer() {
   );
 }
 
+function PersonalInfoDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Personal Information</DialogTitle>
+        </DialogHeader>
+        <form className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="name">Name</Label>
+            <Input id="name" placeholder="Your name" />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" type="email" placeholder="you@example.com" />
+          </div>
+          <Button type="submit" className="mt-2 w-full">
+            Save
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function JobInfoDialog({
+  open,
+  onOpenChange,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Job Information</DialogTitle>
+        </DialogHeader>
+        <form className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="job">Job Title</Label>
+            <Input id="job" placeholder="Desired role" />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="company">Company</Label>
+            <Input id="company" placeholder="Company name" />
+          </div>
+          <Button type="submit" className="mt-2 w-full">
+            Save
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 export default function App() {
-  const [currentView, setCurrentView] = useState("builder");
+  const [openPersonal, setOpenPersonal] = useState(false)
+  const [openJob, setOpenJob] = useState(false)
 
   return (
     <SidebarProvider className="min-h-screen">
@@ -39,19 +110,17 @@ export default function App() {
             </div>
             <h1 className="flex-1 text-center text-lg font-semibold">Resume</h1>
             <nav className="flex gap-2">
-              <Button variant="outline" onClick={() => setCurrentView('data')}>
+              <Button variant="outline" onClick={() => setOpenPersonal(true)}>
                 Personal Info
               </Button>
-              <Button variant="outline" onClick={() => setCurrentView('jobs')}>
+              <Button variant="outline" onClick={() => setOpenJob(true)}>
                 Job Info
               </Button>
             </nav>
           </header>
 
           <div className="flex-1 overflow-hidden p-4">
-            {currentView === 'builder' && <PdfViewer />}
-            {currentView === 'data' && <MyDataSection />}
-            {currentView === 'jobs' && <JobUploadSection />}
+            <PdfViewer />
           </div>
         </div>
       </SidebarInset>
@@ -61,14 +130,9 @@ export default function App() {
         <SidebarRail />
         <SidebarContent className="p-4 text-sm">Right Sidebar</SidebarContent>
       </Sidebar>
+
+      <PersonalInfoDialog open={openPersonal} onOpenChange={setOpenPersonal} />
+      <JobInfoDialog open={openJob} onOpenChange={setOpenJob} />
     </SidebarProvider>
   );
-}
-
-function MyDataSection() {
-  return <div>📁 Personal data form goes here.</div>;
-}
-
-function JobUploadSection() {
-  return <div>📄 Upload/paste job info and view history here.</div>;
 }
