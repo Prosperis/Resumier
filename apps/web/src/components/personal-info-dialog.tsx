@@ -23,6 +23,7 @@ import type {
   Education,
   WorkExperience,
   Certification,
+  Skill,
 } from "@/hooks/use-resume-store"
 import { useResumeStore } from "@/hooks/use-resume-store"
 import { Plus, Trash } from "lucide-react"
@@ -55,8 +56,7 @@ export function PersonalInfoDialog({
   const [education, setEducation] = useState<Education[]>(
     userInfo.education ?? []
   )
-  const [skills, setSkills] = useState<string[]>(userInfo.skills ?? [])
-  const [skillInput, setSkillInput] = useState("")
+  const [skills, setSkills] = useState<Skill[]>(userInfo.skills ?? [])
   const [certifications, setCertifications] = useState<Certification[]>(
     userInfo.certifications ?? []
   )
@@ -121,9 +121,15 @@ export function PersonalInfoDialog({
   }
 
   function addSkill() {
-    if (!skillInput.trim()) return
-    setSkills([...skills, skillInput.trim()])
-    setSkillInput("")
+    setSkills([...skills, {}])
+  }
+
+  function updateSkill(index: number, field: keyof Skill, value: string) {
+    setSkills((prev) => {
+      const next = [...prev]
+      next[index] = { ...next[index], [field]: value }
+      return next
+    })
   }
 
   function removeSkill(index: number) {
@@ -386,31 +392,63 @@ export function PersonalInfoDialog({
             )}
             {section === "skills" && (
               <div className="grid gap-4">
-                <div className="flex gap-2">
-                  <Input
-                    value={skillInput}
-                    onChange={(e) => setSkillInput(e.target.value)}
-                    placeholder="Add skill"
-                  />
-                  <Button type="button" onClick={addSkill}>
-                    <Plus className="mr-2 h-4 w-4" /> Add
-                  </Button>
-                </div>
-                <ul className="grid gap-2">
-                  {skills.map((skill, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <span className="flex-1">{skill}</span>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => removeSkill(i)}
+                {skills.map((skill, i) => (
+                  <div key={i} className="border p-4 rounded-md grid gap-2">
+                    <div className="grid gap-2">
+                      <Label>Skill</Label>
+                      <Input
+                        value={skill.name ?? ""}
+                        onChange={(e) => updateSkill(i, "name", e.target.value)}
+                        placeholder="Skill name"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label>Years of Experience</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={skill.years ?? ""}
+                        onChange={(e) => updateSkill(i, "years", e.target.value)}
+                        placeholder="0"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label>Proficiency</Label>
+                      <select
+                        className="border rounded-md p-2"
+                        value={skill.proficiency ?? ""}
+                        onChange={(e) =>
+                          updateSkill(i, "proficiency", e.target.value)
+                        }
                       >
-                        <Trash className="mr-2 h-4 w-4" />
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
+                        <option value="">Select</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="professional">Professional</option>
+                        <option value="expert">Expert</option>
+                        {[...Array(10)].map((_, idx) => {
+                          const val = (idx + 1).toString()
+                          return (
+                            <option key={val} value={val}>
+                              {val}
+                            </option>
+                          )
+                        })}
+                      </select>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeSkill(i)}
+                    >
+                      <Trash className="mr-2 h-4 w-4" /> Remove
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" onClick={addSkill}>
+                  <Plus className="mr-2 h-4 w-4" /> Add Skill
+                </Button>
               </div>
             )}
             {section === "certifications" && (
