@@ -46,6 +46,7 @@ export interface JobInfo {
   title?: string
   company?: string
   description?: string
+  benefits?: string[]
   [key: string]: unknown
 }
 

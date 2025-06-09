@@ -20,7 +20,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar"
-import { Trash } from "lucide-react"
+import { Plus, Trash } from "lucide-react"
 
 type Section = "details" | "list"
 
@@ -36,20 +36,31 @@ export function JobInfoDialog({
     title?: string
     company?: string
     description?: string
+    benefits?: string[]
   }
+  const standardBenefits = [
+    "Health Insurance",
+    "Dental Insurance",
+    "Vision Insurance",
+    "401(k)",
+    "Paid Time Off",
+  ]
   const [section, setSection] = useState<Section>("details")
   const [title, setTitle] = useState(typedJobInfo.title ?? "")
   const [company, setCompany] = useState(typedJobInfo.company ?? "")
   const [description, setDescription] = useState(typedJobInfo.description ?? "")
+  const [benefits, setBenefits] = useState<string[]>(typedJobInfo.benefits ?? [])
+  const [benefitInput, setBenefitInput] = useState("")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const job = { title, company, description }
+    const job = { title, company, description, benefits }
     setJobInfo(job)
     addJob(job)
     setTitle("")
     setCompany("")
     setDescription("")
+    setBenefits([])
   }
 
   return (
@@ -111,6 +122,57 @@ export function JobInfoDialog({
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Job description"
                   />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Benefits</Label>
+                  {benefits.map((benefit, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <Input
+                        value={benefit}
+                        onChange={(e) =>
+                          setBenefits((prev) => {
+                            const next = [...prev]
+                            next[i] = e.target.value
+                            return next
+                          })
+                        }
+                        placeholder="Benefit"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() =>
+                          setBenefits((prev) =>
+                            prev.filter((_, idx) => idx !== i),
+                          )
+                        }
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <div className="flex gap-2">
+                    <Input
+                      value={benefitInput}
+                      onChange={(e) => setBenefitInput(e.target.value)}
+                      placeholder="Add benefit"
+                    />
+                    <Button type="button" variant="outline" onClick={() => {
+                      if (!benefitInput.trim()) return
+                      setBenefits([...benefits, benefitInput.trim()])
+                      setBenefitInput("")
+                    }}>
+                      <Plus className="mr-2 h-4 w-4" /> Add Benefit
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setBenefits(standardBenefits)}
+                    >
+                      Use Template
+                    </Button>
+                  </div>
                 </div>
                 <Button type="submit" className="mt-2 w-full">
                   Add Job
