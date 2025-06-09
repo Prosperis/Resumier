@@ -31,6 +31,8 @@ export interface UserInfo {
 }
 
 export interface JobInfo {
+  title?: string
+  company?: string
   description?: string
   [key: string]: unknown
 }
@@ -42,9 +44,12 @@ export interface ResumeContent {
 export interface ResumeStore {
   userInfo: UserInfo
   jobInfo: JobInfo
+  jobs: JobInfo[]
   content: ResumeContent
   setUserInfo: (info: UserInfo) => void
   setJobInfo: (info: JobInfo) => void
+  addJob: (job: JobInfo) => void
+  removeJob: (index: number) => void
   setContent: (data: ResumeContent) => void
   reset: () => void
 }
@@ -54,11 +59,15 @@ export const useResumeStore = create<ResumeStore>()(
     (set) => ({
       userInfo: {},
       jobInfo: {},
+      jobs: [],
       content: {},
       setUserInfo: (info) => set({ userInfo: { ...info } }),
       setJobInfo: (info) => set({ jobInfo: { ...info } }),
+      addJob: (job) => set((state) => ({ jobs: [...state.jobs, { ...job }] })),
+      removeJob: (index) =>
+        set((state) => ({ jobs: state.jobs.filter((_, i) => i !== index) })),
       setContent: (data) => set({ content: { ...data } }),
-      reset: () => set({ userInfo: {}, jobInfo: {}, content: {} }),
+      reset: () => set({ userInfo: {}, jobInfo: {}, jobs: [], content: {} }),
     }),
     {
       name: "resumier-web-store",
