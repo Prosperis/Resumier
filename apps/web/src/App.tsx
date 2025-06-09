@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/sidebar"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import logo from "@/assets/logo_dark.png";
+import logo from "@/assets/logo_dark.png"
+import { useResumeStore } from "@/hooks/use-resume-store"
 
 function PdfViewer() {
   return (
@@ -24,7 +25,7 @@ function PdfViewer() {
       className="h-full w-full border-0"
       title="Resume Preview"
     />
-  );
+  )
 }
 
 function PersonalInfoDialog({
@@ -34,20 +35,41 @@ function PersonalInfoDialog({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
+  const { userInfo, setUserInfo } = useResumeStore()
+  const [name, setName] = useState(userInfo.name ?? "")
+  const [email, setEmail] = useState(userInfo.email ?? "")
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setUserInfo({ name, email })
+    onOpenChange(false)
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Personal Information</DialogTitle>
         </DialogHeader>
-        <form className="grid gap-4">
+        <form className="grid gap-4" onSubmit={handleSubmit}>
           <div className="grid gap-2">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" placeholder="Your name" />
+            <Input
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+            />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="you@example.com" />
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+            />
           </div>
           <Button type="submit" className="mt-2 w-full">
             Save
@@ -65,20 +87,41 @@ function JobInfoDialog({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
+  const { jobInfo, setJobInfo } = useResumeStore()
+  const typedJobInfo = jobInfo as { title?: string; company?: string }
+  const [title, setTitle] = useState(typedJobInfo.title ?? "")
+  const [company, setCompany] = useState(typedJobInfo.company ?? "")
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setJobInfo({ title, company })
+    onOpenChange(false)
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Job Information</DialogTitle>
         </DialogHeader>
-        <form className="grid gap-4">
+        <form className="grid gap-4" onSubmit={handleSubmit}>
           <div className="grid gap-2">
             <Label htmlFor="job">Job Title</Label>
-            <Input id="job" placeholder="Desired role" />
+            <Input
+              id="job"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Desired role"
+            />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="company">Company</Label>
-            <Input id="company" placeholder="Company name" />
+            <Input
+              id="company"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              placeholder="Company name"
+            />
           </div>
           <Button type="submit" className="mt-2 w-full">
             Save
@@ -134,5 +177,5 @@ export default function App() {
       <PersonalInfoDialog open={openPersonal} onOpenChange={setOpenPersonal} />
       <JobInfoDialog open={openJob} onOpenChange={setOpenJob} />
     </SidebarProvider>
-  );
+  )
 }
