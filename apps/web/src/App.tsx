@@ -1,25 +1,67 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarContent,
+  SidebarInset,
+  SidebarRail,
+} from "@/components/ui/sidebar";
+import logo from "@/assets/logo_dark.png";
+
+function PdfViewer() {
+  return (
+    <iframe
+      src="/blank.pdf"
+      className="h-full w-full border-0"
+      title="Resume Preview"
+    />
+  );
+}
 
 export default function App() {
   const [currentView, setCurrentView] = useState("builder");
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="p-4 bg-gray-800 text-white flex justify-between items-center">
-        <img src="/assets/logo_dark.png" alt="Logo" className="h-8" />
-        <nav className="flex gap-2">
-          <Button variant="outline" onClick={() => setCurrentView("data")}>Add Personal Info</Button>
-          <Button variant="outline" onClick={() => setCurrentView("jobs")}>Add Job Info</Button>
-        </nav>
-      </header>
+    <SidebarProvider className="min-h-screen">
+      {/* Left Sidebar */}
+      <Sidebar side="left" collapsible="icon">
+        <SidebarRail />
+        <SidebarContent className="p-4 text-sm">Left Sidebar</SidebarContent>
+      </Sidebar>
 
-      <main className="flex-1 p-6">
-        {currentView === "data" && <MyDataSection />}
-        {currentView === "jobs" && <JobUploadSection />}
-        {currentView === "builder" && <ResumeBuilderViewer />}
-      </main>
-    </div>
+      {/* Main Content Area */}
+      <SidebarInset>
+        <div className="flex min-h-screen flex-col">
+          <header className="flex items-center justify-between gap-4 border-b p-4">
+            <div className="flex items-center gap-2">
+              <img src={logo} alt="Logo" className="h-8" />
+            </div>
+            <h1 className="flex-1 text-center text-lg font-semibold">Resume</h1>
+            <nav className="flex gap-2">
+              <Button variant="outline" onClick={() => setCurrentView('data')}>
+                Personal Info
+              </Button>
+              <Button variant="outline" onClick={() => setCurrentView('jobs')}>
+                Job Info
+              </Button>
+            </nav>
+          </header>
+
+          <div className="flex-1 overflow-hidden p-4">
+            {currentView === 'builder' && <PdfViewer />}
+            {currentView === 'data' && <MyDataSection />}
+            {currentView === 'jobs' && <JobUploadSection />}
+          </div>
+        </div>
+      </SidebarInset>
+
+      {/* Right Sidebar */}
+      <Sidebar side="right" collapsible="icon">
+        <SidebarRail />
+        <SidebarContent className="p-4 text-sm">Right Sidebar</SidebarContent>
+      </Sidebar>
+    </SidebarProvider>
   );
 }
 
@@ -29,8 +71,4 @@ function MyDataSection() {
 
 function JobUploadSection() {
   return <div>📄 Upload/paste job info and view history here.</div>;
-}
-
-function ResumeBuilderViewer() {
-  return <div className="text-gray-500 italic">🧾 Your resume will appear here once you add some data.</div>;
 }
