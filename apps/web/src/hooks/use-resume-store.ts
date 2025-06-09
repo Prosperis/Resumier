@@ -2,9 +2,31 @@ import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
 import { get, set, del } from "idb-keyval"
 
+export interface WorkExperience {
+  company?: string
+  title?: string
+  startDate?: string
+  endDate?: string
+  description?: string
+}
+
+export interface Education {
+  school?: string
+  degree?: string
+  startDate?: string
+  endDate?: string
+  description?: string
+}
+
 export interface UserInfo {
   name?: string
   email?: string
+  phone?: string
+  address?: string
+  experiences?: WorkExperience[]
+  education?: Education[]
+  skills?: string[]
+  certifications?: string[]
   [key: string]: unknown
 }
 
