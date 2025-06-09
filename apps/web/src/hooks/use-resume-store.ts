@@ -7,6 +7,7 @@ export interface WorkExperience {
   title?: string
   startDate?: string
   endDate?: string
+  current?: boolean
   description?: string
 }
 
@@ -18,6 +19,11 @@ export interface Education {
   description?: string
 }
 
+export interface Certification {
+  name?: string
+  expiration?: string
+}
+
 export interface UserInfo {
   name?: string
   email?: string
@@ -26,7 +32,7 @@ export interface UserInfo {
   experiences?: WorkExperience[]
   education?: Education[]
   skills?: string[]
-  certifications?: string[]
+  certifications?: Certification[]
   [key: string]: unknown
 }
 
