@@ -9,7 +9,8 @@
     "dev:desktop": "pnpm --filter @resumier/desktop tauri dev",
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "turbo": "^2.5.0"
