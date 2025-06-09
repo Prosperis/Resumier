@@ -19,7 +19,11 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { Textarea } from "@/components/ui/textarea"
-import type { Education, WorkExperience } from "@/hooks/use-resume-store"
+import type {
+  Education,
+  WorkExperience,
+  Certification,
+} from "@/hooks/use-resume-store"
 import { useResumeStore } from "@/hooks/use-resume-store"
 import { Plus, Trash } from "lucide-react"
 
@@ -53,10 +57,9 @@ export function PersonalInfoDialog({
   )
   const [skills, setSkills] = useState<string[]>(userInfo.skills ?? [])
   const [skillInput, setSkillInput] = useState("")
-  const [certifications, setCertifications] = useState<string[]>(
+  const [certifications, setCertifications] = useState<Certification[]>(
     userInfo.certifications ?? []
   )
-  const [certInput, setCertInput] = useState("")
 
   function handleSave(e: React.FormEvent) {
     e.preventDefault()
@@ -124,9 +127,19 @@ export function PersonalInfoDialog({
   }
 
   function addCertification() {
-    if (!certInput.trim()) return
-    setCertifications([...certifications, certInput.trim()])
-    setCertInput("")
+    setCertifications([...certifications, {}])
+  }
+
+  function updateCertification(
+    index: number,
+    field: keyof Certification,
+    value: string,
+  ) {
+    setCertifications((prev) => {
+      const next = [...prev]
+      next[index] = { ...next[index], [field]: value }
+      return next
+    })
   }
 
   function removeCertification(index: number) {
@@ -384,31 +397,44 @@ export function PersonalInfoDialog({
             )}
             {section === "certifications" && (
               <div className="grid gap-4">
-                <div className="flex gap-2">
-                  <Input
-                    value={certInput}
-                    onChange={(e) => setCertInput(e.target.value)}
-                    placeholder="Add certification"
-                  />
-                  <Button type="button" onClick={addCertification}>
-                    <Plus className="mr-2 h-4 w-4" /> Add
-                  </Button>
-                </div>
-                <ul className="grid gap-2">
-                  {certifications.map((cert, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <span className="flex-1">{cert}</span>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => removeCertification(i)}
-                      >
-                        <Trash className="mr-2 h-4 w-4" />
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
+                {certifications.map((cert, i) => (
+                  <div
+                    key={i}
+                    className="border p-4 rounded-md grid gap-2"
+                  >
+                    <div className="grid gap-2">
+                      <Label>Certification</Label>
+                      <Input
+                        value={cert.name ?? ""}
+                        onChange={(e) =>
+                          updateCertification(i, "name", e.target.value)
+                        }
+                        placeholder="Certification name"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label>Expiration</Label>
+                      <Input
+                        type="date"
+                        value={cert.expiration ?? ""}
+                        onChange={(e) =>
+                          updateCertification(i, "expiration", e.target.value)
+                        }
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeCertification(i)}
+                    >
+                      <Trash className="mr-2 h-4 w-4" /> Remove
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" onClick={addCertification}>
+                  <Plus className="mr-2 h-4 w-4" /> Add Certification
+                </Button>
               </div>
             )}
           </main>
