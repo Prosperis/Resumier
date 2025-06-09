@@ -78,6 +78,12 @@ For information on reporting security vulnerabilities, please see
 
 ---
 
+## 📬 Contact
+
+For general questions or support, email [adrian.the.hactus@gmail.com](mailto:adrian.the.hactus@gmail.com).
+
+---
+
 ## 💵 Compensation
 
 Resumier is maintained by volunteers and does not provide monetary
