@@ -71,6 +71,13 @@ pnpm dev
 
 ---
 
+## 🔒 Security
+
+For information on reporting security vulnerabilities, please see
+[`.github/SECURITY.md`](.github/SECURITY.md).
+
+---
+
 ## 📄 License
 
 This project is open-source and available under the MIT License.
