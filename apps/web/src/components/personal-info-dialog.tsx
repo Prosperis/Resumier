@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useMutation } from "@tanstack/react-query"
 import {
   Dialog,
   DialogContent,
@@ -24,6 +25,7 @@ import type {
   WorkExperience,
   Certification,
   Skill,
+  UserInfo,
 } from "@/hooks/use-resume-store"
 import { useResumeStore } from "@/hooks/use-resume-store"
 import { Plus, Trash } from "lucide-react"
@@ -46,6 +48,8 @@ export function PersonalInfoDialog({
 
   const [section, setSection] = useState<Section>("basic")
 
+  const [linkedInUrl, setLinkedInUrl] = useState("")
+
   const [name, setName] = useState(userInfo.name ?? "")
   const [email, setEmail] = useState(userInfo.email ?? "")
   const [phone, setPhone] = useState(userInfo.phone ?? "")
@@ -61,6 +65,24 @@ export function PersonalInfoDialog({
     userInfo.certifications ?? []
   )
 
+  const importMutation = useMutation({
+    mutationFn: async (url: string) => {
+      const res = await fetch(`/api/linkedin?url=${encodeURIComponent(url)}`)
+      if (!res.ok) throw new Error('Failed to fetch')
+      return (await res.json()) as Partial<UserInfo>
+    },
+    onSuccess: (data) => {
+      setName(data.name ?? '')
+      setEmail(data.email ?? '')
+      setPhone(data.phone ?? '')
+      setAddress(data.address ?? '')
+      setExperiences(data.experiences ?? [])
+      setEducation(data.education ?? [])
+      setSkills(data.skills ?? [])
+      setCertifications(data.certifications ?? [])
+    },
+  })
+
   function handleSave(e: React.FormEvent) {
     e.preventDefault()
     setUserInfo({
@@ -74,6 +96,11 @@ export function PersonalInfoDialog({
       certifications,
     })
     onOpenChange(false)
+  }
+
+  function handleImport() {
+    if (!linkedInUrl) return
+    importMutation.mutate(linkedInUrl)
   }
 
   function addExperience() {
@@ -228,6 +255,23 @@ export function PersonalInfoDialog({
                     onChange={(e) => setAddress(e.target.value)}
                     placeholder="Your address"
                   />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="linkedin">LinkedIn Profile URL</Label>
+                  <Input
+                    id="linkedin"
+                    value={linkedInUrl}
+                    onChange={(e) => setLinkedInUrl(e.target.value)}
+                    placeholder="https://www.linkedin.com/in/username"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleImport}
+                    disabled={importMutation.isPending}
+                  >
+                    Import from LinkedIn
+                  </Button>
                 </div>
                 <Button type="submit" className="mt-2 w-full">
                   Save
