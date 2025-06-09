@@ -33,7 +33,6 @@ Thumbs.db
 .DS_Store
 
 # IDEs
-.vscode/
 .idea/
 
 # Env
