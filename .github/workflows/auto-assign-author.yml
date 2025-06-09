@@ -1,7 +1,7 @@
 name: Auto assign PR author
 on:
   pull_request:
-    types: [opened, reopened, ready_for_review, synchronize]
+    types: [opened, reopened, ready_for_review]
 jobs:
   add-author:
     runs-on: ubuntu-latest
