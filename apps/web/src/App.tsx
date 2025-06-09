@@ -10,6 +10,7 @@ import {
 import { PdfViewer } from "@/components/pdf-viewer"
 import { PersonalInfoDialog } from "@/components/personal-info-dialog"
 import { JobInfoDialog } from "@/components/job-info-dialog"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
           <Button variant="outline" onClick={() => setOpenJob(true)}>
             Job Info
           </Button>
+          <ThemeToggle />
         </nav>
       </header>
       <SidebarProvider className="flex flex-1">
