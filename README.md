@@ -78,6 +78,12 @@ For information on reporting security vulnerabilities, please see
 
 ---
 
+## 📬 Contact
+
+For general questions or support, email [adrian.the.hactus@gmail.com](mailto:adrian.the.hactus@gmail.com).
+
+---
+
 ## 📄 License
 
 This project is open-source and available under the MIT License.
