@@ -18,7 +18,22 @@ export default function App() {
   const [openJob, setOpenJob] = useState(false)
 
   return (
-    <SidebarProvider className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
+      <header className="flex items-center justify-between gap-4 border-b p-4">
+        <div className="flex items-center gap-2">
+          <img src={logo} alt="Logo" className="h-8" />
+        </div>
+        <h1 className="flex-1 text-center text-lg font-semibold">Resume</h1>
+        <nav className="flex gap-2">
+          <Button variant="outline" onClick={() => setOpenPersonal(true)}>
+            Personal Info
+          </Button>
+          <Button variant="outline" onClick={() => setOpenJob(true)}>
+            Job Info
+          </Button>
+        </nav>
+      </header>
+      <SidebarProvider className="flex flex-1">
       {/* Left Sidebar */}
       <Sidebar side="left" collapsible="icon">
         <SidebarRail />
@@ -27,22 +42,7 @@ export default function App() {
 
       {/* Main Content Area */}
       <SidebarInset>
-        <div className="flex min-h-screen flex-col">
-          <header className="flex items-center justify-between gap-4 border-b p-4">
-            <div className="flex items-center gap-2">
-              <img src={logo} alt="Logo" className="h-12" />
-            </div>
-            <h1 className="flex-1 text-center text-lg font-semibold">Resume</h1>
-            <nav className="flex gap-2">
-              <Button variant="outline" onClick={() => setOpenPersonal(true)}>
-                Personal Info
-              </Button>
-              <Button variant="outline" onClick={() => setOpenJob(true)}>
-                Job Info
-              </Button>
-            </nav>
-          </header>
-
+        <div className="flex flex-col flex-1 min-h-0">
           <div className="flex-1 overflow-hidden p-4">
             <PdfViewer />
           </div>
@@ -50,13 +50,13 @@ export default function App() {
       </SidebarInset>
 
       {/* Right Sidebar */}
-      <Sidebar side="right" collapsible="icon">
-        <SidebarRail />
-        <SidebarContent className="p-4 text-sm">Right Sidebar</SidebarContent>
-      </Sidebar>
-
+        <Sidebar side="right" collapsible="icon">
+          <SidebarRail />
+          <SidebarContent className="p-4 text-sm">Right Sidebar</SidebarContent>
+        </Sidebar>
+      </SidebarProvider>
       <PersonalInfoDialog open={openPersonal} onOpenChange={setOpenPersonal} />
       <JobInfoDialog open={openJob} onOpenChange={setOpenJob} />
-    </SidebarProvider>
+    </div>
   )
 }
