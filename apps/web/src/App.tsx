@@ -7,10 +7,10 @@ import {
   SidebarInset,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import logo from "@/assets/logo_dark.png"
 import { PdfViewer } from "@/components/pdf-viewer"
 import { PersonalInfoDialog } from "@/components/personal-info-dialog"
 import { JobInfoDialog } from "@/components/job-info-dialog"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 
 export default function App() {
@@ -21,7 +21,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col">
       <header className="flex items-center justify-between gap-4 border-b p-4 z-20">
         <div className="flex items-center gap-2">
-          <img src={logo} alt="Logo" className="h-8" />
+          <img src="/logo_dark.png" alt="Logo" className="h-8" />
         </div>
         <h1 className="flex-1 text-center text-lg font-semibold">Resume</h1>
         <nav className="flex gap-2">
@@ -31,6 +31,7 @@ export default function App() {
           <Button variant="outline" onClick={() => setOpenJob(true)}>
             Job Info
           </Button>
+          <ThemeToggle />
         </nav>
       </header>
       <SidebarProvider className="flex flex-1 mt-16">
