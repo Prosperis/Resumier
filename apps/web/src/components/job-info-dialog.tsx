@@ -36,20 +36,23 @@ export function JobInfoDialog({
     title?: string
     company?: string
     description?: string
+    workType?: string
   }
   const [section, setSection] = useState<Section>("details")
   const [title, setTitle] = useState(typedJobInfo.title ?? "")
   const [company, setCompany] = useState(typedJobInfo.company ?? "")
   const [description, setDescription] = useState(typedJobInfo.description ?? "")
+  const [workType, setWorkType] = useState(typedJobInfo.workType ?? "")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const job = { title, company, description }
+    const job = { title, company, description, workType }
     setJobInfo(job)
     addJob(job)
     setTitle("")
     setCompany("")
     setDescription("")
+    setWorkType("")
   }
 
   return (
@@ -104,6 +107,20 @@ export function JobInfoDialog({
                   />
                 </div>
                 <div className="grid gap-2">
+                  <Label htmlFor="workType">Type of Work</Label>
+                  <select
+                    id="workType"
+                    className="border rounded-md p-2"
+                    value={workType}
+                    onChange={(e) => setWorkType(e.target.value)}
+                  >
+                    <option value="">Select</option>
+                    <option value="onsite">Onsite</option>
+                    <option value="remote">Remote</option>
+                    <option value="hybrid">Hybrid</option>
+                  </select>
+                </div>
+                <div className="grid gap-2">
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
@@ -124,6 +141,7 @@ export function JobInfoDialog({
                     <tr>
                       <th className="text-left p-2">Title</th>
                       <th className="text-left p-2">Company</th>
+                      <th className="text-left p-2">Work Type</th>
                       <th className="p-2" />
                     </tr>
                   </thead>
@@ -132,6 +150,7 @@ export function JobInfoDialog({
                       <tr key={i}>
                         <td className="p-2">{job.title}</td>
                         <td className="p-2">{job.company}</td>
+                        <td className="p-2">{job.workType}</td>
                         <td className="p-2 text-right">
                           <Button
                             type="button"

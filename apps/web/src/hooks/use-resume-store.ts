@@ -46,6 +46,7 @@ export interface JobInfo {
   title?: string
   company?: string
   description?: string
+  workType?: "onsite" | "remote" | "hybrid"
   [key: string]: unknown
 }
 
