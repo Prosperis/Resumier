@@ -158,7 +158,7 @@ export function PersonalInfoDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="overflow-hidden p-0 md:max-h-[600px] md:max-w-[800px]">
+      <DialogContent className="overflow-hidden md:max-h-[600px] md:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>Personal Information</DialogTitle>
         </DialogHeader>
