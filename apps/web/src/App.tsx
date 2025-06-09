@@ -30,7 +30,7 @@ export default function App() {
         <div className="flex min-h-screen flex-col">
           <header className="flex items-center justify-between gap-4 border-b p-4">
             <div className="flex items-center gap-2">
-              <img src={logo} alt="Logo" className="h-8" />
+              <img src={logo} alt="Logo" className="h-12" />
             </div>
             <h1 className="flex-1 text-center text-lg font-semibold">Resume</h1>
             <nav className="flex gap-2">
