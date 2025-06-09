@@ -1,0 +1,41 @@
+# Node
+node_modules/
+.pnpm/
+.pnp.*
+*.log
+*.tsbuildinfo
+
+# Build
+dist/
+build/
+.next/
+out/
+coverage/
+*.DS_Store
+
+# Turbo
+turbo/
+.cache/
+
+# Expo / React Native
+.expo/
+.expo-shared/
+android/
+ios/
+
+# Tauri
+src-tauri/target/
+src-tauri/.cargo/
+src-tauri/Cargo.lock
+
+# OS
+Thumbs.db
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# Env
+.env
+.env.*
