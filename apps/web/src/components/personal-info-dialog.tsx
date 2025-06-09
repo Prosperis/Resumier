@@ -11,11 +11,13 @@ import { Label } from "@/components/ui/label";
 import {
   Sidebar,
   SidebarContent,
+  SidebarHeader,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
   SidebarProvider,
 } from "@/components/ui/sidebar";
 import { Textarea } from "@/components/ui/textarea";
@@ -201,12 +203,16 @@ export function PersonalInfoDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="overflow-hidden md:max-h-[600px] md:max-w-[800px]">
-        <DialogHeader>
+        <DialogHeader className="md:hidden">
           <DialogTitle>Personal Information</DialogTitle>
         </DialogHeader>
         <SidebarProvider className="items-start">
           <Sidebar collapsible="none" className="hidden md:flex">
             <SidebarContent>
+              <SidebarHeader>
+                <DialogTitle className="text-base">Personal Information</DialogTitle>
+              </SidebarHeader>
+              <SidebarSeparator />
               <SidebarGroup>
                 <SidebarGroupContent>
                   <SidebarMenu>
