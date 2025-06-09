@@ -35,20 +35,23 @@ export function JobInfoDialog({
   const typedJobInfo = jobInfo as {
     title?: string
     company?: string
+    location?: string
     description?: string
   }
   const [section, setSection] = useState<Section>("details")
   const [title, setTitle] = useState(typedJobInfo.title ?? "")
   const [company, setCompany] = useState(typedJobInfo.company ?? "")
+  const [location, setLocation] = useState(typedJobInfo.location ?? "")
   const [description, setDescription] = useState(typedJobInfo.description ?? "")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const job = { title, company, description }
+    const job = { title, company, location, description }
     setJobInfo(job)
     addJob(job)
     setTitle("")
     setCompany("")
+    setLocation("")
     setDescription("")
   }
 
@@ -104,6 +107,15 @@ export function JobInfoDialog({
                   />
                 </div>
                 <div className="grid gap-2">
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    id="location"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="Company location"
+                  />
+                </div>
+                <div className="grid gap-2">
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
@@ -124,6 +136,7 @@ export function JobInfoDialog({
                     <tr>
                       <th className="text-left p-2">Title</th>
                       <th className="text-left p-2">Company</th>
+                      <th className="text-left p-2">Location</th>
                       <th className="p-2" />
                     </tr>
                   </thead>
@@ -132,6 +145,7 @@ export function JobInfoDialog({
                       <tr key={i}>
                         <td className="p-2">{job.title}</td>
                         <td className="p-2">{job.company}</td>
+                        <td className="p-2">{job.location}</td>
                         <td className="p-2 text-right">
                           <Button
                             type="button"
