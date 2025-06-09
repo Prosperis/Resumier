@@ -1,7 +1,7 @@
 # Instructions for Codex
 
 ## Pull Request labels
-- Apply the label `automated` to every PR opened by Codex.
+- Apply the label `(ノಠ益ಠ)ノ彡┻━┻` to every PR opened by Codex.
 - Do not apply the default `codex` label.
 
 ## Tests
