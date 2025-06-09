@@ -1,57 +1,58 @@
-import { create } from "zustand"
-import { persist, createJSONStorage } from "zustand/middleware"
-import { get, set, del } from "idb-keyval"
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import { get, set, del } from "idb-keyval";
 
 export interface WorkExperience {
-  company?: string
-  title?: string
-  startDate?: string
-  endDate?: string
-  description?: string
+  company?: string;
+  title?: string;
+  startDate?: string;
+  endDate?: string;
+  description?: string;
+  awards?: string[];
 }
 
 export interface Education {
-  school?: string
-  degree?: string
-  startDate?: string
-  endDate?: string
-  description?: string
+  school?: string;
+  degree?: string;
+  startDate?: string;
+  endDate?: string;
+  description?: string;
 }
 
 export interface Certification {
-  name?: string
-  expiration?: string
+  name?: string;
+  expiration?: string;
 }
 
 export interface UserInfo {
-  name?: string
-  email?: string
-  phone?: string
-  address?: string
-  experiences?: WorkExperience[]
-  education?: Education[]
-  skills?: string[]
-  certifications?: Certification[]
-  [key: string]: unknown
+  name?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  experiences?: WorkExperience[];
+  education?: Education[];
+  skills?: string[];
+  certifications?: Certification[];
+  [key: string]: unknown;
 }
 
 export interface JobInfo {
-  description?: string
-  [key: string]: unknown
+  description?: string;
+  [key: string]: unknown;
 }
 
 export interface ResumeContent {
-  [key: string]: unknown
+  [key: string]: unknown;
 }
 
 export interface ResumeStore {
-  userInfo: UserInfo
-  jobInfo: JobInfo
-  content: ResumeContent
-  setUserInfo: (info: UserInfo) => void
-  setJobInfo: (info: JobInfo) => void
-  setContent: (data: ResumeContent) => void
-  reset: () => void
+  userInfo: UserInfo;
+  jobInfo: JobInfo;
+  content: ResumeContent;
+  setUserInfo: (info: UserInfo) => void;
+  setJobInfo: (info: JobInfo) => void;
+  setContent: (data: ResumeContent) => void;
+  reset: () => void;
 }
 
 export const useResumeStore = create<ResumeStore>()(
@@ -69,16 +70,16 @@ export const useResumeStore = create<ResumeStore>()(
       name: "resumier-web-store",
       storage: createJSONStorage(() => ({
         async getItem(name: string) {
-          const value = await get(name)
-          return value ?? null
+          const value = await get(name);
+          return value ?? null;
         },
         async setItem(name: string, value: unknown) {
-          await set(name, value)
+          await set(name, value);
         },
         async removeItem(name: string) {
-          await del(name)
+          await del(name);
         },
       })),
     },
   ),
-)
+);

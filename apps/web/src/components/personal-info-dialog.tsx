@@ -1,13 +1,13 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Sidebar,
   SidebarContent,
@@ -17,52 +17,53 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-} from "@/components/ui/sidebar"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/sidebar";
+import { Textarea } from "@/components/ui/textarea";
 import type {
   Education,
   WorkExperience,
   Certification,
-} from "@/hooks/use-resume-store"
-import { useResumeStore } from "@/hooks/use-resume-store"
-import { Plus, Trash } from "lucide-react"
+} from "@/hooks/use-resume-store";
+import { useResumeStore } from "@/hooks/use-resume-store";
+import { Plus, Trash } from "lucide-react";
 
 type Section =
   | "basic"
   | "experience"
   | "education"
   | "skills"
-  | "certifications"
+  | "certifications";
 
 export function PersonalInfoDialog({
   open,
   onOpenChange,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const { userInfo, setUserInfo } = useResumeStore()
+  const { userInfo, setUserInfo } = useResumeStore();
 
-  const [section, setSection] = useState<Section>("basic")
+  const [section, setSection] = useState<Section>("basic");
 
-  const [name, setName] = useState(userInfo.name ?? "")
-  const [email, setEmail] = useState(userInfo.email ?? "")
-  const [phone, setPhone] = useState(userInfo.phone ?? "")
-  const [address, setAddress] = useState(userInfo.address ?? "")
+  const [name, setName] = useState(userInfo.name ?? "");
+  const [email, setEmail] = useState(userInfo.email ?? "");
+  const [phone, setPhone] = useState(userInfo.phone ?? "");
+  const [address, setAddress] = useState(userInfo.address ?? "");
   const [experiences, setExperiences] = useState<WorkExperience[]>(
-    userInfo.experiences ?? []
-  )
+    userInfo.experiences ?? [],
+  );
   const [education, setEducation] = useState<Education[]>(
-    userInfo.education ?? []
-  )
-  const [skills, setSkills] = useState<string[]>(userInfo.skills ?? [])
-  const [skillInput, setSkillInput] = useState("")
+    userInfo.education ?? [],
+  );
+  const [skills, setSkills] = useState<string[]>(userInfo.skills ?? []);
+  const [skillInput, setSkillInput] = useState("");
   const [certifications, setCertifications] = useState<Certification[]>(
-    userInfo.certifications ?? []
-  )
+    userInfo.certifications ?? [],
+  );
+  const [awardInputs, setAwardInputs] = useState<Record<number, string>>({});
 
   function handleSave(e: React.FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
     setUserInfo({
       name,
       email,
@@ -72,62 +73,100 @@ export function PersonalInfoDialog({
       education,
       skills,
       certifications,
-    })
-    onOpenChange(false)
+    });
+    onOpenChange(false);
   }
 
   function addExperience() {
-    setExperiences([...experiences, {}])
+    setExperiences([...experiences, {}]);
+    setAwardInputs((prev) => ({ ...prev, [experiences.length]: "" }));
   }
 
   function updateExperience(
     index: number,
     field: keyof WorkExperience,
-    value: string
+    value: string | string[],
   ) {
     setExperiences((prev) => {
-      const next = [...prev]
-      next[index] = { ...next[index], [field]: value }
-      return next
-    })
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
   }
 
   function removeExperience(index: number) {
-    setExperiences((prev) => prev.filter((_, i) => i !== index))
+    setExperiences((prev) => prev.filter((_, i) => i !== index));
+    setAwardInputs((prev) => {
+      const next: Record<number, string> = {};
+      Object.keys(prev).forEach((key) => {
+        const i = Number(key);
+        if (i < index) next[i] = prev[i];
+        else if (i > index) next[i - 1] = prev[i];
+      });
+      return next;
+    });
+  }
+
+  function setAwardInput(index: number, value: string) {
+    setAwardInputs((prev) => ({ ...prev, [index]: value }));
+  }
+
+  function addExperienceAward(index: number) {
+    const award = awardInputs[index]?.trim();
+    if (!award) return;
+    setExperiences((prev) => {
+      const next = [...prev];
+      const awards = next[index].awards ?? [];
+      next[index] = { ...next[index], awards: [...awards, award] };
+      return next;
+    });
+    setAwardInputs((prev) => ({ ...prev, [index]: "" }));
+  }
+
+  function removeExperienceAward(index: number, awardIndex: number) {
+    setExperiences((prev) => {
+      const next = [...prev];
+      const awards = next[index].awards ?? [];
+      next[index] = {
+        ...next[index],
+        awards: awards.filter((_, i) => i !== awardIndex),
+      };
+      return next;
+    });
   }
 
   function addEducation() {
-    setEducation([...education, {}])
+    setEducation([...education, {}]);
   }
 
   function updateEducation(
     index: number,
     field: keyof Education,
-    value: string
+    value: string,
   ) {
     setEducation((prev) => {
-      const next = [...prev]
-      next[index] = { ...next[index], [field]: value }
-      return next
-    })
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
   }
 
   function removeEducation(index: number) {
-    setEducation((prev) => prev.filter((_, i) => i !== index))
+    setEducation((prev) => prev.filter((_, i) => i !== index));
   }
 
   function addSkill() {
-    if (!skillInput.trim()) return
-    setSkills([...skills, skillInput.trim()])
-    setSkillInput("")
+    if (!skillInput.trim()) return;
+    setSkills([...skills, skillInput.trim()]);
+    setSkillInput("");
   }
 
   function removeSkill(index: number) {
-    setSkills((prev) => prev.filter((_, i) => i !== index))
+    setSkills((prev) => prev.filter((_, i) => i !== index));
   }
 
   function addCertification() {
-    setCertifications([...certifications, {}])
+    setCertifications([...certifications, {}]);
   }
 
   function updateCertification(
@@ -136,14 +175,14 @@ export function PersonalInfoDialog({
     value: string,
   ) {
     setCertifications((prev) => {
-      const next = [...prev]
-      next[index] = { ...next[index], [field]: value }
-      return next
-    })
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
   }
 
   function removeCertification(index: number) {
-    setCertifications((prev) => prev.filter((_, i) => i !== index))
+    setCertifications((prev) => prev.filter((_, i) => i !== index));
   }
 
   return (
@@ -227,10 +266,7 @@ export function PersonalInfoDialog({
             {section === "experience" && (
               <div className="grid gap-4">
                 {experiences.map((exp, i) => (
-                  <div
-                    key={i}
-                    className="border p-4 rounded-md grid gap-2"
-                  >
+                  <div key={i} className="border p-4 rounded-md grid gap-2">
                     <div className="grid gap-2">
                       <Label>Company</Label>
                       <Input
@@ -280,6 +316,37 @@ export function PersonalInfoDialog({
                         }
                       />
                     </div>
+                    <div className="grid gap-2">
+                      <Label>Awards</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          value={awardInputs[i] ?? ""}
+                          onChange={(e) => setAwardInput(i, e.target.value)}
+                          placeholder="Add award"
+                        />
+                        <Button
+                          type="button"
+                          onClick={() => addExperienceAward(i)}
+                        >
+                          <Plus className="mr-2 h-4 w-4" /> Add
+                        </Button>
+                      </div>
+                      <ul className="grid gap-2">
+                        {(exp.awards ?? []).map((award, j) => (
+                          <li key={j} className="flex items-center gap-2">
+                            <span className="flex-1">{award}</span>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => removeExperienceAward(i, j)}
+                            >
+                              <Trash className="mr-2 h-4 w-4" />
+                            </Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                     <Button
                       type="button"
                       variant="outline"
@@ -298,10 +365,7 @@ export function PersonalInfoDialog({
             {section === "education" && (
               <div className="grid gap-4">
                 {education.map((ed, i) => (
-                  <div
-                    key={i}
-                    className="border p-4 rounded-md grid gap-2"
-                  >
+                  <div key={i} className="border p-4 rounded-md grid gap-2">
                     <div className="grid gap-2">
                       <Label>School</Label>
                       <Input
@@ -398,10 +462,7 @@ export function PersonalInfoDialog({
             {section === "certifications" && (
               <div className="grid gap-4">
                 {certifications.map((cert, i) => (
-                  <div
-                    key={i}
-                    className="border p-4 rounded-md grid gap-2"
-                  >
+                  <div key={i} className="border p-4 rounded-md grid gap-2">
                     <div className="grid gap-2">
                       <Label>Certification</Label>
                       <Input
@@ -432,7 +493,11 @@ export function PersonalInfoDialog({
                     </Button>
                   </div>
                 ))}
-                <Button type="button" variant="outline" onClick={addCertification}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={addCertification}
+                >
                   <Plus className="mr-2 h-4 w-4" /> Add Certification
                 </Button>
               </div>
@@ -441,5 +506,5 @@ export function PersonalInfoDialog({
         </SidebarProvider>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
