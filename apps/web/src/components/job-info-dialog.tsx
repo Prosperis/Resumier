@@ -35,6 +35,7 @@ export function JobInfoDialog({
   const typedJobInfo = jobInfo as {
     title?: string
     company?: string
+    location?: string
     description?: string
     benefits?: string[]
   }
@@ -48,24 +49,26 @@ export function JobInfoDialog({
   const [section, setSection] = useState<Section>("details")
   const [title, setTitle] = useState(typedJobInfo.title ?? "")
   const [company, setCompany] = useState(typedJobInfo.company ?? "")
+  const [location, setLocation] = useState(typedJobInfo.location ?? "")
   const [description, setDescription] = useState(typedJobInfo.description ?? "")
   const [benefits, setBenefits] = useState<string[]>(typedJobInfo.benefits ?? [])
   const [benefitInput, setBenefitInput] = useState("")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const job = { title, company, description, benefits }
+    const job = { title, company, location, description, benefits }
     setJobInfo(job)
     addJob(job)
     setTitle("")
     setCompany("")
+    setLocation("")
     setDescription("")
     setBenefits([])
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="overflow-hidden p-0 md:max-h-[600px] md:max-w-[800px]">
+      <DialogContent className="overflow-hidden p-0 md:max-h-[750px] md:max-w-[960px]">
         <DialogHeader>
           <DialogTitle>Job Information</DialogTitle>
         </DialogHeader>
@@ -93,7 +96,7 @@ export function JobInfoDialog({
               </SidebarGroup>
             </SidebarContent>
           </Sidebar>
-          <main className="flex h-[500px] flex-1 flex-col overflow-y-auto p-4">
+          <main className="flex h-[650px] flex-1 flex-col overflow-y-auto p-4">
             {section === "details" && (
               <form className="grid gap-4" onSubmit={handleSubmit}>
                 <div className="grid gap-2">
@@ -112,6 +115,15 @@ export function JobInfoDialog({
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="Company name"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    id="location"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="Company location"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -186,6 +198,7 @@ export function JobInfoDialog({
                     <tr>
                       <th className="text-left p-2">Title</th>
                       <th className="text-left p-2">Company</th>
+                      <th className="text-left p-2">Location</th>
                       <th className="p-2" />
                     </tr>
                   </thead>
@@ -194,6 +207,7 @@ export function JobInfoDialog({
                       <tr key={i}>
                         <td className="p-2">{job.title}</td>
                         <td className="p-2">{job.company}</td>
+                        <td className="p-2">{job.location}</td>
                         <td className="p-2 text-right">
                           <Button
                             type="button"
