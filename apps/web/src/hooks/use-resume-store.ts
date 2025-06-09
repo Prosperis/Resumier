@@ -19,6 +19,12 @@ export interface Education {
   description?: string
 }
 
+export interface Skill {
+  name?: string
+  years?: string
+  proficiency?: string
+}
+
 export interface Certification {
   name?: string
   expiration?: string
@@ -31,7 +37,7 @@ export interface UserInfo {
   address?: string
   experiences?: WorkExperience[]
   education?: Education[]
-  skills?: string[]
+  skills?: Skill[]
   certifications?: Certification[]
   [key: string]: unknown
 }
