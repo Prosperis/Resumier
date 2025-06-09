@@ -84,6 +84,14 @@ For general questions or support, email [adrian.the.hactus@gmail.com](mailto:adr
 
 ---
 
+## 💵 Compensation
+
+Resumier is maintained by volunteers and does not provide monetary
+compensation. Contributors do not receive a base salary, bonuses, or
+company stock for their work on this project.
+
+---
+
 ## 📄 License
 
 This project is open-source and available under the MIT License.

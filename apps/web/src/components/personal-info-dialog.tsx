@@ -11,11 +11,13 @@ import { Label } from "@/components/ui/label";
 import {
   Sidebar,
   SidebarContent,
+  SidebarHeader,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
   SidebarProvider,
 } from "@/components/ui/sidebar";
 import { Textarea } from "@/components/ui/textarea";
@@ -200,13 +202,17 @@ export function PersonalInfoDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="overflow-hidden p-0 md:max-h-[600px] md:max-w-[800px]">
+      <DialogContent className="overflow-hidden md:max-h-[750px] md:max-w-[960px]">
         <DialogHeader>
           <DialogTitle>Personal Information</DialogTitle>
         </DialogHeader>
         <SidebarProvider className="items-start">
           <Sidebar collapsible="none" className="hidden md:flex">
             <SidebarContent>
+              <SidebarHeader>
+                <DialogTitle className="text-base">Personal Information</DialogTitle>
+              </SidebarHeader>
+              <SidebarSeparator />
               <SidebarGroup>
                 <SidebarGroupContent>
                   <SidebarMenu>
@@ -231,7 +237,7 @@ export function PersonalInfoDialog({
               </SidebarGroup>
             </SidebarContent>
           </Sidebar>
-          <main className="flex h-[500px] flex-1 flex-col overflow-y-auto p-4">
+          <main className="flex h-[650px] flex-1 flex-col overflow-y-auto p-4">
             {section === "basic" && (
               <form className="grid gap-4" onSubmit={handleSave}>
                 <div className="grid gap-2">
