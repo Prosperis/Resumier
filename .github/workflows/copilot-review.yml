@@ -1,0 +1,25 @@
+name: Request Copilot Review
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  request-copilot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request GitHub Copilot as reviewer
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            await github.rest.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              reviewers: ['github-copilot']
+            });
+
