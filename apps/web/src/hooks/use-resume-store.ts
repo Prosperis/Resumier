@@ -46,6 +46,9 @@ export interface JobInfo {
   title?: string
   company?: string
   description?: string
+  basePay?: string
+  bonus?: string
+  stocks?: string
   [key: string]: unknown
 }
 

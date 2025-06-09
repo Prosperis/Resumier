@@ -36,20 +36,29 @@ export function JobInfoDialog({
     title?: string
     company?: string
     description?: string
+    basePay?: string
+    bonus?: string
+    stocks?: string
   }
   const [section, setSection] = useState<Section>("details")
   const [title, setTitle] = useState(typedJobInfo.title ?? "")
   const [company, setCompany] = useState(typedJobInfo.company ?? "")
   const [description, setDescription] = useState(typedJobInfo.description ?? "")
+  const [basePay, setBasePay] = useState(typedJobInfo.basePay ?? "")
+  const [bonus, setBonus] = useState(typedJobInfo.bonus ?? "")
+  const [stocks, setStocks] = useState(typedJobInfo.stocks ?? "")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const job = { title, company, description }
+    const job = { title, company, description, basePay, bonus, stocks }
     setJobInfo(job)
     addJob(job)
     setTitle("")
     setCompany("")
     setDescription("")
+    setBasePay("")
+    setBonus("")
+    setStocks("")
   }
 
   return (
@@ -112,6 +121,33 @@ export function JobInfoDialog({
                     placeholder="Job description"
                   />
                 </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="basePay">Base Pay</Label>
+                  <Input
+                    id="basePay"
+                    value={basePay}
+                    onChange={(e) => setBasePay(e.target.value)}
+                    placeholder="Annual salary"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="bonus">Bonus</Label>
+                  <Input
+                    id="bonus"
+                    value={bonus}
+                    onChange={(e) => setBonus(e.target.value)}
+                    placeholder="Bonus or incentives"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="stocks">Stocks/Options</Label>
+                  <Input
+                    id="stocks"
+                    value={stocks}
+                    onChange={(e) => setStocks(e.target.value)}
+                    placeholder="Stock options or RSUs"
+                  />
+                </div>
                 <Button type="submit" className="mt-2 w-full">
                   Add Job
                 </Button>
@@ -124,6 +160,7 @@ export function JobInfoDialog({
                     <tr>
                       <th className="text-left p-2">Title</th>
                       <th className="text-left p-2">Company</th>
+                      <th className="text-left p-2">Base Pay</th>
                       <th className="p-2" />
                     </tr>
                   </thead>
@@ -132,6 +169,7 @@ export function JobInfoDialog({
                       <tr key={i}>
                         <td className="p-2">{job.title}</td>
                         <td className="p-2">{job.company}</td>
+                        <td className="p-2">{job.basePay}</td>
                         <td className="p-2 text-right">
                           <Button
                             type="button"
