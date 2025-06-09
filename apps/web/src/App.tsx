@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { useResumeStore } from "@/hooks/use-resume-store"
 
 export default function App() {
   const [currentView, setCurrentView] = useState("builder");
@@ -24,13 +26,58 @@ export default function App() {
 }
 
 function MyDataSection() {
-  return <div>📁 Personal data form goes here.</div>;
+  const { userInfo, setUserInfo } = useResumeStore()
+  const [name, setName] = useState(userInfo.name ?? "")
+  const [email, setEmail] = useState(userInfo.email ?? "")
+
+  return (
+    <div className="space-y-2 max-w-sm">
+      <Input
+        placeholder="Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <Input
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <Button onClick={() => setUserInfo({ name, email })}>Save</Button>
+    </div>
+  )
 }
 
 function JobUploadSection() {
-  return <div>📄 Upload/paste job info and view history here.</div>;
+  const { jobInfo, setJobInfo } = useResumeStore()
+  const [description, setDescription] = useState(jobInfo.description ?? "")
+
+  return (
+    <div className="space-y-2 max-w-sm">
+      <textarea
+        className="w-full rounded border p-2 text-sm"
+        rows={6}
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <Button onClick={() => setJobInfo({ description })}>Save</Button>
+    </div>
+  )
 }
 
 function ResumeBuilderViewer() {
-  return <div className="text-gray-500 italic">🧾 Your resume will appear here once you add some data.</div>;
+  const { userInfo, jobInfo } = useResumeStore()
+
+  if (!Object.keys(userInfo).length && !Object.keys(jobInfo).length) {
+    return (
+      <div className="text-gray-500 italic">
+        🧾 Your resume will appear here once you add some data.
+      </div>
+    )
+  }
+
+  return (
+    <pre className="bg-muted p-4 rounded text-sm">
+      {JSON.stringify({ userInfo, jobInfo }, null, 2)}
+    </pre>
+  )
 }
