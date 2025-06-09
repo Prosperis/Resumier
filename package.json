@@ -1,0 +1,21 @@
+{
+  "name": "resumier",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.12.1",
+  "scripts": {
+    "dev:web": "pnpm --filter @resumier/web dev",
+    "dev:mobile": "pnpm --filter @resumier/mobile start",
+    "dev:desktop": "pnpm --filter @resumier/desktop tauri dev",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
