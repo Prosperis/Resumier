@@ -80,11 +80,15 @@ export function PersonalInfoDialog({
   function updateExperience(
     index: number,
     field: keyof WorkExperience,
-    value: string
+    value: string | boolean
   ) {
     setExperiences((prev) => {
       const next = [...prev]
-      next[index] = { ...next[index], [field]: value }
+      if (field === "current" && value === true) {
+        next[index] = { ...next[index], current: true, endDate: undefined }
+      } else {
+        next[index] = { ...next[index], [field]: value }
+      }
       return next
     })
   }
@@ -236,7 +240,7 @@ export function PersonalInfoDialog({
                         }
                       />
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-3 gap-2">
                       <div className="grid gap-2">
                         <Label>Start Date</Label>
                         <Input
@@ -255,7 +259,21 @@ export function PersonalInfoDialog({
                           onChange={(e) =>
                             updateExperience(i, "endDate", e.target.value)
                           }
+                          disabled={exp.current}
+                          placeholder={exp.current ? "Present" : undefined}
                         />
+                      </div>
+                      <div className="flex items-center gap-2 pt-6">
+                        <input
+                          id={`current-${i}`}
+                          type="checkbox"
+                          checked={exp.current ?? false}
+                          onChange={(e) =>
+                            updateExperience(i, "current", e.target.checked)
+                          }
+                          className="h-4 w-4"
+                        />
+                        <Label htmlFor={`current-${i}`}>Current</Label>
                       </div>
                     </div>
                     <div className="grid gap-2">
