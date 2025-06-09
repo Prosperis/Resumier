@@ -1,0 +1,36 @@
+name: Snyk Security Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 10.12.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - uses: snyk/actions/setup@v2
+      - name: Snyk test
+        run: snyk test --all-projects
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Snyk monitor
+        if: github.event_name == 'push'
+        run: snyk monitor --all-projects
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

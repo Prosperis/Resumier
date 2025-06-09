@@ -78,6 +78,10 @@ For information on reporting security vulnerabilities, please see
 
 ---
 
+## 🛡️ Snyk Checks
+
+All pull requests run Snyk security scans. Contributors must have access to the `SNYK_TOKEN` secret for the workflow to execute on forks.
+
 ## 📄 License
 
 This project is open-source and available under the MIT License.
