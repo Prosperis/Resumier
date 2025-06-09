@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="flex items-center justify-between gap-4 border-b p-4">
+      <header className="flex items-center justify-between gap-4 border-b p-4 z-20">
         <div className="flex items-center gap-2">
           <img src="/logo_dark.png" alt="Logo" className="h-8" />
         </div>
@@ -34,7 +34,7 @@ export default function App() {
           <ThemeToggle />
         </nav>
       </header>
-      <SidebarProvider className="flex flex-1">
+      <SidebarProvider className="flex flex-1 mt-16">
       {/* Left Sidebar */}
       <Sidebar side="left" collapsible="icon">
         <SidebarRail />
