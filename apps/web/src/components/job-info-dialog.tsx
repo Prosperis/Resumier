@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { Select } from "@/components/ui/select"
 import {
   Sidebar,
   SidebarContent,
@@ -40,7 +39,7 @@ export function JobInfoDialog({
     location?: string
     description?: string
     benefits?: string[]
-    workType?: string
+    workType?: "onsite" | "remote" | "hybrid"
     basePay?: string
     bonus?: string
     stocks?: string
@@ -59,7 +58,7 @@ export function JobInfoDialog({
   const [description, setDescription] = useState(typedJobInfo.description ?? "")
   const [benefits, setBenefits] = useState<string[]>(typedJobInfo.benefits ?? [])
   const [benefitInput, setBenefitInput] = useState("")
-  const [workType, setWorkType] = useState(typedJobInfo.workType ?? "")
+  const [workType, setWorkType] = useState(typedJobInfo.workType)
   const [basePay, setBasePay] = useState(typedJobInfo.basePay ?? "")
   const [bonus, setBonus] = useState(typedJobInfo.bonus ?? "")
   const [stocks, setStocks] = useState(typedJobInfo.stocks ?? "")
@@ -74,7 +73,7 @@ export function JobInfoDialog({
     setLocation("")
     setDescription("")
     setBenefits([])
-    setWorkType("")
+    setWorkType(undefined)
     setBasePay("")
     setBonus("")
     setStocks("")
@@ -136,7 +135,7 @@ export function JobInfoDialog({
                   <Select
                     id="workType"
                     value={workType}
-                    onChange={(e) => setWorkType(e.target.value)}
+                    onChange={(e) => setWorkType(e.target.value as "onsite" | "remote" | "hybrid" | undefined)}
                   >
                     <option value="">Select</option>
                     <option value="onsite">Onsite</option>
