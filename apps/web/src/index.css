@@ -127,3 +127,29 @@ input[type="date"] {
 .dark input[type="date"] {
   color-scheme: dark;
 }
+
+/* Global scrollbar styling with fade-in/out */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--muted-foreground);
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+  opacity: 1;
+}
