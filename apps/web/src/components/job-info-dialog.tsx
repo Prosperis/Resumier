@@ -35,29 +35,41 @@ export function JobInfoDialog({
   const typedJobInfo = jobInfo as {
     title?: string
     company?: string
+    location?: string
     description?: string
     workType?: string
+    basePay?: string
+    bonus?: string
+    stocks?: string
   }
   const [section, setSection] = useState<Section>("details")
   const [title, setTitle] = useState(typedJobInfo.title ?? "")
   const [company, setCompany] = useState(typedJobInfo.company ?? "")
+  const [location, setLocation] = useState(typedJobInfo.location ?? "")
   const [description, setDescription] = useState(typedJobInfo.description ?? "")
   const [workType, setWorkType] = useState(typedJobInfo.workType ?? "")
+  const [basePay, setBasePay] = useState(typedJobInfo.basePay ?? "")
+  const [bonus, setBonus] = useState(typedJobInfo.bonus ?? "")
+  const [stocks, setStocks] = useState(typedJobInfo.stocks ?? "")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const job = { title, company, description, workType }
+    const job = { title, company, location, description, basePay, bonus, stocks, workType }
     setJobInfo(job)
     addJob(job)
     setTitle("")
     setCompany("")
+    setLocation("")
     setDescription("")
     setWorkType("")
+    setBasePay("")
+    setBonus("")
+    setStocks("")
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="overflow-hidden p-0 md:max-h-[600px] md:max-w-[800px]">
+      <DialogContent className="overflow-hidden p-0 md:max-h-[750px] md:max-w-[960px]">
         <DialogHeader>
           <DialogTitle>Job Information</DialogTitle>
         </DialogHeader>
@@ -85,7 +97,7 @@ export function JobInfoDialog({
               </SidebarGroup>
             </SidebarContent>
           </Sidebar>
-          <main className="flex h-[500px] flex-1 flex-col overflow-y-auto p-4">
+          <main className="flex h-[650px] flex-1 flex-col overflow-y-auto p-4">
             {section === "details" && (
               <form className="grid gap-4" onSubmit={handleSubmit}>
                 <div className="grid gap-2">
@@ -121,12 +133,48 @@ export function JobInfoDialog({
                   </select>
                 </div>
                 <div className="grid gap-2">
+                  <Label htmlFor="location">Location</Label>
+                  <Input
+                    id="location"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="Company location"
+                  />
+                </div>
+                <div className="grid gap-2">
                   <Label htmlFor="description">Description</Label>
                   <Textarea
                     id="description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Job description"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="basePay">Base Pay</Label>
+                  <Input
+                    id="basePay"
+                    value={basePay}
+                    onChange={(e) => setBasePay(e.target.value)}
+                    placeholder="Annual salary"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="bonus">Bonus</Label>
+                  <Input
+                    id="bonus"
+                    value={bonus}
+                    onChange={(e) => setBonus(e.target.value)}
+                    placeholder="Bonus or incentives"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="stocks">Stocks/Options</Label>
+                  <Input
+                    id="stocks"
+                    value={stocks}
+                    onChange={(e) => setStocks(e.target.value)}
+                    placeholder="Stock options or RSUs"
                   />
                 </div>
                 <Button type="submit" className="mt-2 w-full">
@@ -142,6 +190,8 @@ export function JobInfoDialog({
                       <th className="text-left p-2">Title</th>
                       <th className="text-left p-2">Company</th>
                       <th className="text-left p-2">Work Type</th>
+                      <th className="text-left p-2">Location</th>
+                      <th className="text-left p-2">Base Pay</th>
                       <th className="p-2" />
                     </tr>
                   </thead>
@@ -151,6 +201,8 @@ export function JobInfoDialog({
                         <td className="p-2">{job.title}</td>
                         <td className="p-2">{job.company}</td>
                         <td className="p-2">{job.workType}</td>
+                        <td className="p-2">{job.location}</td>
+                        <td className="p-2">{job.basePay}</td>
                         <td className="p-2 text-right">
                           <Button
                             type="button"
