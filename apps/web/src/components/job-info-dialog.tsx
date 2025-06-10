@@ -38,6 +38,10 @@ export function JobInfoDialog({
     location?: string
     description?: string
     benefits?: string[]
+    workType?: string
+    basePay?: string
+    bonus?: string
+    stocks?: string
   }
   const standardBenefits = [
     "Health Insurance",
@@ -53,10 +57,14 @@ export function JobInfoDialog({
   const [description, setDescription] = useState(typedJobInfo.description ?? "")
   const [benefits, setBenefits] = useState<string[]>(typedJobInfo.benefits ?? [])
   const [benefitInput, setBenefitInput] = useState("")
+  const [workType, setWorkType] = useState(typedJobInfo.workType ?? "")
+  const [basePay, setBasePay] = useState(typedJobInfo.basePay ?? "")
+  const [bonus, setBonus] = useState(typedJobInfo.bonus ?? "")
+  const [stocks, setStocks] = useState(typedJobInfo.stocks ?? "")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const job = { title, company, location, description, benefits }
+    const job = { title, company, location, description, basePay, bonus, stocks, workType, benefits }
     setJobInfo(job)
     addJob(job)
     setTitle("")
@@ -64,6 +72,10 @@ export function JobInfoDialog({
     setLocation("")
     setDescription("")
     setBenefits([])
+    setWorkType("")
+    setBasePay("")
+    setBonus("")
+    setStocks("")
   }
 
   return (
@@ -116,6 +128,20 @@ export function JobInfoDialog({
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="Company name"
                   />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="workType">Type of Work</Label>
+                  <select
+                    id="workType"
+                    className="border rounded-md p-2"
+                    value={workType}
+                    onChange={(e) => setWorkType(e.target.value)}
+                  >
+                    <option value="">Select</option>
+                    <option value="onsite">Onsite</option>
+                    <option value="remote">Remote</option>
+                    <option value="hybrid">Hybrid</option>
+                  </select>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="location">Location</Label>
@@ -186,6 +212,33 @@ export function JobInfoDialog({
                     </Button>
                   </div>
                 </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="basePay">Base Pay</Label>
+                  <Input
+                    id="basePay"
+                    value={basePay}
+                    onChange={(e) => setBasePay(e.target.value)}
+                    placeholder="Annual salary"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="bonus">Bonus</Label>
+                  <Input
+                    id="bonus"
+                    value={bonus}
+                    onChange={(e) => setBonus(e.target.value)}
+                    placeholder="Bonus or incentives"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="stocks">Stocks/Options</Label>
+                  <Input
+                    id="stocks"
+                    value={stocks}
+                    onChange={(e) => setStocks(e.target.value)}
+                    placeholder="Stock options or RSUs"
+                  />
+                </div>
                 <Button type="submit" className="mt-2 w-full">
                   Add Job
                 </Button>
@@ -198,7 +251,9 @@ export function JobInfoDialog({
                     <tr>
                       <th className="text-left p-2">Title</th>
                       <th className="text-left p-2">Company</th>
+                      <th className="text-left p-2">Work Type</th>
                       <th className="text-left p-2">Location</th>
+                      <th className="text-left p-2">Base Pay</th>
                       <th className="p-2" />
                     </tr>
                   </thead>
@@ -207,7 +262,9 @@ export function JobInfoDialog({
                       <tr key={i}>
                         <td className="p-2">{job.title}</td>
                         <td className="p-2">{job.company}</td>
+                        <td className="p-2">{job.workType}</td>
                         <td className="p-2">{job.location}</td>
+                        <td className="p-2">{job.basePay}</td>
                         <td className="p-2 text-right">
                           <Button
                             type="button"
