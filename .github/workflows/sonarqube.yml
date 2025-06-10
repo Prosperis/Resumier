@@ -18,7 +18,7 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
