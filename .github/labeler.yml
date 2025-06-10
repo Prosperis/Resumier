@@ -1,36 +1,35 @@
 web:
-  - changed-files:
-      - 'apps/web/**'
+  - apps/web/**
+
 mobile:
-  - changed-files:
-      - 'apps/mobile/**'
+  - apps/mobile/**
+
 desktop:
-  - changed-files:
-      - 'apps/desktop/**'
+  - apps/desktop/**
+
 docs:
-  - changed-files:
-      - '**/*.md'
-      - '**/docs/**'
+  - '**/*.md'
+  - '**/docs/**'
+
 ci:
-  - changed-files:
-      - '.github/workflows/**'
+  - .github/workflows/**
+
 config:
-  - changed-files:
-      - '*.json'
-      - '*.yaml'
-      - '**/eslint.config.js'
-      - 'tsconfig*.json'
+  - '*.json'
+  - '*.yaml'
+  - '**/eslint.config.js'
+  - tsconfig*.json
+
 dependencies:
-  - changed-files:
-      - '**/package.json'
-      - '**/pnpm-lock.yaml'
+  - '**/package.json'
+  - '**/pnpm-lock.yaml'
+
 ui:
-  - changed-files:
-      - 'apps/web/src/components/ui/**'
+  - apps/web/src/components/ui/**
+
 testing:
-  - changed-files:
-      - '**/*.test.*'
-      - '**/__tests__/**'
+  - '**/*.test.*'
+  - '**/__tests__/**'
+
 security:
-  - changed-files:
-      - '.github/SECURITY.md'
+  - .github/SECURITY.md
