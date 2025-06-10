@@ -71,6 +71,14 @@ pnpm dev
 
 ---
 
+## 🌍 Deployment
+
+The web app under `apps/web` is automatically built and deployed to the
+`gh-pages` branch via GitHub Actions whenever a pull request is merged into
+`main`. The static files are served through GitHub Pages.
+
+---
+
 ## 🔒 Security
 
 For information on reporting security vulnerabilities, please see
