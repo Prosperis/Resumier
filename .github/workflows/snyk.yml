@@ -23,7 +23,7 @@ jobs:
           override: true
           profile: minimal
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+      - uses: snyk/actions/setup@v1
       - uses: snyk/actions/setup@master
       - name: Snyk test
         run: snyk test --all-projects
