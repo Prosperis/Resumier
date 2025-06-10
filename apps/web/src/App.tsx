@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="flex items-center justify-between gap-4 border-b p-4 z-20">
+      <header className="fixed inset-x-0 top-0 z-20 flex h-16 items-center justify-between gap-4 border-b bg-background px-4">
         <div className="flex items-center gap-2">
           <img src="/logo_dark.png" alt="Logo" className="h-8" />
         </div>
