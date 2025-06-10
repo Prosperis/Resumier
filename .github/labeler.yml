@@ -1,35 +1,35 @@
 web:
-  - apps/web/**
+  - "apps/web/**"
 
 mobile:
-  - apps/mobile/**
+  - "apps/mobile/**"
 
 desktop:
-  - apps/desktop/**
+  - "apps/desktop/**"
 
 docs:
-  - '**/*.md'
-  - '**/docs/**'
+  - "**/*.md"
+  - "**/docs/**"
 
 ci:
-  - .github/workflows/**
+  - ".github/workflows/**"
 
 config:
-  - '*.json'
-  - '*.yaml'
-  - '**/eslint.config.js'
-  - tsconfig*.json
+  - "*.json"
+  - "*.yaml"
+  - "**/eslint.config.js"
+  - "tsconfig*.json"
 
 dependencies:
-  - '**/package.json'
-  - '**/pnpm-lock.yaml'
+  - "**/package.json"
+  - "**/pnpm-lock.yaml"
 
 ui:
-  - apps/web/src/components/ui/**
+  - "apps/web/src/components/ui/**"
 
 testing:
-  - '**/*.test.*'
-  - '**/__tests__/**'
+  - "**/*.test.*"
+  - "**/__tests__/**"
 
 security:
-  - .github/SECURITY.md
+  - ".github/SECURITY.md"
