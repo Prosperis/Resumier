@@ -30,11 +30,18 @@ export interface Certification {
   expiration?: string;
 }
 
+export interface Link {
+  label?: string
+  url?: string
+}
+
 export interface UserInfo {
   name?: string
   email?: string
   phone?: string
   address?: string
+  customUrl?: string
+  links?: Link[]
   experiences?: WorkExperience[]
   education?: Education[]
   skills?: Skill[]
@@ -47,6 +54,11 @@ export interface JobInfo {
   company?: string
   location?: string
   description?: string
+  benefits?: string[]
+  workType?: "onsite" | "remote" | "hybrid"
+  basePay?: string
+  bonus?: string
+  stocks?: string
   [key: string]: unknown
 }
 
