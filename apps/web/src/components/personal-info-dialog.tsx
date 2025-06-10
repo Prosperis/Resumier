@@ -1,15 +1,11 @@
 import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/dialog"
 import {
   Sidebar,
   SidebarContent,
@@ -21,8 +17,7 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
   SidebarProvider,
-} from "@/components/ui/sidebar";
-import { Textarea } from "@/components/ui/textarea";
+} from "@/components/ui/sidebar"
 import type {
   Education,
   WorkExperience,
@@ -32,12 +27,14 @@ import type {
   Link,
 } from "@/hooks/use-resume-store"
 import { useResumeStore } from "@/hooks/use-resume-store"
-import { ChevronDown, Plus, Trash } from "lucide-react"
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+  BasicInfoSection,
+  ExperienceSection,
+  EducationSection,
+  SkillsSection,
+  CertificationsSection,
+  LinksSection,
+} from "@/components/personal-info"
 
 type Section =
   | "basic"
@@ -69,7 +66,6 @@ export function PersonalInfoDialog({
     userInfo.education ?? [],
   );
   const [skills, setSkills] = useState<Skill[]>(userInfo.skills ?? []);
-  const [skillInput, setSkillInput] = useState("");
   const [certifications, setCertifications] = useState<Certification[]>(
     userInfo.certifications ?? [],
   );
@@ -200,9 +196,7 @@ export function PersonalInfoDialog({
   }
 
   function addSkill() {
-    if (!skillInput.trim()) return;
-    setSkills([...skills, skillInput.trim()]);
-    setSkillInput("");
+    setSkills((prev) => [...prev, {}]);
   }
 
   function updateSkill(index: number, field: keyof Skill, value: string) {
@@ -293,421 +287,67 @@ export function PersonalInfoDialog({
           </Sidebar>
           <main className="flex h-[650px] flex-1 flex-col overflow-y-auto p-4">
             {section === "basic" && (
-              <form className="grid gap-4" onSubmit={handleSave}>
-                <div className="grid gap-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Your name"
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="phone">Phone</Label>
-                  <Input
-                    id="phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="555-555-5555"
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="address">Address</Label>
-                  <Input
-                    id="address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Your address"
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="linkedin">LinkedIn Profile URL</Label>
-                  <Input
-                    id="linkedin"
-                    value={linkedInUrl}
-                    onChange={(e) => setLinkedInUrl(e.target.value)}
-                    placeholder="https://www.linkedin.com/in/username"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleImport}
-                    disabled={importMutation.isPending}
-                  >
-                    Import from LinkedIn
-                  </Button>
-                </div>
-                <Button type="submit" className="mt-2 w-full">
-                  Save
-                </Button>
-              </form>
+              <BasicInfoSection
+                name={name}
+                email={email}
+                phone={phone}
+                address={address}
+                linkedInUrl={linkedInUrl}
+                onNameChange={setName}
+                onEmailChange={setEmail}
+                onPhoneChange={setPhone}
+                onAddressChange={setAddress}
+                onLinkedInUrlChange={setLinkedInUrl}
+                onImport={handleImport}
+                importing={importMutation.isPending}
+                onSave={handleSave}
+              />
             )}
             {section === "experience" && (
-              <div className="grid gap-4">
-                {experiences.map((exp, i) => (
-                  <Collapsible
-                    key={i}
-                    defaultOpen={!exp.company}
-                    className="rounded-md border"
-                  >
-                    <div className="flex items-center justify-between gap-2 p-2">
-                      <span className="font-medium">
-                        {exp.company || `Experience ${i + 1}`}
-                      </span>
-                      <div className="flex gap-2">
-                        <CollapsibleTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <ChevronDown className="h-4 w-4 transition-transform data-[state=open]:rotate-180" />
-                            <span className="sr-only">Toggle</span>
-                          </Button>
-                        </CollapsibleTrigger>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => removeExperience(i)}
-                        >
-                          <Trash className="mr-2 h-4 w-4" /> Remove
-                        </Button>
-                      </div>
-                    </div>
-                    <CollapsibleContent className="grid gap-2 border-t p-4">
-                      <div className="grid gap-2">
-                        <Label>Company</Label>
-                        <Input
-                          value={exp.company ?? ""}
-                          onChange={(e) =>
-                            updateExperience(i, "company", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label>Title</Label>
-                        <Input
-                          value={exp.title ?? ""}
-                          onChange={(e) =>
-                            updateExperience(i, "title", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="grid grid-cols-3 gap-2">
-                        <div className="grid gap-2">
-                          <Label>Start Date</Label>
-                          <Input
-                            type="date"
-                            value={exp.startDate ?? ""}
-                            onChange={(e) =>
-                              updateExperience(i, "startDate", e.target.value)
-                            }
-                          />
-                        </div>
-                        <div className="grid gap-2">
-                          <Label>End Date</Label>
-                          <Input
-                            type="date"
-                            value={exp.endDate ?? ""}
-                            onChange={(e) =>
-                              updateExperience(i, "endDate", e.target.value)
-                            }
-                            disabled={exp.current}
-                            placeholder={exp.current ? "Present" : undefined}
-                          />
-                        </div>
-                        <div className="flex items-center gap-2 pt-6">
-                          <input
-                            id={`current-${i}`}
-                            type="checkbox"
-                            checked={exp.current ?? false}
-                            onChange={(e) =>
-                              updateExperience(i, "current", e.target.checked)
-                            }
-                            className="h-4 w-4"
-                          />
-                          <Label htmlFor={`current-${i}`}>Current</Label>
-                        </div>
-                      </div>
-                    <div className="grid gap-2">
-                      <Label>Description</Label>
-                      <Textarea
-                        value={exp.description ?? ""}
-                        onChange={(e) =>
-                          updateExperience(i, "description", e.target.value)
-                        }
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Awards</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          value={awardInputs[i] ?? ""}
-                          onChange={(e) => setAwardInput(i, e.target.value)}
-                          placeholder="Add award"
-                        />
-                        <Button
-                          type="button"
-                          onClick={() => addExperienceAward(i)}
-                        >
-                          <Plus className="mr-2 h-4 w-4" /> Add
-                        </Button>
-                      </div>
-                      <ul className="grid gap-2">
-                        {(exp.awards ?? []).map((award, j) => (
-                          <li key={j} className="flex items-center gap-2">
-                            <span className="flex-1">{award}</span>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={() => removeExperienceAward(i, j)}
-                            >
-                              <Trash className="mr-2 h-4 w-4" />
-                            </Button>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeExperience(i)}
-                    >
-                      <Trash className="mr-2 h-4 w-4" /> Remove
-                    </Button>
-                    </CollapsibleContent>
-                  </Collapsible>
-                ))}
-                <Button type="button" variant="outline" onClick={addExperience}>
-                  <Plus className="mr-2 h-4 w-4" /> Add Experience
-                </Button>
-              </div>
+              <ExperienceSection
+                experiences={experiences}
+                awardInputs={awardInputs}
+                addExperience={addExperience}
+                updateExperience={updateExperience}
+                removeExperience={removeExperience}
+                setAwardInput={setAwardInput}
+                addExperienceAward={addExperienceAward}
+                removeExperienceAward={removeExperienceAward}
+              />
             )}
             {section === "education" && (
-              <div className="grid gap-4">
-                {education.map((ed, i) => (
-                  <div key={i} className="border p-4 rounded-md grid gap-2">
-                    <div className="grid gap-2">
-                      <Label>School</Label>
-                      <Input
-                        value={ed.school ?? ""}
-                        onChange={(e) =>
-                          updateEducation(i, "school", e.target.value)
-                        }
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Degree</Label>
-                      <Input
-                        value={ed.degree ?? ""}
-                        onChange={(e) =>
-                          updateEducation(i, "degree", e.target.value)
-                        }
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="grid gap-2">
-                        <Label>Start Date</Label>
-                        <Input
-                          type="date"
-                          value={ed.startDate ?? ""}
-                          onChange={(e) =>
-                            updateEducation(i, "startDate", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label>End Date</Label>
-                        <Input
-                          type="date"
-                          value={ed.endDate ?? ""}
-                          onChange={(e) =>
-                            updateEducation(i, "endDate", e.target.value)
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Description</Label>
-                      <Textarea
-                        value={ed.description ?? ""}
-                        onChange={(e) =>
-                          updateEducation(i, "description", e.target.value)
-                        }
-                      />
-                    </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeEducation(i)}
-                    >
-                      <Trash className="mr-2 h-4 w-4" /> Remove
-                    </Button>
-                  </div>
-                ))}
-                <Button type="button" variant="outline" onClick={addEducation}>
-                  <Plus className="mr-2 h-4 w-4" /> Add Education
-                </Button>
-              </div>
+              <EducationSection
+                education={education}
+                addEducation={addEducation}
+                updateEducation={updateEducation}
+                removeEducation={removeEducation}
+              />
             )}
             {section === "skills" && (
-              <div className="grid gap-4">
-                {skills.map((skill, i) => (
-                  <div key={i} className="border p-4 rounded-md grid gap-2">
-                    <div className="grid gap-2">
-                      <Label>Skill</Label>
-                      <Input
-                        value={skill.name ?? ""}
-                        onChange={(e) => updateSkill(i, "name", e.target.value)}
-                        placeholder="Skill name"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Years of Experience</Label>
-                      <Input
-                        type="number"
-                        min="0"
-                        value={skill.years ?? ""}
-                        onChange={(e) => updateSkill(i, "years", e.target.value)}
-                        placeholder="0"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Proficiency</Label>
-                      <select
-                        className="border rounded-md p-2"
-                        value={skill.proficiency ?? ""}
-                        onChange={(e) =>
-                          updateSkill(i, "proficiency", e.target.value)
-                        }
-                      >
-                        <option value="">Select</option>
-                        <option value="beginner">Beginner</option>
-                        <option value="intermediate">Intermediate</option>
-                        <option value="professional">Professional</option>
-                        <option value="expert">Expert</option>
-                        {[...Array(10)].map((_, idx) => {
-                          const val = (idx + 1).toString()
-                          return (
-                            <option key={val} value={val}>
-                              {val}
-                            </option>
-                          )
-                        })}
-                      </select>
-                    </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeSkill(i)}
-                    >
-                      <Trash className="mr-2 h-4 w-4" /> Remove
-                    </Button>
-                  </div>
-                ))}
-                <Button type="button" variant="outline" onClick={addSkill}>
-                  <Plus className="mr-2 h-4 w-4" /> Add Skill
-                </Button>
-              </div>
+              <SkillsSection
+                skills={skills}
+                addSkill={addSkill}
+                updateSkill={updateSkill}
+                removeSkill={removeSkill}
+              />
             )}
             {section === "certifications" && (
-              <div className="grid gap-4">
-                {certifications.map((cert, i) => (
-                  <div key={i} className="border p-4 rounded-md grid gap-2">
-                    <div className="grid gap-2">
-                      <Label>Certification</Label>
-                      <Input
-                        value={cert.name ?? ""}
-                        onChange={(e) =>
-                          updateCertification(i, "name", e.target.value)
-                        }
-                        placeholder="Certification name"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Expiration</Label>
-                      <Input
-                        type="date"
-                        value={cert.expiration ?? ""}
-                        onChange={(e) =>
-                          updateCertification(i, "expiration", e.target.value)
-                        }
-                      />
-                    </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeCertification(i)}
-                    >
-                      <Trash className="mr-2 h-4 w-4" /> Remove
-                    </Button>
-                  </div>
-                ))}
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={addCertification}
-                >
-                  <Plus className="mr-2 h-4 w-4" /> Add Certification
-                </Button>
-              </div>
+              <CertificationsSection
+                certifications={certifications}
+                addCertification={addCertification}
+                updateCertification={updateCertification}
+                removeCertification={removeCertification}
+              />
             )}
             {section === "links" && (
-              <div className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="custom-url">Custom URL</Label>
-                  <Input
-                    id="custom-url"
-                    value={customUrl}
-                    onChange={(e) => setCustomUrl(e.target.value)}
-                    placeholder="yourname"
-                  />
-                </div>
-                {links.map((link, i) => (
-                  <div key={i} className="border p-4 rounded-md grid gap-2">
-                    <div className="grid gap-2">
-                      <Label>Label</Label>
-                      <Input
-                        value={link.label ?? ""}
-                        onChange={(e) => updateLink(i, "label", e.target.value)}
-                        placeholder="LinkedIn"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>URL</Label>
-                      <Input
-                        value={link.url ?? ""}
-                        onChange={(e) => updateLink(i, "url", e.target.value)}
-                        placeholder="https://linkedin.com/in/you"
-                      />
-                    </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => removeLink(i)}
-                    >
-                      <Trash className="mr-2 h-4 w-4" /> Remove
-                    </Button>
-                  </div>
-                ))}
-                <Button type="button" variant="outline" onClick={addLink}>
-                  <Plus className="mr-2 h-4 w-4" /> Add Link
-                </Button>
-              </div>
+              <LinksSection
+                customUrl={customUrl}
+                links={links}
+                setCustomUrl={setCustomUrl}
+                addLink={addLink}
+                updateLink={updateLink}
+                removeLink={removeLink}
+              />
             )}
           </main>
         </SidebarProvider>
