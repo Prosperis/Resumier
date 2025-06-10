@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Select } from "@/components/ui/select"
 import type { Skill } from "@/hooks/use-resume-store"
 import { Plus, Trash } from "lucide-react"
 
@@ -36,8 +37,7 @@ export function SkillsSection({ skills, addSkill, updateSkill, removeSkill }: Sk
           </div>
           <div className="grid gap-2">
             <Label>Proficiency</Label>
-            <select
-              className="border rounded-md p-2"
+            <Select
               value={skill.proficiency ?? ""}
               onChange={(e) => updateSkill(i, "proficiency", e.target.value)}
             >
@@ -54,7 +54,7 @@ export function SkillsSection({ skills, addSkill, updateSkill, removeSkill }: Sk
                   </option>
                 )
               })}
-            </select>
+            </Select>
           </div>
           <Button type="button" variant="outline" size="sm" onClick={() => removeSkill(i)}>
             <Trash className="mr-2 h-4 w-4" /> Remove
