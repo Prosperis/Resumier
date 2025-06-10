@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Select } from "@/components/ui/select"
 import {
   Sidebar,
   SidebarContent,
@@ -131,9 +132,8 @@ export function JobInfoDialog({
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="workType">Type of Work</Label>
-                  <select
+                  <Select
                     id="workType"
-                    className="border rounded-md p-2"
                     value={workType}
                     onChange={(e) => setWorkType(e.target.value)}
                   >
@@ -141,7 +141,7 @@ export function JobInfoDialog({
                     <option value="onsite">Onsite</option>
                     <option value="remote">Remote</option>
                     <option value="hybrid">Hybrid</option>
-                  </select>
+                  </Select>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="location">Location</Label>
