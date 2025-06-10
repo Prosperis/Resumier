@@ -37,6 +37,7 @@ export function JobInfoDialog({
     company?: string
     location?: string
     description?: string
+    workType?: string
     basePay?: string
     bonus?: string
     stocks?: string
@@ -46,19 +47,21 @@ export function JobInfoDialog({
   const [company, setCompany] = useState(typedJobInfo.company ?? "")
   const [location, setLocation] = useState(typedJobInfo.location ?? "")
   const [description, setDescription] = useState(typedJobInfo.description ?? "")
+  const [workType, setWorkType] = useState(typedJobInfo.workType ?? "")
   const [basePay, setBasePay] = useState(typedJobInfo.basePay ?? "")
   const [bonus, setBonus] = useState(typedJobInfo.bonus ?? "")
   const [stocks, setStocks] = useState(typedJobInfo.stocks ?? "")
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const job = { title, company, location, description, basePay, bonus, stocks }
+    const job = { title, company, location, description, basePay, bonus, stocks, workType }
     setJobInfo(job)
     addJob(job)
     setTitle("")
     setCompany("")
     setLocation("")
     setDescription("")
+    setWorkType("")
     setBasePay("")
     setBonus("")
     setStocks("")
@@ -114,6 +117,20 @@ export function JobInfoDialog({
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="Company name"
                   />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="workType">Type of Work</Label>
+                  <select
+                    id="workType"
+                    className="border rounded-md p-2"
+                    value={workType}
+                    onChange={(e) => setWorkType(e.target.value)}
+                  >
+                    <option value="">Select</option>
+                    <option value="onsite">Onsite</option>
+                    <option value="remote">Remote</option>
+                    <option value="hybrid">Hybrid</option>
+                  </select>
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="location">Location</Label>
@@ -172,6 +189,7 @@ export function JobInfoDialog({
                     <tr>
                       <th className="text-left p-2">Title</th>
                       <th className="text-left p-2">Company</th>
+                      <th className="text-left p-2">Work Type</th>
                       <th className="text-left p-2">Location</th>
                       <th className="text-left p-2">Base Pay</th>
                       <th className="p-2" />
@@ -182,6 +200,7 @@ export function JobInfoDialog({
                       <tr key={i}>
                         <td className="p-2">{job.title}</td>
                         <td className="p-2">{job.company}</td>
+                        <td className="p-2">{job.workType}</td>
                         <td className="p-2">{job.location}</td>
                         <td className="p-2">{job.basePay}</td>
                         <td className="p-2 text-right">
