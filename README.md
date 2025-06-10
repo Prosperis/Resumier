@@ -57,7 +57,7 @@ pnpm dev
 | `pnpm dev`   | Run all dev servers        |
 | `pnpm build` | Build all apps/packages    |
 | `pnpm lint`  | Lint all workspaces        |
-| `pnpm test`  | Run all tests (future use) |
+| `pnpm test`  | Run all tests             |
 
 ---
 
