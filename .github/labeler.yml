@@ -1,35 +1,49 @@
 web:
-  - apps/web/**
+  - changed-files:
+      - any-glob-to-any-file: 'apps/web/**'
 
 mobile:
-  - apps/mobile/**
+  - changed-files:
+      - any-glob-to-any-file: 'apps/mobile/**'
 
 desktop:
-  - apps/desktop/**
+  - changed-files:
+      - any-glob-to-any-file: 'apps/desktop/**'
 
 docs:
-  - '**/*.md'
-  - '**/docs/**'
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - '**/docs/**'
 
 ci:
-  - .github/workflows/**
+  - changed-files:
+      - any-glob-to-any-file: '.github/workflows/**'
 
 config:
-  - '*.json'
-  - '*.yaml'
-  - '**/eslint.config.js'
-  - tsconfig*.json
+  - changed-files:
+      - any-glob-to-any-file:
+          - '*.json'
+          - '*.yaml'
+          - '**/eslint.config.js'
+          - 'tsconfig*.json'
 
 dependencies:
-  - '**/package.json'
-  - '**/pnpm-lock.yaml'
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/package.json'
+          - '**/pnpm-lock.yaml'
 
 ui:
-  - apps/web/src/components/ui/**
+  - changed-files:
+      - any-glob-to-any-file: 'apps/web/src/components/ui/**'
 
 testing:
-  - '**/*.test.*'
-  - '**/__tests__/**'
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.test.*'
+          - '**/__tests__/**'
 
 security:
-  - .github/SECURITY.md
+  - changed-files:
+      - any-glob-to-any-file: '.github/SECURITY.md'
