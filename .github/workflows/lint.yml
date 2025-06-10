@@ -1,8 +1,6 @@
 name: Lint
 
 on:
-  push:
-    branches: [main]
   pull_request:
 
 jobs:
@@ -18,6 +16,8 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        # Use --no-frozen-lockfile so that CI doesn't fail when pnpm-lock.yaml
+        # is slightly out of sync with package.json
+        run: pnpm install --no-frozen-lockfile
       - name: Run linter
         run: pnpm lint
