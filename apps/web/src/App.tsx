@@ -7,7 +7,7 @@ import {
   SidebarInset,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { PdfViewer } from "@/components/pdf-viewer"
+import { ResumeBuilder } from "@/components/resume-builder"
 import { PersonalInfoDialog } from "@/components/personal-info-dialog"
 import { JobInfoDialog } from "@/components/job-info-dialog"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -44,8 +44,8 @@ export default function App() {
       {/* Main Content Area */}
       <SidebarInset>
         <div className="flex flex-col flex-1 min-h-0">
-          <div className="flex-1 overflow-hidden p-4">
-            <PdfViewer />
+          <div className="flex-1 overflow-auto p-4 flex items-start justify-center">
+            <ResumeBuilder />
           </div>
         </div>
       </SidebarInset>
