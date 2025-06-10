@@ -9,7 +9,7 @@
   "scripts": {
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
     "dev": "turbo run dev",
     "dev:desktop": "pnpm --filter @resumier/desktop tauri dev",
     "dev:mobile": "pnpm --filter @resumier/mobile start",
