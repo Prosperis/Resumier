@@ -7,7 +7,7 @@ import {
   SidebarInset,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { PdfViewer } from "@/components/pdf-viewer"
+import { ResumeBuilder } from "@/components/resume-builder"
 import { PersonalInfoDialog } from "@/components/personal-info-dialog"
 import { JobInfoDialog } from "@/components/job-info-dialog"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="flex items-center justify-between gap-4 border-b p-4 z-20">
+      <header className="fixed inset-x-0 top-0 z-20 flex h-16 items-center justify-between gap-4 border-b bg-background px-4">
         <div className="flex items-center gap-2">
           <img src="/logo_dark.png" alt="Logo" className="h-8" />
         </div>
@@ -44,8 +44,8 @@ export default function App() {
       {/* Main Content Area */}
       <SidebarInset>
         <div className="flex flex-col flex-1 min-h-0">
-          <div className="flex-1 overflow-hidden p-4">
-            <PdfViewer />
+          <div className="flex-1 overflow-auto p-4 flex items-start justify-center">
+            <ResumeBuilder />
           </div>
         </div>
       </SidebarInset>

@@ -1,3 +1,5 @@
+import { useState } from "react"
+import { useMutation } from "@tanstack/react-query"
 import { useState } from "react";
 import {
   Dialog,
@@ -11,11 +13,13 @@ import { Label } from "@/components/ui/label";
 import {
   Sidebar,
   SidebarContent,
+  SidebarHeader,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
   SidebarProvider,
 } from "@/components/ui/sidebar";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,16 +28,24 @@ import type {
   WorkExperience,
   Certification,
   Skill,
+  UserInfo,
+  Link,
 } from "@/hooks/use-resume-store"
 import { useResumeStore } from "@/hooks/use-resume-store"
-import { Plus, Trash } from "lucide-react"
+import { ChevronDown, Plus, Trash } from "lucide-react"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 type Section =
   | "basic"
   | "experience"
   | "education"
   | "skills"
-  | "certifications";
+  | "certifications"
+  | "links";
 
 export function PersonalInfoDialog({
   open,
@@ -45,11 +57,11 @@ export function PersonalInfoDialog({
   const { userInfo, setUserInfo } = useResumeStore();
 
   const [section, setSection] = useState<Section>("basic");
-
-  const [name, setName] = useState(userInfo.name ?? "");
-  const [email, setEmail] = useState(userInfo.email ?? "");
-  const [phone, setPhone] = useState(userInfo.phone ?? "");
-  const [address, setAddress] = useState(userInfo.address ?? "");
+  const [linkedInUrl, setLinkedInUrl] = useState("")
+  const [name, setName] = useState(userInfo.name ?? "")
+  const [email, setEmail] = useState(userInfo.email ?? "")
+  const [phone, setPhone] = useState(userInfo.phone ?? "")
+  const [address, setAddress] = useState(userInfo.address ?? "")
   const [experiences, setExperiences] = useState<WorkExperience[]>(
     userInfo.experiences ?? [],
   );
@@ -62,6 +74,26 @@ export function PersonalInfoDialog({
     userInfo.certifications ?? [],
   );
   const [awardInputs, setAwardInputs] = useState<Record<number, string>>({});
+  const [links, setLinks] = useState<Link[]>(userInfo.links ?? [])
+  const [customUrl, setCustomUrl] = useState(userInfo.customUrl ?? "")
+
+  const importMutation = useMutation({
+    mutationFn: async (url: string) => {
+      const res = await fetch(`/api/linkedin?url=${encodeURIComponent(url)}`)
+      if (!res.ok) throw new Error('Failed to fetch')
+      return (await res.json()) as Partial<UserInfo>
+    },
+    onSuccess: (data) => {
+      setName(data.name ?? '')
+      setEmail(data.email ?? '')
+      setPhone(data.phone ?? '')
+      setAddress(data.address ?? '')
+      setExperiences(data.experiences ?? [])
+      setEducation(data.education ?? [])
+      setSkills(data.skills ?? [])
+      setCertifications(data.certifications ?? [])
+    },
+  })
 
   function handleSave(e: React.FormEvent) {
     e.preventDefault();
@@ -70,12 +102,19 @@ export function PersonalInfoDialog({
       email,
       phone,
       address,
+      customUrl,
+      links,
       experiences,
       education,
       skills,
       certifications,
     });
     onOpenChange(false);
+  }
+
+  function handleImport() {
+    if (!linkedInUrl) return
+    importMutation.mutate(linkedInUrl)
   }
 
   function addExperience() {
@@ -198,15 +237,35 @@ export function PersonalInfoDialog({
     setCertifications((prev) => prev.filter((_, i) => i !== index));
   }
 
+  function addLink() {
+    setLinks([...links, {}])
+  }
+
+  function updateLink(index: number, field: keyof Link, value: string) {
+    setLinks((prev) => {
+      const next = [...prev]
+      next[index] = { ...next[index], [field]: value }
+      return next
+    })
+  }
+
+  function removeLink(index: number) {
+    setLinks((prev) => prev.filter((_, i) => i !== index))
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="overflow-hidden md:max-h-[600px] md:max-w-[800px]">
+      <DialogContent className="overflow-hidden md:max-h-[750px] md:max-w-[960px]">
         <DialogHeader>
           <DialogTitle>Personal Information</DialogTitle>
         </DialogHeader>
         <SidebarProvider className="items-start">
           <Sidebar collapsible="none" className="hidden md:flex">
             <SidebarContent>
+              <SidebarHeader>
+                <DialogTitle className="text-base">Personal Information</DialogTitle>
+              </SidebarHeader>
+              <SidebarSeparator />
               <SidebarGroup>
                 <SidebarGroupContent>
                   <SidebarMenu>
@@ -216,6 +275,7 @@ export function PersonalInfoDialog({
                       { value: "education", label: "Education" },
                       { value: "skills", label: "Skills" },
                       { value: "certifications", label: "Certifications" },
+                      { value: "links", label: "Links" },
                     ].map((item) => (
                       <SidebarMenuItem key={item.value}>
                         <SidebarMenuButton
@@ -231,7 +291,7 @@ export function PersonalInfoDialog({
               </SidebarGroup>
             </SidebarContent>
           </Sidebar>
-          <main className="flex h-[500px] flex-1 flex-col overflow-y-auto p-4">
+          <main className="flex h-[650px] flex-1 flex-col overflow-y-auto p-4">
             {section === "basic" && (
               <form className="grid gap-4" onSubmit={handleSave}>
                 <div className="grid gap-2">
@@ -271,6 +331,23 @@ export function PersonalInfoDialog({
                     placeholder="Your address"
                   />
                 </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="linkedin">LinkedIn Profile URL</Label>
+                  <Input
+                    id="linkedin"
+                    value={linkedInUrl}
+                    onChange={(e) => setLinkedInUrl(e.target.value)}
+                    placeholder="https://www.linkedin.com/in/username"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleImport}
+                    disabled={importMutation.isPending}
+                  >
+                    Import from LinkedIn
+                  </Button>
+                </div>
                 <Button type="submit" className="mt-2 w-full">
                   Save
                 </Button>
@@ -279,61 +356,87 @@ export function PersonalInfoDialog({
             {section === "experience" && (
               <div className="grid gap-4">
                 {experiences.map((exp, i) => (
-                  <div key={i} className="border p-4 rounded-md grid gap-2">
-                    <div className="grid gap-2">
-                      <Label>Company</Label>
-                      <Input
-                        value={exp.company ?? ""}
-                        onChange={(e) =>
-                          updateExperience(i, "company", e.target.value)
-                        }
-                      />
+                  <Collapsible
+                    key={i}
+                    defaultOpen={!exp.company}
+                    className="rounded-md border"
+                  >
+                    <div className="flex items-center justify-between gap-2 p-2">
+                      <span className="font-medium">
+                        {exp.company || `Experience ${i + 1}`}
+                      </span>
+                      <div className="flex gap-2">
+                        <CollapsibleTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <ChevronDown className="h-4 w-4 transition-transform data-[state=open]:rotate-180" />
+                            <span className="sr-only">Toggle</span>
+                          </Button>
+                        </CollapsibleTrigger>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => removeExperience(i)}
+                        >
+                          <Trash className="mr-2 h-4 w-4" /> Remove
+                        </Button>
+                      </div>
                     </div>
-                    <div className="grid gap-2">
-                      <Label>Title</Label>
-                      <Input
-                        value={exp.title ?? ""}
-                        onChange={(e) =>
-                          updateExperience(i, "title", e.target.value)
-                        }
-                      />
-                    </div>
-                    <div className="grid grid-cols-3 gap-2">
+                    <CollapsibleContent className="grid gap-2 border-t p-4">
                       <div className="grid gap-2">
-                        <Label>Start Date</Label>
+                        <Label>Company</Label>
                         <Input
-                          type="date"
-                          value={exp.startDate ?? ""}
+                          value={exp.company ?? ""}
                           onChange={(e) =>
-                            updateExperience(i, "startDate", e.target.value)
+                            updateExperience(i, "company", e.target.value)
                           }
                         />
                       </div>
                       <div className="grid gap-2">
-                        <Label>End Date</Label>
+                        <Label>Title</Label>
                         <Input
-                          type="date"
-                          value={exp.endDate ?? ""}
+                          value={exp.title ?? ""}
                           onChange={(e) =>
-                            updateExperience(i, "endDate", e.target.value)
+                            updateExperience(i, "title", e.target.value)
                           }
-                          disabled={exp.current}
-                          placeholder={exp.current ? "Present" : undefined}
                         />
                       </div>
-                      <div className="flex items-center gap-2 pt-6">
-                        <input
-                          id={`current-${i}`}
-                          type="checkbox"
-                          checked={exp.current ?? false}
-                          onChange={(e) =>
-                            updateExperience(i, "current", e.target.checked)
-                          }
-                          className="h-4 w-4"
-                        />
-                        <Label htmlFor={`current-${i}`}>Current</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        <div className="grid gap-2">
+                          <Label>Start Date</Label>
+                          <Input
+                            type="date"
+                            value={exp.startDate ?? ""}
+                            onChange={(e) =>
+                              updateExperience(i, "startDate", e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label>End Date</Label>
+                          <Input
+                            type="date"
+                            value={exp.endDate ?? ""}
+                            onChange={(e) =>
+                              updateExperience(i, "endDate", e.target.value)
+                            }
+                            disabled={exp.current}
+                            placeholder={exp.current ? "Present" : undefined}
+                          />
+                        </div>
+                        <div className="flex items-center gap-2 pt-6">
+                          <input
+                            id={`current-${i}`}
+                            type="checkbox"
+                            checked={exp.current ?? false}
+                            onChange={(e) =>
+                              updateExperience(i, "current", e.target.checked)
+                            }
+                            className="h-4 w-4"
+                          />
+                          <Label htmlFor={`current-${i}`}>Current</Label>
+                        </div>
                       </div>
-                    </div>
                     <div className="grid gap-2">
                       <Label>Description</Label>
                       <Textarea
@@ -382,7 +485,8 @@ export function PersonalInfoDialog({
                     >
                       <Trash className="mr-2 h-4 w-4" /> Remove
                     </Button>
-                  </div>
+                    </CollapsibleContent>
+                  </Collapsible>
                 ))}
                 <Button type="button" variant="outline" onClick={addExperience}>
                   <Plus className="mr-2 h-4 w-4" /> Add Experience
@@ -558,6 +662,50 @@ export function PersonalInfoDialog({
                   onClick={addCertification}
                 >
                   <Plus className="mr-2 h-4 w-4" /> Add Certification
+                </Button>
+              </div>
+            )}
+            {section === "links" && (
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="custom-url">Custom URL</Label>
+                  <Input
+                    id="custom-url"
+                    value={customUrl}
+                    onChange={(e) => setCustomUrl(e.target.value)}
+                    placeholder="yourname"
+                  />
+                </div>
+                {links.map((link, i) => (
+                  <div key={i} className="border p-4 rounded-md grid gap-2">
+                    <div className="grid gap-2">
+                      <Label>Label</Label>
+                      <Input
+                        value={link.label ?? ""}
+                        onChange={(e) => updateLink(i, "label", e.target.value)}
+                        placeholder="LinkedIn"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label>URL</Label>
+                      <Input
+                        value={link.url ?? ""}
+                        onChange={(e) => updateLink(i, "url", e.target.value)}
+                        placeholder="https://linkedin.com/in/you"
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeLink(i)}
+                    >
+                      <Trash className="mr-2 h-4 w-4" /> Remove
+                    </Button>
+                  </div>
+                ))}
+                <Button type="button" variant="outline" onClick={addLink}>
+                  <Plus className="mr-2 h-4 w-4" /> Add Link
                 </Button>
               </div>
             )}

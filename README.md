@@ -57,7 +57,7 @@ pnpm dev
 | `pnpm dev`   | Run all dev servers        |
 | `pnpm build` | Build all apps/packages    |
 | `pnpm lint`  | Lint all workspaces        |
-| `pnpm test`  | Run all tests (future use) |
+| `pnpm test`  | Run all tests             |
 
 ---
 
@@ -71,6 +71,14 @@ pnpm dev
 
 ---
 
+## 🌍 Deployment
+
+The web app under `apps/web` is automatically built and deployed to the
+`gh-pages` branch via GitHub Actions whenever a pull request is merged into
+`main`. The static files are served through GitHub Pages.
+
+---
+
 ## 🔒 Security
 
 For information on reporting security vulnerabilities, please see
@@ -81,6 +89,21 @@ For information on reporting security vulnerabilities, please see
 ## 🛡️ Snyk Checks
 
 All pull requests run Snyk security scans. Contributors must have access to the `SNYK_TOKEN` secret for the workflow to execute on forks.
+
+
+## 📬 Contact
+
+For general questions or support, email [adrian.the.hactus@gmail.com](mailto:adrian.the.hactus@gmail.com).
+
+---
+
+## 💵 Compensation
+
+Resumier is maintained by volunteers and does not provide monetary
+compensation. Contributors do not receive a base salary, bonuses, or
+company stock for their work on this project.
+
+---
 
 ## 📄 License
 
