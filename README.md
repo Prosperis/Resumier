@@ -57,7 +57,7 @@ pnpm dev
 | `pnpm dev`   | Run all dev servers        |
 | `pnpm build` | Build all apps/packages    |
 | `pnpm lint`  | Lint all workspaces        |
-| `pnpm test`  | Run all tests             |
+All pull requests run Snyk security scans. The workflow authenticates using `snyk auth` with the `SNYK_TOKEN` secret, so contributors must have access to this secret for the workflow to execute on forks.
 
 ---
 
