@@ -2,20 +2,20 @@
   "name": "resumier",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "pnpm@10.12.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev:web": "pnpm --filter @resumier/web dev",
-    "dev:mobile": "pnpm --filter @resumier/mobile start",
-    "dev:desktop": "pnpm --filter @resumier/desktop tauri dev",
-    "dev": "turbo run dev",
     "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:desktop": "pnpm --filter @resumier/desktop tauri dev",
+    "dev:mobile": "pnpm --filter @resumier/mobile start",
+    "dev:web": "pnpm --filter @resumier/web dev",
     "lint": "turbo run lint"
   },
   "devDependencies": {
     "turbo": "^2.5.0"
   },
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "packageManager": "pnpm@10.12.1"
 }
