@@ -61,7 +61,7 @@ export function ResumeBuilder() {
           <ul className="flex flex-wrap gap-2">
             {skills.map((skill, i) => (
               <li key={i} className="border px-2 py-1 rounded text-sm">
-                {skill}
+                {typeof skill === "string" ? skill : skill.name}
               </li>
             ))}
           </ul>
