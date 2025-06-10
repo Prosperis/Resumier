@@ -121,7 +121,7 @@ export function PersonalInfoDialog({
   function updateExperience(
     index: number,
     field: keyof WorkExperience,
-    value: string | string[],
+    value: string | string[] | boolean,
   ) {
     setExperiences((prev) => {
       const next = [...prev]

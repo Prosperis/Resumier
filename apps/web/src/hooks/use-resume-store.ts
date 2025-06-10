@@ -7,6 +7,7 @@ export interface WorkExperience {
   title?: string;
   startDate?: string;
   endDate?: string;
+  current?: boolean;
   description?: string;
   awards?: string[];
 }
