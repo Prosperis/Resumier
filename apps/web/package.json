@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -54,7 +54,7 @@
     "vite": "^6.3.5",
     "vitest": "^1.4.0",
     "@testing-library/react": "^14.2.1",
-    "@testing-library/jest-dom": "^6.4.2"
+    "@testing-library/jest-dom": "^6.4.2",
     "@storybook/react-vite": "^8.0.0"
   }
 }

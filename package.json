@@ -13,7 +13,7 @@
     "dev": "turbo run dev",
     "dev:desktop": "pnpm --filter @resumier/desktop tauri dev",
     "dev:mobile": "pnpm --filter @resumier/mobile start",
-    "dev:web": "pnpm --filter @resumier/web dev",
+    "dev:web": "pnpm --filter @resumier/web dev"
   },
   "devDependencies": {
     "turbo": "^2.5.0"
