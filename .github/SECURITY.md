@@ -6,5 +6,5 @@ Only the latest stable release of Resumier is currently supported. Please update
 
 ## Reporting a Vulnerability
 
-If you discover a security issue, please email security@example.com with the details.
-We ask that you do not publicly disclose the issue before we have a chance to address it.
+If you discover a security issue, please [open a security report](../../issues/new?template=security_report.md) using our "Security report" issue template.
+Do not publicly disclose the vulnerability before we have a chance to address it.
