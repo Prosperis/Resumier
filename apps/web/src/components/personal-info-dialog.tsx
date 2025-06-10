@@ -29,7 +29,12 @@ import type {
   Link,
 } from "@/hooks/use-resume-store"
 import { useResumeStore } from "@/hooks/use-resume-store"
-import { Plus, Trash } from "lucide-react"
+import { ChevronDown, Plus, Trash } from "lucide-react"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 type Section =
   | "basic"
@@ -308,61 +313,87 @@ export function PersonalInfoDialog({
             {section === "experience" && (
               <div className="grid gap-4">
                 {experiences.map((exp, i) => (
-                  <div key={i} className="border p-4 rounded-md grid gap-2">
-                    <div className="grid gap-2">
-                      <Label>Company</Label>
-                      <Input
-                        value={exp.company ?? ""}
-                        onChange={(e) =>
-                          updateExperience(i, "company", e.target.value)
-                        }
-                      />
+                  <Collapsible
+                    key={i}
+                    defaultOpen={!exp.company}
+                    className="rounded-md border"
+                  >
+                    <div className="flex items-center justify-between gap-2 p-2">
+                      <span className="font-medium">
+                        {exp.company || `Experience ${i + 1}`}
+                      </span>
+                      <div className="flex gap-2">
+                        <CollapsibleTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <ChevronDown className="h-4 w-4 transition-transform data-[state=open]:rotate-180" />
+                            <span className="sr-only">Toggle</span>
+                          </Button>
+                        </CollapsibleTrigger>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => removeExperience(i)}
+                        >
+                          <Trash className="mr-2 h-4 w-4" /> Remove
+                        </Button>
+                      </div>
                     </div>
-                    <div className="grid gap-2">
-                      <Label>Title</Label>
-                      <Input
-                        value={exp.title ?? ""}
-                        onChange={(e) =>
-                          updateExperience(i, "title", e.target.value)
-                        }
-                      />
-                    </div>
-                    <div className="grid grid-cols-3 gap-2">
+                    <CollapsibleContent className="grid gap-2 border-t p-4">
                       <div className="grid gap-2">
-                        <Label>Start Date</Label>
+                        <Label>Company</Label>
                         <Input
-                          type="date"
-                          value={exp.startDate ?? ""}
+                          value={exp.company ?? ""}
                           onChange={(e) =>
-                            updateExperience(i, "startDate", e.target.value)
+                            updateExperience(i, "company", e.target.value)
                           }
                         />
                       </div>
                       <div className="grid gap-2">
-                        <Label>End Date</Label>
+                        <Label>Title</Label>
                         <Input
-                          type="date"
-                          value={exp.endDate ?? ""}
+                          value={exp.title ?? ""}
                           onChange={(e) =>
-                            updateExperience(i, "endDate", e.target.value)
+                            updateExperience(i, "title", e.target.value)
                           }
-                          disabled={exp.current}
-                          placeholder={exp.current ? "Present" : undefined}
                         />
                       </div>
-                      <div className="flex items-center gap-2 pt-6">
-                        <input
-                          id={`current-${i}`}
-                          type="checkbox"
-                          checked={exp.current ?? false}
-                          onChange={(e) =>
-                            updateExperience(i, "current", e.target.checked)
-                          }
-                          className="h-4 w-4"
-                        />
-                        <Label htmlFor={`current-${i}`}>Current</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        <div className="grid gap-2">
+                          <Label>Start Date</Label>
+                          <Input
+                            type="date"
+                            value={exp.startDate ?? ""}
+                            onChange={(e) =>
+                              updateExperience(i, "startDate", e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label>End Date</Label>
+                          <Input
+                            type="date"
+                            value={exp.endDate ?? ""}
+                            onChange={(e) =>
+                              updateExperience(i, "endDate", e.target.value)
+                            }
+                            disabled={exp.current}
+                            placeholder={exp.current ? "Present" : undefined}
+                          />
+                        </div>
+                        <div className="flex items-center gap-2 pt-6">
+                          <input
+                            id={`current-${i}`}
+                            type="checkbox"
+                            checked={exp.current ?? false}
+                            onChange={(e) =>
+                              updateExperience(i, "current", e.target.checked)
+                            }
+                            className="h-4 w-4"
+                          />
+                          <Label htmlFor={`current-${i}`}>Current</Label>
+                        </div>
                       </div>
-                    </div>
                     <div className="grid gap-2">
                       <Label>Description</Label>
                       <Textarea
@@ -411,7 +442,8 @@ export function PersonalInfoDialog({
                     >
                       <Trash className="mr-2 h-4 w-4" /> Remove
                     </Button>
-                  </div>
+                    </CollapsibleContent>
+                  </Collapsible>
                 ))}
                 <Button type="button" variant="outline" onClick={addExperience}>
                   <Plus className="mr-2 h-4 w-4" /> Add Experience
