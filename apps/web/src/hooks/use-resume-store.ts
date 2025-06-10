@@ -47,6 +47,10 @@ export interface JobInfo {
   company?: string
   location?: string
   description?: string
+  workType?: "onsite" | "remote" | "hybrid"
+  basePay?: string
+  bonus?: string
+  stocks?: string
   [key: string]: unknown
 }
 
