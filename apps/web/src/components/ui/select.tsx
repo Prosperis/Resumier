@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-function Select({ className, ...props }: React.ComponentProps<"select">) {
+function Select({ className, children, ...props }: React.ComponentProps<"select">) {
   return (
     <select
       data-slot="select"
@@ -13,7 +13,9 @@ function Select({ className, ...props }: React.ComponentProps<"select">) {
         className
       )}
       {...props}
-    />
+    >
+      {children}
+    </select>
   )
 }
 
