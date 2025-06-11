@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import {
   SidebarProvider,
   Sidebar,
@@ -10,7 +9,7 @@ import {
 import { ResumeBuilder } from "@/components/resume-builder"
 import { PersonalInfoDialog } from "@/components/personal-info-dialog"
 import { JobInfoDialog } from "@/components/job-info-dialog"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { AppHeader } from "@/components/app-header"
 
 
 export default function App() {
@@ -19,21 +18,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="fixed inset-x-0 top-0 z-20 flex h-16 items-center justify-between gap-4 border-b bg-background px-4">
-        <div className="flex items-center gap-2">
-          <img src={`${import.meta.env.BASE_URL}logo_dark.png`} alt="Logo" className="h-8" />
-        </div>
-        <h1 className="flex-1 text-center text-lg font-semibold">Resume</h1>
-        <nav className="flex gap-2">
-          <Button variant="outline" onClick={() => setOpenPersonal(true)}>
-            Personal Info
-          </Button>
-          <Button variant="outline" onClick={() => setOpenJob(true)}>
-            Job Info
-          </Button>
-          <ThemeToggle />
-        </nav>
-      </header>
+      <AppHeader
+        onPersonalInfoClick={() => setOpenPersonal(true)}
+        onJobInfoClick={() => setOpenJob(true)}
+      />
       <SidebarProvider className="flex flex-1 mt-16">
       {/* Left Sidebar */}
       <Sidebar side="left" collapsible="icon">
