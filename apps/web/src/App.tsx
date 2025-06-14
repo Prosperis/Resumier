@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useTheme } from "@/hooks/use-theme"
 import {
   SidebarProvider,
   Sidebar,
@@ -15,6 +16,8 @@ import { useResumeDocuments } from "@/hooks/use-resume-documents"
 
 
 export default function App() {
+  // Ensure the saved theme is applied on initial load
+  useTheme()
   const [openPersonal, setOpenPersonal] = useState(false)
   const [openJob, setOpenJob] = useState(false)
   const [page, setPage] = useState<'dashboard' | 'builder'>('dashboard')
