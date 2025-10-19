@@ -1,4 +1,5 @@
 import { AlertCircle, Plus } from "lucide-react"
+import { FadeIn } from "@/components/ui/animated"
 import { Button } from "@/components/ui/button"
 import { RouteLoadingFallback } from "@/components/ui/route-loading"
 import { useDuplicateResume, useResumes } from "@/hooks/api"
@@ -63,50 +64,54 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
   if (!resumes || resumes.length === 0) {
     return (
       <div className="p-4">
-        <div className="rounded-lg border-2 border-dashed p-12 text-center">
-          <h3 className="text-lg font-semibold mb-2">No resumes yet</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Create your first resume to get started
-          </p>
-          <CreateResumeDialog
-            onSuccess={(id) => onResumeClick?.(id)}
-            trigger={
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Create Resume
-              </Button>
-            }
-          />
-        </div>
+        <FadeIn>
+          <div className="rounded-lg border-2 border-dashed p-12 text-center">
+            <h3 className="text-lg font-semibold mb-2">No resumes yet</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Create your first resume to get started
+            </p>
+            <CreateResumeDialog
+              onSuccess={(id) => onResumeClick?.(id)}
+              trigger={
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create Resume
+                </Button>
+              }
+            />
+          </div>
+        </FadeIn>
       </div>
     )
   }
 
   return (
-    <div className="p-4 space-y-4">
-      {/* Header with create button */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Resumes</h2>
-          <p className="text-muted-foreground">Manage your resume documents ({resumes.length})</p>
+    <FadeIn>
+      <div className="p-4 space-y-4">
+        {/* Header with create button */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">Resumes</h2>
+            <p className="text-muted-foreground">Manage your resume documents ({resumes.length})</p>
+          </div>
+          <CreateResumeDialog
+            onSuccess={(id) => onResumeClick?.(id)}
+            trigger={
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                New Resume
+              </Button>
+            }
+          />
         </div>
-        <CreateResumeDialog
-          onSuccess={(id) => onResumeClick?.(id)}
-          trigger={
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              New Resume
-            </Button>
-          }
+
+        {/* Resume table */}
+        <ResumeTable
+          resumes={resumes}
+          onEdit={(resume) => onResumeClick?.(resume.id)}
+          onDuplicate={handleDuplicate}
         />
       </div>
-
-      {/* Resume table */}
-      <ResumeTable
-        resumes={resumes}
-        onEdit={(resume) => onResumeClick?.(resume.id)}
-        onDuplicate={handleDuplicate}
-      />
-    </div>
+    </FadeIn>
   )
 }

@@ -1,10 +1,14 @@
+import { motion } from "framer-motion"
 import type * as React from "react"
-
+import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion"
 import { cn } from "@/lib/utils"
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+  const prefersReducedMotion = useReducedMotion()
+  const MotionInput = motion.input
+
   return (
-    <input
+    <MotionInput
       type={type}
       data-slot="input"
       className={cn(
@@ -13,7 +17,11 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
         "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
         className,
       )}
-      {...props}
+      whileFocus={prefersReducedMotion ? undefined : { scale: 1.01 }}
+      transition={
+        prefersReducedMotion ? undefined : { type: "spring", stiffness: 300, damping: 25 }
+      }
+      {...(props as React.ComponentProps<typeof MotionInput>)}
     />
   )
 }

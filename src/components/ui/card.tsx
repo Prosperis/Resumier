@@ -1,16 +1,42 @@
+import { motion } from "framer-motion"
 import type * as React from "react"
-
+import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion"
 import { cn } from "@/lib/utils"
 
-function Card({ className, ...props }: React.ComponentProps<"div">) {
+function Card({
+  className,
+  interactive = false,
+  ...props
+}: React.ComponentProps<"div"> & { interactive?: boolean }) {
+  const prefersReducedMotion = useReducedMotion()
+  const MotionDiv = motion.div
+
+  if (!interactive) {
+    return (
+      <div
+        data-slot="card"
+        className={cn(
+          "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+          className,
+        )}
+        {...props}
+      />
+    )
+  }
+
   return (
-    <div
+    <MotionDiv
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm cursor-pointer",
         className,
       )}
-      {...props}
+      whileHover={prefersReducedMotion ? undefined : { y: -4, scale: 1.01 }}
+      whileTap={prefersReducedMotion ? undefined : { scale: 0.99 }}
+      transition={
+        prefersReducedMotion ? undefined : { type: "spring", stiffness: 300, damping: 20 }
+      }
+      {...(props as React.ComponentProps<typeof MotionDiv>)}
     />
   )
 }
