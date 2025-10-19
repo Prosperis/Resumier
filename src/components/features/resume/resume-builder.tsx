@@ -157,6 +157,31 @@ export function ResumeBuilder() {
     )
   }
 
+  const handleReorderExperiences = (reorderedExperiences: Experience[]) => {
+    updateResume(
+      {
+        id: resumeId,
+        data: {
+          content: {
+            experience: reorderedExperiences,
+          },
+        },
+      },
+      {
+        onSuccess: () => {
+          // Silent success - no toast for reordering
+        },
+        onError: (error) => {
+          toast({
+            title: "Error",
+            description: `Failed to reorder experiences: ${error.message}`,
+            variant: "destructive",
+          })
+        },
+      },
+    )
+  }
+
   // Education handlers
   const handleAddEducation = () => {
     setEditingEducation(null)
@@ -241,6 +266,31 @@ export function ResumeBuilder() {
           toast({
             title: "Error",
             description: `Failed to delete education: ${error.message}`,
+            variant: "destructive",
+          })
+        },
+      },
+    )
+  }
+
+  const handleReorderEducation = (reorderedEducation: Education[]) => {
+    updateResume(
+      {
+        id: resumeId,
+        data: {
+          content: {
+            education: reorderedEducation,
+          },
+        },
+      },
+      {
+        onSuccess: () => {
+          // Silent success
+        },
+        onError: (error) => {
+          toast({
+            title: "Error",
+            description: `Failed to reorder education: ${error.message}`,
             variant: "destructive",
           })
         },
@@ -464,6 +514,7 @@ export function ResumeBuilder() {
             experiences={content.experience || []}
             onEdit={handleEditExperience}
             onDelete={handleDeleteExperience}
+            onReorder={handleReorderExperiences}
           />
         </CardContent>
       </Card>
@@ -489,6 +540,7 @@ export function ResumeBuilder() {
             education={content.education || []}
             onEdit={handleEditEducation}
             onDelete={handleDeleteEducation}
+            onReorder={handleReorderEducation}
           />
         </CardContent>
       </Card>
