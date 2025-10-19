@@ -30,10 +30,6 @@ export const Route = createFileRoute("/dashboard")({
 function DashboardComponent() {
   const navigate = useNavigate()
 
-  const handleCreateResume = () => {
-    navigate({ to: "/resume/new" })
-  }
-
   const handleResumeClick = (id: string) => {
     navigate({ to: "/resume/$id", params: { id } })
   }
@@ -45,7 +41,7 @@ function DashboardComponent() {
         <p className="text-muted-foreground">Manage your resumes and create new ones</p>
       </div>
 
-      <ResumeDashboard onCreateResume={handleCreateResume} onResumeClick={handleResumeClick} />
+      <ResumeDashboard onResumeClick={handleResumeClick} />
     </div>
   )
 }
