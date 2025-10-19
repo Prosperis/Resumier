@@ -24,13 +24,18 @@ export function useReducedMotion(): boolean {
   const [shouldReduceMotion, setShouldReduceMotion] = useState(false)
 
   useEffect(() => {
-    // Check if matchMedia is supported
+    // Check if matchMedia is supported (for SSR and test environments)
     if (typeof window === "undefined" || !window.matchMedia) {
       return
     }
 
     // Create media query for prefers-reduced-motion
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+
+    // Additional guard for test environments
+    if (!mediaQuery) {
+      return
+    }
 
     // Set initial value
     setShouldReduceMotion(mediaQuery.matches)
