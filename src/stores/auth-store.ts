@@ -1,0 +1,118 @@
+import { create } from "zustand"
+import { createJSONStorage, devtools, persist } from "zustand/middleware"
+
+export interface User {
+  id: string
+  email: string
+  name: string
+  avatar?: string
+}
+
+interface AuthStore {
+  // State
+  user: User | null
+  isAuthenticated: boolean
+  isLoading: boolean
+  error: string | null
+
+  // Actions
+  setUser: (user: User | null) => void
+  setLoading: (loading: boolean) => void
+  setError: (error: string | null) => void
+  login: (email: string, password: string) => Promise<void>
+  logout: () => void
+  clearError: () => void
+}
+
+const initialState = {
+  user: null,
+  isAuthenticated: false,
+  isLoading: false,
+  error: null,
+}
+
+export const useAuthStore = create<AuthStore>()(
+  devtools(
+    persist(
+      (set) => ({
+        ...initialState,
+
+        setUser: (user) =>
+          set({
+            user,
+            isAuthenticated: !!user,
+            error: null,
+          }),
+
+        setLoading: (isLoading) => set({ isLoading }),
+
+        setError: (error) => set({ error, isLoading: false }),
+
+        login: async (email: string, password: string) => {
+          set({ isLoading: true, error: null })
+
+          try {
+            // TODO: Replace with actual API call
+            // Simulated login for now
+            await new Promise((resolve) => setTimeout(resolve, 1000))
+
+            if (email && password) {
+              const user: User = {
+                id: "1",
+                email,
+                name: email.split("@")[0],
+                avatar: undefined,
+              }
+              set({
+                user,
+                isAuthenticated: true,
+                isLoading: false,
+                error: null,
+              })
+            } else {
+              throw new Error("Invalid credentials")
+            }
+          } catch (error) {
+            const message = error instanceof Error ? error.message : "Login failed"
+            set({
+              user: null,
+              isAuthenticated: false,
+              isLoading: false,
+              error: message,
+            })
+          }
+        },
+
+        logout: () =>
+          set({
+            ...initialState,
+          }),
+
+        clearError: () => set({ error: null }),
+      }),
+      {
+        name: "resumier-auth",
+        storage: createJSONStorage(() => localStorage),
+        // Only persist user and auth status, not loading/error states
+        partialize: (state) => ({
+          user: state.user,
+          isAuthenticated: state.isAuthenticated,
+        }),
+      },
+    ),
+    { name: "AuthStore" },
+  ),
+)
+
+// Selectors for optimized access
+export const selectUser = (state: AuthStore) => state.user
+export const selectIsAuthenticated = (state: AuthStore) => state.isAuthenticated
+export const selectIsLoading = (state: AuthStore) => state.isLoading
+export const selectError = (state: AuthStore) => state.error
+
+export const selectAuthActions = (state: AuthStore) => ({
+  login: state.login,
+  logout: state.logout,
+  setUser: state.setUser,
+  clearError: state.clearError,
+})

@@ -1,7 +1,7 @@
-import { useResumeStore } from "@/hooks/use-resume-store"
+import { useResumeStore } from "@/stores"
 
 export function ResumeBuilder() {
-  const { userInfo } = useResumeStore()
+  const userInfo = useResumeStore((state) => state.userInfo)
 
   const experiences = userInfo.experiences ?? []
   const education = userInfo.education ?? []

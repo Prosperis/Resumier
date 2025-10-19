@@ -4,7 +4,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import type { WorkExperience } from "@/hooks/use-resume-store"
+import type { WorkExperience } from "@/stores"
 
 interface ExperienceProps {
   experiences: WorkExperience[]

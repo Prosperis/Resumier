@@ -1,0 +1,288 @@
+import { renderHook, act, waitFor } from "@testing-library/react"
+import { describe, it, expect, beforeEach } from "vitest"
+import { useAuthStore } from "../auth-store"
+import type { User } from "../auth-store"
+
+describe("useAuthStore", () => {
+	beforeEach(() => {
+		// Clear store state and localStorage before each test
+		useAuthStore.setState({
+			user: null,
+			isAuthenticated: false,
+			isLoading: false,
+			error: null,
+		})
+		localStorage.clear()
+	})
+
+	describe("Initial State", () => {
+		it("should have correct initial state", () => {
+			const { result } = renderHook(() => useAuthStore())
+			expect(result.current.user).toBeNull()
+			expect(result.current.isAuthenticated).toBe(false)
+			expect(result.current.isLoading).toBe(false)
+			expect(result.current.error).toBeNull()
+		})
+	})
+
+	describe("setUser", () => {
+		it("should set user and mark as authenticated", () => {
+			const { result } = renderHook(() => useAuthStore())
+			const user: User = {
+				id: "1",
+				email: "test@example.com",
+				name: "Test User",
+			}
+
+			act(() => {
+				result.current.setUser(user)
+			})
+
+			const currentState = useAuthStore.getState()
+			expect(currentState.user).toEqual(user)
+			expect(currentState.isAuthenticated).toBe(true)
+			expect(currentState.error).toBeNull()
+		})
+
+		it("should clear user and mark as not authenticated when null", () => {
+			const { result } = renderHook(() => useAuthStore())
+			const user: User = {
+				id: "1",
+				email: "test@example.com",
+				name: "Test User",
+			}
+
+			act(() => {
+				result.current.setUser(user)
+			})
+
+			act(() => {
+				result.current.setUser(null)
+			})
+
+			const currentState = useAuthStore.getState()
+			expect(currentState.user).toBeNull()
+			expect(currentState.isAuthenticated).toBe(false)
+		})
+	})
+
+	describe("setLoading", () => {
+		it("should set loading state", () => {
+			const { result } = renderHook(() => useAuthStore())
+
+			act(() => {
+				result.current.setLoading(true)
+			})
+
+			expect(result.current.isLoading).toBe(true)
+
+			act(() => {
+				result.current.setLoading(false)
+			})
+
+			expect(result.current.isLoading).toBe(false)
+		})
+	})
+
+	describe("setError", () => {
+		it("should set error and clear loading", () => {
+			const { result } = renderHook(() => useAuthStore())
+
+			act(() => {
+				result.current.setLoading(true)
+			})
+
+			act(() => {
+				result.current.setError("Test error")
+			})
+
+			const currentState = useAuthStore.getState()
+			expect(currentState.error).toBe("Test error")
+			expect(currentState.isLoading).toBe(false)
+		})
+	})
+
+	describe("login", () => {
+		it("should successfully log in with valid credentials", async () => {
+			const { result } = renderHook(() => useAuthStore())
+
+			await act(async () => {
+				await result.current.login("test@example.com", "password123")
+			})
+
+			await waitFor(() => {
+				const currentState = useAuthStore.getState()
+				expect(currentState.isLoading).toBe(false)
+				expect(currentState.user).not.toBeNull()
+				expect(currentState.user?.email).toBe("test@example.com")
+				expect(currentState.user?.name).toBe("test")
+				expect(currentState.isAuthenticated).toBe(true)
+				expect(currentState.error).toBeNull()
+			})
+		})
+
+		it("should set loading to true during login", async () => {
+			const { result } = renderHook(() => useAuthStore())
+
+			const loginPromise = act(async () => {
+				await result.current.login("test@example.com", "password")
+			})
+
+			// Check loading state immediately
+			expect(result.current.isLoading).toBe(true)
+
+			await loginPromise
+
+			await waitFor(() => {
+				expect(result.current.isLoading).toBe(false)
+			})
+		})
+
+		it("should handle login failure with empty email", async () => {
+			const { result } = renderHook(() => useAuthStore())
+
+			await act(async () => {
+				await result.current.login("", "password")
+			})
+
+			await waitFor(() => {
+				const currentState = useAuthStore.getState()
+				expect(currentState.isLoading).toBe(false)
+				expect(currentState.user).toBeNull()
+				expect(currentState.isAuthenticated).toBe(false)
+				expect(currentState.error).toBeTruthy()
+			})
+		})
+
+		it("should handle login failure with empty password", async () => {
+			const { result } = renderHook(() => useAuthStore())
+
+			await act(async () => {
+				await result.current.login("test@example.com", "")
+			})
+
+			await waitFor(() => {
+				const currentState = useAuthStore.getState()
+				expect(currentState.isLoading).toBe(false)
+				expect(currentState.user).toBeNull()
+				expect(currentState.isAuthenticated).toBe(false)
+				expect(currentState.error).toBeTruthy()
+			})
+		})
+	})
+
+	describe("logout", () => {
+		it("should clear user and reset to initial state", () => {
+			const { result } = renderHook(() => useAuthStore())
+			const user: User = {
+				id: "1",
+				email: "test@example.com",
+				name: "Test User",
+			}
+
+			act(() => {
+				result.current.setUser(user)
+			})
+
+			act(() => {
+				result.current.logout()
+			})
+
+			const currentState = useAuthStore.getState()
+			expect(currentState.user).toBeNull()
+			expect(currentState.isAuthenticated).toBe(false)
+			expect(currentState.isLoading).toBe(false)
+			expect(currentState.error).toBeNull()
+		})
+	})
+
+	describe("clearError", () => {
+		it("should clear error message", () => {
+			const { result } = renderHook(() => useAuthStore())
+
+			act(() => {
+				result.current.setError("Test error")
+			})
+
+			expect(result.current.error).toBe("Test error")
+
+			act(() => {
+				result.current.clearError()
+			})
+
+			expect(result.current.error).toBeNull()
+		})
+	})
+
+	describe("Persistence", () => {
+		it("should persist user and auth status to localStorage", () => {
+			const { result } = renderHook(() => useAuthStore())
+			const user: User = {
+				id: "1",
+				email: "test@example.com",
+				name: "Test User",
+			}
+
+			act(() => {
+				result.current.setUser(user)
+			})
+
+			const stored = localStorage.getItem("resumier-auth")
+			expect(stored).toBeTruthy()
+			if (stored) {
+				const parsed = JSON.parse(stored)
+				expect(parsed.state.user).toEqual(user)
+				expect(parsed.state.isAuthenticated).toBe(true)
+			}
+		})
+
+		it("should not persist loading and error states", () => {
+			const { result } = renderHook(() => useAuthStore())
+
+			act(() => {
+				result.current.setLoading(true)
+				result.current.setError("Test error")
+			})
+
+			const stored = localStorage.getItem("resumier-auth")
+			if (stored) {
+				const parsed = JSON.parse(stored)
+				// These should not be in persisted state
+				expect(parsed.state.isLoading).toBeUndefined()
+				expect(parsed.state.error).toBeUndefined()
+			}
+		})
+	})
+
+	describe("Selectors", () => {
+		it("should not cause re-render when unrelated state changes", () => {
+			let renderCount = 0
+			const { result } = renderHook(() => {
+				renderCount++
+				return useAuthStore((state) => state.user)
+			})
+
+			expect(renderCount).toBe(1)
+			expect(result.current).toBeNull()
+
+			// Changing loading shouldn't cause re-render of user selector
+			act(() => {
+				useAuthStore.getState().setLoading(true)
+			})
+
+			// Still only 1 render since user didn't change
+			expect(renderCount).toBe(1)
+
+			// Changing user SHOULD cause re-render
+			act(() => {
+				useAuthStore.getState().setUser({
+					id: "1",
+					email: "test@example.com",
+					name: "Test",
+				})
+			})
+
+			expect(renderCount).toBe(2)
+		})
+	})
+})

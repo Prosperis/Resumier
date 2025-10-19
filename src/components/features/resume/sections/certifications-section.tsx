@@ -2,7 +2,7 @@ import { Plus, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import type { Certification } from "@/hooks/use-resume-store"
+import type { Certification } from "@/stores"
 
 interface CertProps {
   certifications: Certification[]

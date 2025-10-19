@@ -11,17 +11,16 @@ import {
   SidebarProvider,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { useResumeDocuments } from "@/hooks/use-resume-documents"
-import { useTheme } from "@/hooks/use-theme"
+import { useResumeStore, useThemeStore } from "@/stores"
 
 export default function App() {
   // Ensure the saved theme is applied on initial load
-  useTheme()
+  useThemeStore()
   const [openPersonal, setOpenPersonal] = useState(false)
   const [openJob, setOpenJob] = useState(false)
   const [page, setPage] = useState<"dashboard" | "builder">("dashboard")
-  const documents = useResumeDocuments((s) => s.documents)
-  const addDocument = useResumeDocuments((s) => s.addDocument)
+  const documents = useResumeStore((s) => s.documents)
+  const addDocument = useResumeStore((s) => s.addDocument)
 
   function handleCreateResume() {
     const id =

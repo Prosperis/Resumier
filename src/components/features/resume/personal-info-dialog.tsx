@@ -21,15 +21,8 @@ import {
   SidebarProvider,
   SidebarSeparator,
 } from "@/components/ui/sidebar"
-import type {
-  Certification,
-  Education,
-  Link,
-  Skill,
-  UserInfo,
-  WorkExperience,
-} from "@/hooks/use-resume-store"
-import { useResumeStore } from "@/hooks/use-resume-store"
+import type { Certification, Education, Link, Skill, UserInfo, WorkExperience } from "@/stores"
+import { useResumeStore } from "@/stores"
 
 type Section = "basic" | "experience" | "education" | "skills" | "certifications" | "links"
 

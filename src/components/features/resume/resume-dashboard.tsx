@@ -1,9 +1,9 @@
 import { Plus } from "lucide-react"
 import { Card, CardHeader, CardTitle } from "@/components/ui/card"
-import { useResumeDocuments } from "@/hooks/use-resume-documents"
+import { useResumeStore } from "@/stores"
 
 export function ResumeDashboard({ onCreateResume }: { onCreateResume: () => void }) {
-  const documents = useResumeDocuments((state) => state.documents)
+  const documents = useResumeStore((state) => state.documents)
 
   return (
     <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 p-4">

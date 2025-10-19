@@ -16,7 +16,7 @@ import {
   SidebarProvider,
 } from "@/components/ui/sidebar"
 import { Textarea } from "@/components/ui/textarea"
-import { useResumeStore } from "@/hooks/use-resume-store"
+import { useResumeStore } from "@/stores"
 
 type Section = "details" | "list"
 
@@ -27,7 +27,11 @@ export function JobInfoDialog({
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
-  const { jobInfo, setJobInfo, jobs, addJob, removeJob } = useResumeStore()
+  const jobInfo = useResumeStore((state) => state.jobInfo)
+  const setJobInfo = useResumeStore((state) => state.setJobInfo)
+  const jobs = useResumeStore((state) => state.jobs)
+  const addJob = useResumeStore((state) => state.addJob)
+  const removeJob = useResumeStore((state) => state.removeJob)
   const typedJobInfo = jobInfo as {
     title?: string
     company?: string
