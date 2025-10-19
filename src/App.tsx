@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { AppHeader } from "@/components/app-header"
-import { JobInfoDialog } from "@/components/job-info-dialog"
-import { PersonalInfoDialog } from "@/components/personal-info-dialog"
-import { ResumeBuilder } from "@/components/resume-builder"
-import { ResumeDashboard } from "@/components/resume-dashboard"
+import { AppHeader } from "@/components/features/navigation/app-header"
+import { JobInfoDialog } from "@/components/features/resume/job-info-dialog"
+import { PersonalInfoDialog } from "@/components/features/resume/personal-info-dialog"
+import { ResumeBuilder } from "@/components/features/resume/resume-builder"
+import { ResumeDashboard } from "@/components/features/resume/resume-dashboard"
 import {
   Sidebar,
   SidebarContent,

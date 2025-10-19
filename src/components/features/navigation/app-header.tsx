@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react"
-import { ThemeToggle } from "@/components/theme-toggle"
+import { ThemeToggle } from "@/components/features/navigation/theme-toggle"
 import { Button } from "@/components/ui/button"
 
 export function AppHeader({

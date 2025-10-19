@@ -12,10 +12,10 @@ import {
 } from "lucide-react"
 import type * as React from "react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/features/navigation/nav-main"
+import { NavProjects } from "@/components/features/navigation/nav-projects"
+import { NavSecondary } from "@/components/features/navigation/nav-secondary"
+import { NavUser } from "@/components/features/navigation/nav-user"
 import {
   Sidebar,
   SidebarContent,

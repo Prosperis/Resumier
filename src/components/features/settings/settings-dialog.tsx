@@ -17,7 +17,6 @@ import * as React from "react"
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -94,7 +93,7 @@ export function SettingsDialog() {
                 <Breadcrumb>
                   <BreadcrumbList>
                     <BreadcrumbItem className="hidden md:block">
-                      <BreadcrumbLink href="#">Settings</BreadcrumbLink>
+                      <BreadcrumbPage>Settings</BreadcrumbPage>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator className="hidden md:block" />
                     <BreadcrumbItem>
@@ -105,8 +104,8 @@ export function SettingsDialog() {
               </div>
             </header>
             <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0">
-              {Array.from({ length: 10 }).map((_, i) => (
-                <div key={i} className="bg-muted/50 aspect-video max-w-3xl rounded-xl" />
+              {Array.from({ length: 10 }, (_, i) => `placeholder-${i}`).map((id) => (
+                <div key={id} className="bg-muted/50 aspect-video max-w-3xl rounded-xl" />
               ))}
             </div>
           </main>

@@ -7,7 +7,7 @@ import {
   ExperienceSection,
   LinksSection,
   SkillsSection,
-} from "@/components/personal-info"
+} from "@/components/features/resume/sections"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import {
   Sidebar,
