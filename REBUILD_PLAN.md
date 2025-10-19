@@ -519,25 +519,28 @@ src/
 
 ---
 
-## Phase 13: Drag & Drop
+## Phase 13: Drag & Drop ✅ COMPLETE
 **Goal**: Add drag-and-drop functionality
 
 ### Tasks:
-- [ ] Choose DnD library (recommend `@dnd-kit`)
-- [ ] Implement draggable sections in resume builder
-- [ ] Add reordering for:
-  - Resume sections
-  - List items (experience, education)
-  - Skills
+- [x] Choose DnD library (using `@dnd-kit`) ✅
+- [x] Implement draggable sections in resume builder ✅
+- [x] Add reordering for: ✅
+  - [x] Experience entries ✅
+  - [x] Education entries ✅
+  - [x] Certifications ✅
+  - [x] Links ✅
   
-- [ ] Add visual feedback
-- [ ] Handle touch devices
-- [ ] Add keyboard accessibility
+- [x] Add visual feedback (grip handles, opacity) ✅
+- [x] Handle touch devices (long press support) ✅
+- [x] Add keyboard accessibility (arrow keys, space/enter) ✅
 
 ### Deliverables:
-- Smooth drag-and-drop
-- Accessible interactions
-- Mobile support
+- ✅ Smooth drag-and-drop
+- ✅ Accessible interactions
+- ✅ Mobile support
+
+**Note**: Section reordering (moving entire sections) deferred to future phase.
 
 ---
 
