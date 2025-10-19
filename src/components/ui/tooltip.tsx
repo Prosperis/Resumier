@@ -1,6 +1,11 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip"
+import { motion } from "framer-motion"
 import type * as React from "react"
-
+import {
+  useAnimationTransition,
+  useAnimationVariants,
+} from "@/lib/animations/hooks/use-reduced-motion"
+import { fadeVariants } from "@/lib/animations/variants"
 import { cn } from "@/lib/utils"
 
 function TooltipProvider({
@@ -34,19 +39,31 @@ function TooltipContent({
   children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+  const variants = useAnimationVariants(fadeVariants)
+  const transition = useAnimationTransition({ duration: 0.15 })
+
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content
+        asChild
         data-slot="tooltip-content"
         sideOffset={sideOffset}
-        className={cn(
-          "bg-primary text-primary-foreground animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-xs text-balance",
-          className,
-        )}
         {...props}
       >
-        {children}
-        <TooltipPrimitive.Arrow className="bg-primary fill-primary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
+        <motion.div
+          variants={variants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          transition={transition}
+          className={cn(
+            "bg-primary text-primary-foreground z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-xs text-balance",
+            className,
+          )}
+        >
+          {children}
+          <TooltipPrimitive.Arrow className="bg-primary fill-primary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
+        </motion.div>
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   )
