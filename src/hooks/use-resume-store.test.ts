@@ -32,14 +32,20 @@ describe("useResumeStore", () => {
     const store = useResumeStore.getState()
     store.addJob({ title: "A" })
     store.addJob({ title: "B" })
-    store.removeJob(0)
-    expect(store.jobs).toHaveLength(1)
-    expect(store.jobs[0].title).toBe("B")
+    // Get fresh state after adding jobs
+    const stateAfterAdd = useResumeStore.getState()
+    stateAfterAdd.removeJob(0)
+    // Get fresh state after removing
+    const finalState = useResumeStore.getState()
+    expect(finalState.jobs).toHaveLength(1)
+    expect(finalState.jobs[0].title).toBe("B")
   })
 
   it("updates user info", () => {
     const store = useResumeStore.getState()
     store.setUserInfo({ name: "Bob" })
-    expect(store.userInfo).toEqual({ name: "Bob" })
+    // Get fresh state after update
+    const updatedState = useResumeStore.getState()
+    expect(updatedState.userInfo).toEqual({ name: "Bob" })
   })
 })
