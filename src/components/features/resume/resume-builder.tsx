@@ -389,6 +389,31 @@ export function ResumeBuilder() {
     )
   }
 
+  const handleReorderCertifications = (reorderedCertifications: Certification[]) => {
+    updateResume(
+      {
+        id: resumeId,
+        data: {
+          content: {
+            certifications: reorderedCertifications,
+          },
+        },
+      },
+      {
+        onSuccess: () => {
+          // Silent success
+        },
+        onError: (error) => {
+          toast({
+            title: "Error",
+            description: `Failed to reorder certifications: ${error.message}`,
+            variant: "destructive",
+          })
+        },
+      },
+    )
+  }
+
   // Link handlers
   const handleAddLink = () => {
     setEditingLink(null)
@@ -469,6 +494,31 @@ export function ResumeBuilder() {
           toast({
             title: "Error",
             description: `Failed to delete link: ${error.message}`,
+            variant: "destructive",
+          })
+        },
+      },
+    )
+  }
+
+  const handleReorderLinks = (reorderedLinks: Link[]) => {
+    updateResume(
+      {
+        id: resumeId,
+        data: {
+          content: {
+            links: reorderedLinks,
+          },
+        },
+      },
+      {
+        onSuccess: () => {
+          // Silent success
+        },
+        onError: (error) => {
+          toast({
+            title: "Error",
+            description: `Failed to reorder links: ${error.message}`,
             variant: "destructive",
           })
         },
@@ -582,6 +632,7 @@ export function ResumeBuilder() {
             certifications={content.certifications || []}
             onEdit={handleEditCertification}
             onDelete={handleDeleteCertification}
+            onReorder={handleReorderCertifications}
           />
         </CardContent>
       </Card>
@@ -609,6 +660,7 @@ export function ResumeBuilder() {
             links={content.links || []}
             onEdit={handleEditLink}
             onDelete={handleDeleteLink}
+            onReorder={handleReorderLinks}
           />
         </CardContent>
       </Card>
