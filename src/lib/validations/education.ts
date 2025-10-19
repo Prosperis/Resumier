@@ -11,9 +11,9 @@ export const educationSchema = z.object({
   field: z.string().min(1, "Field of study is required"),
   startDate: z.string().min(1, "Start date is required"),
   endDate: z.string().min(1, "End date is required"),
-  current: z.boolean().default(false),
+  current: z.boolean().optional(),
   gpa: z.string().max(10, "GPA must be less than 10 characters").optional().or(z.literal("")),
-  honors: z.array(z.string()).default([]),
+  honors: z.array(z.string()).optional(),
 })
 
 export type EducationFormData = z.infer<typeof educationSchema>
