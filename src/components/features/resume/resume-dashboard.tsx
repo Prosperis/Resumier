@@ -1,15 +1,11 @@
-import { AlertCircle, MoreVertical, Pencil, Trash2 } from "lucide-react"
+import { AlertCircle, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { RouteLoadingFallback } from "@/components/ui/route-loading"
-import { useResumes } from "@/hooks/api"
-import { CreateResumeDialog, DeleteResumeDialog, RenameResumeDialog } from "./mutations"
+import { useDuplicateResume, useResumes } from "@/hooks/api"
+import { useToast } from "@/hooks/use-toast"
+import type { Resume } from "@/lib/api/types"
+import { CreateResumeDialog } from "./mutations"
+import { ResumeTable } from "./resume-table"
 
 interface ResumeDashboardProps {
   onResumeClick?: (id: string) => void
@@ -17,6 +13,29 @@ interface ResumeDashboardProps {
 
 export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
   const { data: resumes, isLoading, error } = useResumes()
+  const { mutate: duplicateResume } = useDuplicateResume()
+  const { toast } = useToast()
+
+  // Handle duplicate action
+  const handleDuplicate = (resume: Resume) => {
+    duplicateResume(resume, {
+      onSuccess: (newResume) => {
+        toast({
+          title: "Success",
+          description: `Resume "${newResume.title}" has been created`,
+        })
+        // Optionally navigate to the new resume
+        // onResumeClick?.(newResume.id)
+      },
+      onError: (err) => {
+        toast({
+          title: "Error",
+          description: err instanceof Error ? err.message : "Failed to duplicate resume",
+          variant: "destructive",
+        })
+      },
+    })
+  }
 
   if (isLoading) {
     return <RouteLoadingFallback message="Loading your resumes..." />
@@ -40,93 +59,53 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
     )
   }
 
+  // Empty state
+  if (!resumes || resumes.length === 0) {
+    return (
+      <div className="p-4">
+        <div className="rounded-lg border-2 border-dashed p-12 text-center">
+          <h3 className="text-lg font-semibold mb-2">No resumes yet</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            Create your first resume to get started
+          </p>
+          <CreateResumeDialog
+            onSuccess={(id) => onResumeClick?.(id)}
+            trigger={
+              <Button>
+                <Plus className="mr-2 h-4 w-4" />
+                Create Resume
+              </Button>
+            }
+          />
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4">
-      {resumes?.map((resume) => (
-        <Card key={resume.id} className="group relative hover:shadow-md transition-all">
-          <CardHeader>
-            <div className="flex items-start justify-between gap-2">
-              <button
-                type="button"
-                className="flex-1 text-left"
-                onClick={() => onResumeClick?.(resume.id)}
-              >
-                <CardTitle className="text-base">{resume.title}</CardTitle>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Updated {new Date(resume.updatedAt).toLocaleDateString()}
-                </p>
-              </button>
+    <div className="p-4 space-y-4">
+      {/* Header with create button */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Resumes</h2>
+          <p className="text-muted-foreground">Manage your resume documents ({resumes.length})</p>
+        </div>
+        <CreateResumeDialog
+          onSuccess={(id) => onResumeClick?.(id)}
+          trigger={
+            <Button>
+              <Plus className="mr-2 h-4 w-4" />
+              New Resume
+            </Button>
+          }
+        />
+      </div>
 
-              {/* Actions dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <MoreVertical className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <RenameResumeDialog
-                    resumeId={resume.id}
-                    currentTitle={resume.title}
-                    trigger={
-                      <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                        <Pencil className="mr-2 h-4 w-4" />
-                        Rename
-                      </DropdownMenuItem>
-                    }
-                  />
-                  <DeleteResumeDialog
-                    resumeId={resume.id}
-                    resumeTitle={resume.title}
-                    trigger={
-                      <DropdownMenuItem
-                        onSelect={(e) => e.preventDefault()}
-                        className="text-destructive focus:text-destructive"
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        Delete
-                      </DropdownMenuItem>
-                    }
-                  />
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </CardHeader>
-        </Card>
-      ))}
-
-      {/* Create new resume button */}
-      <CreateResumeDialog
-        onSuccess={(id) => onResumeClick?.(id)}
-        trigger={
-          <button
-            type="button"
-            className="border-dashed border-2 rounded-lg flex flex-col items-center justify-center cursor-pointer py-12 text-muted-foreground hover:bg-accent hover:border-accent-foreground/50 transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-label="Plus icon"
-            >
-              <title>Add new resume</title>
-              <path d="M5 12h14" />
-              <path d="M12 5v14" />
-            </svg>
-            <span className="mt-2 font-medium">New Resume</span>
-          </button>
-        }
+      {/* Resume table */}
+      <ResumeTable
+        resumes={resumes}
+        onEdit={(resume) => onResumeClick?.(resume.id)}
+        onDuplicate={handleDuplicate}
       />
     </div>
   )
