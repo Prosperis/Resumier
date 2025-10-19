@@ -1,41 +1,24 @@
-# Node
-node_modules/
-.pnpm/
-.pnp.*
+# Logs
+logs
 *.log
-*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Build
-dist/
-build/
-.next/
-out/
-coverage/
-*.DS_Store
+node_modules
+dist
+dist-ssr
+*.local
 
-# Turbo
-turbo/
-.cache/
-
-# Expo / React Native
-.expo/
-.expo-shared/
-android/
-ios/
-
-# Tauri
-src-tauri/target/
-src-tauri/.cargo/
-src-tauri/Cargo.lock
-
-# OS
-Thumbs.db
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-
-# IDEs
-.idea/
-
-# Env
-.env
-.env.*
-.turbo/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

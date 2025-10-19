@@ -1,105 +1,54 @@
-# 📝 Resumier
+# React + TypeScript + Vite
 
-A cross-platform, AI-powered resume and job application builder. This monorepo supports web, mobile, and desktop apps with a shared codebase using [Turborepo](https://turbo.build/repo) and [pnpm](https://pnpm.io/).
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
----
+Currently, two official plugins are available:
 
-## 📦 Project Structure
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-```
-resume-builder/
-├── apps/
-│   ├── web/        # React (Vite or Next.js)
-│   ├── mobile/     # React Native (Expo)
-│   └── desktop/    # Tauri wrapper
-│
-├── packages/
-│   ├── ui/         # Shared cross-platform UI components
-│   ├── core/       # Logic, hooks, and AI utils
-│   └── storage/    # Platform-specific local storage
-│
-├── turbo.json      # Turbo task runner config
-├── package.json    # Monorepo config and scripts
-├── pnpm-workspace.yaml
-└── .gitignore
-```
+## Expanding the ESLint configuration
 
----
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-## 🚀 Getting Started
-
-### 1. Install dependencies
-
-```bash
-pnpm install
+```js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
 ```
 
-### 2. Run development servers
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```bash
-pnpm dev:web       # Web app
-pnpm dev:mobile    # Mobile app
-pnpm dev:desktop   # Desktop app
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default tseslint.config({
+  plugins: {
+    // Add the react-x and react-dom plugins
+    'react-x': reactX,
+    'react-dom': reactDom,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended typescript rules
+    ...reactX.configs['recommended-typescript'].rules,
+    ...reactDom.configs.recommended.rules,
+  },
+})
 ```
-
-Or run all with:
-
-```bash
-pnpm dev
-```
-
----
-
-## 📚 Scripts
-
-| Command      | Description                |
-| ------------ | -------------------------- |
-| `pnpm dev`   | Run all dev servers        |
-| `pnpm build` | Build all apps/packages    |
-| `pnpm lint`  | Lint all workspaces        |
-| `pnpm test`  | Run all tests             |
-
----
-
-## 🌐 Technologies
-
-* **React** – Web UI
-* **React Native + Expo** – Mobile app
-* **Tauri** – Lightweight native desktop app
-* **Turborepo** – Build system and task runner
-* **pnpm** – Fast, disk-efficient package manager
-
----
-
-## 🌍 Deployment
-
-The web app under `apps/web` is automatically built and deployed to the
-`gh-pages` branch via GitHub Actions whenever a pull request is merged into
-`main`. The static files are served through GitHub Pages.
-
----
-
-## 🔒 Security
-
-For information on reporting security vulnerabilities, please see
-[`.github/SECURITY.md`](.github/SECURITY.md).
-
----
-
-## 📬 Contact
-
-For general questions or support, email [adrian.the.hactus@gmail.com](mailto:adrian.the.hactus@gmail.com).
-
----
-
-## 💵 Compensation
-
-Resumier is maintained by volunteers and does not provide monetary
-compensation. Contributors do not receive a base salary, bonuses, or
-company stock for their work on this project.
-
----
-
-## 📄 License
-
-This project is open-source and available under the Apache License 2.0.
