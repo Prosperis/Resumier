@@ -11,7 +11,7 @@ export const experienceSchema = z
     position: z.string().min(1, "Position is required"),
     startDate: z.string().min(1, "Start date is required"),
     endDate: z.string().optional().or(z.literal("")),
-    current: z.boolean().default(false),
+    current: z.boolean().optional(),
     description: z
       .string()
       .max(1000, "Description must be less than 1000 characters")

@@ -48,12 +48,10 @@ export interface Experience {
   position: string
   startDate: string
   endDate: string
-  current: boolean
+  current?: boolean
   description: string
   highlights: string[]
-}
-
-/**
+} /**
  * Education
  */
 export interface Education {
