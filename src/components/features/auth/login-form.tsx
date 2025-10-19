@@ -39,6 +39,17 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
         </p>
       </div>
 
+      {/* Demo credentials banner */}
+      <div className="rounded-md bg-blue-50 dark:bg-blue-950 p-3 text-sm">
+        <p className="font-medium text-blue-900 dark:text-blue-100">Demo Credentials:</p>
+        <p className="text-blue-700 dark:text-blue-300">
+          Email: <code className="font-mono">demo@example.com</code>
+        </p>
+        <p className="text-blue-700 dark:text-blue-300">
+          Password: <code className="font-mono">demo123</code>
+        </p>
+      </div>
+
       {error && (
         <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
       )}

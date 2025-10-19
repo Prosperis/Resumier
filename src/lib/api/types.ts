@@ -8,11 +8,12 @@
  */
 export interface Resume {
   id: string
+  userId?: string // Optional - for multi-user support in future
   title: string
   content: ResumeContent
   createdAt: string
   updatedAt: string
-  version: number
+  version?: number // Optional - for versioning in future
 }
 
 /**

@@ -1,11 +1,13 @@
 import { create } from "zustand"
 import { createJSONStorage, devtools, persist } from "zustand/middleware"
+import { authApi } from "@/lib/api/auth"
 
 export interface User {
   id: string
   email: string
   name: string
   avatar?: string
+  token?: string // JWT token for API requests
 }
 
 interface AuthStore {
@@ -52,15 +54,15 @@ export const useAuthStore = create<AuthStore>()(
           set({ isLoading: true, error: null })
 
           try {
-            // TODO: Replace with actual API call
-            // Simulated login for now
-            await new Promise((resolve) => setTimeout(resolve, 1000))
+            // Call auth API
+            const response = await authApi.login({ email, password })
 
-            if (email && password) {
+            if (response.user) {
               const user: User = {
-                id: "1",
-                email,
-                name: email.split("@")[0],
+                id: response.user.id,
+                email: response.user.email,
+                name: response.user.name,
+                token: response.user.token,
                 avatar: undefined,
               }
               set({
@@ -83,10 +85,20 @@ export const useAuthStore = create<AuthStore>()(
           }
         },
 
-        logout: () =>
-          set({
-            ...initialState,
-          }),
+        logout: async () => {
+          try {
+            // Call logout API
+            await authApi.logout()
+          } catch (error) {
+            // Log error but still clear local state
+            console.error("Logout API error:", error)
+          } finally {
+            // Always clear local state
+            set({
+              ...initialState,
+            })
+          }
+        },
 
         clearError: () => set({ error: null }),
       }),
