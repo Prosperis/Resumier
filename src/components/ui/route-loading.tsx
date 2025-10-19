@@ -1,4 +1,5 @@
-import { Loader2 } from "lucide-react"
+import { FadeIn } from "@/components/ui/animated"
+import { LoadingDots, LoadingSpinner } from "./loading-spinner"
 
 /**
  * Generic loading component for route pending states
@@ -7,10 +8,12 @@ import { Loader2 } from "lucide-react"
 export function RouteLoadingFallback({ message = "Loading..." }: { message?: string }) {
   return (
     <div className="flex h-screen items-center justify-center">
-      <div className="flex items-center gap-3">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="text-lg text-muted-foreground">{message}</span>
-      </div>
+      <FadeIn>
+        <div className="flex flex-col items-center gap-4">
+          <LoadingSpinner size="lg" variant="primary" />
+          <span className="text-lg text-muted-foreground">{message}</span>
+        </div>
+      </FadeIn>
     </div>
   )
 }
@@ -34,4 +37,16 @@ export function ResumeEditorLoading() {
  */
 export function SettingsLoading() {
   return <RouteLoadingFallback message="Loading settings..." />
+}
+
+/**
+ * Inline loading component for smaller areas
+ */
+export function InlineLoading({ message }: { message?: string }) {
+  return (
+    <div className="flex items-center gap-2 text-muted-foreground">
+      <LoadingDots size="sm" variant="muted" />
+      {message && <span className="text-sm">{message}</span>}
+    </div>
+  )
 }
