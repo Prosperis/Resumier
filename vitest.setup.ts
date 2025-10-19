@@ -11,7 +11,7 @@ const mockMatchMedia = (query: string) => ({
   addEventListener: () => {},
   removeEventListener: () => {},
   addListener: () => {}, // deprecated
-  removeListener: () => {}, // deprecated  
+  removeListener: () => {}, // deprecated
   dispatchEvent: () => false,
 })
 
