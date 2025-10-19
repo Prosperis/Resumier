@@ -1,5 +1,5 @@
 import { createFileRoute, redirect, useParams } from "@tanstack/react-router"
-import { ResumeBuilder } from "@/components/features/resume/resume-builder"
+import { ResumeEditor } from "@/components/features/resume/resume-editor"
 import { RouteError } from "@/components/ui/route-error"
 import { ResumeEditorLoading } from "@/components/ui/route-loading"
 import { useResume } from "@/hooks/api"
@@ -57,12 +57,7 @@ function EditResumeComponent() {
 
   return (
     <div className="container mx-auto p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">{resume.title}</h1>
-        <p className="text-muted-foreground">Update your resume information and content</p>
-      </div>
-
-      <ResumeBuilder />
+      <ResumeEditor resume={resume} />
     </div>
   )
 }

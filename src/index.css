@@ -153,3 +153,69 @@ input[type="date"] {
 *:hover::-webkit-scrollbar-thumb {
   opacity: 1;
 }
+
+/* Print styles for resume export */
+@media print {
+  /* Hide UI elements */
+  nav,
+  header,
+  footer,
+  button,
+  .no-print,
+  [role="navigation"],
+  [role="banner"],
+  [role="contentinfo"] {
+    display: none !important;
+  }
+
+  /* Reset page styles */
+  body {
+    margin: 0;
+    padding: 0;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Ensure resume takes full width */
+  .container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Page breaks */
+  .resume-section {
+    page-break-inside: avoid;
+  }
+
+  /* Remove shadows and borders that don't translate well to print */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Ensure colors print correctly */
+  a,
+  a:visited {
+    color: inherit !important;
+    text-decoration: underline !important;
+  }
+
+  /* Set appropriate font sizes for print */
+  body {
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+  }
+
+  h1 {
+    font-size: 18pt !important;
+  }
+
+  h2 {
+    font-size: 14pt !important;
+  }
+
+  h3 {
+    font-size: 12pt !important;
+  }
+}
