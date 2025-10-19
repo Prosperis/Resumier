@@ -34,6 +34,10 @@ function DashboardComponent() {
     navigate({ to: "/resume/new" })
   }
 
+  const handleResumeClick = (id: string) => {
+    navigate({ to: "/resume/$id", params: { id } })
+  }
+
   return (
     <div className="container mx-auto p-8">
       <div className="mb-8">
@@ -41,7 +45,7 @@ function DashboardComponent() {
         <p className="text-muted-foreground">Manage your resumes and create new ones</p>
       </div>
 
-      <ResumeDashboard onCreateResume={handleCreateResume} />
+      <ResumeDashboard onCreateResume={handleCreateResume} onResumeClick={handleResumeClick} />
     </div>
   )
 }

@@ -1,11 +1,11 @@
 import { createFileRoute, redirect, useNavigate, useParams } from "@tanstack/react-router"
 import { ArrowLeft, Download } from "lucide-react"
-import { useEffect } from "react"
 import { PdfViewer } from "@/components/features/resume/pdf-viewer"
 import { Button } from "@/components/ui/button"
 import { RouteError } from "@/components/ui/route-error"
 import { RouteLoadingFallback } from "@/components/ui/route-loading"
-import { useAuthStore, useResumeStore } from "@/stores"
+import { useResume } from "@/hooks/api"
+import { useAuthStore } from "@/stores"
 
 /**
  * Resume preview route
@@ -32,17 +32,21 @@ export const Route = createFileRoute("/resume/$id/preview")({
 function PreviewResumeComponent() {
   const { id } = useParams({ from: "/resume/$id/preview" })
   const navigate = useNavigate()
-  const documents = useResumeStore((state) => state.documents)
-  const userInfo = useResumeStore((state) => state.userInfo)
+  const { data: resume, isLoading, error } = useResume(id)
 
-  // Load resume for preview
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Load on mount or ID change
-  useEffect(() => {
-    const resume = documents.find((doc) => doc.id === id)
-    if (resume) {
-      console.log("Previewing resume:", resume.name)
-    }
-  }, [id])
+  if (isLoading) {
+    return <RouteLoadingFallback message="Loading preview..." />
+  }
+
+  if (error || !resume) {
+    return (
+      <RouteError
+        error={error || new Error("Resume not found")}
+        reset={() => window.location.reload()}
+        title="Failed to load preview"
+      />
+    )
+  }
 
   const handleBack = () => {
     navigate({ to: "/resume/$id", params: { id } })
@@ -50,7 +54,7 @@ function PreviewResumeComponent() {
 
   const handleDownload = () => {
     // PDF download logic will go here
-    console.log("Downloading resume...")
+    console.log("Downloading resume:", resume.title)
   }
 
   return (
@@ -63,8 +67,8 @@ function PreviewResumeComponent() {
             Back to Editor
           </Button>
           <div>
-            <h2 className="font-semibold">{userInfo.name || "Resume Preview"}</h2>
-            <p className="text-sm text-muted-foreground">{userInfo.title || "Preview Mode"}</p>
+            <h2 className="font-semibold">{resume.title}</h2>
+            <p className="text-sm text-muted-foreground">Preview Mode</p>
           </div>
         </div>
 

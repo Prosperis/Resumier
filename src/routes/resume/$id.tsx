@@ -1,9 +1,9 @@
 import { createFileRoute, redirect, useParams } from "@tanstack/react-router"
-import { useEffect } from "react"
 import { ResumeBuilder } from "@/components/features/resume/resume-builder"
 import { RouteError } from "@/components/ui/route-error"
 import { ResumeEditorLoading } from "@/components/ui/route-loading"
-import { useAuthStore, useResumeStore } from "@/stores"
+import { useResume } from "@/hooks/api"
+import { useAuthStore } from "@/stores"
 
 /**
  * Edit resume route
@@ -29,23 +29,36 @@ export const Route = createFileRoute("/resume/$id")({
 
 function EditResumeComponent() {
   const { id } = useParams({ from: "/resume/$id" })
-  const documents = useResumeStore((state) => state.documents)
+  const { data: resume, isLoading, error } = useResume(id)
 
-  // Load resume content by ID
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Load on mount or ID change
-  useEffect(() => {
-    const resume = documents.find((doc) => doc.id === id)
-    if (resume) {
-      // In a real app, you'd load the full resume content here
-      // For now, we'll just use what's in the store
-      console.log("Loading resume:", resume.name)
-    }
-  }, [id])
+  if (isLoading) {
+    return <ResumeEditorLoading />
+  }
+
+  if (error) {
+    return (
+      <RouteError
+        error={error}
+        reset={() => window.location.reload()}
+        title="Failed to load resume"
+      />
+    )
+  }
+
+  if (!resume) {
+    return (
+      <RouteError
+        error={new Error("Resume not found")}
+        reset={() => window.location.reload()}
+        title="Resume not found"
+      />
+    )
+  }
 
   return (
     <div className="container mx-auto p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Edit Resume</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{resume.title}</h1>
         <p className="text-muted-foreground">Update your resume information and content</p>
       </div>
 
