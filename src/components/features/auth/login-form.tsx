@@ -1,28 +1,68 @@
+import { useNavigate, useSearch } from "@tanstack/react-router"
+import { Loader2 } from "lucide-react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
+import { useAuthStore } from "@/stores"
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
+  const navigate = useNavigate()
+  const search = useSearch({ strict: false }) as { redirect?: string }
+  const login = useAuthStore((state) => state.login)
+  const isLoading = useAuthStore((state) => state.isLoading)
+  const error = useAuthStore((state) => state.error)
+
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    try {
+      await login(email, password)
+      // Redirect to intended destination or dashboard
+      navigate({ to: search.redirect || "/dashboard" })
+    } catch (err) {
+      // Error is handled by the store
+      console.error("Login failed:", err)
+    }
+  }
+
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form className={cn("flex flex-col gap-6", className)} onSubmit={handleSubmit} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Login to your account</h1>
         <p className="text-muted-foreground text-sm text-balance">
           Enter your email below to login to your account
         </p>
       </div>
+
+      {error && (
+        <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
+      )}
+
       <div className="grid gap-6">
         <div className="grid gap-3">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input
+            id="email"
+            type="email"
+            placeholder="m@example.com"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoading}
+          />
         </div>
         <div className="grid gap-3">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
             <button
               type="button"
-              className="ml-auto text-sm underline-offset-4 hover:underline"
+              className="ml-auto text-sm underline-offset-4 hover:underline disabled:opacity-50"
+              disabled={isLoading}
               onClick={() => {
                 // TODO: Implement forgot password functionality
                 console.log("Forgot password clicked")
@@ -31,17 +71,31 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
               Forgot your password?
             </button>
           </div>
-          <Input id="password" type="password" required />
+          <Input
+            id="password"
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={isLoading}
+          />
         </div>
-        <Button type="submit" className="w-full">
-          Login
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Logging in...
+            </>
+          ) : (
+            "Login"
+          )}
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
           <span className="bg-background text-muted-foreground relative z-10 px-2">
             Or continue with
           </span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full" type="button" disabled={isLoading}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
             <title>GitHub</title>
             <path
@@ -56,7 +110,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
         Don&apos;t have an account?{" "}
         <button
           type="button"
-          className="underline underline-offset-4 hover:opacity-80"
+          className="underline underline-offset-4 hover:opacity-80 disabled:opacity-50"
+          disabled={isLoading}
           onClick={() => {
             // TODO: Navigate to sign up page
             console.log("Sign up clicked")
