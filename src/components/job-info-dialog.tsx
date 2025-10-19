@@ -1,16 +1,10 @@
+import { Plus, Trash } from "lucide-react"
 import { useState } from "react"
-import { useResumeStore } from "@/hooks/use-resume-store"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import {
   Sidebar,
   SidebarContent,
@@ -21,7 +15,8 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar"
-import { Plus, Trash } from "lucide-react"
+import { Textarea } from "@/components/ui/textarea"
+import { useResumeStore } from "@/hooks/use-resume-store"
 
 type Section = "details" | "list"
 
@@ -65,7 +60,17 @@ export function JobInfoDialog({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const job = { title, company, location, description, basePay, bonus, stocks, workType, benefits }
+    const job = {
+      title,
+      company,
+      location,
+      description,
+      basePay,
+      bonus,
+      stocks,
+      workType,
+      benefits,
+    }
     setJobInfo(job)
     addJob(job)
     setTitle("")
@@ -135,7 +140,9 @@ export function JobInfoDialog({
                   <Select
                     id="workType"
                     value={workType}
-                    onChange={(e) => setWorkType(e.target.value as "onsite" | "remote" | "hybrid" | undefined)}
+                    onChange={(e) =>
+                      setWorkType(e.target.value as "onsite" | "remote" | "hybrid" | undefined)
+                    }
                   >
                     <option value="">Select</option>
                     <option value="onsite">Onsite</option>
@@ -180,11 +187,7 @@ export function JobInfoDialog({
                         type="button"
                         variant="outline"
                         size="icon"
-                        onClick={() =>
-                          setBenefits((prev) =>
-                            prev.filter((_, idx) => idx !== i),
-                          )
-                        }
+                        onClick={() => setBenefits((prev) => prev.filter((_, idx) => idx !== i))}
                       >
                         <Trash className="h-4 w-4" />
                       </Button>
@@ -196,11 +199,15 @@ export function JobInfoDialog({
                       onChange={(e) => setBenefitInput(e.target.value)}
                       placeholder="Add benefit"
                     />
-                    <Button type="button" variant="outline" onClick={() => {
-                      if (!benefitInput.trim()) return
-                      setBenefits([...benefits, benefitInput.trim()])
-                      setBenefitInput("")
-                    }}>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        if (!benefitInput.trim()) return
+                        setBenefits([...benefits, benefitInput.trim()])
+                        setBenefitInput("")
+                      }}
+                    >
                       <Plus className="mr-2 h-4 w-4" /> Add Benefit
                     </Button>
                     <Button

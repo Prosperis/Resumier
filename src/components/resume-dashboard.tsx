@@ -1,12 +1,8 @@
 import { Plus } from "lucide-react"
-import { useResumeDocuments } from "@/hooks/use-resume-documents"
 import { Card, CardHeader, CardTitle } from "@/components/ui/card"
+import { useResumeDocuments } from "@/hooks/use-resume-documents"
 
-export function ResumeDashboard({
-  onCreateResume,
-}: {
-  onCreateResume: () => void
-}) {
+export function ResumeDashboard({ onCreateResume }: { onCreateResume: () => void }) {
   const documents = useResumeDocuments((state) => state.documents)
 
   return (

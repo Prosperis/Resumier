@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { persist, createJSONStorage } from "zustand/middleware"
+import { createJSONStorage, persist } from "zustand/middleware"
 
 export interface ResumeDocument {
   id: string
@@ -15,8 +15,7 @@ export const useResumeDocuments = create<DocumentsState>()(
   persist(
     (set) => ({
       documents: [],
-      addDocument: (doc) =>
-        set((state) => ({ documents: [...state.documents, doc] })),
+      addDocument: (doc) => set((state) => ({ documents: [...state.documents, doc] })),
     }),
     {
       name: "resumier-documents",

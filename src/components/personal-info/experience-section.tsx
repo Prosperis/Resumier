@@ -1,9 +1,9 @@
+import { ChevronDown, Plus, Trash } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { ChevronDown, Plus, Trash } from "lucide-react"
 import type { WorkExperience } from "@/hooks/use-resume-store"
 
 interface ExperienceProps {
@@ -13,7 +13,7 @@ interface ExperienceProps {
   updateExperience: (
     i: number,
     field: keyof WorkExperience,
-    value: string | string[] | boolean
+    value: string | string[] | boolean,
   ) => void
   removeExperience: (i: number) => void
   setAwardInput: (i: number, value: string) => void

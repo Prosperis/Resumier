@@ -1,12 +1,12 @@
-import { renderHook, act } from '@testing-library/react'
-import { describe, it, expect, beforeEach, beforeAll, afterAll, vi } from 'vitest'
-import { useTheme } from './use-theme'
+import { act, renderHook } from "@testing-library/react"
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
+import { useTheme } from "./use-theme"
 
 let originalMatchMedia: typeof window.matchMedia
 
 beforeAll(() => {
   originalMatchMedia = window.matchMedia
-  Object.defineProperty(window, 'matchMedia', {
+  Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
       matches: false,
@@ -21,26 +21,26 @@ afterAll(() => {
   window.matchMedia = originalMatchMedia
 })
 
-describe('useTheme', () => {
+describe("useTheme", () => {
   beforeEach(() => {
     localStorage.clear()
-    document.documentElement.className = ''
+    document.documentElement.className = ""
   })
 
-  it('initializes from localStorage', () => {
-    localStorage.setItem('theme', 'dark')
+  it("initializes from localStorage", () => {
+    localStorage.setItem("theme", "dark")
     const { result } = renderHook(() => useTheme())
-    expect(result.current.theme).toBe('dark')
-    expect(document.documentElement.classList.contains('dark')).toBe(true)
+    expect(result.current.theme).toBe("dark")
+    expect(document.documentElement.classList.contains("dark")).toBe(true)
   })
 
-  it('toggles theme', () => {
+  it("toggles theme", () => {
     const { result } = renderHook(() => useTheme())
     act(() => {
       result.current.toggleTheme()
     })
-    expect(result.current.theme).toBe('dark')
-    expect(localStorage.getItem('theme')).toBe('dark')
-    expect(document.documentElement.classList.contains('dark')).toBe(true)
+    expect(result.current.theme).toBe("dark")
+    expect(localStorage.getItem("theme")).toBe("dark")
+    expect(document.documentElement.classList.contains("dark")).toBe(true)
   })
 })

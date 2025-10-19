@@ -1,21 +1,21 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react"
 import {
   Breadcrumb,
-  BreadcrumbList,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbSeparator,
+  BreadcrumbList,
   BreadcrumbPage,
-} from "./breadcrumb";
+  BreadcrumbSeparator,
+} from "./breadcrumb"
 
 const meta: Meta<typeof Breadcrumb> = {
   title: "ui/Breadcrumb",
   component: Breadcrumb,
   tags: ["autodocs"],
-};
-export default meta;
+}
+export default meta
 
-type Story = StoryObj<typeof Breadcrumb>;
+type Story = StoryObj<typeof Breadcrumb>
 
 export const Default: Story = {
   render: () => (
@@ -35,4 +35,4 @@ export const Default: Story = {
       </BreadcrumbList>
     </Breadcrumb>
   ),
-};
+}

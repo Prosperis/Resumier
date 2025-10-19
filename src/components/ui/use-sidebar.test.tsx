@@ -1,16 +1,16 @@
-import { renderHook } from '@testing-library/react'
-import { describe, it, expect, vi } from 'vitest'
-import { useSidebar, SidebarContext } from './use-sidebar'
-import type { SidebarContextProps } from './use-sidebar'
+import { renderHook } from "@testing-library/react"
+import { describe, expect, it, vi } from "vitest"
+import type { SidebarContextProps } from "./use-sidebar"
+import { SidebarContext, useSidebar } from "./use-sidebar"
 
-describe('useSidebar', () => {
-  it('throws when used outside provider', () => {
+describe("useSidebar", () => {
+  it("throws when used outside provider", () => {
     expect(() => renderHook(() => useSidebar())).toThrowError()
   })
 
-  it('returns context when inside provider', () => {
+  it("returns context when inside provider", () => {
     const context: SidebarContextProps = {
-      state: 'expanded',
+      state: "expanded",
       open: true,
       setOpen: vi.fn(),
       openMobile: false,

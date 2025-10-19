@@ -1,23 +1,23 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react"
 import {
-  SidebarProvider,
   Sidebar,
-  SidebarHeader,
   SidebarContent,
   SidebarGroup,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
-} from "./sidebar";
+  SidebarProvider,
+} from "./sidebar"
 
 const meta: Meta<typeof Sidebar> = {
   title: "ui/Sidebar",
   component: Sidebar,
   tags: ["autodocs"],
-};
-export default meta;
+}
+export default meta
 
-type Story = StoryObj<typeof Sidebar>;
+type Story = StoryObj<typeof Sidebar>
 
 export const Default: Story = {
   render: () => (
@@ -35,4 +35,4 @@ export const Default: Story = {
       </Sidebar>
     </SidebarProvider>
   ),
-};
+}

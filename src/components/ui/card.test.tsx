@@ -1,9 +1,9 @@
-import { render } from '@testing-library/react'
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from './card'
-import { describe, it, expect } from 'vitest'
+import { render } from "@testing-library/react"
+import { describe, expect, it } from "vitest"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./card"
 
-describe('Card', () => {
-  it('renders all subcomponents', () => {
+describe("Card", () => {
+  it("renders all subcomponents", () => {
     const { getByText, getByTestId } = render(
       <Card>
         <CardHeader data-testid="header">
@@ -11,11 +11,11 @@ describe('Card', () => {
         </CardHeader>
         <CardContent data-testid="content">Body</CardContent>
         <CardFooter data-testid="footer">Footer</CardFooter>
-      </Card>
+      </Card>,
     )
-    expect(getByTestId('header').getAttribute('data-slot')).toBe('card-header')
-    expect(getByText('Title').getAttribute('data-slot')).toBe('card-title')
-    expect(getByTestId('content').getAttribute('data-slot')).toBe('card-content')
-    expect(getByTestId('footer').getAttribute('data-slot')).toBe('card-footer')
+    expect(getByTestId("header").getAttribute("data-slot")).toBe("card-header")
+    expect(getByText("Title").getAttribute("data-slot")).toBe("card-title")
+    expect(getByTestId("content").getAttribute("data-slot")).toBe("card-content")
+    expect(getByTestId("footer").getAttribute("data-slot")).toBe("card-footer")
   })
 })
