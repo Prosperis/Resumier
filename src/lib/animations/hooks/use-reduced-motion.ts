@@ -3,6 +3,7 @@
  * Respects user's motion preferences for accessibility
  */
 
+import type { Transition, Variants } from "framer-motion"
 import { useEffect, useState } from "react"
 
 /**
@@ -78,9 +79,7 @@ export function useReducedMotion(): boolean {
  * >
  * ```
  */
-export function useAnimationTransition(
-  transition: Record<string, unknown> = {},
-): Record<string, unknown> {
+export function useAnimationTransition(transition: Transition = {}): Transition {
   const shouldReduceMotion = useReducedMotion()
 
   if (shouldReduceMotion) {
@@ -108,9 +107,7 @@ export function useAnimationTransition(
  * >
  * ```
  */
-export function useAnimationVariants<T extends Record<string, unknown>>(
-  variants: T,
-): T | Record<string, never> {
+export function useAnimationVariants(variants: Variants): Variants | Record<string, never> {
   const shouldReduceMotion = useReducedMotion()
 
   if (shouldReduceMotion) {

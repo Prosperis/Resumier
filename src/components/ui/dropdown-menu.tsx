@@ -1,9 +1,15 @@
 "use client"
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
+import { motion } from "framer-motion"
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react"
 import type * as React from "react"
-
+import {
+  useAnimationTransition,
+  useAnimationVariants,
+} from "@/lib/animations/hooks/use-reduced-motion"
+import { dropdownTransition } from "@/lib/animations/transitions"
+import { dropdownVariants } from "@/lib/animations/variants"
 import { cn } from "@/lib/utils"
 
 function DropdownMenu({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
@@ -27,17 +33,29 @@ function DropdownMenuContent({
   sideOffset = 4,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
+  const variants = useAnimationVariants(dropdownVariants)
+  const transition = useAnimationTransition(dropdownTransition)
+
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
+        asChild
         data-slot="dropdown-menu-content"
         sideOffset={sideOffset}
-        className={cn(
-          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 max-h-(--radix-dropdown-menu-content-available-height) min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md",
-          className,
-        )}
         {...props}
-      />
+      >
+        <motion.div
+          variants={variants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          transition={transition}
+          className={cn(
+            "bg-popover text-popover-foreground z-50 max-h-(--radix-dropdown-menu-content-available-height) min-w-[8rem] origin-(--radix-dropdown-menu-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border p-1 shadow-md",
+            className,
+          )}
+        />
+      </DropdownMenuPrimitive.Content>
     </DropdownMenuPrimitive.Portal>
   )
 }

@@ -1,9 +1,15 @@
 "use client"
 
 import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { XIcon } from "lucide-react"
+import { motion } from "framer-motion"
+import { X } from "lucide-react"
 import type * as React from "react"
-
+import {
+  useAnimationTransition,
+  useAnimationVariants,
+} from "@/lib/animations/hooks/use-reduced-motion"
+import { modalTransition } from "@/lib/animations/transitions"
+import { modalBackdropVariants, modalContentVariants } from "@/lib/animations/variants"
 import { cn } from "@/lib/utils"
 
 function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {
@@ -26,47 +32,52 @@ function DialogOverlay({
   className,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
+  const variants = useAnimationVariants(modalBackdropVariants)
+  const transition = useAnimationTransition(modalTransition)
+
   return (
-    <DialogPrimitive.Overlay
-      data-slot="dialog-overlay"
-      className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
-        className,
-      )}
-      {...props}
-    />
+    <DialogPrimitive.Overlay asChild data-slot="dialog-overlay" {...props}>
+      <motion.div
+        variants={variants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        transition={transition}
+        className={cn("fixed inset-0 z-50 bg-black/50", className)}
+      />
+    </DialogPrimitive.Overlay>
   )
 }
 
 function DialogContent({
   className,
   children,
-  showCloseButton = true,
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Content> & {
-  showCloseButton?: boolean
-}) {
+}: React.ComponentProps<typeof DialogPrimitive.Content>) {
+  const contentVariants = useAnimationVariants(modalContentVariants)
+  const transition = useAnimationTransition(modalTransition)
+
   return (
-    <DialogPortal data-slot="dialog-portal">
+    <DialogPortal>
       <DialogOverlay />
-      <DialogPrimitive.Content
-        data-slot="dialog-content"
-        className={cn(
-          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 sm:max-w-lg",
-          className,
-        )}
-        {...props}
-      >
-        {children}
-        {showCloseButton && (
-          <DialogPrimitive.Close
-            data-slot="dialog-close"
-            className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
-          >
-            <XIcon />
+      <DialogPrimitive.Content asChild data-slot="dialog-content" {...props}>
+        <motion.div
+          variants={contentVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          transition={transition}
+          className={cn(
+            "fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg",
+            className,
+          )}
+        >
+          {children}
+          <DialogPrimitive.Close className="absolute top-4 right-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+            <X className="h-4 w-4" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
-        )}
+        </motion.div>
       </DialogPrimitive.Content>
     </DialogPortal>
   )
