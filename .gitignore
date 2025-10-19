@@ -36,6 +36,9 @@ coverage/
 # Vitest
 .vitest/
 
+# TanStack Router
+src/app/routeTree.gen.ts
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

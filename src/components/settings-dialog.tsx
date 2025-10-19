@@ -77,11 +77,9 @@ export function SettingsDialog() {
                   <SidebarMenu>
                     {data.nav.map((item) => (
                       <SidebarMenuItem key={item.name}>
-                        <SidebarMenuButton asChild isActive={item.name === "Messages & media"}>
-                          <a href="#">
-                            <item.icon />
-                            <span>{item.name}</span>
-                          </a>
+                        <SidebarMenuButton isActive={item.name === "Messages & media"}>
+                          <item.icon />
+                          <span>{item.name}</span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}

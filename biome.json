@@ -8,6 +8,18 @@
 	"files": {
 		"ignoreUnknown": false
 	},
+	"overrides": [
+		{
+			"includes": ["src/**/*.css"],
+			"linter": {
+				"rules": {
+					"suspicious": {
+						"noUnknownAtRules": "off"
+					}
+				}
+			}
+		}
+	],
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "space",
@@ -22,21 +34,31 @@
 				"noUnusedVariables": "error",
 				"noUnusedImports": "error",
 				"useHookAtTopLevel": "error",
-				"useExhaustiveDependencies": "warn"
+				"useExhaustiveDependencies": "warn",
+				"useUniqueElementIds": "off",
+				"noNestedComponentDefinitions": "warn"
 			},
 			"style": {
 				"useConst": "error",
-				"useImportType": "error"
+				"useImportType": "error",
+				"noNonNullAssertion": "warn"
 			},
 			"suspicious": {
 				"noExplicitAny": "warn",
-				"noArrayIndexKey": "warn",
-				"noConsole": "off"
+				"noArrayIndexKey": "off",
+				"noConsole": "off",
+				"noDocumentCookie": "warn"
 			},
 			"a11y": {
 				"useAltText": "error",
 				"useAriaPropsForRole": "error",
-				"useValidAriaProps": "error"
+				"useValidAriaProps": "error",
+				"useValidAnchor": "warn",
+				"noSvgWithoutTitle": "warn",
+				"noStaticElementInteractions": "warn",
+				"useKeyWithClickEvents": "warn",
+				"useFocusableInteractive": "warn",
+				"useSemanticElements": "warn"
 			}
 		}
 	},

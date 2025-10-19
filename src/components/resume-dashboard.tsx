@@ -14,13 +14,14 @@ export function ResumeDashboard({ onCreateResume }: { onCreateResume: () => void
           </CardHeader>
         </Card>
       ))}
-      <div
+      <button
+        type="button"
         onClick={onCreateResume}
         className="border-dashed border-2 rounded-lg flex flex-col items-center justify-center cursor-pointer py-8 text-muted-foreground hover:bg-accent"
       >
         <Plus className="size-8" />
         <span className="mt-2">New Resume</span>
-      </div>
+      </button>
     </div>
   )
 }
