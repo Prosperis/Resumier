@@ -1,0 +1,5 @@
+bun test v1.3.0 (b0a6feca)
+vi.mocked: function
+vi keys: [ "mock", "mocked" ]
+vi.mocked exists!
+mocked result: function

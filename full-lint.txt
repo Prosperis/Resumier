@@ -1,0 +1,274 @@
+1:$ biome check src/
+2:src\components\features\resume\sections\__tests__\basic-info-section.test.tsx:295:27 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+4:  i Template literals are preferred over string concatenation.
+5:  
+6:    293 │       const longEmail = `${"a".repeat(50)}@${"example".repeat(10)}.com`
+7:    294 │       const longPhone = "1".repeat(50)
+8:  > 295 │       const longAddress = "123 ".repeat(50) + "Main St"
+9:        │                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+10:    296 │       const longUrl = "https://linkedin.com/in/" + "a".repeat(100)
+11:    297 │ 
+12:  
+13:  i Unsafe fix: Use a template literal.
+14:  
+15:    293 293 │         const longEmail = `${"a".repeat(50)}@${"example".repeat(10)}.com`
+16:    294 294 │         const longPhone = "1".repeat(50)
+17:    295     │ - ······const·longAddress·=·"123·".repeat(50)·+·"Main·St"
+18:        295 │ + ······const·longAddress·=·`${"123·".repeat(50)}Main·St`
+19:    296 296 │         const longUrl = "https://linkedin.com/in/" + "a".repeat(100)
+20:    297 297 │   
+21:  
+23:src\components\features\resume\sections\__tests__\basic-info-section.test.tsx:296:23 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━
+25:  i Template literals are preferred over string concatenation.
+26:  
+27:    294 │       const longPhone = "1".repeat(50)
+28:    295 │       const longAddress = "123 ".repeat(50) + "Main St"
+29:  > 296 │       const longUrl = "https://linkedin.com/in/" + "a".repeat(100)
+30:        │                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+31:    297 │ 
+32:    298 │       render(
+33:  
+34:  i Unsafe fix: Use a template literal.
+35:  
+36:    294 294 │         const longPhone = "1".repeat(50)
+37:    295 295 │         const longAddress = "123 ".repeat(50) + "Main St"
+38:    296     │ - ······const·longUrl·=·"https://linkedin.com/in/"·+·"a".repeat(100)
+39:        296 │ + ······const·longUrl·=·`https://linkedin.com/in/${"a".repeat(100)}`
+40:    297 297 │   
+41:    298 298 │         render(
+42:  
+44:src\components\ui\avatar.test.tsx:154:24 lint/a11y/noSvgWithoutTitle ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+46:  ! Alternative text title element cannot be empty
+47:  
+48:    153 │   it("renders with icon as fallback", () => {
+49:  > 154 │     const Icon = () => <svg data-testid="icon">Icon</svg>
+50:        │                        ^^^^^^^^^^^^^^^^^^^^^^^^
+51:    155 │     render(
+52:    156 │       <Avatar>
+53:  
+54:  i For accessibility purposes, SVGs should have an alternative text, provided via title element. If the svg element has role="img", you should add the aria-label or aria-labelledby attribute.
+55:  
+57:src\components\ui\calendar.tsx:9:57 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+59:  ! Unexpected any. Specify a different type.
+60:  
+61:     8 │ // Calendar component helpers
+62:   > 9 │ const CalendarRoot = ({ className, rootRef, ...props }: any) => {
+63:       │                                                         ^^^
+64:    10 │   return <div data-slot="calendar" ref={rootRef} className={cn(className)} {...props} />
+65:    11 │ }
+66:  
+67:  i any disables many type checking rules. Its use should be avoided.
+68:  
+70:src\components\ui\calendar.tsx:13:64 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+72:  ! Unexpected any. Specify a different type.
+73:  
+74:    11 │ }
+75:    12 │ 
+76:  > 13 │ const CalendarChevron = ({ className, orientation, ...props }: any) => {
+77:       │                                                                ^^^
+78:    14 │   if (orientation === "left") {
+79:    15 │     return <ChevronLeftIcon className={cn("size-4", className)} {...props} />
+80:  
+81:  i any disables many type checking rules. Its use should be avoided.
+82:  
+84:src\components\ui\calendar.tsx:25:53 lint/suspicious/noExplicitAny ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+86:  ! Unexpected any. Specify a different type.
+87:  
+88:    23 │ }
+89:    24 │ 
+90:  > 25 │ const CalendarWeekNumber = ({ children, ...props }: any) => {
+91:       │                                                     ^^^
+92:    26 │   return (
+93:    27 │     <td {...props}>
+94:  
+95:  i any disables many type checking rules. Its use should be avoided.
+96:  
+98:src\components\ui\sidebar.tsx:61:7 lint/suspicious/noDocumentCookie ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+100:  ! Direct assigning to document.cookie is not recommended.
+101:  
+102:    60 │       // This sets the cookie to keep the sidebar state.
+103:  > 61 │       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+104:       │       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+105:    62 │     },
+106:    63 │     [setOpenProp, open],
+107:  
+108:  i Consider using the Cookie Store API.
+109:  
+111:src\components\ui\tooltip.test.tsx:238:24 lint/a11y/noSvgWithoutTitle ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+113:  ! Alternative text title element cannot be empty
+114:  
+115:    236 │   it("renders with icon as trigger", async () => {
+116:    237 │     const user = userEvent.setup()
+117:  > 238 │     const Icon = () => <svg data-testid="icon">Icon</svg>
+118:        │                        ^^^^^^^^^^^^^^^^^^^^^^^^
+119:    239 │ 
+120:    240 │     render(
+121:  
+122:  i For accessibility purposes, SVGs should have an alternative text, provided via title element. If the svg element has role="img", you should add the aria-label or aria-labelledby attribute.
+123:  
+125:src\hooks\api\use-create-resume.test.tsx:35:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+127:  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+128:  
+129:    33 │     })
+130:    34 │ 
+131:  > 35 │     // biome-ignore lint/suspicious/noExplicitAny: test helper
+132:       │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+133:    36 │     return ({ children }: any) => (
+134:    37 │       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+135:  
+137:src\hooks\api\use-delete-resume.test.tsx:36:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+139:  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+140:  
+141:    34 │     })
+142:    35 │ 
+143:  > 36 │     // biome-ignore lint/suspicious/noExplicitAny: test helper
+144:       │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+145:    37 │     return ({ children }: any) => (
+146:    38 │       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+147:  
+149:src\hooks\api\use-duplicate-resume.test.tsx:34:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+151:  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+152:  
+153:    32 │     })
+154:    33 │ 
+155:  > 34 │     // biome-ignore lint/suspicious/noExplicitAny: test helper
+156:       │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+157:    35 │     return ({ children }: any) => (
+158:    36 │       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+159:  
+161:src\hooks\api\use-resume.test.tsx:30:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+163:  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+164:  
+165:    28 │     })
+166:    29 │ 
+167:  > 30 │     // biome-ignore lint/suspicious/noExplicitAny: test helper
+168:       │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+169:    31 │     return ({ children }: any) => (
+170:    32 │       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+171:  
+173:src\hooks\api\use-resumes.test.tsx:30:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+175:  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+176:  
+177:    28 │     })
+178:    29 │ 
+179:  > 30 │     // biome-ignore lint/suspicious/noExplicitAny: test helper
+180:       │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+181:    31 │     return ({ children }: any) => (
+182:    32 │       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+183:  
+185:src\hooks\api\use-update-resume.test.tsx:36:5 suppressions/unused ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+187:  ! Suppression comment has no effect. Remove the suppression or make sure you are suppressing the correct rule.
+188:  
+189:    34 │     })
+190:    35 │ 
+191:  > 36 │     // biome-ignore lint/suspicious/noExplicitAny: test helper
+192:       │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+193:    37 │     return ({ children }: any) => (
+194:    38 │       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+195:  
+197:src\index.css:167:19 lint/complexity/noImportantStyles  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+199:  ! Avoid the use of the !important style.
+200:  
+201:    165 │   [role="banner"],
+202:    166 │   [role="contentinfo"] {
+203:  > 167 │     display: none !important;
+204:        │                   ^^^^^^^^^^
+205:    168 │   }
+206:    169 │ 
+207:  
+208:  i This style reverses the cascade logic, and precedence is reversed. This could lead to having styles with higher specificity being overridden by styles with lower specificity.
+209:  
+210:  i Unsafe fix: Remove the style.
+211:  
+212:    167 │ ····display:·none·!important;
+213:        │                  ----------- 
+215:src\index.css:174:23 lint/complexity/noImportantStyles  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+217:  ! Avoid the use of the !important style.
+218:  
+219:    172 │     margin: 0;
+220:    173 │     padding: 0;
+221:  > 174 │     background: white !important;
+222:        │                       ^^^^^^^^^^
+223:    175 │     color: black !important;
+224:    176 │   }
+225:  
+226:  i This style reverses the cascade logic, and precedence is reversed. This could lead to having styles with higher specificity being overridden by styles with lower specificity.
+227:  
+228:  i Unsafe fix: Remove the style.
+229:  
+230:    174 │ ····background:·white·!important;
+231:        │                      ----------- 
+233:src\index.css:175:18 lint/complexity/noImportantStyles  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+235:  ! Avoid the use of the !important style.
+236:  
+237:    173 │     padding: 0;
+238:    174 │     background: white !important;
+239:  > 175 │     color: black !important;
+240:        │                  ^^^^^^^^^^
+241:    176 │   }
+242:    177 │ 
+243:  
+244:  i This style reverses the cascade logic, and precedence is reversed. This could lead to having styles with higher specificity being overridden by styles with lower specificity.
+245:  
+246:  i Unsafe fix: Remove the style.
+247:  
+248:    175 │ ····color:·black·!important;
+249:        │                 ----------- 
+251:src\index.css:180:21 lint/complexity/noImportantStyles  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+253:  ! Avoid the use of the !important style.
+254:  
+255:    178 │   /* Ensure resume takes full width */
+256:    179 │   .container {
+257:  > 180 │     max-width: 100% !important;
+258:        │                     ^^^^^^^^^^
+259:    181 │     margin: 0 !important;
+260:    182 │     padding: 0 !important;
+261:  
+262:  i This style reverses the cascade logic, and precedence is reversed. This could lead to having styles with higher specificity being overridden by styles with lower specificity.
+263:  
+264:  i Unsafe fix: Remove the style.
+265:  
+266:    180 │ ····max-width:·100%·!important;
+267:        │                    ----------- 
+269:src\index.css:181:15 lint/complexity/noImportantStyles  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+271:  ! Avoid the use of the !important style.
+272:  
+273:    179 │   .container {
+274:    180 │     max-width: 100% !important;
+275:  > 181 │     margin: 0 !important;
+276:        │               ^^^^^^^^^^
+277:    182 │     padding: 0 !important;
+278:    183 │   }
+279:  
+280:  i This style reverses the cascade logic, and precedence is reversed. This could lead to having styles with higher specificity being overridden by styles with lower specificity.
+281:  
+282:  i Unsafe fix: Remove the style.
+283:  
+284:    181 │ ····margin:·0·!important;
+285:        │              ----------- 
+287:src\hooks\__tests__\use-resume-documents.test.ts:171:14 lint/suspicious/useIterableCallbackReturn ━━━━━━━━━━
+289:  × This callback passed to forEach() iterable method should not return a value.
+290:  
+291:    170 │       act(() => {
+292:  > 171 │         docs.forEach((doc) => result.current.addDocument(doc))
+293:        │              ^^^^^^^
+294:    172 │       })
+295:    173 │ 
+296:  
+297:  i Either remove this return or remove the returned value.
+298:  
+299:    170 │       act(() => {
+300:  > 171 │         docs.forEach((doc) => result.current.addDocument(doc))
+301:        │                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+302:    172 │       })
+303:    173 │ 
+304:  
+306:The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+307:Diagnostics not shown: 18.
+308:Checked 303 files in 168ms. No fixes applied.
+309:Found 3 errors.
+310:Found 32 warnings.
+311:check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+313:  × Some errors were emitted while running checks.
+314:  
+316:error: script "lint" exited with code 1

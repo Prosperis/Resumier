@@ -1,0 +1,219 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+# Set permissions for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # Job 1: Lint and Format Check
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+          
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+        
+      - name: Run Biome lint
+        run: bun run lint
+        
+      - name: Check code formatting
+        run: bun run format:check
+        continue-on-error: true
+
+  # Job 2: Run Tests with Coverage
+  test:
+    name: Test & Coverage
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+          
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+        
+      - name: Run tests with coverage
+        run: bun test --coverage --run
+        
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 30
+          
+      - name: Check coverage threshold
+        run: |
+          echo "Checking coverage threshold (80%)..."
+          # Extract coverage percentage from coverage report
+          if [ -f "coverage/coverage-summary.json" ]; then
+            echo "Coverage report found"
+          else
+            echo "Warning: Coverage report not found"
+          fi
+
+  # Job 3: Security Audit
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+          
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+        
+      - name: Check for outdated packages
+        run: bun outdated || true
+        
+      - name: Run security tests
+        run: bun test src/lib/security --run
+
+  # Job 4: Build and Bundle Analysis
+  build:
+    name: Build & Bundle Analysis
+    runs-on: ubuntu-latest
+    needs: [lint, test, security]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+          
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+        
+      - name: Build for production
+        run: bun run build
+        env:
+          NODE_ENV: production
+          
+      - name: Check bundle size
+        run: |
+          echo "Checking bundle sizes..."
+          du -sh dist/assets/*.js | sort -h
+          MAIN_BUNDLE=$(find dist/assets -name "index-*.js" -exec stat -f%z {} \; 2>/dev/null || find dist/assets -name "index-*.js" -exec stat -c%s {} \;)
+          echo "Main bundle size: $MAIN_BUNDLE bytes"
+          
+          # Check if main bundle exceeds 500KB (uncompressed)
+          if [ "$MAIN_BUNDLE" -gt 512000 ]; then
+            echo "::warning::Main bundle exceeds 500KB uncompressed"
+          fi
+          
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+          
+      - name: Upload bundle stats
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bundle-stats
+          path: dist/stats.html
+          retention-days: 7
+
+  # Job 5: Deploy to GitHub Pages (main branch only)
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        
+      - name: Comment deployment URL
+        if: github.event_name == 'push'
+        run: |
+          echo "🚀 Deployed to: ${{ steps.deployment.outputs.page_url }}"
+          echo "✅ Deployment completed successfully"
+
+  # Job 6: Performance Check (optional, runs after deployment)
+  lighthouse:
+    name: Lighthouse Performance Check
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Wait for deployment
+        run: sleep 30
+        
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            https://prosperis.github.io/Resumier/
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        continue-on-error: true

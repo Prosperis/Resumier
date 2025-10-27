@@ -1,0 +1,1910 @@
+
+ RUN  v1.6.1 c:/Users/hello/Projects/Resumier
+
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Rendering > renders the dialog when open
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Rendering > renders with custom title and description
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Rendering > does not render when closed
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Rendering > renders all form fields
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Rendering > renders honors section button
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Rendering > renders action buttons
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Interaction > allows filling in institution name
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Interaction > allows filling in degree 418ms
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Interaction > allows filling in field of study 359ms
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Interaction > allows filling in start date
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Interaction > allows filling in end date
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Interaction > allows filling in GPA
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Current Study Checkbox > disables end date when current is checked
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Current Study Checkbox > clears end date when current is checked 355ms
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Current Study Checkbox > enables end date when current is unchecked
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Current Study Checkbox > updates description text when current is checked
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Honors Management > does not show honors inputs by default
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Honors Management > shows honors section after adding an honor
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Honors Management > allows adding multiple honors 312ms
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Honors Management > allows typing in honor inputs 419ms
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Honors Management > allows removing honors
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Honors Management > can remove all honors
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Honors Management > renders with default honors
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > submits form with valid data 1303ms
+ × src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > submits form with current study 1984ms
+   → expected "spy" to be called with arguments: [ ObjectContaining{…} ]
+
+Received: 
+
+
+
+Number of calls: 0
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_7b_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_7a_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_79_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_7a_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_7b_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_7c_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_7c_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_7c_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Stanford"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_7d_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_7d_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_7d_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"Master of Science"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_7e_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_7e_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder...
+ × src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > submits form with honors 2581ms
+   → expected "spy" to be called with arguments: [ ObjectContaining{…} ]
+
+Received: 
+
+
+
+Number of calls: 0
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_7l_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_7k_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_7j_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_7k_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_7l_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_7m_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_7m_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_7m_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Harvard"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_7n_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_7n_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_7n_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"PhD"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_7o_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_7o_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-for...
+ × src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > filters out empty honors on submit 2417ms
+   → expected "spy" to be called with arguments: [ ObjectContaining{…} ]
+
+Received: 
+
+
+
+Number of calls: 0
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_7v_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_7u_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_7t_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_7u_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_7v_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_80_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_80_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_80_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Test U"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_81_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_81_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_81_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"BS"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_82_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_82_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreg...
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > submits form without optional GPA 883ms
+ × src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > closes dialog after successful submission 1715ms
+   → expected "spy" to be called with arguments: [ false ]
+
+Received: 
+
+
+
+Number of calls: 0
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_8j_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_8i_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_8h_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_8i_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_8j_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_8k_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_8k_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_8k_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Test"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_8l_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_8l_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_8l_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"Degree"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_8m_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_8m_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-for...
+ × src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > resets form after submission 2004ms
+   → expect(element).toHaveValue()
+
+Expected the element to have value:
+
+Received:
+  Test Institution
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_8t_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_8s_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_8r_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_8s_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_8t_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_8u_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_8u_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_8u_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Test Institution"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_8v_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_8v_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_8v_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"Test Degree"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_90_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_90_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placehold...
+ × src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > resets honors after submission 1791ms
+   → expect(element).not.toBeInTheDocument()
+
+expected document not to contain element, found <input
+  class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+  data-slot="input"
+  placeholder="Dean's List, Summa Cum Laude..."
+  value=""
+/> instead
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_97_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_96_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_95_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_96_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_97_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_98_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_98_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_98_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Test"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_99_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_99_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_99_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"Degree"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_9a_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_9a_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-for...
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Cancel Button > closes dialog when cancel is clicked
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Cancel Button > does not submit form when cancel is clicked
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Default Values > populates form with default values
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Default Values > handles partial default values
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Validation > requires institution field 565ms
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Validation > requires degree field 533ms
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Validation > requires field of study 577ms
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Validation > requires start date field 592ms
+ × src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > GPA Field > accepts valid GPA format 2084ms
+   → expected "spy" to be called with arguments: [ ObjectContaining {"gpa": "3.8/4.0"} ]
+
+Received: 
+
+
+
+Number of calls: 0
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_c1_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_c0_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_bv_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_c0_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_c1_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_c2_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_c2_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_c2_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Test U"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_c3_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_c3_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_c3_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"BS"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_c4_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_c4_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreg...
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > GPA Field > shows GPA description text
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > submits form with current study
+AssertionError: expected "spy" to be called with arguments: [ ObjectContaining{…} ]
+
+Received: 
+
+
+
+Number of calls: 0
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_7b_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_7a_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_79_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_7a_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_7b_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_7c_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_7c_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_7c_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Stanford"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_7d_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_7d_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_7d_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"Master of Science"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_7e_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_7e_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder...
+ ❯ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx:275:26
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > submits form with honors
+AssertionError: expected "spy" to be called with arguments: [ ObjectContaining{…} ]
+
+Received: 
+
+
+
+Number of calls: 0
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_7l_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_7k_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_7j_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_7k_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_7l_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_7m_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_7m_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_7m_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Harvard"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_7n_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_7n_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_7n_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"PhD"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_7o_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_7o_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-for...
+ ❯ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx:305:26
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > filters out empty honors on submit
+AssertionError: expected "spy" to be called with arguments: [ ObjectContaining{…} ]
+
+Received: 
+
+
+
+Number of calls: 0
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_7v_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_7u_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_7t_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_7u_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_7v_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_80_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_80_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_80_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Test U"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_81_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_81_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_81_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"BS"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_82_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_82_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreg...
+ ❯ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx:332:26
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > closes dialog after successful submission
+AssertionError: expected "spy" to be called with arguments: [ false ]
+
+Received: 
+
+
+
+Number of calls: 0
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_8j_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_8i_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_8h_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_8i_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_8j_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_8k_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_8k_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_8k_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Test"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_8l_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_8l_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_8l_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"Degree"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_8m_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_8m_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-for...
+ ❯ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx:372:30
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > resets form after submission
+Error: expect(element).toHaveValue()
+
+Expected the element to have value:
+
+Received:
+  Test Institution
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_8t_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_8s_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_8r_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_8s_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_8t_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_8u_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_8u_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_8u_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Test Institution"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_8v_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_8v_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_8v_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"Test Degree"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_90_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_90_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placehold...
+ ❯ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx:386:34
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > Form Submission > resets honors after submission
+Error: expect(element).not.toBeInTheDocument()
+
+expected document not to contain element, found <input
+  class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+  data-slot="input"
+  placeholder="Dean's List, Summa Cum Laude..."
+  value=""
+/> instead
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_97_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_96_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_95_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_96_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_97_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_98_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_98_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_98_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Test"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_99_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_99_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_99_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"Degree"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_9a_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_9a_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-for...
+ ❯ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx:404:67
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx > EducationFormDialog > GPA Field > accepts valid GPA format
+AssertionError: expected "spy" to be called with arguments: [ ObjectContaining {"gpa": "3.8/4.0"} ]
+
+Received: 
+
+
+
+Number of calls: 0
+
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body[39m
+    [33mdata-scroll-locked[39m=[32m"1"[39m
+    [33mstyle[39m=[32m"pointer-events: none;"[39m
+  [36m>[39m
+    [36m<span[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-radix-focus-guard[39m=[32m""[39m
+      [33mstyle[39m=[32m"outline: none; opacity: 0; position: fixed; pointer-events: none;"[39m
+      [33mtabindex[39m=[32m"0"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-hidden[39m=[32m"true"[39m
+      [33mclass[39m=[32m"fixed inset-0 z-50 bg-black/50"[39m
+      [33mdata-aria-hidden[39m=[32m"true"[39m
+      [33mdata-slot[39m=[32m"dialog-overlay"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mstyle[39m=[32m"pointer-events: auto; opacity: 1;"[39m
+    [36m/>[39m
+    [36m<div[39m
+      [33maria-describedby[39m=[32m"radix-_r_c1_"[39m
+      [33maria-labelledby[39m=[32m"radix-_r_c0_"[39m
+      [33mclass[39m=[32m"fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg max-h-[90vh] overflow-y-auto sm:max-w-[600px]"[39m
+      [33mdata-slot[39m=[32m"dialog-content"[39m
+      [33mdata-state[39m=[32m"open"[39m
+      [33mid[39m=[32m"radix-_r_bv_"[39m
+      [33mrole[39m=[32m"dialog"[39m
+      [33mstyle[39m=[32m"opacity: 1; transform: none; pointer-events: auto;"[39m
+      [33mtabindex[39m=[32m"-1"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 text-center sm:text-left"[39m
+        [33mdata-slot[39m=[32m"dialog-header"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-lg leading-none font-semibold"[39m
+          [33mdata-slot[39m=[32m"dialog-title"[39m
+          [33mid[39m=[32m"radix-_r_c0_"[39m
+        [36m>[39m
+          [0mAdd Education[0m
+        [36m</h2>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"text-muted-foreground text-sm"[39m
+          [33mdata-slot[39m=[32m"dialog-description"[39m
+          [33mid[39m=[32m"radix-_r_c1_"[39m
+        [36m>[39m
+          [0mAdd your education details.[0m
+        [36m</p>[39m
+      [36m</div>[39m
+      [36m<form[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"space-y-2"[39m
+        [36m>[39m
+          [36m<label[39m
+            [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+            [33mdata-slot[39m=[32m"label"[39m
+            [33mfor[39m=[32m"_r_c2_-form-item"[39m
+          [36m>[39m
+            [0mInstitution[0m
+          [36m</label>[39m
+          [36m<input[39m
+            [33maria-describedby[39m=[32m"_r_c2_-form-item-description"[39m
+            [33maria-invalid[39m=[32m"false"[39m
+            [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+            [33mdata-slot[39m=[32m"input"[39m
+            [33mid[39m=[32m"_r_c2_-form-item"[39m
+            [33mname[39m=[32m"institution"[39m
+            [33mplaceholder[39m=[32m"University of Example"[39m
+            [33mstyle[39m=[32m"transform: none;"[39m
+            [33mvalue[39m=[32m"Test U"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"grid grid-cols-2 gap-4"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_c3_-form-item"[39m
+            [36m>[39m
+              [0mDegree[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_c3_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"[39m
+              [33mdata-slot[39m=[32m"input"[39m
+              [33mid[39m=[32m"_r_c3_-form-item"[39m
+              [33mname[39m=[32m"degree"[39m
+              [33mplaceholder[39m=[32m"Bachelor of Science"[39m
+              [33mstyle[39m=[32m"transform: none;"[39m
+              [33mvalue[39m=[32m"BS"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"space-y-2"[39m
+          [36m>[39m
+            [36m<label[39m
+              [33mclass[39m=[32m"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"[39m
+              [33mdata-slot[39m=[32m"label"[39m
+              [33mfor[39m=[32m"_r_c4_-form-item"[39m
+            [36m>[39m
+              [0mField of Study[0m
+            [36m</label>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"_r_c4_-form-item-description"[39m
+              [33maria-invalid[39m=[32m"false"[39m
+              [33mclass[39m=[32m"file:text-foreground placeholder:text-muted-foreg...
+ ❯ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx:531:26
+ ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12
+ ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77
+ ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+ Test Files  1 failed (1)
+      Tests  7 failed | 34 passed (41)
+   Start at  02:01:30
+   Duration  27.38s (transform 192ms, setup 271ms, collect 1.28s, tests 23.84s, environment 1.04s, prepare 463ms)
+

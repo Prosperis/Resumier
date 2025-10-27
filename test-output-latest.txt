@@ -1,0 +1,11 @@
+
+ RUN  v1.6.1 C:/Users/hello/Projects/Prosperis/Resumier
+      Coverage enabled with v8
+
+ ✓ src/lib/api/__tests__/client.test.ts  (31 tests) 106ms
+ ✓ src/stores/__tests__/auth-store.test.ts  (23 tests) 223ms
+ ✓ src/hooks/__tests__/use-toast.test.ts  (30 tests) 330ms
+ ✓ src/hooks/__tests__/use-auto-save.test.ts  (22 tests) 299ms
+ ✓ src/components/features/resume/preview/templates/__tests__/minimal-template.test.tsx  (41 tests) 2194ms
+ ✓ src/components/features/resume/preview/templates/__tests__/classic-template.test.tsx  (42 tests) 2253ms
+ ✓ src/components/ui/__tests__/breadcrumb.test.tsx  (35 tests) 1105ms

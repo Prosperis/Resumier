@@ -1,0 +1,304 @@
+
+> resumier@1.0.0 test
+> vitest run --coverage --reporter=default
+
+
+ RUN  v1.6.1 C:/Users/hello/Projects/Prosperis/Resumier
+      Coverage enabled with v8
+
+ ✓ src/lib/api/__tests__/client.test.ts  (31 tests) 66ms
+ ✓ src/lib/api/mock/db.test.ts  (35 tests) 76ms
+ ✓ src/lib/animations/__tests__/variants.test.ts  (78 tests) 83ms
+ ✓ src/hooks/__tests__/use-toast.test.ts  (30 tests) 374ms
+ ✓ src/components/ui/__tests__/animated-badge.test.tsx  (53 tests) 742ms
+ ✓ src/components/features/resume/preview/templates/__tests__/classic-template.test.tsx  (42 tests) 2120ms
+ ✓ src/components/features/resume/preview/templates/__tests__/minimal-template.test.tsx  (41 tests) 2539ms
+ ✓ src/components/features/resume/preview/templates/__tests__/modern-template.test.tsx  (46 tests) 3760ms
+ ✓ src/components/features/resume/__tests__/personal-info-dialog.test.tsx  (37 tests) 4719ms
+ ✓ src/components/features/resume/__tests__/resume-dashboard.test.tsx  (25 tests) 2327ms
+ ✓ src/components/features/resume/sections/__tests__/basic-info-section.test.tsx  (27 tests) 3933ms
+ ✓ src/components/features/resume/sections/__tests__/skills-section.test.tsx  (35 tests) 4495ms
+ ✓ src/components/ui/tabs.test.tsx  (25 tests) 4836ms
+ ✓ src/components/features/resume/forms/__tests__/certification-list.test.tsx  (27 tests) 3769ms
+ ✓ src/lib/validations/__tests__/personal-info.test.ts  (27 tests) 29ms
+ ✓ src/components/features/resume/forms/__tests__/education-list.test.tsx  (33 tests) 4667ms
+ ✓ src/components/features/resume/forms/__tests__/experience-list.test.tsx  (30 tests) 5189ms
+ ✓ src/hooks/__tests__/use-auto-save.test.ts  (22 tests) 276ms
+ ✓ src/stores/__tests__/auth-store.test.ts  (23 tests) 282ms
+ ✓ src/components/ui/alert-dialog.test.tsx  (31 tests) 8824ms
+ ✓ src/components/features/resume/forms/__tests__/link-list.test.tsx  (31 tests) 6686ms
+ ✓ src/components/features/resume/forms/experience-form-dialog.test.tsx  (20 tests) 952ms
+ ✓ src/hooks/api/use-update-resume.test.tsx  (12 tests) 1055ms
+ ✓ src/components/ui/dialog.test.tsx  (37 tests) 8074ms
+ ✓ src/lib/api/__tests__/errors.test.ts  (32 tests) 35ms
+ ✓ src/lib/animations/__tests__/transitions.test.ts  (49 tests) 37ms
+ ✓ src/components/ui/__tests__/breadcrumb.test.tsx  (35 tests) 857ms
+ ✓ src/components/features/navigation/__tests__/app-sidebar.test.tsx  (17 tests) 2411ms
+ ✓ src/app/__tests__/theme-provider.test.tsx  (21 tests) 350ms
+ ✓ src/lib/api/mock/resumes.test.ts  (29 tests) 73ms
+ ✓ src/lib/validations/__tests__/skills.test.ts  (35 tests) 32ms
+ ✓ src/stores/__tests__/resume-store.test.ts  (20 tests) 330ms
+ ✓ src/components/features/navigation/__tests__/nav-projects.test.tsx  (30 tests) 12414ms
+ ✓ src/components/ui/__tests__/progress.test.tsx  (41 tests) 781ms
+ ✓ src/lib/validations/__tests__/education.test.ts  (20 tests) 39ms
+ ✓ src/components/ui/__tests__/route-error.test.tsx  (37 tests) 4540ms
+ ✓ src/lib/validations/__tests__/links.test.ts  (26 tests) 63ms
+ ✓ src/components/ui/calendar.test.tsx  (23 tests) 251ms
+ ✓ src/stores/__tests__/ui-store.test.ts  (18 tests) 232ms
+ ✓ src/components/features/resume/__tests__/resume-table.test.tsx  (15 tests) 319ms
+ ✓ src/hooks/api/use-duplicate-resume.test.tsx  (10 tests) 841ms
+ ✓ src/components/features/navigation/__tests__/nav-user.test.tsx  (30 tests) 16451ms
+ ✓ src/components/features/resume/forms/__tests__/personal-info-form.test.tsx  (47 tests) 17369ms
+ ✓ src/lib/validations/__tests__/certification.test.ts  (20 tests) 40ms
+ ✓ src/components/features/resume/dnd/__tests__/dnd-utils.test.ts  (37 tests) 40ms
+ ✓ src/routes/resume/__tests__/$id.preview.test.tsx  (20 tests) 448ms
+ ✓ src/components/ui/__tests__/loading-spinner.test.tsx  (31 tests) 580ms
+ ✓ src/components/features/auth/__tests__/login-form.test.tsx  (39 tests) 18756ms
+ ✓ src/hooks/__tests__/use-resume-documents.test.ts  (13 tests) 243ms
+ ✓ src/lib/validations/__tests__/experience.test.ts  (18 tests) 28ms
+ ✓ src/components/features/resume/forms/__tests__/skills-form.test.tsx  (40 tests) 21092ms
+ ✓ src/components/features/resume/__tests__/job-info-dialog.test.tsx  (45 tests) 21609ms
+ ✓ src/components/features/navigation/__tests__/nav-main.test.tsx  (18 tests) 2815ms
+ ✓ src/components/ui/animated-icon.test.tsx  (26 tests) 283ms
+ ✓ src/components/ui/__tests__/sheet.test.tsx  (25 tests) 453ms
+ ✓ src/components/ui/animated-feedback.test.tsx  (33 tests) 406ms
+ ✓ src/components/ui/tooltip.test.tsx  (18 tests) 5435ms
+ ✓ src/components/features/resume/sections/__tests__/experience-section.test.tsx  (42 tests) 25140ms
+ ✓ src/routes/__tests__/index.test.tsx  (23 tests) 5450ms
+ ✓ src/app/__tests__/query-client.test.ts  (22 tests) 37ms
+ ✓ src/routes/__tests__/settings.test.tsx  (22 tests) 2067ms
+ ✓ src/hooks/api/use-create-resume.test.tsx  (7 tests) 589ms
+ ✓ src/hooks/api/use-delete-resume.test.tsx  (8 tests) 745ms
+ ✓ src/components/ui/__tests__/skeleton.test.tsx  (22 tests) 846ms
+ ✓ src/routes/__tests__/login.test.tsx  (19 tests) 1354ms
+ ✓ src/components/features/navigation/__tests__/app-header.test.tsx  (19 tests) 3363ms
+ ✓ src/app/__tests__/providers.test.tsx  (11 tests) 276ms
+ ✓ src/components/ui/__tests__/route-loading.test.tsx  (24 tests) 687ms
+ ✓ src/components/features/resume/mutations/__tests__/rename-resume-dialog.test.tsx  (14 tests) 14402ms
+ ✓ src/routes/resume/__tests__/$id.test.tsx  (11 tests) 167ms
+ ✓ src/components/ui/avatar.test.tsx  (17 tests) 326ms
+ ✓ src/components/ui/animated-badge.test.tsx  (25 tests) 339ms
+ ✓ src/hooks/use-resume-store.test.ts  (9 tests) 19ms
+ ✓ src/stores/__tests__/theme-store.test.ts  (15 tests) 154ms
+ ✓ src/components/ui/__tests__/dropdown-menu.test.tsx  (17 tests) 722ms
+ ✓ src/components/features/resume/sections/__tests__/education-section.test.tsx  (18 tests) 4633ms
+ ✓ src/components/features/resume/sections/__tests__/links-section.test.tsx  (20 tests) 4656ms
+ ✓ src/routes/__tests__/dashboard.test.tsx  (10 tests) 768ms
+ ✓ src/components/features/resume/forms/__tests__/link-form-dialog.test.tsx  (36 tests) 29119ms
+ ✓ src/components/features/resume/mutations/__tests__/delete-resume-dialog.test.tsx  (11 tests) 7921ms
+ ✓ src/components/features/resume/mutations/__tests__/create-resume-dialog.test.tsx  (10 tests) 10268ms
+ ✓ src/components/ui/textarea.test.tsx  (17 tests) 1831ms
+ ✓ src/routes/resume/__tests__/new.test.tsx  (15 tests) 830ms
+ ✓ src/hooks/api/use-resume.test.tsx  (6 tests) 543ms
+ ✓ src/components/features/resume/sections/__tests__/certifications-section.test.tsx  (14 tests) 3279ms
+ ✓ src/components/features/navigation/__tests__/nav-secondary.test.tsx  (10 tests) 1309ms
+ ✓ src/routes/__tests__/__root.test.tsx  (8 tests) 169ms
+ ✓ src/components/ui/separator.test.tsx  (11 tests) 477ms
+ ✓ src/components/ui/select.test.tsx  (10 tests) 1391ms
+ ✓ src/hooks/use-theme.test.ts  (6 tests) 84ms
+ ✓ src/components/features/resume/__tests__/pdf-viewer.test.tsx  (7 tests) 268ms
+ ✓ src/hooks/api/use-resumes.test.tsx  (5 tests) 397ms
+ ✓ src/components/features/resume/forms/__tests__/certification-form-dialog.test.tsx  (35 tests) 35507ms
+ ✓ src/components/ui/label.test.tsx  (8 tests) 418ms
+ ✓ src/components/ui/input.test.tsx  (16 tests) 1258ms
+stdout | src/test-mocks.test.tsx > Mock verification > window.matchMedia returns correct object
+typeof window.matchMedia: function
+window.matchMedia: [Function: spy] {
+  getMockName: [Function (anonymous)],
+  mockName: [Function (anonymous)],
+  mockClear: [Function (anonymous)],
+  mockReset: [Function (anonymous)],
+  mockRestore: [Function (anonymous)],
+  getMockImplementation: [Function (anonymous)],
+  mockImplementation: [Function (anonymous)],
+  mockImplementationOnce: [Function (anonymous)],
+  withImplementation: [Function: withImplementation],
+  mockReturnThis: [Function (anonymous)],
+  mockReturnValue: [Function (anonymous)],
+  mockReturnValueOnce: [Function (anonymous)],
+  mockResolvedValue: [Function (anonymous)],
+  mockResolvedValueOnce: [Function (anonymous)],
+  mockRejectedValue: [Function (anonymous)],
+  mockRejectedValueOnce: [Function (anonymous)]
+}
+result: {
+  matches: false,
+  media: '(prefers-reduced-motion)',
+  onchange: null,
+  addEventListener: [Function: spy] {
+    getMockName: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    getMockImplementation: [Function (anonymous)],
+    mockImplementation: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: withImplementation],
+    mockReturnThis: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)]
+  },
+  removeEventListener: [Function: spy] {
+    getMockName: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    getMockImplementation: [Function (anonymous)],
+    mockImplementation: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: withImplementation],
+    mockReturnThis: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)]
+  },
+  addListener: [Function: spy] {
+    getMockName: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    getMockImplementation: [Function (anonymous)],
+    mockImplementation: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: withImplementation],
+    mockReturnThis: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)]
+  },
+  removeListener: [Function: spy] {
+    getMockName: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    getMockImplementation: [Function (anonymous)],
+    mockImplementation: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: withImplementation],
+    mockReturnThis: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)]
+  },
+  dispatchEvent: [Function: spy] {
+    getMockName: [Function (anonymous)],
+    mockName: [Function (anonymous)],
+    mockClear: [Function (anonymous)],
+    mockReset: [Function (anonymous)],
+    mockRestore: [Function (anonymous)],
+    getMockImplementation: [Function (anonymous)],
+    mockImplementation: [Function (anonymous)],
+    mockImplementationOnce: [Function (anonymous)],
+    withImplementation: [Function: withImplementation],
+    mockReturnThis: [Function (anonymous)],
+    mockReturnValue: [Function (anonymous)],
+    mockReturnValueOnce: [Function (anonymous)],
+    mockResolvedValue: [Function (anonymous)],
+    mockResolvedValueOnce: [Function (anonymous)],
+    mockRejectedValue: [Function (anonymous)],
+    mockRejectedValueOnce: [Function (anonymous)]
+  }
+}
+
+ ✓ src/test-mocks.test.tsx  (4 tests) 10ms
+ ✓ src/hooks/use-mobile.test.ts  (4 tests) 59ms
+ ✓ src/components/ui/card.test.tsx  (7 tests) 159ms
+ ✓ src/components/ui/use-sidebar.test.tsx  (3 tests) 61ms
+ ✓ src/components/features/settings/__tests__/settings-dialog.test.tsx  (8 tests) 2205ms
+ ✓ src/lib/utils.test.ts  (5 tests) 23ms
+ ✓ src/components/ui/checkbox.test.tsx  (10 tests) 1374ms
+ ✓ src/debug2.test.ts  (1 test) 4ms
+ ✓ src/app/__tests__/router.test.ts  (23 tests) 13ms
+ ✓ src/components/ui/button.test.tsx  (6 tests) 137ms
+ ✓ src/components/features/navigation/__tests__/theme-toggle.test.tsx  (9 tests) 1272ms
+ ✓ src/debug.test.ts  (1 test) 4ms
+stdout | src/matcher-test.test.tsx > jest-dom matchers test > should have toBeInTheDocument matcher
+expect object keys: [
+  'fail',
+  'extend',
+  'addSnapshotSerializer',
+  'anything',
+  'any',
+  'stringContaining',
+  'objectContaining',
+  'arrayContaining',
+  'stringMatching',
+  'closeTo',
+  'not',
+  'getState',
+  'setState',
+  'addEqualityTesters',
+  'soft',
+  'unreachable',
+  'assertions',
+  'hasAssertions',
+  'toAppearAfter',
+  'toAppearBefore',
+  'toBeChecked',
+  'toBeDisabled',
+  'toBeEmpty',
+  'toBeEmptyDOMElement',
+  'toBeEnabled',
+  'toBeInTheDOM',
+  'toBeInTheDocument',
+  'toBeInvalid',
+  'toBePartiallyChecked',
+  'toBePartiallyPressed',
+  'toBePressed',
+  'toBeRequired',
+  'toBeValid',
+  'toBeVisible',
+  'toContainElement',
+  'toContainHTML',
+  'toHaveAccessibleDescription',
+  'toHaveAccessibleErrorMessage',
+  'toHaveAccessibleName',
+  'toHaveAttribute',
+  'toHaveClass',
+  'toHaveDescription',
+  'toHaveDisplayValue',
+  'toHaveErrorMessage',
+  'toHaveFocus',
+  'toHaveFormValues',
+  'toHaveRole',
+  'toHaveSelection',
+  'toHaveStyle',
+  'toHaveTextContent',
+  'toHaveValue'
+]
+Has toBeInTheDocument? function
+
+ ✓ src/components/ui/badge.test.tsx  (7 tests) 134ms
+ ✓ src/matcher-test.test.tsx  (1 test) 61ms
+ ✓ src/components/features/resume/__tests__/resume-builder.test.tsx  (46 tests) 39279ms
+ ❯ src/components/features/resume/forms/__tests__/experience-form-dialog.test.tsx  (34 tests | 2 failed) 40148ms
+   ❯ src/components/features/resume/forms/__tests__/experience-form-dialog.test.tsx > ExperienceFormDialog > Form Submission > submits form with highlights
+     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+   ❯ src/components/features/resume/forms/__tests__/experience-form-dialog.test.tsx > ExperienceFormDialog > Form Submission > filters out empty highlights on submit
+     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ✓ src/components/features/resume/forms/__tests__/education-form-dialog.test.tsx  (41 tests) 46120ms
+
+ Test Files  1 failed | 111 passed (112)
+      Tests  2 failed | 2524 passed (2526)
+   Start at  01:01:06
+   Duration  57.43s (transform 22.57s, setup 101.33s, collect 238.09s, tests 492.40s, environment 432.59s, prepare 105.72s)
+

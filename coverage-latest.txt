@@ -1,0 +1,5 @@
+ % Coverage report from v8
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+ERROR: Coverage for lines (47.57%) does not meet global threshold (80%)
+ERROR: Coverage for functions (60.12%) does not meet global threshold (80%)
+ERROR: Coverage for statements (47.57%) does not meet global threshold (80%)

@@ -1,0 +1,20 @@
+
+> resumier@1.0.0 test
+> vitest run --coverage
+
+
+ RUN  v1.6.1 C:/Users/hello/Projects/Prosperis/Resumier
+      Coverage enabled with v8
+
+ ✓ src/lib/api/__tests__/errors.test.ts  (32 tests) 24ms
+
+⎯⎯⎯⎯ Unhandled Rejection ⎯⎯⎯⎯⎯
+Error: ENOENT: no such file or directory, open 'C:\Users\hello\Projects\Prosperis\Resumier\coverage\.tmp\coverage-0.json'
+ ❯ open node:internal/fs/promises:633:25
+ ❯ Object.writeFile node:internal/fs/promises:1207:14
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { errno: -4058, code: 'ENOENT', syscall: 'open', path: 'C:\Users\hello\Projects\Prosperis\Resumier\coverage\.tmp\coverage-0.json' }
+
+
+
