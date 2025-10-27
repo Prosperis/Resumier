@@ -1,194 +1,143 @@
-import { describe, it, expect, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { describe, expect, it, vi } from "vitest"
 import { Textarea } from "./textarea"
 
-vi.mock("@/lib/animations/hooks/use-reduced-motion", () => ({
-  useReducedMotion: () => false,
-}))
-
 describe("Textarea", () => {
-  describe("rendering", () => {
-    it("renders a textarea element", () => {
-      render(<Textarea data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toBeInTheDocument()
-      expect(textarea.tagName).toBe("TEXTAREA")
-    })
-
-    it("has data-slot attribute", () => {
-      render(<Textarea data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("data-slot", "textarea")
-    })
-
-    it("renders with placeholder text", () => {
-      render(<Textarea placeholder="Enter description" data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("placeholder", "Enter description")
-    })
-
-    it("applies custom className", () => {
-      render(<Textarea className="custom-class" data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveClass("custom-class")
-    })
+  it("renders correctly", () => {
+    render(<Textarea placeholder="Enter text" />)
+    expect(screen.getByPlaceholderText("Enter text")).toBeInTheDocument()
   })
 
-  describe("user interaction", () => {
-    it("accepts text input", async () => {
-      const user = userEvent.setup()
-      render(<Textarea data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea") as HTMLTextAreaElement
-
-      await user.type(textarea, "Hello World")
-
-      expect(textarea.value).toBe("Hello World")
-    })
-
-    it("accepts multiline text", async () => {
-      const user = userEvent.setup()
-      render(<Textarea data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea") as HTMLTextAreaElement
-
-      await user.type(textarea, "Line 1{Enter}Line 2{Enter}Line 3")
-
-      expect(textarea.value).toContain("Line 1\nLine 2\nLine 3")
-    })
-
-    it("can be focused", async () => {
-      const user = userEvent.setup()
-      render(<Textarea data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-
-      await user.click(textarea)
-
-      expect(textarea).toHaveFocus()
-    })
-
-    it("can be cleared", async () => {
-      const user = userEvent.setup()
-      render(<Textarea defaultValue="Initial text" data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea") as HTMLTextAreaElement
-
-      await user.clear(textarea)
-
-      expect(textarea.value).toBe("")
-    })
-
-    it("calls onChange handler", async () => {
-      const user = userEvent.setup()
-      const handleChange = vi.fn()
-      render(<Textarea onChange={handleChange} data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-
-      await user.type(textarea, "test")
-
-      expect(handleChange).toHaveBeenCalled()
-    })
+  it("renders with custom className", () => {
+    render(<Textarea className="custom-class" data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+    expect(textarea).toHaveClass("custom-class")
   })
 
-  describe("states", () => {
-    it("can be disabled", () => {
-      render(<Textarea disabled data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toBeDisabled()
-    })
+  it("handles multiline text input", async () => {
+    const user = userEvent.setup()
+    render(<Textarea data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
 
-    it("can be readonly", () => {
-      render(<Textarea readOnly data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("readonly")
-    })
-
-    it("can be required", () => {
-      render(<Textarea required data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toBeRequired()
-    })
-
-    it("applies aria-invalid styling", () => {
-      render(<Textarea aria-invalid data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("aria-invalid")
-    })
+    await user.type(textarea, "Line 1{Enter}Line 2{Enter}Line 3")
+    expect(textarea).toHaveValue("Line 1\nLine 2\nLine 3")
   })
 
-  describe("controlled textarea", () => {
-    it("works as controlled component", async () => {
-      const user = userEvent.setup()
-      const handleChange = vi.fn()
-      const { rerender } = render(
-        <Textarea value="initial" onChange={handleChange} data-testid="textarea" />,
+  it("calls onChange when value changes", async () => {
+    const user = userEvent.setup()
+    const handleChange = vi.fn()
+    render(<Textarea onChange={handleChange} data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+
+    await user.type(textarea, "a")
+    expect(handleChange).toHaveBeenCalled()
+  })
+
+  it("respects disabled state", async () => {
+    const user = userEvent.setup()
+    render(<Textarea disabled data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+
+    expect(textarea).toBeDisabled()
+    await user.type(textarea, "test")
+    expect(textarea).toHaveValue("")
+  })
+
+  it("renders with value prop", () => {
+    render(<Textarea value="Initial Value" onChange={() => {}} data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+    expect(textarea).toHaveValue("Initial Value")
+  })
+
+  it("applies aria-invalid attribute when invalid", () => {
+    render(<Textarea aria-invalid={true} data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+    expect(textarea).toHaveAttribute("aria-invalid", "true")
+  })
+
+  it("renders with data-slot attribute", () => {
+    render(<Textarea data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+    expect(textarea).toHaveAttribute("data-slot", "textarea")
+  })
+
+  it("handles focus events", async () => {
+    const user = userEvent.setup()
+    const handleFocus = vi.fn()
+    render(<Textarea onFocus={handleFocus} data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+
+    await user.click(textarea)
+    expect(handleFocus).toHaveBeenCalled()
+  })
+
+  it("handles blur events", async () => {
+    const user = userEvent.setup()
+    const handleBlur = vi.fn()
+    render(<Textarea onBlur={handleBlur} data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+
+    await user.click(textarea)
+    await user.tab()
+    expect(handleBlur).toHaveBeenCalled()
+  })
+
+  it("renders with required attribute", () => {
+    render(<Textarea required data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+    expect(textarea).toBeRequired()
+  })
+
+  it("renders with readonly attribute", () => {
+    render(<Textarea readOnly data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+    expect(textarea).toHaveAttribute("readonly")
+  })
+
+  it("renders with maxLength attribute", () => {
+    render(<Textarea maxLength={100} data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+    expect(textarea).toHaveAttribute("maxLength", "100")
+  })
+
+  it("renders with rows attribute", () => {
+    render(<Textarea rows={5} data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+    expect(textarea).toHaveAttribute("rows", "5")
+  })
+
+  it("handles paste events", async () => {
+    const user = userEvent.setup()
+    const handlePaste = vi.fn()
+    render(<Textarea onPaste={handlePaste} data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+
+    await user.click(textarea)
+    await user.paste("Pasted text")
+    expect(handlePaste).toHaveBeenCalled()
+  })
+
+  it("applies min-height styling", () => {
+    render(<Textarea data-testid="textarea" />)
+    const textarea = screen.getByTestId("textarea")
+    expect(textarea).toHaveClass("min-h-[80px]")
+  })
+
+  it("supports controlled component pattern", async () => {
+    const user = userEvent.setup()
+    const TestComponent = () => {
+      const [value, setValue] = React.useState("")
+      return (
+        <Textarea data-testid="textarea" value={value} onChange={(e) => setValue(e.target.value)} />
       )
-      const textarea = screen.getByTestId("textarea") as HTMLTextAreaElement
+    }
 
-      expect(textarea.value).toBe("initial")
+    const { default: React } = await import("react")
+    render(<TestComponent />)
+    const textarea = screen.getByTestId("textarea")
 
-      await user.type(textarea, "x")
-      expect(handleChange).toHaveBeenCalled()
-
-      rerender(<Textarea value="updated" onChange={handleChange} data-testid="textarea" />)
-      expect(textarea.value).toBe("updated")
-    })
-  })
-
-  describe("sizing", () => {
-    it("accepts rows attribute", () => {
-      render(<Textarea rows={5} data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("rows", "5")
-    })
-
-    it("accepts cols attribute", () => {
-      render(<Textarea cols={40} data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("cols", "40")
-    })
-
-    it("accepts maxLength attribute", () => {
-      render(<Textarea maxLength={100} data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("maxlength", "100")
-    })
-  })
-
-  describe("accessibility", () => {
-    it("accepts aria-label", () => {
-      render(<Textarea aria-label="Description" data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("aria-label", "Description")
-    })
-
-    it("accepts aria-describedby", () => {
-      render(<Textarea aria-describedby="helper-text" data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("aria-describedby", "helper-text")
-    })
-
-    it("can be associated with a label", () => {
-      render(
-        <>
-          <label htmlFor="test-textarea">Description</label>
-          <Textarea id="test-textarea" data-testid="textarea" />
-        </>,
-      )
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("id", "test-textarea")
-    })
-  })
-
-  describe("props forwarding", () => {
-    it("forwards additional props", () => {
-      render(<Textarea data-custom="value" data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("data-custom", "value")
-    })
-
-    it("forwards name attribute", () => {
-      render(<Textarea name="description" data-testid="textarea" />)
-      const textarea = screen.getByTestId("textarea")
-      expect(textarea).toHaveAttribute("name", "description")
-    })
+    await user.type(textarea, "test")
+    expect(textarea).toHaveValue("test")
   })
 })

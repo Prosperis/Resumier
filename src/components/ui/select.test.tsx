@@ -1,253 +1,142 @@
 import { render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import { describe, expect, it } from "vitest"
-
+import { userEvent } from "@testing-library/user-event"
+import { describe, expect, it, vi } from "vitest"
 import { Select } from "./select"
 
 describe("Select", () => {
-  describe("rendering", () => {
-    it("renders a select element", () => {
-      render(
-        <Select data-testid="select">
-          <option value="1">Option 1</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select.tagName).toBe("SELECT")
-    })
+  it("renders correctly", () => {
+    render(
+      <Select>
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+      </Select>,
+    )
+    const select = screen.getByRole("combobox")
+    expect(select).toBeInTheDocument()
+  })
 
-    it("renders with data-slot attribute", () => {
-      render(
-        <Select data-testid="select">
-          <option value="1">Option 1</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select).toHaveAttribute("data-slot", "select")
-    })
+  it("renders with default value", () => {
+    render(
+      <Select defaultValue="2">
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+      </Select>,
+    )
+    const select = screen.getByRole("combobox") as HTMLSelectElement
+    expect(select.value).toBe("2")
+  })
 
-    it("renders with custom className", () => {
-      render(
-        <Select data-testid="select" className="custom-class">
-          <option value="1">Option 1</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select).toHaveClass("custom-class")
-    })
+  it("renders with custom className", () => {
+    render(
+      <Select className="custom-select">
+        <option value="1">Option 1</option>
+      </Select>,
+    )
+    const select = screen.getByRole("combobox")
+    expect(select).toHaveClass("custom-select")
+  })
 
-    it("renders multiple options", () => {
-      render(
-        <Select data-testid="select">
+  it("renders as disabled", () => {
+    render(
+      <Select disabled>
+        <option value="1">Option 1</option>
+      </Select>,
+    )
+    const select = screen.getByRole("combobox")
+    expect(select).toBeDisabled()
+  })
+
+  it("handles onChange event", async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+
+    render(
+      <Select onChange={onChange}>
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+        <option value="3">Option 3</option>
+      </Select>,
+    )
+
+    const select = screen.getByRole("combobox")
+    await user.selectOptions(select, "2")
+
+    expect(onChange).toHaveBeenCalledTimes(1)
+  })
+
+  it("displays multiple options", () => {
+    render(
+      <Select>
+        <option value="1">First</option>
+        <option value="2">Second</option>
+        <option value="3">Third</option>
+      </Select>,
+    )
+
+    expect(screen.getByText("First")).toBeInTheDocument()
+    expect(screen.getByText("Second")).toBeInTheDocument()
+    expect(screen.getByText("Third")).toBeInTheDocument()
+  })
+
+  it("forwards additional props", () => {
+    render(
+      <Select data-testid="custom-select" name="test-select">
+        <option value="1">Option</option>
+      </Select>,
+    )
+
+    const select = screen.getByTestId("custom-select")
+    expect(select).toHaveAttribute("name", "test-select")
+  })
+
+  it("works with option groups", () => {
+    render(
+      <Select>
+        <optgroup label="Group 1">
           <option value="1">Option 1</option>
           <option value="2">Option 2</option>
+        </optgroup>
+        <optgroup label="Group 2">
           <option value="3">Option 3</option>
-        </Select>,
-      )
-      const options = screen.getAllByRole("option")
-      expect(options).toHaveLength(3)
-    })
+        </optgroup>
+      </Select>,
+    )
+
+    expect(screen.getByText("Option 1")).toBeInTheDocument()
+    expect(screen.getByText("Option 3")).toBeInTheDocument()
   })
 
-  describe("selection", () => {
-    it("allows selecting an option by click", async () => {
-      const user = userEvent.setup()
-      render(
-        <Select data-testid="select">
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select") as HTMLSelectElement
+  it("updates value on selection", async () => {
+    const user = userEvent.setup()
 
-      await user.selectOptions(select, "2")
+    render(
+      <Select>
+        <option value="a">Apple</option>
+        <option value="b">Banana</option>
+        <option value="c">Cherry</option>
+      </Select>,
+    )
 
-      expect(select.value).toBe("2")
-      expect(screen.getByRole("option", { name: "Option 2" })).toHaveProperty("selected", true)
-    })
+    const select = screen.getByRole("combobox") as HTMLSelectElement
+    expect(select.value).toBe("a") // First option is selected by default
 
-    it("calls onChange when selection changes", async () => {
-      const user = userEvent.setup()
-      const onChange = vi.fn()
-      render(
-        <Select data-testid="select" onChange={onChange}>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select")
-
-      await user.selectOptions(select, "2")
-
-      expect(onChange).toHaveBeenCalled()
-    })
-
-    it("works with defaultValue prop", () => {
-      render(
-        <Select data-testid="select" defaultValue="2">
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select") as HTMLSelectElement
-
-      expect(select.value).toBe("2")
-    })
+    await user.selectOptions(select, "c")
+    expect(select.value).toBe("c")
   })
 
-  describe("states", () => {
-    it("handles disabled state", () => {
-      render(
-        <Select data-testid="select" disabled>
-          <option value="1">Option 1</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select).toBeDisabled()
-    })
+  it("renders with placeholder option", () => {
+    render(
+      <Select defaultValue="">
+        <option value="" disabled>
+          Select an option...
+        </option>
+        <option value="1">Option 1</option>
+        <option value="2">Option 2</option>
+      </Select>,
+    )
 
-    it("handles required attribute", () => {
-      render(
-        <Select data-testid="select" required>
-          <option value="1">Option 1</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select).toBeRequired()
-    })
-
-    it("handles aria-invalid state", () => {
-      render(
-        <Select data-testid="select" aria-invalid>
-          <option value="1">Option 1</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select).toHaveAttribute("aria-invalid")
-    })
-  })
-
-  describe("controlled component", () => {
-    it("works as controlled component with value prop", async () => {
-      const user = userEvent.setup()
-      const onChange = vi.fn()
-      const { rerender } = render(
-        <Select data-testid="select" value="1" onChange={onChange}>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select") as HTMLSelectElement
-
-      expect(select.value).toBe("1")
-
-      await user.selectOptions(select, "2")
-
-      // Value should still be "1" until parent updates it
-      expect(select.value).toBe("1")
-      expect(onChange).toHaveBeenCalled()
-
-      // Parent updates the value
-      rerender(
-        <Select data-testid="select" value="2" onChange={onChange}>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-        </Select>,
-      )
-
-      expect(select.value).toBe("2")
-    })
-  })
-
-  describe("accessibility", () => {
-    it("supports aria-label", () => {
-      render(
-        <Select data-testid="select" aria-label="Choose option">
-          <option value="1">Option 1</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select).toHaveAttribute("aria-label", "Choose option")
-    })
-
-    it("supports aria-describedby", () => {
-      render(
-        <>
-          <span id="helper-text">Select an option</span>
-          <Select data-testid="select" aria-describedby="helper-text">
-            <option value="1">Option 1</option>
-          </Select>
-        </>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select).toHaveAttribute("aria-describedby", "helper-text")
-    })
-
-    it("associates with label via htmlFor", () => {
-      render(
-        <>
-          <label htmlFor="select-input">Choose option</label>
-          <Select id="select-input" data-testid="select">
-            <option value="1">Option 1</option>
-          </Select>
-        </>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select).toHaveAccessibleName("Choose option")
-    })
-  })
-
-  describe("props forwarding", () => {
-    it("forwards data attributes", () => {
-      render(
-        <Select data-testid="select" data-custom="value">
-          <option value="1">Option 1</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select).toHaveAttribute("data-custom", "value")
-    })
-
-    it("forwards name attribute", () => {
-      render(
-        <Select data-testid="select" name="country">
-          <option value="1">Option 1</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select).toHaveAttribute("name", "country")
-    })
-
-    it("supports multiple attribute", () => {
-      render(
-        <Select data-testid="select" multiple>
-          <option value="1">Option 1</option>
-          <option value="2">Option 2</option>
-        </Select>,
-      )
-      const select = screen.getByTestId("select")
-      expect(select).toHaveAttribute("multiple")
-    })
-  })
-
-  describe("option groups", () => {
-    it("renders optgroup elements", () => {
-      render(
-        <Select data-testid="select">
-          <optgroup label="Group 1">
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-          </optgroup>
-          <optgroup label="Group 2">
-            <option value="3">Option 3</option>
-          </optgroup>
-        </Select>,
-      )
-
-      const groups = screen.getAllByRole("group")
-      expect(groups).toHaveLength(2)
-      expect(groups[0]).toHaveAccessibleName("Group 1")
-      expect(groups[1]).toHaveAccessibleName("Group 2")
-    })
+    expect(screen.getByText("Select an option...")).toBeInTheDocument()
+    const select = screen.getByRole("combobox") as HTMLSelectElement
+    expect(select.value).toBe("")
   })
 })

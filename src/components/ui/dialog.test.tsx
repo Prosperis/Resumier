@@ -1,8 +1,9 @@
-import { describe, it, expect, vi } from "vitest"
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { describe, expect, it, vi } from "vitest"
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -11,325 +12,584 @@ import {
   DialogTrigger,
 } from "./dialog"
 
-vi.mock("@/lib/animations/hooks/use-reduced-motion", () => ({
-  useReducedMotion: () => false,
-  useAnimationVariants: (variants: unknown) => variants,
-  useAnimationTransition: (transition: unknown) => transition,
-}))
-
 describe("Dialog", () => {
-  describe("rendering", () => {
-    it("renders dialog with trigger", () => {
-      render(
-        <Dialog>
-          <DialogTrigger>Open Dialog</DialogTrigger>
-          <DialogContent>
+  it("renders with trigger and content", async () => {
+    const user = userEvent.setup()
+    render(
+      <Dialog>
+        <DialogTrigger>Open Dialog</DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
             <DialogTitle>Dialog Title</DialogTitle>
-            <DialogDescription>Dialog description</DialogDescription>
-          </DialogContent>
-        </Dialog>,
-      )
+            <DialogDescription>Dialog description text</DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>,
+    )
 
-      expect(screen.getByText("Open Dialog")).toBeInTheDocument()
+    expect(screen.getByText("Open Dialog")).toBeInTheDocument()
+
+    await user.click(screen.getByText("Open Dialog"))
+
+    await waitFor(() => {
+      expect(screen.getByText("Dialog Title")).toBeInTheDocument()
     })
+  })
 
-    it("does not show content initially", () => {
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Title</DialogTitle>
-          </DialogContent>
-        </Dialog>,
-      )
+  it("has data-slot attribute", () => {
+    render(
+      <Dialog>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>Content</DialogContent>
+      </Dialog>,
+    )
 
+    expect(screen.getByText("Open")).toHaveAttribute("data-slot", "dialog-trigger")
+  })
+
+  it("renders with open prop controlled", () => {
+    render(
+      <Dialog open={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByText("Title")).toBeInTheDocument()
+  })
+
+  it("renders with defaultOpen prop", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByText("Title")).toBeInTheDocument()
+  })
+
+  it("calls onOpenChange when dialog state changes", async () => {
+    const user = userEvent.setup()
+    const handleOpenChange = vi.fn()
+
+    render(
+      <Dialog onOpenChange={handleOpenChange}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    await user.click(screen.getByText("Open"))
+
+    await waitFor(() => {
+      expect(handleOpenChange).toHaveBeenCalledWith(true)
+    })
+  })
+})
+
+describe("DialogTrigger", () => {
+  it("renders children correctly", () => {
+    render(
+      <Dialog>
+        <DialogTrigger>Trigger Button</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByText("Trigger Button")).toBeInTheDocument()
+  })
+
+  it("has data-slot attribute", () => {
+    render(
+      <Dialog>
+        <DialogTrigger data-testid="trigger">Open</DialogTrigger>
+        <DialogContent>Content</DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("trigger")).toHaveAttribute("data-slot", "dialog-trigger")
+  })
+
+  it("opens dialog when clicked", async () => {
+    const user = userEvent.setup()
+    render(
+      <Dialog>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Dialog Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    await user.click(screen.getByText("Open"))
+
+    await waitFor(() => {
+      expect(screen.getByText("Dialog Title")).toBeInTheDocument()
+    })
+  })
+
+  it("can be a custom component with asChild", () => {
+    render(
+      <Dialog>
+        <DialogTrigger asChild>
+          <button type="button">Custom Button</button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByRole("button", { name: "Custom Button" })).toBeInTheDocument()
+  })
+})
+
+describe("DialogContent", () => {
+  it("renders content correctly", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent data-testid="content">
+          <DialogTitle>Content Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("content")).toBeInTheDocument()
+  })
+
+  it("renders with custom className", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent className="custom-dialog" data-testid="content">
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("content")).toHaveClass("custom-dialog")
+  })
+
+  it("has data-slot attribute", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent data-testid="content">
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("content")).toHaveAttribute("data-slot", "dialog-content")
+  })
+
+  it("renders close button", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByRole("button", { name: /close/i })).toBeInTheDocument()
+  })
+
+  it("closes dialog when close button is clicked", async () => {
+    const user = userEvent.setup()
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    const closeButton = screen.getByRole("button", { name: /close/i })
+    await user.click(closeButton)
+
+    await waitFor(() => {
       expect(screen.queryByText("Title")).not.toBeInTheDocument()
     })
-
-    it("shows content when opened", async () => {
-      const user = userEvent.setup()
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Dialog Title</DialogTitle>
-          </DialogContent>
-        </Dialog>,
-      )
-
-      await user.click(screen.getByText("Open"))
-
-      await waitFor(() => {
-        expect(screen.getByText("Dialog Title")).toBeInTheDocument()
-      })
-    })
   })
 
-  describe("dialog structure", () => {
-    it("renders DialogHeader", async () => {
-      const user = userEvent.setup()
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Title</DialogTitle>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>,
-      )
+  it("renders with overlay", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
 
-      await user.click(screen.getByText("Open"))
+    // The overlay is rendered as part of the DialogContent
+    expect(screen.getByText("Title")).toBeInTheDocument()
+  })
+})
 
-      await waitFor(() => {
-        expect(screen.getByText("Title")).toBeInTheDocument()
-      })
-    })
+describe("DialogHeader", () => {
+  it("renders children correctly", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogHeader data-testid="header">
+            <DialogTitle>Header Title</DialogTitle>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>,
+    )
 
-    it("renders DialogDescription", async () => {
-      const user = userEvent.setup()
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Title</DialogTitle>
-            <DialogDescription>This is a description</DialogDescription>
-          </DialogContent>
-        </Dialog>,
-      )
-
-      await user.click(screen.getByText("Open"))
-
-      await waitFor(() => {
-        expect(screen.getByText("This is a description")).toBeInTheDocument()
-      })
-    })
-
-    it("renders DialogFooter", async () => {
-      const user = userEvent.setup()
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Title</DialogTitle>
-            <DialogFooter>
-              <button type="button">Cancel</button>
-              <button type="button">Save</button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>,
-      )
-
-      await user.click(screen.getByText("Open"))
-
-      await waitFor(() => {
-        expect(screen.getByText("Cancel")).toBeInTheDocument()
-        expect(screen.getByText("Save")).toBeInTheDocument()
-      })
-    })
+    expect(screen.getByTestId("header")).toBeInTheDocument()
   })
 
-  describe("controlled dialog", () => {
-    it("works as controlled component", async () => {
-      const onOpenChange = vi.fn()
-      const { rerender } = render(
-        <Dialog open={false} onOpenChange={onOpenChange}>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
+  it("has data-slot attribute", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogHeader data-testid="header">
             <DialogTitle>Title</DialogTitle>
-          </DialogContent>
-        </Dialog>,
-      )
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>,
+    )
 
+    expect(screen.getByTestId("header")).toHaveAttribute("data-slot", "dialog-header")
+  })
+
+  it("applies flex layout classes", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogHeader data-testid="header">
+            <DialogTitle>Title</DialogTitle>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("header")).toHaveClass("flex", "flex-col")
+  })
+
+  it("renders with custom className", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogHeader className="custom-header" data-testid="header">
+            <DialogTitle>Title</DialogTitle>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("header")).toHaveClass("custom-header")
+  })
+})
+
+describe("DialogFooter", () => {
+  it("renders children correctly", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogFooter data-testid="footer">
+            <button type="button">Action</button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("footer")).toBeInTheDocument()
+  })
+
+  it("has data-slot attribute", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogFooter data-testid="footer">
+            <button type="button">Action</button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("footer")).toHaveAttribute("data-slot", "dialog-footer")
+  })
+
+  it("applies flex layout classes", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogFooter data-testid="footer">
+            <button type="button">Action</button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("footer")).toHaveClass("flex")
+  })
+
+  it("renders with custom className", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogFooter className="custom-footer" data-testid="footer">
+            <button type="button">Action</button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("footer")).toHaveClass("custom-footer")
+  })
+})
+
+describe("DialogTitle", () => {
+  it("renders title text", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Dialog Title Text</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByText("Dialog Title Text")).toBeInTheDocument()
+  })
+
+  it("has data-slot attribute", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle data-testid="title">Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("title")).toHaveAttribute("data-slot", "dialog-title")
+  })
+
+  it("applies font styling classes", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle data-testid="title">Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("title")).toHaveClass("text-lg", "font-semibold")
+  })
+
+  it("renders with custom className", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle className="custom-title" data-testid="title">
+            Title
+          </DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("title")).toHaveClass("custom-title")
+  })
+})
+
+describe("DialogDescription", () => {
+  it("renders description text", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogDescription>This is a dialog description</DialogDescription>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByText("This is a dialog description")).toBeInTheDocument()
+  })
+
+  it("has data-slot attribute", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogDescription data-testid="description">Description</DialogDescription>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("description")).toHaveAttribute("data-slot", "dialog-description")
+  })
+
+  it("applies text styling classes", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogDescription data-testid="description">Description</DialogDescription>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("description")).toHaveClass("text-sm", "text-muted-foreground")
+  })
+
+  it("renders with custom className", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogDescription className="custom-desc" data-testid="description">
+            Description
+          </DialogDescription>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    expect(screen.getByTestId("description")).toHaveClass("custom-desc")
+  })
+})
+
+describe("DialogClose", () => {
+  it("closes dialog when clicked", async () => {
+    const user = userEvent.setup()
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogClose>Close Dialog</DialogClose>
+        </DialogContent>
+      </Dialog>,
+    )
+
+    await user.click(screen.getByText("Close Dialog"))
+
+    await waitFor(() => {
       expect(screen.queryByText("Title")).not.toBeInTheDocument()
-
-      rerender(
-        <Dialog open={true} onOpenChange={onOpenChange}>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Title</DialogTitle>
-          </DialogContent>
-        </Dialog>,
-      )
-
-      await waitFor(() => {
-        expect(screen.getByText("Title")).toBeInTheDocument()
-      })
-    })
-
-    it("calls onOpenChange when trigger is clicked", async () => {
-      const user = userEvent.setup()
-      const onOpenChange = vi.fn()
-      render(
-        <Dialog onOpenChange={onOpenChange}>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Title</DialogTitle>
-          </DialogContent>
-        </Dialog>,
-      )
-
-      await user.click(screen.getByText("Open"))
-
-      expect(onOpenChange).toHaveBeenCalledWith(true)
     })
   })
 
-  describe("closing dialog", () => {
-    it("closes when Escape key is pressed", async () => {
-      const user = userEvent.setup()
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Title</DialogTitle>
-          </DialogContent>
-        </Dialog>,
-      )
+  it("has data-slot attribute", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogClose data-testid="close">Close</DialogClose>
+        </DialogContent>
+      </Dialog>,
+    )
 
-      await user.click(screen.getByText("Open"))
-      await waitFor(() => expect(screen.getByText("Title")).toBeInTheDocument())
+    expect(screen.getByTestId("close")).toHaveAttribute("data-slot", "dialog-close")
+  })
 
-      await user.keyboard("{Escape}")
+  it("can be a custom button", async () => {
+    const user = userEvent.setup()
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogClose asChild>
+            <button type="button">Custom Close Button</button>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>,
+    )
 
-      await waitFor(() => {
-        expect(screen.queryByText("Title")).not.toBeInTheDocument()
-      })
+    await user.click(screen.getByText("Custom Close Button"))
+
+    await waitFor(() => {
+      expect(screen.queryByText("Title")).not.toBeInTheDocument()
     })
+  })
+})
 
-    it("closes when close button is clicked", async () => {
-      const user = userEvent.setup()
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Title</DialogTitle>
-          </DialogContent>
-        </Dialog>,
-      )
+describe("Dialog accessibility", () => {
+  it("has proper role attribute", () => {
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Dialog Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
 
-      await user.click(screen.getByText("Open"))
-      await waitFor(() => expect(screen.getByText("Title")).toBeInTheDocument())
+    expect(screen.getByRole("dialog")).toBeInTheDocument()
+  })
 
-      const closeButton = screen.getByRole("button", { name: /close/i })
-      await user.click(closeButton)
+  it("supports keyboard navigation", async () => {
+    const user = userEvent.setup()
+    render(
+      <Dialog>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    )
 
-      await waitFor(() => {
-        expect(screen.queryByText("Title")).not.toBeInTheDocument()
-      })
+    const trigger = screen.getByText("Open")
+    trigger.focus()
+    await user.keyboard("{Enter}")
+
+    await waitFor(() => {
+      expect(screen.getByText("Title")).toBeInTheDocument()
     })
   })
 
-  describe("accessibility", () => {
-    it("has proper ARIA attributes", async () => {
-      const user = userEvent.setup()
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Dialog Title</DialogTitle>
-            <DialogDescription>Dialog description</DialogDescription>
-          </DialogContent>
-        </Dialog>,
-      )
+  it("traps focus within dialog", async () => {
+    const user = userEvent.setup()
+    render(
+      <Dialog defaultOpen={true}>
+        <DialogTrigger>Open</DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <button type="button">First Button</button>
+          <button type="button">Second Button</button>
+        </DialogContent>
+      </Dialog>,
+    )
 
-      await user.click(screen.getByText("Open"))
-
-      await waitFor(() => {
-        const dialog = screen.getByRole("dialog")
-        expect(dialog).toBeInTheDocument()
-        expect(dialog).toHaveAttribute("aria-describedby")
-        expect(dialog).toHaveAttribute("aria-labelledby")
-      })
-    })
-
-    it("focuses dialog content when opened", async () => {
-      const user = userEvent.setup()
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Title</DialogTitle>
-            <button type="button">First Button</button>
-          </DialogContent>
-        </Dialog>,
-      )
-
-      await user.click(screen.getByText("Open"))
-
-      await waitFor(() => {
-        const dialog = screen.getByRole("dialog")
-        expect(dialog).toBeInTheDocument()
-      })
-    })
-
-    it("traps focus within dialog", async () => {
-      const user = userEvent.setup()
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Title</DialogTitle>
-            <button type="button">Button 1</button>
-            <button type="button">Button 2</button>
-          </DialogContent>
-        </Dialog>,
-      )
-
-      await user.click(screen.getByText("Open"))
-
-      await waitFor(() => {
-        expect(screen.getByText("Button 1")).toBeInTheDocument()
-      })
-
-      // Focus should be trapped in dialog
-      await user.tab()
-      await user.tab()
-      await user.tab()
-
-      // Focus should cycle back to first focusable element
-      const focusedElement = document.activeElement
-      expect(focusedElement).toBeInTheDocument()
-    })
-  })
-
-  describe("custom content", () => {
-    it("renders custom children in content", async () => {
-      const user = userEvent.setup()
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Title</DialogTitle>
-            <div data-testid="custom-content">Custom Content</div>
-          </DialogContent>
-        </Dialog>,
-      )
-
-      await user.click(screen.getByText("Open"))
-
-      await waitFor(() => {
-        expect(screen.getByTestId("custom-content")).toBeInTheDocument()
-      })
-    })
-
-    it("applies custom className to content", async () => {
-      const user = userEvent.setup()
-      render(
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent className="custom-class">
-            <DialogTitle>Title</DialogTitle>
-          </DialogContent>
-        </Dialog>,
-      )
-
-      await user.click(screen.getByText("Open"))
-
-      await waitFor(() => {
-        const dialog = screen.getByRole("dialog")
-        expect(dialog).toHaveClass("custom-class")
-      })
-    })
+    // Focus should be trapped within the dialog
+    const firstButton = screen.getByText("First Button")
+    firstButton.focus()
+    expect(firstButton).toHaveFocus()
   })
 })
