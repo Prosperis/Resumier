@@ -1,0 +1,64 @@
+# Apache Security Headers Configuration
+# For traditional hosting platforms
+
+# Enable rewrite engine for SPA routing
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /Resumier/
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /Resumier/index.html [L]
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+  # Content Security Policy
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+  
+  # Prevent clickjacking
+  Header always set X-Frame-Options "DENY"
+  
+  # Prevent MIME type sniffing
+  Header always set X-Content-Type-Options "nosniff"
+  
+  # Referrer Policy
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # Permissions Policy
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  
+  # XSS Protection
+  Header always set X-XSS-Protection "1; mode=block"
+  
+  # HSTS - Force HTTPS
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+  
+  # Remove server signature
+  Header unset Server
+  Header unset X-Powered-By
+</IfModule>
+
+# Cache Control
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # HTML - no caching
+  ExpiresByType text/html "access plus 0 seconds"
+  
+  # JavaScript and CSS - 1 year
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  
+  # Images - 1 year
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  
+  # Fonts - 1 year
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/ttf "access plus 1 year"
+</IfModule>
