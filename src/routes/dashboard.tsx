@@ -1,7 +1,10 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router"
-import { ResumeDashboard } from "@/components/features/resume/resume-dashboard"
+import { createFileRoute, redirect } from "@tanstack/react-router"
+import { queryClient } from "@/app/query-client"
 import { RouteError } from "@/components/ui/route-error"
 import { DashboardLoading } from "@/components/ui/route-loading"
+import { resumesQueryKey } from "@/hooks/api/use-resumes"
+import { apiClient } from "@/lib/api/client"
+import type { Resume } from "@/lib/api/types"
 import { useAuthStore } from "@/stores"
 
 /**
@@ -20,28 +23,17 @@ export const Route = createFileRoute("/dashboard")({
       })
     }
   },
-  component: DashboardComponent,
+  // Prefetch resumes for faster dashboard load (cache warming)
+  loader: async () => {
+    // Prefetch resumes list if not already in cache
+    await queryClient.prefetchQuery({
+      queryKey: resumesQueryKey,
+      queryFn: () => apiClient.get<Resume[]>("/api/resumes"),
+      staleTime: 1000 * 60 * 5, // Consider fresh for 5 minutes
+    })
+  },
   pendingComponent: DashboardLoading,
   errorComponent: ({ error, reset }) => (
     <RouteError error={error} reset={reset} title="Dashboard Error" />
   ),
 })
-
-function DashboardComponent() {
-  const navigate = useNavigate()
-
-  const handleResumeClick = (id: string) => {
-    navigate({ to: "/resume/$id", params: { id } })
-  }
-
-  return (
-    <div className="container mx-auto p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">My Resumes</h1>
-        <p className="text-muted-foreground">Manage your resumes and create new ones</p>
-      </div>
-
-      <ResumeDashboard onResumeClick={handleResumeClick} />
-    </div>
-  )
-}

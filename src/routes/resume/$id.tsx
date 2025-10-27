@@ -1,8 +1,10 @@
-import { createFileRoute, redirect, useParams } from "@tanstack/react-router"
-import { ResumeEditor } from "@/components/features/resume/resume-editor"
+import { createFileRoute, redirect } from "@tanstack/react-router"
+import { queryClient } from "@/app/query-client"
 import { RouteError } from "@/components/ui/route-error"
 import { ResumeEditorLoading } from "@/components/ui/route-loading"
-import { useResume } from "@/hooks/api"
+import { resumeQueryKey } from "@/hooks/api/use-resume"
+import { apiClient } from "@/lib/api/client"
+import type { Resume } from "@/lib/api/types"
 import { useAuthStore } from "@/stores"
 
 /**
@@ -20,44 +22,19 @@ export const Route = createFileRoute("/resume/$id")({
       })
     }
   },
-  component: EditResumeComponent,
+  // Prefetch individual resume data for faster editing (cache warming)
+  loader: async ({ params }) => {
+    const { id } = params
+
+    // Prefetch the specific resume if not already in cache
+    await queryClient.prefetchQuery({
+      queryKey: resumeQueryKey(id),
+      queryFn: () => apiClient.get<Resume>(`/api/resumes/${id}`),
+      staleTime: 1000 * 60 * 5, // Consider fresh for 5 minutes
+    })
+  },
   pendingComponent: ResumeEditorLoading,
   errorComponent: ({ error, reset }) => (
     <RouteError error={error} reset={reset} title="Resume Loading Error" />
   ),
 })
-
-function EditResumeComponent() {
-  const { id } = useParams({ from: "/resume/$id" })
-  const { data: resume, isLoading, error } = useResume(id)
-
-  if (isLoading) {
-    return <ResumeEditorLoading />
-  }
-
-  if (error) {
-    return (
-      <RouteError
-        error={error}
-        reset={() => window.location.reload()}
-        title="Failed to load resume"
-      />
-    )
-  }
-
-  if (!resume) {
-    return (
-      <RouteError
-        error={new Error("Resume not found")}
-        reset={() => window.location.reload()}
-        title="Resume not found"
-      />
-    )
-  }
-
-  return (
-    <div className="container mx-auto p-8">
-      <ResumeEditor resume={resume} />
-    </div>
-  )
-}

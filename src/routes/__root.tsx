@@ -2,6 +2,7 @@ import { createRootRoute, Outlet } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/router-devtools"
 import { RootLayout } from "@/components/layouts/root-layout"
 import { NotFoundError } from "@/components/ui/route-error"
+import { useCacheCleanup } from "@/hooks/use-cache-cleanup"
 
 /**
  * Root route component
@@ -13,6 +14,13 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
+  // Enable automatic cache cleanup
+  useCacheCleanup({
+    enabled: true,
+    interval: 1000 * 60 * 5, // 5 minutes
+    logStats: import.meta.env.DEV,
+  })
+
   return (
     <>
       <RootLayout>

@@ -1,3 +1,5 @@
+import { persistQueryClient } from "@tanstack/query-persist-client-core"
+import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister"
 import { QueryClient } from "@tanstack/react-query"
 
 /**
@@ -22,6 +24,33 @@ export const queryClient = new QueryClient({
     mutations: {
       // Retry mutations once on failure
       retry: 1,
+    },
+  },
+})
+
+/**
+ * LocalStorage persister for caching query data offline
+ * Persists query cache to localStorage for offline access
+ */
+const localStoragePersister = createSyncStoragePersister({
+  storage: window.localStorage,
+  key: "resumier-query-cache",
+})
+
+/**
+ * Persist query client to localStorage
+ * Allows offline access to cached data
+ */
+persistQueryClient({
+  queryClient,
+  persister: localStoragePersister,
+  maxAge: 1000 * 60 * 60 * 24, // 24 hours
+  // Only persist resume-related queries
+  dehydrateOptions: {
+    shouldDehydrateQuery: (query) => {
+      const queryKey = query.queryKey[0]
+      // Persist resumes list and individual resume queries
+      return queryKey === "resumes" || queryKey === "resume"
     },
   },
 })
