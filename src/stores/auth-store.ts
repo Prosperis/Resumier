@@ -1,6 +1,7 @@
 import { create } from "zustand"
 import { createJSONStorage, devtools, persist } from "zustand/middleware"
 import { authApi } from "@/lib/api/auth"
+import { setUser as setSentryUser } from "@/lib/monitoring/sentry"
 
 export interface User {
   id: string
@@ -39,12 +40,24 @@ export const useAuthStore = create<AuthStore>()(
       (set) => ({
         ...initialState,
 
-        setUser: (user) =>
+        setUser: (user) => {
+          // Set user in Sentry for error tracking
+          if (user) {
+            setSentryUser({
+              id: user.id,
+              email: user.email,
+              name: user.name,
+            })
+          } else {
+            setSentryUser(null)
+          }
+
           set({
             user,
             isAuthenticated: !!user,
             error: null,
-          }),
+          })
+        },
 
         setLoading: (isLoading) => set({ isLoading }),
 
@@ -65,6 +78,14 @@ export const useAuthStore = create<AuthStore>()(
                 token: response.user.token,
                 avatar: undefined,
               }
+
+              // Set user in Sentry for error tracking
+              setSentryUser({
+                id: user.id,
+                email: user.email,
+                name: user.name,
+              })
+
               set({
                 user,
                 isAuthenticated: true,
@@ -93,6 +114,9 @@ export const useAuthStore = create<AuthStore>()(
             // Log error but still clear local state
             console.error("Logout API error:", error)
           } finally {
+            // Clear Sentry user context
+            setSentryUser(null)
+
             // Always clear local state
             set({
               ...initialState,

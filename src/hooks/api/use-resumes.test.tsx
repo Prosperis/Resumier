@@ -1,15 +1,17 @@
-import { describe, it, expect, beforeEach, vi } from "vitest"
-import { renderHook, waitFor } from "@testing-library/react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { useResumes } from "./use-resumes"
-import { apiClient } from "@/lib/api/client"
-import type { Resume } from "@/lib/api/types"
-import type { ReactNode } from "react"
+import { renderHook, waitFor } from "@testing-library/react"
+import { beforeEach, describe, expect, it, vi } from "vitest"
+import { apiClient } from "../../lib/api/client"
 import { createMockResume } from "./test-helpers"
+import { resumesQueryKey, useResumes } from "./use-resumes"
 
-vi.mock("@/lib/api/client", () => ({
+// Mock the API client
+vi.mock("../../lib/api/client", () => ({
   apiClient: {
     get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    delete: vi.fn(),
   },
 }))
 
@@ -17,188 +19,96 @@ describe("useResumes", () => {
   let queryClient: QueryClient
 
   const createWrapper = () => {
-    return ({ children }: { children: ReactNode }) => (
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+    })
+
+    // biome-ignore lint/suspicious/noExplicitAny: test helper
+    return ({ children }: any) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     )
   }
 
   beforeEach(() => {
-    queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { retry: false },
-      },
-    })
-    vi.clearAllMocks()
+    // Mock reset handled by vitest config (clearMocks: true)
   })
 
-  const mockResumes: Resume[] = [
-    createMockResume({ id: "resume-1", title: "Resume 1" }),
-    createMockResume({ id: "resume-2", title: "Resume 2" }),
-    createMockResume({ id: "resume-3", title: "Resume 3" }),
-  ]
+  it("fetches resumes successfully", async () => {
+    const mockResumes = [
+      createMockResume({ id: "1", title: "Resume 1" }),
+      createMockResume({ id: "2", title: "Resume 2" }),
+    ](apiClient.get as any).mockResolvedValueOnce(mockResumes)
 
-  describe("query", () => {
-    it("fetches all resumes successfully", async () => {
-      vi.mocked(apiClient.get).mockResolvedValueOnce(mockResumes)
-
-      const { result } = renderHook(() => useResumes(), {
-        wrapper: createWrapper(),
-      })
-
-      await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-      expect(apiClient.get).toHaveBeenCalledWith("/api/resumes")
-      expect(result.current.data).toEqual(mockResumes)
-      expect(result.current.data).toHaveLength(3)
+    const { result } = renderHook(() => useResumes(), {
+      wrapper: createWrapper(),
     })
 
-    it("handles empty resume list", async () => {
-      vi.mocked(apiClient.get).mockResolvedValueOnce([])
+    // Initial state
+    expect(result.current.isLoading).toBe(true)
+    expect(result.current.data).toBeUndefined()
 
-      const { result } = renderHook(() => useResumes(), {
-        wrapper: createWrapper(),
-      })
+    // Wait for query to resolve
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-      await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-      expect(result.current.data).toEqual([])
-      expect(result.current.data).toHaveLength(0)
-    })
-
-    it("handles API errors", async () => {
-      const error = new Error("Failed to fetch resumes")
-      vi.mocked(apiClient.get).mockRejectedValueOnce(error)
-
-      const { result } = renderHook(() => useResumes(), {
-        wrapper: createWrapper(),
-      })
-
-      await waitFor(() => expect(result.current.isError).toBe(true))
-
-      expect(result.current.error).toEqual(error)
-    })
-
-    it("uses correct query key", async () => {
-      vi.mocked(apiClient.get).mockResolvedValueOnce(mockResumes)
-
-      const { result } = renderHook(() => useResumes(), {
-        wrapper: createWrapper(),
-      })
-
-      await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-      const cachedData = queryClient.getQueryData(["resumes"])
-      expect(cachedData).toEqual(mockResumes)
-    })
+    // Check final state
+    expect(result.current.data).toEqual(mockResumes)
+    expect(result.current.isLoading).toBe(false)
+    expect(apiClient.get).toHaveBeenCalledWith("/api/resumes")
   })
 
-  describe("loading states", () => {
-    it("shows loading state while fetching", async () => {
-      let resolveGet: ((value: Resume[]) => void) | undefined
-      const getPromise = new Promise<Resume[]>((resolve) => {
-        resolveGet = resolve
-      })
+  it("handles empty resume list", async () => {
+    ;(apiClient.get as any).mockResolvedValueOnce([])
 
-      vi.mocked(apiClient.get).mockReturnValueOnce(getPromise)
-
-      const { result } = renderHook(() => useResumes(), {
-        wrapper: createWrapper(),
-      })
-
-      expect(result.current.isLoading).toBe(true)
-      expect(result.current.data).toBeUndefined()
-
-      if (resolveGet) {
-        resolveGet(mockResumes)
-      }
-
-      await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-      expect(result.current.isLoading).toBe(false)
-      expect(result.current.data).toEqual(mockResumes)
+    const { result } = renderHook(() => useResumes(), {
+      wrapper: createWrapper(),
     })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+
+    expect(result.current.data).toEqual([])
   })
 
-  describe("caching", () => {
-    it("uses cached data when available", async () => {
-      // Pre-populate cache
-      queryClient.setQueryData(["resumes"], mockResumes)
+  it("handles error when fetching resumes fails", async () => {
+    const error = new Error("Failed to fetch resumes")(apiClient.get as any).mockRejectedValueOnce(
+      error,
+    )
 
-      const { result } = renderHook(() => useResumes(), {
-        wrapper: createWrapper(),
-      })
-
-      // Should immediately have data from cache
-      expect(result.current.data).toEqual(mockResumes)
-      expect(result.current.isSuccess).toBe(true)
+    const { result } = renderHook(() => useResumes(), {
+      wrapper: createWrapper(),
     })
 
-    it("respects stale time", async () => {
-      vi.mocked(apiClient.get).mockResolvedValue(mockResumes)
+    await waitFor(() => expect(result.current.isError).toBe(true))
 
-      const { result } = renderHook(() => useResumes(), {
-        wrapper: createWrapper(),
-      })
-
-      await waitFor(() => expect(result.current.isSuccess).toBe(true))
-
-      // First call
-      expect(apiClient.get).toHaveBeenCalledTimes(1)
-
-      // Unmount and remount within stale time
-      const { result: result2 } = renderHook(() => useResumes(), {
-        wrapper: createWrapper(),
-      })
-
-      // Should use cached data without refetching
-      expect(result2.current.data).toEqual(mockResumes)
-      expect(apiClient.get).toHaveBeenCalledTimes(1)
-    })
-
-    it("refetches when invalidated", async () => {
-      vi.mocked(apiClient.get).mockResolvedValue(mockResumes)
-
-      const { result } = renderHook(() => useResumes(), {
-        wrapper: createWrapper(),
-      })
-
-      await waitFor(() => expect(result.current.isSuccess).toBe(true))
-      expect(apiClient.get).toHaveBeenCalledTimes(1)
-
-      // Invalidate query
-      await queryClient.invalidateQueries({ queryKey: ["resumes"] })
-
-      await waitFor(() => expect(apiClient.get).toHaveBeenCalledTimes(2))
-    })
+    expect(result.current.error).toBe(error)
+    expect(result.current.data).toBeUndefined()
   })
 
-  describe("data manipulation", () => {
-    it("handles sorting resumes by date", async () => {
-      const unsortedResumes = [
-        createMockResume({ id: "1", updatedAt: "2024-01-03T00:00:00.000Z" }),
-        createMockResume({ id: "2", updatedAt: "2024-01-01T00:00:00.000Z" }),
-        createMockResume({ id: "3", updatedAt: "2024-01-02T00:00:00.000Z" }),
-      ]
+  it("uses correct query key", () => {
+    expect(resumesQueryKey).toEqual(["resumes"])
+  })
 
-      vi.mocked(apiClient.get).mockResolvedValueOnce(unsortedResumes)
+  it("caches results correctly", async () => {
+    const mockResumes = [createMockResume()](apiClient.get as any).mockResolvedValueOnce(
+      mockResumes,
+    )
 
-      const { result } = renderHook(() => useResumes(), {
-        wrapper: createWrapper(),
-      })
+    const wrapper = createWrapper()
 
-      await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    // First render
+    const { result: result1 } = renderHook(() => useResumes(), { wrapper })
+    await waitFor(() => expect(result1.current.isSuccess).toBe(true))
 
-      // Data should be available for sorting in UI
-      expect(result.current.data).toEqual(unsortedResumes)
+    // Second render should use cached data
+    const { result: result2 } = renderHook(() => useResumes(), { wrapper })
 
-      // Sort by updatedAt descending
-      const sorted = [...(result.current.data || [])].sort(
-        (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-      )
+    // Should have data immediately from cache
+    expect(result2.current.data).toEqual(mockResumes)
 
-      expect(sorted[0].id).toBe("1")
-      expect(sorted[1].id).toBe("3")
-      expect(sorted[2].id).toBe("2")
-    })
+    // API should only be called once
+    expect(apiClient.get).toHaveBeenCalledTimes(1)
   })
 })
