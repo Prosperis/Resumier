@@ -45,9 +45,9 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
   if (error) {
     return (
       <div className="p-4">
-        <div className="rounded-lg border border-destructive bg-destructive/10 p-4">
+        <div className="rounded-lg border border-destructive bg-destructive/10 p-4" role="alert">
           <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
+            <AlertCircle className="h-5 w-5 text-destructive mt-0.5" aria-hidden="true" />
             <div>
               <h3 className="font-semibold text-destructive">Failed to load resumes</h3>
               <p className="text-sm text-destructive/90 mt-1">
@@ -73,8 +73,8 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
             <CreateResumeDialog
               onSuccess={(id) => onResumeClick?.(id)}
               trigger={
-                <Button>
-                  <Plus className="mr-2 h-4 w-4" />
+                <Button aria-label="Create your first resume">
+                  <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
                   Create Resume
                 </Button>
               }
@@ -97,8 +97,8 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
           <CreateResumeDialog
             onSuccess={(id) => onResumeClick?.(id)}
             trigger={
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
+              <Button aria-label="Create new resume">
+                <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
                 New Resume
               </Button>
             }

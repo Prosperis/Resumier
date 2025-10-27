@@ -1,6 +1,6 @@
 import { useParams } from "@tanstack/react-router"
 import { Plus } from "lucide-react"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -14,16 +14,21 @@ import type {
 import type { CreateEducationFormData, EducationFormData } from "@/lib/validations/education"
 import type { CreateExperienceFormData, ExperienceFormData } from "@/lib/validations/experience"
 import type { CreateLinkFormData, LinkFormData } from "@/lib/validations/links"
-import { CertificationFormDialog } from "./forms/certification-form-dialog"
-import { CertificationList } from "./forms/certification-list"
-import { EducationFormDialog } from "./forms/education-form-dialog"
-import { EducationList } from "./forms/education-list"
-import { ExperienceFormDialog } from "./forms/experience-form-dialog"
-import { ExperienceList } from "./forms/experience-list"
-import { LinkFormDialog } from "./forms/link-form-dialog"
-import { LinkList } from "./forms/link-list"
-import { PersonalInfoForm } from "./forms/personal-info-form"
-import { SkillsForm } from "./forms/skills-form"
+import {
+  FormDialogSkeleton,
+  FormSkeleton,
+  LazyCertificationFormDialog,
+  LazyCertificationList,
+  LazyEducationFormDialog,
+  LazyEducationList,
+  LazyExperienceFormDialog,
+  LazyExperienceList,
+  LazyLinkFormDialog,
+  LazyLinkList,
+  LazyPersonalInfoForm,
+  LazySkillsForm,
+  ListSkeleton,
+} from "./lazy"
 
 export function ResumeBuilder() {
   const { id } = useParams({ strict: false })
@@ -537,7 +542,9 @@ export function ResumeBuilder() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <PersonalInfoForm resumeId={resumeId} defaultValues={content.personalInfo} />
+          <Suspense fallback={<FormSkeleton />}>
+            <LazyPersonalInfoForm resumeId={resumeId} defaultValues={content.personalInfo} />
+          </Suspense>
         </CardContent>
       </Card>
 
@@ -560,12 +567,14 @@ export function ResumeBuilder() {
           </div>
         </CardHeader>
         <CardContent>
-          <ExperienceList
-            experiences={content.experience || []}
-            onEdit={handleEditExperience}
-            onDelete={handleDeleteExperience}
-            onReorder={handleReorderExperiences}
-          />
+          <Suspense fallback={<ListSkeleton />}>
+            <LazyExperienceList
+              experiences={content.experience || []}
+              onEdit={handleEditExperience}
+              onDelete={handleDeleteExperience}
+              onReorder={handleReorderExperiences}
+            />
+          </Suspense>
         </CardContent>
       </Card>
 
@@ -586,12 +595,14 @@ export function ResumeBuilder() {
           </div>
         </CardHeader>
         <CardContent>
-          <EducationList
-            education={content.education || []}
-            onEdit={handleEditEducation}
-            onDelete={handleDeleteEducation}
-            onReorder={handleReorderEducation}
-          />
+          <Suspense fallback={<ListSkeleton />}>
+            <LazyEducationList
+              education={content.education || []}
+              onEdit={handleEditEducation}
+              onDelete={handleDeleteEducation}
+              onReorder={handleReorderEducation}
+            />
+          </Suspense>
         </CardContent>
       </Card>
 
@@ -607,7 +618,9 @@ export function ResumeBuilder() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <SkillsForm resumeId={resumeId} skills={content.skills} />
+          <Suspense fallback={<FormSkeleton />}>
+            <LazySkillsForm resumeId={resumeId} skills={content.skills} />
+          </Suspense>
         </CardContent>
       </Card>
 
@@ -628,12 +641,14 @@ export function ResumeBuilder() {
           </div>
         </CardHeader>
         <CardContent>
-          <CertificationList
-            certifications={content.certifications || []}
-            onEdit={handleEditCertification}
-            onDelete={handleDeleteCertification}
-            onReorder={handleReorderCertifications}
-          />
+          <Suspense fallback={<ListSkeleton />}>
+            <LazyCertificationList
+              certifications={content.certifications || []}
+              onEdit={handleEditCertification}
+              onDelete={handleDeleteCertification}
+              onReorder={handleReorderCertifications}
+            />
+          </Suspense>
         </CardContent>
       </Card>
 
@@ -656,43 +671,53 @@ export function ResumeBuilder() {
           </div>
         </CardHeader>
         <CardContent>
-          <LinkList
-            links={content.links || []}
-            onEdit={handleEditLink}
-            onDelete={handleDeleteLink}
-            onReorder={handleReorderLinks}
-          />
+          <Suspense fallback={<ListSkeleton />}>
+            <LazyLinkList
+              links={content.links || []}
+              onEdit={handleEditLink}
+              onDelete={handleDeleteLink}
+              onReorder={handleReorderLinks}
+            />
+          </Suspense>
         </CardContent>
       </Card>
 
       {/* Dialogs */}
-      <ExperienceFormDialog
-        open={experienceDialogOpen}
-        onOpenChange={setExperienceDialogOpen}
-        onSubmit={handleSaveExperience}
-        defaultValues={editingExperience || undefined}
-      />
+      <Suspense fallback={<FormDialogSkeleton />}>
+        <LazyExperienceFormDialog
+          open={experienceDialogOpen}
+          onOpenChange={setExperienceDialogOpen}
+          onSubmit={handleSaveExperience}
+          defaultValues={editingExperience || undefined}
+        />
+      </Suspense>
 
-      <EducationFormDialog
-        open={educationDialogOpen}
-        onOpenChange={setEducationDialogOpen}
-        onSubmit={handleSaveEducation}
-        defaultValues={editingEducation || undefined}
-      />
+      <Suspense fallback={<FormDialogSkeleton />}>
+        <LazyEducationFormDialog
+          open={educationDialogOpen}
+          onOpenChange={setEducationDialogOpen}
+          onSubmit={handleSaveEducation}
+          defaultValues={editingEducation || undefined}
+        />
+      </Suspense>
 
-      <CertificationFormDialog
-        open={certificationDialogOpen}
-        onOpenChange={setCertificationDialogOpen}
-        onSubmit={handleSaveCertification}
-        defaultValues={editingCertification || undefined}
-      />
+      <Suspense fallback={<FormDialogSkeleton />}>
+        <LazyCertificationFormDialog
+          open={certificationDialogOpen}
+          onOpenChange={setCertificationDialogOpen}
+          onSubmit={handleSaveCertification}
+          defaultValues={editingCertification || undefined}
+        />
+      </Suspense>
 
-      <LinkFormDialog
-        open={linkDialogOpen}
-        onOpenChange={setLinkDialogOpen}
-        onSubmit={handleSaveLink}
-        defaultValues={editingLink || undefined}
-      />
+      <Suspense fallback={<FormDialogSkeleton />}>
+        <LazyLinkFormDialog
+          open={linkDialogOpen}
+          onOpenChange={setLinkDialogOpen}
+          onSubmit={handleSaveLink}
+          defaultValues={editingLink || undefined}
+        />
+      </Suspense>
     </div>
   )
 }

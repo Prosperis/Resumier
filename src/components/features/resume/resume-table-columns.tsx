@@ -66,14 +66,14 @@ function RowActions({ resume, onEdit, onDuplicate }: RowActionsProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-8 w-8 p-0" aria-label={`Actions for ${resume.title}`}>
-          <MoreHorizontal className="h-4 w-4" />
+          <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => onEdit(resume)}>
-          <Pencil className="mr-2 h-4 w-4" />
+          <Pencil className="mr-2 h-4 w-4" aria-hidden="true" />
           Edit
         </DropdownMenuItem>
         <RenameResumeDialog
@@ -81,13 +81,13 @@ function RowActions({ resume, onEdit, onDuplicate }: RowActionsProps) {
           currentTitle={resume.title}
           trigger={
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <Pencil className="mr-2 h-4 w-4" />
+              <Pencil className="mr-2 h-4 w-4" aria-hidden="true" />
               Rename
             </DropdownMenuItem>
           }
         />
         <DropdownMenuItem onClick={() => onDuplicate(resume)}>
-          <Copy className="mr-2 h-4 w-4" />
+          <Copy className="mr-2 h-4 w-4" aria-hidden="true" />
           Duplicate
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -99,7 +99,7 @@ function RowActions({ resume, onEdit, onDuplicate }: RowActionsProps) {
               onSelect={(e) => e.preventDefault()}
               className="text-destructive focus:text-destructive"
             >
-              <Trash2 className="mr-2 h-4 w-4" />
+              <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
               Delete
             </DropdownMenuItem>
           }

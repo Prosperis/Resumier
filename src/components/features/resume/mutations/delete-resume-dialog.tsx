@@ -60,8 +60,8 @@ export function DeleteResumeDialog({
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         {trigger || (
-          <Button variant="destructive" size="sm">
-            <Trash2 className="mr-2 h-4 w-4" />
+          <Button variant="destructive" size="sm" aria-label={`Delete ${resumeTitle}`}>
+            <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
             Delete
           </Button>
         )}
@@ -83,8 +83,9 @@ export function DeleteResumeDialog({
             }}
             disabled={isPending}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            aria-label={isPending ? "Deleting resume..." : "Confirm delete resume"}
           >
-            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
             Delete Resume
           </AlertDialogAction>
         </AlertDialogFooter>

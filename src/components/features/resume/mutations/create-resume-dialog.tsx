@@ -24,6 +24,7 @@ interface CreateResumeDialogProps {
 export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogProps) {
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState("")
+  const [validationError, setValidationError] = useState("")
   const navigate = useNavigate()
   const { toast } = useToast()
 
@@ -32,12 +33,13 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
+    // Clear previous validation error
+    setValidationError("")
+
     if (!title.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter a resume title",
-        variant: "destructive",
-      })
+      setValidationError("Please enter a resume title")
+      // Focus the input field
+      document.getElementById("title")?.focus()
       return
     }
 
@@ -95,8 +97,8 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || (
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
+          <Button aria-label="Create new resume">
+            <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
             New Resume
           </Button>
         )}
@@ -113,13 +115,28 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
             <Input
               id="title"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                setTitle(e.target.value)
+                // Clear validation error on change
+                if (validationError) {
+                  setValidationError("")
+                }
+              }}
               placeholder="e.g., Software Engineer Resume"
               disabled={isPending}
               autoFocus
+              aria-invalid={!!validationError || !!error}
+              aria-describedby={
+                validationError ? "title-validation-error" : error ? "title-api-error" : undefined
+              }
             />
-            {error && (
-              <p className="mt-2 text-sm text-destructive">
+            {validationError && (
+              <p id="title-validation-error" className="mt-2 text-sm text-destructive" role="alert">
+                {validationError}
+              </p>
+            )}
+            {error && !validationError && (
+              <p id="title-api-error" className="mt-2 text-sm text-destructive" role="alert">
                 {error.message || "An error occurred"}
               </p>
             )}
@@ -134,8 +151,12 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isPending}>
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button
+              type="submit"
+              disabled={isPending}
+              aria-label={isPending ? "Creating resume..." : "Create resume"}
+            >
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
               Create Resume
             </Button>
           </DialogFooter>
