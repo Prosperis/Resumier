@@ -18,6 +18,28 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/**/__tests__/**/*.ts", "src/**/__tests__/**/*.tsx", "src/**/*.test.ts", "src/**/*.test.tsx"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noExplicitAny": "off"
+          },
+          "a11y": {
+            "useButtonType": "off",
+            "noLabelWithoutControl": "off"
+          },
+          "style": {
+            "noNonNullAssertion": "off"
+          },
+          "correctness": {
+            "noUnusedFunctionParameters": "off",
+            "noUnusedVariables": "off",
+            "noUnusedImports": "off"
+          }
+        }
+      }
     }
   ],
   "formatter": {
@@ -41,7 +63,8 @@
       "style": {
         "useConst": "error",
         "useImportType": "error",
-        "noNonNullAssertion": "warn"
+        "noNonNullAssertion": "warn",
+        "useTemplate": "warn"
       },
       "suspicious": {
         "noExplicitAny": "warn",
