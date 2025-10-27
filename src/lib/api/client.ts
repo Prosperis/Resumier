@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react"
 import { NetworkError, parseErrorResponse } from "./errors"
 import { mockApi, useMockApi } from "./mock"
 
@@ -77,6 +78,23 @@ export class ApiClient {
         } catch {
           errorData = { message: response.statusText }
         }
+
+        // Track API errors in Sentry
+        Sentry.captureMessage(`API Error: ${endpoint}`, {
+          level: response.status >= 500 ? "error" : "warning",
+          tags: {
+            type: "api_error",
+            status: response.status.toString(),
+            endpoint,
+            method: options.method || "GET",
+          },
+          extra: {
+            url,
+            status: response.status,
+            statusText: response.statusText,
+            errorData,
+          },
+        })
 
         parseErrorResponse(response.status, errorData)
       }

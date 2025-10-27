@@ -10,7 +10,7 @@ export const educationSchema = z.object({
   degree: z.string().min(1, "Degree is required"),
   field: z.string().min(1, "Field of study is required"),
   startDate: z.string().min(1, "Start date is required"),
-  endDate: z.string().min(1, "End date is required"),
+  endDate: z.string(),
   current: z.boolean().optional(),
   gpa: z.string().max(10, "GPA must be less than 10 characters").optional().or(z.literal("")),
   honors: z.array(z.string()).optional(),

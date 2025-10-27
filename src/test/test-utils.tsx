@@ -48,4 +48,4 @@ export function resetStore<T>(store: {
 
 // Re-export common testing utilities
 export * from "@testing-library/react"
-export { vi, describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from "vitest"
+export { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest"

@@ -3,4 +3,8 @@
  * Export all custom animation hooks
  */
 
-export { useReducedMotion, useAnimationTransition, useAnimationVariants } from "./use-reduced-motion"
+export {
+  useAnimationTransition,
+  useAnimationVariants,
+  useReducedMotion,
+} from "./use-reduced-motion"
