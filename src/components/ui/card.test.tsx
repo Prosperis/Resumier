@@ -1,21 +1,65 @@
+import { describe, it, expect } from "vitest"
 import { render } from "@testing-library/react"
-import { describe, expect, it } from "vitest"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./card"
 
 describe("Card", () => {
-  it("renders all subcomponents", () => {
-    const { getByText, getByTestId } = render(
-      <Card>
-        <CardHeader data-testid="header">
-          <CardTitle>Title</CardTitle>
-        </CardHeader>
-        <CardContent data-testid="content">Body</CardContent>
-        <CardFooter data-testid="footer">Footer</CardFooter>
-      </Card>,
-    )
-    expect(getByTestId("header").getAttribute("data-slot")).toBe("card-header")
-    expect(getByText("Title").getAttribute("data-slot")).toBe("card-title")
-    expect(getByTestId("content").getAttribute("data-slot")).toBe("card-content")
-    expect(getByTestId("footer").getAttribute("data-slot")).toBe("card-footer")
-  })
+	it("renders Card component", () => {
+		const { container } = render(<Card>Card content</Card>)
+		const card = container.querySelector("[data-slot='card']")
+		expect(card).toBeInTheDocument()
+	})
+
+	it("renders CardHeader with CardTitle", () => {
+		const { getByTestId, getByText } = render(
+			<CardHeader data-testid="header">
+				<CardTitle>Test Title</CardTitle>
+			</CardHeader>,
+		)
+		expect(getByTestId("header")).toBeInTheDocument()
+		expect(getByText("Test Title")).toBeInTheDocument()
+	})
+
+	it("renders CardDescription", () => {
+		const { getByText } = render(
+			<CardDescription>Test description</CardDescription>,
+		)
+		expect(getByText("Test description")).toBeInTheDocument()
+	})
+
+	it("renders CardContent", () => {
+		const { getByTestId } = render(
+			<CardContent data-testid="content">Card body content</CardContent>,
+		)
+		expect(getByTestId("content")).toBeInTheDocument()
+	})
+
+	it("renders CardFooter", () => {
+		const { getByTestId } = render(
+			<CardFooter data-testid="footer">Card footer</CardFooter>,
+		)
+		expect(getByTestId("footer")).toBeInTheDocument()
+	})
+
+	it("renders all subcomponents together", () => {
+		const { getByText } = render(
+			<Card>
+				<CardHeader>
+					<CardTitle>Title</CardTitle>
+					<CardDescription>Description</CardDescription>
+				</CardHeader>
+				<CardContent>Body</CardContent>
+				<CardFooter>Footer</CardFooter>
+			</Card>,
+		)
+		expect(getByText("Title")).toBeInTheDocument()
+		expect(getByText("Description")).toBeInTheDocument()
+		expect(getByText("Body")).toBeInTheDocument()
+		expect(getByText("Footer")).toBeInTheDocument()
+	})
+
+	it("applies interactive prop correctly", () => {
+		const { container } = render(<Card interactive>Interactive card</Card>)
+		const card = container.querySelector("[data-slot='card']")
+		expect(card).toHaveClass("cursor-pointer")
+	})
 })

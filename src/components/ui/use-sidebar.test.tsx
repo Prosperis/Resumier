@@ -1,27 +1,60 @@
+import { describe, it, expect, vi } from "vitest"
 import { renderHook } from "@testing-library/react"
-import { describe, expect, it, vi } from "vitest"
+import type { ReactNode } from "react"
 import type { SidebarContextProps } from "./use-sidebar"
 import { SidebarContext, useSidebar } from "./use-sidebar"
 
 describe("useSidebar", () => {
-  it("throws when used outside provider", () => {
-    expect(() => renderHook(() => useSidebar())).toThrowError()
-  })
+	it("throws error when used outside SidebarProvider", () => {
+		expect(() => renderHook(() => useSidebar())).toThrow(
+			"useSidebar must be used within a SidebarProvider",
+		)
+	})
 
-  it("returns context when inside provider", () => {
-    const context: SidebarContextProps = {
-      state: "expanded",
-      open: true,
-      setOpen: vi.fn(),
-      openMobile: false,
-      setOpenMobile: vi.fn(),
-      isMobile: false,
-      toggleSidebar: vi.fn(),
-    }
-    const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <SidebarContext.Provider value={context}>{children}</SidebarContext.Provider>
-    )
-    const { result } = renderHook(() => useSidebar(), { wrapper })
-    expect(result.current).toBe(context)
-  })
+	it("returns context when used inside SidebarProvider", () => {
+		const mockContext: SidebarContextProps = {
+			state: "expanded",
+			open: true,
+			setOpen: vi.fn(),
+			openMobile: false,
+			setOpenMobile: vi.fn(),
+			isMobile: false,
+			toggleSidebar: vi.fn(),
+		}
+
+		const wrapper = ({ children }: { children: ReactNode }) => (
+			<SidebarContext.Provider value={mockContext}>
+				{children}
+			</SidebarContext.Provider>
+		)
+
+		const { result } = renderHook(() => useSidebar(), { wrapper })
+		expect(result.current).toBe(mockContext)
+		expect(result.current.state).toBe("expanded")
+		expect(result.current.open).toBe(true)
+		expect(result.current.isMobile).toBe(false)
+	})
+
+	it("provides toggleSidebar function", () => {
+		const mockToggle = vi.fn()
+		const mockContext: SidebarContextProps = {
+			state: "expanded",
+			open: true,
+			setOpen: vi.fn(),
+			openMobile: false,
+			setOpenMobile: vi.fn(),
+			isMobile: false,
+			toggleSidebar: mockToggle,
+		}
+
+		const wrapper = ({ children }: { children: ReactNode }) => (
+			<SidebarContext.Provider value={mockContext}>
+				{children}
+			</SidebarContext.Provider>
+		)
+
+		const { result } = renderHook(() => useSidebar(), { wrapper })
+		result.current.toggleSidebar()
+		expect(mockToggle).toHaveBeenCalledTimes(1)
+	})
 })
