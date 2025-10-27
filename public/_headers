@@ -1,0 +1,66 @@
+# Security Headers Configuration
+# Works with Netlify and GitHub Pages (via netlify.toml or GitHub Actions)
+# https://docs.netlify.com/routing/headers/
+
+/*
+  # Content Security Policy (CSP) - Enhanced for production
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://browser.sentry-cdn.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; connect-src 'self' https://*.ingest.sentry.io https://*.sentry.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests; block-all-mixed-content;
+  
+  # Prevent clickjacking attacks
+  X-Frame-Options: DENY
+  
+  # Prevent MIME type sniffing
+  X-Content-Type-Options: nosniff
+  
+  # Control referrer information (balance privacy and analytics)
+  Referrer-Policy: strict-origin-when-cross-origin
+  
+  # Feature Policy / Permissions Policy - Disable unused browser features
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  
+  # XSS Protection (legacy, but still useful for older browsers)
+  X-XSS-Protection: 1; mode=block
+  
+  # HSTS - Force HTTPS (GitHub Pages automatically serves HTTPS)
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  
+  # Disable caching for HTML files (always get fresh content)
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Cache static assets aggressively (JS, CSS with hashed filenames)
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache fonts
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Service Worker (always fetch fresh)
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Web App Manifest (cache for a day)
+/manifest.webmanifest
+  Cache-Control: public, max-age=86400
+
+# PWA Icons (cache long-term)
+/pwa-*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+# Logos and images
+*.webp
+  Cache-Control: public, max-age=2592000
+  
+*.png
+  Cache-Control: public, max-age=2592000
+
+*.jpg
+  Cache-Control: public, max-age=2592000
+
+# Sitemap and robots (cache for a day)
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+
+/robots.txt
+  Cache-Control: public, max-age=86400
+

@@ -1,0 +1,30 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow private or admin areas (if any in the future)
+# Disallow: /admin/
+# Disallow: /api/
+
+# Sitemap location
+Sitemap: https://prosperis.github.io/Resumier/sitemap.xml
+
+# Crawl-delay (optional - be nice to search engines)
+# Crawl-delay: 10
+
+# Allow all content indexing for resume builder
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Social media crawlers
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
