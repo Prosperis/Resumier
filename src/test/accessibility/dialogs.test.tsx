@@ -126,18 +126,18 @@ describe("Dialog Accessibility Tests", () => {
   })
 
   describe("RenameResumeDialog", () => {
-    const mockResume = {
-      id: "1",
-      title: "My Resume",
-      userId: "user-1",
-      template: "modern" as const,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }
+    const mockResumeId = "1"
+    const mockResumeTitle = "My Resume"
 
     it("should have no accessibility violations when open", async () => {
       const user = userEvent.setup()
-      const { container } = renderWithQuery(<RenameResumeDialog resume={mockResume} />)
+      const { container } = renderWithQuery(
+        <RenameResumeDialog
+          resumeId={mockResumeId}
+          currentTitle={mockResumeTitle}
+          trigger={<button>Rename</button>}
+        />,
+      )
 
       const triggerButton = screen.getByRole("button", { name: /rename/i })
       await user.click(triggerButton)
@@ -149,7 +149,13 @@ describe("Dialog Accessibility Tests", () => {
 
     it("should have proper dialog ARIA", async () => {
       const user = userEvent.setup()
-      renderWithQuery(<RenameResumeDialog resume={mockResume} />)
+      renderWithQuery(
+        <RenameResumeDialog
+          resumeId={mockResumeId}
+          currentTitle={mockResumeTitle}
+          trigger={<button>Rename</button>}
+        />,
+      )
 
       const triggerButton = screen.getByRole("button", { name: /rename/i })
       await user.click(triggerButton)
@@ -162,7 +168,13 @@ describe("Dialog Accessibility Tests", () => {
 
     it("should have pre-filled accessible input", async () => {
       const user = userEvent.setup()
-      renderWithQuery(<RenameResumeDialog resume={mockResume} />)
+      renderWithQuery(
+        <RenameResumeDialog
+          resumeId={mockResumeId}
+          currentTitle={mockResumeTitle}
+          trigger={<button>Rename</button>}
+        />,
+      )
 
       const triggerButton = screen.getByRole("button", { name: /rename/i })
       await user.click(triggerButton)
@@ -170,24 +182,24 @@ describe("Dialog Accessibility Tests", () => {
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/new title/i)
         expect(titleInput).toBeInTheDocument()
-        expect(titleInput).toHaveValue(mockResume.title)
+        expect(titleInput).toHaveValue(mockResumeTitle)
       })
     })
   })
 
   describe("DeleteResumeDialog (AlertDialog)", () => {
-    const mockResume = {
-      id: "1",
-      title: "My Resume",
-      userId: "user-1",
-      template: "modern" as const,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }
+    const mockResumeId = "1"
+    const mockResumeTitle = "My Resume"
 
     it("should have no accessibility violations", async () => {
       const user = userEvent.setup()
-      const { container } = renderWithQuery(<DeleteResumeDialog resume={mockResume} />)
+      const { container } = renderWithQuery(
+        <DeleteResumeDialog
+          resumeId={mockResumeId}
+          resumeTitle={mockResumeTitle}
+          trigger={<button>Delete</button>}
+        />,
+      )
 
       const triggerButton = screen.getByRole("button", { name: /delete/i })
       await user.click(triggerButton)
@@ -199,7 +211,13 @@ describe("Dialog Accessibility Tests", () => {
 
     it("should have alertdialog role", async () => {
       const user = userEvent.setup()
-      renderWithQuery(<DeleteResumeDialog resume={mockResume} />)
+      renderWithQuery(
+        <DeleteResumeDialog
+          resumeId={mockResumeId}
+          resumeTitle={mockResumeTitle}
+          trigger={<button>Delete</button>}
+        />,
+      )
 
       const triggerButton = screen.getByRole("button", { name: /delete/i })
       await user.click(triggerButton)
@@ -212,7 +230,13 @@ describe("Dialog Accessibility Tests", () => {
 
     it("should have accessible action buttons", async () => {
       const user = userEvent.setup()
-      renderWithQuery(<DeleteResumeDialog resume={mockResume} />)
+      renderWithQuery(
+        <DeleteResumeDialog
+          resumeId={mockResumeId}
+          resumeTitle={mockResumeTitle}
+          trigger={<button>Delete</button>}
+        />,
+      )
 
       const triggerButton = screen.getByRole("button", { name: /delete/i })
       await user.click(triggerButton)
