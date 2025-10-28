@@ -44,6 +44,10 @@ coverage/
 # TanStack Router
 src/app/routeTree.gen.ts
 
+# Lighthouse CI
+.lighthouseci/
+lighthouse-results/
+
 # Environment variables
 .env
 .env.local
