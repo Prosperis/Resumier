@@ -235,7 +235,12 @@ describe("Tooltip accessibility", () => {
 describe("Tooltip with custom components", () => {
   it("renders with icon as trigger", async () => {
     const user = userEvent.setup()
-    const Icon = () => <svg data-testid="icon">Icon</svg>
+    const Icon = () => (
+      <svg data-testid="icon" role="img" aria-label="Icon">
+        <title>Icon</title>
+        Icon
+      </svg>
+    )
 
     render(
       <Tooltip>

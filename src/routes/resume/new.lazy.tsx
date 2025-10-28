@@ -15,7 +15,6 @@ function NewResumeComponent() {
   const resetContent = useResumeStore((state) => state.resetContent)
 
   // Reset content when creating a new resume
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Only run on mount
   useEffect(() => {
     resetContent()
   }, [])

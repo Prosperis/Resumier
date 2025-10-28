@@ -1,12 +1,12 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { renderHook, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { apiClient } from "../../lib/api/client"
-import { createMockResume } from "./test-helpers"
-import { resumeQueryKey, useResume } from "./use-resume"
+import { apiClient } from "@/lib/api/client"
+import { createMockResume } from "../test-helpers"
+import { resumeQueryKey, useResume } from "../use-resume"
 
 // Mock the API client
-vi.mock("../../lib/api/client", () => ({
+vi.mock("@/lib/api/client", () => ({
   apiClient: {
     get: vi.fn(),
     post: vi.fn(),
@@ -27,7 +27,6 @@ describe("useResume", () => {
       },
     })
 
-    // biome-ignore lint/suspicious/noExplicitAny: test helper
     return ({ children }: any) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     )
@@ -38,9 +37,8 @@ describe("useResume", () => {
   })
 
   it("fetches a resume by ID successfully", async () => {
-    const mockResume = createMockResume({ id: "resume-123", title: "My Resume" })(
-      apiClient.get as any,
-    ).mockResolvedValueOnce(mockResume)
+    const mockResume = createMockResume({ id: "resume-123", title: "My Resume" })
+    ;(apiClient.get as any).mockResolvedValueOnce(mockResume)
 
     const { result } = renderHook(() => useResume("resume-123"), {
       wrapper: createWrapper(),
@@ -73,7 +71,8 @@ describe("useResume", () => {
   })
 
   it("handles error when fetching resume fails", async () => {
-    const error = new Error("Resume not found")(apiClient.get as any).mockRejectedValueOnce(error)
+    const error = new Error("Resume not found")
+    ;(apiClient.get as any).mockRejectedValueOnce(error)
 
     const { result } = renderHook(() => useResume("resume-123"), {
       wrapper: createWrapper(),
@@ -92,11 +91,8 @@ describe("useResume", () => {
 
   it("refetches when ID changes", async () => {
     const mockResume1 = createMockResume({ id: "resume-1", title: "Resume 1" })
-    const mockResume2 = createMockResume({ id: "resume-2", title: "Resume 2" })(
-      apiClient.get as any,
-    )
-      .mockResolvedValueOnce(mockResume1)
-      .mockResolvedValueOnce(mockResume2)
+    const mockResume2 = createMockResume({ id: "resume-2", title: "Resume 2" })
+    ;(apiClient.get as any).mockResolvedValueOnce(mockResume1).mockResolvedValueOnce(mockResume2)
 
     const { result, rerender } = renderHook(({ id }) => useResume(id), {
       wrapper: createWrapper(),
@@ -119,9 +115,8 @@ describe("useResume", () => {
   })
 
   it("caches results correctly", async () => {
-    const mockResume = createMockResume({ id: "resume-123" })(
-      apiClient.get as any,
-    ).mockResolvedValueOnce(mockResume)
+    const mockResume = createMockResume({ id: "resume-123" })
+    ;(apiClient.get as any).mockResolvedValueOnce(mockResume)
 
     const wrapper = createWrapper()
 

@@ -1,12 +1,12 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { renderHook, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { apiClient } from "../../lib/api/client"
-import { createMockResume } from "./test-helpers"
-import { resumesQueryKey, useResumes } from "./use-resumes"
+import { apiClient } from "@/lib/api/client"
+import { createMockResume } from "../test-helpers"
+import { resumesQueryKey, useResumes } from "../use-resumes"
 
 // Mock the API client
-vi.mock("../../lib/api/client", () => ({
+vi.mock("@/lib/api/client", () => ({
   apiClient: {
     get: vi.fn(),
     post: vi.fn(),
@@ -27,7 +27,6 @@ describe("useResumes", () => {
       },
     })
 
-    // biome-ignore lint/suspicious/noExplicitAny: test helper
     return ({ children }: any) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     )
@@ -41,7 +40,8 @@ describe("useResumes", () => {
     const mockResumes = [
       createMockResume({ id: "1", title: "Resume 1" }),
       createMockResume({ id: "2", title: "Resume 2" }),
-    ](apiClient.get as any).mockResolvedValueOnce(mockResumes)
+    ]
+    ;(apiClient.get as any).mockResolvedValueOnce(mockResumes)
 
     const { result } = renderHook(() => useResumes(), {
       wrapper: createWrapper(),
@@ -73,9 +73,8 @@ describe("useResumes", () => {
   })
 
   it("handles error when fetching resumes fails", async () => {
-    const error = new Error("Failed to fetch resumes")(apiClient.get as any).mockRejectedValueOnce(
-      error,
-    )
+    const error = new Error("Failed to fetch resumes")
+    ;(apiClient.get as any).mockRejectedValueOnce(error)
 
     const { result } = renderHook(() => useResumes(), {
       wrapper: createWrapper(),
@@ -92,9 +91,8 @@ describe("useResumes", () => {
   })
 
   it("caches results correctly", async () => {
-    const mockResumes = [createMockResume()](apiClient.get as any).mockResolvedValueOnce(
-      mockResumes,
-    )
+    const mockResumes = [createMockResume()]
+    ;(apiClient.get as any).mockResolvedValueOnce(mockResumes)
 
     const wrapper = createWrapper()
 

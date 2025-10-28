@@ -1,12 +1,12 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { renderHook, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { apiClient } from "../../lib/api/client"
-import type { UpdateResumeDto } from "../../lib/api/types"
-import { createMockResume } from "./test-helpers"
-import { resumeQueryKey } from "./use-resume"
-import { resumesQueryKey } from "./use-resumes"
-import { useUpdateResume } from "./use-update-resume"
+import { apiClient } from "../../../lib/api/client"
+import type { UpdateResumeDto } from "../../../lib/api/types"
+import { createMockResume } from "../test-helpers"
+import { resumeQueryKey } from "../use-resume"
+import { resumesQueryKey } from "../use-resumes"
+import { useUpdateResume } from "../use-update-resume"
 
 // Mock the API client
 vi.mock("../../lib/api/client", () => ({
@@ -33,7 +33,6 @@ describe("useUpdateResume", () => {
       },
     })
 
-    // biome-ignore lint/suspicious/noExplicitAny: test helper
     return ({ children }: any) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     )
@@ -52,7 +51,8 @@ describe("useUpdateResume", () => {
     const updatedResume = createMockResume({
       id: resumeId,
       title: "Updated Title",
-    })(apiClient.put as any).mockResolvedValueOnce(updatedResume)
+    })
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
@@ -85,12 +85,8 @@ describe("useUpdateResume", () => {
     })
 
     // Set original resume in cache
-    queryClient
-      .setQueryData(
-        resumeQueryKey(resumeId),
-        originalResume,
-      )(apiClient.put as any)
-      .mockResolvedValueOnce(updatedResume)
+    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume)
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
@@ -122,12 +118,8 @@ describe("useUpdateResume", () => {
     })
 
     // Set resumes list in cache
-    queryClient
-      .setQueryData(
-        resumesQueryKey,
-        resumes,
-      )(apiClient.put as any)
-      .mockResolvedValueOnce(updatedResume)
+    queryClient.setQueryData(resumesQueryKey, resumes)
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
 
     const wrapper = createWrapper()
     const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries")
@@ -156,7 +148,8 @@ describe("useUpdateResume", () => {
     // Set original resume in cache
     queryClient.setQueryData(resumeQueryKey(resumeId), originalResume)
 
-    const error = new Error("Update failed")(apiClient.put as any).mockRejectedValueOnce(error)
+    const error = new Error("Update failed")
+    vi.mocked(apiClient.put).mockRejectedValueOnce(error)
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
@@ -173,9 +166,8 @@ describe("useUpdateResume", () => {
   it("invalidates queries after successful update", async () => {
     const resumeId = "resume-123"
     const updateData: UpdateResumeDto = { title: "Updated" }
-    const updatedResume = createMockResume({ id: resumeId })(
-      apiClient.put as any,
-    ).mockResolvedValueOnce(updatedResume)
+    const updatedResume = createMockResume({ id: resumeId })
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
 
     const wrapper = createWrapper()
     const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries")
@@ -193,7 +185,8 @@ describe("useUpdateResume", () => {
   it("handles API errors correctly", async () => {
     const resumeId = "resume-123"
     const updateData: UpdateResumeDto = { title: "Failed" }
-    const error = new Error("Update failed")(apiClient.put as any).mockRejectedValueOnce(error)
+    const error = new Error("Update failed")
+    vi.mocked(apiClient.put).mockRejectedValueOnce(error)
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
@@ -221,12 +214,8 @@ describe("useUpdateResume", () => {
       updatedAt: new Date().toISOString(),
     })
 
-    queryClient
-      .setQueryData(
-        resumeQueryKey(resumeId),
-        originalResume,
-      )(apiClient.put as any)
-      .mockResolvedValueOnce(updatedResume)
+    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume)
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
@@ -242,10 +231,9 @@ describe("useUpdateResume", () => {
   it("handles optimistic update when resume not in cache", async () => {
     const resumeId = "resume-new"
     const updateData: UpdateResumeDto = { title: "Updated" }
-    const updatedResume = createMockResume({ id: resumeId, title: "Updated" })(
-      // Don't set any initial data in cache
-      apiClient.put as any,
-    ).mockResolvedValueOnce(updatedResume)
+    const updatedResume = createMockResume({ id: resumeId, title: "Updated" })
+    // Don't set any initial data in cache
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
@@ -265,16 +253,9 @@ describe("useUpdateResume", () => {
     const updatedResume = createMockResume({ id: resumeId, title: "Updated" })
 
     // Set resume in cache but not the list
-    queryClient
-      .setQueryData(
-        resumeQueryKey(resumeId),
-        originalResume,
-      )(
-        // Don't set resumesQueryKey
-
-        apiClient.put as any,
-      )
-      .mockResolvedValueOnce(updatedResume)
+    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume)
+    // Don't set resumesQueryKey
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
@@ -341,12 +322,8 @@ describe("useUpdateResume", () => {
       },
     })
 
-    queryClient
-      .setQueryData(
-        resumeQueryKey(resumeId),
-        originalResume,
-      )(apiClient.put as any)
-      .mockResolvedValueOnce(updatedResume)
+    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume)
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
@@ -362,10 +339,9 @@ describe("useUpdateResume", () => {
   it("handles error rollback without previous resume context", async () => {
     const resumeId = "resume-123"
     const updateData: UpdateResumeDto = { title: "Failed" }
-    const error = new Error("Update failed")(
-      // Don't set any initial data
-      apiClient.put as any,
-    ).mockRejectedValueOnce(error)
+    const error = new Error("Update failed")
+    // Don't set any initial data
+    vi.mocked(apiClient.put).mockRejectedValueOnce(error)
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
@@ -409,12 +385,8 @@ describe("useUpdateResume", () => {
     })
 
     queryClient.setQueryData(resumesQueryKey, resumes)
-    queryClient
-      .setQueryData(
-        resumeQueryKey(resumeId),
-        resumes[1],
-      )(apiClient.put as any)
-      .mockResolvedValueOnce(updatedResume)
+    queryClient.setQueryData(resumeQueryKey(resumeId), resumes[1])
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),

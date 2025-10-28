@@ -113,7 +113,13 @@ export function sanitizeFilename(filename: string): string {
   let sanitized = filename.replace(/[/\\]/g, "")
 
   // Remove dangerous characters
-  sanitized = sanitized.replace(/[<>:"|?*\x00-\x1f]/g, "")
+  sanitized = sanitized.replace(/[<>:"|?*]/g, "")
+
+  // Remove control characters (0-31) by filtering each character
+  sanitized = sanitized
+    .split("")
+    .filter((char) => char.charCodeAt(0) > 31)
+    .join("")
 
   // Remove leading/trailing dots and spaces
   sanitized = sanitized.replace(/^[.\s]+|[.\s]+$/g, "")

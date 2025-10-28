@@ -1,14 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { renderHook, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { apiClient } from "../../lib/api/client"
-import { createMockResume } from "./test-helpers"
-import { useDeleteResume } from "./use-delete-resume"
-import { resumeQueryKey } from "./use-resume"
-import { resumesQueryKey } from "./use-resumes"
+import { apiClient } from "@/lib/api/client"
+import { createMockResume } from "../test-helpers"
+import { useDeleteResume } from "../use-delete-resume"
+import { resumeQueryKey } from "../use-resume"
+import { resumesQueryKey } from "../use-resumes"
 
 // Mock the API client
-vi.mock("../../lib/api/client", () => ({
+vi.mock("@/lib/api/client", () => ({
   apiClient: {
     get: vi.fn(),
     post: vi.fn(),
@@ -33,7 +33,6 @@ describe("useDeleteResume", () => {
       },
     })
 
-    // biome-ignore lint/suspicious/noExplicitAny: test helper
     return ({ children }: any) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     )
@@ -45,7 +44,8 @@ describe("useDeleteResume", () => {
   })
 
   it("deletes a resume successfully", async () => {
-    const resumeId = "resume-123"(apiClient.delete as any).mockResolvedValueOnce(undefined)
+    const resumeId = "resume-123"
+    ;(apiClient.delete as any).mockResolvedValueOnce(undefined)
 
     const { result } = renderHook(() => useDeleteResume(), {
       wrapper: createWrapper(),
@@ -65,14 +65,9 @@ describe("useDeleteResume", () => {
       createMockResume({ id: resumeId, title: "Resume 2" }),
       createMockResume({ id: "resume-3", title: "Resume 3" }),
     ]
-
     // Set resumes list in cache
-    queryClient
-      .setQueryData(
-        resumesQueryKey,
-        resumes,
-      )(apiClient.delete as any)
-      .mockResolvedValueOnce(undefined)
+    queryClient.setQueryData(resumesQueryKey, resumes)
+    ;(apiClient.delete as any).mockResolvedValueOnce(undefined).mockResolvedValueOnce(undefined)
 
     const { result } = renderHook(() => useDeleteResume(), {
       wrapper: createWrapper(),
@@ -98,7 +93,8 @@ describe("useDeleteResume", () => {
     // Set resumes list in cache
     queryClient.setQueryData(resumesQueryKey, resumes)
 
-    const error = new Error("Delete failed")(apiClient.delete as any).mockRejectedValueOnce(error)
+    const error = new Error("Delete failed")
+    ;(apiClient.delete as any).mockRejectedValueOnce(error)
 
     const { result } = renderHook(() => useDeleteResume(), {
       wrapper: createWrapper(),
@@ -113,10 +109,10 @@ describe("useDeleteResume", () => {
   })
 
   it("invalidates queries after successful deletion", async () => {
-    const resumeId = "resume-123"(apiClient.delete as any).mockResolvedValueOnce(undefined)
-
+    const resumeId = "resume-123"
     const wrapper = createWrapper()
     const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries")
+    ;(apiClient.delete as any).mockResolvedValueOnce(undefined)
 
     const { result } = renderHook(() => useDeleteResume(), { wrapper })
 
@@ -130,16 +126,11 @@ describe("useDeleteResume", () => {
   it("removes individual resume from cache", async () => {
     const resumeId = "resume-123"
     const resume = createMockResume({ id: resumeId })
+    const wrapper = createWrapper()
 
     // Set individual resume in cache
-    queryClient
-      .setQueryData(
-        resumeQueryKey(resumeId),
-        resume,
-      )(apiClient.delete as any)
-      .mockResolvedValueOnce(undefined)
-
-    const wrapper = createWrapper()
+    queryClient.setQueryData(resumeQueryKey(resumeId), resume)
+    ;(apiClient.delete as any).mockResolvedValueOnce(undefined)
     const removeQueriesSpy = vi.spyOn(queryClient, "removeQueries")
 
     const { result } = renderHook(() => useDeleteResume(), { wrapper })
@@ -152,13 +143,13 @@ describe("useDeleteResume", () => {
   })
 
   it("handles deletion when cache is empty", async () => {
-    const resumeId = "resume-123"(apiClient.delete as any).mockResolvedValueOnce(undefined)
+    const resumeId = "resume-123"
+    ;(apiClient.delete as any).mockResolvedValueOnce(undefined)
 
     const { result } = renderHook(() => useDeleteResume(), {
       wrapper: createWrapper(),
     })
 
-    // No error should occur even if cache is empty
     result.current.mutate(resumeId)
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
@@ -168,7 +159,8 @@ describe("useDeleteResume", () => {
 
   it("handles error when deletion fails", async () => {
     const resumeId = "resume-123"
-    const error = new Error("Network error")(apiClient.delete as any).mockRejectedValueOnce(error)
+    const error = new Error("Network error")
+    ;(apiClient.delete as any).mockRejectedValueOnce(error)
 
     const { result } = renderHook(() => useDeleteResume(), {
       wrapper: createWrapper(),
@@ -183,10 +175,10 @@ describe("useDeleteResume", () => {
 
   it("invalidates queries even on error", async () => {
     const resumeId = "resume-123"
-    const error = new Error("Delete failed")(apiClient.delete as any).mockRejectedValueOnce(error)
-
+    const error = new Error("Delete failed")
     const wrapper = createWrapper()
     const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries")
+    ;(apiClient.delete as any).mockRejectedValueOnce(error)
 
     const { result } = renderHook(() => useDeleteResume(), { wrapper })
 

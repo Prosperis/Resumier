@@ -1,13 +1,13 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { renderHook, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { apiClient } from "../../lib/api/client"
-import { createMockResume, createMockResumeContent } from "./test-helpers"
-import { useDuplicateResume } from "./use-duplicate-resume"
-import { resumesQueryKey } from "./use-resumes"
+import { apiClient } from "@/lib/api/client"
+import { createMockResume, createMockResumeContent } from "../test-helpers"
+import { useDuplicateResume } from "../use-duplicate-resume"
+import { resumesQueryKey } from "../use-resumes"
 
 // Mock the API client
-vi.mock("../../lib/api/client", () => ({
+vi.mock("@/lib/api/client", () => ({
   apiClient: {
     get: vi.fn(),
     post: vi.fn(),
@@ -31,7 +31,6 @@ describe("useDuplicateResume", () => {
       },
     })
 
-    // biome-ignore lint/suspicious/noExplicitAny: test helper
     return ({ children }: any) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     )
@@ -52,7 +51,8 @@ describe("useDuplicateResume", () => {
       id: "new-id",
       title: "My Resume (Copy)",
       content: originalResume.content,
-    })(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
+    })
+    ;(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
 
     const { result } = renderHook(() => useDuplicateResume(), {
       wrapper: createWrapper(),
@@ -78,7 +78,8 @@ describe("useDuplicateResume", () => {
     const duplicatedResume = createMockResume({
       id: "duplicate",
       title: "Software Engineer Resume (Copy)",
-    })(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
+    })
+    ;(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
 
     const { result } = renderHook(() => useDuplicateResume(), {
       wrapper: createWrapper(),
@@ -109,7 +110,8 @@ describe("useDuplicateResume", () => {
       id: "duplicate",
       title: "My Resume (Copy)",
       content: customContent,
-    })(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
+    })
+    ;(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
 
     const { result } = renderHook(() => useDuplicateResume(), {
       wrapper: createWrapper(),
@@ -128,9 +130,8 @@ describe("useDuplicateResume", () => {
 
   it("invalidates resumes query after successful duplication", async () => {
     const originalResume = createMockResume({ id: "original" })
-    const duplicatedResume = createMockResume({ id: "duplicate" })(
-      apiClient.post as any,
-    ).mockResolvedValueOnce(duplicatedResume)
+    const duplicatedResume = createMockResume({ id: "duplicate" })
+    ;(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
 
     const wrapper = createWrapper()
     const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries")
@@ -160,12 +161,8 @@ describe("useDuplicateResume", () => {
       title: "Resume 2 (Copy)",
     })
 
-    queryClient
-      .setQueryData(
-        resumesQueryKey,
-        existingResumes,
-      )(apiClient.post as any)
-      .mockResolvedValueOnce(duplicatedResume)
+    queryClient.setQueryData(resumesQueryKey, existingResumes)
+    ;(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
 
     const { result } = renderHook(() => useDuplicateResume(), {
       wrapper: createWrapper(),
@@ -184,7 +181,8 @@ describe("useDuplicateResume", () => {
     const duplicatedResume = createMockResume({
       id: "duplicate",
       title: `${originalResume.title} (Copy)`,
-    })(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
+    })
+    ;(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
 
     const { result } = renderHook(() => useDuplicateResume(), {
       wrapper: createWrapper(),
@@ -203,7 +201,8 @@ describe("useDuplicateResume", () => {
     const duplicatedResume = createMockResume({
       id: "duplicate-id",
       title: "Resume (Copy)",
-    })(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
+    })
+    ;(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
 
     const { result } = renderHook(() => useDuplicateResume(), {
       wrapper: createWrapper(),
@@ -219,9 +218,8 @@ describe("useDuplicateResume", () => {
 
   it("handles duplication error", async () => {
     const originalResume = createMockResume({ id: "original" })
-    const error = new Error("Failed to duplicate resume")(
-      apiClient.post as any,
-    ).mockRejectedValueOnce(error)
+    const error = new Error("Failed to duplicate resume")
+    ;(apiClient.post as any).mockRejectedValueOnce(error)
 
     const { result } = renderHook(() => useDuplicateResume(), {
       wrapper: createWrapper(),
@@ -244,7 +242,8 @@ describe("useDuplicateResume", () => {
     const duplicatedResume = createMockResume({
       id: "duplicate",
       title: "My Resume (Copy) (Copy)",
-    })(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
+    })
+    ;(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
 
     const { result } = renderHook(() => useDuplicateResume(), {
       wrapper: createWrapper(),
@@ -262,9 +261,8 @@ describe("useDuplicateResume", () => {
 
   it("can use mutateAsync for promise-based handling", async () => {
     const originalResume = createMockResume({ id: "original" })
-    const duplicatedResume = createMockResume({ id: "duplicate" })(
-      apiClient.post as any,
-    ).mockResolvedValueOnce(duplicatedResume)
+    const duplicatedResume = createMockResume({ id: "duplicate" })
+    ;(apiClient.post as any).mockResolvedValueOnce(duplicatedResume)
 
     const { result } = renderHook(() => useDuplicateResume(), {
       wrapper: createWrapper(),

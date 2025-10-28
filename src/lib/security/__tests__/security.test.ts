@@ -128,7 +128,7 @@ describe("Security Utilities", () => {
     })
 
     it("handles long filenames", () => {
-      const longName = "a".repeat(300) + ".txt"
+      const longName = `${"a".repeat(300)}.txt`
       const result = sanitizeFilename(longName)
       expect(result.length).toBeLessThanOrEqual(255)
       expect(result).toContain(".txt")

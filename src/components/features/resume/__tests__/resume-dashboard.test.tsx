@@ -139,7 +139,8 @@ describe("ResumeDashboard", () => {
 
   describe("Error State", () => {
     it("shows error message when error occurs", () => {
-      const error = new Error("Network error")(useResumes as any).mockReturnValue({
+      const error = new Error("Network error")
+      ;(useResumes as any).mockReturnValue({
         data: undefined,
         isLoading: false,
         error,
@@ -152,7 +153,8 @@ describe("ResumeDashboard", () => {
     })
 
     it("shows error icon in error state", () => {
-      const error = new Error("Test error")(useResumes as any).mockReturnValue({
+      const error = new Error("Test error")
+      ;(useResumes as any).mockReturnValue({
         data: undefined,
         isLoading: false,
         error,

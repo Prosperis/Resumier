@@ -291,10 +291,11 @@ describe("ResumeBuilder", () => {
     mockUseUpdateResume = vi.fn().mockReturnValue({ mutate: mockMutate })
 
     const apiModule = await import("@/hooks/api")
-    const toastModule = await import("@/hooks/use-toast")(apiModule.useResume as any)
-      .mockImplementation(mockUseResume)(apiModule.useUpdateResume as any)
-      .mockImplementation(mockUseUpdateResume)(toastModule.useToast as any)
-      .mockReturnValue({ toast: mockToast })
+    const toastModule = await import("@/hooks/use-toast")
+
+    ;(apiModule.useResume as any).mockImplementation(mockUseResume)
+    ;(apiModule.useUpdateResume as any).mockImplementation(mockUseUpdateResume)
+    ;(toastModule.useToast as any).mockReturnValue({ toast: mockToast })
   })
 
   describe("Rendering", () => {

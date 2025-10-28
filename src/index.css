@@ -164,22 +164,22 @@ input[type="date"] {
   [role="navigation"],
   [role="banner"],
   [role="contentinfo"] {
-    display: none !important;
+    display: none;
   }
 
   /* Reset page styles */
   body {
     margin: 0;
     padding: 0;
-    background: white !important;
-    color: black !important;
+    background: white;
+    color: black;
   }
 
   /* Ensure resume takes full width */
   .container {
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   /* Page breaks */
@@ -189,32 +189,32 @@ input[type="date"] {
 
   /* Remove shadows and borders that don't translate well to print */
   * {
-    box-shadow: none !important;
-    text-shadow: none !important;
+    box-shadow: none;
+    text-shadow: none;
   }
 
   /* Ensure colors print correctly */
   a,
   a:visited {
-    color: inherit !important;
-    text-decoration: underline !important;
+    color: inherit;
+    text-decoration: underline;
   }
 
   /* Set appropriate font sizes for print */
   body {
-    font-size: 11pt !important;
-    line-height: 1.4 !important;
+    font-size: 11pt;
+    line-height: 1.4;
   }
 
   h1 {
-    font-size: 18pt !important;
+    font-size: 18pt;
   }
 
   h2 {
-    font-size: 14pt !important;
+    font-size: 14pt;
   }
 
   h3 {
-    font-size: 12pt !important;
+    font-size: 12pt;
   }
 }

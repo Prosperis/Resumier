@@ -151,7 +151,12 @@ describe("AvatarFallback", () => {
   })
 
   it("renders with icon as fallback", () => {
-    const Icon = () => <svg data-testid="icon">Icon</svg>
+    const Icon = () => (
+      <svg data-testid="icon" role="img" aria-label="Icon">
+        <title>Icon</title>
+        Icon
+      </svg>
+    )
     render(
       <Avatar>
         <AvatarFallback>

@@ -26,9 +26,8 @@ describe("useAutoSave", () => {
       error: null,
     })
 
-    const apiModule = await import("../api")(apiModule.useUpdateResume as any).mockImplementation(
-      mockUseUpdateResume as any,
-    )
+    const apiModule = await import("../api")
+    vi.mocked(apiModule.useUpdateResume).mockImplementation(mockUseUpdateResume as any)
   })
 
   afterEach(() => {

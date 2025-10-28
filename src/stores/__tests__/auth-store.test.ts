@@ -225,7 +225,8 @@ describe("AuthStore", () => {
         email: "test@example.com",
         name: "Test User",
         token: "mock-token",
-      }(authApi.login as any).mockResolvedValue({ user: mockUser })
+      }
+      vi.mocked(authApi.login).mockResolvedValue({ user: mockUser })
 
       const { result } = renderHook(() => useAuthStore())
 

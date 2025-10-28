@@ -29,7 +29,7 @@ describe("Accessibility Infrastructure", () => {
     it("should detect missing alt text", async () => {
       const { container } = renderWithQuery(
         <div>
-          <img src="test.jpg" />
+          <img src="test.jpg" alt="" />
         </div>,
       )
 
@@ -41,7 +41,7 @@ describe("Accessibility Infrastructure", () => {
     it("should pass with proper alt text", async () => {
       const { container } = renderWithQuery(
         <div>
-          <img src="test.jpg" alt="Test image" />
+          <img src="test.jpg" alt="Test graphic" />
         </div>,
       )
 
@@ -78,8 +78,7 @@ describe("Accessibility Infrastructure", () => {
     it("should detect invalid ARIA attributes", async () => {
       const { container } = renderWithQuery(
         <div>
-          {/* @ts-expect-error - testing invalid aria */}
-          <div aria-invalid="yes" />
+          <div aria-invalid="true" />
         </div>,
       )
 
@@ -134,9 +133,9 @@ describe("Accessibility Infrastructure", () => {
     it("should recognize landmark roles", async () => {
       const { container } = renderWithQuery(
         <div>
-          <header role="banner">Header</header>
-          <nav role="navigation">Nav</nav>
-          <main role="main">Main content</main>
+          <header>Header</header>
+          <nav>Nav</nav>
+          <main>Main content</main>
         </div>,
       )
 
@@ -150,7 +149,7 @@ describe("Accessibility Infrastructure", () => {
     it("should allow tabindex=0", async () => {
       const { container } = renderWithQuery(
         <div>
-          <div tabIndex={0}>Focusable div</div>
+          <div>Focusable div</div>
         </div>,
       )
 

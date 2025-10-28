@@ -109,7 +109,8 @@ describe("Resume Preview Route (/resume/$id/preview)", () => {
 
   describe("Error State", () => {
     it("shows error component when resume fetch fails", () => {
-      const testError = new Error("Failed to load resume")(useResume as any).mockReturnValue({
+      const testError = new Error("Failed to load resume")
+      ;(useResume as any).mockReturnValue({
         data: undefined,
         isLoading: false,
         error: testError,

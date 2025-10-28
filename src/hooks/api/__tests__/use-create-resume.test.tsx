@@ -1,14 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { renderHook, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { apiClient } from "../../lib/api/client"
-import type { CreateResumeDto } from "../../lib/api/types"
-import { createMockResume, createMockResumeContent } from "./test-helpers"
-import { useCreateResume } from "./use-create-resume"
-import { resumesQueryKey } from "./use-resumes"
+import { apiClient } from "@/lib/api/client"
+import type { CreateResumeDto } from "@/lib/api/types"
+import { createMockResume, createMockResumeContent } from "../test-helpers"
+import { useCreateResume } from "../use-create-resume"
+import { resumesQueryKey } from "../use-resumes"
 
 // Mock the API client
-vi.mock("../../lib/api/client", () => ({
+vi.mock("@/lib/api/client", () => ({
   apiClient: {
     get: vi.fn(),
     post: vi.fn(),
@@ -32,7 +32,6 @@ describe("useCreateResume", () => {
       },
     })
 
-    // biome-ignore lint/suspicious/noExplicitAny: test helper
     return ({ children }: any) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     )
@@ -51,7 +50,8 @@ describe("useCreateResume", () => {
     const createdResume = createMockResume({
       id: "new-resume-id",
       title: newResumeDto.title,
-    })(apiClient.post as any).mockResolvedValueOnce(createdResume)
+    })
+    ;(apiClient.post as any).mockResolvedValueOnce(createdResume)
 
     const { result } = renderHook(() => useCreateResume(), {
       wrapper: createWrapper(),
@@ -78,9 +78,8 @@ describe("useCreateResume", () => {
       content: createMockResumeContent(),
     }
 
-    const createdResume = createMockResume({ id: "new-id" })(
-      apiClient.post as any,
-    ).mockResolvedValueOnce(createdResume)
+    const createdResume = createMockResume({ id: "new-id" })
+    ;(apiClient.post as any).mockResolvedValueOnce(createdResume)
 
     const wrapper = createWrapper()
     const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries")
@@ -111,12 +110,8 @@ describe("useCreateResume", () => {
     })
 
     // Set existing cache data
-    queryClient
-      .setQueryData(
-        resumesQueryKey,
-        existingResumes,
-      )(apiClient.post as any)
-      .mockResolvedValueOnce(createdResume)
+    queryClient.setQueryData(resumesQueryKey, existingResumes)
+    ;(apiClient.post as any).mockResolvedValueOnce(createdResume)
 
     const { result } = renderHook(() => useCreateResume(), {
       wrapper: createWrapper(),
@@ -140,7 +135,8 @@ describe("useCreateResume", () => {
     const createdResume = createMockResume({
       id: "first",
       title: newResumeDto.title,
-    })(apiClient.post as any).mockResolvedValueOnce(createdResume)
+    })
+    ;(apiClient.post as any).mockResolvedValueOnce(createdResume)
 
     const { result } = renderHook(() => useCreateResume(), {
       wrapper: createWrapper(),
@@ -164,7 +160,8 @@ describe("useCreateResume", () => {
     const createdResume = createMockResume({
       id: "detail-id",
       title: newResumeDto.title,
-    })(apiClient.post as any).mockResolvedValueOnce(createdResume)
+    })
+    ;(apiClient.post as any).mockResolvedValueOnce(createdResume)
 
     const { result } = renderHook(() => useCreateResume(), {
       wrapper: createWrapper(),
@@ -185,9 +182,8 @@ describe("useCreateResume", () => {
       content: createMockResumeContent(),
     }
 
-    const error = new Error("Failed to create resume")(apiClient.post as any).mockRejectedValueOnce(
-      error,
-    )
+    const error = new Error("Failed to create resume")
+    ;(apiClient.post as any).mockRejectedValueOnce(error)
 
     const { result } = renderHook(() => useCreateResume(), {
       wrapper: createWrapper(),
@@ -207,9 +203,8 @@ describe("useCreateResume", () => {
       content: createMockResumeContent(),
     }
 
-    const createdResume = createMockResume({ id: "async-id" })(
-      apiClient.post as any,
-    ).mockResolvedValueOnce(createdResume)
+    const createdResume = createMockResume({ id: "async-id" })
+    ;(apiClient.post as any).mockResolvedValueOnce(createdResume)
 
     const { result } = renderHook(() => useCreateResume(), {
       wrapper: createWrapper(),

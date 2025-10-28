@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { mockApi, useMockApi } from "./mock"
-import { mockDb } from "./mock-db"
+import { mockApi, useMockApi } from "../mock"
+import { mockDb } from "../mock-db"
 
 // Mock the mock-db module
-vi.mock("./mock-db", () => ({
+vi.mock("../mock-db", () => ({
   mockDb: {
     getResumes: vi.fn(),
     getResume: vi.fn(),
@@ -73,7 +73,8 @@ describe("mockApi", () => {
         const mockResumes = [
           { id: "1", title: "Resume 1" },
           { id: "2", title: "Resume 2" },
-        ](mockDb.getResumes as any).mockReturnValue(mockResumes as any)
+        ]
+        vi.mocked(mockDb.getResumes).mockReturnValue(mockResumes as any)
 
         const result = await mockApi.handleResumes("GET")
 
@@ -82,9 +83,8 @@ describe("mockApi", () => {
       })
 
       it("returns single resume by ID", async () => {
-        const mockResume = { id: "1", title: "Resume 1" }(mockDb.getResume as any).mockReturnValue(
-          mockResume as any,
-        )
+        const mockResume = { id: "1", title: "Resume 1" }
+        vi.mocked(mockDb.getResume).mockReturnValue(mockResume as any)
 
         const result = await mockApi.handleResumes("GET", "1")
 
@@ -104,9 +104,8 @@ describe("mockApi", () => {
 
     describe("POST", () => {
       it("creates new resume", async () => {
-        const mockResume = { id: "3", title: "New Resume" }(
-          mockDb.createResume as any,
-        ).mockReturnValue(mockResume as any)
+        const mockResume = { id: "3", title: "New Resume" }
+        vi.mocked(mockDb.createResume).mockReturnValue(mockResume as any)
 
         const result = await mockApi.handleResumes("POST", undefined, {
           title: "New Resume",
@@ -123,9 +122,8 @@ describe("mockApi", () => {
       })
 
       it("creates resume with custom content", async () => {
-        const mockResume = { id: "3", title: "Custom Resume" }(
-          mockDb.createResume as any,
-        ).mockReturnValue(mockResume as any)
+        const mockResume = { id: "3", title: "Custom Resume" }
+        vi.mocked(mockDb.createResume).mockReturnValue(mockResume as any)
 
         const customContent = {
           personalInfo: {
@@ -174,9 +172,8 @@ describe("mockApi", () => {
 
     describe("PUT/PATCH", () => {
       it("updates resume with PUT", async () => {
-        const mockResume = { id: "1", title: "Updated Resume" }(
-          mockDb.updateResume as any,
-        ).mockReturnValue(mockResume as any)
+        const mockResume = { id: "1", title: "Updated Resume" }
+        vi.mocked(mockDb.updateResume).mockReturnValue(mockResume as any)
 
         const result = await mockApi.handleResumes("PUT", "1", {
           title: "Updated Resume",
@@ -187,9 +184,8 @@ describe("mockApi", () => {
       })
 
       it("updates resume with PATCH", async () => {
-        const mockResume = { id: "1", title: "Patched Resume" }(
-          mockDb.updateResume as any,
-        ).mockReturnValue(mockResume as any)
+        const mockResume = { id: "1", title: "Patched Resume" }
+        vi.mocked(mockDb.updateResume).mockReturnValue(mockResume as any)
 
         const result = await mockApi.handleResumes("PATCH", "1", {
           title: "Patched Resume",

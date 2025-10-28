@@ -100,9 +100,8 @@ export function FormSkeleton() {
  * Wrapper components with Suspense
  */
 
-interface LazyFormDialogProps {
-  component: React.ComponentType<any>
-  [key: string]: any
+interface LazyFormDialogProps extends Record<string, unknown> {
+  component: React.ComponentType<Record<string, unknown>>
 }
 
 export function LazyFormDialog({ component: Component, ...props }: LazyFormDialogProps) {

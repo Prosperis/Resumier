@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.6/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.1/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -8,15 +8,24 @@
   "files": {
     "ignoreUnknown": false
   },
+  "css": {
+    "parser": {
+      "cssModules": false,
+      "allowWrongLineComments": true,
+      "tailwindDirectives": true
+    }
+  },
   "overrides": [
     {
       "includes": ["src/**/*.css"],
-      "linter": {
-        "rules": {
-          "suspicious": {
-            "noUnknownAtRules": "off"
-          }
+      "css": {
+        "parser": {
+          "cssModules": false,
+          "allowWrongLineComments": true
         }
+      },
+      "linter": {
+        "enabled": false
       }
     },
     {

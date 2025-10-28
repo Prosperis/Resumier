@@ -40,7 +40,6 @@ export function SaveStatusIndicator({
         return lastSaved ? `Saved ${formatLastSaved(lastSaved)}` : "All changes saved"
       case "error":
         return error ? `Error: ${error.message}` : "Failed to save changes"
-      case "idle":
       default:
         return ""
     }

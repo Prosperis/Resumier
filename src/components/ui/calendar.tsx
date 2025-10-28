@@ -6,11 +6,19 @@ import { buttonVariants } from "@/components/ui/button-variants"
 import { cn } from "@/lib/utils"
 
 // Calendar component helpers
-const CalendarRoot = ({ className, rootRef, ...props }: any) => {
+interface CalendarRootProps extends React.HTMLAttributes<HTMLDivElement> {
+  rootRef?: React.Ref<HTMLDivElement>
+}
+
+const CalendarRoot = ({ className, rootRef, ...props }: CalendarRootProps) => {
   return <div data-slot="calendar" ref={rootRef} className={cn(className)} {...props} />
 }
 
-const CalendarChevron = ({ className, orientation, ...props }: any) => {
+interface CalendarChevronProps extends React.HTMLAttributes<SVGElement> {
+  orientation?: "left" | "right" | "down" | "up"
+}
+
+const CalendarChevron = ({ className, orientation, ...props }: CalendarChevronProps) => {
   if (orientation === "left") {
     return <ChevronLeftIcon className={cn("size-4", className)} {...props} />
   }
@@ -22,7 +30,11 @@ const CalendarChevron = ({ className, orientation, ...props }: any) => {
   return <ChevronDownIcon className={cn("size-4", className)} {...props} />
 }
 
-const CalendarWeekNumber = ({ children, ...props }: any) => {
+interface CalendarWeekNumberProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
+  children?: React.ReactNode
+}
+
+const CalendarWeekNumber = ({ children, ...props }: CalendarWeekNumberProps) => {
   return (
     <td {...props}>
       <div className="flex size-(--cell-size) items-center justify-center text-center">
