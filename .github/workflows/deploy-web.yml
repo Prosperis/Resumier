@@ -36,12 +36,12 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Build project
-        run: pnpm --filter @resumier/web build
+        run: pnpm build
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: apps/web/dist
+          path: dist
 
   deploy:
     needs: build
