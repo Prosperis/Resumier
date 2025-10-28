@@ -21,10 +21,10 @@ describe("Dialog Accessibility Tests", () => {
     it("should have no accessibility violations when open", async () => {
       const user = userEvent.setup()
       const { container } = renderWithQuery(<CreateResumeDialog />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /new resume/i })
       await user.click(triggerButton)
-      
+
       await waitFor(async () => {
         await expectNoAccessibilityViolations(container)
       })
@@ -33,10 +33,10 @@ describe("Dialog Accessibility Tests", () => {
     it("should have proper dialog role and ARIA", async () => {
       const user = userEvent.setup()
       renderWithQuery(<CreateResumeDialog />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /new resume/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const dialog = screen.getByRole("dialog")
         expect(dialog).toBeInTheDocument()
@@ -48,10 +48,10 @@ describe("Dialog Accessibility Tests", () => {
     it("should have accessible form fields in dialog", async () => {
       const user = userEvent.setup()
       renderWithQuery(<CreateResumeDialog />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /new resume/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/title/i)
         expect(titleInput).toBeInTheDocument()
@@ -62,19 +62,19 @@ describe("Dialog Accessibility Tests", () => {
     it("should show aria-invalid on validation errors", async () => {
       const user = userEvent.setup()
       renderWithQuery(<CreateResumeDialog />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /new resume/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const createButton = screen.getByRole("button", { name: /^create$/i })
         expect(createButton).toBeInTheDocument()
       })
-      
+
       // Try to submit without filling the form
       const createButton = screen.getByRole("button", { name: /^create$/i })
       await user.click(createButton)
-      
+
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/title/i)
         expect(titleInput).toHaveAttribute("aria-invalid", "true")
@@ -84,23 +84,23 @@ describe("Dialog Accessibility Tests", () => {
     it("should associate error messages with aria-describedby", async () => {
       const user = userEvent.setup()
       renderWithQuery(<CreateResumeDialog />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /new resume/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const createButton = screen.getByRole("button", { name: /^create$/i })
         expect(createButton).toBeInTheDocument()
       })
-      
+
       const createButton = screen.getByRole("button", { name: /^create$/i })
       await user.click(createButton)
-      
+
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/title/i)
         const describedBy = titleInput.getAttribute("aria-describedby")
         expect(describedBy).toBeTruthy()
-        
+
         if (describedBy) {
           const errorElement = document.getElementById(describedBy)
           expect(errorElement).toBeInTheDocument()
@@ -111,14 +111,14 @@ describe("Dialog Accessibility Tests", () => {
     it("should have accessible action buttons", async () => {
       const user = userEvent.setup()
       renderWithQuery(<CreateResumeDialog />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /new resume/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const cancelButton = screen.getByRole("button", { name: /cancel/i })
         const createButton = screen.getByRole("button", { name: /^create$/i })
-        
+
         expect(cancelButton).toBeInTheDocument()
         expect(createButton).toBeInTheDocument()
       })
@@ -137,13 +137,11 @@ describe("Dialog Accessibility Tests", () => {
 
     it("should have no accessibility violations when open", async () => {
       const user = userEvent.setup()
-      const { container } = renderWithQuery(
-        <RenameResumeDialog resume={mockResume} />,
-      )
-      
+      const { container } = renderWithQuery(<RenameResumeDialog resume={mockResume} />)
+
       const triggerButton = screen.getByRole("button", { name: /rename/i })
       await user.click(triggerButton)
-      
+
       await waitFor(async () => {
         await expectNoAccessibilityViolations(container)
       })
@@ -152,10 +150,10 @@ describe("Dialog Accessibility Tests", () => {
     it("should have proper dialog ARIA", async () => {
       const user = userEvent.setup()
       renderWithQuery(<RenameResumeDialog resume={mockResume} />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /rename/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const dialog = screen.getByRole("dialog")
         expect(dialog).toHaveAttribute("aria-labelledby")
@@ -165,10 +163,10 @@ describe("Dialog Accessibility Tests", () => {
     it("should have pre-filled accessible input", async () => {
       const user = userEvent.setup()
       renderWithQuery(<RenameResumeDialog resume={mockResume} />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /rename/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/new title/i)
         expect(titleInput).toBeInTheDocument()
@@ -189,13 +187,11 @@ describe("Dialog Accessibility Tests", () => {
 
     it("should have no accessibility violations", async () => {
       const user = userEvent.setup()
-      const { container } = renderWithQuery(
-        <DeleteResumeDialog resume={mockResume} />,
-      )
-      
+      const { container } = renderWithQuery(<DeleteResumeDialog resume={mockResume} />)
+
       const triggerButton = screen.getByRole("button", { name: /delete/i })
       await user.click(triggerButton)
-      
+
       await waitFor(async () => {
         await expectNoAccessibilityViolations(container)
       })
@@ -204,10 +200,10 @@ describe("Dialog Accessibility Tests", () => {
     it("should have alertdialog role", async () => {
       const user = userEvent.setup()
       renderWithQuery(<DeleteResumeDialog resume={mockResume} />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /delete/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const dialog = screen.getByRole("alertdialog")
         expect(dialog).toBeInTheDocument()
@@ -217,14 +213,14 @@ describe("Dialog Accessibility Tests", () => {
     it("should have accessible action buttons", async () => {
       const user = userEvent.setup()
       renderWithQuery(<DeleteResumeDialog resume={mockResume} />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /delete/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const cancelButton = screen.getByRole("button", { name: /cancel/i })
         const deleteButton = screen.getByRole("button", { name: /^delete$/i })
-        
+
         expect(cancelButton).toBeInTheDocument()
         expect(deleteButton).toBeInTheDocument()
       })
@@ -235,10 +231,10 @@ describe("Dialog Accessibility Tests", () => {
     it("should focus first input when dialog opens", async () => {
       const user = userEvent.setup()
       renderWithQuery(<CreateResumeDialog />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /new resume/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/title/i)
         // Focus management is handled by Radix UI automatically
@@ -249,18 +245,18 @@ describe("Dialog Accessibility Tests", () => {
     it("should restore focus to trigger when closed", async () => {
       const user = userEvent.setup()
       renderWithQuery(<CreateResumeDialog />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /new resume/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const cancelButton = screen.getByRole("button", { name: /cancel/i })
         expect(cancelButton).toBeInTheDocument()
       })
-      
+
       const cancelButton = screen.getByRole("button", { name: /cancel/i })
       await user.click(cancelButton)
-      
+
       // Focus restoration is handled by Radix UI
       await waitFor(() => {
         expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
@@ -272,10 +268,10 @@ describe("Dialog Accessibility Tests", () => {
     it("should hide decorative icons from screen readers", async () => {
       const user = userEvent.setup()
       const { container } = renderWithQuery(<CreateResumeDialog />)
-      
+
       const triggerButton = screen.getByRole("button", { name: /new resume/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         // Check that decorative SVG icons have aria-hidden
         const svgs = container.querySelectorAll("svg")
@@ -288,16 +284,15 @@ describe("Dialog Accessibility Tests", () => {
       })
     })
   })
-})
 
-describe("Additional Dialog Tests", () => {
+  describe("Additional Dialog Tests", () => {
     it("should have proper dialog role and ARIA", async () => {
       const user = userEvent.setup()
-      render(<CreateResumeDialog />)
-      
+      renderWithQuery(<CreateResumeDialog />)
+
       const triggerButton = screen.getByRole("button")
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const dialog = screen.getByRole("dialog")
         expect(dialog).toBeInTheDocument()
@@ -308,11 +303,11 @@ describe("Additional Dialog Tests", () => {
 
     it("should have accessible form fields in dialog", async () => {
       const user = userEvent.setup()
-      render(<CreateResumeDialog />)
-      
+      renderWithQuery(<CreateResumeDialog />)
+
       const triggerButton = screen.getByRole("button")
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/title/i)
         expect(titleInput).toBeInTheDocument()
@@ -322,16 +317,16 @@ describe("Additional Dialog Tests", () => {
 
     it("should show aria-invalid on validation errors", async () => {
       const user = userEvent.setup()
-      render(<CreateResumeDialog />)
-      
+      renderWithQuery(<CreateResumeDialog />)
+
       const triggerButton = screen.getByRole("button")
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const createButton = screen.getByRole("button", { name: /create resume/i })
         user.click(createButton)
       })
-      
+
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/title/i)
         expect(titleInput).toHaveAttribute("aria-invalid", "true")
@@ -340,20 +335,20 @@ describe("Additional Dialog Tests", () => {
 
     it("should associate error messages with aria-describedby", async () => {
       const user = userEvent.setup()
-      render(<CreateResumeDialog />)
-      
+      renderWithQuery(<CreateResumeDialog />)
+
       const triggerButton = screen.getByRole("button")
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const createButton = screen.getByRole("button", { name: /create resume/i })
         user.click(createButton)
       })
-      
+
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/title/i)
         const describedBy = titleInput.getAttribute("aria-describedby")
-        
+
         if (describedBy) {
           const errorElement = document.getElementById(describedBy)
           expect(errorElement).toBeInTheDocument()
@@ -363,15 +358,15 @@ describe("Additional Dialog Tests", () => {
 
     it("should have accessible action buttons", async () => {
       const user = userEvent.setup()
-      render(<CreateResumeDialog />)
-      
+      renderWithQuery(<CreateResumeDialog />)
+
       const triggerButton = screen.getByRole("button")
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const createButton = screen.getByRole("button", { name: /create resume/i })
         const cancelButton = screen.getByRole("button", { name: /cancel/i })
-        
+
         expect(createButton).toHaveAccessibleName()
         expect(cancelButton).toHaveAccessibleName()
       })
@@ -381,17 +376,17 @@ describe("Additional Dialog Tests", () => {
   describe("RenameResumeDialog", () => {
     it("should have no accessibility violations when open", async () => {
       const user = userEvent.setup()
-      const { container } = render(
+      const { container } = renderWithQuery(
         <RenameResumeDialog
           resumeId="test-id"
           currentTitle="Test Resume"
           trigger={<button>Rename</button>}
         />,
       )
-      
+
       const triggerButton = screen.getByRole("button", { name: /rename/i })
       await user.click(triggerButton)
-      
+
       await waitFor(async () => {
         await expectNoAccessibilityViolations(container)
       })
@@ -399,17 +394,17 @@ describe("Additional Dialog Tests", () => {
 
     it("should have proper dialog ARIA", async () => {
       const user = userEvent.setup()
-      render(
+      renderWithQuery(
         <RenameResumeDialog
           resumeId="test-id"
           currentTitle="Test Resume"
           trigger={<button>Rename</button>}
         />,
       )
-      
+
       const triggerButton = screen.getByRole("button", { name: /rename/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const dialog = screen.getByRole("dialog")
         expect(dialog).toHaveAccessibleName()
@@ -419,17 +414,17 @@ describe("Additional Dialog Tests", () => {
 
     it("should have pre-filled accessible input", async () => {
       const user = userEvent.setup()
-      render(
+      renderWithQuery(
         <RenameResumeDialog
           resumeId="test-id"
           currentTitle="Test Resume"
           trigger={<button>Rename</button>}
         />,
       )
-      
+
       const triggerButton = screen.getByRole("button", { name: /rename/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/title/i) as HTMLInputElement
         expect(titleInput).toHaveValue("Test Resume")
@@ -441,17 +436,17 @@ describe("Additional Dialog Tests", () => {
   describe("DeleteResumeDialog (AlertDialog)", () => {
     it("should have no accessibility violations", async () => {
       const user = userEvent.setup()
-      const { container } = render(
+      const { container } = renderWithQuery(
         <DeleteResumeDialog
           resumeId="test-id"
           resumeTitle="Test Resume"
           trigger={<button>Delete</button>}
         />,
       )
-      
+
       const triggerButton = screen.getByRole("button", { name: /delete/i })
       await user.click(triggerButton)
-      
+
       await waitFor(async () => {
         await expectNoAccessibilityViolations(container)
       })
@@ -459,17 +454,17 @@ describe("Additional Dialog Tests", () => {
 
     it("should have alertdialog role", async () => {
       const user = userEvent.setup()
-      render(
+      renderWithQuery(
         <DeleteResumeDialog
           resumeId="test-id"
           resumeTitle="Test Resume"
           trigger={<button>Delete</button>}
         />,
       )
-      
+
       const triggerButton = screen.getByRole("button", { name: /delete/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const alertDialog = screen.getByRole("alertdialog")
         expect(alertDialog).toBeInTheDocument()
@@ -480,21 +475,21 @@ describe("Additional Dialog Tests", () => {
 
     it("should have accessible action buttons", async () => {
       const user = userEvent.setup()
-      render(
+      renderWithQuery(
         <DeleteResumeDialog
           resumeId="test-id"
           resumeTitle="Test Resume"
           trigger={<button>Delete</button>}
         />,
       )
-      
+
       const triggerButton = screen.getByRole("button", { name: /delete/i })
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const cancelButton = screen.getByRole("button", { name: /cancel/i })
         const deleteButton = screen.getByRole("button", { name: /delete resume/i })
-        
+
         expect(cancelButton).toHaveAccessibleName()
         expect(deleteButton).toHaveAccessibleName()
       })
@@ -504,11 +499,11 @@ describe("Additional Dialog Tests", () => {
   describe("Dialog Focus Management", () => {
     it("should focus first input when dialog opens", async () => {
       const user = userEvent.setup()
-      render(<CreateResumeDialog />)
-      
+      renderWithQuery(<CreateResumeDialog />)
+
       const triggerButton = screen.getByRole("button")
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const titleInput = screen.getByLabelText(/title/i)
         expect(titleInput).toHaveFocus()
@@ -517,19 +512,19 @@ describe("Additional Dialog Tests", () => {
 
     it("should restore focus to trigger when closed", async () => {
       const user = userEvent.setup()
-      render(<CreateResumeDialog />)
-      
+      renderWithQuery(<CreateResumeDialog />)
+
       const triggerButton = screen.getByRole("button")
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const dialog = screen.getByRole("dialog")
         expect(dialog).toBeInTheDocument()
       })
-      
+
       // Close dialog with Escape
       await user.keyboard("{Escape}")
-      
+
       await waitFor(() => {
         expect(triggerButton).toHaveFocus()
       })
@@ -539,11 +534,11 @@ describe("Additional Dialog Tests", () => {
   describe("Dialog Icon Accessibility", () => {
     it("should hide decorative icons from screen readers", async () => {
       const user = userEvent.setup()
-      const { container } = render(<CreateResumeDialog />)
-      
+      const { container } = renderWithQuery(<CreateResumeDialog />)
+
       const triggerButton = screen.getByRole("button")
       await user.click(triggerButton)
-      
+
       await waitFor(() => {
         const svgs = container.querySelectorAll("svg")
         svgs.forEach((svg) => {
@@ -551,7 +546,7 @@ describe("Additional Dialog Tests", () => {
           // or have aria-label if they're functional
           const isHidden = svg.getAttribute("aria-hidden") === "true"
           const hasLabel = svg.hasAttribute("aria-label")
-          
+
           // Either hidden or labeled
           expect(isHidden || hasLabel).toBe(true)
         })
