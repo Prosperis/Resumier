@@ -25,6 +25,11 @@
     "build-storybook": "storybook build",
     "routes:generate": "bunx tsr generate",
     "routes:watch": "bunx tsr watch",
+    "deps:check": "taze",
+    "deps:update": "taze major -w",
+    "deps:update:minor": "taze minor -w",
+    "deps:update:patch": "taze patch -w",
+    "deps:interactive": "taze -I",
     "prepare": "husky"
   },
   "dependencies": {
@@ -92,6 +97,7 @@
     "jsdom": "^27.0.1",
     "rollup-plugin-visualizer": "^6.0.5",
     "sharp": "^0.34.4",
+    "taze": "^19.8.1",
     "typescript": "~5.8.3",
     "vite": "^6.4.1",
     "vite-bundle-visualizer": "^1.2.1",
