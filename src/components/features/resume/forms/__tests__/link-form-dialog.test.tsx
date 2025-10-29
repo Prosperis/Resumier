@@ -4,13 +4,19 @@ import { vi } from "vitest"
 import { LinkFormDialog } from "../link-form-dialog"
 
 describe("LinkFormDialog", () => {
-  const defaultProps = {
-    open: true,
-    onOpenChange: vi.fn(),
-    onSubmit: vi.fn(),
+  let defaultProps: {
+    open: boolean
+    onOpenChange: ReturnType<typeof vi.fn>
+    onSubmit: ReturnType<typeof vi.fn>
   }
+
   beforeEach(() => {
     // Mock reset handled by vitest config (clearMocks: true)
+    defaultProps = {
+      open: true,
+      onOpenChange: vi.fn(),
+      onSubmit: vi.fn(),
+    }
   })
   describe("Rendering", () => {
     it("renders the dialog when open", () => {

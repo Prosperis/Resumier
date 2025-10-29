@@ -82,12 +82,14 @@ describe("CreateResumeDialog", () => {
     render(<CreateResumeDialog />, { wrapper: createWrapper() })
 
     await user.click(screen.getByRole("button", { name: /new resume/i }))
-    await user.click(screen.getByRole("button", { name: "Create Resume" }))
+    await user.click(screen.getByRole("button", { name: "Create resume" }))
 
-    expect(mockToast).toHaveBeenCalledWith({
-      title: "Error",
-      description: "Please enter a resume title",
-      variant: "destructive",
+    await waitFor(() => {
+      expect(mockToast).toHaveBeenCalledWith({
+        title: "Error",
+        description: "Please enter a resume title",
+        variant: "destructive",
+      })
     })
     expect(mockMutate).not.toHaveBeenCalled()
   })
@@ -106,7 +108,7 @@ describe("CreateResumeDialog", () => {
 
     await user.click(screen.getByRole("button", { name: /new resume/i }))
     await user.type(screen.getByLabelText("Resume Title"), "My New Resume")
-    await user.click(screen.getByRole("button", { name: "Create Resume" }))
+    await user.click(screen.getByRole("button", { name: "Create resume" }))
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith(
@@ -143,7 +145,7 @@ describe("CreateResumeDialog", () => {
 
     await user.click(screen.getByRole("button", { name: /new resume/i }))
     await user.type(screen.getByLabelText("Resume Title"), "  Trimmed Title  ")
-    await user.click(screen.getByRole("button", { name: "Create Resume" }))
+    await user.click(screen.getByRole("button", { name: "Create resume" }))
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith(
@@ -167,7 +169,7 @@ describe("CreateResumeDialog", () => {
 
     await user.click(screen.getByRole("button", { name: /new resume/i }))
     await user.type(screen.getByLabelText("Resume Title"), "Test Resume")
-    await user.click(screen.getByRole("button", { name: "Create Resume" }))
+    await user.click(screen.getByRole("button", { name: "Create resume" }))
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({
@@ -179,19 +181,19 @@ describe("CreateResumeDialog", () => {
   })
 
   it("disables submit button while pending", async () => {
-    const user = userEvent
-      .setup()(useCreateResume as any)
-      .mockReturnValue({
-        mutate: mockMutate,
-        isPending: true,
-        error: null,
-      } as any)
+    const user = userEvent.setup()
+
+    vi.mocked(useCreateResume).mockReturnValue({
+      mutate: mockMutate,
+      isPending: true,
+      error: null,
+    } as any)
 
     render(<CreateResumeDialog />, { wrapper: createWrapper() })
 
     await user.click(screen.getByRole("button", { name: /new resume/i }))
 
-    const submitButton = screen.getByRole("button", { name: "Create Resume" })
+    const submitButton = screen.getByRole("button", { name: "Creating resume..." })
     expect(submitButton).toBeDisabled()
   })
 
@@ -207,7 +209,7 @@ describe("CreateResumeDialog", () => {
     await user.click(screen.getByRole("button", { name: /new resume/i }))
     const input = screen.getByLabelText("Resume Title")
     await user.type(input, "Test Resume")
-    await user.click(screen.getByRole("button", { name: "Create Resume" }))
+    await user.click(screen.getByRole("button", { name: "Create resume" }))
 
     // Dialog should close
     await waitFor(() => {

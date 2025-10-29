@@ -35,7 +35,7 @@ describe("Root Route", () => {
 
   const renderRootRoute = () => {
     // Get the component from the route definition
-    const Component = (rootRoute as any).options?.component || (rootRoute as any).component
+    const Component = (rootRoute as any).component
     if (!Component) {
       throw new Error("Component not found in route")
     }

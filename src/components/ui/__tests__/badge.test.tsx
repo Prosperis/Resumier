@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react"
-import { Badge } from "./badge"
+import { describe, expect, it } from "vitest"
+import { Badge } from "@/components/ui/badge"
 
 describe("Badge", () => {
   it("renders badge with default variant", () => {

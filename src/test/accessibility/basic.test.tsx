@@ -29,7 +29,7 @@ describe("Accessibility Infrastructure", () => {
     it("should detect missing alt text", async () => {
       const { container } = renderWithQuery(
         <div>
-          <img src="test.jpg" alt="" />
+          <img src="test.jpg" />
         </div>,
       )
 
@@ -78,7 +78,7 @@ describe("Accessibility Infrastructure", () => {
     it("should detect invalid ARIA attributes", async () => {
       const { container } = renderWithQuery(
         <div>
-          <div aria-invalid="true" />
+          <div role="region" aria-labelledby="nonexistent" />
         </div>,
       )
 

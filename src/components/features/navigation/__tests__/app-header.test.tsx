@@ -30,9 +30,9 @@ describe("AppHeader", () => {
     it("renders the logo", () => {
       render(<AppHeader />)
 
-      const logo = screen.getByAltText("Logo")
+      const logo = screen.getByAltText("Resumier Logo")
       expect(logo).toBeInTheDocument()
-      expect(logo).toHaveAttribute("src", expect.stringContaining("logo_dark.png"))
+      expect(logo).toHaveAttribute("src", expect.stringContaining("logo_dark_optimized.png"))
     })
 
     it("renders the title", () => {

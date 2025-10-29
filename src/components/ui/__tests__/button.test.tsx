@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react"
 import { vi } from "vitest"
-import { Button } from "./button"
+import { Button } from "@/components/ui/button"
 
 describe("Button", () => {
   it("renders children", () => {

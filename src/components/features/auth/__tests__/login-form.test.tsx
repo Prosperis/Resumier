@@ -22,21 +22,21 @@ describe("LoginForm", () => {
   const mockLogin = vi.fn()
 
   beforeEach(() => {
-    // Mock reset handled by vitest config (clearMocks: true)
-    mockNavigate.mockClear()
-    mockUseSearch
-      .mockReturnValue({})(
-        // Default mock for auth store
-        useAuthStore as any,
-      )
-      .mockImplementation((selector: any) => {
-        const state = {
-          login: mockLogin,
-          isLoading: false,
-          error: null,
-        }
-        return selector(state)
-      })
+    // Clear all mocks to ensure clean state
+    vi.clearAllMocks()
+
+    // Reset specific mocks
+    mockUseSearch.mockReturnValue({})
+
+    // Default mock for auth store
+    ;(useAuthStore as any).mockImplementation((selector: any) => {
+      const state = {
+        login: mockLogin,
+        isLoading: false,
+        error: null,
+      }
+      return selector(state)
+    })
   })
 
   describe("Form Rendering", () => {

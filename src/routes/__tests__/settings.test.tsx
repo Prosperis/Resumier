@@ -11,6 +11,7 @@ vi.mock("@/stores", () => ({
 
 vi.mock("@tanstack/react-router", () => ({
   createFileRoute: vi.fn(() => (config: any) => ({ ...config })),
+  createLazyFileRoute: vi.fn(() => (config: any) => ({ ...config })),
 }))
 
 vi.mock("@/components/ui/route-error", () => ({
@@ -27,7 +28,7 @@ vi.mock("@/components/ui/route-loading", () => ({
 }))
 
 // Import the route module after setting up mocks
-const { Route: settingsRoute } = await import("../settings")
+const { Route: settingsRoute } = await import("../settings.lazy")
 
 describe("Settings Route", () => {
   beforeEach(() => {
@@ -42,7 +43,7 @@ describe("Settings Route", () => {
 
   const renderSettingsRoute = () => {
     // Get the component from the route definition
-    const Component = (settingsRoute as any).options?.component || (settingsRoute as any).component
+    const Component = (settingsRoute as any).component
     if (!Component) {
       throw new Error("Component not found in route")
     }

@@ -43,6 +43,11 @@ export function RenameResumeDialog({
 
     if (!title.trim()) {
       setValidationError("Please enter a resume title")
+      toast({
+        title: "Error",
+        description: "Please enter a resume title",
+        variant: "destructive",
+      })
       // Focus the input field
       document.getElementById("title")?.focus()
       return

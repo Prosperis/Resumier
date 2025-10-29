@@ -9,7 +9,7 @@ import { resumesQueryKey } from "../use-resumes"
 import { useUpdateResume } from "../use-update-resume"
 
 // Mock the API client
-vi.mock("../../lib/api/client", () => ({
+vi.mock("../../../lib/api/client", () => ({
   apiClient: {
     get: vi.fn(),
     post: vi.fn(),

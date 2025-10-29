@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { useThemeStore } from "@/stores"
 import { ThemeToggle } from "../theme-toggle"
 
@@ -10,17 +10,29 @@ vi.mock("@/stores", () => ({
 }))
 
 describe("ThemeToggle", () => {
-  const mockToggleTheme = vi.fn()
+  let mockToggleTheme: any
+  let mockUseThemeStore: any
 
   beforeEach(() => {
-    // Mock reset handled by vitest config (clearMocks: true)
+    // Clear all mocks to ensure clean state between tests
+    vi.clearAllMocks()
+    // Create a fresh mock for each test
+    mockToggleTheme = vi.fn()
+    mockUseThemeStore = vi.mocked(useThemeStore)
+  })
+
+  afterEach(() => {
+    // Additional cleanup to ensure no state leaks between tests
+    vi.resetAllMocks()
   })
 
   describe("Dark Theme", () => {
     beforeEach(() => {
-      ;(useThemeStore as any).mockImplementation((selector) =>
-        selector({ theme: "dark", toggleTheme: mockToggleTheme, setTheme: vi.fn() }),
-      )
+      // Mock the store to return different values based on the selector
+      mockUseThemeStore.mockImplementation((selector: any) => {
+        const state = { theme: "dark", toggleTheme: mockToggleTheme, setTheme: vi.fn() }
+        return selector(state)
+      })
     })
 
     it("renders sun icon in dark mode", () => {
@@ -50,9 +62,11 @@ describe("ThemeToggle", () => {
 
   describe("Light Theme", () => {
     beforeEach(() => {
-      ;(useThemeStore as any).mockImplementation((selector) =>
-        selector({ theme: "light", toggleTheme: mockToggleTheme, setTheme: vi.fn() }),
-      )
+      // Mock the store to return different values based on the selector
+      mockUseThemeStore.mockImplementation((selector: any) => {
+        const state = { theme: "light", toggleTheme: mockToggleTheme, setTheme: vi.fn() }
+        return selector(state)
+      })
     })
 
     it("renders moon icon in light mode", () => {
@@ -66,6 +80,9 @@ describe("ThemeToggle", () => {
       const user = userEvent.setup()
       render(<ThemeToggle />)
 
+      // Verify that mockToggleTheme starts with 0 calls
+      expect(mockToggleTheme).toHaveBeenCalledTimes(0)
+
       const button = screen.getByRole("button", { name: /toggle theme/i })
       await user.click(button)
 
@@ -75,9 +92,11 @@ describe("ThemeToggle", () => {
 
   describe("Styling", () => {
     beforeEach(() => {
-      ;(useThemeStore as any).mockImplementation((selector) =>
-        selector({ theme: "dark", toggleTheme: mockToggleTheme, setTheme: vi.fn() }),
-      )
+      // Mock the store to return different values based on the selector
+      mockUseThemeStore.mockImplementation((selector: any) => {
+        const state = { theme: "dark", toggleTheme: mockToggleTheme, setTheme: vi.fn() }
+        return selector(state)
+      })
     })
 
     it("renders as an outline button", () => {
@@ -97,9 +116,11 @@ describe("ThemeToggle", () => {
 
   describe("Accessibility", () => {
     beforeEach(() => {
-      ;(useThemeStore as any).mockImplementation((selector) =>
-        selector({ theme: "dark", toggleTheme: mockToggleTheme, setTheme: vi.fn() }),
-      )
+      // Mock the store to return different values based on the selector
+      mockUseThemeStore.mockImplementation((selector: any) => {
+        const state = { theme: "dark", toggleTheme: mockToggleTheme, setTheme: vi.fn() }
+        return selector(state)
+      })
     })
 
     it("has screen reader only text", () => {

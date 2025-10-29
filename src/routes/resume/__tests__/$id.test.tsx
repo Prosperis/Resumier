@@ -1,5 +1,7 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { render, screen, waitFor } from "@testing-library/react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { createMockResume } from "@/hooks/api/test-helpers"
 import { useAuthStore } from "@/stores"
 
 // Mock dependencies
@@ -15,8 +17,13 @@ vi.mock("@tanstack/react-router", () => ({
   useParams: vi.fn(() => ({ id: "test-resume-id" })),
 }))
 
-vi.mock("@/hooks/api", () => ({
-  useResume: vi.fn(),
+vi.mock("@/lib/api/client", () => ({
+  apiClient: {
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    delete: vi.fn(),
+  },
 }))
 
 vi.mock("@/components/features/resume/resume-editor", () => ({
@@ -42,10 +49,32 @@ vi.mock("@/components/ui/route-loading", () => ({
 
 // Import the route module and hooks after setting up mocks
 const { Route: resumeIdRoute } = await import("../$id")
-const { useResume } = await import("@/hooks/api")
+const { apiClient } = await import("@/lib/api/client")
 
 describe("Resume Edit Route (/resume/$id)", () => {
+  let queryClient: QueryClient
+
+  const createWrapper = () => {
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+      },
+    })
+
+    return ({ children }: any) => (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    )
+  }
+
   beforeEach(() => {
+    // Clear the query client before each test
+    if (queryClient) {
+      queryClient.clear()
+    }
+    // Explicitly clear mock call history
+    vi.clearAllMocks()
     // Mock reset handled by vitest config (clearMocks: true)
     ;(useAuthStore.getState as any).mockReturnValue({
       isAuthenticated: true,
@@ -56,20 +85,22 @@ describe("Resume Edit Route (/resume/$id)", () => {
   })
 
   const renderResumeRoute = () => {
-    const Component = (resumeIdRoute as any).options?.component || (resumeIdRoute as any).component
+    const Component = (resumeIdRoute as any).component
     if (!Component) {
       throw new Error("Component not found in route")
     }
-    return render(<Component />)
+    const Wrapper = createWrapper()
+    return render(
+      <Wrapper>
+        <Component />
+      </Wrapper>,
+    )
   }
 
   describe("Authentication", () => {
-    it("allows access when authenticated", () => {
-      ;(useResume as any).mockReturnValue({
-        data: { id: "test-resume-id", title: "My Resume", content: {} },
-        isLoading: false,
-        error: null,
-      } as any)
+    it("allows access when authenticated", async () => {
+      const mockResume = createMockResume({ id: "test-resume-id", title: "My Resume" })
+      ;(apiClient.get as any).mockResolvedValueOnce(mockResume)
 
       expect(() => renderResumeRoute()).not.toThrow()
     })
@@ -77,11 +108,9 @@ describe("Resume Edit Route (/resume/$id)", () => {
 
   describe("Loading State", () => {
     it("shows loading indicator when fetching resume", () => {
-      ;(useResume as any).mockReturnValue({
-        data: undefined,
-        isLoading: true,
-        error: null,
-      } as any)
+      // Create a promise that won't resolve immediately to simulate loading
+      const pendingPromise = new Promise(() => {}) // Never resolves
+      ;(apiClient.get as any).mockReturnValueOnce(pendingPromise)
 
       renderResumeRoute()
 
@@ -91,73 +120,67 @@ describe("Resume Edit Route (/resume/$id)", () => {
   })
 
   describe("Error State", () => {
-    it("shows error component when resume fetch fails", () => {
+    it("shows error component when resume fetch fails", async () => {
       const testError = new Error("Failed to load resume")
-      ;(useResume as any).mockReturnValue({
-        data: undefined,
-        isLoading: false,
-        error: testError,
-      } as any)
+      ;(apiClient.get as any).mockRejectedValueOnce(testError)
 
       renderResumeRoute()
 
-      expect(screen.getByTestId("route-error")).toBeInTheDocument()
+      await waitFor(() => {
+        expect(screen.getByTestId("route-error")).toBeInTheDocument()
+      })
       const errorElements = screen.getAllByText("Failed to load resume")
       expect(errorElements.length).toBeGreaterThan(0)
     })
 
-    it("shows error when resume is not found", () => {
-      ;(useResume as any).mockReturnValue({
-        data: null,
-        isLoading: false,
-        error: null,
-      } as any)
+    it("shows error when resume is not found", async () => {
+      const notFoundError = new Error("Resume not found")
+      ;(apiClient.get as any).mockRejectedValueOnce(notFoundError)
 
       renderResumeRoute()
 
-      expect(screen.getByTestId("route-error")).toBeInTheDocument()
+      await waitFor(() => {
+        expect(screen.getByTestId("route-error")).toBeInTheDocument()
+      })
       const errorElements = screen.getAllByText("Resume not found")
       expect(errorElements.length).toBeGreaterThan(0)
     })
   })
 
   describe("Success State", () => {
-    it("renders resume editor with resume data", () => {
-      ;(useResume as any).mockReturnValue({
-        data: { id: "test-resume-id", title: "My Test Resume", content: {} },
-        isLoading: false,
-        error: null,
-      } as any)
+    it("renders resume editor with resume data", async () => {
+      const mockResume = createMockResume({ id: "test-resume-id", title: "My Test Resume" })
+      ;(apiClient.get as any).mockResolvedValueOnce(mockResume)
 
       renderResumeRoute()
 
-      expect(screen.getByTestId("resume-editor")).toBeInTheDocument()
+      await waitFor(() => {
+        expect(screen.getByTestId("resume-editor")).toBeInTheDocument()
+      })
       expect(screen.getByText("My Test Resume")).toBeInTheDocument()
     })
 
-    it("renders within a container", () => {
-      ;(useResume as any).mockReturnValue({
-        data: { id: "test-resume-id", title: "My Resume", content: {} },
-        isLoading: false,
-        error: null,
-      } as any)
+    it("renders within a container", async () => {
+      const mockResume = createMockResume({ id: "test-resume-id", title: "My Resume" })
+      ;(apiClient.get as any).mockResolvedValueOnce(mockResume)
 
       const { container } = renderResumeRoute()
 
-      expect(container.querySelector(".container")).toBeInTheDocument()
+      await waitFor(() => {
+        expect(container.querySelector(".container")).toBeInTheDocument()
+      })
     })
 
-    it("applies proper styling to container", () => {
-      ;(useResume as any).mockReturnValue({
-        data: { id: "test-resume-id", title: "My Resume", content: {} },
-        isLoading: false,
-        error: null,
-      } as any)
+    it("applies proper styling to container", async () => {
+      const mockResume = createMockResume({ id: "test-resume-id", title: "My Resume" })
+      ;(apiClient.get as any).mockResolvedValueOnce(mockResume)
 
       const { container } = renderResumeRoute()
 
-      const mainContainer = container.querySelector(".container.mx-auto.p-8")
-      expect(mainContainer).toBeInTheDocument()
+      await waitFor(() => {
+        const mainContainer = container.querySelector(".container.mx-auto.p-8")
+        expect(mainContainer).toBeInTheDocument()
+      })
     })
   })
 

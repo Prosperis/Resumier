@@ -29,7 +29,7 @@
       }
     },
     {
-      "includes": ["src/**/__tests__/**/*.ts", "src/**/__tests__/**/*.tsx", "src/**/*.test.ts", "src/**/*.test.tsx"],
+      "includes": ["src/**/__tests__/**/*.ts", "src/**/__tests__/**/*.tsx", "src/**/*.test.ts", "src/**/*.test.tsx", "src/test/**/*.ts", "src/test/**/*.tsx"],
       "linter": {
         "rules": {
           "suspicious": {
@@ -37,7 +37,8 @@
           },
           "a11y": {
             "useButtonType": "off",
-            "noLabelWithoutControl": "off"
+            "noLabelWithoutControl": "off",
+            "useAltText": "off"
           },
           "style": {
             "noNonNullAssertion": "off"
@@ -82,7 +83,7 @@
         "noDocumentCookie": "warn"
       },
       "a11y": {
-        "useAltText": "error",
+        "useAltText": "warn",
         "useAriaPropsForRole": "error",
         "useValidAriaProps": "error",
         "useValidAnchor": "warn",

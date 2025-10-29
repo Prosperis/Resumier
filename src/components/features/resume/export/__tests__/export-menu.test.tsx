@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { ExportMenu } from "@/components/features/resume/export/export-menu"
+import * as exportUtils from "@/components/features/resume/export/export-utils"
 import type { Resume } from "@/lib/api/types"
-import { ExportMenu } from "./export-menu"
-import * as exportUtils from "./export-utils"
 
 // Mock the toast hook
 vi.mock("@/hooks/use-toast", () => ({

@@ -36,10 +36,10 @@ describe("ApiClient", () => {
 
     // Mock fetch
     mockFetch = vi.fn()
-    global.fetch = mockFetch(
-      // Default to real API (not mock)
-      useMockApi as any,
-    ).mockReturnValue(false)
+    global.fetch = mockFetch as any
+
+    // Default to real API (not mock)
+    ;(useMockApi as any).mockReturnValue(false)
 
     // Create client instance
     client = new ApiClient({

@@ -38,6 +38,11 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
 
     if (!title.trim()) {
       setValidationError("Please enter a resume title")
+      toast({
+        title: "Error",
+        description: "Please enter a resume title",
+        variant: "destructive",
+      })
       // Focus the input field
       document.getElementById("title")?.focus()
       return
@@ -104,7 +109,7 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
         )}
       </DialogTrigger>
       <DialogContent>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <DialogHeader>
             <DialogTitle>Create New Resume</DialogTitle>
             <DialogDescription>Give your resume a title to get started</DialogDescription>
@@ -125,6 +130,7 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
               placeholder="e.g., Software Engineer Resume"
               disabled={isPending}
               autoFocus
+              required
               aria-invalid={!!validationError || !!error}
               aria-describedby={
                 validationError ? "title-validation-error" : error ? "title-api-error" : undefined

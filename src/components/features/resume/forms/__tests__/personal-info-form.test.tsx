@@ -20,7 +20,9 @@ describe("PersonalInfoForm", () => {
     resumeId: "resume-123",
   }
   beforeEach(() => {
-    // Mock reset handled by vitest config (clearMocks: true)
+    // Clear mocks between tests to ensure isolation
+    mockSave.mockClear()
+    mockUseAutoSave.mockClear()
     mockUseAutoSave.mockReturnValue({
       save: mockSave,
       isSaving: false,

@@ -34,7 +34,7 @@ describe("Index Route", () => {
 
   const renderIndexRoute = () => {
     // Get the component from the route definition
-    const Component = (indexRoute as any).options?.component || (indexRoute as any).component
+    const Component = (indexRoute as any).component
     if (!Component) {
       throw new Error("Component not found in route")
     }

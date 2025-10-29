@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "./test/vitest-utils"
+import { describe, expect, it, vi } from "vitest"
 
 describe("vi.mocked test", () => {
   it("should have vi.mocked function", () => {

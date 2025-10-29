@@ -37,6 +37,10 @@ describe("useDuplicateResume", () => {
   }
 
   beforeEach(() => {
+    // Clear the query client before each test
+    if (queryClient) {
+      queryClient.clear()
+    }
     // Mock reset handled by vitest config (clearMocks: true)
   })
 
@@ -89,7 +93,7 @@ describe("useDuplicateResume", () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    const callArgs = (apiClient.post as any).mock.calls[0]
+    const callArgs = (apiClient.post as any).mock.lastCall
     expect(callArgs[1]).toEqual({
       title: "Software Engineer Resume (Copy)",
       content: originalResume.content,
@@ -121,7 +125,7 @@ describe("useDuplicateResume", () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    const callArgs = (apiClient.post as any).mock.calls[0]
+    const callArgs = (apiClient.post as any).mock.lastCall
     expect(callArgs[1]).toEqual({
       title: "My Resume (Copy)",
       content: customContent,
@@ -253,7 +257,7 @@ describe("useDuplicateResume", () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    const callArgs = (apiClient.post as any).mock.calls[0]
+    const callArgs = (apiClient.post as any).mock.lastCall
     expect(callArgs[1]).toMatchObject({
       title: "My Resume (Copy) (Copy)",
     })

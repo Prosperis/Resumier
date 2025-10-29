@@ -48,7 +48,9 @@ export function PersonalInfoForm({
   const handleFieldChange = (field: keyof PersonalInfoFormData, value: string) => {
     form.setValue(field, value)
 
-    // Only save if the field is valid
+    // Only save if enabled and the field is valid
+    if (!enabled) return
+
     const isValid = form.formState.errors[field] === undefined
     if (isValid) {
       // Get all current form values

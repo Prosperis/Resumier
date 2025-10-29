@@ -1,4 +1,4 @@
-import { vi } from "../test/vitest-utils"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 // Mock idb-keyval before importing the store
 vi.mock("idb-keyval", () => ({
@@ -8,7 +8,7 @@ vi.mock("idb-keyval", () => ({
 }))
 
 // Import store after mocking dependencies
-import { useResumeStore } from "./use-resume-store"
+import { useResumeStore } from "@/hooks/use-resume-store"
 
 describe("useResumeStore", () => {
   beforeEach(() => {

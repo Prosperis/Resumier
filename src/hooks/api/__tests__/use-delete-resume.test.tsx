@@ -39,8 +39,14 @@ describe("useDeleteResume", () => {
   }
 
   beforeEach(() => {
-    // Mock reset handled by vitest config (clearMocks: true)
-    consoleErrorSpy.mockClear()
+    // Clear the query client before each test
+    if (queryClient) {
+      queryClient.clear()
+    }
+    // Reset mocks to clear implementation queue
+    vi.resetAllMocks()
+    // Restore console.error spy
+    consoleErrorSpy.mockImplementation(() => {})
   })
 
   it("deletes a resume successfully", async () => {

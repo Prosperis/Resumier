@@ -40,14 +40,13 @@ describe("DeleteResumeDialog", () => {
 
   beforeEach(() => {
     // Mock reset handled by vitest config (clearMocks: true)
-    ;(useDeleteResume as any)
-      .mockReturnValue({
-        mutate: mockMutate,
-        isPending: false,
-      } as any)(useToast as any)
-      .mockReturnValue({
-        toast: mockToast,
-      } as any)
+    ;(useDeleteResume as any).mockReturnValue({
+      mutate: mockMutate,
+      isPending: false,
+    } as any)
+    ;(useToast as any).mockReturnValue({
+      toast: mockToast,
+    } as any)
   })
 
   it("renders with default trigger button", () => {
@@ -96,7 +95,7 @@ describe("DeleteResumeDialog", () => {
     const user = userEvent.setup()
     const mockOnSuccess = vi.fn()
 
-    mockMutate.mockImplementation((id, { onSuccess }) => {
+    mockMutate.mockImplementation((_id, { onSuccess }) => {
       onSuccess()
     })
 
@@ -105,7 +104,7 @@ describe("DeleteResumeDialog", () => {
     })
 
     await user.click(screen.getByRole("button", { name: /delete/i }))
-    await user.click(screen.getByRole("button", { name: "Delete Resume" }))
+    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }))
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith("resume-123", expect.any(Object))
@@ -122,14 +121,14 @@ describe("DeleteResumeDialog", () => {
     const user = userEvent.setup()
     const error = new Error("Deletion failed")
 
-    mockMutate.mockImplementation((id, { onError }) => {
+    mockMutate.mockImplementation((_id, { onError }) => {
       onError(error)
     })
 
     render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() })
 
     await user.click(screen.getByRole("button", { name: /delete/i }))
-    await user.click(screen.getByRole("button", { name: "Delete Resume" }))
+    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }))
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({
@@ -141,19 +140,19 @@ describe("DeleteResumeDialog", () => {
   })
 
   it("disables buttons while pending", async () => {
-    const user = userEvent
-      .setup()(useDeleteResume as any)
-      .mockReturnValue({
-        mutate: mockMutate,
-        isPending: true,
-      } as any)
+    ;(useDeleteResume as any).mockReturnValue({
+      mutate: mockMutate,
+      isPending: true,
+    } as any)
+
+    const user = userEvent.setup()
 
     render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() })
 
     await user.click(screen.getByRole("button", { name: /delete/i }))
 
     const cancelButton = screen.getByRole("button", { name: "Cancel" })
-    const continueButton = screen.getByRole("button", { name: "Delete Resume" })
+    const continueButton = screen.getByRole("button", { name: /deleting resume/i })
 
     expect(cancelButton).toBeDisabled()
     expect(continueButton).toBeDisabled()
@@ -176,14 +175,14 @@ describe("DeleteResumeDialog", () => {
   it("closes dialog after successful deletion", async () => {
     const user = userEvent.setup()
 
-    mockMutate.mockImplementation((id, { onSuccess }) => {
+    mockMutate.mockImplementation((_id, { onSuccess }) => {
       onSuccess()
     })
 
     render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() })
 
     await user.click(screen.getByRole("button", { name: /delete/i }))
-    await user.click(screen.getByRole("button", { name: "Delete Resume" }))
+    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }))
 
     await waitFor(() => {
       expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()
@@ -195,14 +194,14 @@ describe("DeleteResumeDialog", () => {
     const error = new Error()
     error.message = ""
 
-    mockMutate.mockImplementation((id, { onError }) => {
+    mockMutate.mockImplementation((_id, { onError }) => {
       onError(error)
     })
 
     render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() })
 
     await user.click(screen.getByRole("button", { name: /delete/i }))
-    await user.click(screen.getByRole("button", { name: "Delete Resume" }))
+    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }))
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({
@@ -216,14 +215,14 @@ describe("DeleteResumeDialog", () => {
   it("does not call onSuccess if not provided", async () => {
     const user = userEvent.setup()
 
-    mockMutate.mockImplementation((id, { onSuccess }) => {
+    mockMutate.mockImplementation((_id, { onSuccess }) => {
       onSuccess()
     })
 
     render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() })
 
     await user.click(screen.getByRole("button", { name: /delete/i }))
-    await user.click(screen.getByRole("button", { name: "Delete Resume" }))
+    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }))
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({

@@ -7,7 +7,7 @@ import {
   ScaleOnHover,
   ShakeOnHover,
   SpinOnClick,
-} from "./animated-icon"
+} from "@/components/ui/animated-icon"
 
 // Mock framer-motion
 vi.mock("framer-motion", () => ({

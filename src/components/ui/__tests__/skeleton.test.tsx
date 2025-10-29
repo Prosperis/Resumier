@@ -66,13 +66,16 @@ describe("Skeleton", () => {
 
   describe("Reduced Motion", () => {
     it("uses pulse animation with reduced motion", async () => {
-      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")(
-        useReducedMotion as any,
-      ).mockReturnValue(true)
+      // Mock useReducedMotion to return true for this test
+      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")
+      vi.mocked(useReducedMotion).mockReturnValue(true)
 
       const { container } = render(<Skeleton />)
       const skeleton = container.querySelector('[data-slot="skeleton"]')
       expect(skeleton?.className).toContain("animate-pulse")
+
+      // Reset the mock back to default
+      vi.mocked(useReducedMotion).mockReturnValue(false)
     })
   })
 

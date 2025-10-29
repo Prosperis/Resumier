@@ -259,18 +259,16 @@ describe("IndeterminateProgress", () => {
 
 describe("Reduced Motion", () => {
   it("respects reduced motion preference", async () => {
-    const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")(
-      useReducedMotion as any,
-    ).mockReturnValue(true)
+    const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")
+    vi.mocked(useReducedMotion).mockReturnValue(true)
 
     const { container } = render(<Progress value={50} />)
     expect(container.firstChild).toBeInTheDocument()
   })
 
   it("respects reduced motion for circular progress", async () => {
-    const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")(
-      useReducedMotion as any,
-    ).mockReturnValue(true)
+    const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")
+    vi.mocked(useReducedMotion).mockReturnValue(true)
 
     const { container } = render(<CircularProgress value={50} />)
     expect(container.querySelector("svg")).toBeInTheDocument()

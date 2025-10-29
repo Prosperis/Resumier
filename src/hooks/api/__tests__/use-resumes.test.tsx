@@ -33,7 +33,12 @@ describe("useResumes", () => {
   }
 
   beforeEach(() => {
-    // Mock reset handled by vitest config (clearMocks: true)
+    // Clear the query client before each test
+    if (queryClient) {
+      queryClient.clear()
+    }
+    // Explicitly clear mock call history
+    vi.clearAllMocks()
   })
 
   it("fetches resumes successfully", async () => {

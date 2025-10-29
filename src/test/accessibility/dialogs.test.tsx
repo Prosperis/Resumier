@@ -67,12 +67,12 @@ describe("Dialog Accessibility Tests", () => {
       await user.click(triggerButton)
 
       await waitFor(() => {
-        const createButton = screen.getByRole("button", { name: /^create$/i })
+        const createButton = screen.getByRole("button", { name: /create resume/i })
         expect(createButton).toBeInTheDocument()
       })
 
       // Try to submit without filling the form
-      const createButton = screen.getByRole("button", { name: /^create$/i })
+      const createButton = screen.getByRole("button", { name: /create resume/i })
       await user.click(createButton)
 
       await waitFor(() => {
@@ -89,11 +89,11 @@ describe("Dialog Accessibility Tests", () => {
       await user.click(triggerButton)
 
       await waitFor(() => {
-        const createButton = screen.getByRole("button", { name: /^create$/i })
+        const createButton = screen.getByRole("button", { name: /create resume/i })
         expect(createButton).toBeInTheDocument()
       })
 
-      const createButton = screen.getByRole("button", { name: /^create$/i })
+      const createButton = screen.getByRole("button", { name: /create resume/i })
       await user.click(createButton)
 
       await waitFor(() => {
@@ -117,7 +117,7 @@ describe("Dialog Accessibility Tests", () => {
 
       await waitFor(() => {
         const cancelButton = screen.getByRole("button", { name: /cancel/i })
-        const createButton = screen.getByRole("button", { name: /^create$/i })
+        const createButton = screen.getByRole("button", { name: /create resume/i })
 
         expect(cancelButton).toBeInTheDocument()
         expect(createButton).toBeInTheDocument()
@@ -180,7 +180,7 @@ describe("Dialog Accessibility Tests", () => {
       await user.click(triggerButton)
 
       await waitFor(() => {
-        const titleInput = screen.getByLabelText(/new title/i)
+        const titleInput = screen.getByLabelText(/resume title/i)
         expect(titleInput).toBeInTheDocument()
         expect(titleInput).toHaveValue(mockResumeTitle)
       })
@@ -243,7 +243,7 @@ describe("Dialog Accessibility Tests", () => {
 
       await waitFor(() => {
         const cancelButton = screen.getByRole("button", { name: /cancel/i })
-        const deleteButton = screen.getByRole("button", { name: /^delete$/i })
+        const deleteButton = screen.getByRole("button", { name: /confirm delete resume/i })
 
         expect(cancelButton).toBeInTheDocument()
         expect(deleteButton).toBeInTheDocument()

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react"
-import { describe, expect, it, vi } from "vitest"
-import { Calendar, CalendarDayButton } from "./calendar"
+import { describe, expect, it } from "vitest"
+import { Calendar, CalendarDayButton } from "@/components/ui/calendar"
 
 // Mock dependencies
 vi.mock("react-day-picker", () => ({

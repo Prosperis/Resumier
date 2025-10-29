@@ -298,6 +298,9 @@ describe("ResumeTable", () => {
     })
 
     it("creates new columns when callbacks change", () => {
+      // Clear mock call count from previous tests
+      vi.clearAllMocks()
+
       const { rerender } = render(
         <ResumeTable resumes={mockResumes} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />,
       )

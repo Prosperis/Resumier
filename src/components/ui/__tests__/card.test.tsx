@@ -1,5 +1,12 @@
 import { render } from "@testing-library/react"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 describe("Card", () => {
   it("renders Card component", () => {

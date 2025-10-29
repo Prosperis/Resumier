@@ -62,9 +62,8 @@ describe("LoadingSpinner", () => {
 
   describe("Reduced Motion", () => {
     it("respects reduced motion preference", async () => {
-      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")(
-        useReducedMotion as any,
-      ).mockReturnValue(true)
+      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")
+      ;(useReducedMotion as any).mockReturnValue(true)
 
       const { container } = render(<LoadingSpinner />)
       expect(container.firstChild).toBeInTheDocument()
@@ -72,9 +71,8 @@ describe("LoadingSpinner", () => {
     })
 
     it("animates when reduced motion is not preferred", async () => {
-      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")(
-        useReducedMotion as any,
-      ).mockReturnValue(false)
+      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")
+      ;(useReducedMotion as any).mockReturnValue(false)
 
       const { container } = render(<LoadingSpinner />)
       expect(container.firstChild).toBeInTheDocument()
@@ -164,9 +162,8 @@ describe("LoadingDots", () => {
     })
 
     it("respects reduced motion preference", async () => {
-      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")(
-        useReducedMotion as any,
-      ).mockReturnValue(true)
+      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")
+      ;(useReducedMotion as any).mockReturnValue(true)
 
       const { container } = render(<LoadingDots />)
       expect(container.querySelectorAll(".rounded-full")).toHaveLength(3)
@@ -224,18 +221,16 @@ describe("LoadingPulse", () => {
 
   describe("Animation", () => {
     it("respects reduced motion preference", async () => {
-      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")(
-        useReducedMotion as any,
-      ).mockReturnValue(true)
+      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")
+      ;(useReducedMotion as any).mockReturnValue(true)
 
       const { container } = render(<LoadingPulse />)
       expect(container.firstChild).toBeInTheDocument()
     })
 
     it("animates when reduced motion is not preferred", async () => {
-      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")(
-        useReducedMotion as any,
-      ).mockReturnValue(false)
+      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion")
+      ;(useReducedMotion as any).mockReturnValue(false)
 
       const { container } = render(<LoadingPulse />)
       expect(container.firstChild).toBeInTheDocument()

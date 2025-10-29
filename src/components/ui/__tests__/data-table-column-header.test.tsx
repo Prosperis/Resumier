@@ -2,7 +2,7 @@ import type { Column } from "@tanstack/react-table"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
-import { DataTableColumnHeader } from "./data-table-column-header"
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 
 describe("DataTableColumnHeader", () => {
   const createMockColumn = (canSort: boolean, sorted: false | "asc" | "desc" = false) => {

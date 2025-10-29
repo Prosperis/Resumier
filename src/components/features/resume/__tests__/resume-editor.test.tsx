@@ -2,16 +2,15 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 import type { Resume } from "@/lib/api/types"
-import { ResumeEditor } from "./resume-editor"
 
-// Mock child components
-vi.mock("./export/export-menu", () => ({
+// Mock child components - must be before imports that use them
+vi.mock("@/components/features/resume/export/export-menu", () => ({
   ExportMenu: ({ resume }: { resume: Resume }) => (
     <div data-testid="export-menu">Export Menu for {resume.title}</div>
   ),
 }))
 
-vi.mock("./preview/resume-preview", () => ({
+vi.mock("@/components/features/resume/preview/resume-preview", () => ({
   ResumePreview: ({ resume, template }: { resume: Resume; template: string }) => (
     <div data-testid="resume-preview">
       Preview: {resume.title} - {template}
@@ -19,7 +18,7 @@ vi.mock("./preview/resume-preview", () => ({
   ),
 }))
 
-vi.mock("./preview/template-selector", () => ({
+vi.mock("@/components/features/resume/preview/template-selector", () => ({
   TemplateSelector: ({
     selected,
     onSelect,
@@ -34,9 +33,11 @@ vi.mock("./preview/template-selector", () => ({
   ),
 }))
 
-vi.mock("./resume-builder", () => ({
+vi.mock("@/components/features/resume/resume-builder", () => ({
   ResumeBuilder: () => <div data-testid="resume-builder">Resume Builder</div>,
 }))
+
+import { ResumeEditor } from "@/components/features/resume/resume-editor"
 
 describe("ResumeEditor", () => {
   const mockResume: Resume = {

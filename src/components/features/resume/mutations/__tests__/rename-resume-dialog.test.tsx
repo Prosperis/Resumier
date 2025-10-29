@@ -39,16 +39,18 @@ describe("RenameResumeDialog", () => {
   }
 
   beforeEach(() => {
-    // Mock reset handled by vitest config (clearMocks: true)
-    ;(useUpdateResume as any)
-      .mockReturnValue({
-        mutate: mockMutate,
-        isPending: false,
-        error: null,
-      } as any)(useToast as any)
-      .mockReturnValue({
-        toast: mockToast,
-      } as any)
+    // Explicitly reset mocks before each test
+    mockMutate.mockReset()
+    mockToast.mockReset()
+
+    ;(useUpdateResume as any).mockReturnValue({
+      mutate: mockMutate,
+      isPending: false,
+      error: null,
+    } as any)
+    ;(useToast as any).mockReturnValue({
+      toast: mockToast,
+    } as any)
   })
 
   it("renders with default trigger button", () => {
@@ -97,7 +99,7 @@ describe("RenameResumeDialog", () => {
 
     const input = screen.getByLabelText("Resume Title")
     await user.clear(input)
-    await user.click(screen.getByRole("button", { name: "Save Changes" }))
+    await user.click(screen.getByRole("button", { name: "Save changes" }))
 
     expect(mockToast).toHaveBeenCalledWith({
       title: "Error",
@@ -112,7 +114,7 @@ describe("RenameResumeDialog", () => {
     render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() })
 
     await user.click(screen.getByRole("button", { name: /rename/i }))
-    await user.click(screen.getByRole("button", { name: "Save Changes" }))
+    await user.click(screen.getByRole("button", { name: "Save changes" }))
 
     await waitFor(() => {
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
@@ -139,7 +141,7 @@ describe("RenameResumeDialog", () => {
     const input = screen.getByLabelText("Resume Title")
     await user.clear(input)
     await user.type(input, "Updated Resume Title")
-    await user.click(screen.getByRole("button", { name: "Save Changes" }))
+    await user.click(screen.getByRole("button", { name: "Save changes" }))
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith(
@@ -172,7 +174,7 @@ describe("RenameResumeDialog", () => {
     const input = screen.getByLabelText("Resume Title")
     await user.clear(input)
     await user.type(input, "  Trimmed Title  ")
-    await user.click(screen.getByRole("button", { name: "Save Changes" }))
+    await user.click(screen.getByRole("button", { name: "Save changes" }))
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith(
@@ -199,7 +201,7 @@ describe("RenameResumeDialog", () => {
     const input = screen.getByLabelText("Resume Title")
     await user.clear(input)
     await user.type(input, "New Title")
-    await user.click(screen.getByRole("button", { name: "Save Changes" }))
+    await user.click(screen.getByRole("button", { name: "Save changes" }))
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({
@@ -211,19 +213,18 @@ describe("RenameResumeDialog", () => {
   })
 
   it("disables save button while pending", async () => {
-    const user = userEvent
-      .setup()(useUpdateResume as any)
-      .mockReturnValue({
-        mutate: mockMutate,
-        isPending: true,
-        error: null,
-      } as any)
+    const user = userEvent.setup()
+    ;(useUpdateResume as any).mockReturnValue({
+      mutate: mockMutate,
+      isPending: true,
+      error: null,
+    } as any)
 
     render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() })
 
     await user.click(screen.getByRole("button", { name: /rename/i }))
 
-    const saveButton = screen.getByRole("button", { name: "Save Changes" })
+    const saveButton = screen.getByRole("button", { name: "Saving changes..." })
     expect(saveButton).toBeDisabled()
   })
 
@@ -241,7 +242,7 @@ describe("RenameResumeDialog", () => {
     const input = screen.getByLabelText("Resume Title")
     await user.clear(input)
     await user.type(input, "New Title")
-    await user.click(screen.getByRole("button", { name: "Save Changes" }))
+    await user.click(screen.getByRole("button", { name: "Save changes" }))
 
     await waitFor(() => {
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
@@ -278,7 +279,7 @@ describe("RenameResumeDialog", () => {
     const input = screen.getByLabelText("Resume Title")
     await user.clear(input)
     await user.type(input, "New Title")
-    await user.click(screen.getByRole("button", { name: "Save Changes" }))
+    await user.click(screen.getByRole("button", { name: "Save changes" }))
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({
@@ -303,7 +304,7 @@ describe("RenameResumeDialog", () => {
     const input = screen.getByLabelText("Resume Title")
     await user.clear(input)
     await user.type(input, "New Title")
-    await user.click(screen.getByRole("button", { name: "Save Changes" }))
+    await user.click(screen.getByRole("button", { name: "Save changes" }))
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({

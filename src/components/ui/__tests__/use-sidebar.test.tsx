@@ -1,8 +1,8 @@
 import { renderHook } from "@testing-library/react"
 import type { ReactNode } from "react"
-import { vi } from "vitest"
-import type { SidebarContextProps } from "./use-sidebar"
-import { SidebarContext, useSidebar } from "./use-sidebar"
+import { describe, expect, it, vi } from "vitest"
+import type { SidebarContextProps } from "@/components/ui/use-sidebar"
+import { SidebarContext, useSidebar } from "@/components/ui/use-sidebar"
 
 describe("useSidebar", () => {
   it("throws error when used outside SidebarProvider", () => {

@@ -102,11 +102,10 @@ describe("ResumeDashboard", () => {
 
   beforeEach(() => {
     // Mock reset handled by vitest config (clearMocks: true)
-    ;(useToast as any)
-      .mockReturnValue({ toast: mockToast } as any)(useDuplicateResume as any)
-      .mockReturnValue({
-        mutate: mockDuplicateResume,
-      } as any)
+    ;(useToast as any).mockReturnValue({ toast: mockToast } as any)
+    ;(useDuplicateResume as any).mockReturnValue({
+      mutate: mockDuplicateResume,
+    } as any)
   })
 
   describe("Loading State", () => {

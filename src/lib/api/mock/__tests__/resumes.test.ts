@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { ConflictError, NotFoundError } from "../errors"
-import type { CreateResumeDto, UpdateResumeDto } from "../types"
-import { mockResumeApi } from "./resumes"
+import { ConflictError, NotFoundError } from "@/lib/api/errors"
+import { mockResumeApi } from "@/lib/api/mock/resumes"
+import type { CreateResumeDto, UpdateResumeDto } from "@/lib/api/types"
 
 // Mock the delay function
-vi.mock("./db", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("./db")>()
+vi.mock("@/lib/api/mock/db", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/api/mock/db")>()
   return {
     ...actual,
     delay: vi.fn(() => Promise.resolve()),
@@ -13,7 +13,7 @@ vi.mock("./db", async (importOriginal) => {
 })
 
 // Import mockDb after mocking
-const { mockDb } = await import("./db")
+const { mockDb } = await import("@/lib/api/mock/db")
 
 describe("mockResumeApi", () => {
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe("mockResumeApi", () => {
     })
 
     it("includes delay", async () => {
-      const { delay } = await import("./db")
+      const { delay } = await import("@/lib/api/mock/db")
       await mockResumeApi.getAll()
 
       expect(delay).toHaveBeenCalledWith(expect.any(Number))
@@ -61,7 +61,7 @@ describe("mockResumeApi", () => {
     })
 
     it("includes delay", async () => {
-      const { delay } = await import("./db")
+      const { delay } = await import("@/lib/api/mock/db")
       await mockResumeApi.getById("1")
 
       expect(delay).toHaveBeenCalledWith(expect.any(Number))
@@ -146,7 +146,7 @@ describe("mockResumeApi", () => {
     })
 
     it("includes delay", async () => {
-      const { delay } = await import("./db")
+      const { delay } = await import("@/lib/api/mock/db")
       await mockResumeApi.create({ title: "Delayed Resume" })
 
       expect(delay).toHaveBeenCalledWith(expect.any(Number))
@@ -246,7 +246,7 @@ describe("mockResumeApi", () => {
     })
 
     it("includes delay", async () => {
-      const { delay } = await import("./db")
+      const { delay } = await import("@/lib/api/mock/db")
       await mockResumeApi.update("1", { title: "Delayed Update" })
 
       expect(delay).toHaveBeenCalledWith(expect.any(Number))
@@ -287,7 +287,7 @@ describe("mockResumeApi", () => {
     })
 
     it("includes delay", async () => {
-      const { delay } = await import("./db")
+      const { delay } = await import("@/lib/api/mock/db")
       await mockResumeApi.delete("1")
 
       expect(delay).toHaveBeenCalledWith(expect.any(Number))

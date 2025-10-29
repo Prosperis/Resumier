@@ -6,7 +6,7 @@ import {
   ErrorShake,
   SuccessCheckmark,
   WarningPulse,
-} from "./animated-feedback"
+} from "@/components/ui/animated-feedback"
 
 // Mock framer-motion
 vi.mock("framer-motion", () => ({

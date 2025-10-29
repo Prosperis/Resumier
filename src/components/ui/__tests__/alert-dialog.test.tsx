@@ -11,7 +11,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./alert-dialog"
+} from "@/components/ui/alert-dialog"
 
 describe("AlertDialog", () => {
   it("renders with trigger and content", async () => {

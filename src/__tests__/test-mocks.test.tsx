@@ -1,4 +1,4 @@
-import { describe, expect, it } from "test/vitest-utils"
+import { describe, expect, it } from "vitest"
 
 describe("Mock verification", () => {
   it("window.matchMedia exists", () => {

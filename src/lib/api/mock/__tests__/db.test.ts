@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import type { CreateResumeDto, UpdateResumeDto } from "../types"
-import { delay, mockDb } from "./db"
+import { delay, mockDb } from "@/lib/api/mock/db"
+import type { CreateResumeDto, UpdateResumeDto } from "@/lib/api/types"
 
 // Mock localStorage
 const localStorageMock = (() => {

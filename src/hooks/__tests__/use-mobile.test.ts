@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react"
-import { vi } from "../test/vitest-utils"
-import { useIsMobile } from "./use-mobile"
+import { describe, expect, it, vi } from "vitest"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 function setupWindowWidth(width: number) {
   Object.defineProperty(window, "innerWidth", {

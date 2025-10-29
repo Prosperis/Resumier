@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import type { Resume } from "@/lib/api/types"
 import {
   copyToClipboard,
   downloadHTML,
   formatResumeDate,
   openPrintPreview,
   printResume,
-} from "./export-utils"
+} from "@/components/features/resume/export/export-utils"
+import type { Resume } from "@/lib/api/types"
 
 describe("export-utils", () => {
   describe("printResume", () => {

@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react"
-import { vi } from "../test/vitest-utils"
-import { useTheme } from "./use-theme"
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
+import { useTheme } from "@/hooks/use-theme"
 
 let originalMatchMedia: typeof window.matchMedia
 beforeAll(() => {

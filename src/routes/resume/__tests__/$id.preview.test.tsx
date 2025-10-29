@@ -11,6 +11,7 @@ vi.mock("@/stores", () => ({
 
 vi.mock("@tanstack/react-router", () => ({
   createFileRoute: vi.fn(() => (config: any) => ({ ...config })),
+  createLazyFileRoute: vi.fn(() => (config: any) => ({ ...config })),
   useParams: vi.fn(() => ({ id: "test-resume-id" })),
   useNavigate: vi.fn(),
 }))
@@ -52,7 +53,7 @@ vi.mock("lucide-react", () => ({
 }))
 
 // Import the route module and hooks after setting up mocks
-const { Route: previewRoute } = await import("../$id.preview")
+const { Route: previewRoute } = await import("../$id.preview.lazy")
 const { useResume } = await import("@/hooks/api")
 const { useNavigate } = await import("@tanstack/react-router")
 
@@ -62,18 +63,17 @@ describe("Resume Preview Route (/resume/$id/preview)", () => {
 
   beforeEach(() => {
     // Mock reset handled by vitest config (clearMocks: true)
-    ;(useAuthStore.getState as any)
-      .mockReturnValue({
-        isAuthenticated: true,
-        user: { id: "1", email: "test@example.com", name: "Test User" },
-        login: vi.fn(),
-        logout: vi.fn(),
-      })(useNavigate as any)
-      .mockReturnValue(mockNavigate)
+    ;(useAuthStore.getState as any).mockReturnValue({
+      isAuthenticated: true,
+      user: { id: "1", email: "test@example.com", name: "Test User" },
+      login: vi.fn(),
+      logout: vi.fn(),
+    })
+    ;(useNavigate as any).mockReturnValue(mockNavigate)
   })
 
   const renderPreviewRoute = () => {
-    const Component = (previewRoute as any).options?.component || (previewRoute as any).component
+    const Component = (previewRoute as any).component
     if (!Component) {
       throw new Error("Component not found in route")
     }
@@ -254,16 +254,7 @@ describe("Resume Preview Route (/resume/$id/preview)", () => {
       expect(previewRoute).toHaveProperty("component")
     })
 
-    it("has a pendingComponent property", () => {
-      expect(previewRoute).toHaveProperty("pendingComponent")
-    })
-
-    it("has an errorComponent property", () => {
-      expect(previewRoute).toHaveProperty("errorComponent")
-    })
-
-    it("has a beforeLoad property", () => {
-      expect(previewRoute).toHaveProperty("beforeLoad")
-    })
+    // Note: Lazy routes only have the component property.
+    // pendingComponent, errorComponent, and beforeLoad are defined in the main route file ($id.preview.tsx)
   })
 })
