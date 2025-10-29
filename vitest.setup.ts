@@ -16,6 +16,51 @@ window.indexedDB = idb
 // @ts-expect-error - idb-keyval accesses indexedDB directly from global scope
 global.indexedDB = idb
 
+// Mock localStorage and sessionStorage if not available (jsdom should provide these, but ensure they exist)
+class LocalStorageMock implements Storage {
+  private store: Map<string, string> = new Map()
+  
+  get length(): number {
+    return this.store.size
+  }
+  
+  clear(): void {
+    this.store.clear()
+  }
+  
+  getItem(key: string): string | null {
+    return this.store.get(key) ?? null
+  }
+  
+  key(index: number): string | null {
+    return Array.from(this.store.keys())[index] ?? null
+  }
+  
+  removeItem(key: string): void {
+    this.store.delete(key)
+  }
+  
+  setItem(key: string, value: string): void {
+    this.store.set(key, value)
+  }
+}
+
+// Ensure localStorage exists in all environments
+if (typeof localStorage === 'undefined') {
+  global.localStorage = new LocalStorageMock()
+}
+if (typeof sessionStorage === 'undefined') {
+  global.sessionStorage = new LocalStorageMock()
+}
+
+// Ensure window and document are available
+if (typeof window === 'undefined') {
+  throw new Error('jsdom environment not properly initialized - window is undefined')
+}
+if (typeof document === 'undefined') {
+  throw new Error('jsdom environment not properly initialized - document is undefined')
+}
+
 // Extend vitest expect with jest-dom matchers
 import * as matchers from "@testing-library/jest-dom/matchers"
 import { expect as vitestExpect, vi } from "vitest"
