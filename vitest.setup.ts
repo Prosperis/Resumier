@@ -9,11 +9,8 @@ import { IDBFactory } from "fake-indexeddb"
 
 // Ensure indexedDB is available on ALL global scopes
 const idb = new IDBFactory()
-// @ts-expect-error - Polyfilling indexedDB
 globalThis.indexedDB = idb
-// @ts-expect-error - Polyfilling indexedDB
-window.indexedDB = idb  
-// @ts-expect-error - idb-keyval accesses indexedDB directly from global scope
+window.indexedDB = idb
 global.indexedDB = idb
 
 // Mock localStorage and sessionStorage if not available (jsdom should provide these, but ensure they exist)
@@ -87,9 +84,9 @@ const originalClearAllMocks = (vi as any).clearAllMocks
 vitestExpect.extend(matchers)
 
 // Also extend the global expect (when globals: true)
-if (typeof globalThis.expect !== "undefined") {
+if (typeof (globalThis as any).expect !== "undefined") {
   // @ts-expect-error - jest-dom matchers aren't typed for vitest expect
-  globalThis.expect.extend(matchers)
+  (globalThis as any).expect.extend(matchers)
 }
 
 // Mock matchMedia for Framer Motion (must be defined early)
