@@ -17,13 +17,6 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.ts", "./src/setupTests.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
     exclude: ["node_modules", "dist", "build", "e2e"],
-    // Ensure tests wait for environment to be ready
-    pool: "forks",
-    poolOptions: {
-      forks: {
-        singleFork: false,
-      },
-    },
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html", "lcov"],

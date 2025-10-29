@@ -45,20 +45,21 @@ class LocalStorageMock implements Storage {
   }
 }
 
-// Ensure localStorage exists in all environments
-if (typeof localStorage === 'undefined') {
-  global.localStorage = new LocalStorageMock()
-}
-if (typeof sessionStorage === 'undefined') {
-  global.sessionStorage = new LocalStorageMock()
-}
-
-// Ensure window and document are available
-if (typeof window === 'undefined') {
-  throw new Error('jsdom environment not properly initialized - window is undefined')
-}
-if (typeof document === 'undefined') {
-  throw new Error('jsdom environment not properly initialized - document is undefined')
+// Ensure localStorage exists in all environments (even if jsdom provides it, ensure it's available)
+if (typeof global !== 'undefined') {
+  if (typeof global.localStorage === 'undefined') {
+    global.localStorage = new LocalStorageMock()
+  }
+  if (typeof global.sessionStorage === 'undefined') {
+    global.sessionStorage = new LocalStorageMock()
+  }
+  // Also ensure it's on globalThis
+  if (typeof (globalThis as any).localStorage === 'undefined') {
+    (globalThis as any).localStorage = global.localStorage
+  }
+  if (typeof (globalThis as any).sessionStorage === 'undefined') {
+    (globalThis as any).sessionStorage = global.sessionStorage
+  }
 }
 
 // Extend vitest expect with jest-dom matchers
