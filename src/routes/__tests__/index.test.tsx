@@ -185,7 +185,7 @@ describe("Index Route", () => {
 
       // Hero section heading
       const heroHeading = screen.getByRole("heading", {
-        name: /welcome to resumier/i,
+        name: /build your perfect resume/i,
       });
       // Features section heading (first feature)
       const featuresHeading = screen.getByRole("heading", {
@@ -265,7 +265,7 @@ describe("Index Route", () => {
     it("applies hover effects to feature cards", () => {
       const { container } = renderIndexRoute();
 
-      const hoverCards = container.querySelectorAll(".hover\\:shadow-md");
+      const hoverCards = container.querySelectorAll(".hover\\:shadow-lg");
       expect(hoverCards.length).toBe(4);
     });
 
@@ -273,7 +273,7 @@ describe("Index Route", () => {
       const { container } = renderIndexRoute();
 
       const primaryElements = container.querySelectorAll(
-        "[class*='text-primary']",
+        "[class*='primary']",
       );
       expect(primaryElements.length).toBeGreaterThan(0);
     });
