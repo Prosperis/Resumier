@@ -1,4 +1,10 @@
-import { act, render, renderHook, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  render,
+  renderHook,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ThemeProvider, useTheme } from "../theme-provider";
 
@@ -30,7 +36,7 @@ describe("ThemeProvider", () => {
       render(
         <ThemeProvider>
           <div>Test Content</div>
-        </ThemeProvider>
+        </ThemeProvider>,
       );
 
       expect(screen.getByText("Test Content")).toBeInTheDocument();
@@ -45,7 +51,7 @@ describe("ThemeProvider", () => {
       render(
         <ThemeProvider>
           <TestComponent />
-        </ThemeProvider>
+        </ThemeProvider>,
       );
 
       expect(screen.getByText(/Current theme:/)).toBeInTheDocument();
@@ -63,7 +69,9 @@ describe("ThemeProvider", () => {
 
     it("should use custom default theme when provided", () => {
       const { result } = renderHook(() => useTheme(), {
-        wrapper: ({ children }) => <ThemeProvider defaultTheme="dark">{children}</ThemeProvider>,
+        wrapper: ({ children }) => (
+          <ThemeProvider defaultTheme="dark">{children}</ThemeProvider>
+        ),
       });
 
       expect(result.current.theme).toBe("dark");
@@ -119,7 +127,9 @@ describe("ThemeProvider", () => {
 
     it("should update theme to system", () => {
       const { result } = renderHook(() => useTheme(), {
-        wrapper: ({ children }) => <ThemeProvider defaultTheme="dark">{children}</ThemeProvider>,
+        wrapper: ({ children }) => (
+          <ThemeProvider defaultTheme="dark">{children}</ThemeProvider>
+        ),
       });
 
       act(() => {
@@ -203,7 +213,9 @@ describe("ThemeProvider", () => {
       });
 
       await waitFor(() => {
-        expect(document.documentElement.classList.contains("light")).toBe(false);
+        expect(document.documentElement.classList.contains("light")).toBe(
+          false,
+        );
         expect(document.documentElement.classList.contains("dark")).toBe(true);
       });
     });
@@ -278,7 +290,9 @@ describe("ThemeProvider", () => {
 
     it("should have correct initial theme", () => {
       const { result } = renderHook(() => useTheme(), {
-        wrapper: ({ children }) => <ThemeProvider defaultTheme="light">{children}</ThemeProvider>,
+        wrapper: ({ children }) => (
+          <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
+        ),
       });
 
       expect(result.current.theme).toBe("light");

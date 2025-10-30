@@ -20,7 +20,8 @@ export function useDeleteResume() {
       await queryClient.cancelQueries({ queryKey: resumesQueryKey });
 
       // Snapshot previous value for rollback
-      const previousResumes = queryClient.getQueryData<Resume[]>(resumesQueryKey);
+      const previousResumes =
+        queryClient.getQueryData<Resume[]>(resumesQueryKey);
 
       // Optimistically remove from list
       queryClient.setQueryData<Resume[]>(resumesQueryKey, (old) => {

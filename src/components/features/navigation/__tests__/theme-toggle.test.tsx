@@ -30,7 +30,11 @@ describe("ThemeToggle", () => {
     beforeEach(() => {
       // Mock the store to return different values based on the selector
       mockUseThemeStore.mockImplementation((selector: any) => {
-        const state = { theme: "dark", toggleTheme: mockToggleTheme, setTheme: vi.fn() };
+        const state = {
+          theme: "dark",
+          toggleTheme: mockToggleTheme,
+          setTheme: vi.fn(),
+        };
         return selector(state);
       });
     });
@@ -46,7 +50,9 @@ describe("ThemeToggle", () => {
     it("has accessible label", () => {
       render(<ThemeToggle />);
 
-      expect(screen.getByRole("button", { name: /toggle theme/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /toggle theme/i }),
+      ).toBeInTheDocument();
     });
 
     it("calls toggleTheme when clicked", async () => {
@@ -64,7 +70,11 @@ describe("ThemeToggle", () => {
     beforeEach(() => {
       // Mock the store to return different values based on the selector
       mockUseThemeStore.mockImplementation((selector: any) => {
-        const state = { theme: "light", toggleTheme: mockToggleTheme, setTheme: vi.fn() };
+        const state = {
+          theme: "light",
+          toggleTheme: mockToggleTheme,
+          setTheme: vi.fn(),
+        };
         return selector(state);
       });
     });
@@ -94,7 +104,11 @@ describe("ThemeToggle", () => {
     beforeEach(() => {
       // Mock the store to return different values based on the selector
       mockUseThemeStore.mockImplementation((selector: any) => {
-        const state = { theme: "dark", toggleTheme: mockToggleTheme, setTheme: vi.fn() };
+        const state = {
+          theme: "dark",
+          toggleTheme: mockToggleTheme,
+          setTheme: vi.fn(),
+        };
         return selector(state);
       });
     });
@@ -118,7 +132,11 @@ describe("ThemeToggle", () => {
     beforeEach(() => {
       // Mock the store to return different values based on the selector
       mockUseThemeStore.mockImplementation((selector: any) => {
-        const state = { theme: "dark", toggleTheme: mockToggleTheme, setTheme: vi.fn() };
+        const state = {
+          theme: "dark",
+          toggleTheme: mockToggleTheme,
+          setTheme: vi.fn(),
+        };
         return selector(state);
       });
     });

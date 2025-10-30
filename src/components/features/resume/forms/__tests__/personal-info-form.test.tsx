@@ -35,7 +35,9 @@ describe("PersonalInfoForm", () => {
       render(<PersonalInfoForm {...defaultProps} />);
       expect(screen.getByText("Personal Information")).toBeInTheDocument();
       expect(
-        screen.getByText(/your basic contact information and professional summary/i)
+        screen.getByText(
+          /your basic contact information and professional summary/i,
+        ),
       ).toBeInTheDocument();
     });
     it("renders all form fields", () => {
@@ -44,7 +46,9 @@ describe("PersonalInfoForm", () => {
       expect(screen.getByLabelText(/^email \*/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/phone/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/^location \*/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/professional summary/i)).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(/professional summary/i),
+      ).toBeInTheDocument();
     });
     it("shows required field indicators", () => {
       render(<PersonalInfoForm {...defaultProps} />);
@@ -57,17 +61,27 @@ describe("PersonalInfoForm", () => {
       render(<PersonalInfoForm {...defaultProps} />);
       expect(screen.getByText(/city and state\/country/i)).toBeInTheDocument();
       expect(
-        screen.getByText(/a brief professional summary \(optional, max 500 characters\)/i)
+        screen.getByText(
+          /a brief professional summary \(optional, max 500 characters\)/i,
+        ),
       ).toBeInTheDocument();
     });
     it("shows placeholder text for all fields", () => {
       render(<PersonalInfoForm {...defaultProps} />);
       expect(screen.getByPlaceholderText(/john doe/i)).toBeInTheDocument();
-      expect(screen.getByPlaceholderText(/john@example\.com/i)).toBeInTheDocument();
-      expect(screen.getByPlaceholderText(/\+1 \(555\) 123-4567/i)).toBeInTheDocument();
-      expect(screen.getByPlaceholderText(/san francisco, ca/i)).toBeInTheDocument();
       expect(
-        screen.getByPlaceholderText(/brief overview of your professional background/i)
+        screen.getByPlaceholderText(/john@example\.com/i),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(/\+1 \(555\) 123-4567/i),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(/san francisco, ca/i),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(
+          /brief overview of your professional background/i,
+        ),
       ).toBeInTheDocument();
     });
   });
@@ -93,7 +107,7 @@ describe("PersonalInfoForm", () => {
                 name: "John Doe",
               }),
             }),
-          })
+          }),
         );
       });
     });
@@ -125,7 +139,7 @@ describe("PersonalInfoForm", () => {
                 email: "test@example.com",
               }),
             }),
-          })
+          }),
         );
       });
     });
@@ -157,7 +171,7 @@ describe("PersonalInfoForm", () => {
                 phone: "+1234567890",
               }),
             }),
-          })
+          }),
         );
       });
     });
@@ -188,7 +202,7 @@ describe("PersonalInfoForm", () => {
                 location: "New York, NY",
               }),
             }),
-          })
+          }),
         );
       });
     });
@@ -209,14 +223,19 @@ describe("PersonalInfoForm", () => {
     it("shows summary description", () => {
       render(<PersonalInfoForm {...defaultProps} />);
       expect(
-        screen.getByText(/a brief professional summary \(optional, max 500 characters\)/i)
+        screen.getByText(
+          /a brief professional summary \(optional, max 500 characters\)/i,
+        ),
       ).toBeInTheDocument();
     });
     it("triggers auto-save on blur with summary", async () => {
       const user = userEvent.setup();
       render(<PersonalInfoForm {...defaultProps} />);
       const summaryInput = screen.getByLabelText(/professional summary/i);
-      await user.type(summaryInput, "Software engineer with 5 years of experience");
+      await user.type(
+        summaryInput,
+        "Software engineer with 5 years of experience",
+      );
       await user.tab();
       await waitFor(() => {
         expect(mockSave).toHaveBeenCalledWith(
@@ -226,7 +245,7 @@ describe("PersonalInfoForm", () => {
                 summary: "Software engineer with 5 years of experience",
               }),
             }),
-          })
+          }),
         );
       });
     });
@@ -243,7 +262,10 @@ describe("PersonalInfoForm", () => {
       await user.tab();
       await user.type(screen.getByLabelText(/^location/i), "NYC");
       await user.tab();
-      await user.type(screen.getByLabelText(/professional summary/i), "Summary text");
+      await user.type(
+        screen.getByLabelText(/professional summary/i),
+        "Summary text",
+      );
       await user.tab();
       // Should have called save multiple times
       expect(mockSave).toHaveBeenCalled();
@@ -270,7 +292,7 @@ describe("PersonalInfoForm", () => {
                 summary: "",
               },
             },
-          })
+          }),
         );
       });
     });
@@ -287,7 +309,7 @@ describe("PersonalInfoForm", () => {
                 summary: "",
               }),
             }),
-          })
+          }),
         );
       });
     });
@@ -346,19 +368,27 @@ describe("PersonalInfoForm", () => {
         location: "San Francisco, CA",
         summary: "Experienced developer",
       };
-      render(<PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />);
+      render(
+        <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
+      );
       expect(screen.getByLabelText(/full name/i)).toHaveValue("John Doe");
       expect(screen.getByLabelText(/^email/i)).toHaveValue("john@example.com");
       expect(screen.getByLabelText(/phone/i)).toHaveValue("+1234567890");
-      expect(screen.getByLabelText(/^location/i)).toHaveValue("San Francisco, CA");
-      expect(screen.getByLabelText(/professional summary/i)).toHaveValue("Experienced developer");
+      expect(screen.getByLabelText(/^location/i)).toHaveValue(
+        "San Francisco, CA",
+      );
+      expect(screen.getByLabelText(/professional summary/i)).toHaveValue(
+        "Experienced developer",
+      );
     });
     it("handles partial default values", () => {
       const defaultValues = {
         name: "Jane Smith",
         email: "jane@example.com",
       };
-      render(<PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />);
+      render(
+        <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
+      );
       expect(screen.getByLabelText(/full name/i)).toHaveValue("Jane Smith");
       expect(screen.getByLabelText(/^email/i)).toHaveValue("jane@example.com");
       expect(screen.getByLabelText(/phone/i)).toHaveValue("");
@@ -367,7 +397,9 @@ describe("PersonalInfoForm", () => {
     });
     it("handles empty default values", () => {
       const defaultValues = {};
-      render(<PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />);
+      render(
+        <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
+      );
       expect(screen.getByLabelText(/full name/i)).toHaveValue("");
       expect(screen.getByLabelText(/^email/i)).toHaveValue("");
       expect(screen.getByLabelText(/phone/i)).toHaveValue("");
@@ -379,7 +411,9 @@ describe("PersonalInfoForm", () => {
       const defaultValues = {
         name: "Original Name",
       };
-      render(<PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />);
+      render(
+        <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
+      );
       const nameInput = screen.getByLabelText(/full name/i);
       expect(nameInput).toHaveValue("Original Name");
       await user.clear(nameInput);

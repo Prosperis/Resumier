@@ -72,9 +72,12 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
-          <DialogTitle className="text-center text-2xl font-bold">Welcome to Resumier</DialogTitle>
+          <DialogTitle className="text-center text-2xl font-bold">
+            Welcome to Resumier
+          </DialogTitle>
           <DialogDescription className="text-center">
-            Sign in or create an account to get started with your professional resume
+            Sign in or create an account to get started with your professional
+            resume
           </DialogDescription>
         </DialogHeader>
 
@@ -118,7 +121,9 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background text-muted-foreground px-2">Or continue with</span>
+                <span className="bg-background text-muted-foreground px-2">
+                  Or continue with
+                </span>
               </div>
             </div>
 
@@ -231,7 +236,9 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background text-muted-foreground px-2">Or continue with</span>
+                <span className="bg-background text-muted-foreground px-2">
+                  Or continue with
+                </span>
               </div>
             </div>
 

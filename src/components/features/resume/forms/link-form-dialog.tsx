@@ -20,7 +20,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { type CreateLinkFormData, createLinkSchema } from "@/lib/validations/links";
+import {
+  type CreateLinkFormData,
+  createLinkSchema,
+} from "@/lib/validations/links";
 
 interface LinkFormDialogProps {
   open: boolean;
@@ -64,7 +67,10 @@ export function LinkFormDialog({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="type"
@@ -79,7 +85,9 @@ export function LinkFormDialog({
                       <option value="other">Other</option>
                     </Select>
                   </FormControl>
-                  <FormDescription>Choose the type of link you're adding</FormDescription>
+                  <FormDescription>
+                    Choose the type of link you're adding
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -107,7 +115,11 @@ export function LinkFormDialog({
                 <FormItem>
                   <FormLabel>URL</FormLabel>
                   <FormControl>
-                    <Input type="url" placeholder="https://example.com" {...field} />
+                    <Input
+                      type="url"
+                      placeholder="https://example.com"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>Full URL including https://</FormDescription>
                   <FormMessage />
@@ -116,7 +128,11 @@ export function LinkFormDialog({
             />
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+              >
                 Cancel
               </Button>
               <Button type="submit" disabled={form.formState.isSubmitting}>

@@ -5,13 +5,16 @@ interface ClassicTemplateProps {
 }
 
 export function ClassicTemplate({ resume }: ClassicTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } =
+    resume.content;
 
   return (
     <div className="mx-auto max-w-[21cm] bg-white p-12 font-serif text-black shadow-lg">
       {/* Header Section - Centered */}
       <header className="mb-8 border-b-2 border-black pb-4 text-center">
-        <h1 className="mb-2 text-3xl font-bold">{personalInfo.name || "Your Name"}</h1>
+        <h1 className="mb-2 text-3xl font-bold">
+          {personalInfo.name || "Your Name"}
+        </h1>
         <div className="space-x-3 text-sm">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && (
@@ -55,7 +58,9 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
                   </span>
                 </div>
                 <p className="mb-2 text-sm italic">{exp.company}</p>
-                {exp.description && <p className="mb-2 text-sm">{exp.description}</p>}
+                {exp.description && (
+                  <p className="mb-2 text-sm">{exp.description}</p>
+                )}
                 {exp.highlights && exp.highlights.length > 0 && (
                   <ul className="list-inside list-disc space-y-1 text-sm">
                     {exp.highlights.map((highlight, idx) => (
@@ -72,7 +77,9 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
       {/* Education */}
       {education.length > 0 && (
         <section className="mb-6">
-          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">Education</h2>
+          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">
+            Education
+          </h2>
           <div className="space-y-3">
             {education.map((edu) => (
               <div key={edu.id}>
@@ -105,7 +112,9 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
         skills.tools?.length > 0 ||
         skills.soft?.length > 0) && (
         <section className="mb-6">
-          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">Skills</h2>
+          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">
+            Skills
+          </h2>
           <div className="space-y-2">
             {skills.technical && skills.technical.length > 0 && (
               <div>
@@ -138,7 +147,9 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
       {/* Certifications */}
       {certifications.length > 0 && (
         <section className="mb-6">
-          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">Certifications</h2>
+          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">
+            Certifications
+          </h2>
           <div className="space-y-2">
             {certifications.map((cert) => (
               <div key={cert.id}>
@@ -165,7 +176,12 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
             {links.map((link) => (
               <div key={link.id} className="text-sm">
                 <span className="font-semibold">{link.label}: </span>
-                <a href={link.url} target="_blank" rel="noopener noreferrer" className="underline">
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
                   {link.url}
                 </a>
               </div>

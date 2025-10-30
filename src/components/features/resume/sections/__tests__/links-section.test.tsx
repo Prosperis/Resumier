@@ -37,14 +37,20 @@ describe("LinksSection", () => {
 
     expect(screen.getByDisplayValue("LinkedIn")).toBeInTheDocument();
     expect(screen.getByDisplayValue("GitHub")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("https://linkedin.com/in/johndoe")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("https://github.com/johndoe")).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue("https://linkedin.com/in/johndoe"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue("https://github.com/johndoe"),
+    ).toBeInTheDocument();
   });
 
   it("renders Add Link button", () => {
     render(<LinksSection {...defaultProps} />);
 
-    expect(screen.getByRole("button", { name: /add link/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /add link/i }),
+    ).toBeInTheDocument();
   });
 
   it("calls addLink when Add button is clicked", async () => {
@@ -84,7 +90,9 @@ describe("LinksSection", () => {
 
     // The function is called for each character typed
     expect(defaultProps.setCustomUrl).toHaveBeenCalled();
-    expect(defaultProps.setCustomUrl).toHaveBeenCalledWith(expect.stringContaining("n"));
+    expect(defaultProps.setCustomUrl).toHaveBeenCalledWith(
+      expect.stringContaining("n"),
+    );
   });
 
   it("calls updateLink when link label is changed", async () => {
@@ -96,26 +104,38 @@ describe("LinksSection", () => {
     await user.type(labelInput, "Twitter");
 
     expect(defaultProps.updateLink).toHaveBeenCalled();
-    expect(defaultProps.updateLink).toHaveBeenCalledWith(0, "label", expect.stringContaining("T"));
+    expect(defaultProps.updateLink).toHaveBeenCalledWith(
+      0,
+      "label",
+      expect.stringContaining("T"),
+    );
   });
 
   it("calls updateLink when link URL is changed", async () => {
     const user = userEvent.setup();
     render(<LinksSection {...defaultProps} />);
 
-    const urlInput = screen.getByDisplayValue("https://linkedin.com/in/johndoe");
+    const urlInput = screen.getByDisplayValue(
+      "https://linkedin.com/in/johndoe",
+    );
     await user.clear(urlInput);
     await user.type(urlInput, "https://twitter.com");
 
     expect(defaultProps.updateLink).toHaveBeenCalled();
-    expect(defaultProps.updateLink).toHaveBeenCalledWith(0, "url", expect.stringContaining("http"));
+    expect(defaultProps.updateLink).toHaveBeenCalledWith(
+      0,
+      "url",
+      expect.stringContaining("http"),
+    );
   });
 
   it("renders empty links section with Add button", () => {
     render(<LinksSection {...defaultProps} links={[]} />);
 
     expect(screen.getByLabelText(/custom url/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /add link/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /add link/i }),
+    ).toBeInTheDocument();
     expect(screen.queryByText("Label")).not.toBeInTheDocument();
   });
 
@@ -146,7 +166,9 @@ describe("LinksSection", () => {
   it("displays correct placeholder text for link URL", () => {
     render(<LinksSection {...defaultProps} links={[{ label: "", url: "" }]} />);
 
-    expect(screen.getByPlaceholderText("https://linkedin.com/in/you")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("https://linkedin.com/in/you"),
+    ).toBeInTheDocument();
   });
 
   it("renders labels for link fields", () => {
@@ -197,6 +219,10 @@ describe("LinksSection", () => {
     await user.type(githubLabel, "Portfolio");
 
     expect(defaultProps.updateLink).toHaveBeenCalled();
-    expect(defaultProps.updateLink).toHaveBeenCalledWith(1, "label", expect.stringContaining("P"));
+    expect(defaultProps.updateLink).toHaveBeenCalledWith(
+      1,
+      "label",
+      expect.stringContaining("P"),
+    );
   });
 });

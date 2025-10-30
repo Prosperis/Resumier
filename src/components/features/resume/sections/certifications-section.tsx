@@ -7,7 +7,11 @@ import type { Certification } from "@/stores";
 interface CertProps {
   certifications: Certification[];
   addCertification: () => void;
-  updateCertification: (i: number, field: keyof Certification, value: string) => void;
+  updateCertification: (
+    i: number,
+    field: keyof Certification,
+    value: string,
+  ) => void;
   removeCertification: (i: number) => void;
 }
 
@@ -34,10 +38,17 @@ export function CertificationsSection({
             <Input
               type="date"
               value={cert.expiration ?? ""}
-              onChange={(e) => updateCertification(i, "expiration", e.target.value)}
+              onChange={(e) =>
+                updateCertification(i, "expiration", e.target.value)
+              }
             />
           </div>
-          <Button type="button" variant="outline" size="sm" onClick={() => removeCertification(i)}>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => removeCertification(i)}
+          >
             <Trash className="mr-2 h-4 w-4" /> Remove
           </Button>
         </div>

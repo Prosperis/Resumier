@@ -18,23 +18,27 @@ describe("Card", () => {
     const { getByTestId, getByText } = render(
       <CardHeader data-testid="header">
         <CardTitle>Test Title</CardTitle>
-      </CardHeader>
+      </CardHeader>,
     );
     expect(getByTestId("header")).toBeInTheDocument();
     expect(getByText("Test Title")).toBeInTheDocument();
   });
   it("renders CardDescription", () => {
-    const { getByText } = render(<CardDescription>Test description</CardDescription>);
+    const { getByText } = render(
+      <CardDescription>Test description</CardDescription>,
+    );
     expect(getByText("Test description")).toBeInTheDocument();
   });
   it("renders CardContent", () => {
     const { getByTestId } = render(
-      <CardContent data-testid="content">Card body content</CardContent>
+      <CardContent data-testid="content">Card body content</CardContent>,
     );
     expect(getByTestId("content")).toBeInTheDocument();
   });
   it("renders CardFooter", () => {
-    const { getByTestId } = render(<CardFooter data-testid="footer">Card footer</CardFooter>);
+    const { getByTestId } = render(
+      <CardFooter data-testid="footer">Card footer</CardFooter>,
+    );
     expect(getByTestId("footer")).toBeInTheDocument();
   });
   it("renders all subcomponents together", () => {
@@ -46,7 +50,7 @@ describe("Card", () => {
         </CardHeader>
         <CardContent>Body</CardContent>
         <CardFooter>Footer</CardFooter>
-      </Card>
+      </Card>,
     );
     expect(getByText("Title")).toBeInTheDocument();
     expect(getByText("Description")).toBeInTheDocument();

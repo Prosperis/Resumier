@@ -34,6 +34,6 @@ export const useAnimationStore = create<AnimationStore>()(
     }),
     {
       name: "resumier-animation-settings",
-    }
-  )
+    },
+  ),
 );

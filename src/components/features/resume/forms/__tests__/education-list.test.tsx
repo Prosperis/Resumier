@@ -6,7 +6,9 @@ import { EducationList } from "../education-list";
 
 // Mock the dnd-kit modules
 vi.mock("@dnd-kit/core", () => ({
-  DndContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DndContext: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   closestCenter: vi.fn(),
   useSensor: vi.fn(),
   useSensors: vi.fn(() => []),
@@ -15,7 +17,9 @@ vi.mock("@dnd-kit/core", () => ({
 }));
 
 vi.mock("@dnd-kit/sortable", () => ({
-  SortableContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SortableContext: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   verticalListSortingStrategy: vi.fn(),
   sortableKeyboardCoordinates: vi.fn(),
   useSortable: vi.fn(() => ({
@@ -37,7 +41,9 @@ vi.mock("@dnd-kit/utilities", () => ({
 }));
 
 vi.mock("../dnd/sortable-item", () => ({
-  SortableItem: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SortableItem: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));
 
 vi.mock("../dnd/drag-handle", () => ({
@@ -94,15 +100,27 @@ describe("EducationList", () => {
 
   describe("Empty State", () => {
     it("renders empty state when no education", () => {
-      render(<EducationList education={[]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("No education added yet.")).toBeInTheDocument();
-      expect(screen.getByText('Click "Add Education" to get started.')).toBeInTheDocument();
+      expect(
+        screen.getByText('Click "Add Education" to get started.'),
+      ).toBeInTheDocument();
     });
 
     it("renders empty state with dashed border card", () => {
       const { container } = render(
-        <EducationList education={[]} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={[]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       const card = container.querySelector(".border-dashed");
@@ -113,7 +131,11 @@ describe("EducationList", () => {
   describe("Education Rendering", () => {
     it("renders all education entries", () => {
       render(
-        <EducationList education={sampleEducation} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={sampleEducation}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       expect(screen.getByText("Bachelor of Science")).toBeInTheDocument();
@@ -123,7 +145,11 @@ describe("EducationList", () => {
 
     it("displays institution names", () => {
       render(
-        <EducationList education={sampleEducation} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={sampleEducation}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       expect(screen.getByText("Stanford University")).toBeInTheDocument();
@@ -133,7 +159,11 @@ describe("EducationList", () => {
 
     it("displays field of study", () => {
       render(
-        <EducationList education={sampleEducation} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={sampleEducation}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       expect(screen.getByText("Computer Science")).toBeInTheDocument();
@@ -147,7 +177,7 @@ describe("EducationList", () => {
           education={[sampleEducation[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       expect(screen.getByText("Sep 2015 – Jun 2019")).toBeInTheDocument();
@@ -159,7 +189,7 @@ describe("EducationList", () => {
           education={[sampleEducation[1]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       expect(screen.getByText("Sep 2019 – Present")).toBeInTheDocument();
@@ -171,7 +201,7 @@ describe("EducationList", () => {
           education={[sampleEducation[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       expect(screen.getByText("GPA:")).toBeInTheDocument();
@@ -184,7 +214,7 @@ describe("EducationList", () => {
           education={[sampleEducation[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       expect(screen.getByText("Honors & Awards:")).toBeInTheDocument();
@@ -202,7 +232,7 @@ describe("EducationList", () => {
           education={[eduWithoutContent]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       // Should render the degree
@@ -220,7 +250,11 @@ describe("EducationList", () => {
       };
 
       render(
-        <EducationList education={[eduWithGPA]} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={[eduWithGPA]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       expect(screen.getByText("GPA:")).toBeInTheDocument();
@@ -234,7 +268,11 @@ describe("EducationList", () => {
       };
 
       render(
-        <EducationList education={[eduWithHonors]} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={[eduWithHonors]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       expect(screen.getByText("Honors & Awards:")).toBeInTheDocument();
@@ -253,7 +291,7 @@ describe("EducationList", () => {
           education={[eduWithWhitespaceGPA]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       // Should render the degree
@@ -269,7 +307,11 @@ describe("EducationList", () => {
     it("calls onEdit with correct education when edit button clicked", async () => {
       const user = userEvent.setup();
       render(
-        <EducationList education={sampleEducation} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={sampleEducation}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       const editButtons = screen.getAllByLabelText(/edit.*education/i);
@@ -285,16 +327,22 @@ describe("EducationList", () => {
           education={[sampleEducation[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
-      expect(screen.getByLabelText("Edit Bachelor of Science education")).toBeInTheDocument();
+      expect(
+        screen.getByLabelText("Edit Bachelor of Science education"),
+      ).toBeInTheDocument();
     });
 
     it("calls onEdit for different education entries independently", async () => {
       const user = userEvent.setup();
       render(
-        <EducationList education={sampleEducation} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={sampleEducation}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       const editButtons = screen.getAllByLabelText(/edit.*education/i);
@@ -311,7 +359,11 @@ describe("EducationList", () => {
     it("calls onDelete with correct id when delete button clicked", async () => {
       const user = userEvent.setup();
       render(
-        <EducationList education={sampleEducation} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={sampleEducation}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       const deleteButtons = screen.getAllByLabelText(/delete.*education/i);
@@ -327,16 +379,22 @@ describe("EducationList", () => {
           education={[sampleEducation[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
-      expect(screen.getByLabelText("Delete Bachelor of Science education")).toBeInTheDocument();
+      expect(
+        screen.getByLabelText("Delete Bachelor of Science education"),
+      ).toBeInTheDocument();
     });
 
     it("calls onDelete for different education entries independently", async () => {
       const user = userEvent.setup();
       render(
-        <EducationList education={sampleEducation} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={sampleEducation}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       const deleteButtons = screen.getAllByLabelText(/delete.*education/i);
@@ -357,7 +415,13 @@ describe("EducationList", () => {
         endDate: "2024-01",
       };
 
-      render(<EducationList education={[edu]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[edu]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("Jan 2020 – Jan 2024")).toBeInTheDocument();
     });
@@ -369,7 +433,13 @@ describe("EducationList", () => {
         endDate: "2024-12",
       };
 
-      render(<EducationList education={[edu]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[edu]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("Dec 2020 – Dec 2024")).toBeInTheDocument();
     });
@@ -378,7 +448,11 @@ describe("EducationList", () => {
   describe("Multiple Education Entries", () => {
     it("renders multiple entries in order", () => {
       render(
-        <EducationList education={sampleEducation} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={sampleEducation}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       const degrees = screen.getAllByRole("heading", { level: 3 });
@@ -390,7 +464,11 @@ describe("EducationList", () => {
 
     it("renders edit and delete buttons for each entry", () => {
       render(
-        <EducationList education={sampleEducation} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <EducationList
+          education={sampleEducation}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       const editButtons = screen.getAllByLabelText(/edit.*education/i);
@@ -408,7 +486,13 @@ describe("EducationList", () => {
         honors: ["First Honor", "Second Honor", "Third Honor"],
       };
 
-      render(<EducationList education={[edu]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[edu]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("First Honor")).toBeInTheDocument();
       expect(screen.getByText("Second Honor")).toBeInTheDocument();
@@ -421,7 +505,13 @@ describe("EducationList", () => {
         honors: ["Only Honor"],
       };
 
-      render(<EducationList education={[edu]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[edu]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("Only Honor")).toBeInTheDocument();
     });
@@ -433,7 +523,13 @@ describe("EducationList", () => {
         honors: [],
       };
 
-      render(<EducationList education={[edu]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[edu]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.queryByText("Honors & Awards:")).not.toBeInTheDocument();
     });
@@ -446,7 +542,13 @@ describe("EducationList", () => {
         honors: undefined as unknown as string[],
       };
 
-      render(<EducationList education={[edu]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[edu]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("Bachelor of Science")).toBeInTheDocument();
     });
@@ -457,7 +559,7 @@ describe("EducationList", () => {
           education={[sampleEducation[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       expect(screen.getByText("Bachelor of Science")).toBeInTheDocument();
@@ -471,9 +573,17 @@ describe("EducationList", () => {
           "Bachelor of Science in Advanced Computer Science and Software Engineering Technology",
       };
 
-      render(<EducationList education={[edu]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[edu]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
-      expect(screen.getByText(/Bachelor of Science in Advanced/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Bachelor of Science in Advanced/),
+      ).toBeInTheDocument();
     });
 
     it("handles very long institution names", () => {
@@ -483,9 +593,17 @@ describe("EducationList", () => {
           "The Very Long Name University of Technology and Applied Sciences International",
       };
 
-      render(<EducationList education={[edu]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[edu]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
-      expect(screen.getByText(/The Very Long Name University/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/The Very Long Name University/),
+      ).toBeInTheDocument();
     });
 
     it("handles GPA with trailing spaces", () => {
@@ -495,7 +613,13 @@ describe("EducationList", () => {
         honors: [],
       };
 
-      render(<EducationList education={[edu]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[edu]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("GPA:")).toBeInTheDocument();
       expect(screen.getByText("3.8")).toBeInTheDocument();
@@ -509,7 +633,13 @@ describe("EducationList", () => {
         gpa: "3.95",
       };
 
-      render(<EducationList education={[edu]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[edu]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       const gpaText = screen.getByText((content, element) => {
         return element?.textContent === "GPA: 3.95";
@@ -523,7 +653,13 @@ describe("EducationList", () => {
         gpa: "4.0",
       };
 
-      render(<EducationList education={[edu]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <EducationList
+          education={[edu]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("4.0")).toBeInTheDocument();
     });

@@ -9,7 +9,10 @@ import { describe, expect, it } from "vitest";
 import { CreateResumeDialog } from "@/components/features/resume/mutations/create-resume-dialog";
 import { DeleteResumeDialog } from "@/components/features/resume/mutations/delete-resume-dialog";
 import { RenameResumeDialog } from "@/components/features/resume/mutations/rename-resume-dialog";
-import { expectNoAccessibilityViolations, renderWithQuery } from "@/test/accessibility-utils";
+import {
+  expectNoAccessibilityViolations,
+  renderWithQuery,
+} from "@/test/accessibility-utils";
 
 describe("Dialog Accessibility Tests", () => {
   describe("CreateResumeDialog", () => {
@@ -67,12 +70,16 @@ describe("Dialog Accessibility Tests", () => {
       await user.click(triggerButton);
 
       await waitFor(() => {
-        const createButton = screen.getByRole("button", { name: /create resume/i });
+        const createButton = screen.getByRole("button", {
+          name: /create resume/i,
+        });
         expect(createButton).toBeInTheDocument();
       });
 
       // Try to submit without filling the form
-      const createButton = screen.getByRole("button", { name: /create resume/i });
+      const createButton = screen.getByRole("button", {
+        name: /create resume/i,
+      });
       await user.click(createButton);
 
       await waitFor(() => {
@@ -89,11 +96,15 @@ describe("Dialog Accessibility Tests", () => {
       await user.click(triggerButton);
 
       await waitFor(() => {
-        const createButton = screen.getByRole("button", { name: /create resume/i });
+        const createButton = screen.getByRole("button", {
+          name: /create resume/i,
+        });
         expect(createButton).toBeInTheDocument();
       });
 
-      const createButton = screen.getByRole("button", { name: /create resume/i });
+      const createButton = screen.getByRole("button", {
+        name: /create resume/i,
+      });
       await user.click(createButton);
 
       await waitFor(() => {
@@ -117,7 +128,9 @@ describe("Dialog Accessibility Tests", () => {
 
       await waitFor(() => {
         const cancelButton = screen.getByRole("button", { name: /cancel/i });
-        const createButton = screen.getByRole("button", { name: /create resume/i });
+        const createButton = screen.getByRole("button", {
+          name: /create resume/i,
+        });
 
         expect(cancelButton).toBeInTheDocument();
         expect(createButton).toBeInTheDocument();
@@ -136,7 +149,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId={mockResumeId}
           currentTitle={mockResumeTitle}
           trigger={<button>Rename</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /rename/i });
@@ -154,7 +167,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId={mockResumeId}
           currentTitle={mockResumeTitle}
           trigger={<button>Rename</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /rename/i });
@@ -173,7 +186,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId={mockResumeId}
           currentTitle={mockResumeTitle}
           trigger={<button>Rename</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /rename/i });
@@ -198,7 +211,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId={mockResumeId}
           resumeTitle={mockResumeTitle}
           trigger={<button>Delete</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /delete/i });
@@ -216,7 +229,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId={mockResumeId}
           resumeTitle={mockResumeTitle}
           trigger={<button>Delete</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /delete/i });
@@ -235,7 +248,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId={mockResumeId}
           resumeTitle={mockResumeTitle}
           trigger={<button>Delete</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /delete/i });
@@ -243,7 +256,9 @@ describe("Dialog Accessibility Tests", () => {
 
       await waitFor(() => {
         const cancelButton = screen.getByRole("button", { name: /cancel/i });
-        const deleteButton = screen.getByRole("button", { name: /confirm delete resume/i });
+        const deleteButton = screen.getByRole("button", {
+          name: /confirm delete resume/i,
+        });
 
         expect(cancelButton).toBeInTheDocument();
         expect(deleteButton).toBeInTheDocument();
@@ -347,7 +362,9 @@ describe("Dialog Accessibility Tests", () => {
       await user.click(triggerButton);
 
       await waitFor(() => {
-        const createButton = screen.getByRole("button", { name: /create resume/i });
+        const createButton = screen.getByRole("button", {
+          name: /create resume/i,
+        });
         user.click(createButton);
       });
 
@@ -365,7 +382,9 @@ describe("Dialog Accessibility Tests", () => {
       await user.click(triggerButton);
 
       await waitFor(() => {
-        const createButton = screen.getByRole("button", { name: /create resume/i });
+        const createButton = screen.getByRole("button", {
+          name: /create resume/i,
+        });
         user.click(createButton);
       });
 
@@ -388,7 +407,9 @@ describe("Dialog Accessibility Tests", () => {
       await user.click(triggerButton);
 
       await waitFor(() => {
-        const createButton = screen.getByRole("button", { name: /create resume/i });
+        const createButton = screen.getByRole("button", {
+          name: /create resume/i,
+        });
         const cancelButton = screen.getByRole("button", { name: /cancel/i });
 
         expect(createButton).toHaveAccessibleName();
@@ -405,7 +426,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId="test-id"
           currentTitle="Test Resume"
           trigger={<button>Rename</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /rename/i });
@@ -423,7 +444,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId="test-id"
           currentTitle="Test Resume"
           trigger={<button>Rename</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /rename/i });
@@ -443,7 +464,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId="test-id"
           currentTitle="Test Resume"
           trigger={<button>Rename</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /rename/i });
@@ -465,7 +486,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId="test-id"
           resumeTitle="Test Resume"
           trigger={<button>Delete</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /delete/i });
@@ -483,7 +504,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId="test-id"
           resumeTitle="Test Resume"
           trigger={<button>Delete</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /delete/i });
@@ -504,7 +525,7 @@ describe("Dialog Accessibility Tests", () => {
           resumeId="test-id"
           resumeTitle="Test Resume"
           trigger={<button>Delete</button>}
-        />
+        />,
       );
 
       const triggerButton = screen.getByRole("button", { name: /delete/i });
@@ -512,7 +533,9 @@ describe("Dialog Accessibility Tests", () => {
 
       await waitFor(() => {
         const cancelButton = screen.getByRole("button", { name: /cancel/i });
-        const deleteButton = screen.getByRole("button", { name: /delete resume/i });
+        const deleteButton = screen.getByRole("button", {
+          name: /delete resume/i,
+        });
 
         expect(cancelButton).toHaveAccessibleName();
         expect(deleteButton).toHaveAccessibleName();

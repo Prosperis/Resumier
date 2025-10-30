@@ -35,7 +35,12 @@ export {
   useResumeStore,
 } from "./resume-store";
 export type { Theme } from "./theme-store";
-export { selectSetTheme, selectTheme, selectToggleTheme, useThemeStore } from "./theme-store";
+export {
+  selectSetTheme,
+  selectTheme,
+  selectToggleTheme,
+  useThemeStore,
+} from "./theme-store";
 export type { Notification } from "./ui-store";
 export {
   selectActiveDialog,

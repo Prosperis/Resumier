@@ -21,7 +21,10 @@ interface CreateResumeDialogProps {
   onSuccess?: (id: string) => void;
 }
 
-export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogProps) {
+export function CreateResumeDialog({
+  trigger,
+  onSuccess,
+}: CreateResumeDialogProps) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [validationError, setValidationError] = useState("");
@@ -94,7 +97,7 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -112,7 +115,9 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
         <form onSubmit={handleSubmit} noValidate>
           <DialogHeader>
             <DialogTitle>Create New Resume</DialogTitle>
-            <DialogDescription>Give your resume a title to get started</DialogDescription>
+            <DialogDescription>
+              Give your resume a title to get started
+            </DialogDescription>
           </DialogHeader>
 
           <div className="py-4">
@@ -133,16 +138,28 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
               required
               aria-invalid={!!validationError || !!error}
               aria-describedby={
-                validationError ? "title-validation-error" : error ? "title-api-error" : undefined
+                validationError
+                  ? "title-validation-error"
+                  : error
+                    ? "title-api-error"
+                    : undefined
               }
             />
             {validationError && (
-              <p id="title-validation-error" className="text-destructive mt-2 text-sm" role="alert">
+              <p
+                id="title-validation-error"
+                className="text-destructive mt-2 text-sm"
+                role="alert"
+              >
                 {validationError}
               </p>
             )}
             {error && !validationError && (
-              <p id="title-api-error" className="text-destructive mt-2 text-sm" role="alert">
+              <p
+                id="title-api-error"
+                className="text-destructive mt-2 text-sm"
+                role="alert"
+              >
                 {error.message || "An error occurred"}
               </p>
             )}
@@ -162,7 +179,12 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
               disabled={isPending}
               aria-label={isPending ? "Creating resume..." : "Create resume"}
             >
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
+              {isPending && (
+                <Loader2
+                  className="mr-2 h-4 w-4 animate-spin"
+                  aria-hidden="true"
+                />
+              )}
               Create Resume
             </Button>
           </DialogFooter>

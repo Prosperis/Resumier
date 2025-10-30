@@ -63,7 +63,10 @@ export function ExportMenu({ resume }: ExportMenuProps) {
     printResume(resume.title);
   };
 
-  const handleExport = async (format: string, handler: () => void | Promise<void>) => {
+  const handleExport = async (
+    format: string,
+    handler: () => void | Promise<void>,
+  ) => {
     setIsExporting(true);
     try {
       await handler();
@@ -106,7 +109,7 @@ export function ExportMenu({ resume }: ExportMenuProps) {
       handler: () =>
         downloadHTML(
           resume,
-          `<h1>${resume.content.personalInfo.name}</h1><p>Resume content here</p>`
+          `<h1>${resume.content.personalInfo.name}</h1><p>Resume content here</p>`,
         ),
     },
     {
@@ -156,7 +159,9 @@ export function ExportMenu({ resume }: ExportMenuProps) {
               <Icon className="mr-2 h-4 w-4" />
               <div className="flex flex-col">
                 <span>{format.label}</span>
-                <span className="text-muted-foreground text-xs">{format.description}</span>
+                <span className="text-muted-foreground text-xs">
+                  {format.description}
+                </span>
               </div>
             </DropdownMenuItem>
           );
@@ -164,11 +169,17 @@ export function ExportMenu({ resume }: ExportMenuProps) {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem onClick={handlePrint} className="cursor-pointer" disabled={isExporting}>
+        <DropdownMenuItem
+          onClick={handlePrint}
+          className="cursor-pointer"
+          disabled={isExporting}
+        >
           <Printer className="mr-2 h-4 w-4" />
           <div className="flex flex-col">
             <span>Print</span>
-            <span className="text-muted-foreground text-xs">Open print preview</span>
+            <span className="text-muted-foreground text-xs">
+              Open print preview
+            </span>
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

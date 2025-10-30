@@ -133,7 +133,12 @@ describe("MinimalTemplate", () => {
     it("applies minimal design header styles", () => {
       const { container } = render(<MinimalTemplate resume={mockResumeFull} />);
       const heading = screen.getByText("Jane Smith");
-      expect(heading).toHaveClass("text-5xl", "font-light", "mb-3", "tracking-tight");
+      expect(heading).toHaveClass(
+        "text-5xl",
+        "font-light",
+        "mb-3",
+        "tracking-tight",
+      );
     });
   });
 
@@ -141,13 +146,17 @@ describe("MinimalTemplate", () => {
     it("renders summary when provided", () => {
       render(<MinimalTemplate resume={mockResumeFull} />);
       expect(
-        screen.getByText("Creative designer with passion for user experience")
+        screen.getByText("Creative designer with passion for user experience"),
       ).toBeInTheDocument();
     });
 
     it("does not render summary section when empty", () => {
-      const { container } = render(<MinimalTemplate resume={mockResumeMinimal} />);
-      const summaryText = container.querySelector(".text-sm.leading-relaxed.text-gray-700");
+      const { container } = render(
+        <MinimalTemplate resume={mockResumeMinimal} />,
+      );
+      const summaryText = container.querySelector(
+        ".text-sm.leading-relaxed.text-gray-700",
+      );
       expect(summaryText).not.toBeInTheDocument();
     });
   });
@@ -161,7 +170,7 @@ describe("MinimalTemplate", () => {
         "font-semibold",
         "uppercase",
         "tracking-wider",
-        "text-gray-500"
+        "text-gray-500",
       );
     });
 
@@ -194,7 +203,9 @@ describe("MinimalTemplate", () => {
     it("renders highlights with em dash bullets", () => {
       render(<MinimalTemplate resume={mockResumeFull} />);
       expect(screen.getByText("Created brand guidelines")).toBeInTheDocument();
-      expect(screen.getByText("Improved UX metrics by 40%")).toBeInTheDocument();
+      expect(
+        screen.getByText("Improved UX metrics by 40%"),
+      ).toBeInTheDocument();
     });
 
     it("does not render highlights section when empty", () => {
@@ -272,7 +283,9 @@ describe("MinimalTemplate", () => {
     it("renders soft skills with bullet separators", () => {
       render(<MinimalTemplate resume={mockResumeFull} />);
       expect(screen.getByText("Soft Skills")).toBeInTheDocument();
-      expect(screen.getByText("Creativity • Problem Solving")).toBeInTheDocument();
+      expect(
+        screen.getByText("Creativity • Problem Solving"),
+      ).toBeInTheDocument();
     });
 
     it("uses grid layout for skills", () => {
@@ -296,7 +309,9 @@ describe("MinimalTemplate", () => {
     it("renders certification name, issuer, and date with bullet separator", () => {
       render(<MinimalTemplate resume={mockResumeFull} />);
       expect(screen.getByText("UX Certification")).toBeInTheDocument();
-      expect(screen.getByText("Nielsen Norman Group • 2020")).toBeInTheDocument();
+      expect(
+        screen.getByText("Nielsen Norman Group • 2020"),
+      ).toBeInTheDocument();
     });
   });
 
@@ -343,7 +358,7 @@ describe("MinimalTemplate", () => {
         "max-w-[21cm]",
         "mx-auto",
         "p-16",
-        "font-sans"
+        "font-sans",
       );
     });
 

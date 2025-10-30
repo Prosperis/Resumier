@@ -23,7 +23,9 @@ describe("CertificationFormDialog", () => {
       render(<CertificationFormDialog {...defaultProps} />);
       expect(screen.getByRole("dialog")).toBeInTheDocument();
       expect(screen.getByText("Add Certification")).toBeInTheDocument();
-      expect(screen.getByText("Add your certification details.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Add your certification details."),
+      ).toBeInTheDocument();
     });
     it("renders with custom title and description", () => {
       render(
@@ -31,10 +33,12 @@ describe("CertificationFormDialog", () => {
           {...defaultProps}
           title="Edit Certification"
           description="Update your certification information."
-        />
+        />,
       );
       expect(screen.getByText("Edit Certification")).toBeInTheDocument();
-      expect(screen.getByText("Update your certification information.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Update your certification information."),
+      ).toBeInTheDocument();
     });
     it("does not render when closed", () => {
       render(<CertificationFormDialog {...defaultProps} open={false} />);
@@ -43,7 +47,9 @@ describe("CertificationFormDialog", () => {
     it("renders all form fields", () => {
       render(<CertificationFormDialog {...defaultProps} />);
       expect(screen.getByLabelText(/certification name/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/issuing organization/i)).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(/issuing organization/i),
+      ).toBeInTheDocument();
       expect(screen.getByLabelText(/^issue date$/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/expiry date/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/credential id/i)).toBeInTheDocument();
@@ -51,15 +57,23 @@ describe("CertificationFormDialog", () => {
     });
     it("renders action buttons", () => {
       render(<CertificationFormDialog {...defaultProps} />);
-      expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /^save$/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /cancel/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /^save$/i }),
+      ).toBeInTheDocument();
     });
     it("shows field descriptions", () => {
       render(<CertificationFormDialog {...defaultProps} />);
       expect(screen.getByText(/format: yyyy-mm/i)).toBeInTheDocument();
       expect(screen.getByText(/leave blank if no expiry/i)).toBeInTheDocument();
-      expect(screen.getByText(/certificate or credential number/i)).toBeInTheDocument();
-      expect(screen.getByText(/link to verify the certification/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/certificate or credential number/i),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/link to verify the certification/i),
+      ).toBeInTheDocument();
     });
   });
   describe("Form Interaction", () => {
@@ -111,7 +125,10 @@ describe("CertificationFormDialog", () => {
       const user = userEvent.setup();
       const onSubmit = vi.fn();
       render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
-      await user.type(screen.getByLabelText(/certification name/i), "AWS Solutions Architect");
+      await user.type(
+        screen.getByLabelText(/certification name/i),
+        "AWS Solutions Architect",
+      );
       await user.type(screen.getByLabelText(/issuing organization/i), "AWS");
       await user.type(screen.getByLabelText(/^issue date$/i), "2023-06");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
@@ -122,7 +139,7 @@ describe("CertificationFormDialog", () => {
             name: "AWS Solutions Architect",
             issuer: "AWS",
             date: "2023-06",
-          })
+          }),
         );
       });
     });
@@ -130,12 +147,18 @@ describe("CertificationFormDialog", () => {
       const user = userEvent.setup();
       const onSubmit = vi.fn();
       render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
-      await user.type(screen.getByLabelText(/certification name/i), "AWS Solutions Architect");
+      await user.type(
+        screen.getByLabelText(/certification name/i),
+        "AWS Solutions Architect",
+      );
       await user.type(screen.getByLabelText(/issuing organization/i), "AWS");
       await user.type(screen.getByLabelText(/^issue date$/i), "2023-06");
       await user.type(screen.getByLabelText(/expiry date/i), "2026-06");
       await user.type(screen.getByLabelText(/credential id/i), "ABC123");
-      await user.type(screen.getByLabelText(/credential url/i), "https://example.com/cert");
+      await user.type(
+        screen.getByLabelText(/credential url/i),
+        "https://example.com/cert",
+      );
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
@@ -165,7 +188,7 @@ describe("CertificationFormDialog", () => {
             issuer: "PMI",
             date: "2022-01",
             expiryDate: "",
-          })
+          }),
         );
       });
     });
@@ -185,7 +208,7 @@ describe("CertificationFormDialog", () => {
             issuer: "ISC2",
             date: "2021-03",
             credentialId: "",
-          })
+          }),
         );
       });
     });
@@ -205,16 +228,27 @@ describe("CertificationFormDialog", () => {
             issuer: "CNCF",
             date: "2023-09",
             url: "",
-          })
+          }),
         );
       });
     });
     it("closes dialog after successful submission", async () => {
       const user = userEvent.setup();
       const onOpenChange = vi.fn();
-      render(<CertificationFormDialog {...defaultProps} onOpenChange={onOpenChange} />);
-      await user.type(screen.getByLabelText(/certification name/i), "Test Cert");
-      await user.type(screen.getByLabelText(/issuing organization/i), "Test Org");
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          onOpenChange={onOpenChange}
+        />,
+      );
+      await user.type(
+        screen.getByLabelText(/certification name/i),
+        "Test Cert",
+      );
+      await user.type(
+        screen.getByLabelText(/issuing organization/i),
+        "Test Org",
+      );
       await user.type(screen.getByLabelText(/^issue date$/i), "2023-01");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
@@ -227,7 +261,10 @@ describe("CertificationFormDialog", () => {
       render(<CertificationFormDialog {...defaultProps} />);
       const nameInput = screen.getByLabelText(/certification name/i);
       await user.type(nameInput, "Test Certification");
-      await user.type(screen.getByLabelText(/issuing organization/i), "Test Org");
+      await user.type(
+        screen.getByLabelText(/issuing organization/i),
+        "Test Org",
+      );
       await user.type(screen.getByLabelText(/^issue date$/i), "2023-01");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
@@ -240,7 +277,12 @@ describe("CertificationFormDialog", () => {
     it("closes dialog when cancel is clicked", async () => {
       const user = userEvent.setup();
       const onOpenChange = vi.fn();
-      render(<CertificationFormDialog {...defaultProps} onOpenChange={onOpenChange} />);
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          onOpenChange={onOpenChange}
+        />,
+      );
       const cancelButton = screen.getByRole("button", { name: /cancel/i });
       await user.click(cancelButton);
       expect(onOpenChange).toHaveBeenCalledWith(false);
@@ -265,13 +307,24 @@ describe("CertificationFormDialog", () => {
         credentialId: "DEF456",
         url: "https://default.com/cert",
       };
-      render(<CertificationFormDialog {...defaultProps} defaultValues={defaultValues} />);
-      expect(screen.getByLabelText(/certification name/i)).toHaveValue("Default Cert");
-      expect(screen.getByLabelText(/issuing organization/i)).toHaveValue("Default Org");
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          defaultValues={defaultValues}
+        />,
+      );
+      expect(screen.getByLabelText(/certification name/i)).toHaveValue(
+        "Default Cert",
+      );
+      expect(screen.getByLabelText(/issuing organization/i)).toHaveValue(
+        "Default Org",
+      );
       expect(screen.getByLabelText(/^issue date$/i)).toHaveValue("2022-06");
       expect(screen.getByLabelText(/expiry date/i)).toHaveValue("2025-06");
       expect(screen.getByLabelText(/credential id/i)).toHaveValue("DEF456");
-      expect(screen.getByLabelText(/credential url/i)).toHaveValue("https://default.com/cert");
+      expect(screen.getByLabelText(/credential url/i)).toHaveValue(
+        "https://default.com/cert",
+      );
     });
     it("handles partial default values", () => {
       const defaultValues = {
@@ -279,9 +332,18 @@ describe("CertificationFormDialog", () => {
         issuer: "Partial Org",
         date: "2021-01",
       };
-      render(<CertificationFormDialog {...defaultProps} defaultValues={defaultValues} />);
-      expect(screen.getByLabelText(/certification name/i)).toHaveValue("Partial Cert");
-      expect(screen.getByLabelText(/issuing organization/i)).toHaveValue("Partial Org");
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          defaultValues={defaultValues}
+        />,
+      );
+      expect(screen.getByLabelText(/certification name/i)).toHaveValue(
+        "Partial Cert",
+      );
+      expect(screen.getByLabelText(/issuing organization/i)).toHaveValue(
+        "Partial Org",
+      );
       expect(screen.getByLabelText(/^issue date$/i)).toHaveValue("2021-01");
       expect(screen.getByLabelText(/expiry date/i)).toHaveValue("");
       expect(screen.getByLabelText(/credential id/i)).toHaveValue("");
@@ -293,7 +355,10 @@ describe("CertificationFormDialog", () => {
       const user = userEvent.setup();
       render(<CertificationFormDialog {...defaultProps} />);
       // Fill in other required fields but leave name empty
-      await user.type(screen.getByLabelText(/issuing organization/i), "Test Org");
+      await user.type(
+        screen.getByLabelText(/issuing organization/i),
+        "Test Org",
+      );
       await user.type(screen.getByLabelText(/^issue date$/i), "2023-01");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
@@ -306,7 +371,10 @@ describe("CertificationFormDialog", () => {
       const user = userEvent.setup();
       render(<CertificationFormDialog {...defaultProps} />);
       // Fill in other required fields but leave issuer empty
-      await user.type(screen.getByLabelText(/certification name/i), "Test Cert");
+      await user.type(
+        screen.getByLabelText(/certification name/i),
+        "Test Cert",
+      );
       await user.type(screen.getByLabelText(/^issue date$/i), "2023-01");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
@@ -319,8 +387,14 @@ describe("CertificationFormDialog", () => {
       const user = userEvent.setup();
       render(<CertificationFormDialog {...defaultProps} />);
       // Fill in other required fields but leave date empty
-      await user.type(screen.getByLabelText(/certification name/i), "Test Cert");
-      await user.type(screen.getByLabelText(/issuing organization/i), "Test Org");
+      await user.type(
+        screen.getByLabelText(/certification name/i),
+        "Test Cert",
+      );
+      await user.type(
+        screen.getByLabelText(/issuing organization/i),
+        "Test Org",
+      );
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
@@ -339,7 +413,7 @@ describe("CertificationFormDialog", () => {
       await user.type(screen.getByLabelText(/^issue date$/i), "2023-01");
       await user.type(
         screen.getByLabelText(/credential url/i),
-        "https://www.credly.com/badges/12345"
+        "https://www.credly.com/badges/12345",
       );
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
@@ -347,7 +421,7 @@ describe("CertificationFormDialog", () => {
         expect(onSubmit).toHaveBeenCalledWith(
           expect.objectContaining({
             url: "https://www.credly.com/badges/12345",
-          })
+          }),
         );
       });
     });
@@ -383,7 +457,7 @@ describe("CertificationFormDialog", () => {
           expect.objectContaining({
             date: "2023-01",
             expiryDate: "2026-01",
-          })
+          }),
         );
       });
     });
@@ -391,7 +465,9 @@ describe("CertificationFormDialog", () => {
   describe("Placeholder Text", () => {
     it("shows helpful placeholder for certification name", () => {
       render(<CertificationFormDialog {...defaultProps} />);
-      const nameInput = screen.getByPlaceholderText(/aws certified solutions architect/i);
+      const nameInput = screen.getByPlaceholderText(
+        /aws certified solutions architect/i,
+      );
       expect(nameInput).toBeInTheDocument();
     });
     it("shows helpful placeholder for issuing organization", () => {
@@ -406,7 +482,9 @@ describe("CertificationFormDialog", () => {
     });
     it("shows helpful placeholder for URL", () => {
       render(<CertificationFormDialog {...defaultProps} />);
-      const urlInput = screen.getByPlaceholderText(/https:\/\/www\.credly\.com\/badges\//i);
+      const urlInput = screen.getByPlaceholderText(
+        /https:\/\/www\.credly\.com\/badges\//i,
+      );
       expect(urlInput).toBeInTheDocument();
     });
   });

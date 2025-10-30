@@ -86,7 +86,7 @@ export function useAutoSave({
             onError: (err: Error) => {
               setError(err);
             },
-          }
+          },
         );
       }
     }, debounceMs);

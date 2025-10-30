@@ -84,7 +84,9 @@ export function useReducedMotion(): boolean {
  * >
  * ```
  */
-export function useAnimationTransition(transition: Transition = {}): Transition {
+export function useAnimationTransition(
+  transition: Transition = {},
+): Transition {
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
@@ -112,7 +114,9 @@ export function useAnimationTransition(transition: Transition = {}): Transition 
  * >
  * ```
  */
-export function useAnimationVariants(variants: Variants): Variants | Record<string, never> {
+export function useAnimationVariants(
+  variants: Variants,
+): Variants | Record<string, never> {
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {

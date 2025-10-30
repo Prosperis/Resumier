@@ -50,7 +50,12 @@ export function LinksSection({
               placeholder="https://linkedin.com/in/you"
             />
           </div>
-          <Button type="button" variant="outline" size="sm" onClick={() => removeLink(i)}>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => removeLink(i)}
+          >
             <Trash className="mr-2 h-4 w-4" /> Remove
           </Button>
         </div>

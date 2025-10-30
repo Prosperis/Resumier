@@ -21,7 +21,7 @@ describe("Button", () => {
     const { container } = render(
       <Button asChild>
         <a href="https://example.com">Link</a>
-      </Button>
+      </Button>,
     );
     const anchor = container.querySelector("a");
     expect(anchor).toBeInTheDocument();
@@ -29,7 +29,9 @@ describe("Button", () => {
   });
   it("handles click events", () => {
     const handleClick = vi.fn();
-    const { getByText } = render(<Button onClick={handleClick}>Click me</Button>);
+    const { getByText } = render(
+      <Button onClick={handleClick}>Click me</Button>,
+    );
     getByText("Click me").click();
     expect(handleClick).toHaveBeenCalledTimes(1);
   });

@@ -27,7 +27,9 @@ function RootComponent() {
         <Outlet />
       </RootLayout>
       {/* Show router devtools in development */}
-      {import.meta.env.DEV && <TanStackRouterDevtools position="bottom-right" />}
+      {import.meta.env.DEV && (
+        <TanStackRouterDevtools position="bottom-right" />
+      )}
     </>
   );
 }

@@ -1,14 +1,19 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 describe("TooltipProvider", () => {
   it("renders children correctly", () => {
     render(
       <TooltipProvider>
         <div data-testid="child">Content</div>
-      </TooltipProvider>
+      </TooltipProvider>,
     );
     expect(screen.getByTestId("child")).toBeInTheDocument();
   });
@@ -17,7 +22,7 @@ describe("TooltipProvider", () => {
     render(
       <TooltipProvider delayDuration={500}>
         <div>Content</div>
-      </TooltipProvider>
+      </TooltipProvider>,
     );
     // Component should render without errors
     expect(screen.getByText("Content")).toBeInTheDocument();
@@ -31,7 +36,7 @@ describe("Tooltip", () => {
       <Tooltip>
         <TooltipTrigger data-testid="trigger">Hover me</TooltipTrigger>
         <TooltipContent data-testid="content">Tooltip content</TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     expect(screen.getByTestId("trigger")).toBeInTheDocument();
@@ -51,7 +56,7 @@ describe("Tooltip", () => {
       <Tooltip>
         <TooltipTrigger data-testid="trigger">Hover me</TooltipTrigger>
         <TooltipContent data-testid="content">Tooltip content</TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     const trigger = screen.getByTestId("trigger");
@@ -73,7 +78,7 @@ describe("Tooltip", () => {
       <Tooltip open={true}>
         <TooltipTrigger>Hover me</TooltipTrigger>
         <TooltipContent data-testid="content">Tooltip content</TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     // Tooltip should be visible immediately
@@ -85,7 +90,7 @@ describe("Tooltip", () => {
       <Tooltip defaultOpen={true}>
         <TooltipTrigger>Hover me</TooltipTrigger>
         <TooltipContent data-testid="content">Tooltip content</TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     // Tooltip should be visible initially
@@ -99,7 +104,7 @@ describe("TooltipTrigger", () => {
       <Tooltip>
         <TooltipTrigger>Trigger Button</TooltipTrigger>
         <TooltipContent>Content</TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
     expect(screen.getByText("Trigger Button")).toBeInTheDocument();
   });
@@ -109,9 +114,12 @@ describe("TooltipTrigger", () => {
       <Tooltip>
         <TooltipTrigger data-testid="trigger">Trigger</TooltipTrigger>
         <TooltipContent>Content</TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
-    expect(screen.getByTestId("trigger")).toHaveAttribute("data-slot", "tooltip-trigger");
+    expect(screen.getByTestId("trigger")).toHaveAttribute(
+      "data-slot",
+      "tooltip-trigger",
+    );
   });
 
   it("can be a button element", () => {
@@ -121,7 +129,7 @@ describe("TooltipTrigger", () => {
           <button type="button">Button Trigger</button>
         </TooltipTrigger>
         <TooltipContent>Content</TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
     const button = screen.getByRole("button", { name: "Button Trigger" });
     expect(button).toBeInTheDocument();
@@ -134,15 +142,19 @@ describe("TooltipContent", () => {
     render(
       <Tooltip>
         <TooltipTrigger data-testid="trigger">Hover</TooltipTrigger>
-        <TooltipContent data-testid="content">This is tooltip content</TooltipContent>
-      </Tooltip>
+        <TooltipContent data-testid="content">
+          This is tooltip content
+        </TooltipContent>
+      </Tooltip>,
     );
 
     await user.hover(screen.getByTestId("trigger"));
 
     await waitFor(() => {
       expect(screen.getByTestId("content")).toBeInTheDocument();
-      expect(screen.getByTestId("content").textContent).toContain("This is tooltip content");
+      expect(screen.getByTestId("content").textContent).toContain(
+        "This is tooltip content",
+      );
     });
   });
 
@@ -153,7 +165,7 @@ describe("TooltipContent", () => {
         <TooltipContent className="custom-tooltip" data-testid="content">
           Content
         </TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     const content = screen.getByTestId("content");
@@ -165,7 +177,7 @@ describe("TooltipContent", () => {
       <Tooltip defaultOpen={true}>
         <TooltipTrigger>Hover</TooltipTrigger>
         <TooltipContent data-testid="content">Content</TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     const content = screen.getByTestId("content");
@@ -179,7 +191,7 @@ describe("TooltipContent", () => {
         <TooltipContent sideOffset={10} data-testid="content">
           Content
         </TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     // Component should render without errors
@@ -193,7 +205,7 @@ describe("TooltipContent", () => {
         <TooltipContent side="top" data-testid="content">
           Content
         </TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     expect(screen.getByTestId("content")).toBeInTheDocument();
@@ -204,7 +216,7 @@ describe("TooltipContent", () => {
       <Tooltip defaultOpen={true}>
         <TooltipTrigger>Hover</TooltipTrigger>
         <TooltipContent data-testid="content">Content</TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     // The arrow is rendered as part of the component
@@ -219,7 +231,7 @@ describe("Tooltip accessibility", () => {
       <Tooltip>
         <TooltipTrigger data-testid="trigger">Hover me</TooltipTrigger>
         <TooltipContent>Tooltip content</TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     const trigger = screen.getByTestId("trigger");
@@ -250,7 +262,7 @@ describe("Tooltip with custom components", () => {
           </button>
         </TooltipTrigger>
         <TooltipContent data-testid="content">Icon tooltip</TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     expect(screen.getByTestId("icon")).toBeInTheDocument();
@@ -272,7 +284,7 @@ describe("Tooltip with custom components", () => {
             <p>Paragraph text</p>
           </div>
         </TooltipContent>
-      </Tooltip>
+      </Tooltip>,
     );
 
     const content = screen.getByTestId("content");

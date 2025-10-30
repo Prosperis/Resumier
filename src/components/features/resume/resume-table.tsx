@@ -13,7 +13,11 @@ interface ResumeTableProps {
   onDuplicate: (resume: Resume) => void;
 }
 
-export function ResumeTable({ resumes, onEdit, onDuplicate }: ResumeTableProps) {
+export function ResumeTable({
+  resumes,
+  onEdit,
+  onDuplicate,
+}: ResumeTableProps) {
   const columns = createResumeColumns({ onEdit, onDuplicate });
 
   // Hide date columns on mobile by default (can be toggled via column visibility)

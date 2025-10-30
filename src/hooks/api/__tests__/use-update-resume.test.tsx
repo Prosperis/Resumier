@@ -65,7 +65,10 @@ describe("useUpdateResume", () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     expect(result.current.data).toEqual(updatedResume);
-    expect(apiClient.put).toHaveBeenCalledWith(`/api/resumes/${resumeId}`, updateData);
+    expect(apiClient.put).toHaveBeenCalledWith(
+      `/api/resumes/${resumeId}`,
+      updateData,
+    );
   });
 
   it("updates the resume in cache after mutation", async () => {
@@ -178,7 +181,9 @@ describe("useUpdateResume", () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: resumeQueryKey(resumeId) });
+    expect(invalidateSpy).toHaveBeenCalledWith({
+      queryKey: resumeQueryKey(resumeId),
+    });
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: resumesQueryKey });
   });
 
@@ -248,7 +253,10 @@ describe("useUpdateResume", () => {
 
   it("handles optimistic update when list not in cache", async () => {
     const resumeId = "resume-123";
-    const originalResume = createMockResume({ id: resumeId, title: "Original" });
+    const originalResume = createMockResume({
+      id: resumeId,
+      title: "Original",
+    });
     const updateData: UpdateResumeDto = { title: "Updated" };
     const updatedResume = createMockResume({ id: resumeId, title: "Updated" });
 

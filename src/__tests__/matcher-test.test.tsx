@@ -7,7 +7,10 @@ describe("jest-dom matchers test", () => {
 
     // Try to call the matcher
     console.log("expect object keys:", Object.keys(expect));
-    console.log("Has toBeInTheDocument?", typeof (expect as any).toBeInTheDocument);
+    console.log(
+      "Has toBeInTheDocument?",
+      typeof (expect as any).toBeInTheDocument,
+    );
 
     // This should work if matchers are loaded
     expect(div).toBeInTheDocument();

@@ -3,7 +3,12 @@ import { z } from "zod";
 /**
  * Link Type
  */
-export const linkTypeSchema = z.enum(["portfolio", "linkedin", "github", "other"]);
+export const linkTypeSchema = z.enum([
+  "portfolio",
+  "linkedin",
+  "github",
+  "other",
+]);
 
 /**
  * Link Validation Schema

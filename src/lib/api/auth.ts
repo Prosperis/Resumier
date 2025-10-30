@@ -48,7 +48,11 @@ export const authApi = {
   /**
    * Register new user (TODO: implement when needed)
    */
-  async register(data: { email: string; password: string; name: string }): Promise<AuthResponse> {
+  async register(data: {
+    email: string;
+    password: string;
+    name: string;
+  }): Promise<AuthResponse> {
     return apiClient.post<AuthResponse>("/api/auth/register", data);
   },
 
@@ -56,13 +60,18 @@ export const authApi = {
    * Request password reset (TODO: implement when needed)
    */
   async forgotPassword(email: string): Promise<{ message: string }> {
-    return apiClient.post<{ message: string }>("/api/auth/forgot-password", { email });
+    return apiClient.post<{ message: string }>("/api/auth/forgot-password", {
+      email,
+    });
   },
 
   /**
    * Reset password (TODO: implement when needed)
    */
-  async resetPassword(token: string, password: string): Promise<{ message: string }> {
+  async resetPassword(
+    token: string,
+    password: string,
+  ): Promise<{ message: string }> {
     return apiClient.post<{ message: string }>("/api/auth/reset-password", {
       token,
       password,

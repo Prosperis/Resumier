@@ -1,5 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Cloud, Download, FileText, Sparkles, Zap } from "lucide-react";
+import {
+  ArrowRight,
+  Cloud,
+  Download,
+  FileText,
+  Sparkles,
+  Zap,
+} from "lucide-react";
 import { useState } from "react";
 import { AuthModal } from "@/components/features/auth/auth-modal";
 import { Button } from "@/components/ui/button";
@@ -24,7 +31,8 @@ function IndexComponent() {
             Build Your Perfect Resume
           </h1>
           <p className="text-muted-foreground mx-auto max-w-xl text-xl leading-relaxed">
-            Professional resume builder. Create, customize, and download in minutes.
+            Professional resume builder. Create, customize, and download in
+            minutes.
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <Button
@@ -51,10 +59,12 @@ function IndexComponent() {
             <div className="from-primary/20 to-primary/5 border-primary/10 relative flex h-12 w-12 items-center justify-center rounded-lg border bg-gradient-to-br backdrop-blur-sm">
               <FileText className="text-primary h-6 w-6" />
             </div>
-            <h2 className="relative text-2xl font-semibold">Multiple Templates</h2>
+            <h2 className="relative text-2xl font-semibold">
+              Multiple Templates
+            </h2>
             <p className="text-muted-foreground relative">
-              Choose from a variety of professional templates tailored to different industries and
-              experience levels.
+              Choose from a variety of professional templates tailored to
+              different industries and experience levels.
             </p>
           </div>
 
@@ -63,9 +73,12 @@ function IndexComponent() {
             <div className="relative flex h-12 w-12 items-center justify-center rounded-lg border border-purple-500/10 bg-gradient-to-br from-purple-500/20 to-purple-500/5 backdrop-blur-sm">
               <Sparkles className="h-6 w-6 text-purple-500" />
             </div>
-            <h2 className="relative text-2xl font-semibold">Real-time Preview</h2>
+            <h2 className="relative text-2xl font-semibold">
+              Real-time Preview
+            </h2>
             <p className="text-muted-foreground relative">
-              See your resume come to life as you type. What you see is exactly what you'll get.
+              See your resume come to life as you type. What you see is exactly
+              what you'll get.
             </p>
           </div>
 
@@ -76,7 +89,8 @@ function IndexComponent() {
             </div>
             <h2 className="relative text-2xl font-semibold">Export to PDF</h2>
             <p className="text-muted-foreground relative">
-              Download your resume as a high-quality PDF, ready to send to employers or print.
+              Download your resume as a high-quality PDF, ready to send to
+              employers or print.
             </p>
           </div>
 
@@ -87,17 +101,20 @@ function IndexComponent() {
             </div>
             <h2 className="relative text-2xl font-semibold">Cloud Storage</h2>
             <p className="text-muted-foreground relative">
-              Save your resumes securely in the cloud. Access them from anywhere, anytime.
+              Save your resumes securely in the cloud. Access them from
+              anywhere, anytime.
             </p>
           </div>
         </div>
 
         {/* CTA Section */}
         <div className="bg-muted/50 space-y-4 rounded-lg border p-8 text-center">
-          <h3 className="text-2xl font-semibold">Ready to create your resume?</h3>
+          <h3 className="text-2xl font-semibold">
+            Ready to create your resume?
+          </h3>
           <p className="text-muted-foreground mx-auto max-w-2xl">
-            Join thousands of job seekers who have built their perfect resume with Resumier. Start
-            for free today!
+            Join thousands of job seekers who have built their perfect resume
+            with Resumier. Start for free today!
           </p>
           <Link to="/resume/new">
             <Button size="lg" className="mt-4">

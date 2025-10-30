@@ -7,7 +7,7 @@ describe("Avatar", () => {
     render(
       <Avatar data-testid="avatar">
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     expect(screen.getByTestId("avatar")).toBeInTheDocument();
   });
@@ -16,7 +16,7 @@ describe("Avatar", () => {
     render(
       <Avatar className="custom-avatar" data-testid="avatar">
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     const avatar = screen.getByTestId("avatar");
     expect(avatar).toHaveClass("custom-avatar");
@@ -26,7 +26,7 @@ describe("Avatar", () => {
     render(
       <Avatar data-testid="avatar">
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     expect(screen.getByTestId("avatar")).toHaveAttribute("data-slot", "avatar");
   });
@@ -35,7 +35,7 @@ describe("Avatar", () => {
     render(
       <Avatar data-testid="avatar">
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     expect(screen.getByTestId("avatar")).toHaveClass("rounded-full");
   });
@@ -44,7 +44,7 @@ describe("Avatar", () => {
     render(
       <Avatar data-testid="avatar">
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     expect(screen.getByTestId("avatar")).toHaveClass("size-8");
   });
@@ -54,9 +54,12 @@ describe("AvatarImage", () => {
   it("renders with src attribute", () => {
     render(
       <Avatar data-testid="avatar">
-        <AvatarImage src="data:image/png;base64,iVBORw0KGgo=" alt="User avatar" />
+        <AvatarImage
+          src="data:image/png;base64,iVBORw0KGgo="
+          alt="User avatar"
+        />
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     // Avatar image component is rendered
     expect(screen.getByTestId("avatar")).toBeInTheDocument();
@@ -71,7 +74,7 @@ describe("AvatarImage", () => {
           className="custom-image"
         />
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     // Component renders without errors
     expect(screen.getByTestId("avatar")).toBeInTheDocument();
@@ -80,9 +83,12 @@ describe("AvatarImage", () => {
   it("has data-slot attribute", () => {
     render(
       <Avatar data-testid="avatar">
-        <AvatarImage src="data:image/png;base64,iVBORw0KGgo=" alt="User avatar" />
+        <AvatarImage
+          src="data:image/png;base64,iVBORw0KGgo="
+          alt="User avatar"
+        />
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     // Avatar image renders in the avatar container
     expect(screen.getByTestId("avatar")).toBeInTheDocument();
@@ -91,9 +97,12 @@ describe("AvatarImage", () => {
   it("applies aspect-square and size-full styling", () => {
     render(
       <Avatar data-testid="avatar">
-        <AvatarImage src="data:image/png;base64,iVBORw0KGgo=" alt="User avatar" />
+        <AvatarImage
+          src="data:image/png;base64,iVBORw0KGgo="
+          alt="User avatar"
+        />
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     // Component renders with avatar container
     expect(screen.getByTestId("avatar")).toBeInTheDocument();
@@ -105,7 +114,7 @@ describe("AvatarFallback", () => {
     render(
       <Avatar>
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     expect(screen.getByText("JD")).toBeInTheDocument();
   });
@@ -114,7 +123,7 @@ describe("AvatarFallback", () => {
     render(
       <Avatar>
         <AvatarFallback className="custom-fallback">JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     const fallback = screen.getByText("JD");
     expect(fallback).toHaveClass("custom-fallback");
@@ -124,7 +133,7 @@ describe("AvatarFallback", () => {
     render(
       <Avatar>
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     const fallback = screen.getByText("JD");
     expect(fallback).toHaveAttribute("data-slot", "avatar-fallback");
@@ -134,7 +143,7 @@ describe("AvatarFallback", () => {
     render(
       <Avatar>
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     const fallback = screen.getByText("JD");
     expect(fallback).toHaveClass("bg-muted");
@@ -144,7 +153,7 @@ describe("AvatarFallback", () => {
     render(
       <Avatar>
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     const fallback = screen.getByText("JD");
     expect(fallback).toHaveClass("rounded-full");
@@ -162,7 +171,7 @@ describe("AvatarFallback", () => {
         <AvatarFallback>
           <Icon />
         </AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     expect(screen.getByTestId("icon")).toBeInTheDocument();
   });
@@ -174,7 +183,7 @@ describe("Avatar with Image and Fallback", () => {
       <Avatar>
         <AvatarImage src="invalid-url" alt="User avatar" />
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     // Initially, fallback should be in document
     expect(screen.getByText("JD")).toBeInTheDocument();
@@ -183,9 +192,12 @@ describe("Avatar with Image and Fallback", () => {
   it("renders both image and fallback components", () => {
     render(
       <Avatar data-testid="avatar">
-        <AvatarImage src="data:image/png;base64,iVBORw0KGgo=" alt="User avatar" />
+        <AvatarImage
+          src="data:image/png;base64,iVBORw0KGgo="
+          alt="User avatar"
+        />
         <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
+      </Avatar>,
     );
     // Both should be rendered (Radix handles the display logic)
     expect(screen.getByTestId("avatar")).toBeInTheDocument();

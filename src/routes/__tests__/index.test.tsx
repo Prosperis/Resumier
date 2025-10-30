@@ -21,7 +21,9 @@ vi.mock("lucide-react", () => ({
 }));
 
 vi.mock("@/components/ui/button", () => ({
-  Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+  Button: ({ children, ...props }: any) => (
+    <button {...props}>{children}</button>
+  ),
 }));
 
 vi.mock("@/components/features/auth/auth-modal", () => ({
@@ -55,20 +57,27 @@ describe("Index Route", () => {
       renderIndexRoute();
 
       expect(
-        screen.getByRole("heading", { name: /build your perfect resume/i, level: 1 })
+        screen.getByRole("heading", {
+          name: /build your perfect resume/i,
+          level: 1,
+        }),
       ).toBeInTheDocument();
     });
 
     it("renders the hero description", () => {
       renderIndexRoute();
 
-      expect(screen.getByText(/professional resume builder/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/professional resume builder/i),
+      ).toBeInTheDocument();
     });
 
     it("renders Get Started button", () => {
       renderIndexRoute();
 
-      const getStartedButton = screen.getByRole("button", { name: /get started/i });
+      const getStartedButton = screen.getByRole("button", {
+        name: /get started/i,
+      });
       expect(getStartedButton).toBeInTheDocument();
     });
 
@@ -84,31 +93,45 @@ describe("Index Route", () => {
     it("renders Multiple Templates feature", () => {
       renderIndexRoute();
 
-      expect(screen.getByRole("heading", { name: /multiple templates/i })).toBeInTheDocument();
       expect(
-        screen.getByText(/choose from a variety of professional templates/i)
+        screen.getByRole("heading", { name: /multiple templates/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/choose from a variety of professional templates/i),
       ).toBeInTheDocument();
     });
 
     it("renders Real-time Preview feature", () => {
       renderIndexRoute();
 
-      expect(screen.getByRole("heading", { name: /real-time preview/i })).toBeInTheDocument();
-      expect(screen.getByText(/see your resume come to life/i)).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /real-time preview/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/see your resume come to life/i),
+      ).toBeInTheDocument();
     });
 
     it("renders Export to PDF feature", () => {
       renderIndexRoute();
 
-      expect(screen.getByRole("heading", { name: /export to pdf/i })).toBeInTheDocument();
-      expect(screen.getByText(/download your resume as a high-quality pdf/i)).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /export to pdf/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/download your resume as a high-quality pdf/i),
+      ).toBeInTheDocument();
     });
 
     it("renders Cloud Storage feature", () => {
       renderIndexRoute();
 
-      expect(screen.getByRole("heading", { name: /cloud storage/i })).toBeInTheDocument();
-      expect(screen.getByText(/save your resumes securely in the cloud/i)).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /cloud storage/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/save your resumes securely in the cloud/i),
+      ).toBeInTheDocument();
     });
 
     it("displays all feature icons", () => {
@@ -127,20 +150,24 @@ describe("Index Route", () => {
       renderIndexRoute();
 
       expect(
-        screen.getByRole("heading", { name: /ready to create your resume/i })
+        screen.getByRole("heading", { name: /ready to create your resume/i }),
       ).toBeInTheDocument();
     });
 
     it("renders the CTA description", () => {
       renderIndexRoute();
 
-      expect(screen.getByText(/join thousands of job seekers/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/join thousands of job seekers/i),
+      ).toBeInTheDocument();
     });
 
     it("renders Create Your Resume button with link", () => {
       renderIndexRoute();
 
-      const createButton = screen.getByRole("link", { name: /create your resume/i });
+      const createButton = screen.getByRole("link", {
+        name: /create your resume/i,
+      });
       expect(createButton).toBeInTheDocument();
       expect(createButton).toHaveAttribute("href", "/resume/new");
     });
@@ -157,11 +184,17 @@ describe("Index Route", () => {
       renderIndexRoute();
 
       // Hero section heading
-      const heroHeading = screen.getByRole("heading", { name: /welcome to resumier/i });
+      const heroHeading = screen.getByRole("heading", {
+        name: /welcome to resumier/i,
+      });
       // Features section heading (first feature)
-      const featuresHeading = screen.getByRole("heading", { name: /multiple templates/i });
+      const featuresHeading = screen.getByRole("heading", {
+        name: /multiple templates/i,
+      });
       // CTA section heading
-      const ctaHeading = screen.getByRole("heading", { name: /ready to create your resume/i });
+      const ctaHeading = screen.getByRole("heading", {
+        name: /ready to create your resume/i,
+      });
 
       expect(heroHeading).toBeInTheDocument();
       expect(featuresHeading).toBeInTheDocument();
@@ -185,13 +218,17 @@ describe("Index Route", () => {
     it("mentions resume building", () => {
       renderIndexRoute();
 
-      expect(screen.getByText(/build your perfect resume/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/build your perfect resume/i),
+      ).toBeInTheDocument();
     });
 
     it("emphasizes professional resume building", () => {
       renderIndexRoute();
 
-      expect(screen.getByText(/professional resume builder/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/professional resume builder/i),
+      ).toBeInTheDocument();
     });
 
     it("highlights speed and efficiency", () => {
@@ -235,7 +272,9 @@ describe("Index Route", () => {
     it("uses primary color accents", () => {
       const { container } = renderIndexRoute();
 
-      const primaryElements = container.querySelectorAll("[class*='text-primary']");
+      const primaryElements = container.querySelectorAll(
+        "[class*='text-primary']",
+      );
       expect(primaryElements.length).toBeGreaterThan(0);
     });
   });

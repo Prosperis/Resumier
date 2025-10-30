@@ -31,7 +31,8 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
       onError: (err) => {
         toast({
           title: "Error",
-          description: err instanceof Error ? err.message : "Failed to duplicate resume",
+          description:
+            err instanceof Error ? err.message : "Failed to duplicate resume",
           variant: "destructive",
         });
       },
@@ -45,11 +46,19 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
   if (error) {
     return (
       <div className="p-4">
-        <div className="border-destructive bg-destructive/10 rounded-lg border p-4" role="alert">
+        <div
+          className="border-destructive bg-destructive/10 rounded-lg border p-4"
+          role="alert"
+        >
           <div className="flex items-start gap-3">
-            <AlertCircle className="text-destructive mt-0.5 h-5 w-5" aria-hidden="true" />
+            <AlertCircle
+              className="text-destructive mt-0.5 h-5 w-5"
+              aria-hidden="true"
+            />
             <div>
-              <h3 className="text-destructive font-semibold">Failed to load resumes</h3>
+              <h3 className="text-destructive font-semibold">
+                Failed to load resumes
+              </h3>
               <p className="text-destructive/90 mt-1 text-sm">
                 {error instanceof Error ? error.message : "Unknown error"}
               </p>
@@ -92,7 +101,9 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Resumes</h2>
-            <p className="text-muted-foreground">Manage your resume documents ({resumes.length})</p>
+            <p className="text-muted-foreground">
+              Manage your resume documents ({resumes.length})
+            </p>
           </div>
           <CreateResumeDialog
             onSuccess={(id) => onResumeClick?.(id)}

@@ -28,7 +28,7 @@ describe("Badge", () => {
     const { container } = render(
       <Badge asChild>
         <a href="https://example.com">Link</a>
-      </Badge>
+      </Badge>,
     );
     const anchor = container.querySelector("a");
     expect(anchor).toBeInTheDocument();
@@ -40,7 +40,9 @@ describe("Badge", () => {
     expect(badge).toBeInTheDocument();
   });
   it("applies custom className", () => {
-    const { getByText } = render(<Badge className="custom-class">Custom</Badge>);
+    const { getByText } = render(
+      <Badge className="custom-class">Custom</Badge>,
+    );
     const badge = getByText("Custom");
     expect(badge).toHaveClass("custom-class");
   });

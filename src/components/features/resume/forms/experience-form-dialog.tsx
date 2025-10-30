@@ -45,7 +45,9 @@ export function ExperienceFormDialog({
   title = "Add Experience",
   description = "Add your work experience details.",
 }: ExperienceFormDialogProps) {
-  const [highlights, setHighlights] = useState<string[]>(defaultValues?.highlights || [""]);
+  const [highlights, setHighlights] = useState<string[]>(
+    defaultValues?.highlights || [""],
+  );
 
   const form = useForm<CreateExperienceFormData>({
     resolver: zodResolver(createExperienceSchema),
@@ -95,7 +97,10 @@ export function ExperienceFormDialog({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="company"
@@ -235,7 +240,11 @@ export function ExperienceFormDialog({
             </div>
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+              >
                 Cancel
               </Button>
               <Button type="submit" disabled={form.formState.isSubmitting}>

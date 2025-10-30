@@ -128,15 +128,16 @@ export const useUIStore = create<UIStore>()(
           sidebarOpen: state.sidebarOpen,
           sidebarCollapsed: state.sidebarCollapsed,
         }),
-      }
+      },
     ),
-    { name: "UIStore" }
-  )
+    { name: "UIStore" },
+  ),
 );
 
 // Selectors for optimized access
 export const selectSidebarOpen = (state: UIStore) => state.sidebarOpen;
-export const selectSidebarCollapsed = (state: UIStore) => state.sidebarCollapsed;
+export const selectSidebarCollapsed = (state: UIStore) =>
+  state.sidebarCollapsed;
 export const selectActiveDialog = (state: UIStore) => state.activeDialog;
 export const selectDialogData = (state: UIStore) => state.dialogData;
 export const selectNotifications = (state: UIStore) => state.notifications;

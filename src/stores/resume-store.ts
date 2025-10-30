@@ -144,10 +144,13 @@ export const useResumeStore = create<ResumeStore>()(
         resetJobInfo: () => set({ jobInfo: {} }),
 
         // Jobs List Actions
-        addJob: (job) => set((state) => ({ jobs: [...state.jobs, { ...job }] })),
+        addJob: (job) =>
+          set((state) => ({ jobs: [...state.jobs, { ...job }] })),
         updateJob: (index, updates) =>
           set((state) => ({
-            jobs: state.jobs.map((job, i) => (i === index ? { ...job, ...updates } : job)),
+            jobs: state.jobs.map((job, i) =>
+              i === index ? { ...job, ...updates } : job,
+            ),
           })),
         removeJob: (index) =>
           set((state) => ({
@@ -158,12 +161,17 @@ export const useResumeStore = create<ResumeStore>()(
         // Documents Actions (merged from use-resume-documents)
         addDocument: (doc) =>
           set((state) => ({
-            documents: [...state.documents, { ...doc, createdAt: new Date().toISOString() }],
+            documents: [
+              ...state.documents,
+              { ...doc, createdAt: new Date().toISOString() },
+            ],
           })),
         updateDocument: (id, updates) =>
           set((state) => ({
             documents: state.documents.map((doc) =>
-              doc.id === id ? { ...doc, ...updates, updatedAt: new Date().toISOString() } : doc
+              doc.id === id
+                ? { ...doc, ...updates, updatedAt: new Date().toISOString() }
+                : doc,
             ),
           })),
         removeDocument: (id) =>
@@ -197,10 +205,10 @@ export const useResumeStore = create<ResumeStore>()(
             await del(name);
           },
         })),
-      }
+      },
     ),
-    { name: "ResumeStore" }
-  )
+    { name: "ResumeStore" },
+  ),
 );
 
 // Selectors for optimized access

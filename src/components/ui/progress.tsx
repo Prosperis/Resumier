@@ -52,11 +52,16 @@ export function Progress({
   return (
     <div className={cn("space-y-1", className)}>
       <div
-        className={cn("bg-muted relative w-full overflow-hidden rounded-full", sizeClasses[size])}
+        className={cn(
+          "bg-muted relative w-full overflow-hidden rounded-full",
+          sizeClasses[size],
+        )}
       >
         <motion.div
           className={cn("h-full rounded-full", variantClasses[variant])}
-          initial={prefersReducedMotion ? { width: `${percentage}%` } : { width: 0 }}
+          initial={
+            prefersReducedMotion ? { width: `${percentage}%` } : { width: 0 }
+          }
           animate={{ width: `${percentage}%` }}
           transition={
             prefersReducedMotion
@@ -69,7 +74,9 @@ export function Progress({
         />
       </div>
       {showValue && (
-        <div className="text-muted-foreground text-right text-xs">{Math.round(percentage)}%</div>
+        <div className="text-muted-foreground text-right text-xs">
+          {Math.round(percentage)}%
+        </div>
       )}
     </div>
   );
@@ -118,7 +125,12 @@ export function CircularProgress({
   };
 
   return (
-    <div className={cn("relative inline-flex items-center justify-center", className)}>
+    <div
+      className={cn(
+        "relative inline-flex items-center justify-center",
+        className,
+      )}
+    >
       <svg
         width={size}
         height={size}
@@ -173,7 +185,9 @@ export function CircularProgress({
       </svg>
       {showValue && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-sm font-semibold">{Math.round(percentage)}%</span>
+          <span className="text-sm font-semibold">
+            {Math.round(percentage)}%
+          </span>
         </div>
       )}
     </div>
@@ -215,9 +229,18 @@ export function IndeterminateProgress({
   if (prefersReducedMotion) {
     return (
       <div
-        className={cn("bg-muted w-full overflow-hidden rounded-full", sizeClasses[size], className)}
+        className={cn(
+          "bg-muted w-full overflow-hidden rounded-full",
+          sizeClasses[size],
+          className,
+        )}
       >
-        <div className={cn("h-full w-1/3 animate-pulse rounded-full", variantClasses[variant])} />
+        <div
+          className={cn(
+            "h-full w-1/3 animate-pulse rounded-full",
+            variantClasses[variant],
+          )}
+        />
       </div>
     );
   }
@@ -227,11 +250,14 @@ export function IndeterminateProgress({
       className={cn(
         "bg-muted relative w-full overflow-hidden rounded-full",
         sizeClasses[size],
-        className
+        className,
       )}
     >
       <motion.div
-        className={cn("absolute h-full w-1/3 rounded-full", variantClasses[variant])}
+        className={cn(
+          "absolute h-full w-1/3 rounded-full",
+          variantClasses[variant],
+        )}
         animate={{
           x: ["-100%", "400%"],
         }}

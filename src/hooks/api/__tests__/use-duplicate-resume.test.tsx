@@ -216,7 +216,10 @@ describe("useDuplicateResume", () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    const cachedResume = queryClient.getQueryData(["resumes", duplicatedResume.id]);
+    const cachedResume = queryClient.getQueryData([
+      "resumes",
+      duplicatedResume.id,
+    ]);
     expect(cachedResume).toEqual(duplicatedResume);
   });
 

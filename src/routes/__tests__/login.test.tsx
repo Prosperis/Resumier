@@ -50,13 +50,17 @@ describe("Login Route", () => {
     it("renders the login page", () => {
       renderLoginRoute();
 
-      expect(screen.getByRole("heading", { name: /welcome back/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /welcome back/i }),
+      ).toBeInTheDocument();
     });
 
     it("renders the welcome message", () => {
       renderLoginRoute();
 
-      expect(screen.getByText(/sign in to your account to continue/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/sign in to your account to continue/i),
+      ).toBeInTheDocument();
     });
 
     it("renders the LoginForm component", () => {
@@ -69,7 +73,9 @@ describe("Login Route", () => {
       renderLoginRoute();
 
       expect(screen.getByText(/don't have an account/i)).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: /sign up/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("link", { name: /sign up/i }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -77,7 +83,9 @@ describe("Login Route", () => {
     it("uses flexbox centering", () => {
       const { container } = renderLoginRoute();
 
-      const flexContainer = container.querySelector(".flex.items-center.justify-center");
+      const flexContainer = container.querySelector(
+        ".flex.items-center.justify-center",
+      );
       expect(flexContainer).toBeInTheDocument();
     });
 
@@ -114,7 +122,9 @@ describe("Login Route", () => {
     it("uses smaller text for subtitle", () => {
       const { container } = renderLoginRoute();
 
-      const subtitle = container.querySelector(".text-sm.text-muted-foreground");
+      const subtitle = container.querySelector(
+        ".text-sm.text-muted-foreground",
+      );
       expect(subtitle).toBeInTheDocument();
     });
 

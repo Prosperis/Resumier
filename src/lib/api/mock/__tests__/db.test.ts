@@ -368,7 +368,9 @@ describe("MockDatabase", () => {
     });
 
     it("handles localStorage errors gracefully on save", () => {
-      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const consoleWarnSpy = vi
+        .spyOn(console, "warn")
+        .mockImplementation(() => {});
 
       // Mock setItem to throw an error
       const originalSetItem = Storage.prototype.setItem;

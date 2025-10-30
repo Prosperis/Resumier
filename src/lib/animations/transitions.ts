@@ -172,7 +172,9 @@ export const instantTransition: Transition = {
  * Create custom transition
  * Helper function to create transition with overrides
  */
-export function createTransition(overrides: Partial<Transition> = {}): Transition {
+export function createTransition(
+  overrides: Partial<Transition> = {},
+): Transition {
   return {
     ...defaultTransition,
     ...overrides,
@@ -183,7 +185,9 @@ export function createTransition(overrides: Partial<Transition> = {}): Transitio
  * Create spring transition
  * Helper function to create spring transition with overrides
  */
-export function createSpringTransition(overrides: Partial<Transition> = {}): Transition {
+export function createSpringTransition(
+  overrides: Partial<Transition> = {},
+): Transition {
   return {
     ...springTransition,
     ...overrides,

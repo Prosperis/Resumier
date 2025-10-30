@@ -21,7 +21,10 @@ interface SuccessCheckmarkProps {
  * <SuccessCheckmark size="lg" />
  * ```
  */
-export function SuccessCheckmark({ size = "md", className }: SuccessCheckmarkProps) {
+export function SuccessCheckmark({
+  size = "md",
+  className,
+}: SuccessCheckmarkProps) {
   const prefersReducedMotion = useReducedMotion();
 
   const sizeClasses = {
@@ -41,7 +44,7 @@ export function SuccessCheckmark({ size = "md", className }: SuccessCheckmarkPro
       className={cn(
         "flex items-center justify-center rounded-full bg-green-500",
         sizeClasses[size],
-        className
+        className,
       )}
       initial={
         prefersReducedMotion
@@ -105,7 +108,11 @@ interface ErrorShakeProps {
  * </ErrorShake>
  * ```
  */
-export function ErrorShake({ children, trigger = false, className }: ErrorShakeProps) {
+export function ErrorShake({
+  children,
+  trigger = false,
+  className,
+}: ErrorShakeProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -161,7 +168,7 @@ export function ErrorCross({ size = "md", className }: ErrorCrossProps) {
       className={cn(
         "bg-destructive flex items-center justify-center rounded-full",
         sizeClasses[size],
-        className
+        className,
       )}
       initial={
         prefersReducedMotion
@@ -242,7 +249,7 @@ export function WarningPulse({ size = "md", className }: WarningPulseProps) {
       className={cn(
         "flex items-center justify-center rounded-full bg-yellow-500",
         sizeClasses[size],
-        className
+        className,
       )}
       animate={
         prefersReducedMotion

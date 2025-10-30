@@ -26,7 +26,11 @@ vi.mock("@/components/features/resume/pdf-viewer", () => ({
 
 vi.mock("@/components/ui/button", () => ({
   Button: ({ children, onClick, variant, size }: any) => (
-    <button data-testid={`button-${variant || "default"}`} onClick={onClick} data-size={size}>
+    <button
+      data-testid={`button-${variant || "default"}`}
+      onClick={onClick}
+      data-size={size}
+    >
       {children}
     </button>
   ),

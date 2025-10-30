@@ -55,12 +55,17 @@ function getLinkTypeLabel(type: LinkFormData["type"]) {
   }
 }
 
-export function LinkList({ links, onEdit, onDelete, onReorder }: LinkListProps) {
+export function LinkList({
+  links,
+  onEdit,
+  onDelete,
+  onReorder,
+}: LinkListProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -96,8 +101,15 @@ export function LinkList({ links, onEdit, onDelete, onReorder }: LinkListProps) 
   }
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <SortableContext items={links.map((link) => link.id)} strategy={verticalListSortingStrategy}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={links.map((link) => link.id)}
+        strategy={verticalListSortingStrategy}
+      >
         <div className="space-y-4">
           {links.map((link) => (
             <SortableItem key={link.id} id={link.id}>
@@ -125,10 +137,18 @@ export function LinkList({ links, onEdit, onDelete, onReorder }: LinkListProps) 
                     </div>
 
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => onEdit(link)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onEdit(link)}
+                      >
                         Edit
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => onDelete(link.id)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onDelete(link.id)}
+                      >
                         Delete
                       </Button>
                     </div>

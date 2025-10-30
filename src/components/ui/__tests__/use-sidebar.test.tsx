@@ -7,7 +7,7 @@ import { SidebarContext, useSidebar } from "@/components/ui/use-sidebar";
 describe("useSidebar", () => {
   it("throws error when used outside SidebarProvider", () => {
     expect(() => renderHook(() => useSidebar())).toThrow(
-      "useSidebar must be used within a SidebarProvider"
+      "useSidebar must be used within a SidebarProvider",
     );
   });
   it("returns context when used inside SidebarProvider", () => {
@@ -21,7 +21,9 @@ describe("useSidebar", () => {
       toggleSidebar: vi.fn(),
     };
     const wrapper = ({ children }: { children: ReactNode }) => (
-      <SidebarContext.Provider value={mockContext}>{children}</SidebarContext.Provider>
+      <SidebarContext.Provider value={mockContext}>
+        {children}
+      </SidebarContext.Provider>
     );
     const { result } = renderHook(() => useSidebar(), { wrapper });
     expect(result.current).toBe(mockContext);
@@ -41,7 +43,9 @@ describe("useSidebar", () => {
       toggleSidebar: mockToggle,
     };
     const wrapper = ({ children }: { children: ReactNode }) => (
-      <SidebarContext.Provider value={mockContext}>{children}</SidebarContext.Provider>
+      <SidebarContext.Provider value={mockContext}>
+        {children}
+      </SidebarContext.Provider>
     );
     const { result } = renderHook(() => useSidebar(), { wrapper });
     result.current.toggleSidebar();

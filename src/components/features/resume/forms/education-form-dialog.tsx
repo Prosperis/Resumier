@@ -22,7 +22,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { type CreateEducationFormData, createEducationSchema } from "@/lib/validations/education";
+import {
+  type CreateEducationFormData,
+  createEducationSchema,
+} from "@/lib/validations/education";
 
 interface EducationFormDialogProps {
   open: boolean;
@@ -92,7 +95,10 @@ export function EducationFormDialog({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="institution"
@@ -212,7 +218,9 @@ export function EducationFormDialog({
             {honors.length > 0 && (
               <div className="space-y-2">
                 <FormLabel>Honors & Awards (optional)</FormLabel>
-                <FormDescription>Add any honors, awards, or achievements</FormDescription>
+                <FormDescription>
+                  Add any honors, awards, or achievements
+                </FormDescription>
                 {honors.map((honor, index) => (
                   <div key={index} className="flex gap-2">
                     <Input
@@ -233,13 +241,23 @@ export function EducationFormDialog({
               </div>
             )}
 
-            <Button type="button" variant="outline" size="sm" onClick={addHonor} className="w-full">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={addHonor}
+              className="w-full"
+            >
               <PlusIcon className="mr-2 h-4 w-4" />
               Add Honor/Award
             </Button>
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+              >
                 Cancel
               </Button>
               <Button type="submit" disabled={form.formState.isSubmitting}>

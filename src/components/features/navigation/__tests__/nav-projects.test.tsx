@@ -7,7 +7,8 @@ import { NavProjects } from "../nav-projects";
 
 // Mock useSidebar hook but keep SidebarContext
 vi.mock("@/components/ui/use-sidebar", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@/components/ui/use-sidebar")>();
+  const actual =
+    await importOriginal<typeof import("@/components/ui/use-sidebar")>();
   return {
     ...actual,
     useSidebar: vi.fn(() => ({ isMobile: false })),
@@ -61,7 +62,9 @@ describe("NavProjects", () => {
     });
 
     it("renders icons for each project", () => {
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
       // Each project should have an icon (Folder icon renders as SVG)
       const svgIcons = container.querySelectorAll("svg");
@@ -112,10 +115,14 @@ describe("NavProjects", () => {
 
     it("opens dropdown menu when action button is clicked", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
       // Find the first project's action button (MoreHorizontal icon)
-      const actionButtons = container.querySelectorAll('[data-sidebar="menu-action"]');
+      const actionButtons = container.querySelectorAll(
+        '[data-sidebar="menu-action"]',
+      );
       expect(actionButtons.length).toBeGreaterThan(0);
 
       // Click the first action button
@@ -129,9 +136,13 @@ describe("NavProjects", () => {
 
     it("renders View Project menu item", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      const actionButtons = container.querySelectorAll('[data-sidebar="menu-action"]');
+      const actionButtons = container.querySelectorAll(
+        '[data-sidebar="menu-action"]',
+      );
       await user.click(actionButtons[0] as HTMLElement);
 
       const viewItem = await screen.findByText("View Project");
@@ -140,9 +151,13 @@ describe("NavProjects", () => {
 
     it("renders Share Project menu item", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      const actionButtons = container.querySelectorAll('[data-sidebar="menu-action"]');
+      const actionButtons = container.querySelectorAll(
+        '[data-sidebar="menu-action"]',
+      );
       await user.click(actionButtons[0] as HTMLElement);
 
       const shareItem = await screen.findByText("Share Project");
@@ -151,9 +166,13 @@ describe("NavProjects", () => {
 
     it("renders Delete Project menu item", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      const actionButtons = container.querySelectorAll('[data-sidebar="menu-action"]');
+      const actionButtons = container.querySelectorAll(
+        '[data-sidebar="menu-action"]',
+      );
       await user.click(actionButtons[0] as HTMLElement);
 
       const deleteItem = await screen.findByText("Delete Project");
@@ -162,9 +181,13 @@ describe("NavProjects", () => {
 
     it("can click on menu items", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      const actionButtons = container.querySelectorAll('[data-sidebar="menu-action"]');
+      const actionButtons = container.querySelectorAll(
+        '[data-sidebar="menu-action"]',
+      );
       await user.click(actionButtons[0] as HTMLElement);
 
       const viewItem = await screen.findByText("View Project");
@@ -182,9 +205,13 @@ describe("NavProjects", () => {
     it("positions dropdown at bottom on mobile", async () => {
       (useSidebar as any).mockReturnValue({ isMobile: true } as any);
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      const actionButtons = container.querySelectorAll('[data-sidebar="menu-action"]');
+      const actionButtons = container.querySelectorAll(
+        '[data-sidebar="menu-action"]',
+      );
       await user.click(actionButtons[0] as HTMLElement);
 
       // Dropdown should open (positioning can't be tested in jsdom)
@@ -194,9 +221,13 @@ describe("NavProjects", () => {
     it("positions dropdown at right on desktop", async () => {
       (useSidebar as any).mockReturnValue({ isMobile: false } as any);
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      const actionButtons = container.querySelectorAll('[data-sidebar="menu-action"]');
+      const actionButtons = container.querySelectorAll(
+        '[data-sidebar="menu-action"]',
+      );
       await user.click(actionButtons[0] as HTMLElement);
 
       // Dropdown should open
@@ -206,9 +237,13 @@ describe("NavProjects", () => {
 
   describe("Show On Hover Behavior", () => {
     it("action buttons have showOnHover attribute", () => {
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      const actionButtons = container.querySelectorAll('[data-sidebar="menu-action"]');
+      const actionButtons = container.querySelectorAll(
+        '[data-sidebar="menu-action"]',
+      );
       expect(actionButtons.length).toBeGreaterThan(0);
     });
   });
@@ -242,9 +277,13 @@ describe("NavProjects", () => {
   describe("Menu Separator", () => {
     it("renders separator before Delete Project", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      const actionButtons = container.querySelectorAll('[data-sidebar="menu-action"]');
+      const actionButtons = container.querySelectorAll(
+        '[data-sidebar="menu-action"]',
+      );
       await user.click(actionButtons[0] as HTMLElement);
 
       // All menu items should be visible
@@ -266,13 +305,17 @@ describe("NavProjects", () => {
       renderWithProviders(<NavProjects projects={longNameProjects} />);
 
       expect(
-        screen.getByText("Very Long Project Name That Might Need Truncation")
+        screen.getByText("Very Long Project Name That Might Need Truncation"),
       ).toBeInTheDocument();
     });
 
     it("handles projects with special characters", () => {
       const specialProjects = [
-        { name: "Project-Alpha & Beta", url: "/projects/special", icon: Folder },
+        {
+          name: "Project-Alpha & Beta",
+          url: "/projects/special",
+          icon: Folder,
+        },
       ];
       renderWithProviders(<NavProjects projects={specialProjects} />);
 
@@ -280,14 +323,18 @@ describe("NavProjects", () => {
     });
 
     it("handles projects with unicode characters", () => {
-      const unicodeProjects = [{ name: "Projet français", url: "/projects/unicode", icon: Folder }];
+      const unicodeProjects = [
+        { name: "Projet français", url: "/projects/unicode", icon: Folder },
+      ];
       renderWithProviders(<NavProjects projects={unicodeProjects} />);
 
       expect(screen.getByText("Projet français")).toBeInTheDocument();
     });
 
     it("handles projects with numbers", () => {
-      const numericProjects = [{ name: "Project 2024", url: "/projects/2024", icon: Folder }];
+      const numericProjects = [
+        { name: "Project 2024", url: "/projects/2024", icon: Folder },
+      ];
       renderWithProviders(<NavProjects projects={numericProjects} />);
 
       expect(screen.getByText("Project 2024")).toBeInTheDocument();
@@ -311,9 +358,13 @@ describe("NavProjects", () => {
 
     it("each project has independent dropdown", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      const actionButtons = container.querySelectorAll('[data-sidebar="menu-action"]');
+      const actionButtons = container.querySelectorAll(
+        '[data-sidebar="menu-action"]',
+      );
 
       // Should have one action button per project
       expect(actionButtons.length).toBe(mockProjects.length);
@@ -326,31 +377,45 @@ describe("NavProjects", () => {
 
   describe("Component Structure", () => {
     it("renders within SidebarGroup", () => {
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      expect(container.querySelector('[data-sidebar="group"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-sidebar="group"]'),
+      ).toBeInTheDocument();
     });
 
     it("hides when sidebar is collapsed in icon mode", () => {
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
       const group = container.querySelector('[data-sidebar="group"]');
       expect(group).toHaveClass("group-data-[collapsible=icon]:hidden");
     });
 
     it("renders within SidebarMenu", () => {
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      expect(container.querySelector('[data-sidebar="menu"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-sidebar="menu"]'),
+      ).toBeInTheDocument();
     });
   });
 
   describe("Menu Icons", () => {
     it("displays icons in dropdown menu items", async () => {
       const user = userEvent.setup();
-      const { container } = renderWithProviders(<NavProjects projects={mockProjects} />);
+      const { container } = renderWithProviders(
+        <NavProjects projects={mockProjects} />,
+      );
 
-      const actionButtons = container.querySelectorAll('[data-sidebar="menu-action"]');
+      const actionButtons = container.querySelectorAll(
+        '[data-sidebar="menu-action"]',
+      );
       await user.click(actionButtons[0] as HTMLElement);
 
       // Menu items should render with icons

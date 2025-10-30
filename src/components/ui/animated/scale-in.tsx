@@ -38,7 +38,9 @@ export function ScaleIn({
   className,
   ...props
 }: ScaleInProps) {
-  const variants = useAnimationVariants(bounce ? scaleBounceVariants : scaleVariants);
+  const variants = useAnimationVariants(
+    bounce ? scaleBounceVariants : scaleVariants,
+  );
   const transition = useAnimationTransition({
     ...springTransition,
     delay,

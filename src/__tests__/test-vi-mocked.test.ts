@@ -5,7 +5,7 @@ describe("vi.mocked test", () => {
     console.log("vi.mocked:", typeof vi.mocked);
     console.log(
       "vi keys:",
-      Object.keys(vi).filter((k) => k.includes("mock"))
+      Object.keys(vi).filter((k) => k.includes("mock")),
     );
 
     const mockFn = vi.fn();

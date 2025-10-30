@@ -17,7 +17,7 @@ describe("Sheet Components", () => {
       render(
         <Sheet>
           <SheetTrigger>Open</SheetTrigger>
-        </Sheet>
+        </Sheet>,
       );
       expect(screen.getByText("Open")).toBeInTheDocument();
     });
@@ -26,7 +26,7 @@ describe("Sheet Components", () => {
       render(
         <Sheet open={true}>
           <SheetTrigger>Open</SheetTrigger>
-        </Sheet>
+        </Sheet>,
       );
       expect(screen.getByText("Open")).toBeInTheDocument();
     });
@@ -37,7 +37,7 @@ describe("Sheet Components", () => {
       render(
         <Sheet>
           <SheetTrigger>Open Sheet</SheetTrigger>
-        </Sheet>
+        </Sheet>,
       );
       expect(screen.getByText("Open Sheet")).toBeInTheDocument();
     });
@@ -46,7 +46,7 @@ describe("Sheet Components", () => {
       const { container } = render(
         <Sheet>
           <SheetTrigger>Trigger</SheetTrigger>
-        </Sheet>
+        </Sheet>,
       );
       const trigger = container.querySelector('[data-slot="sheet-trigger"]');
       expect(trigger).toBeInTheDocument();
@@ -58,7 +58,7 @@ describe("Sheet Components", () => {
       render(
         <Sheet>
           <SheetClose>Close</SheetClose>
-        </Sheet>
+        </Sheet>,
       );
       expect(screen.getByText("Close")).toBeInTheDocument();
     });
@@ -67,7 +67,7 @@ describe("Sheet Components", () => {
       const { container } = render(
         <Sheet>
           <SheetClose>Close</SheetClose>
-        </Sheet>
+        </Sheet>,
       );
       const close = container.querySelector('[data-slot="sheet-close"]');
       expect(close).toBeInTheDocument();
@@ -94,7 +94,9 @@ describe("Sheet Components", () => {
     });
 
     it("renders with custom className", () => {
-      const { container } = render(<SheetHeader className="custom-header">Header</SheetHeader>);
+      const { container } = render(
+        <SheetHeader className="custom-header">Header</SheetHeader>,
+      );
       const header = container.querySelector("div");
       expect(header).toHaveClass("custom-header");
     });
@@ -126,7 +128,9 @@ describe("Sheet Components", () => {
     });
 
     it("renders with custom className", () => {
-      const { container } = render(<SheetFooter className="custom-footer">Footer</SheetFooter>);
+      const { container } = render(
+        <SheetFooter className="custom-footer">Footer</SheetFooter>,
+      );
       const footer = container.querySelector("div");
       expect(footer).toHaveClass("custom-footer");
     });
@@ -137,7 +141,7 @@ describe("Sheet Components", () => {
       render(
         <Sheet>
           <SheetTitle>Sheet Title</SheetTitle>
-        </Sheet>
+        </Sheet>,
       );
       expect(screen.getByText("Sheet Title")).toBeInTheDocument();
     });
@@ -146,7 +150,7 @@ describe("Sheet Components", () => {
       const { container } = render(
         <Sheet>
           <SheetTitle>Title</SheetTitle>
-        </Sheet>
+        </Sheet>,
       );
       const title = container.querySelector('[data-slot="sheet-title"]');
       expect(title).toBeInTheDocument();
@@ -156,7 +160,7 @@ describe("Sheet Components", () => {
       render(
         <Sheet>
           <SheetTitle>Title</SheetTitle>
-        </Sheet>
+        </Sheet>,
       );
       const title = screen.getByText("Title");
       expect(title.className).toContain("font-semibold");
@@ -166,7 +170,7 @@ describe("Sheet Components", () => {
       render(
         <Sheet>
           <SheetTitle className="custom-title">Title</SheetTitle>
-        </Sheet>
+        </Sheet>,
       );
       const title = screen.getByText("Title");
       expect(title).toHaveClass("custom-title");
@@ -178,7 +182,7 @@ describe("Sheet Components", () => {
       render(
         <Sheet>
           <SheetDescription>This is a description</SheetDescription>
-        </Sheet>
+        </Sheet>,
       );
       expect(screen.getByText("This is a description")).toBeInTheDocument();
     });
@@ -187,7 +191,7 @@ describe("Sheet Components", () => {
       const { container } = render(
         <Sheet>
           <SheetDescription>Description</SheetDescription>
-        </Sheet>
+        </Sheet>,
       );
       const desc = container.querySelector('[data-slot="sheet-description"]');
       expect(desc).toBeInTheDocument();
@@ -197,7 +201,7 @@ describe("Sheet Components", () => {
       render(
         <Sheet>
           <SheetDescription>Description</SheetDescription>
-        </Sheet>
+        </Sheet>,
       );
       const desc = screen.getByText("Description");
       expect(desc.className).toContain("text-muted-foreground");
@@ -207,7 +211,7 @@ describe("Sheet Components", () => {
       render(
         <Sheet>
           <SheetDescription>Description</SheetDescription>
-        </Sheet>
+        </Sheet>,
       );
       const desc = screen.getByText("Description");
       expect(desc.className).toContain("text-sm");
@@ -216,8 +220,10 @@ describe("Sheet Components", () => {
     it("renders with custom className", () => {
       render(
         <Sheet>
-          <SheetDescription className="custom-desc">Description</SheetDescription>
-        </Sheet>
+          <SheetDescription className="custom-desc">
+            Description
+          </SheetDescription>
+        </Sheet>,
       );
       const desc = screen.getByText("Description");
       expect(desc).toHaveClass("custom-desc");
@@ -239,7 +245,7 @@ describe("Sheet Components", () => {
               <SheetClose>Close</SheetClose>
             </SheetFooter>
           </SheetContent>
-        </Sheet>
+        </Sheet>,
       );
 
       expect(screen.getByText("Open")).toBeInTheDocument();

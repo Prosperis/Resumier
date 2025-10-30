@@ -44,7 +44,9 @@ vi.mock("@/components/ui/route-error", () => ({
 }));
 
 vi.mock("@/components/ui/route-loading", () => ({
-  ResumeEditorLoading: () => <div data-testid="resume-loading">Loading Resume...</div>,
+  ResumeEditorLoading: () => (
+    <div data-testid="resume-loading">Loading Resume...</div>
+  ),
 }));
 
 // Import the route module and hooks after setting up mocks
@@ -93,13 +95,16 @@ describe("Resume Edit Route (/resume/$id)", () => {
     return render(
       <Wrapper>
         <Component />
-      </Wrapper>
+      </Wrapper>,
     );
   };
 
   describe("Authentication", () => {
     it("allows access when authenticated", async () => {
-      const mockResume = createMockResume({ id: "test-resume-id", title: "My Resume" });
+      const mockResume = createMockResume({
+        id: "test-resume-id",
+        title: "My Resume",
+      });
       (apiClient.get as any).mockResolvedValueOnce(mockResume);
 
       expect(() => renderResumeRoute()).not.toThrow();
@@ -149,7 +154,10 @@ describe("Resume Edit Route (/resume/$id)", () => {
 
   describe("Success State", () => {
     it("renders resume editor with resume data", async () => {
-      const mockResume = createMockResume({ id: "test-resume-id", title: "My Test Resume" });
+      const mockResume = createMockResume({
+        id: "test-resume-id",
+        title: "My Test Resume",
+      });
       (apiClient.get as any).mockResolvedValueOnce(mockResume);
 
       renderResumeRoute();
@@ -161,7 +169,10 @@ describe("Resume Edit Route (/resume/$id)", () => {
     });
 
     it("renders within a container", async () => {
-      const mockResume = createMockResume({ id: "test-resume-id", title: "My Resume" });
+      const mockResume = createMockResume({
+        id: "test-resume-id",
+        title: "My Resume",
+      });
       (apiClient.get as any).mockResolvedValueOnce(mockResume);
 
       const { container } = renderResumeRoute();
@@ -172,7 +183,10 @@ describe("Resume Edit Route (/resume/$id)", () => {
     });
 
     it("applies proper styling to container", async () => {
-      const mockResume = createMockResume({ id: "test-resume-id", title: "My Resume" });
+      const mockResume = createMockResume({
+        id: "test-resume-id",
+        title: "My Resume",
+      });
       (apiClient.get as any).mockResolvedValueOnce(mockResume);
 
       const { container } = renderResumeRoute();

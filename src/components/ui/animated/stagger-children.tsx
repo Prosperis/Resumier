@@ -9,9 +9,13 @@ import {
   useAnimationTransition,
   useAnimationVariants,
 } from "@/lib/animations/hooks/use-reduced-motion";
-import { staggerContainerVariants, staggerItemVariants } from "@/lib/animations/variants";
+import {
+  staggerContainerVariants,
+  staggerItemVariants,
+} from "@/lib/animations/variants";
 
-interface StaggerChildrenProps extends Omit<HTMLMotionProps<"div">, "variants"> {
+interface StaggerChildrenProps
+  extends Omit<HTMLMotionProps<"div">, "variants"> {
   children: React.ReactNode;
   staggerDelay?: number;
   className?: string;
@@ -70,7 +74,11 @@ interface StaggerItemProps extends Omit<HTMLMotionProps<"div">, "variants"> {
  * </StaggerItem>
  * ```
  */
-export function StaggerItem({ children, className, ...props }: StaggerItemProps) {
+export function StaggerItem({
+  children,
+  className,
+  ...props
+}: StaggerItemProps) {
   const variants = useAnimationVariants(staggerItemVariants);
 
   return (

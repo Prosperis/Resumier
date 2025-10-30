@@ -5,7 +5,10 @@ import { describe, expect, it, vi } from "vitest";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 
 describe("DataTableColumnHeader", () => {
-  const createMockColumn = (canSort: boolean, sorted: false | "asc" | "desc" = false) => {
+  const createMockColumn = (
+    canSort: boolean,
+    sorted: false | "asc" | "desc" = false,
+  ) => {
     return {
       getCanSort: vi.fn(() => canSort),
       getIsSorted: vi.fn(() => sorted),
@@ -31,7 +34,9 @@ describe("DataTableColumnHeader", () => {
 
   it("should show unsorted icon when column is not sorted", () => {
     const column = createMockColumn(true, false);
-    const { container } = render(<DataTableColumnHeader column={column} title="Age" />);
+    const { container } = render(
+      <DataTableColumnHeader column={column} title="Age" />,
+    );
 
     // ChevronsUpDown icon for unsorted state
     const icon = container.querySelector(".lucide-chevrons-up-down");
@@ -40,7 +45,9 @@ describe("DataTableColumnHeader", () => {
 
   it("should show ascending icon when sorted ascending", () => {
     const column = createMockColumn(true, "asc");
-    const { container } = render(<DataTableColumnHeader column={column} title="Age" />);
+    const { container } = render(
+      <DataTableColumnHeader column={column} title="Age" />,
+    );
 
     // ArrowUp icon for ascending
     const icon = container.querySelector(".lucide-arrow-up");
@@ -49,7 +56,9 @@ describe("DataTableColumnHeader", () => {
 
   it("should show descending icon when sorted descending", () => {
     const column = createMockColumn(true, "desc");
-    const { container } = render(<DataTableColumnHeader column={column} title="Age" />);
+    const { container } = render(
+      <DataTableColumnHeader column={column} title="Age" />,
+    );
 
     // ArrowDown icon for descending
     const icon = container.querySelector(".lucide-arrow-down");
@@ -97,7 +106,11 @@ describe("DataTableColumnHeader", () => {
   it("should apply custom className", () => {
     const column = createMockColumn(false);
     const { container } = render(
-      <DataTableColumnHeader column={column} title="Name" className="custom-class" />
+      <DataTableColumnHeader
+        column={column}
+        title="Name"
+        className="custom-class"
+      />,
     );
 
     const div = container.firstChild as HTMLElement;
@@ -107,7 +120,11 @@ describe("DataTableColumnHeader", () => {
   it("should apply className to sortable column container", () => {
     const column = createMockColumn(true);
     const { container } = render(
-      <DataTableColumnHeader column={column} title="Name" className="custom-class" />
+      <DataTableColumnHeader
+        column={column}
+        title="Name"
+        className="custom-class"
+      />,
     );
 
     const div = container.firstChild as HTMLElement;

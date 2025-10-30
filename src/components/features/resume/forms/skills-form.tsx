@@ -3,7 +3,13 @@ import { XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -112,8 +118,13 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
       <CardHeader>
         <CardTitle>Skills</CardTitle>
         <CardDescription>
-          Add your skills by category. Press Enter to add a skill, Backspace to remove the last one.
-          {isSaving && <span className="text-muted-foreground ml-2 text-xs">Saving...</span>}
+          Add your skills by category. Press Enter to add a skill, Backspace to
+          remove the last one.
+          {isSaving && (
+            <span className="text-muted-foreground ml-2 text-xs">
+              Saving...
+            </span>
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -153,7 +164,9 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
                       placeholder="e.g., English (Native), Spanish (Fluent)"
                     />
                   </FormControl>
-                  <FormDescription>Spoken languages and proficiency levels</FormDescription>
+                  <FormDescription>
+                    Spoken languages and proficiency levels
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -172,7 +185,9 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
                       placeholder="e.g., Git, Docker, Figma"
                     />
                   </FormControl>
-                  <FormDescription>Development tools, software, and platforms</FormDescription>
+                  <FormDescription>
+                    Development tools, software, and platforms
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -191,7 +206,9 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
                       placeholder="e.g., Leadership, Communication, Problem Solving"
                     />
                   </FormControl>
-                  <FormDescription>Interpersonal and professional skills</FormDescription>
+                  <FormDescription>
+                    Interpersonal and professional skills
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

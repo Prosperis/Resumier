@@ -13,7 +13,10 @@ interface TemplateSelectorProps {
   onSelect: (template: TemplateType) => void;
 }
 
-export function TemplateSelector({ selected, onSelect }: TemplateSelectorProps) {
+export function TemplateSelector({
+  selected,
+  onSelect,
+}: TemplateSelectorProps) {
   const selectedTemplate = TEMPLATES.find((t) => t.id === selected);
 
   return (
@@ -33,9 +36,13 @@ export function TemplateSelector({ selected, onSelect }: TemplateSelectorProps) 
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className="font-medium">{template.name}</span>
-                {selected === template.id && <Check className="text-primary h-4 w-4" />}
+                {selected === template.id && (
+                  <Check className="text-primary h-4 w-4" />
+                )}
               </div>
-              <p className="text-muted-foreground mt-1 text-xs">{template.description}</p>
+              <p className="text-muted-foreground mt-1 text-xs">
+                {template.description}
+              </p>
             </div>
           </DropdownMenuItem>
         ))}

@@ -26,7 +26,7 @@ describe("RotateOnHover", () => {
     render(
       <RotateOnHover>
         <span>Icon</span>
-      </RotateOnHover>
+      </RotateOnHover>,
     );
     expect(screen.getByText("Icon")).toBeInTheDocument();
   });
@@ -35,7 +35,7 @@ describe("RotateOnHover", () => {
     const { container } = render(
       <RotateOnHover>
         <span>Icon</span>
-      </RotateOnHover>
+      </RotateOnHover>,
     );
     expect(container.firstChild).toHaveClass("inline-flex");
   });
@@ -44,7 +44,7 @@ describe("RotateOnHover", () => {
     const { container } = render(
       <RotateOnHover className="custom-rotate">
         <span>Icon</span>
-      </RotateOnHover>
+      </RotateOnHover>,
     );
     expect(container.firstChild).toHaveClass("custom-rotate");
   });
@@ -53,7 +53,7 @@ describe("RotateOnHover", () => {
     const { container } = render(
       <RotateOnHover data-testid="rotate-icon">
         <span>Icon</span>
-      </RotateOnHover>
+      </RotateOnHover>,
     );
     expect(container.firstChild).toHaveAttribute("data-testid", "rotate-icon");
   });
@@ -64,7 +64,7 @@ describe("ScaleOnHover", () => {
     render(
       <ScaleOnHover>
         <span>Icon</span>
-      </ScaleOnHover>
+      </ScaleOnHover>,
     );
     expect(screen.getByText("Icon")).toBeInTheDocument();
   });
@@ -73,7 +73,7 @@ describe("ScaleOnHover", () => {
     const { container } = render(
       <ScaleOnHover>
         <span>Icon</span>
-      </ScaleOnHover>
+      </ScaleOnHover>,
     );
     expect(container.firstChild).toHaveClass("inline-flex");
   });
@@ -82,7 +82,7 @@ describe("ScaleOnHover", () => {
     const { container } = render(
       <ScaleOnHover className="custom-scale">
         <span>Icon</span>
-      </ScaleOnHover>
+      </ScaleOnHover>,
     );
     expect(container.firstChild).toHaveClass("custom-scale");
   });
@@ -91,7 +91,7 @@ describe("ScaleOnHover", () => {
     render(
       <ScaleOnHover scale={1.5}>
         <span>Icon</span>
-      </ScaleOnHover>
+      </ScaleOnHover>,
     );
     expect(screen.getByText("Icon")).toBeInTheDocument();
   });
@@ -100,7 +100,7 @@ describe("ScaleOnHover", () => {
     render(
       <ScaleOnHover>
         <span>Icon</span>
-      </ScaleOnHover>
+      </ScaleOnHover>,
     );
     expect(screen.getByText("Icon")).toBeInTheDocument();
   });
@@ -109,7 +109,7 @@ describe("ScaleOnHover", () => {
     const { container } = render(
       <ScaleOnHover data-testid="scale-icon">
         <span>Icon</span>
-      </ScaleOnHover>
+      </ScaleOnHover>,
     );
     expect(container.firstChild).toHaveAttribute("data-testid", "scale-icon");
   });
@@ -120,7 +120,7 @@ describe("BounceOnHover", () => {
     render(
       <BounceOnHover>
         <span>Icon</span>
-      </BounceOnHover>
+      </BounceOnHover>,
     );
     expect(screen.getByText("Icon")).toBeInTheDocument();
   });
@@ -129,7 +129,7 @@ describe("BounceOnHover", () => {
     const { container } = render(
       <BounceOnHover>
         <span>Icon</span>
-      </BounceOnHover>
+      </BounceOnHover>,
     );
     expect(container.firstChild).toHaveClass("inline-flex");
   });
@@ -138,7 +138,7 @@ describe("BounceOnHover", () => {
     const { container } = render(
       <BounceOnHover className="custom-bounce">
         <span>Icon</span>
-      </BounceOnHover>
+      </BounceOnHover>,
     );
     expect(container.firstChild).toHaveClass("custom-bounce");
   });
@@ -147,7 +147,7 @@ describe("BounceOnHover", () => {
     const { container } = render(
       <BounceOnHover data-testid="bounce-icon">
         <span>Icon</span>
-      </BounceOnHover>
+      </BounceOnHover>,
     );
     expect(container.firstChild).toHaveAttribute("data-testid", "bounce-icon");
   });
@@ -158,7 +158,7 @@ describe("ShakeOnHover", () => {
     render(
       <ShakeOnHover>
         <span>Icon</span>
-      </ShakeOnHover>
+      </ShakeOnHover>,
     );
     expect(screen.getByText("Icon")).toBeInTheDocument();
   });
@@ -167,7 +167,7 @@ describe("ShakeOnHover", () => {
     const { container } = render(
       <ShakeOnHover>
         <span>Icon</span>
-      </ShakeOnHover>
+      </ShakeOnHover>,
     );
     expect(container.firstChild).toHaveClass("inline-flex");
   });
@@ -176,7 +176,7 @@ describe("ShakeOnHover", () => {
     const { container } = render(
       <ShakeOnHover className="custom-shake">
         <span>Icon</span>
-      </ShakeOnHover>
+      </ShakeOnHover>,
     );
     expect(container.firstChild).toHaveClass("custom-shake");
   });
@@ -185,7 +185,7 @@ describe("ShakeOnHover", () => {
     const { container } = render(
       <ShakeOnHover data-testid="shake-icon">
         <span>Icon</span>
-      </ShakeOnHover>
+      </ShakeOnHover>,
     );
     expect(container.firstChild).toHaveAttribute("data-testid", "shake-icon");
   });
@@ -196,7 +196,7 @@ describe("PulseOnHover", () => {
     render(
       <PulseOnHover>
         <span>Icon</span>
-      </PulseOnHover>
+      </PulseOnHover>,
     );
     expect(screen.getByText("Icon")).toBeInTheDocument();
   });
@@ -205,7 +205,7 @@ describe("PulseOnHover", () => {
     const { container } = render(
       <PulseOnHover>
         <span>Icon</span>
-      </PulseOnHover>
+      </PulseOnHover>,
     );
     expect(container.firstChild).toHaveClass("inline-flex");
   });
@@ -214,7 +214,7 @@ describe("PulseOnHover", () => {
     const { container } = render(
       <PulseOnHover className="custom-pulse">
         <span>Icon</span>
-      </PulseOnHover>
+      </PulseOnHover>,
     );
     expect(container.firstChild).toHaveClass("custom-pulse");
   });
@@ -223,7 +223,7 @@ describe("PulseOnHover", () => {
     const { container } = render(
       <PulseOnHover data-testid="pulse-icon">
         <span>Icon</span>
-      </PulseOnHover>
+      </PulseOnHover>,
     );
     expect(container.firstChild).toHaveAttribute("data-testid", "pulse-icon");
   });
@@ -234,7 +234,7 @@ describe("SpinOnClick", () => {
     render(
       <SpinOnClick>
         <span>Icon</span>
-      </SpinOnClick>
+      </SpinOnClick>,
     );
     expect(screen.getByText("Icon")).toBeInTheDocument();
   });
@@ -243,7 +243,7 @@ describe("SpinOnClick", () => {
     const { container } = render(
       <SpinOnClick>
         <span>Icon</span>
-      </SpinOnClick>
+      </SpinOnClick>,
     );
     expect(container.firstChild).toHaveClass("inline-flex");
   });
@@ -252,7 +252,7 @@ describe("SpinOnClick", () => {
     const { container } = render(
       <SpinOnClick className="custom-spin">
         <span>Icon</span>
-      </SpinOnClick>
+      </SpinOnClick>,
     );
     expect(container.firstChild).toHaveClass("custom-spin");
   });
@@ -261,7 +261,7 @@ describe("SpinOnClick", () => {
     const { container } = render(
       <SpinOnClick data-testid="spin-icon">
         <span>Icon</span>
-      </SpinOnClick>
+      </SpinOnClick>,
     );
     expect(container.firstChild).toHaveAttribute("data-testid", "spin-icon");
   });

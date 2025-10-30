@@ -25,12 +25,17 @@ interface ExperienceListProps {
   onReorder?: (experiences: Experience[]) => void;
 }
 
-export function ExperienceList({ experiences, onEdit, onDelete, onReorder }: ExperienceListProps) {
+export function ExperienceList({
+  experiences,
+  onEdit,
+  onDelete,
+  onReorder,
+}: ExperienceListProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -55,7 +60,9 @@ export function ExperienceList({ experiences, onEdit, onDelete, onReorder }: Exp
     return (
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-          <p className="text-muted-foreground text-sm">No experience added yet.</p>
+          <p className="text-muted-foreground text-sm">
+            No experience added yet.
+          </p>
           <p className="text-muted-foreground mt-1 text-xs">
             Click "Add Experience" to get started.
           </p>
@@ -91,7 +98,11 @@ export function ExperienceList({ experiences, onEdit, onDelete, onReorder }: Exp
   };
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
       <SortableContext
         items={experiences.map((exp) => exp.id)}
         strategy={verticalListSortingStrategy}
@@ -104,7 +115,9 @@ export function ExperienceList({ experiences, onEdit, onDelete, onReorder }: Exp
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <h3 className="font-semibold">{exp.position}</h3>
-                      <p className="text-muted-foreground text-sm">{exp.company}</p>
+                      <p className="text-muted-foreground text-sm">
+                        {exp.company}
+                      </p>
                       <div className="text-muted-foreground mt-1 flex items-center gap-1 text-xs">
                         <CalendarIcon className="h-3 w-3" />
                         <span>{formatDateRange(exp)}</span>
@@ -130,10 +143,13 @@ export function ExperienceList({ experiences, onEdit, onDelete, onReorder }: Exp
                     </div>
                   </div>
                 </CardHeader>
-                {(exp.description || (exp.highlights && exp.highlights.length > 0)) && (
+                {(exp.description ||
+                  (exp.highlights && exp.highlights.length > 0)) && (
                   <CardContent>
                     {exp.description && (
-                      <p className="text-muted-foreground text-sm">{exp.description}</p>
+                      <p className="text-muted-foreground text-sm">
+                        {exp.description}
+                      </p>
                     )}
                     {exp.highlights && exp.highlights.length > 0 && (
                       <ul className="mt-2 space-y-1 text-sm">

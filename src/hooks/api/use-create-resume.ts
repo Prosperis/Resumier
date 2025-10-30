@@ -11,7 +11,8 @@ export function useCreateResume() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateResumeDto) => apiClient.post<Resume>("/api/resumes", data),
+    mutationFn: (data: CreateResumeDto) =>
+      apiClient.post<Resume>("/api/resumes", data),
 
     onSuccess: (newResume) => {
       // Invalidate resumes list to trigger refetch

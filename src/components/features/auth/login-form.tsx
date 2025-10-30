@@ -7,7 +7,10 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores";
 
-export function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
+export function LoginForm({
+  className,
+  ...props
+}: React.ComponentProps<"form">) {
   const navigate = useNavigate();
   const search = useSearch({ strict: false }) as { redirect?: string };
   const login = useAuthStore((state) => state.login);
@@ -62,7 +65,11 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
   };
 
   return (
-    <form className={cn("flex flex-col gap-6", className)} onSubmit={handleSubmit} {...props}>
+    <form
+      className={cn("flex flex-col gap-6", className)}
+      onSubmit={handleSubmit}
+      {...props}
+    >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Login to your account</h1>
         <p className="text-muted-foreground text-sm text-balance">
@@ -72,7 +79,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
 
       {/* Demo credentials banner */}
       <div className="rounded-md bg-blue-50 p-3 text-sm dark:bg-blue-950">
-        <p className="font-medium text-blue-900 dark:text-blue-100">Demo Credentials:</p>
+        <p className="font-medium text-blue-900 dark:text-blue-100">
+          Demo Credentials:
+        </p>
         <p className="text-blue-700 dark:text-blue-300">
           Email: <code className="font-mono">demo@example.com</code>
         </p>
@@ -109,10 +118,16 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
             }}
             disabled={isLoading}
             aria-invalid={!!validationErrors.email}
-            aria-describedby={validationErrors.email ? "email-error" : undefined}
+            aria-describedby={
+              validationErrors.email ? "email-error" : undefined
+            }
           />
           {validationErrors.email && (
-            <p id="email-error" className="text-destructive text-sm" role="alert">
+            <p
+              id="email-error"
+              className="text-destructive text-sm"
+              role="alert"
+            >
               {validationErrors.email}
             </p>
           )}
@@ -141,15 +156,24 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
               setPassword(e.target.value);
               // Clear validation error on change
               if (validationErrors.password) {
-                setValidationErrors((prev) => ({ ...prev, password: undefined }));
+                setValidationErrors((prev) => ({
+                  ...prev,
+                  password: undefined,
+                }));
               }
             }}
             disabled={isLoading}
             aria-invalid={!!validationErrors.password}
-            aria-describedby={validationErrors.password ? "password-error" : undefined}
+            aria-describedby={
+              validationErrors.password ? "password-error" : undefined
+            }
           />
           {validationErrors.password && (
-            <p id="password-error" className="text-destructive text-sm" role="alert">
+            <p
+              id="password-error"
+              className="text-destructive text-sm"
+              role="alert"
+            >
               {validationErrors.password}
             </p>
           )}
@@ -162,7 +186,10 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
         >
           {isLoading ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+              <Loader2
+                className="mr-2 h-4 w-4 animate-spin"
+                aria-hidden="true"
+              />
               Logging in...
             </>
           ) : (

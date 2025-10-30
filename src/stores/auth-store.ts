@@ -96,7 +96,8 @@ export const useAuthStore = create<AuthStore>()(
               throw new Error("Invalid credentials");
             }
           } catch (error) {
-            const message = error instanceof Error ? error.message : "Login failed";
+            const message =
+              error instanceof Error ? error.message : "Login failed";
             set({
               user: null,
               isAuthenticated: false,
@@ -134,15 +135,16 @@ export const useAuthStore = create<AuthStore>()(
           user: state.user,
           isAuthenticated: state.isAuthenticated,
         }),
-      }
+      },
     ),
-    { name: "AuthStore" }
-  )
+    { name: "AuthStore" },
+  ),
 );
 
 // Selectors for optimized access
 export const selectUser = (state: AuthStore) => state.user;
-export const selectIsAuthenticated = (state: AuthStore) => state.isAuthenticated;
+export const selectIsAuthenticated = (state: AuthStore) =>
+  state.isAuthenticated;
 export const selectIsLoading = (state: AuthStore) => state.isLoading;
 export const selectError = (state: AuthStore) => state.error;
 

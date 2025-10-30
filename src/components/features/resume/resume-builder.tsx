@@ -2,17 +2,34 @@ import { useParams } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import { Suspense, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useResume, useUpdateResume } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
-import type { Certification, Education, Experience, Link } from "@/lib/api/types";
+import type {
+  Certification,
+  Education,
+  Experience,
+  Link,
+} from "@/lib/api/types";
 import type {
   CertificationFormData,
   CreateCertificationFormData,
 } from "@/lib/validations/certification";
-import type { CreateEducationFormData, EducationFormData } from "@/lib/validations/education";
-import type { CreateExperienceFormData, ExperienceFormData } from "@/lib/validations/experience";
+import type {
+  CreateEducationFormData,
+  EducationFormData,
+} from "@/lib/validations/education";
+import type {
+  CreateExperienceFormData,
+  ExperienceFormData,
+} from "@/lib/validations/experience";
 import type { CreateLinkFormData, LinkFormData } from "@/lib/validations/links";
 import {
   FormDialogSkeleton,
@@ -39,15 +56,16 @@ export function ResumeBuilder() {
 
   // Dialog states
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false);
-  const [editingExperience, setEditingExperience] = useState<ExperienceFormData | null>(null);
+  const [editingExperience, setEditingExperience] =
+    useState<ExperienceFormData | null>(null);
 
   const [educationDialogOpen, setEducationDialogOpen] = useState(false);
-  const [editingEducation, setEditingEducation] = useState<EducationFormData | null>(null);
+  const [editingEducation, setEditingEducation] =
+    useState<EducationFormData | null>(null);
 
   const [certificationDialogOpen, setCertificationDialogOpen] = useState(false);
-  const [editingCertification, setEditingCertification] = useState<CertificationFormData | null>(
-    null
-  );
+  const [editingCertification, setEditingCertification] =
+    useState<CertificationFormData | null>(null);
 
   const [linkDialogOpen, setLinkDialogOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<LinkFormData | null>(null);
@@ -82,14 +100,16 @@ export function ResumeBuilder() {
     setExperienceDialogOpen(true);
   };
 
-  const handleSaveExperience = (data: CreateExperienceFormData | ExperienceFormData) => {
+  const handleSaveExperience = (
+    data: CreateExperienceFormData | ExperienceFormData,
+  ) => {
     const experiences = content.experience || [];
     let updatedExperiences: Experience[];
 
     if (editingExperience) {
       // Update existing
       updatedExperiences = experiences.map((exp) =>
-        exp.id === editingExperience.id ? { ...exp, ...data } : exp
+        exp.id === editingExperience.id ? { ...exp, ...data } : exp,
       );
     } else {
       // Add new
@@ -127,7 +147,7 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -158,7 +178,7 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -183,7 +203,7 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -198,14 +218,16 @@ export function ResumeBuilder() {
     setEducationDialogOpen(true);
   };
 
-  const handleSaveEducation = (data: CreateEducationFormData | EducationFormData) => {
+  const handleSaveEducation = (
+    data: CreateEducationFormData | EducationFormData,
+  ) => {
     const educations = content.education || [];
     let updatedEducations: Education[];
 
     if (editingEducation) {
       // Update existing
       updatedEducations = educations.map((edu) =>
-        edu.id === editingEducation.id ? { ...edu, ...data } : edu
+        edu.id === editingEducation.id ? { ...edu, ...data } : edu,
       );
     } else {
       // Add new
@@ -243,7 +265,7 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -274,7 +296,7 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -299,7 +321,7 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -314,14 +336,16 @@ export function ResumeBuilder() {
     setCertificationDialogOpen(true);
   };
 
-  const handleSaveCertification = (data: CreateCertificationFormData | CertificationFormData) => {
+  const handleSaveCertification = (
+    data: CreateCertificationFormData | CertificationFormData,
+  ) => {
     const certifications = content.certifications || [];
     let updatedCertifications: Certification[];
 
     if (editingCertification) {
       // Update existing
       updatedCertifications = certifications.map((cert) =>
-        cert.id === editingCertification.id ? { ...cert, ...data } : cert
+        cert.id === editingCertification.id ? { ...cert, ...data } : cert,
       );
     } else {
       // Add new
@@ -359,13 +383,15 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
   const handleDeleteCertification = (id: string) => {
     const certifications = content.certifications || [];
-    const updatedCertifications = certifications.filter((cert) => cert.id !== id);
+    const updatedCertifications = certifications.filter(
+      (cert) => cert.id !== id,
+    );
 
     updateResume(
       {
@@ -390,11 +416,13 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
-  const handleReorderCertifications = (reorderedCertifications: Certification[]) => {
+  const handleReorderCertifications = (
+    reorderedCertifications: Certification[],
+  ) => {
     updateResume(
       {
         id: resumeId,
@@ -415,7 +443,7 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -437,7 +465,7 @@ export function ResumeBuilder() {
     if (editingLink) {
       // Update existing
       updatedLinks = links.map((link) =>
-        link.id === editingLink.id ? { ...link, ...data } : link
+        link.id === editingLink.id ? { ...link, ...data } : link,
       );
     } else {
       // Add new
@@ -461,7 +489,9 @@ export function ResumeBuilder() {
         onSuccess: () => {
           toast({
             title: "Success",
-            description: editingLink ? "Link updated successfully" : "Link added successfully",
+            description: editingLink
+              ? "Link updated successfully"
+              : "Link added successfully",
           });
           setLinkDialogOpen(false);
           setEditingLink(null);
@@ -473,7 +503,7 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -504,7 +534,7 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -529,7 +559,7 @@ export function ResumeBuilder() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -545,7 +575,10 @@ export function ResumeBuilder() {
         </CardHeader>
         <CardContent>
           <Suspense fallback={<FormSkeleton />}>
-            <LazyPersonalInfoForm resumeId={resumeId} defaultValues={content.personalInfo} />
+            <LazyPersonalInfoForm
+              resumeId={resumeId}
+              defaultValues={content.personalInfo}
+            />
           </Suspense>
         </CardContent>
       </Card>
@@ -588,7 +621,9 @@ export function ResumeBuilder() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>Education</CardTitle>
-              <CardDescription>Add your educational background and achievements</CardDescription>
+              <CardDescription>
+                Add your educational background and achievements
+              </CardDescription>
             </div>
             <Button onClick={handleAddEducation}>
               <Plus className="mr-2 h-4 w-4" />
@@ -615,8 +650,8 @@ export function ResumeBuilder() {
         <CardHeader>
           <CardTitle>Skills</CardTitle>
           <CardDescription>
-            List your technical skills, languages, tools, and soft skills. Changes are saved
-            automatically.
+            List your technical skills, languages, tools, and soft skills.
+            Changes are saved automatically.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -634,7 +669,9 @@ export function ResumeBuilder() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle>Certifications</CardTitle>
-              <CardDescription>Add professional certifications and credentials</CardDescription>
+              <CardDescription>
+                Add professional certifications and credentials
+              </CardDescription>
             </div>
             <Button onClick={handleAddCertification}>
               <Plus className="mr-2 h-4 w-4" />
@@ -663,7 +700,8 @@ export function ResumeBuilder() {
             <div>
               <CardTitle>Links</CardTitle>
               <CardDescription>
-                Add your portfolio, LinkedIn, GitHub, and other professional links
+                Add your portfolio, LinkedIn, GitHub, and other professional
+                links
               </CardDescription>
             </div>
             <Button onClick={handleAddLink}>

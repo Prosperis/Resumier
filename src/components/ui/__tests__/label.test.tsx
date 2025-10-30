@@ -26,7 +26,7 @@ describe("Label", () => {
       <Label>
         <span>Icon</span>
         <span>Text</span>
-      </Label>
+      </Label>,
     );
     expect(screen.getByText("Icon")).toBeInTheDocument();
     expect(screen.getByText("Text")).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe("Label", () => {
       <div>
         <Label htmlFor="email">Email</Label>
         <input id="email" type="email" />
-      </div>
+      </div>,
     );
     const label = screen.getByText("Email");
     const input = screen.getByRole("textbox");

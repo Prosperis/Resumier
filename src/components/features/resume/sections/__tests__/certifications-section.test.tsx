@@ -26,8 +26,12 @@ describe("CertificationsSection", () => {
   it("renders all certifications", () => {
     render(<CertificationsSection {...defaultProps} />);
 
-    expect(screen.getByDisplayValue("AWS Certified Developer")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("Google Cloud Professional")).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue("AWS Certified Developer"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue("Google Cloud Professional"),
+    ).toBeInTheDocument();
   });
 
   it("renders certification expiration dates", () => {
@@ -40,14 +44,18 @@ describe("CertificationsSection", () => {
   it("renders Add Certification button", () => {
     render(<CertificationsSection {...defaultProps} />);
 
-    expect(screen.getByRole("button", { name: /add certification/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /add certification/i }),
+    ).toBeInTheDocument();
   });
 
   it("calls addCertification when Add button is clicked", async () => {
     const user = userEvent.setup();
     render(<CertificationsSection {...defaultProps} />);
 
-    const addButton = screen.getByRole("button", { name: /add certification/i });
+    const addButton = screen.getByRole("button", {
+      name: /add certification/i,
+    });
     await user.click(addButton);
 
     expect(defaultProps.addCertification).toHaveBeenCalledTimes(1);
@@ -83,7 +91,7 @@ describe("CertificationsSection", () => {
     expect(defaultProps.updateCertification).toHaveBeenCalledWith(
       0,
       "name",
-      expect.stringContaining("N")
+      expect.stringContaining("N"),
     );
   });
 
@@ -91,13 +99,20 @@ describe("CertificationsSection", () => {
     render(<CertificationsSection {...defaultProps} certifications={[]} />);
 
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /add certification/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /add certification/i }),
+    ).toBeInTheDocument();
   });
 
   it("handles certifications with null values", () => {
     const certsWithNulls: Certification[] = [{ name: null, expiration: null }];
 
-    render(<CertificationsSection {...defaultProps} certifications={certsWithNulls} />);
+    render(
+      <CertificationsSection
+        {...defaultProps}
+        certifications={certsWithNulls}
+      />,
+    );
 
     const nameInput = screen.getByPlaceholderText("Certification name");
     expect(nameInput).toHaveValue("");
@@ -105,17 +120,26 @@ describe("CertificationsSection", () => {
 
   it("displays correct placeholder text for certification name", () => {
     render(
-      <CertificationsSection {...defaultProps} certifications={[{ name: "", expiration: "" }]} />
+      <CertificationsSection
+        {...defaultProps}
+        certifications={[{ name: "", expiration: "" }]}
+      />,
     );
 
-    expect(screen.getByPlaceholderText("Certification name")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Certification name"),
+    ).toBeInTheDocument();
   });
 
   it("renders labels for certification fields", () => {
     render(<CertificationsSection {...defaultProps} />);
 
-    expect(screen.getAllByText("Certification")).toHaveLength(mockCertifications.length);
-    expect(screen.getAllByText("Expiration")).toHaveLength(mockCertifications.length);
+    expect(screen.getAllByText("Certification")).toHaveLength(
+      mockCertifications.length,
+    );
+    expect(screen.getAllByText("Expiration")).toHaveLength(
+      mockCertifications.length,
+    );
   });
 
   it("calls removeCertification with correct index for second item", async () => {

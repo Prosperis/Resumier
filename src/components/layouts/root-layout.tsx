@@ -61,13 +61,22 @@ export function RootLayout({ children }: RootLayoutProps) {
       {/* Header */}
       <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 relative sticky top-0 z-50 w-full border-b backdrop-blur">
         <div className="container flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 font-semibold" aria-label="Resumier home">
+          <Link
+            to="/"
+            className="flex items-center gap-2 font-semibold"
+            aria-label="Resumier home"
+          >
             <FileText className="size-6" aria-hidden="true" />
             <span className="text-xl">Resumier</span>
           </Link>
 
           <nav className="flex items-center gap-4" aria-label="Main navigation">
-            <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label={getThemeLabel()}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              aria-label={getThemeLabel()}
+            >
               {getThemeIcon()}
             </Button>
           </nav>
@@ -75,7 +84,11 @@ export function RootLayout({ children }: RootLayoutProps) {
       </header>
 
       {/* Main content */}
-      <main id="main-content" tabIndex={-1} className="relative flex-1 focus:outline-none">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="relative flex-1 focus:outline-none"
+      >
         {children}
       </main>
 

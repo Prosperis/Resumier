@@ -38,7 +38,9 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
       transition={
-        prefersReducedMotion ? undefined : { type: "spring", stiffness: 400, damping: 17 }
+        prefersReducedMotion
+          ? undefined
+          : { type: "spring", stiffness: 400, damping: 17 }
       }
       {...(props as React.ComponentProps<typeof MotionButton>)}
     />

@@ -67,7 +67,7 @@ describe("Separator", () => {
         <div>Content above</div>
         <Separator />
         <div>Content below</div>
-      </div>
+      </div>,
     );
     const separator = container.querySelector('[data-slot="separator"]');
     expect(separator).toBeInTheDocument();
@@ -79,7 +79,7 @@ describe("Separator", () => {
         <Separator data-testid="sep-1" />
         <Separator data-testid="sep-2" />
         <Separator data-testid="sep-3" />
-      </div>
+      </div>,
     );
     expect(screen.getByTestId("sep-1")).toBeInTheDocument();
     expect(screen.getByTestId("sep-2")).toBeInTheDocument();

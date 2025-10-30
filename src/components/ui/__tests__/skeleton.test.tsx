@@ -1,6 +1,12 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { Skeleton, SkeletonCard, SkeletonForm, SkeletonTable, SkeletonText } from "../skeleton";
+import {
+  Skeleton,
+  SkeletonCard,
+  SkeletonForm,
+  SkeletonTable,
+  SkeletonText,
+} from "../skeleton";
 
 // Mock the animation hook
 vi.mock("@/lib/animations/hooks/use-reduced-motion", () => ({
@@ -67,7 +73,9 @@ describe("Skeleton", () => {
   describe("Reduced Motion", () => {
     it("uses pulse animation with reduced motion", async () => {
       // Mock useReducedMotion to return true for this test
-      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion");
+      const { useReducedMotion } = await import(
+        "@/lib/animations/hooks/use-reduced-motion"
+      );
       vi.mocked(useReducedMotion).mockReturnValue(true);
 
       const { container } = render(<Skeleton />);
@@ -159,7 +167,9 @@ describe("Skeleton", () => {
 
     it("forwards additional props", () => {
       const { container } = render(<Skeleton data-testid="custom-skeleton" />);
-      expect(container.querySelector('[data-testid="custom-skeleton"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-testid="custom-skeleton"]'),
+      ).toBeInTheDocument();
     });
   });
 });

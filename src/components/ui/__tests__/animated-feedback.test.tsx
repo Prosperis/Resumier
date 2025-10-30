@@ -70,7 +70,7 @@ describe("ErrorShake", () => {
     render(
       <ErrorShake>
         <div>Error Content</div>
-      </ErrorShake>
+      </ErrorShake>,
     );
     expect(screen.getByText("Error Content")).toBeInTheDocument();
   });
@@ -79,7 +79,7 @@ describe("ErrorShake", () => {
     render(
       <ErrorShake>
         <div>Content</div>
-      </ErrorShake>
+      </ErrorShake>,
     );
     expect(screen.getByText("Content")).toBeInTheDocument();
   });
@@ -88,7 +88,7 @@ describe("ErrorShake", () => {
     render(
       <ErrorShake trigger={true}>
         <div>Shaking Content</div>
-      </ErrorShake>
+      </ErrorShake>,
     );
     expect(screen.getByText("Shaking Content")).toBeInTheDocument();
   });
@@ -97,7 +97,7 @@ describe("ErrorShake", () => {
     const { container } = render(
       <ErrorShake className="shake-custom">
         <div>Content</div>
-      </ErrorShake>
+      </ErrorShake>,
     );
     expect(container.firstChild).toHaveClass("shake-custom");
   });
@@ -106,7 +106,7 @@ describe("ErrorShake", () => {
     const { container } = render(
       <ErrorShake>
         <span>Test</span>
-      </ErrorShake>
+      </ErrorShake>,
     );
     expect(container.querySelector("div")).toBeInTheDocument();
   });
@@ -203,7 +203,9 @@ describe("CountUp", () => {
   });
 
   it("applies custom className", () => {
-    const { container } = render(<CountUp value={25} className="count-custom" />);
+    const { container } = render(
+      <CountUp value={25} className="count-custom" />,
+    );
     expect(container.querySelector(".count-custom")).toBeInTheDocument();
   });
 

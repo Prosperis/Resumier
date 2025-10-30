@@ -30,11 +30,13 @@ describe("Accessibility Infrastructure", () => {
       const { container } = renderWithQuery(
         <div>
           <img src="test.jpg" />
-        </div>
+        </div>,
       );
 
       const results = await axe(container);
-      const altTextViolations = results.violations.filter((v) => v.id === "image-alt");
+      const altTextViolations = results.violations.filter(
+        (v) => v.id === "image-alt",
+      );
       expect(altTextViolations.length).toBeGreaterThan(0);
     });
 
@@ -42,11 +44,13 @@ describe("Accessibility Infrastructure", () => {
       const { container } = renderWithQuery(
         <div>
           <img src="test.jpg" alt="Test graphic" />
-        </div>
+        </div>,
       );
 
       const results = await axe(container);
-      const altTextViolations = results.violations.filter((v) => v.id === "image-alt");
+      const altTextViolations = results.violations.filter(
+        (v) => v.id === "image-alt",
+      );
       expect(altTextViolations.length).toBe(0);
     });
 
@@ -54,11 +58,13 @@ describe("Accessibility Infrastructure", () => {
       const { container } = renderWithQuery(
         <div>
           <button />
-        </div>
+        </div>,
       );
 
       const results = await axe(container);
-      const buttonNameViolations = results.violations.filter((v) => v.id === "button-name");
+      const buttonNameViolations = results.violations.filter(
+        (v) => v.id === "button-name",
+      );
       expect(buttonNameViolations.length).toBeGreaterThan(0);
     });
 
@@ -67,11 +73,13 @@ describe("Accessibility Infrastructure", () => {
         <div>
           <button>Click me</button>
           <button aria-label="Close" />
-        </div>
+        </div>,
       );
 
       const results = await axe(container);
-      const buttonNameViolations = results.violations.filter((v) => v.id === "button-name");
+      const buttonNameViolations = results.violations.filter(
+        (v) => v.id === "button-name",
+      );
       expect(buttonNameViolations.length).toBe(0);
     });
 
@@ -80,11 +88,13 @@ describe("Accessibility Infrastructure", () => {
         <div>
           {/* biome-ignore lint/a11y/useSemanticElements: intentionally testing invalid ARIA */}
           <div role="region" aria-labelledby="nonexistent" />
-        </div>
+        </div>,
       );
 
       const results = await axe(container);
-      const ariaViolations = results.violations.filter((v) => v.id.includes("aria"));
+      const ariaViolations = results.violations.filter((v) =>
+        v.id.includes("aria"),
+      );
       expect(ariaViolations.length).toBeGreaterThan(0);
     });
 
@@ -96,11 +106,13 @@ describe("Accessibility Infrastructure", () => {
           </div>
           <input aria-invalid="true" aria-describedby="error" />
           <div id="error">Error message</div>
-        </div>
+        </div>,
       );
 
       const results = await axe(container);
-      const ariaViolations = results.violations.filter((v) => v.id.includes("aria-valid"));
+      const ariaViolations = results.violations.filter((v) =>
+        v.id.includes("aria-valid"),
+      );
       expect(ariaViolations.length).toBe(0);
     });
 
@@ -108,11 +120,13 @@ describe("Accessibility Infrastructure", () => {
       const { container } = renderWithQuery(
         <form>
           <input type="text" />
-        </form>
+        </form>,
       );
 
       const results = await axe(container);
-      const labelViolations = results.violations.filter((v) => v.id === "label");
+      const labelViolations = results.violations.filter(
+        (v) => v.id === "label",
+      );
       expect(labelViolations.length).toBeGreaterThan(0);
     });
 
@@ -121,11 +135,13 @@ describe("Accessibility Infrastructure", () => {
         <form>
           <label htmlFor="name">Name</label>
           <input id="name" type="text" />
-        </form>
+        </form>,
       );
 
       const results = await axe(container);
-      const labelViolations = results.violations.filter((v) => v.id === "label");
+      const labelViolations = results.violations.filter(
+        (v) => v.id === "label",
+      );
       expect(labelViolations.length).toBe(0);
     });
   });
@@ -137,7 +153,7 @@ describe("Accessibility Infrastructure", () => {
           <header>Header</header>
           <nav>Nav</nav>
           <main>Main content</main>
-        </div>
+        </div>,
       );
 
       const results = await axe(container);
@@ -151,7 +167,7 @@ describe("Accessibility Infrastructure", () => {
       const { container } = renderWithQuery(
         <div>
           <div>Focusable div</div>
-        </div>
+        </div>,
       );
 
       const results = await axe(container);
@@ -162,7 +178,7 @@ describe("Accessibility Infrastructure", () => {
       const { container } = renderWithQuery(
         <div>
           <div tabIndex={-1}>Programmatically focusable</div>
-        </div>
+        </div>,
       );
 
       const results = await axe(container);
@@ -175,11 +191,13 @@ describe("Accessibility Infrastructure", () => {
       const { container } = renderWithQuery(
         <div style={{ backgroundColor: "white", color: "black" }}>
           <p>High contrast text</p>
-        </div>
+        </div>,
       );
 
       const results = await axe(container);
-      const contrastViolations = results.violations.filter((v) => v.id === "color-contrast");
+      const contrastViolations = results.violations.filter(
+        (v) => v.id === "color-contrast",
+      );
       // Note: This may still fail depending on actual computed styles
       // In production, our OKLCH colors provide ~15:1 contrast
       expect(contrastViolations).toBeDefined();

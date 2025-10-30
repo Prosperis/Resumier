@@ -23,14 +23,20 @@ interface AnimatedIconProps extends Omit<HTMLMotionProps<"div">, "children"> {
  * </RotateOnHover>
  * ```
  */
-export function RotateOnHover({ children, className, ...props }: AnimatedIconProps) {
+export function RotateOnHover({
+  children,
+  className,
+  ...props
+}: AnimatedIconProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
       className={cn("inline-flex", className)}
       whileHover={prefersReducedMotion ? undefined : { rotate: 180 }}
-      transition={prefersReducedMotion ? undefined : { duration: 0.3, ease: "easeInOut" }}
+      transition={
+        prefersReducedMotion ? undefined : { duration: 0.3, ease: "easeInOut" }
+      }
       {...props}
     >
       {children}
@@ -62,7 +68,9 @@ export function ScaleOnHover({
       whileHover={prefersReducedMotion ? undefined : { scale }}
       whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
       transition={
-        prefersReducedMotion ? undefined : { type: "spring", stiffness: 400, damping: 17 }
+        prefersReducedMotion
+          ? undefined
+          : { type: "spring", stiffness: 400, damping: 17 }
       }
       {...props}
     >
@@ -81,7 +89,11 @@ export function ScaleOnHover({
  * </BounceOnHover>
  * ```
  */
-export function BounceOnHover({ children, className, ...props }: AnimatedIconProps) {
+export function BounceOnHover({
+  children,
+  className,
+  ...props
+}: AnimatedIconProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -119,7 +131,11 @@ export function BounceOnHover({ children, className, ...props }: AnimatedIconPro
  * </ShakeOnHover>
  * ```
  */
-export function ShakeOnHover({ children, className, ...props }: AnimatedIconProps) {
+export function ShakeOnHover({
+  children,
+  className,
+  ...props
+}: AnimatedIconProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -157,7 +173,11 @@ export function ShakeOnHover({ children, className, ...props }: AnimatedIconProp
  * </PulseOnHover>
  * ```
  */
-export function PulseOnHover({ children, className, ...props }: AnimatedIconProps) {
+export function PulseOnHover({
+  children,
+  className,
+  ...props
+}: AnimatedIconProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
@@ -195,7 +215,11 @@ export function PulseOnHover({ children, className, ...props }: AnimatedIconProp
  * </SpinOnClick>
  * ```
  */
-export function SpinOnClick({ children, className, ...props }: AnimatedIconProps) {
+export function SpinOnClick({
+  children,
+  className,
+  ...props
+}: AnimatedIconProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (

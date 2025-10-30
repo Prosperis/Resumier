@@ -53,7 +53,9 @@ describe("RenameResumeDialog", () => {
   });
 
   it("renders with default trigger button", () => {
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     const button = screen.getByRole("button", { name: /rename/i });
     expect(button).toBeInTheDocument();
@@ -61,8 +63,11 @@ describe("RenameResumeDialog", () => {
 
   it("renders with custom trigger", () => {
     render(
-      <RenameResumeDialog {...defaultProps} trigger={<button type="button">Edit Title</button>} />,
-      { wrapper: createWrapper() }
+      <RenameResumeDialog
+        {...defaultProps}
+        trigger={<button type="button">Edit Title</button>}
+      />,
+      { wrapper: createWrapper() },
     );
 
     const button = screen.getByRole("button", { name: /edit title/i });
@@ -71,7 +76,9 @@ describe("RenameResumeDialog", () => {
 
   it("opens dialog when trigger is clicked", async () => {
     const user = userEvent.setup();
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /rename/i }));
 
@@ -82,7 +89,9 @@ describe("RenameResumeDialog", () => {
 
   it("pre-fills input with current title", async () => {
     const user = userEvent.setup();
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /rename/i }));
 
@@ -92,7 +101,9 @@ describe("RenameResumeDialog", () => {
 
   it("shows error toast when title is empty", async () => {
     const user = userEvent.setup();
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /rename/i }));
 
@@ -110,7 +121,9 @@ describe("RenameResumeDialog", () => {
 
   it("closes dialog without mutation if title unchanged", async () => {
     const user = userEvent.setup();
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /rename/i }));
     await user.click(screen.getByRole("button", { name: "Save changes" }));
@@ -148,7 +161,7 @@ describe("RenameResumeDialog", () => {
           id: "resume-123",
           data: { title: "Updated Resume Title" },
         },
-        expect.any(Object)
+        expect.any(Object),
       );
     });
 
@@ -166,7 +179,9 @@ describe("RenameResumeDialog", () => {
       onSuccess();
     });
 
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /rename/i }));
 
@@ -180,7 +195,7 @@ describe("RenameResumeDialog", () => {
         expect.objectContaining({
           data: { title: "Trimmed Title" },
         }),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
   });
@@ -193,7 +208,9 @@ describe("RenameResumeDialog", () => {
       onError(error);
     });
 
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /rename/i }));
 
@@ -219,11 +236,15 @@ describe("RenameResumeDialog", () => {
       error: null,
     } as any);
 
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /rename/i }));
 
-    const saveButton = screen.getByRole("button", { name: "Saving changes..." });
+    const saveButton = screen.getByRole("button", {
+      name: "Saving changes...",
+    });
     expect(saveButton).toBeDisabled();
   });
 
@@ -234,7 +255,9 @@ describe("RenameResumeDialog", () => {
       onSuccess();
     });
 
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /rename/i }));
 
@@ -250,7 +273,9 @@ describe("RenameResumeDialog", () => {
 
   it("closes dialog when cancel is clicked", async () => {
     const user = userEvent.setup();
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /rename/i }));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -271,7 +296,9 @@ describe("RenameResumeDialog", () => {
       onError(error);
     });
 
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /rename/i }));
 
@@ -296,7 +323,9 @@ describe("RenameResumeDialog", () => {
       onSuccess();
     });
 
-    render(<RenameResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<RenameResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /rename/i }));
 

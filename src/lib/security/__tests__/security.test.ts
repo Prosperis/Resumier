@@ -69,12 +69,16 @@ describe("Security Utilities", () => {
     it("allows safe protocols", () => {
       expect(sanitizeUrl("https://example.com")).toBe("https://example.com/");
       expect(sanitizeUrl("http://example.com")).toBe("http://example.com/");
-      expect(sanitizeUrl("mailto:test@example.com")).toBe("mailto:test@example.com");
+      expect(sanitizeUrl("mailto:test@example.com")).toBe(
+        "mailto:test@example.com",
+      );
     });
 
     it("blocks dangerous protocols", () => {
       expect(sanitizeUrl("javascript:alert('xss')")).toBe("");
-      expect(sanitizeUrl("data:text/html,<script>alert('xss')</script>")).toBe("");
+      expect(sanitizeUrl("data:text/html,<script>alert('xss')</script>")).toBe(
+        "",
+      );
       expect(sanitizeUrl("file:///etc/passwd")).toBe("");
     });
 

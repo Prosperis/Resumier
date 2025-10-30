@@ -69,7 +69,10 @@ export function CertificationFormDialog({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="name"
@@ -77,7 +80,10 @@ export function CertificationFormDialog({
                 <FormItem>
                   <FormLabel>Certification Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="AWS Certified Solutions Architect" {...field} />
+                    <Input
+                      placeholder="AWS Certified Solutions Architect"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -139,7 +145,9 @@ export function CertificationFormDialog({
                   <FormControl>
                     <Input placeholder="ABC123XYZ" {...field} />
                   </FormControl>
-                  <FormDescription>Certificate or credential number</FormDescription>
+                  <FormDescription>
+                    Certificate or credential number
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -152,16 +160,26 @@ export function CertificationFormDialog({
                 <FormItem>
                   <FormLabel>Credential URL (optional)</FormLabel>
                   <FormControl>
-                    <Input type="url" placeholder="https://www.credly.com/badges/..." {...field} />
+                    <Input
+                      type="url"
+                      placeholder="https://www.credly.com/badges/..."
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription>Link to verify the certification</FormDescription>
+                  <FormDescription>
+                    Link to verify the certification
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+              >
                 Cancel
               </Button>
               <Button type="submit" disabled={form.formState.isSubmitting}>

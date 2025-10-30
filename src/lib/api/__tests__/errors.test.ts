@@ -188,15 +188,21 @@ describe("API Errors", () => {
     });
 
     it("uses default message if no message in data", () => {
-      expect(() => parseErrorResponse(404, {})).toThrow("An unexpected error occurred");
+      expect(() => parseErrorResponse(404, {})).toThrow(
+        "An unexpected error occurred",
+      );
     });
 
     it("handles null data", () => {
-      expect(() => parseErrorResponse(500, null)).toThrow("An unexpected error occurred");
+      expect(() => parseErrorResponse(500, null)).toThrow(
+        "An unexpected error occurred",
+      );
     });
 
     it("handles undefined data", () => {
-      expect(() => parseErrorResponse(500, undefined)).toThrow("An unexpected error occurred");
+      expect(() => parseErrorResponse(500, undefined)).toThrow(
+        "An unexpected error occurred",
+      );
     });
   });
 
@@ -244,7 +250,9 @@ describe("API Errors", () => {
 
     it("extracts message from ApiError subclasses", () => {
       expect(getErrorMessage(new NotFoundError("Not found"))).toBe("Not found");
-      expect(getErrorMessage(new ValidationError("Invalid", {}))).toBe("Invalid");
+      expect(getErrorMessage(new ValidationError("Invalid", {}))).toBe(
+        "Invalid",
+      );
     });
 
     it("extracts message from regular Error", () => {
@@ -253,7 +261,9 @@ describe("API Errors", () => {
     });
 
     it("returns default message for unknown errors", () => {
-      expect(getErrorMessage("string error")).toBe("An unexpected error occurred");
+      expect(getErrorMessage("string error")).toBe(
+        "An unexpected error occurred",
+      );
       expect(getErrorMessage(123)).toBe("An unexpected error occurred");
       expect(getErrorMessage({})).toBe("An unexpected error occurred");
       expect(getErrorMessage(null)).toBe("An unexpected error occurred");

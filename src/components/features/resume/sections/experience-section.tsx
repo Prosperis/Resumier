@@ -1,6 +1,10 @@
 import { ChevronDown, Plus, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,7 +17,7 @@ interface ExperienceProps {
   updateExperience: (
     i: number,
     field: keyof WorkExperience,
-    value: string | string[] | boolean
+    value: string | string[] | boolean,
   ) => void;
   removeExperience: (i: number) => void;
   setAwardInput: (i: number, value: string) => void;
@@ -34,9 +38,15 @@ export function ExperienceSection({
   return (
     <div className="grid gap-4">
       {experiences.map((exp, i) => (
-        <Collapsible key={i} defaultOpen={!exp.company} className="rounded-md border">
+        <Collapsible
+          key={i}
+          defaultOpen={!exp.company}
+          className="rounded-md border"
+        >
           <div className="flex items-center justify-between gap-2 p-2">
-            <span className="font-medium">{exp.company || `Experience ${i + 1}`}</span>
+            <span className="font-medium">
+              {exp.company || `Experience ${i + 1}`}
+            </span>
             <div className="flex gap-2">
               <CollapsibleTrigger asChild>
                 <Button variant="ghost" size="icon">
@@ -44,7 +54,12 @@ export function ExperienceSection({
                   <span className="sr-only">Toggle</span>
                 </Button>
               </CollapsibleTrigger>
-              <Button type="button" variant="outline" size="sm" onClick={() => removeExperience(i)}>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => removeExperience(i)}
+              >
                 <Trash className="mr-2 h-4 w-4" /> Remove
               </Button>
             </div>
@@ -70,7 +85,9 @@ export function ExperienceSection({
                 <Input
                   type="date"
                   value={exp.startDate ?? ""}
-                  onChange={(e) => updateExperience(i, "startDate", e.target.value)}
+                  onChange={(e) =>
+                    updateExperience(i, "startDate", e.target.value)
+                  }
                 />
               </div>
               <div className="grid gap-2">
@@ -78,7 +95,9 @@ export function ExperienceSection({
                 <Input
                   type="date"
                   value={exp.endDate ?? ""}
-                  onChange={(e) => updateExperience(i, "endDate", e.target.value)}
+                  onChange={(e) =>
+                    updateExperience(i, "endDate", e.target.value)
+                  }
                   disabled={exp.current}
                   placeholder={exp.current ? "Present" : undefined}
                 />
@@ -88,7 +107,9 @@ export function ExperienceSection({
                   id={`current-${i}`}
                   type="checkbox"
                   checked={exp.current ?? false}
-                  onChange={(e) => updateExperience(i, "current", e.target.checked)}
+                  onChange={(e) =>
+                    updateExperience(i, "current", e.target.checked)
+                  }
                   className="h-4 w-4"
                 />
                 <Label htmlFor={`current-${i}`}>Current</Label>
@@ -98,7 +119,9 @@ export function ExperienceSection({
               <Label>Description</Label>
               <Textarea
                 value={exp.description ?? ""}
-                onChange={(e) => updateExperience(i, "description", e.target.value)}
+                onChange={(e) =>
+                  updateExperience(i, "description", e.target.value)
+                }
               />
             </div>
             <div className="grid gap-2">
@@ -129,7 +152,12 @@ export function ExperienceSection({
                 ))}
               </ul>
             </div>
-            <Button type="button" variant="outline" size="sm" onClick={() => removeExperience(i)}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => removeExperience(i)}
+            >
               <Trash className="mr-2 h-4 w-4" /> Remove
             </Button>
           </CollapsibleContent>

@@ -6,7 +6,9 @@ import { CertificationList } from "../certification-list";
 
 // Mock @dnd-kit modules
 vi.mock("@dnd-kit/core", () => ({
-  DndContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DndContext: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   closestCenter: vi.fn(),
   useSensor: vi.fn(),
   useSensors: vi.fn(() => []),
@@ -15,7 +17,9 @@ vi.mock("@dnd-kit/core", () => ({
 }));
 
 vi.mock("@dnd-kit/sortable", () => ({
-  SortableContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SortableContext: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   verticalListSortingStrategy: vi.fn(),
   sortableKeyboardCoordinates: vi.fn(),
   useSortable: () => ({
@@ -37,7 +41,9 @@ vi.mock("@dnd-kit/utilities", () => ({
 }));
 
 vi.mock("../dnd/sortable-item", () => ({
-  SortableItem: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SortableItem: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));
 
 vi.mock("../dnd/drag-handle", () => ({
@@ -81,11 +87,15 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
-      expect(screen.getByText("No certifications added yet.")).toBeInTheDocument();
-      expect(screen.getByText('Click "Add Certification" to get started.')).toBeInTheDocument();
+      expect(
+        screen.getByText("No certifications added yet."),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('Click "Add Certification" to get started.'),
+      ).toBeInTheDocument();
     });
 
     it("renders empty state card with dashed border", () => {
@@ -95,7 +105,7 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const card = container.querySelector(".border-dashed");
@@ -111,11 +121,15 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
-      expect(screen.getByText("AWS Certified Solutions Architect")).toBeInTheDocument();
-      expect(screen.getByText("Professional Scrum Master I")).toBeInTheDocument();
+      expect(
+        screen.getByText("AWS Certified Solutions Architect"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText("Professional Scrum Master I"),
+      ).toBeInTheDocument();
     });
 
     it("displays certification issuer", () => {
@@ -125,7 +139,7 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getByText("Amazon Web Services")).toBeInTheDocument();
@@ -139,7 +153,7 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getByText(/Issued Jun 2023/)).toBeInTheDocument();
@@ -153,7 +167,7 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getByText(/Expires Jun 2026/)).toBeInTheDocument();
@@ -166,7 +180,7 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const psmText = screen.getByText(/Issued Mar 2022/);
@@ -180,7 +194,7 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getByText(/Credential ID: AWS-123456/)).toBeInTheDocument();
@@ -193,7 +207,7 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const credentialIds = screen.queryAllByText(/Credential ID:/);
@@ -207,12 +221,17 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
-      const link = screen.getByLabelText("View AWS Certified Solutions Architect credential");
+      const link = screen.getByLabelText(
+        "View AWS Certified Solutions Architect credential",
+      );
       expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute("href", "https://aws.amazon.com/certification");
+      expect(link).toHaveAttribute(
+        "href",
+        "https://aws.amazon.com/certification",
+      );
       expect(link).toHaveAttribute("target", "_blank");
       expect(link).toHaveAttribute("rel", "noopener noreferrer");
     });
@@ -224,10 +243,12 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
-      const link = screen.queryByLabelText("View Professional Scrum Master I credential");
+      const link = screen.queryByLabelText(
+        "View Professional Scrum Master I credential",
+      );
       expect(link).not.toBeInTheDocument();
     });
 
@@ -238,7 +259,7 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const calendarIcons = container.querySelectorAll("svg");
@@ -255,11 +276,11 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const editButton = screen.getByLabelText(
-        "Edit AWS Certified Solutions Architect certification"
+        "Edit AWS Certified Solutions Architect certification",
       );
       await user.click(editButton);
 
@@ -274,14 +295,16 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(
-        screen.getByLabelText("Edit AWS Certified Solutions Architect certification")
+        screen.getByLabelText(
+          "Edit AWS Certified Solutions Architect certification",
+        ),
       ).toBeInTheDocument();
       expect(
-        screen.getByLabelText("Edit Professional Scrum Master I certification")
+        screen.getByLabelText("Edit Professional Scrum Master I certification"),
       ).toBeInTheDocument();
     });
 
@@ -292,11 +315,11 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const editButton = screen.getByLabelText(
-        "Edit AWS Certified Solutions Architect certification"
+        "Edit AWS Certified Solutions Architect certification",
       );
       expect(editButton).toBeInTheDocument();
       expect(editButton.tagName).toBe("BUTTON");
@@ -312,11 +335,11 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const deleteButton = screen.getByLabelText(
-        "Delete AWS Certified Solutions Architect certification"
+        "Delete AWS Certified Solutions Architect certification",
       );
       await user.click(deleteButton);
 
@@ -331,14 +354,18 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(
-        screen.getByLabelText("Delete AWS Certified Solutions Architect certification")
+        screen.getByLabelText(
+          "Delete AWS Certified Solutions Architect certification",
+        ),
       ).toBeInTheDocument();
       expect(
-        screen.getByLabelText("Delete Professional Scrum Master I certification")
+        screen.getByLabelText(
+          "Delete Professional Scrum Master I certification",
+        ),
       ).toBeInTheDocument();
     });
 
@@ -349,11 +376,11 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const deleteButton = screen.getByLabelText(
-        "Delete AWS Certified Solutions Architect certification"
+        "Delete AWS Certified Solutions Architect certification",
       );
       expect(deleteButton).toBeInTheDocument();
       expect(deleteButton.tagName).toBe("BUTTON");
@@ -383,7 +410,7 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getByText(/Issued Jan 2023/)).toBeInTheDocument();
@@ -417,7 +444,7 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getByText(/Issued Jan 2020/)).toBeInTheDocument();
@@ -433,12 +460,14 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const certNames = screen.getAllByRole("heading", { level: 3 });
       expect(certNames).toHaveLength(2);
-      expect(certNames[0]).toHaveTextContent("AWS Certified Solutions Architect");
+      expect(certNames[0]).toHaveTextContent(
+        "AWS Certified Solutions Architect",
+      );
       expect(certNames[1]).toHaveTextContent("Professional Scrum Master I");
     });
 
@@ -449,20 +478,26 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(
-        screen.getByLabelText("Edit AWS Certified Solutions Architect certification")
+        screen.getByLabelText(
+          "Edit AWS Certified Solutions Architect certification",
+        ),
       ).toBeInTheDocument();
       expect(
-        screen.getByLabelText("Delete AWS Certified Solutions Architect certification")
+        screen.getByLabelText(
+          "Delete AWS Certified Solutions Architect certification",
+        ),
       ).toBeInTheDocument();
       expect(
-        screen.getByLabelText("Edit Professional Scrum Master I certification")
+        screen.getByLabelText("Edit Professional Scrum Master I certification"),
       ).toBeInTheDocument();
       expect(
-        screen.getByLabelText("Delete Professional Scrum Master I certification")
+        screen.getByLabelText(
+          "Delete Professional Scrum Master I certification",
+        ),
       ).toBeInTheDocument();
     });
   });
@@ -484,13 +519,13 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(
         screen.getByText(
-          "AWS Certified Advanced Networking Specialty Certification with Extended Title"
-        )
+          "AWS Certified Advanced Networking Specialty Certification with Extended Title",
+        ),
       ).toBeInTheDocument();
     });
 
@@ -511,13 +546,13 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(
         screen.getByText(
-          "International Association of Professional Certification Bodies and Standards Organizations"
-        )
+          "International Association of Professional Certification Bodies and Standards Organizations",
+        ),
       ).toBeInTheDocument();
     });
 
@@ -540,15 +575,19 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getByText("Full Certification")).toBeInTheDocument();
       expect(screen.getByText("Full Issuer")).toBeInTheDocument();
       expect(screen.getByText(/Issued Jun 2023/)).toBeInTheDocument();
       expect(screen.getByText(/Expires Jun 2026/)).toBeInTheDocument();
-      expect(screen.getByText(/Credential ID: FULL-123456/)).toBeInTheDocument();
-      expect(screen.getByLabelText("View Full Certification credential")).toBeInTheDocument();
+      expect(
+        screen.getByText(/Credential ID: FULL-123456/),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByLabelText("View Full Certification credential"),
+      ).toBeInTheDocument();
     });
 
     it("handles certification with minimal fields", () => {
@@ -567,7 +606,7 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getByText("Minimal Cert")).toBeInTheDocument();
@@ -575,7 +614,9 @@ describe("CertificationList", () => {
       expect(screen.getByText(/Issued Jun 2023/)).toBeInTheDocument();
       expect(screen.queryByText(/Expires/)).not.toBeInTheDocument();
       expect(screen.queryByText(/Credential ID:/)).not.toBeInTheDocument();
-      expect(screen.queryByLabelText(/View .* credential/)).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText(/View .* credential/),
+      ).not.toBeInTheDocument();
     });
 
     it("handles very long credential IDs", () => {
@@ -585,7 +626,8 @@ describe("CertificationList", () => {
           name: "Test Cert",
           issuer: "Test Issuer",
           date: "2023-06",
-          credentialId: "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-VERY-LONG-CREDENTIAL-ID",
+          credentialId:
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-VERY-LONG-CREDENTIAL-ID",
         },
       ];
 
@@ -595,13 +637,13 @@ describe("CertificationList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(
         screen.getByText(
-          /Credential ID: ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-VERY-LONG-CREDENTIAL-ID/
-        )
+          /Credential ID: ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-VERY-LONG-CREDENTIAL-ID/,
+        ),
       ).toBeInTheDocument();
     });
   });

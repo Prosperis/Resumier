@@ -42,7 +42,10 @@ describe("useResume", () => {
   });
 
   it("fetches a resume by ID successfully", async () => {
-    const mockResume = createMockResume({ id: "resume-123", title: "My Resume" });
+    const mockResume = createMockResume({
+      id: "resume-123",
+      title: "My Resume",
+    });
     (apiClient.get as any).mockResolvedValueOnce(mockResume);
 
     const { result } = renderHook(() => useResume("resume-123"), {
@@ -97,7 +100,9 @@ describe("useResume", () => {
   it("refetches when ID changes", async () => {
     const mockResume1 = createMockResume({ id: "resume-1", title: "Resume 1" });
     const mockResume2 = createMockResume({ id: "resume-2", title: "Resume 2" });
-    (apiClient.get as any).mockResolvedValueOnce(mockResume1).mockResolvedValueOnce(mockResume2);
+    (apiClient.get as any)
+      .mockResolvedValueOnce(mockResume1)
+      .mockResolvedValueOnce(mockResume2);
 
     const { result, rerender } = renderHook(({ id }) => useResume(id), {
       wrapper: createWrapper(),
@@ -126,11 +131,15 @@ describe("useResume", () => {
     const wrapper = createWrapper();
 
     // First render
-    const { result: result1 } = renderHook(() => useResume("resume-123"), { wrapper });
+    const { result: result1 } = renderHook(() => useResume("resume-123"), {
+      wrapper,
+    });
     await waitFor(() => expect(result1.current.isSuccess).toBe(true));
 
     // Second render should use cached data
-    const { result: result2 } = renderHook(() => useResume("resume-123"), { wrapper });
+    const { result: result2 } = renderHook(() => useResume("resume-123"), {
+      wrapper,
+    });
 
     // Should have data immediately from cache
     expect(result2.current.data).toEqual(mockResume);

@@ -45,7 +45,13 @@ describe("Textarea", () => {
   });
 
   it("renders with value prop", () => {
-    render(<Textarea value="Initial Value" onChange={() => {}} data-testid="textarea" />);
+    render(
+      <Textarea
+        value="Initial Value"
+        onChange={() => {}}
+        data-testid="textarea"
+      />,
+    );
     const textarea = screen.getByTestId("textarea");
     expect(textarea).toHaveValue("Initial Value");
   });
@@ -129,7 +135,11 @@ describe("Textarea", () => {
     const TestComponent = () => {
       const [value, setValue] = React.useState("");
       return (
-        <Textarea data-testid="textarea" value={value} onChange={(e) => setValue(e.target.value)} />
+        <Textarea
+          data-testid="textarea"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
       );
     };
 

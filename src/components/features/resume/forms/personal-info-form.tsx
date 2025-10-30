@@ -1,7 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -14,7 +20,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { formatLastSaved, useAutoSave } from "@/hooks/use-auto-save";
-import { type PersonalInfoFormData, personalInfoSchema } from "@/lib/validations";
+import {
+  type PersonalInfoFormData,
+  personalInfoSchema,
+} from "@/lib/validations";
 
 interface PersonalInfoFormProps {
   resumeId: string;
@@ -45,7 +54,10 @@ export function PersonalInfoForm({
   });
 
   // Handle form changes with auto-save
-  const handleFieldChange = (field: keyof PersonalInfoFormData, value: string) => {
+  const handleFieldChange = (
+    field: keyof PersonalInfoFormData,
+    value: string,
+  ) => {
     form.setValue(field, value);
 
     // Only save if enabled and the field is valid

@@ -76,22 +76,26 @@ vi.mock("../forms/education-list", () => ({
 }));
 
 vi.mock("../forms/certification-list", () => ({
-  CertificationList: vi.fn(({ certifications, onEdit, onDelete, onReorder }) => (
-    <div data-testid="certification-list">
-      {certifications.length === 0 ? (
-        <div>No certifications</div>
-      ) : (
-        certifications.map((cert: any) => (
-          <div key={cert.id} data-testid={`certification-${cert.id}`}>
-            <div>{cert.name}</div>
-            <button onClick={() => onEdit(cert)}>Edit {cert.id}</button>
-            <button onClick={() => onDelete(cert.id)}>Delete {cert.id}</button>
-            <button onClick={() => onReorder([cert])}>Reorder</button>
-          </div>
-        ))
-      )}
-    </div>
-  )),
+  CertificationList: vi.fn(
+    ({ certifications, onEdit, onDelete, onReorder }) => (
+      <div data-testid="certification-list">
+        {certifications.length === 0 ? (
+          <div>No certifications</div>
+        ) : (
+          certifications.map((cert: any) => (
+            <div key={cert.id} data-testid={`certification-${cert.id}`}>
+              <div>{cert.name}</div>
+              <button onClick={() => onEdit(cert)}>Edit {cert.id}</button>
+              <button onClick={() => onDelete(cert.id)}>
+                Delete {cert.id}
+              </button>
+              <button onClick={() => onReorder([cert])}>Reorder</button>
+            </div>
+          ))
+        )}
+      </div>
+    ),
+  ),
 }));
 
 vi.mock("../forms/link-list", () => ({
@@ -129,14 +133,14 @@ vi.mock("../forms/experience-form-dialog", () => ({
                 endDate: "",
                 current: true,
                 description: "Test",
-              }
+              },
             )
           }
         >
           Submit Experience
         </button>
       </div>
-    ) : null
+    ) : null,
   ),
 }));
 
@@ -156,14 +160,14 @@ vi.mock("../forms/education-form-dialog", () => ({
                 startDate: "2020",
                 endDate: "2024",
                 current: false,
-              }
+              },
             )
           }
         >
           Submit Education
         </button>
       </div>
-    ) : null
+    ) : null,
   ),
 }));
 
@@ -180,14 +184,14 @@ vi.mock("../forms/certification-form-dialog", () => ({
                 name: "AWS Cert",
                 issuer: "Amazon",
                 date: "2024",
-              }
+              },
             )
           }
         >
           Submit Certification
         </button>
       </div>
-    ) : null
+    ) : null,
   ),
 }));
 
@@ -203,14 +207,14 @@ vi.mock("../forms/link-form-dialog", () => ({
               defaultValues || {
                 label: "GitHub",
                 url: "https://github.com/test",
-              }
+              },
             )
           }
         >
           Submit Link
         </button>
       </div>
-    ) : null
+    ) : null,
   ),
 }));
 
@@ -319,19 +323,35 @@ describe("ResumeBuilder", () => {
     it("renders section descriptions", () => {
       render(<ResumeBuilder />);
 
-      expect(screen.getByText(/Basic information about yourself/)).toBeInTheDocument();
-      expect(screen.getByText(/Add your professional experience/)).toBeInTheDocument();
-      expect(screen.getByText(/Add your educational background/)).toBeInTheDocument();
-      expect(screen.getByText(/List your technical skills/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Basic information about yourself/),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/Add your professional experience/),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/Add your educational background/),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/List your technical skills/),
+      ).toBeInTheDocument();
     });
 
     it("renders Add buttons for each section", () => {
       render(<ResumeBuilder />);
 
-      expect(screen.getByRole("button", { name: /Add Experience/ })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /Add Education/ })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /Add Certification/ })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /Add Link/ })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Add Experience/ }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Add Education/ }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Add Certification/ }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Add Link/ }),
+      ).toBeInTheDocument();
     });
 
     it("renders PersonalInfoForm with default values", () => {
@@ -345,7 +365,9 @@ describe("ResumeBuilder", () => {
       render(<ResumeBuilder />);
 
       const form = screen.getByTestId("skills-form");
-      expect(within(form).getByText(/JavaScript, TypeScript/)).toBeInTheDocument();
+      expect(
+        within(form).getByText(/JavaScript, TypeScript/),
+      ).toBeInTheDocument();
     });
   });
 
@@ -381,7 +403,9 @@ describe("ResumeBuilder", () => {
       render(<ResumeBuilder />);
 
       await user.click(screen.getByRole("button", { name: /Add Experience/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Experience/ }));
+      await user.click(
+        screen.getByRole("button", { name: /Submit Experience/ }),
+      );
 
       await waitFor(() => {
         expect(mockMutate).toHaveBeenCalled();
@@ -401,7 +425,9 @@ describe("ResumeBuilder", () => {
       render(<ResumeBuilder />);
 
       await user.click(screen.getByRole("button", { name: /Edit exp-1/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Experience/ }));
+      await user.click(
+        screen.getByRole("button", { name: /Submit Experience/ }),
+      );
 
       await waitFor(() => {
         expect(mockMutate).toHaveBeenCalled();
@@ -421,7 +447,9 @@ describe("ResumeBuilder", () => {
       render(<ResumeBuilder />);
 
       await user.click(screen.getByRole("button", { name: /Add Experience/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Experience/ }));
+      await user.click(
+        screen.getByRole("button", { name: /Submit Experience/ }),
+      );
 
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
@@ -480,7 +508,9 @@ describe("ResumeBuilder", () => {
 
       // Get the reorder button from the experience list specifically
       const experienceList = screen.getByTestId("experience-list");
-      const reorderButton = within(experienceList).getByRole("button", { name: /Reorder/ });
+      const reorderButton = within(experienceList).getByRole("button", {
+        name: /Reorder/,
+      });
       await user.click(reorderButton);
 
       await waitFor(() => {
@@ -540,7 +570,9 @@ describe("ResumeBuilder", () => {
       render(<ResumeBuilder />);
 
       await user.click(screen.getByRole("button", { name: /Add Education/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Education/ }));
+      await user.click(
+        screen.getByRole("button", { name: /Submit Education/ }),
+      );
 
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
@@ -559,7 +591,9 @@ describe("ResumeBuilder", () => {
       render(<ResumeBuilder />);
 
       await user.click(screen.getByRole("button", { name: /Edit edu-1/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Education/ }));
+      await user.click(
+        screen.getByRole("button", { name: /Submit Education/ }),
+      );
 
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
@@ -578,7 +612,9 @@ describe("ResumeBuilder", () => {
       render(<ResumeBuilder />);
 
       await user.click(screen.getByRole("button", { name: /Add Education/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Education/ }));
+      await user.click(
+        screen.getByRole("button", { name: /Submit Education/ }),
+      );
 
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
@@ -669,9 +705,13 @@ describe("ResumeBuilder", () => {
       const user = userEvent.setup();
       render(<ResumeBuilder />);
 
-      await user.click(screen.getByRole("button", { name: /Add Certification/ }));
+      await user.click(
+        screen.getByRole("button", { name: /Add Certification/ }),
+      );
 
-      expect(screen.getByTestId("certification-form-dialog")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("certification-form-dialog"),
+      ).toBeInTheDocument();
     });
 
     it("opens edit certification dialog", async () => {
@@ -680,7 +720,9 @@ describe("ResumeBuilder", () => {
 
       await user.click(screen.getByRole("button", { name: /Edit cert-1/ }));
 
-      expect(screen.getByTestId("certification-form-dialog")).toBeInTheDocument();
+      expect(
+        screen.getByTestId("certification-form-dialog"),
+      ).toBeInTheDocument();
     });
 
     it("adds new certification successfully", async () => {
@@ -691,8 +733,12 @@ describe("ResumeBuilder", () => {
 
       render(<ResumeBuilder />);
 
-      await user.click(screen.getByRole("button", { name: /Add Certification/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Certification/ }));
+      await user.click(
+        screen.getByRole("button", { name: /Add Certification/ }),
+      );
+      await user.click(
+        screen.getByRole("button", { name: /Submit Certification/ }),
+      );
 
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
@@ -711,7 +757,9 @@ describe("ResumeBuilder", () => {
       render(<ResumeBuilder />);
 
       await user.click(screen.getByRole("button", { name: /Edit cert-1/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Certification/ }));
+      await user.click(
+        screen.getByRole("button", { name: /Submit Certification/ }),
+      );
 
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
@@ -729,8 +777,12 @@ describe("ResumeBuilder", () => {
 
       render(<ResumeBuilder />);
 
-      await user.click(screen.getByRole("button", { name: /Add Certification/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Certification/ }));
+      await user.click(
+        screen.getByRole("button", { name: /Add Certification/ }),
+      );
+      await user.click(
+        screen.getByRole("button", { name: /Submit Certification/ }),
+      );
 
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
@@ -973,7 +1025,13 @@ describe("ResumeBuilder", () => {
       const emptyResume: Resume = {
         ...mockResume,
         content: {
-          personalInfo: { name: "", email: "", phone: "", location: "", summary: "" },
+          personalInfo: {
+            name: "",
+            email: "",
+            phone: "",
+            location: "",
+            summary: "",
+          },
           experience: [],
           education: [],
           skills: { technical: [], languages: [], tools: [], soft: [] },

@@ -10,8 +10,20 @@ interface SortableItemProps {
   showHandle?: boolean;
 }
 
-export function SortableItem({ id, children, className, showHandle = true }: SortableItemProps) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+export function SortableItem({
+  id,
+  children,
+  className,
+  showHandle = true,
+}: SortableItemProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id,
   });
 

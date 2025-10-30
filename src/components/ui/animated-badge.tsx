@@ -141,7 +141,11 @@ interface StatusBadgeProps {
  * <StatusBadge status="online" showText />
  * ```
  */
-export function StatusBadge({ status, showText = false, className }: StatusBadgeProps) {
+export function StatusBadge({
+  status,
+  showText = false,
+  className,
+}: StatusBadgeProps) {
   const prefersReducedMotion = useReducedMotion();
 
   const statusConfig = {
@@ -207,7 +211,9 @@ export function StatusBadge({ status, showText = false, className }: StatusBadge
           />
         )}
       </div>
-      {showText && <span className="text-muted-foreground text-sm">{config.text}</span>}
+      {showText && (
+        <span className="text-muted-foreground text-sm">{config.text}</span>
+      )}
     </div>
   );
 }

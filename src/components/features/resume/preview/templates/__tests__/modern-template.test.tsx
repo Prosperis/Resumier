@@ -51,7 +51,10 @@ const mockResumeFull: Resume = {
         endDate: "2024-06",
         current: false,
         description: "Led backend development",
-        highlights: ["Optimized database queries", "Reduced API latency by 50%"],
+        highlights: [
+          "Optimized database queries",
+          "Reduced API latency by 50%",
+        ],
       },
     ],
     education: [
@@ -154,13 +157,15 @@ describe("ModernTemplate", () => {
       render(<ModernTemplate resume={mockResumeFull} />);
       expect(screen.getByText("Professional Summary")).toBeInTheDocument();
       expect(
-        screen.getByText("Full-stack developer passionate about clean code")
+        screen.getByText("Full-stack developer passionate about clean code"),
       ).toBeInTheDocument();
     });
 
     it("does not render summary when empty", () => {
       render(<ModernTemplate resume={mockResumeMinimal} />);
-      expect(screen.queryByText("Professional Summary")).not.toBeInTheDocument();
+      expect(
+        screen.queryByText("Professional Summary"),
+      ).not.toBeInTheDocument();
     });
 
     it("applies primary color to summary heading", () => {
@@ -200,8 +205,12 @@ describe("ModernTemplate", () => {
 
     it("renders highlights as bullet list", () => {
       render(<ModernTemplate resume={mockResumeFull} />);
-      expect(screen.getByText("Optimized database queries")).toBeInTheDocument();
-      expect(screen.getByText("Reduced API latency by 50%")).toBeInTheDocument();
+      expect(
+        screen.getByText("Optimized database queries"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText("Reduced API latency by 50%"),
+      ).toBeInTheDocument();
     });
   });
 
@@ -349,7 +358,7 @@ describe("ModernTemplate", () => {
         "text-gray-900",
         "shadow-lg",
         "max-w-[21cm]",
-        "mx-auto"
+        "mx-auto",
       );
     });
 
@@ -361,7 +370,9 @@ describe("ModernTemplate", () => {
 
     it("applies border with primary color to section headings", () => {
       const { container } = render(<ModernTemplate resume={mockResumeFull} />);
-      const headingsWithBorder = container.querySelectorAll(".border-b-2.border-primary");
+      const headingsWithBorder = container.querySelectorAll(
+        ".border-b-2.border-primary",
+      );
       expect(headingsWithBorder.length).toBeGreaterThan(0);
     });
   });
@@ -399,7 +410,9 @@ describe("ModernTemplate", () => {
       expect(screen.getByText("Experience")).toBeInTheDocument();
 
       // Should not render
-      expect(screen.queryByText("Professional Summary")).not.toBeInTheDocument();
+      expect(
+        screen.queryByText("Professional Summary"),
+      ).not.toBeInTheDocument();
       expect(screen.queryByText("Education")).not.toBeInTheDocument();
       expect(screen.queryByText("Skills")).not.toBeInTheDocument();
       expect(screen.queryByText("Certifications")).not.toBeInTheDocument();
@@ -411,7 +424,10 @@ describe("ModernTemplate", () => {
         ...mockResumeMinimal,
         content: {
           ...mockResumeMinimal.content,
-          personalInfo: { ...mockResumeMinimal.content.personalInfo, name: "Test" },
+          personalInfo: {
+            ...mockResumeMinimal.content.personalInfo,
+            name: "Test",
+          },
           experience: [
             {
               id: "exp1",
@@ -435,7 +451,10 @@ describe("ModernTemplate", () => {
         ...mockResumeMinimal,
         content: {
           ...mockResumeMinimal.content,
-          personalInfo: { ...mockResumeMinimal.content.personalInfo, name: "Test" },
+          personalInfo: {
+            ...mockResumeMinimal.content.personalInfo,
+            name: "Test",
+          },
           education: [
             {
               id: "edu1",

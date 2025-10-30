@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 function ErrorFallback({ error }: { error?: Error }) {
   const router = useRouter();
 
-  const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+  const errorMessage =
+    error instanceof Error ? error.message : "An unexpected error occurred";
 
   const handleReload = () => {
     window.location.reload();
@@ -31,7 +32,9 @@ function ErrorFallback({ error }: { error?: Error }) {
 
         {/* Error Message */}
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold tracking-tight">Something went wrong</h1>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Something went wrong
+          </h1>
           <p className="text-muted-foreground">
             We've been notified and will look into it right away.
           </p>
@@ -40,7 +43,9 @@ function ErrorFallback({ error }: { error?: Error }) {
         {/* Error Details (dev only) */}
         {import.meta.env.DEV && (
           <details className="bg-muted rounded-lg border p-4 text-left">
-            <summary className="cursor-pointer font-mono text-sm">Error Details</summary>
+            <summary className="cursor-pointer font-mono text-sm">
+              Error Details
+            </summary>
             <pre className="mt-2 text-xs break-words whitespace-pre-wrap">
               {errorMessage}
               {error instanceof Error && error.stack && (
@@ -73,7 +78,7 @@ function ErrorFallback({ error }: { error?: Error }) {
             onClick={() => {
               // Trigger Sentry feedback widget
               const feedbackButton = document.querySelector(
-                "[data-sentry-feedback]"
+                "[data-sentry-feedback]",
               ) as HTMLButtonElement;
               feedbackButton?.click();
             }}
@@ -105,7 +110,7 @@ export const ErrorBoundary = Sentry.withErrorBoundary(
       // Add additional tags
       scope.setTag("error_boundary", "react");
     },
-  }
+  },
 );
 
 /**

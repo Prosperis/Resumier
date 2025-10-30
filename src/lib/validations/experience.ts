@@ -30,7 +30,7 @@ export const experienceSchema = z
     {
       message: "End date is required for past positions",
       path: ["endDate"],
-    }
+    },
   );
 
 export type ExperienceFormData = z.infer<typeof experienceSchema>;

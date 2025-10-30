@@ -24,7 +24,7 @@ describe("Dialog", () => {
             <DialogDescription>Dialog description text</DialogDescription>
           </DialogHeader>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByText("Open Dialog")).toBeInTheDocument();
@@ -41,10 +41,13 @@ describe("Dialog", () => {
       <Dialog>
         <DialogTrigger>Open</DialogTrigger>
         <DialogContent>Content</DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(screen.getByText("Open")).toHaveAttribute("data-slot", "dialog-trigger");
+    expect(screen.getByText("Open")).toHaveAttribute(
+      "data-slot",
+      "dialog-trigger",
+    );
   });
 
   it("renders with open prop controlled", () => {
@@ -54,7 +57,7 @@ describe("Dialog", () => {
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByText("Title")).toBeInTheDocument();
@@ -67,7 +70,7 @@ describe("Dialog", () => {
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByText("Title")).toBeInTheDocument();
@@ -83,7 +86,7 @@ describe("Dialog", () => {
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     await user.click(screen.getByText("Open"));
@@ -102,7 +105,7 @@ describe("DialogTrigger", () => {
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByText("Trigger Button")).toBeInTheDocument();
@@ -113,10 +116,13 @@ describe("DialogTrigger", () => {
       <Dialog>
         <DialogTrigger data-testid="trigger">Open</DialogTrigger>
         <DialogContent>Content</DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(screen.getByTestId("trigger")).toHaveAttribute("data-slot", "dialog-trigger");
+    expect(screen.getByTestId("trigger")).toHaveAttribute(
+      "data-slot",
+      "dialog-trigger",
+    );
   });
 
   it("opens dialog when clicked", async () => {
@@ -127,7 +133,7 @@ describe("DialogTrigger", () => {
         <DialogContent>
           <DialogTitle>Dialog Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     await user.click(screen.getByText("Open"));
@@ -146,10 +152,12 @@ describe("DialogTrigger", () => {
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(screen.getByRole("button", { name: "Custom Button" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Custom Button" }),
+    ).toBeInTheDocument();
   });
 });
 
@@ -161,7 +169,7 @@ describe("DialogContent", () => {
         <DialogContent data-testid="content">
           <DialogTitle>Content Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByTestId("content")).toBeInTheDocument();
@@ -174,7 +182,7 @@ describe("DialogContent", () => {
         <DialogContent className="custom-dialog" data-testid="content">
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByTestId("content")).toHaveClass("custom-dialog");
@@ -187,10 +195,13 @@ describe("DialogContent", () => {
         <DialogContent data-testid="content">
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(screen.getByTestId("content")).toHaveAttribute("data-slot", "dialog-content");
+    expect(screen.getByTestId("content")).toHaveAttribute(
+      "data-slot",
+      "dialog-content",
+    );
   });
 
   it("renders close button", () => {
@@ -200,7 +211,7 @@ describe("DialogContent", () => {
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByRole("button", { name: /close/i })).toBeInTheDocument();
@@ -214,7 +225,7 @@ describe("DialogContent", () => {
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     const closeButton = screen.getByRole("button", { name: /close/i });
@@ -232,7 +243,7 @@ describe("DialogContent", () => {
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     // The overlay is rendered as part of the DialogContent
@@ -250,7 +261,7 @@ describe("DialogHeader", () => {
             <DialogTitle>Header Title</DialogTitle>
           </DialogHeader>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByTestId("header")).toBeInTheDocument();
@@ -265,10 +276,13 @@ describe("DialogHeader", () => {
             <DialogTitle>Title</DialogTitle>
           </DialogHeader>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(screen.getByTestId("header")).toHaveAttribute("data-slot", "dialog-header");
+    expect(screen.getByTestId("header")).toHaveAttribute(
+      "data-slot",
+      "dialog-header",
+    );
   });
 
   it("applies flex layout classes", () => {
@@ -280,7 +294,7 @@ describe("DialogHeader", () => {
             <DialogTitle>Title</DialogTitle>
           </DialogHeader>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByTestId("header")).toHaveClass("flex", "flex-col");
@@ -295,7 +309,7 @@ describe("DialogHeader", () => {
             <DialogTitle>Title</DialogTitle>
           </DialogHeader>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByTestId("header")).toHaveClass("custom-header");
@@ -313,7 +327,7 @@ describe("DialogFooter", () => {
             <button type="button">Action</button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByTestId("footer")).toBeInTheDocument();
@@ -329,10 +343,13 @@ describe("DialogFooter", () => {
             <button type="button">Action</button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(screen.getByTestId("footer")).toHaveAttribute("data-slot", "dialog-footer");
+    expect(screen.getByTestId("footer")).toHaveAttribute(
+      "data-slot",
+      "dialog-footer",
+    );
   });
 
   it("applies flex layout classes", () => {
@@ -345,7 +362,7 @@ describe("DialogFooter", () => {
             <button type="button">Action</button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByTestId("footer")).toHaveClass("flex");
@@ -361,7 +378,7 @@ describe("DialogFooter", () => {
             <button type="button">Action</button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByTestId("footer")).toHaveClass("custom-footer");
@@ -376,7 +393,7 @@ describe("DialogTitle", () => {
         <DialogContent>
           <DialogTitle>Dialog Title Text</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByText("Dialog Title Text")).toBeInTheDocument();
@@ -389,10 +406,13 @@ describe("DialogTitle", () => {
         <DialogContent>
           <DialogTitle data-testid="title">Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(screen.getByTestId("title")).toHaveAttribute("data-slot", "dialog-title");
+    expect(screen.getByTestId("title")).toHaveAttribute(
+      "data-slot",
+      "dialog-title",
+    );
   });
 
   it("applies font styling classes", () => {
@@ -402,7 +422,7 @@ describe("DialogTitle", () => {
         <DialogContent>
           <DialogTitle data-testid="title">Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByTestId("title")).toHaveClass("text-lg", "font-semibold");
@@ -417,7 +437,7 @@ describe("DialogTitle", () => {
             Title
           </DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByTestId("title")).toHaveClass("custom-title");
@@ -433,10 +453,12 @@ describe("DialogDescription", () => {
           <DialogTitle>Title</DialogTitle>
           <DialogDescription>This is a dialog description</DialogDescription>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(screen.getByText("This is a dialog description")).toBeInTheDocument();
+    expect(
+      screen.getByText("This is a dialog description"),
+    ).toBeInTheDocument();
   });
 
   it("has data-slot attribute", () => {
@@ -445,12 +467,17 @@ describe("DialogDescription", () => {
         <DialogTrigger>Open</DialogTrigger>
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
-          <DialogDescription data-testid="description">Description</DialogDescription>
+          <DialogDescription data-testid="description">
+            Description
+          </DialogDescription>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(screen.getByTestId("description")).toHaveAttribute("data-slot", "dialog-description");
+    expect(screen.getByTestId("description")).toHaveAttribute(
+      "data-slot",
+      "dialog-description",
+    );
   });
 
   it("applies text styling classes", () => {
@@ -459,12 +486,17 @@ describe("DialogDescription", () => {
         <DialogTrigger>Open</DialogTrigger>
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
-          <DialogDescription data-testid="description">Description</DialogDescription>
+          <DialogDescription data-testid="description">
+            Description
+          </DialogDescription>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(screen.getByTestId("description")).toHaveClass("text-sm", "text-muted-foreground");
+    expect(screen.getByTestId("description")).toHaveClass(
+      "text-sm",
+      "text-muted-foreground",
+    );
   });
 
   it("renders with custom className", () => {
@@ -477,7 +509,7 @@ describe("DialogDescription", () => {
             Description
           </DialogDescription>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByTestId("description")).toHaveClass("custom-desc");
@@ -494,7 +526,7 @@ describe("DialogClose", () => {
           <DialogTitle>Title</DialogTitle>
           <DialogClose>Close Dialog</DialogClose>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     await user.click(screen.getByText("Close Dialog"));
@@ -512,10 +544,13 @@ describe("DialogClose", () => {
           <DialogTitle>Title</DialogTitle>
           <DialogClose data-testid="close">Close</DialogClose>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
-    expect(screen.getByTestId("close")).toHaveAttribute("data-slot", "dialog-close");
+    expect(screen.getByTestId("close")).toHaveAttribute(
+      "data-slot",
+      "dialog-close",
+    );
   });
 
   it("can be a custom button", async () => {
@@ -529,7 +564,7 @@ describe("DialogClose", () => {
             <button type="button">Custom Close Button</button>
           </DialogClose>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     await user.click(screen.getByText("Custom Close Button"));
@@ -548,7 +583,7 @@ describe("Dialog accessibility", () => {
         <DialogContent>
           <DialogTitle>Dialog Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -562,7 +597,7 @@ describe("Dialog accessibility", () => {
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     const trigger = screen.getByText("Open");
@@ -584,7 +619,7 @@ describe("Dialog accessibility", () => {
           <button type="button">First Button</button>
           <button type="button">Second Button</button>
         </DialogContent>
-      </Dialog>
+      </Dialog>,
     );
 
     // Focus should be trapped within the dialog

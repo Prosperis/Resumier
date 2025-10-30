@@ -215,21 +215,25 @@ describe("export-utils", () => {
     });
 
     it("should return false on clipboard error", async () => {
-      const writeTextMock = vi.fn().mockRejectedValue(new Error("Permission denied"));
+      const writeTextMock = vi
+        .fn()
+        .mockRejectedValue(new Error("Permission denied"));
       Object.assign(navigator, {
         clipboard: {
           writeText: writeTextMock,
         },
       });
 
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+      const consoleErrorSpy = vi
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
 
       const result = await copyToClipboard("Test text");
 
       expect(result).toBe(false);
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         "Failed to copy to clipboard:",
-        expect.any(Error)
+        expect.any(Error),
       );
 
       consoleErrorSpy.mockRestore();

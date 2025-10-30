@@ -11,7 +11,13 @@ vi.mock("@/components/features/resume/export/export-menu", () => ({
 }));
 
 vi.mock("@/components/features/resume/preview/resume-preview", () => ({
-  ResumePreview: ({ resume, template }: { resume: Resume; template: string }) => (
+  ResumePreview: ({
+    resume,
+    template,
+  }: {
+    resume: Resume;
+    template: string;
+  }) => (
     <div data-testid="resume-preview">
       Preview: {resume.title} - {template}
     </div>
@@ -123,7 +129,9 @@ describe("ResumeEditor", () => {
     const previewTab = screen.getByRole("tab", { name: /preview/i });
     await user.click(previewTab);
 
-    expect(screen.getByText(/Preview: My Resume - modern/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Preview: My Resume - modern/i),
+    ).toBeInTheDocument();
   });
 
   it("should update preview with selected template", async () => {
@@ -138,7 +146,9 @@ describe("ResumeEditor", () => {
     const previewTab = screen.getByRole("tab", { name: /preview/i });
     await user.click(previewTab);
 
-    expect(screen.getByText(/Preview: My Resume - classic/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Preview: My Resume - classic/i),
+    ).toBeInTheDocument();
   });
 
   it("should render with different resume", () => {
@@ -149,6 +159,8 @@ describe("ResumeEditor", () => {
 
     render(<ResumeEditor resume={differentResume} />);
 
-    expect(screen.getByText(/Export Menu for Engineering Resume/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Export Menu for Engineering Resume/i),
+    ).toBeInTheDocument();
   });
 });

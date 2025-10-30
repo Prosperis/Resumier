@@ -22,7 +22,13 @@ export function AnimatedDotGrid({
 }: AnimatedDotGridProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const dotsRef = useRef<
-    { x: number; y: number; baseX: number; baseY: number; element?: HTMLElement }[]
+    {
+      x: number;
+      y: number;
+      baseX: number;
+      baseY: number;
+      element?: HTMLElement;
+    }[]
   >([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animationFrameRef = useRef<number | undefined>(undefined);
@@ -98,8 +104,11 @@ export function AnimatedDotGrid({
     const updateDotColors = () => {
       const isDark =
         theme === "dark" ||
-        (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-      const dotColor = isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.15)";
+        (theme === "system" &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches);
+      const dotColor = isDark
+        ? "rgba(255, 255, 255, 0.2)"
+        : "rgba(0, 0, 0, 0.15)";
 
       // Batch color updates for better performance
       for (let i = 0; i < dotsRef.current.length; i++) {
@@ -200,7 +209,9 @@ export function AnimatedDotGrid({
     window.addEventListener("resize", updateContainerSize, { passive: true });
     // Use document-level events to work with pointer-events-none
     document.addEventListener("mousemove", handleMouseMove, { passive: true });
-    document.addEventListener("mouseleave", handleMouseLeave, { passive: true });
+    document.addEventListener("mouseleave", handleMouseLeave, {
+      passive: true,
+    });
 
     // Update colors when theme changes
     updateDotColors();
@@ -226,7 +237,10 @@ export function AnimatedDotGrid({
   }
 
   return (
-    <div ref={containerRef} className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+    <div
+      ref={containerRef}
+      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+    >
       {/* Dots will be appended here via JavaScript */}
     </div>
   );

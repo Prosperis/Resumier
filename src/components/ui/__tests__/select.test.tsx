@@ -9,7 +9,7 @@ describe("Select", () => {
       <Select>
         <option value="1">Option 1</option>
         <option value="2">Option 2</option>
-      </Select>
+      </Select>,
     );
     const select = screen.getByRole("combobox");
     expect(select).toBeInTheDocument();
@@ -20,7 +20,7 @@ describe("Select", () => {
       <Select defaultValue="2">
         <option value="1">Option 1</option>
         <option value="2">Option 2</option>
-      </Select>
+      </Select>,
     );
     const select = screen.getByRole("combobox") as HTMLSelectElement;
     expect(select.value).toBe("2");
@@ -30,7 +30,7 @@ describe("Select", () => {
     render(
       <Select className="custom-select">
         <option value="1">Option 1</option>
-      </Select>
+      </Select>,
     );
     const select = screen.getByRole("combobox");
     expect(select).toHaveClass("custom-select");
@@ -40,7 +40,7 @@ describe("Select", () => {
     render(
       <Select disabled>
         <option value="1">Option 1</option>
-      </Select>
+      </Select>,
     );
     const select = screen.getByRole("combobox");
     expect(select).toBeDisabled();
@@ -55,7 +55,7 @@ describe("Select", () => {
         <option value="1">Option 1</option>
         <option value="2">Option 2</option>
         <option value="3">Option 3</option>
-      </Select>
+      </Select>,
     );
 
     const select = screen.getByRole("combobox");
@@ -70,7 +70,7 @@ describe("Select", () => {
         <option value="1">First</option>
         <option value="2">Second</option>
         <option value="3">Third</option>
-      </Select>
+      </Select>,
     );
 
     expect(screen.getByText("First")).toBeInTheDocument();
@@ -82,7 +82,7 @@ describe("Select", () => {
     render(
       <Select data-testid="custom-select" name="test-select">
         <option value="1">Option</option>
-      </Select>
+      </Select>,
     );
 
     const select = screen.getByTestId("custom-select");
@@ -99,7 +99,7 @@ describe("Select", () => {
         <optgroup label="Group 2">
           <option value="3">Option 3</option>
         </optgroup>
-      </Select>
+      </Select>,
     );
 
     expect(screen.getByText("Option 1")).toBeInTheDocument();
@@ -114,7 +114,7 @@ describe("Select", () => {
         <option value="a">Apple</option>
         <option value="b">Banana</option>
         <option value="c">Cherry</option>
-      </Select>
+      </Select>,
     );
 
     const select = screen.getByRole("combobox") as HTMLSelectElement;
@@ -132,7 +132,7 @@ describe("Select", () => {
         </option>
         <option value="1">Option 1</option>
         <option value="2">Option 2</option>
-      </Select>
+      </Select>,
     );
 
     expect(screen.getByText("Select an option...")).toBeInTheDocument();

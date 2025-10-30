@@ -55,14 +55,20 @@ describe("EducationSection", () => {
   it("renders descriptions", () => {
     render(<EducationSection {...defaultProps} />);
 
-    expect(screen.getByDisplayValue("Focused on AI and ML")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("Research in distributed systems")).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue("Focused on AI and ML"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue("Research in distributed systems"),
+    ).toBeInTheDocument();
   });
 
   it("renders Add Education button", () => {
     render(<EducationSection {...defaultProps} />);
 
-    expect(screen.getByRole("button", { name: /add education/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /add education/i }),
+    ).toBeInTheDocument();
   });
 
   it("calls addEducation when Add button is clicked", async () => {
@@ -105,7 +111,7 @@ describe("EducationSection", () => {
     expect(defaultProps.updateEducation).toHaveBeenCalledWith(
       0,
       "school",
-      expect.stringContaining("H")
+      expect.stringContaining("H"),
     );
   });
 
@@ -121,7 +127,7 @@ describe("EducationSection", () => {
     expect(defaultProps.updateEducation).toHaveBeenCalledWith(
       0,
       "degree",
-      expect.stringContaining("B")
+      expect.stringContaining("B"),
     );
   });
 
@@ -138,7 +144,7 @@ describe("EducationSection", () => {
     expect(defaultProps.updateEducation).toHaveBeenCalledWith(
       0,
       "description",
-      expect.stringContaining("N")
+      expect.stringContaining("N"),
     );
   });
 
@@ -146,7 +152,9 @@ describe("EducationSection", () => {
     render(<EducationSection {...defaultProps} education={[]} />);
 
     expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /add education/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /add education/i }),
+    ).toBeInTheDocument();
   });
 
   it("handles education with null values", () => {
@@ -160,7 +168,9 @@ describe("EducationSection", () => {
       },
     ];
 
-    render(<EducationSection {...defaultProps} education={educationWithNulls} />);
+    render(
+      <EducationSection {...defaultProps} education={educationWithNulls} />,
+    );
 
     const textInputs = screen.getAllByRole("textbox");
     textInputs.forEach((input) => {
@@ -173,9 +183,13 @@ describe("EducationSection", () => {
 
     expect(screen.getAllByText("School")).toHaveLength(mockEducation.length);
     expect(screen.getAllByText("Degree")).toHaveLength(mockEducation.length);
-    expect(screen.getAllByText("Start Date")).toHaveLength(mockEducation.length);
+    expect(screen.getAllByText("Start Date")).toHaveLength(
+      mockEducation.length,
+    );
     expect(screen.getAllByText("End Date")).toHaveLength(mockEducation.length);
-    expect(screen.getAllByText("Description")).toHaveLength(mockEducation.length);
+    expect(screen.getAllByText("Description")).toHaveLength(
+      mockEducation.length,
+    );
   });
 
   it("renders date input types for date fields", () => {
@@ -199,7 +213,9 @@ describe("EducationSection", () => {
   it("renders education entries in bordered containers", () => {
     const { container } = render(<EducationSection {...defaultProps} />);
 
-    const educationContainers = container.querySelectorAll(".border.p-4.rounded-md");
+    const educationContainers = container.querySelectorAll(
+      ".border.p-4.rounded-md",
+    );
     expect(educationContainers).toHaveLength(mockEducation.length);
   });
 
@@ -207,7 +223,7 @@ describe("EducationSection", () => {
     render(<EducationSection {...defaultProps} />);
 
     const descriptions = screen.getAllByDisplayValue(
-      /Focused on AI and ML|Research in distributed systems/
+      /Focused on AI and ML|Research in distributed systems/,
     );
     expect(descriptions).toHaveLength(2);
   });

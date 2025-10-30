@@ -16,7 +16,11 @@ vi.mock("@tanstack/react-router", () => ({
 }));
 
 vi.mock("@/components/features/resume/resume-dashboard", () => ({
-  ResumeDashboard: ({ onResumeClick }: { onResumeClick: (id: string) => void }) => (
+  ResumeDashboard: ({
+    onResumeClick,
+  }: {
+    onResumeClick: (id: string) => void;
+  }) => (
     <div data-testid="resume-dashboard">
       <button onClick={() => onResumeClick("test-id")}>Test Resume</button>
     </div>
@@ -33,7 +37,9 @@ vi.mock("@/components/ui/route-error", () => ({
 }));
 
 vi.mock("@/components/ui/route-loading", () => ({
-  DashboardLoading: () => <div data-testid="dashboard-loading">Loading Dashboard...</div>,
+  DashboardLoading: () => (
+    <div data-testid="dashboard-loading">Loading Dashboard...</div>
+  ),
 }));
 
 // Import the route module after setting up mocks
@@ -64,7 +70,9 @@ describe("Dashboard Route", () => {
 
       renderDashboardRoute();
 
-      expect(screen.getByRole("heading", { name: /my resumes/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /my resumes/i }),
+      ).toBeInTheDocument();
     });
 
     it("does not throw when authenticated", () => {
@@ -94,13 +102,17 @@ describe("Dashboard Route", () => {
     it("renders the page heading", () => {
       renderDashboardRoute();
 
-      expect(screen.getByRole("heading", { name: /my resumes/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /my resumes/i }),
+      ).toBeInTheDocument();
     });
 
     it("renders the page description", () => {
       renderDashboardRoute();
 
-      expect(screen.getByText(/manage your resumes and create new ones/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/manage your resumes and create new ones/i),
+      ).toBeInTheDocument();
     });
 
     it("renders the ResumeDashboard component", () => {

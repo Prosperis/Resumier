@@ -40,7 +40,9 @@ vi.mock("../resume-table", () => ({
 }));
 
 vi.mock("@/components/ui/route-loading", () => ({
-  RouteLoadingFallback: ({ message }: any) => <div data-testid="loading">{message}</div>,
+  RouteLoadingFallback: ({ message }: any) => (
+    <div data-testid="loading">{message}</div>
+  ),
 }));
 
 vi.mock("@/components/ui/animated", () => ({
@@ -190,7 +192,9 @@ describe("ResumeDashboard", () => {
       render(<ResumeDashboard />);
 
       expect(screen.getByText("No resumes yet")).toBeInTheDocument();
-      expect(screen.getByText("Create your first resume to get started")).toBeInTheDocument();
+      expect(
+        screen.getByText("Create your first resume to get started"),
+      ).toBeInTheDocument();
     });
 
     it("shows create button in empty state", () => {
@@ -252,7 +256,9 @@ describe("ResumeDashboard", () => {
     it("renders header with resume count", () => {
       render(<ResumeDashboard />);
 
-      expect(screen.getByText(/Manage your resume documents \(2\)/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Manage your resume documents \(2\)/i),
+      ).toBeInTheDocument();
     });
 
     it("renders create button in header", () => {
@@ -339,7 +345,10 @@ describe("ResumeDashboard", () => {
       const duplicateButton = screen.getAllByText("Duplicate")[0];
       await user.click(duplicateButton);
 
-      expect(mockDuplicateResume).toHaveBeenCalledWith(mockResumes[0], expect.any(Object));
+      expect(mockDuplicateResume).toHaveBeenCalledWith(
+        mockResumes[0],
+        expect.any(Object),
+      );
     });
 
     it("shows success toast after successful duplication", async () => {
@@ -360,7 +369,8 @@ describe("ResumeDashboard", () => {
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
           title: "Success",
-          description: 'Resume "Copy of Software Engineer Resume" has been created',
+          description:
+            'Resume "Copy of Software Engineer Resume" has been created',
         });
       });
     });
@@ -402,7 +412,7 @@ describe("ResumeDashboard", () => {
             title: "Error",
             description: "Failed to duplicate resume",
             variant: "destructive",
-          })
+          }),
         );
       });
     });
@@ -434,7 +444,9 @@ describe("ResumeDashboard", () => {
     it("uses flexbox for header layout", () => {
       const { container } = render(<ResumeDashboard />);
 
-      const header = container.querySelector(".flex.items-center.justify-between");
+      const header = container.querySelector(
+        ".flex.items-center.justify-between",
+      );
       expect(header).toBeInTheDocument();
     });
   });

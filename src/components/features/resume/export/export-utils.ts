@@ -81,7 +81,8 @@ export function downloadHTML(resume: Resume, htmlContent: string) {
  * Download resume as DOCX (Microsoft Word) file
  */
 export async function downloadDOCX(resume: Resume): Promise<void> {
-  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } =
+    resume.content;
 
   const sections: Paragraph[] = [];
 
@@ -93,7 +94,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         heading: HeadingLevel.HEADING_1,
         alignment: AlignmentType.CENTER,
         spacing: { after: 200 },
-      })
+      }),
     );
   }
 
@@ -109,7 +110,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         text: contactParts.join(" | "),
         alignment: AlignmentType.CENTER,
         spacing: { after: 300 },
-      })
+      }),
     );
   }
 
@@ -120,13 +121,13 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         text: "PROFESSIONAL SUMMARY",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 200, after: 200 },
-      })
+      }),
     );
     sections.push(
       new Paragraph({
         text: personalInfo.summary,
         spacing: { after: 300 },
-      })
+      }),
     );
   }
 
@@ -137,7 +138,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         text: "EXPERIENCE",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 200, after: 200 },
-      })
+      }),
     );
 
     for (const exp of experience) {
@@ -148,7 +149,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
             new TextRun({ text: ` | ${exp.company}` }),
           ],
           spacing: { after: 100 },
-        })
+        }),
       );
 
       const dateRange = `${exp.startDate} - ${exp.current ? "Present" : exp.endDate || ""}`;
@@ -156,7 +157,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         new Paragraph({
           children: [new TextRun({ text: dateRange, italics: true })],
           spacing: { after: 100 },
-        })
+        }),
       );
 
       if (exp.description) {
@@ -164,7 +165,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
           new Paragraph({
             text: exp.description,
             spacing: { after: 100 },
-          })
+          }),
         );
       }
 
@@ -175,7 +176,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
               text: highlight,
               bullet: { level: 0 },
               spacing: { after: 50 },
-            })
+            }),
           );
         }
       }
@@ -191,7 +192,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         text: "EDUCATION",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 200, after: 200 },
-      })
+      }),
     );
 
     for (const edu of education) {
@@ -202,7 +203,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
             new TextRun({ text: ` | ${edu.institution}` }),
           ],
           spacing: { after: 100 },
-        })
+        }),
       );
 
       if (edu.endDate) {
@@ -210,7 +211,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
           new Paragraph({
             children: [new TextRun({ text: edu.endDate, italics: true })],
             spacing: { after: 100 },
-          })
+          }),
         );
       }
 
@@ -219,7 +220,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
           new Paragraph({
             text: `GPA: ${edu.gpa}`,
             spacing: { after: 200 },
-          })
+          }),
         );
       }
     }
@@ -239,7 +240,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         text: "SKILLS",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 200, after: 200 },
-      })
+      }),
     );
 
     for (const skillCategory of skillCategories) {
@@ -248,7 +249,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         new Paragraph({
           text: skillText,
           spacing: { after: 100 },
-        })
+        }),
       );
     }
   }
@@ -260,7 +261,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         text: "CERTIFICATIONS",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 200, after: 200 },
-      })
+      }),
     );
 
     for (const cert of certifications) {
@@ -269,7 +270,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         new Paragraph({
           text: certText,
           spacing: { after: 100 },
-        })
+        }),
       );
     }
   }
@@ -281,7 +282,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         text: "LINKS",
         heading: HeadingLevel.HEADING_2,
         spacing: { before: 200, after: 200 },
-      })
+      }),
     );
 
     for (const link of links) {
@@ -289,10 +290,13 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
         new Paragraph({
           children: [
             new TextRun({ text: `${link.label}: ` }),
-            new TextRun({ text: link.url, underline: { type: UnderlineType.SINGLE } }),
+            new TextRun({
+              text: link.url,
+              underline: { type: UnderlineType.SINGLE },
+            }),
           ],
           spacing: { after: 100 },
-        })
+        }),
       );
     }
   }
@@ -316,7 +320,8 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
  * Download resume as Markdown file
  */
 export function downloadMarkdown(resume: Resume): void {
-  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } =
+    resume.content;
 
   let markdown = "";
 
@@ -415,7 +420,8 @@ export function downloadMarkdown(resume: Resume): void {
  * Download resume as plain text file
  */
 export function downloadPlainText(resume: Resume): void {
-  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } =
+    resume.content;
 
   let text = "";
 
@@ -521,7 +527,9 @@ export function downloadPlainText(resume: Resume): void {
  */
 export function downloadJSON(resume: Resume): void {
   const jsonString = JSON.stringify(resume, null, 2);
-  const blob = new Blob([jsonString], { type: "application/json;charset=utf-8" });
+  const blob = new Blob([jsonString], {
+    type: "application/json;charset=utf-8",
+  });
   saveAs(blob, `${sanitizeFilename(resume.title)}.json`);
 }
 

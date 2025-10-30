@@ -22,7 +22,11 @@ export default function App() {
   const [page, setPage] = useState<"dashboard" | "builder">("dashboard");
 
   return (
-    <PageTransition pageKey={page} mode="wait" className="flex min-h-screen flex-col">
+    <PageTransition
+      pageKey={page}
+      mode="wait"
+      className="flex min-h-screen flex-col"
+    >
       {page === "dashboard" ? (
         <>
           <h1 className="p-4 text-2xl font-bold">Resumes</h1>
@@ -38,7 +42,9 @@ export default function App() {
           <SidebarProvider className="mt-16 flex flex-1">
             <Sidebar side="left" collapsible="icon">
               <SidebarRail />
-              <SidebarContent className="p-4 text-sm">Left Sidebar</SidebarContent>
+              <SidebarContent className="p-4 text-sm">
+                Left Sidebar
+              </SidebarContent>
             </Sidebar>
             <SidebarInset>
               <div className="flex min-h-0 flex-1 flex-col">
@@ -49,10 +55,15 @@ export default function App() {
             </SidebarInset>
             <Sidebar side="right" collapsible="icon">
               <SidebarRail />
-              <SidebarContent className="p-4 text-sm">Right Sidebar</SidebarContent>
+              <SidebarContent className="p-4 text-sm">
+                Right Sidebar
+              </SidebarContent>
             </Sidebar>
           </SidebarProvider>
-          <PersonalInfoDialog open={openPersonal} onOpenChange={setOpenPersonal} />
+          <PersonalInfoDialog
+            open={openPersonal}
+            onOpenChange={setOpenPersonal}
+          />
           <JobInfoDialog open={openJob} onOpenChange={setOpenJob} />
         </>
       )}

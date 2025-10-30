@@ -53,7 +53,10 @@ describe("useResumeStore", () => {
       const { result } = renderHook(() => useResumeStore());
 
       act(() => {
-        result.current.setUserInfo({ name: "John Doe", email: "john@example.com" });
+        result.current.setUserInfo({
+          name: "John Doe",
+          email: "john@example.com",
+        });
       });
 
       act(() => {

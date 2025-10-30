@@ -1,6 +1,9 @@
 import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { type ResumeDocument, useResumeDocuments } from "../use-resume-documents";
+import {
+  type ResumeDocument,
+  useResumeDocuments,
+} from "../use-resume-documents";
 
 describe("useResumeDocuments", () => {
   beforeEach(() => {

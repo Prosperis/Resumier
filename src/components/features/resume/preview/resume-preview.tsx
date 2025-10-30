@@ -5,13 +5,19 @@ import type { TemplateType } from "@/lib/types/templates";
 
 // Lazy load templates for better code splitting
 const ModernTemplate = lazy(() =>
-  import("./templates/modern-template").then((m) => ({ default: m.ModernTemplate }))
+  import("./templates/modern-template").then((m) => ({
+    default: m.ModernTemplate,
+  })),
 );
 const ClassicTemplate = lazy(() =>
-  import("./templates/classic-template").then((m) => ({ default: m.ClassicTemplate }))
+  import("./templates/classic-template").then((m) => ({
+    default: m.ClassicTemplate,
+  })),
 );
 const MinimalTemplate = lazy(() =>
-  import("./templates/minimal-template").then((m) => ({ default: m.MinimalTemplate }))
+  import("./templates/minimal-template").then((m) => ({
+    default: m.MinimalTemplate,
+  })),
 );
 
 interface ResumePreviewProps {
@@ -61,7 +67,9 @@ export function ResumePreview({ resume, template }: ResumePreviewProps) {
   return (
     <div className="h-full w-full overflow-auto bg-gray-100 p-8">
       <div className="print:bg-white print:p-0">
-        <Suspense fallback={<TemplateLoadingSkeleton />}>{renderTemplate()}</Suspense>
+        <Suspense fallback={<TemplateLoadingSkeleton />}>
+          {renderTemplate()}
+        </Suspense>
       </div>
     </div>
   );

@@ -50,7 +50,9 @@ describe("DeleteResumeDialog", () => {
   });
 
   it("renders with default trigger button", () => {
-    render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<DeleteResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     const button = screen.getByRole("button", { name: /delete/i });
     expect(button).toBeInTheDocument();
@@ -62,7 +64,7 @@ describe("DeleteResumeDialog", () => {
         {...defaultProps}
         trigger={<button type="button">Custom Delete</button>}
       />,
-      { wrapper: createWrapper() }
+      { wrapper: createWrapper() },
     );
 
     const button = screen.getByRole("button", { name: /custom delete/i });
@@ -71,7 +73,9 @@ describe("DeleteResumeDialog", () => {
 
   it("opens alert dialog when trigger is clicked", async () => {
     const user = userEvent.setup();
-    render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<DeleteResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
 
@@ -82,9 +86,15 @@ describe("DeleteResumeDialog", () => {
 
   it("displays resume title in confirmation message", async () => {
     const user = userEvent.setup();
-    render(<DeleteResumeDialog resumeId="test-id" resumeTitle="Software Engineer Resume" />, {
-      wrapper: createWrapper(),
-    });
+    render(
+      <DeleteResumeDialog
+        resumeId="test-id"
+        resumeTitle="Software Engineer Resume"
+      />,
+      {
+        wrapper: createWrapper(),
+      },
+    );
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
 
@@ -104,7 +114,9 @@ describe("DeleteResumeDialog", () => {
     });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
-    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }));
+    await user.click(
+      screen.getByRole("button", { name: /confirm delete resume/i }),
+    );
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith("resume-123", expect.any(Object));
@@ -125,10 +137,14 @@ describe("DeleteResumeDialog", () => {
       onError(error);
     });
 
-    render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<DeleteResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
-    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }));
+    await user.click(
+      screen.getByRole("button", { name: /confirm delete resume/i }),
+    );
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({
@@ -147,12 +163,16 @@ describe("DeleteResumeDialog", () => {
 
     const user = userEvent.setup();
 
-    render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<DeleteResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
 
     const cancelButton = screen.getByRole("button", { name: "Cancel" });
-    const continueButton = screen.getByRole("button", { name: /deleting resume/i });
+    const continueButton = screen.getByRole("button", {
+      name: /deleting resume/i,
+    });
 
     expect(cancelButton).toBeDisabled();
     expect(continueButton).toBeDisabled();
@@ -160,7 +180,9 @@ describe("DeleteResumeDialog", () => {
 
   it("closes dialog when cancel is clicked", async () => {
     const user = userEvent.setup();
-    render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<DeleteResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
     expect(screen.getByRole("alertdialog")).toBeInTheDocument();
@@ -179,10 +201,14 @@ describe("DeleteResumeDialog", () => {
       onSuccess();
     });
 
-    render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<DeleteResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
-    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }));
+    await user.click(
+      screen.getByRole("button", { name: /confirm delete resume/i }),
+    );
 
     await waitFor(() => {
       expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
@@ -198,10 +224,14 @@ describe("DeleteResumeDialog", () => {
       onError(error);
     });
 
-    render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<DeleteResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
-    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }));
+    await user.click(
+      screen.getByRole("button", { name: /confirm delete resume/i }),
+    );
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({
@@ -219,10 +249,14 @@ describe("DeleteResumeDialog", () => {
       onSuccess();
     });
 
-    render(<DeleteResumeDialog {...defaultProps} />, { wrapper: createWrapper() });
+    render(<DeleteResumeDialog {...defaultProps} />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
-    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }));
+    await user.click(
+      screen.getByRole("button", { name: /confirm delete resume/i }),
+    );
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({

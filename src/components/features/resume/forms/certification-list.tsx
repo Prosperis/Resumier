@@ -12,7 +12,12 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { CalendarIcon, EditIcon, ExternalLinkIcon, TrashIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  EditIcon,
+  ExternalLinkIcon,
+  TrashIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Certification } from "@/lib/api/types";
@@ -35,7 +40,7 @@ export function CertificationList({
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -60,7 +65,9 @@ export function CertificationList({
     return (
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-          <p className="text-muted-foreground text-sm">No certifications added yet.</p>
+          <p className="text-muted-foreground text-sm">
+            No certifications added yet.
+          </p>
           <p className="text-muted-foreground mt-1 text-xs">
             Click "Add Certification" to get started.
           </p>
@@ -90,7 +97,11 @@ export function CertificationList({
   };
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
       <SortableContext
         items={certifications.map((cert) => cert.id)}
         strategy={verticalListSortingStrategy}
@@ -116,11 +127,15 @@ export function CertificationList({
                           </a>
                         )}
                       </div>
-                      <p className="text-muted-foreground text-sm">{cert.issuer}</p>
+                      <p className="text-muted-foreground text-sm">
+                        {cert.issuer}
+                      </p>
                       <div className="text-muted-foreground mt-1 flex items-center gap-1 text-xs">
                         <CalendarIcon className="h-3 w-3" />
                         <span>Issued {formatDate(cert.date)}</span>
-                        {cert.expiryDate && <span> · Expires {formatDate(cert.expiryDate)}</span>}
+                        {cert.expiryDate && (
+                          <span> · Expires {formatDate(cert.expiryDate)}</span>
+                        )}
                       </div>
                       {cert.credentialId && (
                         <p className="text-muted-foreground mt-1 text-xs">

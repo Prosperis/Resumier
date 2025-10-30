@@ -13,7 +13,7 @@ describe("Tabs", () => {
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByText("Tab 1")).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("Tabs", () => {
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByText("Content 2")).toBeVisible();
@@ -46,7 +46,7 @@ describe("Tabs", () => {
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByText("Content 1")).toBeVisible();
@@ -67,7 +67,7 @@ describe("Tabs", () => {
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByText("Content 1")).toBeVisible();
@@ -80,7 +80,7 @@ describe("Tabs", () => {
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByText("Content 2")).toBeVisible();
@@ -98,7 +98,7 @@ describe("Tabs", () => {
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     await user.click(screen.getByText("Tab 2"));
@@ -115,7 +115,7 @@ describe("Tabs", () => {
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     // Radix UI should apply the orientation
@@ -133,7 +133,7 @@ describe("TabsList", () => {
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByTestId("tabs-list")).toBeInTheDocument();
@@ -148,10 +148,14 @@ describe("TabsList", () => {
           <TabsTrigger value="tab1">Tab 1</TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
-    expect(screen.getByTestId("tabs-list")).toHaveClass("inline-flex", "items-center", "bg-muted");
+    expect(screen.getByTestId("tabs-list")).toHaveClass(
+      "inline-flex",
+      "items-center",
+      "bg-muted",
+    );
   });
 
   it("renders with custom className", () => {
@@ -161,7 +165,7 @@ describe("TabsList", () => {
           <TabsTrigger value="tab1">Tab 1</TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByTestId("tabs-list")).toHaveClass("custom-list");
@@ -178,7 +182,7 @@ describe("TabsList", () => {
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
         <TabsContent value="tab3">Content 3</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByText("Tab 1")).toBeInTheDocument();
@@ -195,7 +199,7 @@ describe("TabsTrigger", () => {
           <TabsTrigger value="tab1">Trigger Text</TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">Content</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByText("Trigger Text")).toBeInTheDocument();
@@ -212,7 +216,7 @@ describe("TabsTrigger", () => {
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     const activeTrigger = screen.getByTestId("active-trigger");
@@ -223,12 +227,16 @@ describe("TabsTrigger", () => {
     render(
       <Tabs defaultValue="tab1">
         <TabsList>
-          <TabsTrigger value="tab1" className="custom-trigger" data-testid="trigger">
+          <TabsTrigger
+            value="tab1"
+            className="custom-trigger"
+            data-testid="trigger"
+          >
             Tab
           </TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">Content</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByTestId("trigger")).toHaveClass("custom-trigger");
@@ -246,7 +254,7 @@ describe("TabsTrigger", () => {
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     const disabledTrigger = screen.getByText("Tab 2");
@@ -267,7 +275,7 @@ describe("TabsTrigger", () => {
         </TabsList>
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     await user.click(screen.getByText("Tab 2"));
@@ -286,10 +294,12 @@ describe("TabsTrigger", () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">Content</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
-    expect(screen.getByRole("tab", { name: "Custom Button" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("tab", { name: "Custom Button" }),
+    ).toBeInTheDocument();
   });
 });
 
@@ -301,7 +311,7 @@ describe("TabsContent", () => {
           <TabsTrigger value="tab1">Tab 1</TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">Active Content</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByText("Active Content")).toBeVisible();
@@ -318,7 +328,7 @@ describe("TabsContent", () => {
         <TabsContent value="tab2" data-testid="inactive">
           Inactive Content
         </TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     const inactiveContent = screen.getByTestId("inactive");
@@ -331,10 +341,14 @@ describe("TabsContent", () => {
         <TabsList>
           <TabsTrigger value="tab1">Tab 1</TabsTrigger>
         </TabsList>
-        <TabsContent value="tab1" className="custom-content" data-testid="content">
+        <TabsContent
+          value="tab1"
+          className="custom-content"
+          data-testid="content"
+        >
           Content
         </TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByTestId("content")).toHaveClass("custom-content");
@@ -349,10 +363,12 @@ describe("TabsContent", () => {
         <TabsContent value="tab1" data-testid="content">
           Content
         </TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
-    expect(screen.getByTestId("content")).toHaveClass("focus-visible:outline-none");
+    expect(screen.getByTestId("content")).toHaveClass(
+      "focus-visible:outline-none",
+    );
   });
 
   it("supports rich content", () => {
@@ -367,7 +383,7 @@ describe("TabsContent", () => {
             <p>Paragraph</p>
           </div>
         </TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByText("Title")).toBeInTheDocument();
@@ -388,7 +404,7 @@ describe("Tabs keyboard navigation", () => {
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
         <TabsContent value="tab3">Content 3</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     const firstTab = screen.getByText("Tab 1");
@@ -415,7 +431,7 @@ describe("Tabs keyboard navigation", () => {
         <TabsContent value="tab1">Content 1</TabsContent>
         <TabsContent value="tab2">Content 2</TabsContent>
         <TabsContent value="tab3">Content 3</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     const secondTab = screen.getByText("Tab 2");
@@ -437,7 +453,7 @@ describe("Tabs accessibility", () => {
           <TabsTrigger value="tab1">Tab 1</TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">Content</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     expect(screen.getByRole("tablist")).toBeInTheDocument();
@@ -452,7 +468,7 @@ describe("Tabs accessibility", () => {
           <TabsTrigger value="tab1">Tab 1</TabsTrigger>
         </TabsList>
         <TabsContent value="tab1">Content</TabsContent>
-      </Tabs>
+      </Tabs>,
     );
 
     const trigger = screen.getByRole("tab");

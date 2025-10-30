@@ -5,7 +5,8 @@ interface MinimalTemplateProps {
 }
 
 export function MinimalTemplate({ resume }: MinimalTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } =
+    resume.content;
 
   return (
     <div className="mx-auto max-w-[21cm] bg-white p-16 font-sans text-gray-900 shadow-lg">
@@ -24,7 +25,9 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
       {/* Summary */}
       {personalInfo.summary && (
         <section className="mb-12">
-          <p className="text-sm leading-relaxed text-gray-700">{personalInfo.summary}</p>
+          <p className="text-sm leading-relaxed text-gray-700">
+            {personalInfo.summary}
+          </p>
         </section>
       )}
 
@@ -45,7 +48,9 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
                 </div>
                 <p className="mb-3 text-sm text-gray-600">{exp.company}</p>
                 {exp.description && (
-                  <p className="mb-2 text-sm leading-relaxed text-gray-700">{exp.description}</p>
+                  <p className="mb-2 text-sm leading-relaxed text-gray-700">
+                    {exp.description}
+                  </p>
                 )}
                 {exp.highlights && exp.highlights.length > 0 && (
                   <ul className="space-y-1">
@@ -82,7 +87,9 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
                 </div>
                 <p className="text-sm text-gray-600">{edu.institution}</p>
                 <p className="text-sm text-gray-500">{edu.field}</p>
-                {edu.gpa && <p className="mt-1 text-sm text-gray-500">GPA: {edu.gpa}</p>}
+                {edu.gpa && (
+                  <p className="mt-1 text-sm text-gray-500">GPA: {edu.gpa}</p>
+                )}
                 {edu.honors && edu.honors.length > 0 && (
                   <ul className="mt-2 space-y-1">
                     {edu.honors.map((honor, idx) => (
@@ -113,26 +120,42 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
           <div className="grid grid-cols-2 gap-4">
             {skills.technical && skills.technical.length > 0 && (
               <div>
-                <h3 className="mb-2 text-xs font-medium text-gray-700">Technical</h3>
-                <p className="text-sm text-gray-600">{skills.technical.join(" • ")}</p>
+                <h3 className="mb-2 text-xs font-medium text-gray-700">
+                  Technical
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {skills.technical.join(" • ")}
+                </p>
               </div>
             )}
             {skills.languages && skills.languages.length > 0 && (
               <div>
-                <h3 className="mb-2 text-xs font-medium text-gray-700">Languages</h3>
-                <p className="text-sm text-gray-600">{skills.languages.join(" • ")}</p>
+                <h3 className="mb-2 text-xs font-medium text-gray-700">
+                  Languages
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {skills.languages.join(" • ")}
+                </p>
               </div>
             )}
             {skills.tools && skills.tools.length > 0 && (
               <div>
-                <h3 className="mb-2 text-xs font-medium text-gray-700">Tools</h3>
-                <p className="text-sm text-gray-600">{skills.tools.join(" • ")}</p>
+                <h3 className="mb-2 text-xs font-medium text-gray-700">
+                  Tools
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {skills.tools.join(" • ")}
+                </p>
               </div>
             )}
             {skills.soft && skills.soft.length > 0 && (
               <div>
-                <h3 className="mb-2 text-xs font-medium text-gray-700">Soft Skills</h3>
-                <p className="text-sm text-gray-600">{skills.soft.join(" • ")}</p>
+                <h3 className="mb-2 text-xs font-medium text-gray-700">
+                  Soft Skills
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {skills.soft.join(" • ")}
+                </p>
               </div>
             )}
           </div>

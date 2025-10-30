@@ -22,7 +22,12 @@ interface SkeletonProps extends React.ComponentProps<"div"> {
  * <Skeleton variant="text" />
  * ```
  */
-function Skeleton({ className, variant = "rectangular", shimmer = true, ...props }: SkeletonProps) {
+function Skeleton({
+  className,
+  variant = "rectangular",
+  shimmer = true,
+  ...props
+}: SkeletonProps) {
   const prefersReducedMotion = useReducedMotion();
 
   const variantClasses = {
@@ -41,7 +46,11 @@ function Skeleton({ className, variant = "rectangular", shimmer = true, ...props
     return (
       <div
         data-slot="skeleton"
-        className={cn("bg-accent animate-pulse", variantClasses[variant], className)}
+        className={cn(
+          "bg-accent animate-pulse",
+          variantClasses[variant],
+          className,
+        )}
         {...props}
       />
     );
@@ -51,7 +60,11 @@ function Skeleton({ className, variant = "rectangular", shimmer = true, ...props
   return (
     <div
       data-slot="skeleton"
-      className={cn("bg-accent relative overflow-hidden", variantClasses[variant], className)}
+      className={cn(
+        "bg-accent relative overflow-hidden",
+        variantClasses[variant],
+        className,
+      )}
       {...props}
     >
       <motion.div
@@ -77,11 +90,21 @@ function Skeleton({ className, variant = "rectangular", shimmer = true, ...props
  * <SkeletonText lines={3} />
  * ```
  */
-function SkeletonText({ lines = 3, className }: { lines?: number; className?: string }) {
+function SkeletonText({
+  lines = 3,
+  className,
+}: {
+  lines?: number;
+  className?: string;
+}) {
   return (
     <div className={cn("space-y-2", className)}>
       {Array.from({ length: lines }).map((_, index) => (
-        <Skeleton key={index} variant="text" className={cn(index === lines - 1 && "w-3/4")} />
+        <Skeleton
+          key={index}
+          variant="text"
+          className={cn(index === lines - 1 && "w-3/4")}
+        />
       ))}
     </div>
   );
@@ -131,7 +154,10 @@ function SkeletonTable({
     <div className={cn("rounded-md border", className)}>
       {/* Table header */}
       <div className="bg-muted/50 border-b p-4">
-        <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+        <div
+          className="grid gap-4"
+          style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+        >
           {Array.from({ length: columns }).map((_, index) => (
             <Skeleton key={index} className="h-4 w-20" />
           ))}
@@ -141,7 +167,10 @@ function SkeletonTable({
       <div className="divide-y">
         {Array.from({ length: rows }).map((_, rowIndex) => (
           <div key={rowIndex} className="p-4">
-            <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+            <div
+              className="grid gap-4"
+              style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+            >
               {Array.from({ length: columns }).map((_, colIndex) => (
                 <Skeleton key={colIndex} className="h-4" />
               ))}
@@ -161,7 +190,13 @@ function SkeletonTable({
  * <SkeletonForm fields={5} />
  * ```
  */
-function SkeletonForm({ fields = 5, className }: { fields?: number; className?: string }) {
+function SkeletonForm({
+  fields = 5,
+  className,
+}: {
+  fields?: number;
+  className?: string;
+}) {
   return (
     <div className={cn("space-y-6", className)}>
       {Array.from({ length: fields }).map((_, index) => (

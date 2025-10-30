@@ -33,10 +33,17 @@ export class ApiClient {
   /**
    * Make an HTTP request
    */
-  private async request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
+  private async request<T>(
+    endpoint: string,
+    options: RequestOptions = {},
+  ): Promise<T> {
     // Use mock API in development
     if (useMockApi()) {
-      const result = await mockApi.route(endpoint, options.method || "GET", options.body);
+      const result = await mockApi.route(
+        endpoint,
+        options.method || "GET",
+        options.body,
+      );
       return result as T;
     }
 
@@ -116,7 +123,9 @@ export class ApiClient {
     } catch (error) {
       // Handle network errors
       if (error instanceof TypeError) {
-        throw new NetworkError("Network request failed. Please check your connection.");
+        throw new NetworkError(
+          "Network request failed. Please check your connection.",
+        );
       }
 
       // Re-throw API errors
@@ -137,7 +146,11 @@ export class ApiClient {
   /**
    * POST request
    */
-  async post<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T> {
+  async post<T>(
+    endpoint: string,
+    body?: unknown,
+    options?: RequestOptions,
+  ): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
       method: "POST",
@@ -148,7 +161,11 @@ export class ApiClient {
   /**
    * PUT request
    */
-  async put<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T> {
+  async put<T>(
+    endpoint: string,
+    body?: unknown,
+    options?: RequestOptions,
+  ): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
       method: "PUT",
@@ -159,7 +176,11 @@ export class ApiClient {
   /**
    * PATCH request
    */
-  async patch<T>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T> {
+  async patch<T>(
+    endpoint: string,
+    body?: unknown,
+    options?: RequestOptions,
+  ): Promise<T> {
     return this.request<T>(endpoint, {
       ...options,
       method: "PATCH",

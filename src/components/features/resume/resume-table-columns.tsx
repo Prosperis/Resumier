@@ -65,7 +65,11 @@ function RowActions({ resume, onEdit, onDuplicate }: RowActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0" aria-label={`Actions for ${resume.title}`}>
+        <Button
+          variant="ghost"
+          className="h-8 w-8 p-0"
+          aria-label={`Actions for ${resume.title}`}
+        >
           <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
         </Button>
       </DropdownMenuTrigger>
@@ -119,7 +123,9 @@ export function createResumeColumns(handlers: {
   return [
     {
       accessorKey: "title",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Title" />
+      ),
       cell: ({ row }) => {
         return (
           <div className="flex flex-col gap-1">
@@ -134,11 +140,16 @@ export function createResumeColumns(handlers: {
     },
     {
       accessorKey: "createdAt",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Created" />,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Created" />
+      ),
       cell: ({ row }) => {
         const dateString = row.getValue("createdAt") as string;
         return (
-          <div className="text-muted-foreground text-sm" title={formatDateTime(dateString)}>
+          <div
+            className="text-muted-foreground text-sm"
+            title={formatDateTime(dateString)}
+          >
             {formatDate(dateString)}
           </div>
         );
@@ -148,11 +159,16 @@ export function createResumeColumns(handlers: {
     },
     {
       accessorKey: "updatedAt",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Updated" />,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Updated" />
+      ),
       cell: ({ row }) => {
         const dateString = row.getValue("updatedAt") as string;
         return (
-          <div className="text-muted-foreground text-sm" title={formatDateTime(dateString)}>
+          <div
+            className="text-muted-foreground text-sm"
+            title={formatDateTime(dateString)}
+          >
             {formatDate(dateString)}
           </div>
         );

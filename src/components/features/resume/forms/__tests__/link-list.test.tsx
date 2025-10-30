@@ -6,7 +6,9 @@ import { LinkList } from "../link-list";
 
 // Mock @dnd-kit modules
 vi.mock("@dnd-kit/core", () => ({
-  DndContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DndContext: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   closestCenter: vi.fn(),
   useSensor: vi.fn(),
   useSensors: vi.fn(() => []),
@@ -15,7 +17,9 @@ vi.mock("@dnd-kit/core", () => ({
 }));
 
 vi.mock("@dnd-kit/sortable", () => ({
-  SortableContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SortableContext: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   verticalListSortingStrategy: vi.fn(),
   sortableKeyboardCoordinates: vi.fn(),
   useSortable: () => ({
@@ -37,7 +41,9 @@ vi.mock("@dnd-kit/utilities", () => ({
 }));
 
 vi.mock("../dnd/sortable-item", () => ({
-  SortableItem: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SortableItem: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));
 
 vi.mock("../dnd/drag-handle", () => ({
@@ -88,12 +94,14 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getByText("No links added yet")).toBeInTheDocument();
       expect(
-        screen.getByText("Add your portfolio, LinkedIn, GitHub, or other professional links")
+        screen.getByText(
+          "Add your portfolio, LinkedIn, GitHub, or other professional links",
+        ),
       ).toBeInTheDocument();
     });
 
@@ -104,7 +112,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const card = container.querySelector(".border-dashed");
@@ -120,7 +128,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getByText("My Portfolio")).toBeInTheDocument();
@@ -136,12 +144,12 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const allLinks = screen.getAllByRole("link");
       const portfolioLink = allLinks.find(
-        (link) => link.getAttribute("href") === "https://johndoe.com"
+        (link) => link.getAttribute("href") === "https://johndoe.com",
       );
 
       expect(portfolioLink).toBeInTheDocument();
@@ -157,7 +165,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getByText("Portfolio")).toBeInTheDocument();
@@ -173,7 +181,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const icons = container.querySelectorAll("svg");
@@ -187,7 +195,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const badge = container.querySelector(".rounded-full.bg-muted");
@@ -204,7 +212,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const editButton = screen.getAllByText("Edit")[0];
@@ -221,7 +229,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const editButtons = screen.getAllByText("Edit");
@@ -235,7 +243,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const editButton = screen.getAllByText("Edit")[0];
@@ -252,7 +260,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const deleteButton = screen.getAllByText("Delete")[0];
@@ -269,7 +277,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const deleteButtons = screen.getAllByText("Delete");
@@ -283,7 +291,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const deleteButton = screen.getAllByText("Delete")[0];
@@ -308,7 +316,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getAllByText("Portfolio")).toHaveLength(1);
@@ -330,7 +338,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getAllByText("LinkedIn")).toHaveLength(1);
@@ -352,7 +360,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getAllByText("GitHub")).toHaveLength(1);
@@ -374,7 +382,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getAllByText("Other")).toHaveLength(1);
@@ -389,7 +397,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const linkLabels = screen.getAllByRole("heading", { level: 3 });
@@ -407,7 +415,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const editButtons = screen.getAllByText("Edit");
@@ -424,25 +432,29 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const allLinks = screen.getAllByRole("link");
       const portfolioUrl = allLinks.find(
-        (link) => link.getAttribute("href") === "https://johndoe.com"
+        (link) => link.getAttribute("href") === "https://johndoe.com",
       );
       const linkedinUrl = allLinks.find(
-        (link) => link.getAttribute("href") === "https://linkedin.com/in/johndoe"
+        (link) =>
+          link.getAttribute("href") === "https://linkedin.com/in/johndoe",
       );
       const githubUrl = allLinks.find(
-        (link) => link.getAttribute("href") === "https://github.com/johndoe"
+        (link) => link.getAttribute("href") === "https://github.com/johndoe",
       );
       const blogUrl = allLinks.find(
-        (link) => link.getAttribute("href") === "https://blog.johndoe.com"
+        (link) => link.getAttribute("href") === "https://blog.johndoe.com",
       );
 
       expect(portfolioUrl).toHaveAttribute("href", "https://johndoe.com");
-      expect(linkedinUrl).toHaveAttribute("href", "https://linkedin.com/in/johndoe");
+      expect(linkedinUrl).toHaveAttribute(
+        "href",
+        "https://linkedin.com/in/johndoe",
+      );
       expect(githubUrl).toHaveAttribute("href", "https://github.com/johndoe");
       expect(blogUrl).toHaveAttribute("href", "https://blog.johndoe.com");
     });
@@ -466,13 +478,13 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(
         screen.getByText(
-          "My Very Long Professional Portfolio Website Showcasing All My Projects and Achievements"
-        )
+          "My Very Long Professional Portfolio Website Showcasing All My Projects and Achievements",
+        ),
       ).toBeInTheDocument();
     });
 
@@ -492,7 +504,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const link = screen.getByRole("link", {
@@ -500,7 +512,7 @@ describe("LinkList", () => {
       });
       expect(link).toHaveAttribute(
         "href",
-        "https://example.com/very/long/path/to/my/portfolio/page/with/many/segments/and/parameters?param1=value1&param2=value2"
+        "https://example.com/very/long/path/to/my/portfolio/page/with/many/segments/and/parameters?param1=value1&param2=value2",
       );
     });
 
@@ -520,13 +532,15 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
-      const link = screen.getByRole("link", { name: /example.com\/portfolio/i });
+      const link = screen.getByRole("link", {
+        name: /example.com\/portfolio/i,
+      });
       expect(link).toHaveAttribute(
         "href",
-        "https://example.com/portfolio?name=John%20Doe&year=2023&category=design"
+        "https://example.com/portfolio?name=John%20Doe&year=2023&category=design",
       );
     });
 
@@ -546,7 +560,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getAllByText("Portfolio")).toHaveLength(1);
@@ -561,7 +575,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const externalLinkIcons = container.querySelectorAll(".h-3.w-3");
@@ -584,7 +598,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const link = screen.getByRole("link", { name: /secure.example.com/i });
@@ -607,7 +621,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       const link = screen.getByRole("link", { name: /legacy.example.com/i });
@@ -632,7 +646,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getAllByText("LinkedIn")).toHaveLength(1);
@@ -654,7 +668,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getAllByText("GitHub")).toHaveLength(1);
@@ -676,7 +690,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getAllByText("Portfolio")).toHaveLength(1);
@@ -698,7 +712,7 @@ describe("LinkList", () => {
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
           onReorder={mockOnReorder}
-        />
+        />,
       );
 
       expect(screen.getAllByText("Other")).toHaveLength(1);

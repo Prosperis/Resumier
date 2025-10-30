@@ -1,7 +1,12 @@
 import { Plus, Trash } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -54,8 +59,12 @@ export function JobInfoDialog({
   const [title, setTitle] = useState(typedJobInfo.title ?? "");
   const [company, setCompany] = useState(typedJobInfo.company ?? "");
   const [location, setLocation] = useState(typedJobInfo.location ?? "");
-  const [description, setDescription] = useState(typedJobInfo.description ?? "");
-  const [benefits, setBenefits] = useState<string[]>(typedJobInfo.benefits ?? []);
+  const [description, setDescription] = useState(
+    typedJobInfo.description ?? "",
+  );
+  const [benefits, setBenefits] = useState<string[]>(
+    typedJobInfo.benefits ?? [],
+  );
   const [benefitInput, setBenefitInput] = useState("");
   const [workType, setWorkType] = useState(typedJobInfo.workType);
   const [basePay, setBasePay] = useState(typedJobInfo.basePay ?? "");
@@ -145,7 +154,13 @@ export function JobInfoDialog({
                     id="workType"
                     value={workType}
                     onChange={(e) =>
-                      setWorkType(e.target.value as "onsite" | "remote" | "hybrid" | undefined)
+                      setWorkType(
+                        e.target.value as
+                          | "onsite"
+                          | "remote"
+                          | "hybrid"
+                          | undefined,
+                      )
                     }
                   >
                     <option value="">Select</option>
@@ -191,7 +206,11 @@ export function JobInfoDialog({
                         type="button"
                         variant="outline"
                         size="icon"
-                        onClick={() => setBenefits((prev) => prev.filter((_, idx) => idx !== i))}
+                        onClick={() =>
+                          setBenefits((prev) =>
+                            prev.filter((_, idx) => idx !== i),
+                          )
+                        }
                       >
                         <Trash className="h-4 w-4" />
                       </Button>

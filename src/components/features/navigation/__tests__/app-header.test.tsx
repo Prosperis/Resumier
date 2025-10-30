@@ -32,13 +32,18 @@ describe("AppHeader", () => {
 
       const logo = screen.getByAltText("Resumier Logo");
       expect(logo).toBeInTheDocument();
-      expect(logo).toHaveAttribute("src", expect.stringContaining("logo_dark_optimized.png"));
+      expect(logo).toHaveAttribute(
+        "src",
+        expect.stringContaining("logo_dark_optimized.png"),
+      );
     });
 
     it("renders the title", () => {
       render(<AppHeader />);
 
-      expect(screen.getByRole("heading", { name: /resume/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /resume/i }),
+      ).toBeInTheDocument();
     });
 
     it("renders the theme toggle", () => {
@@ -50,13 +55,17 @@ describe("AppHeader", () => {
     it("renders Personal Info button", () => {
       render(<AppHeader />);
 
-      expect(screen.getByRole("button", { name: /personal info/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /personal info/i }),
+      ).toBeInTheDocument();
     });
 
     it("renders Job Info button", () => {
       render(<AppHeader />);
 
-      expect(screen.getByRole("button", { name: /job info/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /job info/i }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -64,14 +73,18 @@ describe("AppHeader", () => {
     it("does not render back button when onBackClick is not provided", () => {
       render(<AppHeader />);
 
-      expect(screen.queryByRole("button", { name: /dashboard/i })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: /dashboard/i }),
+      ).not.toBeInTheDocument();
     });
 
     it("renders back button when onBackClick is provided", () => {
       const onBackClick = vi.fn();
       render(<AppHeader onBackClick={onBackClick} />);
 
-      expect(screen.getByRole("button", { name: /dashboard/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /dashboard/i }),
+      ).toBeInTheDocument();
     });
 
     it("calls onBackClick when back button is clicked", async () => {
@@ -120,7 +133,9 @@ describe("AppHeader", () => {
       const user = userEvent.setup();
       render(<AppHeader />);
 
-      const personalInfoButton = screen.getByRole("button", { name: /personal info/i });
+      const personalInfoButton = screen.getByRole("button", {
+        name: /personal info/i,
+      });
       const jobInfoButton = screen.getByRole("button", { name: /job info/i });
 
       await user.click(personalInfoButton);
@@ -178,9 +193,15 @@ describe("AppHeader", () => {
 
       render(<AppHeader {...handlers} />);
 
-      expect(screen.getByRole("button", { name: /dashboard/i })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /personal info/i })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /job info/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /dashboard/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /personal info/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /job info/i }),
+      ).toBeInTheDocument();
       expect(screen.getByTestId("theme-toggle")).toBeInTheDocument();
     });
 

@@ -6,7 +6,9 @@ describe("cn utility", () => {
     expect(cn("p-2", "p-4")).toBe("p-4");
   });
   it("ignores falsy values", () => {
-    expect(cn("p-2", null, undefined, false, "text-center")).toBe("p-2 text-center");
+    expect(cn("p-2", null, undefined, false, "text-center")).toBe(
+      "p-2 text-center",
+    );
   });
   it("handles conditional classes", () => {
     const isActive = true;

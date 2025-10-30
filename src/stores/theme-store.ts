@@ -52,10 +52,10 @@ export const useThemeStore = create<ThemeStore>()(
             }
           }
         },
-      }
+      },
     ),
-    { name: "ThemeStore" }
-  )
+    { name: "ThemeStore" },
+  ),
 );
 
 // Selectors for optimized access

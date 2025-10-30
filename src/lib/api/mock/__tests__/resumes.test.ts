@@ -57,7 +57,9 @@ describe("mockResumeApi", () => {
 
     it("throws NotFoundError when resume does not exist", async () => {
       await expect(mockResumeApi.getById("999")).rejects.toThrow(NotFoundError);
-      await expect(mockResumeApi.getById("999")).rejects.toThrow('Resume with ID "999" not found');
+      await expect(mockResumeApi.getById("999")).rejects.toThrow(
+        'Resume with ID "999" not found',
+      );
     });
 
     it("includes delay", async () => {
@@ -123,7 +125,9 @@ describe("mockResumeApi", () => {
         title: "",
       };
 
-      await expect(mockResumeApi.create(createDto)).rejects.toThrow("Resume title is required");
+      await expect(mockResumeApi.create(createDto)).rejects.toThrow(
+        "Resume title is required",
+      );
     });
 
     it("throws error when title is only whitespace", async () => {
@@ -131,7 +135,9 @@ describe("mockResumeApi", () => {
         title: "   ",
       };
 
-      await expect(mockResumeApi.create(createDto)).rejects.toThrow("Resume title is required");
+      await expect(mockResumeApi.create(createDto)).rejects.toThrow(
+        "Resume title is required",
+      );
     });
 
     it("throws ConflictError when title already exists", async () => {
@@ -139,9 +145,11 @@ describe("mockResumeApi", () => {
         title: "Software Engineer Resume",
       };
 
-      await expect(mockResumeApi.create(createDto)).rejects.toThrow(ConflictError);
       await expect(mockResumeApi.create(createDto)).rejects.toThrow(
-        'Resume with title "Software Engineer Resume" already exists'
+        ConflictError,
+      );
+      await expect(mockResumeApi.create(createDto)).rejects.toThrow(
+        'Resume with title "Software Engineer Resume" already exists',
       );
     });
 
@@ -197,9 +205,11 @@ describe("mockResumeApi", () => {
         title: "Does Not Exist",
       };
 
-      await expect(mockResumeApi.update("999", updateDto)).rejects.toThrow(NotFoundError);
       await expect(mockResumeApi.update("999", updateDto)).rejects.toThrow(
-        'Resume with ID "999" not found'
+        NotFoundError,
+      );
+      await expect(mockResumeApi.update("999", updateDto)).rejects.toThrow(
+        'Resume with ID "999" not found',
       );
     });
 
@@ -209,7 +219,7 @@ describe("mockResumeApi", () => {
       };
 
       await expect(mockResumeApi.update("1", updateDto)).rejects.toThrow(
-        "Resume title cannot be empty"
+        "Resume title cannot be empty",
       );
     });
 
@@ -219,7 +229,7 @@ describe("mockResumeApi", () => {
       };
 
       await expect(mockResumeApi.update("1", updateDto)).rejects.toThrow(
-        "Resume title cannot be empty"
+        "Resume title cannot be empty",
       );
     });
 
@@ -228,9 +238,11 @@ describe("mockResumeApi", () => {
         title: "Product Manager Resume",
       };
 
-      await expect(mockResumeApi.update("1", updateDto)).rejects.toThrow(ConflictError);
       await expect(mockResumeApi.update("1", updateDto)).rejects.toThrow(
-        'Resume with title "Product Manager Resume" already exists'
+        ConflictError,
+      );
+      await expect(mockResumeApi.update("1", updateDto)).rejects.toThrow(
+        'Resume with title "Product Manager Resume" already exists',
       );
     });
 
@@ -254,7 +266,9 @@ describe("mockResumeApi", () => {
 
     it("increments version", async () => {
       const original = await mockResumeApi.getById("1");
-      const updated = await mockResumeApi.update("1", { title: "Version Test" });
+      const updated = await mockResumeApi.update("1", {
+        title: "Version Test",
+      });
 
       expect(updated.version).toBe((original.version || 0) + 1);
     });
@@ -265,7 +279,9 @@ describe("mockResumeApi", () => {
       vi.useFakeTimers();
       vi.advanceTimersByTime(1000);
 
-      const updated = await mockResumeApi.update("1", { title: "Timestamp Test" });
+      const updated = await mockResumeApi.update("1", {
+        title: "Timestamp Test",
+      });
 
       vi.useRealTimers();
 
@@ -283,7 +299,9 @@ describe("mockResumeApi", () => {
 
     it("throws NotFoundError when resume does not exist", async () => {
       await expect(mockResumeApi.delete("999")).rejects.toThrow(NotFoundError);
-      await expect(mockResumeApi.delete("999")).rejects.toThrow('Resume with ID "999" not found');
+      await expect(mockResumeApi.delete("999")).rejects.toThrow(
+        'Resume with ID "999" not found',
+      );
     });
 
     it("includes delay", async () => {

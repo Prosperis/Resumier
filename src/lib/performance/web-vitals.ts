@@ -19,7 +19,7 @@ const THRESHOLDS = {
  */
 function getRating(
   value: number,
-  thresholds: { good: number; poor: number }
+  thresholds: { good: number; poor: number },
 ): "good" | "needs-improvement" | "poor" {
   if (value <= thresholds.good) return "good";
   if (value <= thresholds.poor) return "needs-improvement";
@@ -37,9 +37,10 @@ function sendToAnalytics(metric: Metric) {
 
   // Log to console in development
   if (import.meta.env.DEV) {
-    const emoji = rating === "good" ? "✅" : rating === "needs-improvement" ? "⚠️" : "❌";
+    const emoji =
+      rating === "good" ? "✅" : rating === "needs-improvement" ? "⚠️" : "❌";
     console.group(
-      `${emoji} ${metric.name}: ${metric.value.toFixed(2)}${metric.name === "CLS" ? "" : "ms"}`
+      `${emoji} ${metric.name}: ${metric.value.toFixed(2)}${metric.name === "CLS" ? "" : "ms"}`,
     );
     console.log(`Rating: ${rating}`);
     console.log(`ID: ${metric.id}`);

@@ -1,6 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiClient } from "../client";
-import { ApiError, NetworkError, NotFoundError, ServerError, UnauthorizedError } from "../errors";
+import {
+  ApiError,
+  NetworkError,
+  NotFoundError,
+  ServerError,
+  UnauthorizedError,
+} from "../errors";
 import { mockApi, useMockApi } from "../mock";
 
 // Mock dependencies
@@ -85,7 +91,7 @@ describe("ApiClient", () => {
           headers: expect.not.objectContaining({
             Authorization: expect.anything(),
           }),
-        })
+        }),
       );
     });
   });
@@ -105,7 +111,7 @@ describe("ApiClient", () => {
         "https://api.example.com/users/1",
         expect.objectContaining({
           method: "GET",
-        })
+        }),
       );
       expect(result).toEqual({ id: 1, name: "Test" });
     });
@@ -126,7 +132,7 @@ describe("ApiClient", () => {
           headers: expect.objectContaining({
             Authorization: "Bearer test-token",
           }),
-        })
+        }),
       );
     });
 
@@ -146,7 +152,7 @@ describe("ApiClient", () => {
           headers: expect.objectContaining({
             "Content-Type": "application/json",
           }),
-        })
+        }),
       );
     });
 
@@ -168,7 +174,7 @@ describe("ApiClient", () => {
           headers: expect.objectContaining({
             "X-Custom-Header": "custom-value",
           }),
-        })
+        }),
       );
     });
   });
@@ -190,7 +196,7 @@ describe("ApiClient", () => {
         expect.objectContaining({
           method: "POST",
           body: JSON.stringify(body),
-        })
+        }),
       );
       expect(result).toEqual({ id: 2, name: "Created" });
     });
@@ -210,7 +216,7 @@ describe("ApiClient", () => {
         expect.objectContaining({
           method: "POST",
           body: undefined,
-        })
+        }),
       );
     });
   });
@@ -232,7 +238,7 @@ describe("ApiClient", () => {
         expect.objectContaining({
           method: "PUT",
           body: JSON.stringify(body),
-        })
+        }),
       );
       expect(result).toEqual({ id: 1, name: "Updated" });
     });
@@ -255,7 +261,7 @@ describe("ApiClient", () => {
         expect.objectContaining({
           method: "PATCH",
           body: JSON.stringify(body),
-        })
+        }),
       );
       expect(result).toEqual({ id: 1, email: "newemail@example.com" });
     });
@@ -274,7 +280,7 @@ describe("ApiClient", () => {
         "https://api.example.com/users/1",
         expect.objectContaining({
           method: "DELETE",
-        })
+        }),
       );
       expect(result).toBeUndefined();
     });
@@ -336,7 +342,9 @@ describe("ApiClient", () => {
       mockFetch.mockResolvedValue({
         ok: true,
         status: 200,
-        headers: new Headers({ "content-type": "application/json; charset=utf-8" }),
+        headers: new Headers({
+          "content-type": "application/json; charset=utf-8",
+        }),
         json: async () => ({ data: "test" }),
       });
 
@@ -398,7 +406,7 @@ describe("ApiClient", () => {
 
       await expect(client.get("/network-error")).rejects.toThrow(NetworkError);
       await expect(client.get("/network-error")).rejects.toThrow(
-        "Network request failed. Please check your connection."
+        "Network request failed. Please check your connection.",
       );
     });
 
@@ -447,7 +455,9 @@ describe("ApiClient", () => {
       (mockApi.route as any).mockResolvedValue({});
 
       await client.put("/users/1", { name: "Updated" });
-      expect(mockApi.route).toHaveBeenCalledWith("/users/1", "PUT", { name: "Updated" });
+      expect(mockApi.route).toHaveBeenCalledWith("/users/1", "PUT", {
+        name: "Updated",
+      });
 
       await client.patch("/users/1", { email: "new@example.com" });
       expect(mockApi.route).toHaveBeenCalledWith("/users/1", "PATCH", {
@@ -455,7 +465,11 @@ describe("ApiClient", () => {
       });
 
       await client.delete("/users/1");
-      expect(mockApi.route).toHaveBeenCalledWith("/users/1", "DELETE", undefined);
+      expect(mockApi.route).toHaveBeenCalledWith(
+        "/users/1",
+        "DELETE",
+        undefined,
+      );
     });
   });
 
@@ -478,7 +492,7 @@ describe("ApiClient", () => {
         expect.objectContaining({
           signal: expect.any(AbortSignal),
           cache: "no-cache",
-        })
+        }),
       );
     });
 
@@ -498,7 +512,7 @@ describe("ApiClient", () => {
             "Content-Type": "application/x-www-form-urlencoded",
             "X-Custom": "value",
           },
-        }
+        },
       );
 
       expect(mockFetch).toHaveBeenCalledWith(
@@ -508,7 +522,7 @@ describe("ApiClient", () => {
             "Content-Type": "application/x-www-form-urlencoded",
             "X-Custom": "value",
           }),
-        })
+        }),
       );
     });
   });

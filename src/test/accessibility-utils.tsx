@@ -22,7 +22,9 @@ export function createQueryWrapper() {
   });
 
   return function QueryWrapper({ children }: { children: React.ReactNode }) {
-    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+    return (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
   };
 }
 
@@ -90,7 +92,7 @@ export const axe = configureAxe({
  * ```
  */
 export async function expectNoAccessibilityViolations(
-  container: RenderResult["container"] | HTMLElement
+  container: RenderResult["container"] | HTMLElement,
 ) {
   const results = await axe(container);
 
@@ -100,7 +102,9 @@ export async function expectNoAccessibilityViolations(
       const nodes = violation.nodes.map((node) => node.html).join("\n");
       return `${violation.id}: ${violation.description}\n${violation.help}\n${nodes}`;
     });
-    throw new Error(`Accessibility violations found:\n\n${violationMessages.join("\n\n")}`);
+    throw new Error(
+      `Accessibility violations found:\n\n${violationMessages.join("\n\n")}`,
+    );
   }
 
   expect(results.violations).toHaveLength(0);
@@ -119,7 +123,7 @@ export async function expectNoAccessibilityViolations(
  */
 export async function checkAccessibility(
   container: RenderResult["container"] | HTMLElement,
-  options?: Parameters<typeof axe>[1]
+  options?: Parameters<typeof axe>[1],
 ) {
   const results = await axe(container, options);
 
@@ -128,7 +132,9 @@ export async function checkAccessibility(
       const nodes = violation.nodes.map((node) => node.html).join("\n");
       return `${violation.id}: ${violation.description}\n${violation.help}\n${nodes}`;
     });
-    throw new Error(`Accessibility violations found:\n\n${violationMessages.join("\n\n")}`);
+    throw new Error(
+      `Accessibility violations found:\n\n${violationMessages.join("\n\n")}`,
+    );
   }
 
   expect(results.violations).toHaveLength(0);
@@ -201,7 +207,7 @@ export const accessibilityTests = {
 
       expect(
         hasAriaLabel || hasAriaLabelledBy || hasTextContent || hasTitle,
-        `Button must have accessible name: ${button.outerHTML}`
+        `Button must have accessible name: ${button.outerHTML}`,
       ).toBe(true);
     });
   },
@@ -217,7 +223,7 @@ export const accessibilityTests = {
 
       expect(
         hasAlt || isAriaHidden,
-        `Image must have alt attribute or be aria-hidden: ${img.outerHTML}`
+        `Image must have alt attribute or be aria-hidden: ${img.outerHTML}`,
       ).toBe(true);
     });
   },
@@ -235,7 +241,7 @@ export const accessibilityTests = {
 
       expect(
         hasAriaLabel || hasAriaLabelledBy || hasLabel,
-        `Input must have associated label: ${input.outerHTML}`
+        `Input must have associated label: ${input.outerHTML}`,
       ).toBe(true);
     });
   },
@@ -245,7 +251,7 @@ export const accessibilityTests = {
    */
   testKeyboardAccessibility(container: HTMLElement) {
     const interactiveElements = container.querySelectorAll(
-      'a, button, input, select, textarea, [role="button"], [role="link"], [tabindex]:not([tabindex="-1"])'
+      'a, button, input, select, textarea, [role="button"], [role="link"], [tabindex]:not([tabindex="-1"])',
     );
 
     interactiveElements.forEach((element) => {
@@ -254,9 +260,10 @@ export const accessibilityTests = {
       // Elements should not have tabindex > 0
       if (tabIndex !== null) {
         const tabIndexNum = Number.parseInt(tabIndex, 10);
-        expect(tabIndexNum <= 0, `Element should not have tabindex > 0: ${element.outerHTML}`).toBe(
-          true
-        );
+        expect(
+          tabIndexNum <= 0,
+          `Element should not have tabindex > 0: ${element.outerHTML}`,
+        ).toBe(true);
       }
     });
   },
@@ -265,15 +272,19 @@ export const accessibilityTests = {
    * Test heading hierarchy
    */
   testHeadingHierarchy(container: HTMLElement) {
-    const headings = Array.from(container.querySelectorAll("h1, h2, h3, h4, h5, h6"));
-    const levels = headings.map((h) => Number.parseInt(h.tagName.charAt(1), 10));
+    const headings = Array.from(
+      container.querySelectorAll("h1, h2, h3, h4, h5, h6"),
+    );
+    const levels = headings.map((h) =>
+      Number.parseInt(h.tagName.charAt(1), 10),
+    );
 
     // Check for skipped heading levels
     for (let i = 1; i < levels.length; i++) {
       const diff = levels[i] - levels[i - 1];
       expect(
         diff <= 1,
-        `Heading hierarchy should not skip levels. Found h${levels[i - 1]} followed by h${levels[i]}`
+        `Heading hierarchy should not skip levels. Found h${levels[i - 1]} followed by h${levels[i]}`,
       ).toBe(true);
     }
   },

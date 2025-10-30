@@ -40,8 +40,9 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>(initialColumnVisibility);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+    initialColumnVisibility,
+  );
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
@@ -66,7 +67,11 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} searchKey={searchKey} searchPlaceholder={searchPlaceholder} />
+      <DataTableToolbar
+        table={table}
+        searchKey={searchKey}
+        searchPlaceholder={searchPlaceholder}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -77,7 +82,10 @@ export function DataTable<TData, TValue>({
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
                   );
                 })}
@@ -92,7 +100,10 @@ export function DataTable<TData, TValue>({
                     <TableRow data-state={row.getIsSelected() && "selected"}>
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
                         </TableCell>
                       ))}
                     </TableRow>
@@ -101,7 +112,10 @@ export function DataTable<TData, TValue>({
               </StaggerChildren>
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>

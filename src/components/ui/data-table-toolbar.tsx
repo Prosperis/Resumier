@@ -23,8 +23,12 @@ export function DataTableToolbar<TData>({
         {searchKey && (
           <Input
             placeholder={searchPlaceholder}
-            value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-            onChange={(event) => table.getColumn(searchKey)?.setFilterValue(event.target.value)}
+            value={
+              (table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn(searchKey)?.setFilterValue(event.target.value)
+            }
             className="h-8 w-[150px] lg:w-[250px]"
           />
         )}

@@ -101,7 +101,9 @@ export function initSentry() {
 /**
  * Set user context for better error tracking
  */
-export function setUser(user: { id: string; email: string; name?: string } | null) {
+export function setUser(
+  user: { id: string; email: string; name?: string } | null,
+) {
   if (user) {
     Sentry.setUser({
       id: user.id,
@@ -120,7 +122,7 @@ export function trackBreadcrumb(
   category: string,
   message: string,
   data?: Record<string, unknown>,
-  level: Sentry.SeverityLevel = "info"
+  level: Sentry.SeverityLevel = "info",
 ) {
   Sentry.addBreadcrumb({
     category,
@@ -137,7 +139,7 @@ export function trackBreadcrumb(
 export async function trackOperation<T>(
   name: string,
   operation: () => Promise<T>,
-  tags?: Record<string, string>
+  tags?: Record<string, string>,
 ): Promise<T> {
   return await Sentry.startSpan(
     {
@@ -157,7 +159,7 @@ export async function trackOperation<T>(
         });
         throw error;
       }
-    }
+    },
   );
 }
 
@@ -170,7 +172,7 @@ export function captureError(
     tags?: Record<string, string>;
     level?: Sentry.SeverityLevel;
     extra?: Record<string, unknown>;
-  }
+  },
 ) {
   Sentry.captureException(error, {
     level: context?.level || "error",
@@ -185,7 +187,7 @@ export function captureError(
 export function captureMessage(
   message: string,
   level: Sentry.SeverityLevel = "info",
-  context?: Record<string, unknown>
+  context?: Record<string, unknown>,
 ) {
   Sentry.captureMessage(message, {
     level,

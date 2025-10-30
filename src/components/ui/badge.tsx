@@ -22,7 +22,11 @@ function Badge({
 
   if (!animated || asChild) {
     return (
-      <Comp data-slot="badge" className={cn(badgeVariants({ variant }), className)} {...props} />
+      <Comp
+        data-slot="badge"
+        className={cn(badgeVariants({ variant }), className)}
+        {...props}
+      />
     );
   }
 
@@ -35,7 +39,9 @@ function Badge({
       initial={prefersReducedMotion ? undefined : { scale: 0.8, opacity: 0 }}
       animate={prefersReducedMotion ? undefined : { scale: 1, opacity: 1 }}
       transition={
-        prefersReducedMotion ? undefined : { type: "spring", stiffness: 500, damping: 25 }
+        prefersReducedMotion
+          ? undefined
+          : { type: "spring", stiffness: 500, damping: 25 }
       }
       {...(props as React.ComponentProps<typeof MotionSpan>)}
     />

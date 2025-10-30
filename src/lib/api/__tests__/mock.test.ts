@@ -62,7 +62,7 @@ describe("mockApi", () => {
 
     it("throws error for unknown endpoint", async () => {
       await expect(mockApi.route("/api/unknown", "GET")).rejects.toThrow(
-        "Mock API: Unknown endpoint /api/unknown"
+        "Mock API: Unknown endpoint /api/unknown",
       );
     });
   });
@@ -117,7 +117,7 @@ describe("mockApi", () => {
             userId: "user-1",
             title: "New Resume",
             content: expect.any(Object),
-          })
+          }),
         );
       });
 
@@ -144,26 +144,32 @@ describe("mockApi", () => {
           expect.objectContaining({
             title: "Custom Resume",
             content: expect.objectContaining(customContent),
-          })
+          }),
         );
       });
 
       it("throws 400 when title is missing", async () => {
-        await expect(mockApi.handleResumes("POST", undefined, {})).rejects.toEqual({
+        await expect(
+          mockApi.handleResumes("POST", undefined, {}),
+        ).rejects.toEqual({
           status: 400,
           message: "Title is required",
         });
       });
 
       it("throws 400 when body is undefined", async () => {
-        await expect(mockApi.handleResumes("POST", undefined, undefined)).rejects.toEqual({
+        await expect(
+          mockApi.handleResumes("POST", undefined, undefined),
+        ).rejects.toEqual({
           status: 400,
           message: "Title is required",
         });
       });
 
       it("throws 400 when title is empty", async () => {
-        await expect(mockApi.handleResumes("POST", undefined, { title: "" })).rejects.toEqual({
+        await expect(
+          mockApi.handleResumes("POST", undefined, { title: "" }),
+        ).rejects.toEqual({
           status: 400,
           message: "Title is required",
         });
@@ -180,7 +186,9 @@ describe("mockApi", () => {
         });
 
         expect(result).toEqual(mockResume);
-        expect(mockDb.updateResume).toHaveBeenCalledWith("1", { title: "Updated Resume" });
+        expect(mockDb.updateResume).toHaveBeenCalledWith("1", {
+          title: "Updated Resume",
+        });
       });
 
       it("updates resume with PATCH", async () => {
@@ -192,11 +200,15 @@ describe("mockApi", () => {
         });
 
         expect(result).toEqual(mockResume);
-        expect(mockDb.updateResume).toHaveBeenCalledWith("1", { title: "Patched Resume" });
+        expect(mockDb.updateResume).toHaveBeenCalledWith("1", {
+          title: "Patched Resume",
+        });
       });
 
       it("throws 400 when ID is missing", async () => {
-        await expect(mockApi.handleResumes("PUT", undefined, { title: "Test" })).rejects.toEqual({
+        await expect(
+          mockApi.handleResumes("PUT", undefined, { title: "Test" }),
+        ).rejects.toEqual({
           status: 400,
           message: "Resume ID is required",
         });
@@ -205,7 +217,9 @@ describe("mockApi", () => {
       it("throws 404 when resume not found", async () => {
         (mockDb.updateResume as any).mockReturnValue(null);
 
-        await expect(mockApi.handleResumes("PUT", "999", { title: "Test" })).rejects.toEqual({
+        await expect(
+          mockApi.handleResumes("PUT", "999", { title: "Test" }),
+        ).rejects.toEqual({
           status: 404,
           message: "Resume not found",
         });
@@ -223,7 +237,9 @@ describe("mockApi", () => {
       });
 
       it("throws 400 when ID is missing", async () => {
-        await expect(mockApi.handleResumes("DELETE", undefined)).rejects.toEqual({
+        await expect(
+          mockApi.handleResumes("DELETE", undefined),
+        ).rejects.toEqual({
           status: 400,
           message: "Resume ID is required",
         });
@@ -241,7 +257,9 @@ describe("mockApi", () => {
 
     describe("unsupported methods", () => {
       it("throws 405 for unsupported method", async () => {
-        await expect(mockApi.handleResumes("OPTIONS", undefined)).rejects.toEqual({
+        await expect(
+          mockApi.handleResumes("OPTIONS", undefined),
+        ).rejects.toEqual({
           status: 405,
           message: "Method not allowed",
         });
@@ -269,7 +287,7 @@ describe("mockApi", () => {
           mockApi.handleAuth("/api/auth/login", "POST", {
             email: "wrong@example.com",
             password: "wrong",
-          })
+          }),
         ).rejects.toEqual({
           status: 401,
           message: "Invalid email or password",
@@ -281,7 +299,7 @@ describe("mockApi", () => {
           mockApi.handleAuth("/api/auth/login", "POST", {
             email: "demo@example.com",
             password: "wrongpassword",
-          })
+          }),
         ).rejects.toEqual({
           status: 401,
           message: "Invalid email or password",
@@ -315,7 +333,9 @@ describe("mockApi", () => {
 
     describe("unknown endpoints", () => {
       it("throws 404 for unknown auth endpoint", async () => {
-        await expect(mockApi.handleAuth("/api/auth/unknown", "GET")).rejects.toEqual({
+        await expect(
+          mockApi.handleAuth("/api/auth/unknown", "GET"),
+        ).rejects.toEqual({
           status: 404,
           message: "Auth endpoint not found",
         });

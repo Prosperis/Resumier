@@ -75,7 +75,9 @@ describe("New Resume Route (/resume/new)", () => {
     it("renders the page description", () => {
       renderNewResumeRoute();
       expect(
-        screen.getByText("Fill in your information to create a professional resume")
+        screen.getByText(
+          "Fill in your information to create a professional resume",
+        ),
       ).toBeInTheDocument();
     });
 
@@ -139,14 +141,17 @@ describe("New Resume Route (/resume/new)", () => {
   describe("Heading Text", () => {
     it("displays 'Create New Resume' as h1", () => {
       renderNewResumeRoute();
-      const heading = screen.getByRole("heading", { level: 1, name: /create new resume/i });
+      const heading = screen.getByRole("heading", {
+        level: 1,
+        name: /create new resume/i,
+      });
       expect(heading).toBeInTheDocument();
     });
 
     it("displays instructions for creating resume", () => {
       renderNewResumeRoute();
       const instructions = screen.getByText(
-        /fill in your information to create a professional resume/i
+        /fill in your information to create a professional resume/i,
       );
       expect(instructions).toBeInTheDocument();
     });

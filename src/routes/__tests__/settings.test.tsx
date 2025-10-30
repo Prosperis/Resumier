@@ -24,7 +24,9 @@ vi.mock("@/components/ui/route-error", () => ({
 }));
 
 vi.mock("@/components/ui/route-loading", () => ({
-  SettingsLoading: () => <div data-testid="settings-loading">Loading Settings...</div>,
+  SettingsLoading: () => (
+    <div data-testid="settings-loading">Loading Settings...</div>
+  ),
 }));
 
 // Import the route module after setting up mocks
@@ -54,28 +56,37 @@ describe("Settings Route", () => {
     it("renders the settings page", () => {
       renderSettingsRoute();
 
-      expect(screen.getByRole("heading", { name: /^settings$/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /^settings$/i }),
+      ).toBeInTheDocument();
     });
 
     it("renders the page description", () => {
       renderSettingsRoute();
 
       expect(
-        screen.getAllByText(/manage your account settings and preferences/i).length
+        screen.getAllByText(/manage your account settings and preferences/i)
+          .length,
       ).toBeGreaterThan(0);
     });
 
     it("renders the Account section", () => {
       renderSettingsRoute();
 
-      expect(screen.getByRole("heading", { name: /^account$/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /^account$/i }),
+      ).toBeInTheDocument();
     });
 
     it("renders the Appearance section", () => {
       renderSettingsRoute();
 
-      expect(screen.getByRole("heading", { name: /appearance/i })).toBeInTheDocument();
-      expect(screen.getByText(/customize how resumier looks/i)).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: /appearance/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/customize how resumier looks/i),
+      ).toBeInTheDocument();
     });
   });
 
@@ -111,7 +122,9 @@ describe("Settings Route", () => {
     it("renders sections with borders", () => {
       const { container } = renderSettingsRoute();
 
-      const borderedSections = container.querySelectorAll(".rounded-lg.border.p-6");
+      const borderedSections = container.querySelectorAll(
+        ".rounded-lg.border.p-6",
+      );
       expect(borderedSections.length).toBeGreaterThanOrEqual(2);
     });
 
@@ -144,7 +157,9 @@ describe("Settings Route", () => {
     it("uses proper heading styles for sections", () => {
       const { container } = renderSettingsRoute();
 
-      const sectionHeadings = container.querySelectorAll("h2.text-xl.font-semibold");
+      const sectionHeadings = container.querySelectorAll(
+        "h2.text-xl.font-semibold",
+      );
       expect(sectionHeadings.length).toBeGreaterThanOrEqual(2);
     });
 
@@ -160,13 +175,17 @@ describe("Settings Route", () => {
     it("mentions account management", () => {
       renderSettingsRoute();
 
-      expect(screen.getAllByText(/manage your account settings/i).length).toBeGreaterThan(0);
+      expect(
+        screen.getAllByText(/manage your account settings/i).length,
+      ).toBeGreaterThan(0);
     });
 
     it("mentions customization options", () => {
       renderSettingsRoute();
 
-      expect(screen.getByText(/customize how resumier looks/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/customize how resumier looks/i),
+      ).toBeInTheDocument();
     });
 
     it("has placeholder comments for future content", () => {

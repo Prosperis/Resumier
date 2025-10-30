@@ -106,7 +106,8 @@ export const useResumeStore = create<ResumeStore>()(
       setUserInfo: (info) => set({ userInfo: { ...info } }),
       setJobInfo: (info) => set({ jobInfo: { ...info } }),
       addJob: (job) => set((state) => ({ jobs: [...state.jobs, { ...job }] })),
-      removeJob: (index) => set((state) => ({ jobs: state.jobs.filter((_, i) => i !== index) })),
+      removeJob: (index) =>
+        set((state) => ({ jobs: state.jobs.filter((_, i) => i !== index) })),
       setContent: (data) => set({ content: { ...data } }),
       reset: () => set({ userInfo: {}, jobInfo: {}, jobs: [], content: {} }),
       // Reordering actions for drag and drop
@@ -114,35 +115,55 @@ export const useResumeStore = create<ResumeStore>()(
         set((state) => ({
           userInfo: {
             ...state.userInfo,
-            experiences: reorderArray(state.userInfo.experiences || [], startIndex, endIndex),
+            experiences: reorderArray(
+              state.userInfo.experiences || [],
+              startIndex,
+              endIndex,
+            ),
           },
         })),
       reorderEducation: (startIndex, endIndex) =>
         set((state) => ({
           userInfo: {
             ...state.userInfo,
-            education: reorderArray(state.userInfo.education || [], startIndex, endIndex),
+            education: reorderArray(
+              state.userInfo.education || [],
+              startIndex,
+              endIndex,
+            ),
           },
         })),
       reorderSkills: (startIndex, endIndex) =>
         set((state) => ({
           userInfo: {
             ...state.userInfo,
-            skills: reorderArray(state.userInfo.skills || [], startIndex, endIndex),
+            skills: reorderArray(
+              state.userInfo.skills || [],
+              startIndex,
+              endIndex,
+            ),
           },
         })),
       reorderCertifications: (startIndex, endIndex) =>
         set((state) => ({
           userInfo: {
             ...state.userInfo,
-            certifications: reorderArray(state.userInfo.certifications || [], startIndex, endIndex),
+            certifications: reorderArray(
+              state.userInfo.certifications || [],
+              startIndex,
+              endIndex,
+            ),
           },
         })),
       reorderLinks: (startIndex, endIndex) =>
         set((state) => ({
           userInfo: {
             ...state.userInfo,
-            links: reorderArray(state.userInfo.links || [], startIndex, endIndex),
+            links: reorderArray(
+              state.userInfo.links || [],
+              startIndex,
+              endIndex,
+            ),
           },
         })),
     }),
@@ -160,6 +181,6 @@ export const useResumeStore = create<ResumeStore>()(
           await del(name);
         },
       })),
-    }
-  )
+    },
+  ),
 );

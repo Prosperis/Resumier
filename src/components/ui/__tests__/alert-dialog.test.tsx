@@ -22,14 +22,16 @@ describe("AlertDialog", () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogDescription>
+              This action cannot be undone.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction>Continue</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByText("Open Dialog")).toBeInTheDocument();
@@ -48,7 +50,7 @@ describe("AlertDialog", () => {
         <AlertDialogContent>
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByText("Title")).toBeInTheDocument();
@@ -61,7 +63,7 @@ describe("AlertDialog", () => {
         <AlertDialogContent>
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByText("Title")).toBeInTheDocument();
@@ -78,7 +80,7 @@ describe("AlertDialog", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     await user.click(screen.getByText("Open"));
@@ -97,7 +99,7 @@ describe("AlertDialogTrigger", () => {
         <AlertDialogContent>
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByText("Trigger Button")).toBeInTheDocument();
@@ -111,7 +113,7 @@ describe("AlertDialogTrigger", () => {
         <AlertDialogContent>
           <AlertDialogTitle>Dialog Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     await user.click(screen.getByText("Open"));
@@ -130,7 +132,7 @@ describe("AlertDialogContent", () => {
         <AlertDialogContent data-testid="content">
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("content")).toBeInTheDocument();
@@ -143,7 +145,7 @@ describe("AlertDialogContent", () => {
         <AlertDialogContent className="custom-dialog" data-testid="content">
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("content")).toHaveClass("custom-dialog");
@@ -156,7 +158,7 @@ describe("AlertDialogContent", () => {
         <AlertDialogContent data-testid="content">
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     const content = screen.getByTestId("content");
@@ -174,7 +176,7 @@ describe("AlertDialogHeader", () => {
             <AlertDialogTitle>Title</AlertDialogTitle>
           </AlertDialogHeader>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("header")).toBeInTheDocument();
@@ -189,7 +191,7 @@ describe("AlertDialogHeader", () => {
             <AlertDialogTitle>Title</AlertDialogTitle>
           </AlertDialogHeader>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("header")).toHaveClass("flex", "flex-col");
@@ -204,7 +206,7 @@ describe("AlertDialogHeader", () => {
             <AlertDialogTitle>Title</AlertDialogTitle>
           </AlertDialogHeader>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("header")).toHaveClass("custom-header");
@@ -222,7 +224,7 @@ describe("AlertDialogFooter", () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("footer")).toBeInTheDocument();
@@ -238,7 +240,7 @@ describe("AlertDialogFooter", () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("footer")).toHaveClass("flex");
@@ -254,7 +256,7 @@ describe("AlertDialogFooter", () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("footer")).toHaveClass("custom-footer");
@@ -269,7 +271,7 @@ describe("AlertDialogTitle", () => {
         <AlertDialogContent>
           <AlertDialogTitle>Dialog Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByText("Dialog Title")).toBeInTheDocument();
@@ -282,7 +284,7 @@ describe("AlertDialogTitle", () => {
         <AlertDialogContent>
           <AlertDialogTitle data-testid="title">Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("title")).toHaveClass("text-lg", "font-semibold");
@@ -297,7 +299,7 @@ describe("AlertDialogTitle", () => {
             Title
           </AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("title")).toHaveClass("custom-title");
@@ -313,7 +315,7 @@ describe("AlertDialogDescription", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogDescription>This is a description</AlertDialogDescription>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByText("This is a description")).toBeInTheDocument();
@@ -325,12 +327,17 @@ describe("AlertDialogDescription", () => {
         <AlertDialogTrigger>Open</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogTitle>Title</AlertDialogTitle>
-          <AlertDialogDescription data-testid="description">Description</AlertDialogDescription>
+          <AlertDialogDescription data-testid="description">
+            Description
+          </AlertDialogDescription>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
-    expect(screen.getByTestId("description")).toHaveClass("text-sm", "text-muted-foreground");
+    expect(screen.getByTestId("description")).toHaveClass(
+      "text-sm",
+      "text-muted-foreground",
+    );
   });
 
   it("renders with custom className", () => {
@@ -339,11 +346,14 @@ describe("AlertDialogDescription", () => {
         <AlertDialogTrigger>Open</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogTitle>Title</AlertDialogTitle>
-          <AlertDialogDescription className="custom-desc" data-testid="description">
+          <AlertDialogDescription
+            className="custom-desc"
+            data-testid="description"
+          >
             Description
           </AlertDialogDescription>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("description")).toHaveClass("custom-desc");
@@ -359,7 +369,7 @@ describe("AlertDialogAction", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogAction>Confirm</AlertDialogAction>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByText("Confirm")).toBeInTheDocument();
@@ -374,7 +384,7 @@ describe("AlertDialogAction", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogAction>Confirm</AlertDialogAction>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     await user.click(screen.getByText("Confirm"));
@@ -395,7 +405,7 @@ describe("AlertDialogAction", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogAction onClick={handleClick}>Confirm</AlertDialogAction>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     await user.click(screen.getByText("Confirm"));
@@ -412,7 +422,7 @@ describe("AlertDialogAction", () => {
             Confirm
           </AlertDialogAction>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("action")).toHaveClass("custom-action");
@@ -428,7 +438,7 @@ describe("AlertDialogCancel", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByText("Cancel")).toBeInTheDocument();
@@ -443,7 +453,7 @@ describe("AlertDialogCancel", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     await user.click(screen.getByText("Cancel"));
@@ -464,7 +474,7 @@ describe("AlertDialogCancel", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogCancel onClick={handleClick}>Cancel</AlertDialogCancel>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     await user.click(screen.getByText("Cancel"));
@@ -481,7 +491,7 @@ describe("AlertDialogCancel", () => {
             Cancel
           </AlertDialogCancel>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     expect(screen.getByTestId("cancel")).toHaveClass("custom-cancel");
@@ -497,7 +507,7 @@ describe("AlertDialog accessibility", () => {
           <AlertDialogTitle>Alert Title</AlertDialogTitle>
           <AlertDialogDescription>Alert Description</AlertDialogDescription>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     // Radix UI adds proper ARIA roles
@@ -514,7 +524,7 @@ describe("AlertDialog accessibility", () => {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction>Confirm</AlertDialogAction>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog>,
     );
 
     const trigger = screen.getByText("Open");

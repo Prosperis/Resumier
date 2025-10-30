@@ -26,7 +26,7 @@ const THRESHOLDS = {
  */
 function getRating(
   name: keyof typeof THRESHOLDS,
-  value: number
+  value: number,
 ): "good" | "needs-improvement" | "poor" {
   const threshold = THRESHOLDS[name];
   if (value <= threshold.good) return "good";
@@ -38,7 +38,10 @@ function getRating(
  * Send Web Vitals metric to Sentry
  */
 function sendToSentry(metric: Metric) {
-  const rating = getRating(metric.name as keyof typeof THRESHOLDS, metric.value);
+  const rating = getRating(
+    metric.name as keyof typeof THRESHOLDS,
+    metric.value,
+  );
 
   // Set measurement in Sentry for performance monitoring
   Sentry.setMeasurement(metric.name, metric.value, "millisecond");
@@ -63,7 +66,10 @@ function sendToSentry(metric: Metric) {
 
   // Console log in development
   if (import.meta.env.DEV) {
-    console.log(`[Web Vitals] ${metric.name}: ${metric.value.toFixed(2)}ms (${rating})`, metric);
+    console.log(
+      `[Web Vitals] ${metric.name}: ${metric.value.toFixed(2)}ms (${rating})`,
+      metric,
+    );
   }
 }
 
@@ -137,7 +143,8 @@ export async function logWebVitalsSummary() {
   console.group("📊 Web Vitals Summary");
   for (const [name, value] of Object.entries(metrics)) {
     const rating = getRating(name as keyof typeof THRESHOLDS, value);
-    const emoji = rating === "good" ? "✅" : rating === "needs-improvement" ? "⚠️" : "❌";
+    const emoji =
+      rating === "good" ? "✅" : rating === "needs-improvement" ? "⚠️" : "❌";
     console.log(`${emoji} ${name}: ${value.toFixed(2)}ms (${rating})`);
   }
   console.groupEnd();

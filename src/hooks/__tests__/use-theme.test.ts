@@ -1,5 +1,13 @@
 import { act, renderHook } from "@testing-library/react";
-import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 import { useTheme } from "@/hooks/use-theme";
 
 let originalMatchMedia: typeof window.matchMedia;

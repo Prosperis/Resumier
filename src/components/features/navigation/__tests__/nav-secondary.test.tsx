@@ -23,7 +23,9 @@ vi.mock("@/components/ui/sidebar", () => ({
     children,
     asChild,
     ...props
-  }: React.PropsWithChildren<{ asChild?: boolean } & React.HTMLAttributes<HTMLElement>>) => {
+  }: React.PropsWithChildren<
+    { asChild?: boolean } & React.HTMLAttributes<HTMLElement>
+  >) => {
     if (asChild) {
       return (
         <div data-testid="sidebar-menu-button" {...props}>
@@ -108,7 +110,13 @@ describe("NavSecondary", () => {
 
   describe("Props", () => {
     it("forwards additional props to SidebarGroup", () => {
-      render(<NavSecondary items={mockItems} className="custom-class" data-testid="custom-nav" />);
+      render(
+        <NavSecondary
+          items={mockItems}
+          className="custom-class"
+          data-testid="custom-nav"
+        />,
+      );
 
       const group = screen.getByTestId("custom-nav");
       expect(group).toBeInTheDocument();

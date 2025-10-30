@@ -213,7 +213,7 @@ describe("Spring Preset Transitions", () => {
     it("should have moderate stiffness", () => {
       expect(smoothSpringTransition.stiffness).toBeDefined();
       expect(Number(smoothSpringTransition.stiffness)).toBeLessThan(
-        Number(stiffSpringTransition.stiffness)
+        Number(stiffSpringTransition.stiffness),
       );
     });
 
@@ -226,7 +226,7 @@ describe("Spring Preset Transitions", () => {
     it("should have low damping", () => {
       expect(bouncySpringTransition.damping).toBeDefined();
       expect(Number(bouncySpringTransition.damping)).toBeLessThan(
-        Number(smoothSpringTransition.damping)
+        Number(smoothSpringTransition.damping),
       );
     });
 

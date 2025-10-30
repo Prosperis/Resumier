@@ -5,7 +5,10 @@ import type { CreateResumeDto, Resume, UpdateResumeDto } from "./types";
  * Check if we should use mock API
  */
 export function useMockApi(): boolean {
-  return import.meta.env.MODE === "development" || import.meta.env.VITE_USE_MOCK_API === "true";
+  return (
+    import.meta.env.MODE === "development" ||
+    import.meta.env.VITE_USE_MOCK_API === "true"
+  );
 }
 
 /**
@@ -24,11 +27,16 @@ export const mockApi = {
   /**
    * Route a request to the appropriate handler
    */
-  async route(endpoint: string, method: string, body?: unknown): Promise<unknown> {
+  async route(
+    endpoint: string,
+    method: string,
+    body?: unknown,
+  ): Promise<unknown> {
     await delay();
 
     // Parse endpoint
-    const [, resource, id] = endpoint.match(/^\/api\/(\w+)(?:\/([^/]+))?/) || [];
+    const [, resource, id] =
+      endpoint.match(/^\/api\/(\w+)(?:\/([^/]+))?/) || [];
 
     if (resource === "resumes") {
       return this.handleResumes(method, id, body);
@@ -47,7 +55,7 @@ export const mockApi = {
   async handleResumes(
     method: string,
     id?: string,
-    body?: unknown
+    body?: unknown,
   ): Promise<Resume | Resume[] | { success: boolean }> {
     switch (method) {
       case "GET": {
@@ -121,7 +129,7 @@ export const mockApi = {
         // Cast to appropriate type for mockDb
         const updated = mockDb.updateResume(
           id,
-          updateData as Partial<Omit<Resume, "id" | "createdAt">>
+          updateData as Partial<Omit<Resume, "id" | "createdAt">>,
         );
 
         if (!updated) {
@@ -168,8 +176,10 @@ export const mockApi = {
   async handleAuth(
     endpoint: string,
     method: string,
-    body?: unknown
-  ): Promise<{ user: { id: string; email: string; name: string; token: string } }> {
+    body?: unknown,
+  ): Promise<{
+    user: { id: string; email: string; name: string; token: string };
+  }> {
     if (endpoint === "/api/auth/login" && method === "POST") {
       const { email, password } = body as { email: string; password: string };
 

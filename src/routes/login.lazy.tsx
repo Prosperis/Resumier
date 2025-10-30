@@ -15,7 +15,9 @@ function LoginComponent() {
       <div className="w-full max-w-md space-y-8 p-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
-          <p className="text-muted-foreground mt-2 text-sm">Sign in to your account to continue</p>
+          <p className="text-muted-foreground mt-2 text-sm">
+            Sign in to your account to continue
+          </p>
         </div>
 
         <LoginForm />

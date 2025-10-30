@@ -24,7 +24,9 @@ describe("LinkFormDialog", () => {
       expect(screen.getByRole("dialog")).toBeInTheDocument();
       expect(screen.getByText("Add Link")).toBeInTheDocument();
       expect(
-        screen.getByText("Add a link to your portfolio, social media, or other profiles.")
+        screen.getByText(
+          "Add a link to your portfolio, social media, or other profiles.",
+        ),
       ).toBeInTheDocument();
     });
     it("renders with custom title and description", () => {
@@ -33,10 +35,12 @@ describe("LinkFormDialog", () => {
           {...defaultProps}
           title="Edit Link"
           description="Update your link information."
-        />
+        />,
       );
       expect(screen.getByText("Edit Link")).toBeInTheDocument();
-      expect(screen.getByText("Update your link information.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Update your link information."),
+      ).toBeInTheDocument();
     });
     it("does not render when closed", () => {
       render(<LinkFormDialog {...defaultProps} open={false} />);
@@ -50,14 +54,24 @@ describe("LinkFormDialog", () => {
     });
     it("renders action buttons", () => {
       render(<LinkFormDialog {...defaultProps} />);
-      expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /^save$/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /cancel/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /^save$/i }),
+      ).toBeInTheDocument();
     });
     it("shows field descriptions", () => {
       render(<LinkFormDialog {...defaultProps} />);
-      expect(screen.getByText(/choose the type of link you're adding/i)).toBeInTheDocument();
-      expect(screen.getByText(/display name for this link/i)).toBeInTheDocument();
-      expect(screen.getByText(/full url including https:\/\//i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/choose the type of link you're adding/i),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/display name for this link/i),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(/full url including https:\/\//i),
+      ).toBeInTheDocument();
     });
   });
   describe("Link Type Dropdown", () => {
@@ -66,14 +80,24 @@ describe("LinkFormDialog", () => {
       const typeSelect = screen.getByLabelText(/link type/i);
       expect(typeSelect).toBeInTheDocument();
       // Check all options are present
-      expect(screen.getByRole("option", { name: /portfolio/i })).toBeInTheDocument();
-      expect(screen.getByRole("option", { name: /linkedin/i })).toBeInTheDocument();
-      expect(screen.getByRole("option", { name: /github/i })).toBeInTheDocument();
-      expect(screen.getByRole("option", { name: /other/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("option", { name: /portfolio/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("option", { name: /linkedin/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("option", { name: /github/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("option", { name: /other/i }),
+      ).toBeInTheDocument();
     });
     it("defaults to 'other' type", () => {
       render(<LinkFormDialog {...defaultProps} />);
-      const typeSelect = screen.getByLabelText(/link type/i) as HTMLSelectElement;
+      const typeSelect = screen.getByLabelText(
+        /link type/i,
+      ) as HTMLSelectElement;
       expect(typeSelect.value).toBe("other");
     });
     it("allows selecting portfolio type", async () => {
@@ -99,7 +123,9 @@ describe("LinkFormDialog", () => {
     });
     it("shows description for link type", () => {
       render(<LinkFormDialog {...defaultProps} />);
-      expect(screen.getByText(/choose the type of link you're adding/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/choose the type of link you're adding/i),
+      ).toBeInTheDocument();
     });
   });
   describe("Form Interaction", () => {
@@ -156,7 +182,10 @@ describe("LinkFormDialog", () => {
       render(<LinkFormDialog {...defaultProps} onSubmit={onSubmit} />);
       await user.selectOptions(screen.getByLabelText(/link type/i), "github");
       await user.type(screen.getByLabelText(/^label$/i), "GitHub Profile");
-      await user.type(screen.getByLabelText(/^url$/i), "https://github.com/user");
+      await user.type(
+        screen.getByLabelText(/^url$/i),
+        "https://github.com/user",
+      );
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
@@ -173,7 +202,10 @@ describe("LinkFormDialog", () => {
       render(<LinkFormDialog {...defaultProps} onSubmit={onSubmit} />);
       await user.selectOptions(screen.getByLabelText(/link type/i), "linkedin");
       await user.type(screen.getByLabelText(/^label$/i), "LinkedIn");
-      await user.type(screen.getByLabelText(/^url$/i), "https://linkedin.com/in/user");
+      await user.type(
+        screen.getByLabelText(/^url$/i),
+        "https://linkedin.com/in/user",
+      );
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
@@ -229,7 +261,9 @@ describe("LinkFormDialog", () => {
     it("resets link type to 'other' after submission", async () => {
       const user = userEvent.setup();
       render(<LinkFormDialog {...defaultProps} />);
-      const typeSelect = screen.getByLabelText(/link type/i) as HTMLSelectElement;
+      const typeSelect = screen.getByLabelText(
+        /link type/i,
+      ) as HTMLSelectElement;
       await user.selectOptions(typeSelect, "github");
       await user.type(screen.getByLabelText(/^label$/i), "Test");
       await user.type(screen.getByLabelText(/^url$/i), "https://test.com");
@@ -266,16 +300,22 @@ describe("LinkFormDialog", () => {
         label: "Default GitHub",
         url: "https://github.com/default",
       };
-      render(<LinkFormDialog {...defaultProps} defaultValues={defaultValues} />);
+      render(
+        <LinkFormDialog {...defaultProps} defaultValues={defaultValues} />,
+      );
       expect(screen.getByLabelText(/link type/i)).toHaveValue("github");
       expect(screen.getByLabelText(/^label$/i)).toHaveValue("Default GitHub");
-      expect(screen.getByLabelText(/^url$/i)).toHaveValue("https://github.com/default");
+      expect(screen.getByLabelText(/^url$/i)).toHaveValue(
+        "https://github.com/default",
+      );
     });
     it("handles partial default values", () => {
       const defaultValues = {
         label: "Partial Link",
       };
-      render(<LinkFormDialog {...defaultProps} defaultValues={defaultValues} />);
+      render(
+        <LinkFormDialog {...defaultProps} defaultValues={defaultValues} />,
+      );
       expect(screen.getByLabelText(/^label$/i)).toHaveValue("Partial Link");
       expect(screen.getByLabelText(/^url$/i)).toHaveValue("");
       expect(screen.getByLabelText(/link type/i)).toHaveValue("other");
@@ -286,10 +326,14 @@ describe("LinkFormDialog", () => {
         label: "My Portfolio",
         url: "https://portfolio.com",
       };
-      render(<LinkFormDialog {...defaultProps} defaultValues={defaultValues} />);
+      render(
+        <LinkFormDialog {...defaultProps} defaultValues={defaultValues} />,
+      );
       expect(screen.getByLabelText(/link type/i)).toHaveValue("portfolio");
       expect(screen.getByLabelText(/^label$/i)).toHaveValue("My Portfolio");
-      expect(screen.getByLabelText(/^url$/i)).toHaveValue("https://portfolio.com");
+      expect(screen.getByLabelText(/^url$/i)).toHaveValue(
+        "https://portfolio.com",
+      );
     });
     it("populates with linkedin type default", () => {
       const defaultValues = {
@@ -297,10 +341,14 @@ describe("LinkFormDialog", () => {
         label: "LinkedIn Profile",
         url: "https://linkedin.com/in/user",
       };
-      render(<LinkFormDialog {...defaultProps} defaultValues={defaultValues} />);
+      render(
+        <LinkFormDialog {...defaultProps} defaultValues={defaultValues} />,
+      );
       expect(screen.getByLabelText(/link type/i)).toHaveValue("linkedin");
       expect(screen.getByLabelText(/^label$/i)).toHaveValue("LinkedIn Profile");
-      expect(screen.getByLabelText(/^url$/i)).toHaveValue("https://linkedin.com/in/user");
+      expect(screen.getByLabelText(/^url$/i)).toHaveValue(
+        "https://linkedin.com/in/user",
+      );
     });
   });
   describe("Form Validation", () => {
@@ -351,20 +399,25 @@ describe("LinkFormDialog", () => {
       const onSubmit = vi.fn();
       render(<LinkFormDialog {...defaultProps} onSubmit={onSubmit} />);
       await user.type(screen.getByLabelText(/^label$/i), "Valid URL");
-      await user.type(screen.getByLabelText(/^url$/i), "https://valid-url.com/path?query=1");
+      await user.type(
+        screen.getByLabelText(/^url$/i),
+        "https://valid-url.com/path?query=1",
+      );
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
         expect(onSubmit).toHaveBeenCalledWith(
           expect.objectContaining({
             url: "https://valid-url.com/path?query=1",
-          })
+          }),
         );
       });
     });
     it("shows URL description", () => {
       render(<LinkFormDialog {...defaultProps} />);
-      expect(screen.getByText(/full url including https:\/\//i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/full url including https:\/\//i),
+      ).toBeInTheDocument();
     });
   });
   describe("Placeholder Text", () => {

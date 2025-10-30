@@ -25,12 +25,17 @@ interface EducationListProps {
   onReorder?: (education: Education[]) => void;
 }
 
-export function EducationList({ education, onEdit, onDelete, onReorder }: EducationListProps) {
+export function EducationList({
+  education,
+  onEdit,
+  onDelete,
+  onReorder,
+}: EducationListProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -55,7 +60,9 @@ export function EducationList({ education, onEdit, onDelete, onReorder }: Educat
     return (
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-          <p className="text-muted-foreground text-sm">No education added yet.</p>
+          <p className="text-muted-foreground text-sm">
+            No education added yet.
+          </p>
           <p className="text-muted-foreground mt-1 text-xs">
             Click "Add Education" to get started.
           </p>
@@ -91,7 +98,11 @@ export function EducationList({ education, onEdit, onDelete, onReorder }: Educat
   };
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
       <SortableContext
         items={education.map((edu) => edu.id)}
         strategy={verticalListSortingStrategy}
@@ -105,7 +116,9 @@ export function EducationList({ education, onEdit, onDelete, onReorder }: Educat
                     <div className="flex-1">
                       <h3 className="font-semibold">{edu.degree}</h3>
                       <p className="text-sm font-medium">{edu.institution}</p>
-                      <p className="text-muted-foreground text-sm">{edu.field}</p>
+                      <p className="text-muted-foreground text-sm">
+                        {edu.field}
+                      </p>
                       <div className="text-muted-foreground mt-1 flex items-center gap-1 text-xs">
                         <CalendarIcon className="h-3 w-3" />
                         <span>{formatDateRange(edu)}</span>
@@ -131,7 +144,8 @@ export function EducationList({ education, onEdit, onDelete, onReorder }: Educat
                     </div>
                   </div>
                 </CardHeader>
-                {((edu.gpa && edu.gpa.trim() !== "") || (edu.honors && edu.honors.length > 0)) && (
+                {((edu.gpa && edu.gpa.trim() !== "") ||
+                  (edu.honors && edu.honors.length > 0)) && (
                   <CardContent>
                     {edu.gpa && edu.gpa.trim() !== "" && (
                       <p className="text-sm">

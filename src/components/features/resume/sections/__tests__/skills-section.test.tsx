@@ -34,7 +34,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       expect(screen.getByDisplayValue("JavaScript")).toBeInTheDocument();
@@ -48,7 +48,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       expect(screen.getByText("Add Skill")).toBeInTheDocument();
@@ -61,7 +61,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const removeButtons = screen.queryAllByText("Remove");
@@ -76,7 +76,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const skillCards = container.querySelectorAll(".border.p-4.rounded-md");
@@ -92,7 +92,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       expect(screen.getByDisplayValue("JavaScript")).toBeInTheDocument();
@@ -107,14 +107,18 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const skillInput = screen.getByDisplayValue("JavaScript");
       await user.type(skillInput, "X");
 
       expect(mockUpdateSkill).toHaveBeenCalled();
-      expect(mockUpdateSkill).toHaveBeenCalledWith(0, "name", expect.any(String));
+      expect(mockUpdateSkill).toHaveBeenCalledWith(
+        0,
+        "name",
+        expect.any(String),
+      );
     });
 
     it("renders skill name placeholder", () => {
@@ -124,7 +128,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       expect(screen.getByPlaceholderText("Skill name")).toBeInTheDocument();
@@ -139,7 +143,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       expect(screen.getByDisplayValue("5")).toBeInTheDocument();
@@ -154,14 +158,18 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const yearsInput = screen.getByDisplayValue("5");
       await user.type(yearsInput, "7");
 
       expect(mockUpdateSkill).toHaveBeenCalled();
-      expect(mockUpdateSkill).toHaveBeenCalledWith(0, "years", expect.any(String));
+      expect(mockUpdateSkill).toHaveBeenCalledWith(
+        0,
+        "years",
+        expect.any(String),
+      );
     });
 
     it("renders years input as number type", () => {
@@ -171,7 +179,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const yearsInput = screen.getByDisplayValue("5");
@@ -185,7 +193,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const yearsInput = screen.getByDisplayValue("5");
@@ -199,7 +207,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       expect(screen.getByPlaceholderText("0")).toBeInTheDocument();
@@ -214,7 +222,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const selects = container.querySelectorAll("select");
@@ -230,13 +238,17 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const proficiencySelect = container.querySelectorAll("select")[0];
       await user.selectOptions(proficiencySelect, "intermediate");
 
-      expect(mockUpdateSkill).toHaveBeenCalledWith(0, "proficiency", "intermediate");
+      expect(mockUpdateSkill).toHaveBeenCalledWith(
+        0,
+        "proficiency",
+        "intermediate",
+      );
     });
 
     it("has correct proficiency options", () => {
@@ -246,14 +258,20 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const select = container.querySelector("select");
       expect(select).toContainHTML('<option value="">Select</option>');
-      expect(select).toContainHTML('<option value="beginner">Beginner</option>');
-      expect(select).toContainHTML('<option value="intermediate">Intermediate</option>');
-      expect(select).toContainHTML('<option value="professional">Professional</option>');
+      expect(select).toContainHTML(
+        '<option value="beginner">Beginner</option>',
+      );
+      expect(select).toContainHTML(
+        '<option value="intermediate">Intermediate</option>',
+      );
+      expect(select).toContainHTML(
+        '<option value="professional">Professional</option>',
+      );
       expect(select).toContainHTML('<option value="expert">Expert</option>');
     });
 
@@ -264,7 +282,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const select = container.querySelector("select");
@@ -283,7 +301,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const addButton = screen.getByText("Add Skill");
@@ -299,7 +317,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const addButton = screen.getByText("Add Skill");
@@ -314,7 +332,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const addButton = screen.getByText("Add Skill");
@@ -330,7 +348,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const removeButtons = screen.getAllByText("Remove");
@@ -345,7 +363,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const removeButtons = screen.getAllByText("Remove");
@@ -362,7 +380,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const removeButtons = screen.getAllByText("Remove");
@@ -378,7 +396,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const removeButtons = screen.getAllByText("Remove");
@@ -393,7 +411,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const removeButtons = screen.getAllByText("Remove");
@@ -407,7 +425,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const removeButtons = screen.getAllByText("Remove");
@@ -423,7 +441,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const skillLabels = screen.getAllByText("Skill");
@@ -437,7 +455,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const yearsLabels = screen.getAllByText("Years of Experience");
@@ -451,7 +469,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const proficiencyLabels = screen.getAllByText("Proficiency");
@@ -475,7 +493,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const nameInput = screen.getByPlaceholderText("Skill name");
@@ -502,7 +520,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const nameInput = screen.getByPlaceholderText("Skill name");
@@ -527,7 +545,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const removeButtons = screen.getAllByText("Remove");
@@ -549,7 +567,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       expect(screen.getByDisplayValue("A".repeat(200))).toBeInTheDocument();
@@ -570,7 +588,7 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
       const proficiencySelect = container.querySelector("select");
@@ -587,14 +605,24 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
-      const nameInputs = container.querySelectorAll('input[placeholder="Skill name"]');
+      const nameInputs = container.querySelectorAll(
+        'input[placeholder="Skill name"]',
+      );
       await user.type(nameInputs[0], "X");
 
-      expect(mockUpdateSkill).toHaveBeenCalledWith(0, "name", expect.any(String));
-      expect(mockUpdateSkill).not.toHaveBeenCalledWith(1, "name", expect.any(String));
+      expect(mockUpdateSkill).toHaveBeenCalledWith(
+        0,
+        "name",
+        expect.any(String),
+      );
+      expect(mockUpdateSkill).not.toHaveBeenCalledWith(
+        1,
+        "name",
+        expect.any(String),
+      );
     });
 
     it("can update different fields of different skills", async () => {
@@ -605,17 +633,27 @@ describe("SkillsSection", () => {
           addSkill={mockAddSkill}
           updateSkill={mockUpdateSkill}
           removeSkill={mockRemoveSkill}
-        />
+        />,
       );
 
-      const nameInputs = container.querySelectorAll('input[placeholder="Skill name"]');
+      const nameInputs = container.querySelectorAll(
+        'input[placeholder="Skill name"]',
+      );
       const yearsInputs = container.querySelectorAll('input[type="number"]');
 
       await user.type(nameInputs[0], "X");
       await user.type(yearsInputs[1], "9");
 
-      expect(mockUpdateSkill).toHaveBeenCalledWith(0, "name", expect.any(String));
-      expect(mockUpdateSkill).toHaveBeenCalledWith(1, "years", expect.any(String));
+      expect(mockUpdateSkill).toHaveBeenCalledWith(
+        0,
+        "name",
+        expect.any(String),
+      );
+      expect(mockUpdateSkill).toHaveBeenCalledWith(
+        1,
+        "years",
+        expect.any(String),
+      );
     });
   });
 });

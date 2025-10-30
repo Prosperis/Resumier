@@ -49,7 +49,8 @@ export function cleanupStaleQueries(): void {
   queries.forEach((query) => {
     const state = query.state;
     const isInactive = query.getObserversCount() === 0;
-    const isStale = state.isInvalidated || state.dataUpdatedAt < Date.now() - 1000 * 60 * 30; // 30 minutes
+    const isStale =
+      state.isInvalidated || state.dataUpdatedAt < Date.now() - 1000 * 60 * 30; // 30 minutes
 
     if (isInactive && isStale) {
       cache.remove(query);

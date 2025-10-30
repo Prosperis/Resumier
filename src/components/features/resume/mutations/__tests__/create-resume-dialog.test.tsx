@@ -57,9 +57,14 @@ describe("CreateResumeDialog", () => {
   });
 
   it("renders with custom trigger", () => {
-    render(<CreateResumeDialog trigger={<button type="button">Custom Trigger</button>} />, {
-      wrapper: createWrapper(),
-    });
+    render(
+      <CreateResumeDialog
+        trigger={<button type="button">Custom Trigger</button>}
+      />,
+      {
+        wrapper: createWrapper(),
+      },
+    );
 
     const button = screen.getByRole("button", { name: /custom trigger/i });
     expect(button).toBeInTheDocument();
@@ -123,7 +128,7 @@ describe("CreateResumeDialog", () => {
             links: [],
           }),
         }),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
 
@@ -152,7 +157,7 @@ describe("CreateResumeDialog", () => {
         expect.objectContaining({
           title: "Trimmed Title",
         }),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
   });
@@ -193,7 +198,9 @@ describe("CreateResumeDialog", () => {
 
     await user.click(screen.getByRole("button", { name: /new resume/i }));
 
-    const submitButton = screen.getByRole("button", { name: "Creating resume..." });
+    const submitButton = screen.getByRole("button", {
+      name: "Creating resume...",
+    });
     expect(submitButton).toBeDisabled();
   });
 

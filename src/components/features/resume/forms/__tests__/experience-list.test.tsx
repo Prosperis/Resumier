@@ -6,7 +6,9 @@ import { ExperienceList } from "../experience-list";
 
 // Mock the dnd-kit modules
 vi.mock("@dnd-kit/core", () => ({
-  DndContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DndContext: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   closestCenter: vi.fn(),
   useSensor: vi.fn(),
   useSensors: vi.fn(() => []),
@@ -15,7 +17,9 @@ vi.mock("@dnd-kit/core", () => ({
 }));
 
 vi.mock("@dnd-kit/sortable", () => ({
-  SortableContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SortableContext: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   verticalListSortingStrategy: vi.fn(),
   sortableKeyboardCoordinates: vi.fn(),
   useSortable: vi.fn(() => ({
@@ -37,7 +41,9 @@ vi.mock("@dnd-kit/utilities", () => ({
 }));
 
 vi.mock("../dnd/sortable-item", () => ({
-  SortableItem: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  SortableItem: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));
 
 vi.mock("../dnd/drag-handle", () => ({
@@ -91,15 +97,27 @@ describe("ExperienceList", () => {
 
   describe("Empty State", () => {
     it("renders empty state when no experiences", () => {
-      render(<ExperienceList experiences={[]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <ExperienceList
+          experiences={[]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("No experience added yet.")).toBeInTheDocument();
-      expect(screen.getByText('Click "Add Experience" to get started.')).toBeInTheDocument();
+      expect(
+        screen.getByText('Click "Add Experience" to get started.'),
+      ).toBeInTheDocument();
     });
 
     it("renders empty state with dashed border card", () => {
       const { container } = render(
-        <ExperienceList experiences={[]} onEdit={mockOnEdit} onDelete={mockOnDelete} />
+        <ExperienceList
+          experiences={[]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
       );
 
       const card = container.querySelector(".border-dashed");
@@ -114,7 +132,7 @@ describe("ExperienceList", () => {
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       expect(screen.getByText("Senior Software Engineer")).toBeInTheDocument();
@@ -128,7 +146,7 @@ describe("ExperienceList", () => {
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       expect(screen.getByText("Tech Corp")).toBeInTheDocument();
@@ -142,7 +160,7 @@ describe("ExperienceList", () => {
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       expect(screen.getByText("Jan 2020 – Jun 2023")).toBeInTheDocument();
@@ -154,7 +172,7 @@ describe("ExperienceList", () => {
           experiences={[sampleExperiences[2]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       expect(screen.getByText("Jul 2023 – Present")).toBeInTheDocument();
@@ -166,10 +184,12 @@ describe("ExperienceList", () => {
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
-      expect(screen.getByText("Led development of key features")).toBeInTheDocument();
+      expect(
+        screen.getByText("Led development of key features"),
+      ).toBeInTheDocument();
     });
 
     it("displays highlights as bullet list", () => {
@@ -178,11 +198,15 @@ describe("ExperienceList", () => {
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
-      expect(screen.getByText("Improved performance by 50%")).toBeInTheDocument();
-      expect(screen.getByText("Mentored junior developers")).toBeInTheDocument();
+      expect(
+        screen.getByText("Improved performance by 50%"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText("Mentored junior developers"),
+      ).toBeInTheDocument();
     });
 
     it("does not render CardContent when no description and no highlights", () => {
@@ -197,7 +221,7 @@ describe("ExperienceList", () => {
           experiences={[expWithoutContent]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       // Should render the position
@@ -218,10 +242,12 @@ describe("ExperienceList", () => {
           experiences={[expWithDescription]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
-      expect(screen.getByText("Led development of key features")).toBeInTheDocument();
+      expect(
+        screen.getByText("Led development of key features"),
+      ).toBeInTheDocument();
     });
 
     it("renders CardContent when only highlights are provided", () => {
@@ -235,10 +261,12 @@ describe("ExperienceList", () => {
           experiences={[expWithHighlights]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
-      expect(screen.getByText("Improved performance by 50%")).toBeInTheDocument();
+      expect(
+        screen.getByText("Improved performance by 50%"),
+      ).toBeInTheDocument();
     });
   });
 
@@ -250,7 +278,7 @@ describe("ExperienceList", () => {
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       const editButtons = screen.getAllByLabelText(/edit.*experience/i);
@@ -266,10 +294,12 @@ describe("ExperienceList", () => {
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
-      expect(screen.getByLabelText("Edit Senior Software Engineer experience")).toBeInTheDocument();
+      expect(
+        screen.getByLabelText("Edit Senior Software Engineer experience"),
+      ).toBeInTheDocument();
     });
 
     it("calls onEdit for different experiences independently", async () => {
@@ -279,7 +309,7 @@ describe("ExperienceList", () => {
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       const editButtons = screen.getAllByLabelText(/edit.*experience/i);
@@ -300,7 +330,7 @@ describe("ExperienceList", () => {
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       const deleteButtons = screen.getAllByLabelText(/delete.*experience/i);
@@ -316,11 +346,11 @@ describe("ExperienceList", () => {
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       expect(
-        screen.getByLabelText("Delete Senior Software Engineer experience")
+        screen.getByLabelText("Delete Senior Software Engineer experience"),
       ).toBeInTheDocument();
     });
 
@@ -331,7 +361,7 @@ describe("ExperienceList", () => {
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       const deleteButtons = screen.getAllByLabelText(/delete.*experience/i);
@@ -352,7 +382,13 @@ describe("ExperienceList", () => {
         endDate: "2020-01",
       };
 
-      render(<ExperienceList experiences={[exp]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <ExperienceList
+          experiences={[exp]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("Jan 2020 – Jan 2020")).toBeInTheDocument();
     });
@@ -364,7 +400,13 @@ describe("ExperienceList", () => {
         endDate: "2021-12",
       };
 
-      render(<ExperienceList experiences={[exp]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <ExperienceList
+          experiences={[exp]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("Dec 2020 – Dec 2021")).toBeInTheDocument();
     });
@@ -376,7 +418,13 @@ describe("ExperienceList", () => {
         endDate: "",
       };
 
-      render(<ExperienceList experiences={[exp]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <ExperienceList
+          experiences={[exp]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       // Should show empty string for end date
       expect(screen.getByText(/Jan 2020 –/)).toBeInTheDocument();
@@ -390,7 +438,7 @@ describe("ExperienceList", () => {
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       const positions = screen.getAllByRole("heading", { level: 3 });
@@ -406,7 +454,7 @@ describe("ExperienceList", () => {
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       const editButtons = screen.getAllByLabelText(/edit.*experience/i);
@@ -424,7 +472,7 @@ describe("ExperienceList", () => {
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       // Calendar icons are rendered via Lucide component
@@ -440,7 +488,13 @@ describe("ExperienceList", () => {
         highlights: [],
       };
 
-      render(<ExperienceList experiences={[exp]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <ExperienceList
+          experiences={[exp]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("Senior Software Engineer")).toBeInTheDocument();
       expect(screen.queryByRole("list")).not.toBeInTheDocument();
@@ -452,7 +506,13 @@ describe("ExperienceList", () => {
         highlights: undefined as unknown as string[],
       };
 
-      render(<ExperienceList experiences={[exp]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <ExperienceList
+          experiences={[exp]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("Senior Software Engineer")).toBeInTheDocument();
     });
@@ -463,7 +523,7 @@ describe("ExperienceList", () => {
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
-        />
+        />,
       );
 
       expect(screen.getByText("Senior Software Engineer")).toBeInTheDocument();
@@ -477,7 +537,13 @@ describe("ExperienceList", () => {
           "Very Long Position Title That Might Wrap Multiple Lines Senior Principal Staff Software Architect Engineer III",
       };
 
-      render(<ExperienceList experiences={[exp]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <ExperienceList
+          experiences={[exp]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText(/Very Long Position Title/)).toBeInTheDocument();
     });
@@ -485,10 +551,17 @@ describe("ExperienceList", () => {
     it("handles very long company names", () => {
       const exp: Experience = {
         ...sampleExperiences[0],
-        company: "Very Long Company Name International Corporation Limited LLC Inc",
+        company:
+          "Very Long Company Name International Corporation Limited LLC Inc",
       };
 
-      render(<ExperienceList experiences={[exp]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <ExperienceList
+          experiences={[exp]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText(/Very Long Company Name/)).toBeInTheDocument();
     });
@@ -498,10 +571,20 @@ describe("ExperienceList", () => {
     it("renders multiple highlights with bullets", () => {
       const exp: Experience = {
         ...sampleExperiences[0],
-        highlights: ["First achievement", "Second achievement", "Third achievement"],
+        highlights: [
+          "First achievement",
+          "Second achievement",
+          "Third achievement",
+        ],
       };
 
-      render(<ExperienceList experiences={[exp]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <ExperienceList
+          experiences={[exp]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("First achievement")).toBeInTheDocument();
       expect(screen.getByText("Second achievement")).toBeInTheDocument();
@@ -514,7 +597,13 @@ describe("ExperienceList", () => {
         highlights: ["Only highlight"],
       };
 
-      render(<ExperienceList experiences={[exp]} onEdit={mockOnEdit} onDelete={mockOnDelete} />);
+      render(
+        <ExperienceList
+          experiences={[exp]}
+          onEdit={mockOnEdit}
+          onDelete={mockOnDelete}
+        />,
+      );
 
       expect(screen.getByText("Only highlight")).toBeInTheDocument();
     });

@@ -16,7 +16,7 @@ describe("DropdownMenu Components", () => {
       render(
         <DropdownMenu>
           <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
-        </DropdownMenu>
+        </DropdownMenu>,
       );
       expect(screen.getByText("Open Menu")).toBeInTheDocument();
     });
@@ -27,7 +27,7 @@ describe("DropdownMenu Components", () => {
           <DropdownMenuTrigger>
             <span>Custom Trigger</span>
           </DropdownMenuTrigger>
-        </DropdownMenu>
+        </DropdownMenu>,
       );
       expect(screen.getByText("Custom Trigger")).toBeInTheDocument();
     });
@@ -38,7 +38,7 @@ describe("DropdownMenu Components", () => {
           <DropdownMenuTrigger asChild>
             <button type="button">Button Trigger</button>
           </DropdownMenuTrigger>
-        </DropdownMenu>
+        </DropdownMenu>,
       );
       expect(screen.getByRole("button")).toHaveTextContent("Button Trigger");
     });
@@ -51,14 +51,20 @@ describe("DropdownMenu Components", () => {
     });
 
     it("applies inset prop", () => {
-      const { container } = render(<DropdownMenuLabel inset>Inset Label</DropdownMenuLabel>);
+      const { container } = render(
+        <DropdownMenuLabel inset>Inset Label</DropdownMenuLabel>,
+      );
       const label = screen.getByText("Inset Label");
       expect(label.className).toContain("pl-8");
     });
 
     it("has data-slot attribute", () => {
-      const { container } = render(<DropdownMenuLabel>Label</DropdownMenuLabel>);
-      const label = container.querySelector('[data-slot="dropdown-menu-label"]');
+      const { container } = render(
+        <DropdownMenuLabel>Label</DropdownMenuLabel>,
+      );
+      const label = container.querySelector(
+        '[data-slot="dropdown-menu-label"]',
+      );
       expect(label).toBeInTheDocument();
     });
   });
@@ -79,7 +85,9 @@ describe("DropdownMenu Components", () => {
 
     it("has data-slot attribute", () => {
       const { container } = render(<DropdownMenuSeparator />);
-      const separator = container.querySelector('[data-slot="dropdown-menu-separator"]');
+      const separator = container.querySelector(
+        '[data-slot="dropdown-menu-separator"]',
+      );
       expect(separator).toBeInTheDocument();
     });
   });
@@ -102,8 +110,12 @@ describe("DropdownMenu Components", () => {
     });
 
     it("has data-slot attribute", () => {
-      const { container } = render(<DropdownMenuShortcut>⌘K</DropdownMenuShortcut>);
-      const shortcut = container.querySelector('[data-slot="dropdown-menu-shortcut"]');
+      const { container } = render(
+        <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>,
+      );
+      const shortcut = container.querySelector(
+        '[data-slot="dropdown-menu-shortcut"]',
+      );
       expect(shortcut).toBeInTheDocument();
     });
   });
@@ -118,7 +130,7 @@ describe("DropdownMenu Components", () => {
               <DropdownMenuLabel>Content Label</DropdownMenuLabel>
             </DropdownMenuContent>
           </DropdownMenuPortal>
-        </DropdownMenu>
+        </DropdownMenu>,
       );
       expect(screen.getByText("Open")).toBeInTheDocument();
     });
@@ -129,7 +141,7 @@ describe("DropdownMenu Components", () => {
       render(
         <DropdownMenu>
           <DropdownMenuTrigger>Actions</DropdownMenuTrigger>
-        </DropdownMenu>
+        </DropdownMenu>,
       );
       expect(screen.getByText("Actions")).toBeInTheDocument();
     });
@@ -139,7 +151,7 @@ describe("DropdownMenu Components", () => {
         <div>
           <DropdownMenuLabel>Section</DropdownMenuLabel>
           <DropdownMenuSeparator />
-        </div>
+        </div>,
       );
       expect(screen.getByText("Section")).toBeInTheDocument();
       expect(container.querySelector('[role="separator"]')).toBeInTheDocument();
@@ -151,7 +163,7 @@ describe("DropdownMenu Components", () => {
           <DropdownMenuTrigger>
             Menu <DropdownMenuShortcut>⌘M</DropdownMenuShortcut>
           </DropdownMenuTrigger>
-        </DropdownMenu>
+        </DropdownMenu>,
       );
       expect(screen.getByText("Menu")).toBeInTheDocument();
       expect(screen.getByText("⌘M")).toBeInTheDocument();

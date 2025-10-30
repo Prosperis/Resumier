@@ -16,7 +16,7 @@ export function DragHandle({ className, isDragging = false }: DragHandleProps) {
         "text-muted-foreground hover:text-foreground transition-colors",
         "touch-none p-1 select-none",
         isDragging && "text-primary cursor-grabbing",
-        className
+        className,
       )}
       aria-label="Drag to reorder"
     >

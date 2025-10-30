@@ -53,7 +53,10 @@ class MockDatabase {
             endDate: "2020-01",
             current: false,
             description: "Developed MVP and scaled to production",
-            highlights: ["Built full-stack application from scratch", "Implemented CI/CD pipeline"],
+            highlights: [
+              "Built full-stack application from scratch",
+              "Implemented CI/CD pipeline",
+            ],
           },
         ],
         education: [
@@ -157,7 +160,10 @@ class MockDatabase {
   /**
    * Update existing resume
    */
-  updateResume(id: string, updates: Partial<Omit<Resume, "id" | "createdAt">>): Resume | null {
+  updateResume(
+    id: string,
+    updates: Partial<Omit<Resume, "id" | "createdAt">>,
+  ): Resume | null {
     const existing = this.resumes.get(id);
     if (!existing) return null;
 
@@ -174,7 +180,10 @@ class MockDatabase {
             ...updates.content,
             // Merge nested objects properly
             personalInfo: updates.content.personalInfo
-              ? { ...existing.content.personalInfo, ...updates.content.personalInfo }
+              ? {
+                  ...existing.content.personalInfo,
+                  ...updates.content.personalInfo,
+                }
               : existing.content.personalInfo,
             skills: updates.content.skills
               ? { ...existing.content.skills, ...updates.content.skills }

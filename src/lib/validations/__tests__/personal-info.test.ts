@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { type PersonalInfoFormData, personalInfoSchema } from "../personal-info";
+import {
+  type PersonalInfoFormData,
+  personalInfoSchema,
+} from "../personal-info";
 
 describe("personalInfoSchema", () => {
   describe("Valid Data", () => {
@@ -75,7 +78,9 @@ describe("personalInfoSchema", () => {
       const result = personalInfoSchema.safeParse(data);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toBe("Name must be less than 100 characters");
+        expect(result.error.issues[0].message).toBe(
+          "Name must be less than 100 characters",
+        );
       }
     });
 
@@ -209,7 +214,11 @@ describe("personalInfoSchema", () => {
     });
 
     it("accepts international phone numbers", () => {
-      const internationalPhones = ["+44 20 7123 4567", "+81 3-1234-5678", "+86 10 1234 5678"];
+      const internationalPhones = [
+        "+44 20 7123 4567",
+        "+81 3-1234-5678",
+        "+86 10 1234 5678",
+      ];
 
       internationalPhones.forEach((phone) => {
         const result = personalInfoSchema.safeParse({
@@ -248,7 +257,9 @@ describe("personalInfoSchema", () => {
       const result = personalInfoSchema.safeParse(data);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toBe("Location must be less than 100 characters");
+        expect(result.error.issues[0].message).toBe(
+          "Location must be less than 100 characters",
+        );
       }
     });
 
@@ -308,7 +319,9 @@ describe("personalInfoSchema", () => {
       const result = personalInfoSchema.safeParse(data);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toBe("Summary must be less than 500 characters");
+        expect(result.error.issues[0].message).toBe(
+          "Summary must be less than 500 characters",
+        );
       }
     });
 

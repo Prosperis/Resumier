@@ -8,52 +8,64 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 // Lazy load form dialogs
 export const LazyExperienceFormDialog = lazy(() =>
-  import("../forms/experience-form-dialog").then((m) => ({ default: m.ExperienceFormDialog }))
+  import("../forms/experience-form-dialog").then((m) => ({
+    default: m.ExperienceFormDialog,
+  })),
 );
 
 export const LazyEducationFormDialog = lazy(() =>
-  import("../forms/education-form-dialog").then((m) => ({ default: m.EducationFormDialog }))
+  import("../forms/education-form-dialog").then((m) => ({
+    default: m.EducationFormDialog,
+  })),
 );
 
 export const LazyCertificationFormDialog = lazy(() =>
   import("../forms/certification-form-dialog").then((m) => ({
     default: m.CertificationFormDialog,
-  }))
+  })),
 );
 
 export const LazyLinkFormDialog = lazy(() =>
-  import("../forms/link-form-dialog").then((m) => ({ default: m.LinkFormDialog }))
+  import("../forms/link-form-dialog").then((m) => ({
+    default: m.LinkFormDialog,
+  })),
 );
 
 // Lazy load list components (with drag-and-drop)
 export const LazyExperienceList = lazy(() =>
-  import("../forms/experience-list").then((m) => ({ default: m.ExperienceList }))
+  import("../forms/experience-list").then((m) => ({
+    default: m.ExperienceList,
+  })),
 );
 
 export const LazyEducationList = lazy(() =>
-  import("../forms/education-list").then((m) => ({ default: m.EducationList }))
+  import("../forms/education-list").then((m) => ({ default: m.EducationList })),
 );
 
 export const LazyCertificationList = lazy(() =>
-  import("../forms/certification-list").then((m) => ({ default: m.CertificationList }))
+  import("../forms/certification-list").then((m) => ({
+    default: m.CertificationList,
+  })),
 );
 
 export const LazyLinkList = lazy(() =>
-  import("../forms/link-list").then((m) => ({ default: m.LinkList }))
+  import("../forms/link-list").then((m) => ({ default: m.LinkList })),
 );
 
 // Lazy load inline forms
 export const LazyPersonalInfoForm = lazy(() =>
-  import("../forms/personal-info-form").then((m) => ({ default: m.PersonalInfoForm }))
+  import("../forms/personal-info-form").then((m) => ({
+    default: m.PersonalInfoForm,
+  })),
 );
 
 export const LazySkillsForm = lazy(() =>
-  import("../forms/skills-form").then((m) => ({ default: m.SkillsForm }))
+  import("../forms/skills-form").then((m) => ({ default: m.SkillsForm })),
 );
 
 // Lazy load PDF viewer
 export const LazyPdfViewer = lazy(() =>
-  import("../pdf-viewer").then((m) => ({ default: m.PdfViewer }))
+  import("../pdf-viewer").then((m) => ({ default: m.PdfViewer })),
 );
 
 /**
@@ -104,7 +116,10 @@ interface LazyFormDialogProps extends Record<string, unknown> {
   component: React.ComponentType<Record<string, unknown>>;
 }
 
-export function LazyFormDialog({ component: Component, ...props }: LazyFormDialogProps) {
+export function LazyFormDialog({
+  component: Component,
+  ...props
+}: LazyFormDialogProps) {
   return (
     <Suspense fallback={<FormDialogSkeleton />}>
       <Component {...props} />
@@ -112,7 +127,10 @@ export function LazyFormDialog({ component: Component, ...props }: LazyFormDialo
   );
 }
 
-export function LazyFormList({ component: Component, ...props }: LazyFormDialogProps) {
+export function LazyFormList({
+  component: Component,
+  ...props
+}: LazyFormDialogProps) {
   return (
     <Suspense fallback={<ListSkeleton />}>
       <Component {...props} />
@@ -120,7 +138,10 @@ export function LazyFormList({ component: Component, ...props }: LazyFormDialogP
   );
 }
 
-export function LazyForm({ component: Component, ...props }: LazyFormDialogProps) {
+export function LazyForm({
+  component: Component,
+  ...props
+}: LazyFormDialogProps) {
   return (
     <Suspense fallback={<FormSkeleton />}>
       <Component {...props} />

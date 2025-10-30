@@ -4,7 +4,9 @@ import { Providers } from "../providers";
 
 // Mock React Query devtools
 vi.mock("@tanstack/react-query-devtools", () => ({
-  ReactQueryDevtools: () => <div data-testid="react-query-devtools">DevTools</div>,
+  ReactQueryDevtools: () => (
+    <div data-testid="react-query-devtools">DevTools</div>
+  ),
 }));
 
 describe("Providers", () => {
@@ -17,7 +19,7 @@ describe("Providers", () => {
       render(
         <Providers>
           <div>Test Content</div>
-        </Providers>
+        </Providers>,
       );
 
       expect(screen.getByText("Test Content")).toBeInTheDocument();
@@ -34,7 +36,7 @@ describe("Providers", () => {
       render(
         <Providers>
           <TestComponent />
-        </Providers>
+        </Providers>,
       );
 
       expect(screen.getByText("Has QueryClient")).toBeInTheDocument();
@@ -47,7 +49,7 @@ describe("Providers", () => {
       render(
         <Providers>
           <div>Test Content</div>
-        </Providers>
+        </Providers>,
       );
 
       // The mock will render if import.meta.env.DEV is true
@@ -60,7 +62,7 @@ describe("Providers", () => {
       render(
         <Providers>
           <div>Test Content</div>
-        </Providers>
+        </Providers>,
       );
 
       // The devtools mock might or might not be present depending on environment
@@ -74,7 +76,7 @@ describe("Providers", () => {
       render(
         <Providers>
           <div>Single Child</div>
-        </Providers>
+        </Providers>,
       );
 
       expect(screen.getByText("Single Child")).toBeInTheDocument();
@@ -86,7 +88,7 @@ describe("Providers", () => {
           <div>First Child</div>
           <div>Second Child</div>
           <div>Third Child</div>
-        </Providers>
+        </Providers>,
       );
 
       expect(screen.getByText("First Child")).toBeInTheDocument();
@@ -99,7 +101,7 @@ describe("Providers", () => {
         <Providers>
           <div>Fragment Child 1</div>
           <div>Fragment Child 2</div>
-        </Providers>
+        </Providers>,
       );
 
       expect(screen.getByText("Fragment Child 1")).toBeInTheDocument();
@@ -112,7 +114,7 @@ describe("Providers", () => {
       render(
         <Providers>
           <NestedComponent />
-        </Providers>
+        </Providers>,
       );
 
       expect(screen.getByText("Nested Content")).toBeInTheDocument();
@@ -130,7 +132,9 @@ describe("Providers", () => {
 
         return (
           <div>
-            <div>QueryClient: {queryClient ? "Available" : "Not Available"}</div>
+            <div>
+              QueryClient: {queryClient ? "Available" : "Not Available"}
+            </div>
             <div>Theme: {theme}</div>
           </div>
         );
@@ -139,7 +143,7 @@ describe("Providers", () => {
       render(
         <Providers>
           <TestComponent />
-        </Providers>
+        </Providers>,
       );
 
       expect(screen.getByText(/QueryClient: Available/)).toBeInTheDocument();
@@ -168,14 +172,18 @@ describe("Providers", () => {
         const providedClient = useQueryClient();
 
         return (
-          <div>{providedClient === importedClient ? "Same Instance" : "Different Instance"}</div>
+          <div>
+            {providedClient === importedClient
+              ? "Same Instance"
+              : "Different Instance"}
+          </div>
         );
       };
 
       render(
         <Providers>
           <TestComponent />
-        </Providers>
+        </Providers>,
       );
 
       expect(screen.getByText("Same Instance")).toBeInTheDocument();

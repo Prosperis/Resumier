@@ -27,7 +27,9 @@ describe("useAutoSave", () => {
     });
 
     const apiModule = await import("../api");
-    vi.mocked(apiModule.useUpdateResume).mockImplementation(mockUseUpdateResume as any);
+    vi.mocked(apiModule.useUpdateResume).mockImplementation(
+      mockUseUpdateResume as any,
+    );
   });
 
   afterEach(() => {
@@ -40,7 +42,7 @@ describe("useAutoSave", () => {
       const { result } = renderHook(() =>
         useAutoSave({
           resumeId: "resume-123",
-        })
+        }),
       );
 
       expect(result.current.isSaving).toBe(false);
@@ -53,7 +55,7 @@ describe("useAutoSave", () => {
       const { result } = renderHook(() =>
         useAutoSave({
           resumeId: "resume-123",
-        })
+        }),
       );
 
       act(() => {
@@ -76,7 +78,7 @@ describe("useAutoSave", () => {
         useAutoSave({
           resumeId: "resume-123",
           debounceMs: 500,
-        })
+        }),
       );
 
       act(() => {
@@ -101,7 +103,7 @@ describe("useAutoSave", () => {
         useAutoSave({
           resumeId: "resume-123",
           debounceMs: 1000,
-        })
+        }),
       );
 
       const testData = createTestData("John Doe");
@@ -122,7 +124,7 @@ describe("useAutoSave", () => {
         expect.objectContaining({
           onSuccess: expect.any(Function),
           onError: expect.any(Function),
-        })
+        }),
       );
     });
 
@@ -131,7 +133,7 @@ describe("useAutoSave", () => {
         useAutoSave({
           resumeId: "resume-123",
           debounceMs: 1000,
-        })
+        }),
       );
 
       act(() => {
@@ -156,7 +158,7 @@ describe("useAutoSave", () => {
           id: "resume-123",
           data: createTestData("Third"),
         },
-        expect.any(Object)
+        expect.any(Object),
       );
     });
 
@@ -166,7 +168,7 @@ describe("useAutoSave", () => {
           resumeId: "resume-123",
           debounceMs: 1000,
           enabled: false,
-        })
+        }),
       );
 
       act(() => {
@@ -186,7 +188,7 @@ describe("useAutoSave", () => {
         useAutoSave({
           resumeId: "resume-123",
           debounceMs: 100,
-        })
+        }),
       );
 
       expect(result.current.lastSaved).toBe(null);
@@ -209,7 +211,7 @@ describe("useAutoSave", () => {
         useAutoSave({
           resumeId: "resume-123",
           debounceMs: 100,
-        })
+        }),
       );
 
       act(() => {
@@ -243,7 +245,7 @@ describe("useAutoSave", () => {
         useAutoSave({
           resumeId: "resume-123",
           debounceMs: 100,
-        })
+        }),
       );
 
       act(() => {
@@ -266,7 +268,7 @@ describe("useAutoSave", () => {
       const { result, rerender } = renderHook(() =>
         useAutoSave({
           resumeId: "resume-123",
-        })
+        }),
       );
 
       rerender();
@@ -286,7 +288,7 @@ describe("useAutoSave", () => {
       const { result } = renderHook(() =>
         useAutoSave({
           resumeId: "resume-123",
-        })
+        }),
       );
 
       expect(result.current.isSaving).toBe(true);
@@ -302,7 +304,7 @@ describe("useAutoSave", () => {
       const { result, rerender } = renderHook(() =>
         useAutoSave({
           resumeId: "resume-123",
-        })
+        }),
       );
 
       expect(result.current.isSaving).toBe(false);
@@ -326,7 +328,7 @@ describe("useAutoSave", () => {
         useAutoSave({
           resumeId: "resume-123",
           debounceMs: 1000,
-        })
+        }),
       );
 
       act(() => {
@@ -354,7 +356,7 @@ describe("useAutoSave", () => {
         useAutoSave({
           resumeId: "resume-123",
           debounceMs: 100,
-        })
+        }),
       );
 
       // First save

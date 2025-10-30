@@ -37,7 +37,9 @@ export function SaveStatusIndicator({
       case "saving":
         return "Saving changes...";
       case "saved":
-        return lastSaved ? `Saved ${formatLastSaved(lastSaved)}` : "All changes saved";
+        return lastSaved
+          ? `Saved ${formatLastSaved(lastSaved)}`
+          : "All changes saved";
       case "error":
         return error ? `Error: ${error.message}` : "Failed to save changes";
       default:
@@ -50,9 +52,13 @@ export function SaveStatusIndicator({
       case "saving":
         return <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />;
       case "saved":
-        return <CheckCircle2 className="h-4 w-4 text-green-600" aria-hidden="true" />;
+        return (
+          <CheckCircle2 className="h-4 w-4 text-green-600" aria-hidden="true" />
+        );
       case "error":
-        return <XCircle className="text-destructive h-4 w-4" aria-hidden="true" />;
+        return (
+          <XCircle className="text-destructive h-4 w-4" aria-hidden="true" />
+        );
       default:
         return null;
     }
@@ -73,7 +79,7 @@ export function SaveStatusIndicator({
           status === "error" && "text-destructive",
           status === "saved" && "text-muted-foreground",
           status === "saving" && "text-muted-foreground",
-          className
+          className,
         )}
       >
         {getStatusIcon()}

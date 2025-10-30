@@ -164,7 +164,13 @@ describe("ClassicTemplate", () => {
     it("applies header styling classes", () => {
       const { container } = render(<ClassicTemplate resume={mockResumeFull} />);
       const header = container.querySelector("header");
-      expect(header).toHaveClass("text-center", "mb-8", "pb-4", "border-b-2", "border-black");
+      expect(header).toHaveClass(
+        "text-center",
+        "mb-8",
+        "pb-4",
+        "border-b-2",
+        "border-black",
+      );
     });
   });
 
@@ -172,12 +178,16 @@ describe("ClassicTemplate", () => {
     it("renders summary when provided", () => {
       render(<ClassicTemplate resume={mockResumeFull} />);
       expect(screen.getByText("Professional Summary")).toBeInTheDocument();
-      expect(screen.getByText("Experienced software engineer with 10+ years")).toBeInTheDocument();
+      expect(
+        screen.getByText("Experienced software engineer with 10+ years"),
+      ).toBeInTheDocument();
     });
 
     it("does not render summary section when empty", () => {
       render(<ClassicTemplate resume={mockResumeMinimal} />);
-      expect(screen.queryByText("Professional Summary")).not.toBeInTheDocument();
+      expect(
+        screen.queryByText("Professional Summary"),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -189,7 +199,9 @@ describe("ClassicTemplate", () => {
 
     it("does not render experience section when empty", () => {
       render(<ClassicTemplate resume={mockResumeMinimal} />);
-      expect(screen.queryByText("Professional Experience")).not.toBeInTheDocument();
+      expect(
+        screen.queryByText("Professional Experience"),
+      ).not.toBeInTheDocument();
     });
 
     it("renders position and company for each experience", () => {
@@ -219,7 +231,9 @@ describe("ClassicTemplate", () => {
     it("renders highlights as bullet list", () => {
       render(<ClassicTemplate resume={mockResumeFull} />);
       expect(screen.getByText("Built scalable systems")).toBeInTheDocument();
-      expect(screen.getByText("Mentored junior developers")).toBeInTheDocument();
+      expect(
+        screen.getByText("Mentored junior developers"),
+      ).toBeInTheDocument();
     });
 
     it("does not render highlights when empty", () => {
@@ -241,7 +255,9 @@ describe("ClassicTemplate", () => {
           ],
         },
       };
-      const { container } = render(<ClassicTemplate resume={resumeNoHighlights} />);
+      const { container } = render(
+        <ClassicTemplate resume={resumeNoHighlights} />,
+      );
       const lists = container.querySelectorAll("ul");
       expect(lists.length).toBe(0);
     });
@@ -260,7 +276,9 @@ describe("ClassicTemplate", () => {
 
     it("renders degree, field, and institution", () => {
       render(<ClassicTemplate resume={mockResumeFull} />);
-      expect(screen.getByText("Bachelor of Science in Computer Science")).toBeInTheDocument();
+      expect(
+        screen.getByText("Bachelor of Science in Computer Science"),
+      ).toBeInTheDocument();
       expect(screen.getByText("State University")).toBeInTheDocument();
     });
 
@@ -306,7 +324,9 @@ describe("ClassicTemplate", () => {
     it("renders technical skills", () => {
       render(<ClassicTemplate resume={mockResumeFull} />);
       expect(screen.getByText("Technical:")).toBeInTheDocument();
-      expect(screen.getByText("JavaScript, TypeScript, React")).toBeInTheDocument();
+      expect(
+        screen.getByText("JavaScript, TypeScript, React"),
+      ).toBeInTheDocument();
     });
 
     it("renders language skills", () => {
@@ -410,7 +430,7 @@ describe("ClassicTemplate", () => {
         "max-w-[21cm]",
         "mx-auto",
         "p-12",
-        "font-serif"
+        "font-serif",
       );
     });
 
