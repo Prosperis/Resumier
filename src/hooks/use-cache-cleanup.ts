@@ -10,13 +10,13 @@ export function useCacheCleanup(options?: {
   enabled?: boolean
   /** Cleanup interval in ms (default: 5 minutes) */
   interval?: number
-  /** Log stats on cleanup (default: false, true in dev) */
+  /** Log stats on cleanup (default: false) */
   logStats?: boolean
 }) {
   const {
     enabled = true,
     interval = 1000 * 60 * 5, // 5 minutes
-    logStats = import.meta.env.DEV,
+    logStats = false,
   } = options || {}
 
   useEffect(() => {

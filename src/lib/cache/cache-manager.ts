@@ -1,4 +1,5 @@
 import { queryClient } from "@/app/query-client"
+import logger from "@/lib/utils/console"
 
 /**
  * Cache management utilities
@@ -12,7 +13,7 @@ export function getLocalStorageSize(): number {
   let total = 0
 
   for (const key in localStorage) {
-    if (Object.hasOwn(localStorage, key)) {
+    if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
       total += key.length + (localStorage[key]?.length || 0)
     }
   }
@@ -41,6 +42,8 @@ export function cleanupStaleQueries(): void {
   const cache = queryClient.getQueryCache()
   const queries = cache.getAll()
 
+  let removedCount = 0
+
   // Remove queries that are inactive and stale
   queries.forEach((query) => {
     const state = query.state
@@ -49,10 +52,13 @@ export function cleanupStaleQueries(): void {
 
     if (isInactive && isStale) {
       cache.remove(query)
+      removedCount++
     }
   })
 
-  console.log(`Cleaned up ${queries.length} stale queries`)
+  if (removedCount > 0) {
+    logger.debug(`🧹 Cleaned up ${removedCount} stale queries`)
+  }
 }
 
 /**
@@ -83,7 +89,7 @@ export function getCacheStats() {
 export function clearPersistedCache(): void {
   localStorage.removeItem("resumier-query-cache")
   queryClient.clear()
-  console.log("Cleared all persisted cache data")
+  logger.warn("🗑️ Cleared all persisted cache data")
 }
 
 /**
@@ -93,17 +99,19 @@ export function clearPersistedCache(): void {
 export function logCacheStats(): void {
   const stats = getCacheStats()
 
-  console.group("📊 Cache Statistics")
-  console.log(`Total Queries: ${stats.totalQueries}`)
-  console.log(`Active Queries: ${stats.activeQueries}`)
-  console.log(`Inactive Queries: ${stats.inactiveQueries}`)
-  console.log(`Stale Queries: ${stats.staleQueries}`)
-  console.log(`Cache Size: ${stats.cacheSizeKB} KB`)
-  console.log(`Total Storage: ${stats.totalStorageSizeKB} KB`)
-  console.groupEnd()
+  logger.group("📊 Cache Statistics")
+  logger.table({
+    "Total Queries": stats.totalQueries,
+    "Active Queries": stats.activeQueries,
+    "Inactive Queries": stats.inactiveQueries,
+    "Stale Queries": stats.staleQueries,
+    "Cache Size": `${stats.cacheSizeKB} KB`,
+    "Total Storage": `${stats.totalStorageSizeKB} KB`,
+  })
+  logger.groupEnd()
 }
 
-// Export for development/debugging
+// Export for development/debugging (only in dev mode)
 if (import.meta.env.DEV) {
   // Make cache utilities available in console for debugging
   ;(window as any).cacheUtils = {
@@ -112,6 +120,6 @@ if (import.meta.env.DEV) {
     cleanup: cleanupStaleQueries,
     clear: clearPersistedCache,
   }
-
-  console.log("💡 Cache utilities available: window.cacheUtils")
+  
+  logger.debug("💡 Cache utilities available: window.cacheUtils")
 }

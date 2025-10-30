@@ -26,11 +26,10 @@ export function AnimatedDotGrid({
   const animationFrameRef = useRef<number | undefined>(undefined)
   const isAnimatingRef = useRef(false)
   const { theme } = useTheme()
-  
-  // Pre-calculate wave radius squared to avoid sqrt in hot path
-  const waveRadiusSq = waveRadius * waveRadius
 
   useEffect(() => {
+    // Pre-calculate wave radius squared to avoid sqrt in hot path
+    const waveRadiusSq = waveRadius * waveRadius
     if (!enabled) return
 
     const container = containerRef.current
@@ -53,7 +52,9 @@ export function AnimatedDotGrid({
       const rows = Math.ceil(containerHeight / dotSpacing)
 
       // Clear existing dots
-      container.querySelectorAll(".dot").forEach((dot) => dot.remove())
+      for (const dot of container.querySelectorAll(".dot")) {
+        dot.remove()
+      }
 
       // Create dot elements with performance optimizations
       const fragment = document.createDocumentFragment()
@@ -196,7 +197,9 @@ export function AnimatedDotGrid({
       }
 
       // Clean up dots
-      container.querySelectorAll(".dot").forEach((dot) => dot.remove())
+      for (const dot of container.querySelectorAll(".dot")) {
+        dot.remove()
+      }
     }
   }, [dotSize, dotSpacing, waveRadius, waveIntensity, theme, enabled])
 

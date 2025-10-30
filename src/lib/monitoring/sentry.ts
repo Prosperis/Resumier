@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/react"
+import logger from "@/lib/utils/console"
 
 /**
  * Initialize Sentry error tracking and performance monitoring
@@ -8,7 +9,7 @@ export function initSentry() {
   // Only initialize if DSN is provided and we're in production
   const dsn = import.meta.env.VITE_SENTRY_DSN
   if (!dsn) {
-    console.info("Sentry DSN not configured, skipping initialization")
+    logger.debug("Sentry DSN not configured, skipping initialization")
     return
   }
 
@@ -91,7 +92,7 @@ export function initSentry() {
     ],
   })
 
-  console.info("✅ Sentry initialized", {
+  logger.success("Sentry initialized", {
     environment: import.meta.env.MODE,
     release: import.meta.env.VITE_APP_VERSION,
   })
