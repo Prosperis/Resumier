@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router"
 import { FileText, Moon, Sun } from "lucide-react"
 import { useTheme } from "@/app/theme-provider"
+import { AnimatedDotGrid } from "@/components/ui/animated-dot-grid"
 import { Button } from "@/components/ui/button"
+import { useAnimationStore } from "@/stores/animation-store"
 
 type RootLayoutProps = {
   children: React.ReactNode
@@ -13,6 +15,7 @@ type RootLayoutProps = {
  */
 export function RootLayout({ children }: RootLayoutProps) {
   const { theme, setTheme } = useTheme()
+  const dotGridEnabled = useAnimationStore((state) => state.dotGridEnabled)
 
   const toggleTheme = () => {
     if (theme === "light") {
@@ -37,7 +40,16 @@ export function RootLayout({ children }: RootLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
+      {/* Animated dot grid background */}
+      <AnimatedDotGrid
+        dotSize={2}
+        dotSpacing={40}
+        waveRadius={150}
+        waveIntensity={20}
+        enabled={dotGridEnabled}
+      />
+
       {/* Skip link for keyboard navigation - visible on focus */}
       <a
         href="#main-content"
@@ -47,7 +59,7 @@ export function RootLayout({ children }: RootLayoutProps) {
       </a>
 
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 relative">
         <div className="container flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2 font-semibold" aria-label="Resumier home">
             <FileText className="size-6" aria-hidden="true" />
@@ -63,12 +75,12 @@ export function RootLayout({ children }: RootLayoutProps) {
       </header>
 
       {/* Main content */}
-      <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
+      <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none relative">
         {children}
       </main>
 
       {/* Footer */}
-      <footer className="border-t py-6 md:py-0">
+      <footer className="border-t py-6 md:py-0 relative">
         <div className="container flex h-16 items-center justify-center text-sm text-muted-foreground">
           Built with React, TanStack, and shadcn/ui
         </div>
