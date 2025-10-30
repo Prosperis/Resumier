@@ -21,7 +21,9 @@ export function AnimatedDotGrid({
   enabled = true,
 }: AnimatedDotGridProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const dotsRef = useRef<{ x: number; y: number; baseX: number; baseY: number; element?: HTMLElement }[]>([])
+  const dotsRef = useRef<
+    { x: number; y: number; baseX: number; baseY: number; element?: HTMLElement }[]
+  >([])
   const mouseRef = useRef({ x: -1000, y: -1000 })
   const animationFrameRef = useRef<number | undefined>(undefined)
   const isAnimatingRef = useRef(false)
@@ -59,10 +61,10 @@ export function AnimatedDotGrid({
 
       // Create dot elements with performance optimizations
       const fragment = document.createDocumentFragment()
-      
+
       // Pre-calculate styles that don't change
       const staticStyles = `width: ${dotSize}px; height: ${dotSize}px; transform: translate(-50%, -50%); will-change: transform; contain: layout style paint;`
-      
+
       for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
           const x = i * dotSpacing + dotSpacing / 2
@@ -70,7 +72,7 @@ export function AnimatedDotGrid({
 
           const dot = document.createElement("div")
           dot.className = "dot absolute rounded-full pointer-events-none"
-          
+
           // Apply static styles + position
           dot.style.cssText = `${staticStyles} left: ${x}px; top: ${y}px;`
 
@@ -86,7 +88,7 @@ export function AnimatedDotGrid({
           })
         }
       }
-      
+
       // Append all dots at once for better performance
       container.appendChild(fragment)
       dotsRef.current = dots
@@ -94,7 +96,9 @@ export function AnimatedDotGrid({
     }
 
     const updateDotColors = () => {
-      const isDark = theme === "dark" || (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
+      const isDark =
+        theme === "dark" ||
+        (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches)
       const dotColor = isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.15)"
 
       // Batch color updates for better performance
@@ -147,7 +151,7 @@ export function AnimatedDotGrid({
           const translateX = Math.cos(angle) * force
           const translateY = Math.sin(angle) * force
           const scale = 1 + force * invWaveIntensity * 0.5
-          
+
           // Use will-change for optimization hint
           dot.element.style.transform = `translate(calc(-50% + ${translateX}px), calc(-50% + ${translateY}px)) scale(${scale})`
         } else {
@@ -155,7 +159,7 @@ export function AnimatedDotGrid({
           dot.element.style.transform = "translate(-50%, -50%) scale(1)"
         }
       }
-      
+
       isAnimatingRef.current = false
     }
 
@@ -163,7 +167,7 @@ export function AnimatedDotGrid({
       const rect = container.getBoundingClientRect()
       const x = e.clientX - rect.left
       const y = e.clientY - rect.top
-      
+
       // Only update if mouse is within container bounds
       if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
         mouseRef.current = { x, y }
@@ -191,7 +195,7 @@ export function AnimatedDotGrid({
 
     // Initialize
     createDots()
-    
+
     // Use passive event listeners for better performance
     window.addEventListener("resize", updateContainerSize, { passive: true })
     // Use document-level events to work with pointer-events-none

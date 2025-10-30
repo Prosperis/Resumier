@@ -187,11 +187,7 @@ export const success = (message: string, ...args: unknown[]): void => {
 export const perf = (label: string, startTime: number): void => {
   if (isDev) {
     const duration = performance.now() - startTime
-    console.log(
-      `%c⚡ ${label}`,
-      "color: #f59e0b; font-weight: bold",
-      `${duration.toFixed(2)}ms`,
-    )
+    console.log(`%c⚡ ${label}`, "color: #f59e0b; font-weight: bold", `${duration.toFixed(2)}ms`)
   }
 }
 

@@ -122,6 +122,6 @@ if (import.meta.env.DEV) {
     cleanup: cleanupStaleQueries,
     clear: clearPersistedCache,
   }
-  
+
   logger.debug("💡 Cache utilities available: window.cacheUtils")
 }
