@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
-import { ArrowRight, Cloud, Download, FileText, Sparkles } from "lucide-react"
+import { useState } from "react"
+import { ArrowRight, Cloud, Download, FileText, Sparkles, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { AuthModal } from "@/components/features/auth/auth-modal"
 
 /**
  * Index (home) route
@@ -11,32 +13,36 @@ export const Route = createFileRoute("/")({
 })
 
 function IndexComponent() {
+  const [showAuthModal, setShowAuthModal] = useState(false)
+
   return (
     <div className="container mx-auto p-8">
       <div className="max-w-4xl mx-auto space-y-12">
         {/* Hero Section */}
         <div className="space-y-6 text-center">
-          <h1 className="text-5xl font-bold tracking-tight">
-            Welcome to <span className="text-primary">Resumier</span>
+          <h1 className="text-6xl font-bold tracking-tight bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text text-transparent">
+            Build Your Perfect Resume
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Create professional resumes with ease using our modern resume builder. Build, customize,
-            and download your perfect resume in minutes.
+          <p className="text-xl text-muted-foreground max-w-xl mx-auto leading-relaxed">
+            Professional resume builder. Create, customize, and download in minutes.
           </p>
           <div className="flex gap-4 justify-center mt-8">
-            <Link to="/dashboard">
-              <Button size="lg">
+            <Button
+              size="lg"
+              onClick={() => setShowAuthModal(true)}
+              className="group relative overflow-hidden bg-gradient-to-r from-primary via-primary to-purple-600 hover:shadow-xl hover:shadow-primary/25 transition-all duration-300 hover:scale-105"
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <span className="relative flex items-center gap-2">
+                <Zap className="h-4 w-4 group-hover:rotate-12 transition-transform" />
                 Get Started
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/login">
-              <Button variant="outline" size="lg">
-                Sign In
-              </Button>
-            </Link>
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </Button>
           </div>
         </div>
+
+        <AuthModal open={showAuthModal} onOpenChange={setShowAuthModal} />
 
         {/* Features Grid */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 pt-8">

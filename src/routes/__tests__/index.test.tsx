@@ -17,10 +17,19 @@ vi.mock("lucide-react", () => ({
   Download: () => <span data-testid="icon-download">↓</span>,
   FileText: () => <span data-testid="icon-file">📄</span>,
   Sparkles: () => <span data-testid="icon-sparkles">✨</span>,
+  Zap: () => <span data-testid="icon-zap">⚡</span>,
 }))
 
 vi.mock("@/components/ui/button", () => ({
   Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+}))
+
+vi.mock("@/components/features/auth/auth-modal", () => ({
+  AuthModal: ({ open }: any) => (
+    <div data-testid="auth-modal" data-open={open}>
+      Auth Modal
+    </div>
+  ),
 }))
 
 // Import the route module after setting up mocks
@@ -46,30 +55,28 @@ describe("Index Route", () => {
       renderIndexRoute()
 
       expect(
-        screen.getByRole("heading", { name: /welcome to resumier/i, level: 1 }),
+        screen.getByRole("heading", { name: /build your perfect resume/i, level: 1 }),
       ).toBeInTheDocument()
     })
 
     it("renders the hero description", () => {
       renderIndexRoute()
 
-      expect(screen.getByText(/create professional resumes with ease/i)).toBeInTheDocument()
+      expect(screen.getByText(/professional resume builder/i)).toBeInTheDocument()
     })
 
-    it("renders Get Started button with link to dashboard", () => {
+    it("renders Get Started button", () => {
       renderIndexRoute()
 
-      const getStartedButton = screen.getByRole("link", { name: /get started/i })
+      const getStartedButton = screen.getByRole("button", { name: /get started/i })
       expect(getStartedButton).toBeInTheDocument()
-      expect(getStartedButton).toHaveAttribute("href", "/dashboard")
     })
 
-    it("renders Sign In button with link to login", () => {
+    it("renders auth modal", () => {
       renderIndexRoute()
 
-      const signInButton = screen.getByRole("link", { name: /sign in/i })
-      expect(signInButton).toBeInTheDocument()
-      expect(signInButton).toHaveAttribute("href", "/login")
+      const authModal = screen.getByTestId("auth-modal")
+      expect(authModal).toBeInTheDocument()
     })
   })
 
@@ -175,22 +182,22 @@ describe("Index Route", () => {
   })
 
   describe("Content", () => {
-    it("mentions the brand name Resumier", () => {
+    it("mentions resume building", () => {
       renderIndexRoute()
 
-      expect(screen.getAllByText(/resumier/i).length).toBeGreaterThan(0)
+      expect(screen.getByText(/build your perfect resume/i)).toBeInTheDocument()
     })
 
     it("emphasizes professional resume building", () => {
       renderIndexRoute()
 
-      expect(screen.getByText(/professional resumes/i)).toBeInTheDocument()
+      expect(screen.getByText(/professional resume builder/i)).toBeInTheDocument()
     })
 
-    it("highlights ease of use", () => {
+    it("highlights speed and efficiency", () => {
       renderIndexRoute()
 
-      expect(screen.getByText(/with ease/i)).toBeInTheDocument()
+      expect(screen.getByText(/in minutes/i)).toBeInTheDocument()
     })
   })
 
