@@ -111,8 +111,9 @@ Resumier/
 │   ├── routes/                # Route components
 │   ├── styles/                # Global styles
 │   └── main.tsx               # App entry point
-├── .htaccess                  # Apache security headers
-├── vercel.json                # Vercel deployment config
+├── public/                    # Static assets
+│   ├── 404.html               # GitHub Pages SPA routing
+│   └── _headers               # Security headers (Netlify/Cloudflare)
 ├── vite.config.ts             # Vite configuration
 ├── vitest.config.ts           # Test configuration
 └── tsconfig.json              # TypeScript configuration
@@ -143,19 +144,23 @@ bun test:e2e
 
 ## 🚀 Deployment
 
-### Automatic Deployment (Recommended)
+### GitHub Pages (Current Setup)
 
-Push to `main` branch triggers automatic deployment to GitHub Pages via CI/CD pipeline.
-
-### Manual Deployment
+The application is deployed to GitHub Pages with:
+- **SPA Routing**: `public/404.html` handles client-side routing
+- **Security Headers**: Configured via `public/_headers` (note: GitHub Pages has its own security headers)
+- **Automatic Deployment**: Push to `main` triggers CI/CD pipeline
 
 ```bash
 # Build for production
 bun run build
 
-# Deploy to GitHub Pages
+# Deploy to GitHub Pages (automatic via CI/CD)
+# Or manually:
 gh-pages -d dist
 ```
+
+**Note**: `vercel.json` has been removed as it's only for Vercel deployments. GitHub Pages uses `404.html` for SPA routing instead.
 
 See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 

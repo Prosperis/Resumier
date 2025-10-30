@@ -92,6 +92,16 @@
       ]
     }
     </script>
+    <!-- GitHub Pages SPA redirect handler -->
+    <script>
+      (function () {
+        const redirect = sessionStorage.getItem("redirect");
+        if (redirect) {
+          sessionStorage.removeItem("redirect");
+          history.replaceState(null, "", redirect);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
