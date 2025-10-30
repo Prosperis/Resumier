@@ -7,11 +7,15 @@ import { ViteImageOptimizer } from "vite-plugin-image-optimizer"
 import { VitePWA } from "vite-plugin-pwa"
 import viteCompression from "vite-plugin-compression"
 
-export default defineConfig({
-  base: "/Resumier/",
-  plugins: [
-    react(),
-    tailwindcss(),
+export default defineConfig(({ mode }) => {
+  // Use "/" for local development, "/Resumier/" for GitHub Pages deployment
+  const base = mode === "production" ? "/Resumier/" : "/"
+  
+  return {
+    base,
+    plugins: [
+      react(),
+      tailwindcss(),
     visualizer({
       filename: "./dist/stats.html",
       open: true,
@@ -72,17 +76,17 @@ export default defineConfig({
         theme_color: "#ffffff",
         background_color: "#ffffff",
         display: "standalone",
-        scope: "/Resumier/",
-        start_url: "/Resumier/",
+        scope: base,
+        start_url: base,
         icons: [
           {
-            src: "/Resumier/pwa-192x192.png",
+            src: `${base}pwa-192x192.png`,
             sizes: "192x192",
             type: "image/png",
             purpose: "any maskable",
           },
           {
-            src: "/Resumier/pwa-512x512.png",
+            src: `${base}pwa-512x512.png`,
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable",
@@ -309,4 +313,5 @@ export default defineConfig({
       // "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload"
     },
   },
+}
 })
