@@ -78,6 +78,7 @@ describe("Accessibility Infrastructure", () => {
     it("should detect invalid ARIA attributes", async () => {
       const { container } = renderWithQuery(
         <div>
+          {/* biome-ignore lint/a11y/useSemanticElements: intentionally testing invalid ARIA */}
           <div role="region" aria-labelledby="nonexistent" />
         </div>,
       )

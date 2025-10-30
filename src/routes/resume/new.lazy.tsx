@@ -17,7 +17,7 @@ function NewResumeComponent() {
   // Reset content when creating a new resume
   useEffect(() => {
     resetContent()
-  }, [])
+  }, [resetContent])
 
   return (
     <div className="container mx-auto p-8">

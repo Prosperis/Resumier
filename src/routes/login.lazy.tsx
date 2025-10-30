@@ -23,6 +23,7 @@ function LoginComponent() {
         <div className="text-center text-sm text-muted-foreground">
           <p>
             Don't have an account?{" "}
+            {/* biome-ignore lint/a11y/useValidAnchor: placeholder link for future signup feature */}
             <a href="#" className="font-medium text-primary hover:underline">
               Sign up
             </a>

@@ -113,6 +113,7 @@ export class NetworkError extends ApiError {
  * Parse error response and throw appropriate error
  */
 export function parseErrorResponse(status: number, data: unknown): never {
+  // biome-ignore lint/suspicious/noExplicitAny: error responses have dynamic structure
   const message = (data as any)?.message || (data as any)?.error || "An unexpected error occurred"
 
   switch (status) {
@@ -127,6 +128,7 @@ export function parseErrorResponse(status: number, data: unknown): never {
     case 409:
       throw new ConflictError(message)
     case 422:
+      // biome-ignore lint/suspicious/noExplicitAny: validation errors have dynamic structure
       throw new ValidationError(message, (data as any)?.errors || {})
     case 500:
     case 502:

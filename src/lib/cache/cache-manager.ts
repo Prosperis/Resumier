@@ -13,6 +13,7 @@ export function getLocalStorageSize(): number {
   let total = 0
 
   for (const key in localStorage) {
+    // biome-ignore lint/suspicious/noPrototypeBuiltins: localStorage is not a plain object
     if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
       total += key.length + (localStorage[key]?.length || 0)
     }
@@ -114,6 +115,7 @@ export function logCacheStats(): void {
 // Export for development/debugging (only in dev mode)
 if (import.meta.env.DEV) {
   // Make cache utilities available in console for debugging
+  // biome-ignore lint/suspicious/noExplicitAny: dev-only debugging utilities on window object
   ;(window as any).cacheUtils = {
     getStats: getCacheStats,
     logStats: logCacheStats,

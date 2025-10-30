@@ -137,6 +137,7 @@ export async function getWebVitalsReport() {
 
 // Export for development/debugging
 if (import.meta.env.DEV) {
+  // biome-ignore lint/suspicious/noExplicitAny: dev-only debugging utilities on window object
   ;(window as any).webVitals = {
     getReport: getWebVitalsReport,
   }
