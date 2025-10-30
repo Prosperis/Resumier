@@ -8,6 +8,11 @@ import {
 } from "@/components/features/resume/export/export-utils";
 import type { Resume } from "@/lib/api/types";
 
+// Mock file-saver
+vi.mock("file-saver", () => ({
+  saveAs: vi.fn(),
+}));
+
 describe("export-utils", () => {
   describe("printResume", () => {
     beforeEach(() => {
@@ -62,25 +67,12 @@ describe("export-utils", () => {
   });
 
   describe("downloadHTML", () => {
-    let mockLink: HTMLAnchorElement;
+    let saveAsMock: any;
 
-    beforeEach(() => {
-      mockLink = {
-        href: "",
-        download: "",
-        click: vi.fn(),
-      } as unknown as HTMLAnchorElement;
-
-      // Mock URL methods
-      global.URL.createObjectURL = vi.fn(() => "blob:mock-url");
-      global.URL.revokeObjectURL = vi.fn();
-
-      vi.spyOn(document, "createElement").mockReturnValue(mockLink);
-      vi.spyOn(document.body, "appendChild").mockImplementation(() => mockLink);
-      vi.spyOn(document.body, "removeChild").mockImplementation(() => mockLink);
-
-      vi.spyOn(document.body, "appendChild").mockImplementation(() => mockLink);
-      vi.spyOn(document.body, "removeChild").mockImplementation(() => mockLink);
+    beforeEach(async () => {
+      const fileSaver = await import("file-saver");
+      saveAsMock = fileSaver.saveAs as any;
+      saveAsMock.mockClear();
     });
 
     afterEach(() => {
@@ -113,7 +105,10 @@ describe("export-utils", () => {
 
       downloadHTML(resume, htmlContent);
 
-      expect(URL.createObjectURL).toHaveBeenCalled();
+      expect(saveAsMock).toHaveBeenCalled();
+      const blob = saveAsMock.mock.calls[0][0];
+      expect(blob).toBeInstanceOf(Blob);
+      expect(blob.type).toBe("text/html;charset=utf-8");
     });
 
     it("should create download link with correct filename", () => {
@@ -140,10 +135,12 @@ describe("export-utils", () => {
 
       downloadHTML(resume, "<html></html>");
 
-      expect(mockLink.download).toBe("Software Engineer Resume.html");
+      expect(saveAsMock).toHaveBeenCalled();
+      const filename = saveAsMock.mock.calls[0][1];
+      expect(filename).toBe("Software_Engineer_Resume.html");
     });
 
-    it("should trigger download by clicking the link", () => {
+    it("should trigger download using saveAs", () => {
       const resume: Resume = {
         id: "1",
         title: "Test",
@@ -167,10 +164,10 @@ describe("export-utils", () => {
 
       downloadHTML(resume, "<html></html>");
 
-      expect(mockLink.click).toHaveBeenCalled();
+      expect(saveAsMock).toHaveBeenCalledTimes(1);
     });
 
-    it("should clean up resources after download", () => {
+    it("should include resume content in HTML", () => {
       const resume: Resume = {
         id: "1",
         title: "Test",
@@ -194,8 +191,9 @@ describe("export-utils", () => {
 
       downloadHTML(resume, "<html></html>");
 
-      expect(document.body.removeChild).toHaveBeenCalledWith(mockLink);
-      expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:mock-url");
+      expect(saveAsMock).toHaveBeenCalled();
+      const blob = saveAsMock.mock.calls[0][0];
+      expect(blob).toBeInstanceOf(Blob);
     });
   });
 

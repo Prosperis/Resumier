@@ -272,9 +272,7 @@ describe("Index Route", () => {
     it("uses primary color accents", () => {
       const { container } = renderIndexRoute();
 
-      const primaryElements = container.querySelectorAll(
-        "[class*='primary']",
-      );
+      const primaryElements = container.querySelectorAll("[class*='primary']");
       expect(primaryElements.length).toBeGreaterThan(0);
     });
   });
