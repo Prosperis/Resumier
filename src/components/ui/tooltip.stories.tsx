@@ -1,15 +1,15 @@
-import type { Meta, StoryObj } from "@storybook/react"
-import { Button } from "./button"
-import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
+import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "./button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
 const meta: Meta<typeof Tooltip> = {
   title: "ui/Tooltip",
   component: Tooltip,
   tags: ["autodocs"],
-}
-export default meta
+};
+export default meta;
 
-type Story = StoryObj<typeof Tooltip>
+type Story = StoryObj<typeof Tooltip>;
 
 export const Default: Story = {
   render: () => (
@@ -20,4 +20,4 @@ export const Default: Story = {
       <TooltipContent>Tooltip text</TooltipContent>
     </Tooltip>
   ),
-}
+};

@@ -1,15 +1,15 @@
-import { Plus, Trash } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import type { Education } from "@/stores"
+import { Plus, Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import type { Education } from "@/stores";
 
 interface EducationProps {
-  education: Education[]
-  addEducation: () => void
-  updateEducation: (i: number, field: keyof Education, value: string) => void
-  removeEducation: (i: number) => void
+  education: Education[];
+  addEducation: () => void;
+  updateEducation: (i: number, field: keyof Education, value: string) => void;
+  removeEducation: (i: number) => void;
 }
 
 export function EducationSection({
@@ -21,7 +21,7 @@ export function EducationSection({
   return (
     <div className="grid gap-4">
       {education.map((ed, i) => (
-        <div key={i} className="border p-4 rounded-md grid gap-2">
+        <div key={i} className="grid gap-2 rounded-md border p-4">
           <div className="grid gap-2">
             <Label>School</Label>
             <Input
@@ -70,5 +70,5 @@ export function EducationSection({
         <Plus className="mr-2 h-4 w-4" /> Add Education
       </Button>
     </div>
-  )
+  );
 }

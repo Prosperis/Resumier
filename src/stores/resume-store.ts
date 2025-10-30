@@ -1,116 +1,116 @@
-import { del, get, set } from "idb-keyval"
-import { create } from "zustand"
-import { createJSONStorage, devtools, persist } from "zustand/middleware"
+import { del, get, set } from "idb-keyval";
+import { create } from "zustand";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 // Types
 export interface WorkExperience {
-  company?: string
-  title?: string
-  startDate?: string
-  endDate?: string
-  current?: boolean
-  description?: string
-  awards?: string[]
+  company?: string;
+  title?: string;
+  startDate?: string;
+  endDate?: string;
+  current?: boolean;
+  description?: string;
+  awards?: string[];
 }
 
 export interface Education {
-  school?: string
-  degree?: string
-  startDate?: string
-  endDate?: string
-  description?: string
+  school?: string;
+  degree?: string;
+  startDate?: string;
+  endDate?: string;
+  description?: string;
 }
 
 export interface Skill {
-  name?: string
-  years?: string
-  proficiency?: string
+  name?: string;
+  years?: string;
+  proficiency?: string;
 }
 
 export interface Certification {
-  name?: string
-  expiration?: string
+  name?: string;
+  expiration?: string;
 }
 
 export interface Link {
-  label?: string
-  url?: string
+  label?: string;
+  url?: string;
 }
 
 export interface UserInfo {
-  name?: string
-  email?: string
-  phone?: string
-  address?: string
-  customUrl?: string
-  links?: Link[]
-  experiences?: WorkExperience[]
-  education?: Education[]
-  skills?: Skill[]
-  certifications?: Certification[]
-  [key: string]: unknown
+  name?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  customUrl?: string;
+  links?: Link[];
+  experiences?: WorkExperience[];
+  education?: Education[];
+  skills?: Skill[];
+  certifications?: Certification[];
+  [key: string]: unknown;
 }
 
 export interface JobInfo {
-  title?: string
-  company?: string
-  location?: string
-  description?: string
-  benefits?: string[]
-  workType?: "onsite" | "remote" | "hybrid"
-  basePay?: string
-  bonus?: string
-  stocks?: string
-  [key: string]: unknown
+  title?: string;
+  company?: string;
+  location?: string;
+  description?: string;
+  benefits?: string[];
+  workType?: "onsite" | "remote" | "hybrid";
+  basePay?: string;
+  bonus?: string;
+  stocks?: string;
+  [key: string]: unknown;
 }
 
 export interface ResumeContent {
-  [key: string]: unknown
+  [key: string]: unknown;
 }
 
 export interface ResumeDocument {
-  id: string
-  name: string
-  createdAt?: string
-  updatedAt?: string
+  id: string;
+  name: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Store interface
 interface ResumeStore {
   // User Info
-  userInfo: UserInfo
-  setUserInfo: (info: UserInfo) => void
-  updateUserInfo: (updates: Partial<UserInfo>) => void
-  resetUserInfo: () => void
+  userInfo: UserInfo;
+  setUserInfo: (info: UserInfo) => void;
+  updateUserInfo: (updates: Partial<UserInfo>) => void;
+  resetUserInfo: () => void;
 
   // Job Info
-  jobInfo: JobInfo
-  setJobInfo: (info: JobInfo) => void
-  updateJobInfo: (updates: Partial<JobInfo>) => void
-  resetJobInfo: () => void
+  jobInfo: JobInfo;
+  setJobInfo: (info: JobInfo) => void;
+  updateJobInfo: (updates: Partial<JobInfo>) => void;
+  resetJobInfo: () => void;
 
   // Jobs List
-  jobs: JobInfo[]
-  addJob: (job: JobInfo) => void
-  updateJob: (index: number, updates: Partial<JobInfo>) => void
-  removeJob: (index: number) => void
-  clearJobs: () => void
+  jobs: JobInfo[];
+  addJob: (job: JobInfo) => void;
+  updateJob: (index: number, updates: Partial<JobInfo>) => void;
+  removeJob: (index: number) => void;
+  clearJobs: () => void;
 
   // Documents (merged from use-resume-documents)
-  documents: ResumeDocument[]
-  addDocument: (doc: ResumeDocument) => void
-  updateDocument: (id: string, updates: Partial<ResumeDocument>) => void
-  removeDocument: (id: string) => void
-  clearDocuments: () => void
+  documents: ResumeDocument[];
+  addDocument: (doc: ResumeDocument) => void;
+  updateDocument: (id: string, updates: Partial<ResumeDocument>) => void;
+  removeDocument: (id: string) => void;
+  clearDocuments: () => void;
 
   // Content
-  content: ResumeContent
-  setContent: (data: ResumeContent) => void
-  updateContent: (updates: Partial<ResumeContent>) => void
-  resetContent: () => void
+  content: ResumeContent;
+  setContent: (data: ResumeContent) => void;
+  updateContent: (updates: Partial<ResumeContent>) => void;
+  resetContent: () => void;
 
   // Global reset
-  reset: () => void
+  reset: () => void;
 }
 
 const initialState = {
@@ -119,7 +119,7 @@ const initialState = {
   jobs: [],
   documents: [],
   content: {},
-}
+};
 
 export const useResumeStore = create<ResumeStore>()(
   devtools(
@@ -163,7 +163,7 @@ export const useResumeStore = create<ResumeStore>()(
         updateDocument: (id, updates) =>
           set((state) => ({
             documents: state.documents.map((doc) =>
-              doc.id === id ? { ...doc, ...updates, updatedAt: new Date().toISOString() } : doc,
+              doc.id === id ? { ...doc, ...updates, updatedAt: new Date().toISOString() } : doc
             ),
           })),
         removeDocument: (id) =>
@@ -187,58 +187,58 @@ export const useResumeStore = create<ResumeStore>()(
         name: "resumier-resume-store",
         storage: createJSONStorage(() => ({
           async getItem(name: string) {
-            const value = await get(name)
-            return value ?? null
+            const value = await get(name);
+            return value ?? null;
           },
           async setItem(name: string, value: unknown) {
-            await set(name, value)
+            await set(name, value);
           },
           async removeItem(name: string) {
-            await del(name)
+            await del(name);
           },
         })),
-      },
+      }
     ),
-    { name: "ResumeStore" },
-  ),
-)
+    { name: "ResumeStore" }
+  )
+);
 
 // Selectors for optimized access
-export const selectUserInfo = (state: ResumeStore) => state.userInfo
-export const selectJobInfo = (state: ResumeStore) => state.jobInfo
-export const selectJobs = (state: ResumeStore) => state.jobs
-export const selectDocuments = (state: ResumeStore) => state.documents
-export const selectContent = (state: ResumeStore) => state.content
+export const selectUserInfo = (state: ResumeStore) => state.userInfo;
+export const selectJobInfo = (state: ResumeStore) => state.jobInfo;
+export const selectJobs = (state: ResumeStore) => state.jobs;
+export const selectDocuments = (state: ResumeStore) => state.documents;
+export const selectContent = (state: ResumeStore) => state.content;
 
 // Action selectors
 export const selectUserInfoActions = (state: ResumeStore) => ({
   setUserInfo: state.setUserInfo,
   updateUserInfo: state.updateUserInfo,
   resetUserInfo: state.resetUserInfo,
-})
+});
 
 export const selectJobInfoActions = (state: ResumeStore) => ({
   setJobInfo: state.setJobInfo,
   updateJobInfo: state.updateJobInfo,
   resetJobInfo: state.resetJobInfo,
-})
+});
 
 export const selectJobsActions = (state: ResumeStore) => ({
   addJob: state.addJob,
   updateJob: state.updateJob,
   removeJob: state.removeJob,
   clearJobs: state.clearJobs,
-})
+});
 
 export const selectDocumentsActions = (state: ResumeStore) => ({
   addDocument: state.addDocument,
   updateDocument: state.updateDocument,
   removeDocument: state.removeDocument,
   clearDocuments: state.clearDocuments,
-})
+});
 
 export const selectContentActions = (state: ResumeStore) => ({
   setContent: state.setContent,
   updateContent: state.updateContent,
   resetContent: state.resetContent,
-})
+});

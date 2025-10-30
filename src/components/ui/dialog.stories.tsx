@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react"
-import { Button } from "./button"
+import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "./button";
 import {
   Dialog,
   DialogContent,
@@ -7,16 +7,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./dialog"
+} from "./dialog";
 
 const meta: Meta<typeof Dialog> = {
   title: "ui/Dialog",
   component: Dialog,
   tags: ["autodocs"],
-}
-export default meta
+};
+export default meta;
 
-type Story = StoryObj<typeof Dialog>
+type Story = StoryObj<typeof Dialog>;
 
 export const Default: Story = {
   render: () => (
@@ -32,4 +32,4 @@ export const Default: Story = {
       </DialogContent>
     </Dialog>
   ),
-}
+};

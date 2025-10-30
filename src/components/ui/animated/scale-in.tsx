@@ -3,21 +3,21 @@
  * Wrapper component that scales in its children
  */
 
-import type { HTMLMotionProps } from "framer-motion"
-import { motion } from "framer-motion"
+import type { HTMLMotionProps } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   useAnimationTransition,
   useAnimationVariants,
-} from "@/lib/animations/hooks/use-reduced-motion"
-import { springTransition } from "@/lib/animations/transitions"
-import { scaleBounceVariants, scaleVariants } from "@/lib/animations/variants"
+} from "@/lib/animations/hooks/use-reduced-motion";
+import { springTransition } from "@/lib/animations/transitions";
+import { scaleBounceVariants, scaleVariants } from "@/lib/animations/variants";
 
 interface ScaleInProps extends Omit<HTMLMotionProps<"div">, "variants"> {
-  children: React.ReactNode
-  bounce?: boolean
-  delay?: number
-  duration?: number
-  className?: string
+  children: React.ReactNode;
+  bounce?: boolean;
+  delay?: number;
+  duration?: number;
+  className?: string;
 }
 
 /**
@@ -38,12 +38,12 @@ export function ScaleIn({
   className,
   ...props
 }: ScaleInProps) {
-  const variants = useAnimationVariants(bounce ? scaleBounceVariants : scaleVariants)
+  const variants = useAnimationVariants(bounce ? scaleBounceVariants : scaleVariants);
   const transition = useAnimationTransition({
     ...springTransition,
     delay,
     ...(duration && { duration }),
-  })
+  });
 
   return (
     <motion.div
@@ -57,5 +57,5 @@ export function ScaleIn({
     >
       {children}
     </motion.div>
-  )
+  );
 }

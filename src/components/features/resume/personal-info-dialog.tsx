@@ -1,5 +1,5 @@
-import { useMutation } from "@tanstack/react-query"
-import { useState } from "react"
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import {
   BasicInfoSection,
   CertificationsSection,
@@ -7,8 +7,8 @@ import {
   ExperienceSection,
   LinksSection,
   SkillsSection,
-} from "@/components/features/resume/sections"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+} from "@/components/features/resume/sections";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Sidebar,
   SidebarContent,
@@ -20,57 +20,57 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarSeparator,
-} from "@/components/ui/sidebar"
-import type { Certification, Education, Link, Skill, UserInfo, WorkExperience } from "@/stores"
-import { useResumeStore } from "@/stores"
+} from "@/components/ui/sidebar";
+import type { Certification, Education, Link, Skill, UserInfo, WorkExperience } from "@/stores";
+import { useResumeStore } from "@/stores";
 
-type Section = "basic" | "experience" | "education" | "skills" | "certifications" | "links"
+type Section = "basic" | "experience" | "education" | "skills" | "certifications" | "links";
 
 export function PersonalInfoDialog({
   open,
   onOpenChange,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const { userInfo, setUserInfo } = useResumeStore()
+  const { userInfo, setUserInfo } = useResumeStore();
 
-  const [section, setSection] = useState<Section>("basic")
-  const [linkedInUrl, setLinkedInUrl] = useState("")
-  const [name, setName] = useState(userInfo.name ?? "")
-  const [email, setEmail] = useState(userInfo.email ?? "")
-  const [phone, setPhone] = useState(userInfo.phone ?? "")
-  const [address, setAddress] = useState(userInfo.address ?? "")
-  const [experiences, setExperiences] = useState<WorkExperience[]>(userInfo.experiences ?? [])
-  const [education, setEducation] = useState<Education[]>(userInfo.education ?? [])
-  const [skills, setSkills] = useState<Skill[]>(userInfo.skills ?? [])
+  const [section, setSection] = useState<Section>("basic");
+  const [linkedInUrl, setLinkedInUrl] = useState("");
+  const [name, setName] = useState(userInfo.name ?? "");
+  const [email, setEmail] = useState(userInfo.email ?? "");
+  const [phone, setPhone] = useState(userInfo.phone ?? "");
+  const [address, setAddress] = useState(userInfo.address ?? "");
+  const [experiences, setExperiences] = useState<WorkExperience[]>(userInfo.experiences ?? []);
+  const [education, setEducation] = useState<Education[]>(userInfo.education ?? []);
+  const [skills, setSkills] = useState<Skill[]>(userInfo.skills ?? []);
   const [certifications, setCertifications] = useState<Certification[]>(
-    userInfo.certifications ?? [],
-  )
-  const [awardInputs, setAwardInputs] = useState<Record<number, string>>({})
-  const [links, setLinks] = useState<Link[]>(userInfo.links ?? [])
-  const [customUrl, setCustomUrl] = useState(userInfo.customUrl ?? "")
+    userInfo.certifications ?? []
+  );
+  const [awardInputs, setAwardInputs] = useState<Record<number, string>>({});
+  const [links, setLinks] = useState<Link[]>(userInfo.links ?? []);
+  const [customUrl, setCustomUrl] = useState(userInfo.customUrl ?? "");
 
   const importMutation = useMutation({
     mutationFn: async (url: string) => {
-      const res = await fetch(`/api/linkedin?url=${encodeURIComponent(url)}`)
-      if (!res.ok) throw new Error("Failed to fetch")
-      return (await res.json()) as Partial<UserInfo>
+      const res = await fetch(`/api/linkedin?url=${encodeURIComponent(url)}`);
+      if (!res.ok) throw new Error("Failed to fetch");
+      return (await res.json()) as Partial<UserInfo>;
     },
     onSuccess: (data) => {
-      setName(data.name ?? "")
-      setEmail(data.email ?? "")
-      setPhone(data.phone ?? "")
-      setAddress(data.address ?? "")
-      setExperiences(data.experiences ?? [])
-      setEducation(data.education ?? [])
-      setSkills(data.skills ?? [])
-      setCertifications(data.certifications ?? [])
+      setName(data.name ?? "");
+      setEmail(data.email ?? "");
+      setPhone(data.phone ?? "");
+      setAddress(data.address ?? "");
+      setExperiences(data.experiences ?? []);
+      setEducation(data.education ?? []);
+      setSkills(data.skills ?? []);
+      setCertifications(data.certifications ?? []);
     },
-  })
+  });
 
   function handleSave(e: React.FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
     setUserInfo({
       name,
       email,
@@ -82,139 +82,139 @@ export function PersonalInfoDialog({
       education,
       skills,
       certifications,
-    })
-    onOpenChange(false)
+    });
+    onOpenChange(false);
   }
 
   function handleImport() {
-    if (!linkedInUrl) return
-    importMutation.mutate(linkedInUrl)
+    if (!linkedInUrl) return;
+    importMutation.mutate(linkedInUrl);
   }
 
   function addExperience() {
-    setExperiences([...experiences, {}])
-    setAwardInputs((prev) => ({ ...prev, [experiences.length]: "" }))
+    setExperiences([...experiences, {}]);
+    setAwardInputs((prev) => ({ ...prev, [experiences.length]: "" }));
   }
 
   function updateExperience(
     index: number,
     field: keyof WorkExperience,
-    value: string | string[] | boolean,
+    value: string | string[] | boolean
   ) {
     setExperiences((prev) => {
-      const next = [...prev]
+      const next = [...prev];
       if (field === "current" && value === true) {
-        next[index] = { ...next[index], current: true, endDate: undefined }
+        next[index] = { ...next[index], current: true, endDate: undefined };
       } else {
-        next[index] = { ...next[index], [field]: value }
+        next[index] = { ...next[index], [field]: value };
       }
-      return next
-    })
+      return next;
+    });
   }
 
   function removeExperience(index: number) {
-    setExperiences((prev) => prev.filter((_, i) => i !== index))
+    setExperiences((prev) => prev.filter((_, i) => i !== index));
     setAwardInputs((prev) => {
-      const next: Record<number, string> = {}
+      const next: Record<number, string> = {};
       Object.keys(prev).forEach((key) => {
-        const i = Number(key)
-        if (i < index) next[i] = prev[i]
-        else if (i > index) next[i - 1] = prev[i]
-      })
-      return next
-    })
+        const i = Number(key);
+        if (i < index) next[i] = prev[i];
+        else if (i > index) next[i - 1] = prev[i];
+      });
+      return next;
+    });
   }
 
   function setAwardInput(index: number, value: string) {
-    setAwardInputs((prev) => ({ ...prev, [index]: value }))
+    setAwardInputs((prev) => ({ ...prev, [index]: value }));
   }
 
   function addExperienceAward(index: number) {
-    const award = awardInputs[index]?.trim()
-    if (!award) return
+    const award = awardInputs[index]?.trim();
+    if (!award) return;
     setExperiences((prev) => {
-      const next = [...prev]
-      const awards = next[index].awards ?? []
-      next[index] = { ...next[index], awards: [...awards, award] }
-      return next
-    })
-    setAwardInputs((prev) => ({ ...prev, [index]: "" }))
+      const next = [...prev];
+      const awards = next[index].awards ?? [];
+      next[index] = { ...next[index], awards: [...awards, award] };
+      return next;
+    });
+    setAwardInputs((prev) => ({ ...prev, [index]: "" }));
   }
 
   function removeExperienceAward(index: number, awardIndex: number) {
     setExperiences((prev) => {
-      const next = [...prev]
-      const awards = next[index].awards ?? []
+      const next = [...prev];
+      const awards = next[index].awards ?? [];
       next[index] = {
         ...next[index],
         awards: awards.filter((_, i) => i !== awardIndex),
-      }
-      return next
-    })
+      };
+      return next;
+    });
   }
 
   function addEducation() {
-    setEducation([...education, {}])
+    setEducation([...education, {}]);
   }
 
   function updateEducation(index: number, field: keyof Education, value: string) {
     setEducation((prev) => {
-      const next = [...prev]
-      next[index] = { ...next[index], [field]: value }
-      return next
-    })
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
   }
 
   function removeEducation(index: number) {
-    setEducation((prev) => prev.filter((_, i) => i !== index))
+    setEducation((prev) => prev.filter((_, i) => i !== index));
   }
 
   function addSkill() {
-    setSkills((prev) => [...prev, {}])
+    setSkills((prev) => [...prev, {}]);
   }
 
   function updateSkill(index: number, field: keyof Skill, value: string) {
     setSkills((prev) => {
-      const next = [...prev]
-      next[index] = { ...next[index], [field]: value }
-      return next
-    })
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
   }
 
   function removeSkill(index: number) {
-    setSkills((prev) => prev.filter((_, i) => i !== index))
+    setSkills((prev) => prev.filter((_, i) => i !== index));
   }
 
   function addCertification() {
-    setCertifications([...certifications, {}])
+    setCertifications([...certifications, {}]);
   }
 
   function updateCertification(index: number, field: keyof Certification, value: string) {
     setCertifications((prev) => {
-      const next = [...prev]
-      next[index] = { ...next[index], [field]: value }
-      return next
-    })
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
   }
 
   function removeCertification(index: number) {
-    setCertifications((prev) => prev.filter((_, i) => i !== index))
+    setCertifications((prev) => prev.filter((_, i) => i !== index));
   }
 
   function addLink() {
-    setLinks([...links, {}])
+    setLinks([...links, {}]);
   }
 
   function updateLink(index: number, field: keyof Link, value: string) {
     setLinks((prev) => {
-      const next = [...prev]
-      next[index] = { ...next[index], [field]: value }
-      return next
-    })
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
   }
 
   function removeLink(index: number) {
-    setLinks((prev) => prev.filter((_, i) => i !== index))
+    setLinks((prev) => prev.filter((_, i) => i !== index));
   }
 
   return (
@@ -323,5 +323,5 @@ export function PersonalInfoDialog({
         </SidebarProvider>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

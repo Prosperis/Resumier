@@ -1,6 +1,6 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -17,20 +17,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   type CreateCertificationFormData,
   createCertificationSchema,
-} from "@/lib/validations/certification"
+} from "@/lib/validations/certification";
 
 interface CertificationFormDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onSubmit: (values: CreateCertificationFormData) => void
-  defaultValues?: Partial<CreateCertificationFormData>
-  title?: string
-  description?: string
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (values: CreateCertificationFormData) => void;
+  defaultValues?: Partial<CreateCertificationFormData>;
+  title?: string;
+  description?: string;
 }
 
 export function CertificationFormDialog({
@@ -52,13 +52,13 @@ export function CertificationFormDialog({
       url: "",
       ...defaultValues,
     },
-  })
+  });
 
   const handleSubmit = (values: CreateCertificationFormData) => {
-    onSubmit(values)
-    onOpenChange(false)
-    form.reset()
-  }
+    onSubmit(values);
+    onOpenChange(false);
+    form.reset();
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -172,5 +172,5 @@ export function CertificationFormDialog({
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

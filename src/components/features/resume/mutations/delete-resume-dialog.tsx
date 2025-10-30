@@ -1,5 +1,5 @@
-import { Loader2, Trash2 } from "lucide-react"
-import { useState } from "react"
+import { Loader2, Trash2 } from "lucide-react";
+import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,16 +10,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { useDeleteResume } from "@/hooks/api"
-import { useToast } from "@/hooks/use-toast"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { useDeleteResume } from "@/hooks/api";
+import { useToast } from "@/hooks/use-toast";
 
 interface DeleteResumeDialogProps {
-  resumeId: string
-  resumeTitle: string
-  trigger?: React.ReactNode
-  onSuccess?: () => void
+  resumeId: string;
+  resumeTitle: string;
+  trigger?: React.ReactNode;
+  onSuccess?: () => void;
 }
 
 export function DeleteResumeDialog({
@@ -28,10 +28,10 @@ export function DeleteResumeDialog({
   trigger,
   onSuccess,
 }: DeleteResumeDialogProps) {
-  const [open, setOpen] = useState(false)
-  const { toast } = useToast()
+  const [open, setOpen] = useState(false);
+  const { toast } = useToast();
 
-  const { mutate, isPending } = useDeleteResume()
+  const { mutate, isPending } = useDeleteResume();
 
   const handleDelete = () => {
     mutate(resumeId, {
@@ -39,11 +39,11 @@ export function DeleteResumeDialog({
         toast({
           title: "Success",
           description: "Resume deleted successfully",
-        })
-        setOpen(false)
+        });
+        setOpen(false);
 
         if (onSuccess) {
-          onSuccess()
+          onSuccess();
         }
       },
       onError: (err) => {
@@ -51,10 +51,10 @@ export function DeleteResumeDialog({
           title: "Error",
           description: err.message || "Failed to delete resume",
           variant: "destructive",
-        })
+        });
       },
-    })
-  }
+    });
+  };
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -78,8 +78,8 @@ export function DeleteResumeDialog({
           <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-              e.preventDefault()
-              handleDelete()
+              e.preventDefault();
+              handleDelete();
             }}
             disabled={isPending}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -91,5 +91,5 @@ export function DeleteResumeDialog({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }

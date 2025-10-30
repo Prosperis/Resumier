@@ -1,10 +1,10 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vitest";
 import {
   type CreateEducationFormData,
   createEducationSchema,
   type EducationFormData,
   educationSchema,
-} from "../education"
+} from "../education";
 
 describe("educationSchema", () => {
   describe("Valid Data", () => {
@@ -19,10 +19,10 @@ describe("educationSchema", () => {
         current: false,
         gpa: "3.8",
         honors: ["Magna Cum Laude", "Dean's List"],
-      }
-      const result = educationSchema.safeParse(validData)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = educationSchema.safeParse(validData);
+      expect(result.success).toBe(true);
+    });
 
     it("validates minimal required fields", () => {
       const data = {
@@ -32,10 +32,10 @@ describe("educationSchema", () => {
         field: "Engineering",
         startDate: "2018-09",
         endDate: "2022-05",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
 
     it("validates current education", () => {
       const data = {
@@ -46,10 +46,10 @@ describe("educationSchema", () => {
         startDate: "2023-09",
         endDate: "",
         current: true,
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
 
     it("validates with empty optional fields", () => {
       const data = {
@@ -60,10 +60,10 @@ describe("educationSchema", () => {
         startDate: "2019-09",
         endDate: "2023-05",
         gpa: "",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
 
     it("validates with omitted optional fields", () => {
       const data = {
@@ -73,10 +73,10 @@ describe("educationSchema", () => {
         field: "Data Science",
         startDate: "2020-09",
         endDate: "2022-05",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
 
     it("validates with empty honors array", () => {
       const data = {
@@ -87,11 +87,11 @@ describe("educationSchema", () => {
         startDate: "2018-09",
         endDate: "2022-05",
         honors: [],
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
-  })
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
+  });
 
   describe("Invalid Data", () => {
     it("fails when institution is missing", () => {
@@ -101,13 +101,13 @@ describe("educationSchema", () => {
         field: "CS",
         startDate: "2018-09",
         endDate: "2022-05",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(false)
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain("institution")
+        expect(result.error.issues[0].path).toContain("institution");
       }
-    })
+    });
 
     it("fails when degree is missing", () => {
       const data = {
@@ -116,13 +116,13 @@ describe("educationSchema", () => {
         field: "CS",
         startDate: "2018-09",
         endDate: "2022-05",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(false)
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain("degree")
+        expect(result.error.issues[0].path).toContain("degree");
       }
-    })
+    });
 
     it("fails when field is missing", () => {
       const data = {
@@ -131,13 +131,13 @@ describe("educationSchema", () => {
         degree: "BS",
         startDate: "2018-09",
         endDate: "2022-05",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(false)
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain("field")
+        expect(result.error.issues[0].path).toContain("field");
       }
-    })
+    });
 
     it("fails when start date is missing", () => {
       const data = {
@@ -146,13 +146,13 @@ describe("educationSchema", () => {
         degree: "BS",
         field: "CS",
         endDate: "2022-05",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(false)
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain("startDate")
+        expect(result.error.issues[0].path).toContain("startDate");
       }
-    })
+    });
 
     it("fails when institution is empty string", () => {
       const data = {
@@ -162,10 +162,10 @@ describe("educationSchema", () => {
         field: "CS",
         startDate: "2018-09",
         endDate: "2022-05",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(false)
-    })
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(false);
+    });
 
     it("fails when degree is empty string", () => {
       const data = {
@@ -175,10 +175,10 @@ describe("educationSchema", () => {
         field: "CS",
         startDate: "2018-09",
         endDate: "2022-05",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(false)
-    })
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(false);
+    });
 
     it("fails when field is empty string", () => {
       const data = {
@@ -188,10 +188,10 @@ describe("educationSchema", () => {
         field: "",
         startDate: "2018-09",
         endDate: "2022-05",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(false)
-    })
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(false);
+    });
 
     it("fails when GPA exceeds 10 characters", () => {
       const data = {
@@ -202,14 +202,14 @@ describe("educationSchema", () => {
         startDate: "2018-09",
         endDate: "2022-05",
         gpa: "12345678901",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(false)
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain("gpa")
+        expect(result.error.issues[0].path).toContain("gpa");
       }
-    })
-  })
+    });
+  });
 
   describe("Edge Cases", () => {
     it("accepts GPA at exactly 10 characters", () => {
@@ -221,10 +221,10 @@ describe("educationSchema", () => {
         startDate: "2018-09",
         endDate: "2022-05",
         gpa: "1234567890",
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
 
     it("validates with multiple honors", () => {
       const data = {
@@ -235,13 +235,13 @@ describe("educationSchema", () => {
         startDate: "2017-09",
         endDate: "2021-05",
         honors: ["Summa Cum Laude", "Phi Beta Kappa", "Honors Thesis"],
-      }
-      const result = educationSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
 
     it("validates with various GPA formats", () => {
-      const gpaFormats = ["3.8", "3.80", "3.8/4.0", "95%", "A"]
+      const gpaFormats = ["3.8", "3.80", "3.8/4.0", "95%", "A"];
 
       for (const gpa of gpaFormats) {
         const data = {
@@ -252,13 +252,13 @@ describe("educationSchema", () => {
           startDate: "2018-09",
           endDate: "2022-05",
           gpa,
-        }
-        const result = educationSchema.safeParse(data)
-        expect(result.success).toBe(true)
+        };
+        const result = educationSchema.safeParse(data);
+        expect(result.success).toBe(true);
       }
-    })
-  })
-})
+    });
+  });
+});
 
 describe("createEducationSchema", () => {
   it("validates new education without ID", () => {
@@ -268,10 +268,10 @@ describe("createEducationSchema", () => {
       field: "Data Science",
       startDate: "2023-09",
       endDate: "2025-05",
-    }
-    const result = createEducationSchema.safeParse(validData)
-    expect(result.success).toBe(true)
-  })
+    };
+    const result = createEducationSchema.safeParse(validData);
+    expect(result.success).toBe(true);
+  });
 
   it("omits ID from parsed data", () => {
     const data = {
@@ -281,14 +281,14 @@ describe("createEducationSchema", () => {
       field: "Physics",
       startDate: "2022-09",
       endDate: "2026-05",
-    }
-    const result = createEducationSchema.safeParse(data)
-    expect(result.success).toBe(true)
+    };
+    const result = createEducationSchema.safeParse(data);
+    expect(result.success).toBe(true);
     if (result.success) {
       // @ts-expect-error - ID should not be in the parsed data
-      expect(result.data.id).toBeUndefined()
+      expect(result.data.id).toBeUndefined();
     }
-  })
+  });
 
   it("validates complete data without ID", () => {
     const data = {
@@ -299,8 +299,8 @@ describe("createEducationSchema", () => {
       endDate: "2025-05",
       gpa: "4.0",
       honors: ["Fellowship"],
-    }
-    const result = createEducationSchema.safeParse(data)
-    expect(result.success).toBe(true)
-  })
-})
+    };
+    const result = createEducationSchema.safeParse(data);
+    expect(result.success).toBe(true);
+  });
+});

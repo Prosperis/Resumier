@@ -3,7 +3,7 @@
  * Reusable Framer Motion animation variants for consistent UI animations
  */
 
-import type { Variants } from "framer-motion"
+import type { Variants } from "framer-motion";
 
 /**
  * Fade Variants
@@ -13,7 +13,7 @@ export const fadeVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
   exit: { opacity: 0 },
-}
+};
 
 /**
  * Fade Up Variants
@@ -23,7 +23,7 @@ export const fadeUpVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: -20 },
-}
+};
 
 /**
  * Fade Down Variants
@@ -33,7 +33,7 @@ export const fadeDownVariants: Variants = {
   hidden: { opacity: 0, y: -20 },
   visible: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 20 },
-}
+};
 
 /**
  * Fade Left Variants
@@ -43,7 +43,7 @@ export const fadeLeftVariants: Variants = {
   hidden: { opacity: 0, x: 20 },
   visible: { opacity: 1, x: 0 },
   exit: { opacity: 0, x: -20 },
-}
+};
 
 /**
  * Fade Right Variants
@@ -53,7 +53,7 @@ export const fadeRightVariants: Variants = {
   hidden: { opacity: 0, x: -20 },
   visible: { opacity: 1, x: 0 },
   exit: { opacity: 0, x: 20 },
-}
+};
 
 /**
  * Scale Variants
@@ -63,7 +63,7 @@ export const scaleVariants: Variants = {
   hidden: { opacity: 0, scale: 0.8 },
   visible: { opacity: 1, scale: 1 },
   exit: { opacity: 0, scale: 0.8 },
-}
+};
 
 /**
  * Scale Bounce Variants
@@ -81,7 +81,7 @@ export const scaleBounceVariants: Variants = {
     },
   },
   exit: { opacity: 0, scale: 0.3 },
-}
+};
 
 /**
  * Slide Up Variants
@@ -91,7 +91,7 @@ export const slideUpVariants: Variants = {
   hidden: { y: "100%" },
   visible: { y: 0 },
   exit: { y: "100%" },
-}
+};
 
 /**
  * Slide Down Variants
@@ -101,7 +101,7 @@ export const slideDownVariants: Variants = {
   hidden: { y: "-100%" },
   visible: { y: 0 },
   exit: { y: "-100%" },
-}
+};
 
 /**
  * Slide Left Variants
@@ -111,7 +111,7 @@ export const slideLeftVariants: Variants = {
   hidden: { x: "100%" },
   visible: { x: 0 },
   exit: { x: "100%" },
-}
+};
 
 /**
  * Slide Right Variants
@@ -121,7 +121,7 @@ export const slideRightVariants: Variants = {
   hidden: { x: "-100%" },
   visible: { x: 0 },
   exit: { x: "-100%" },
-}
+};
 
 /**
  * Stagger Container Variants
@@ -143,7 +143,7 @@ export const staggerContainerVariants: Variants = {
       staggerDirection: -1,
     },
   },
-}
+};
 
 /**
  * Stagger Item Variants
@@ -161,7 +161,7 @@ export const staggerItemVariants: Variants = {
     },
   },
   exit: { opacity: 0, y: -10 },
-}
+};
 
 /**
  * Collapse Variants
@@ -178,7 +178,7 @@ export const collapseVariants: Variants = {
     opacity: 1,
     overflow: "visible",
   },
-}
+};
 
 /**
  * Drawer Variants
@@ -205,7 +205,7 @@ export const drawerVariants = {
     visible: { y: 0 },
     exit: { y: "100%" },
   },
-} as const
+} as const;
 
 /**
  * Modal/Dialog Variants
@@ -215,7 +215,7 @@ export const modalBackdropVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
   exit: { opacity: 0 },
-}
+};
 
 export const modalContentVariants: Variants = {
   hidden: { opacity: 0, scale: 0.95, y: 20 },
@@ -234,7 +234,7 @@ export const modalContentVariants: Variants = {
     scale: 0.95,
     y: 20,
   },
-}
+};
 
 /**
  * Dropdown/Menu Variants
@@ -260,7 +260,7 @@ export const dropdownVariants: Variants = {
     scale: 0.95,
     y: -10,
   },
-}
+};
 
 /**
  * Toast/Notification Variants
@@ -286,7 +286,7 @@ export const toastVariants = {
     visible: { opacity: 1, x: 0, y: 0 },
     exit: { opacity: 0, x: -50, y: 0 },
   },
-} as const
+} as const;
 
 /**
  * Shimmer/Loading Variants
@@ -304,7 +304,7 @@ export const shimmerVariants: Variants = {
       ease: "linear",
     },
   },
-}
+};
 
 /**
  * Pulse Variants
@@ -320,7 +320,7 @@ export const pulseVariants: Variants = {
       ease: "easeInOut",
     },
   },
-}
+};
 
 /**
  * Spin Variants
@@ -335,4 +335,4 @@ export const spinVariants: Variants = {
       ease: "linear",
     },
   },
-}
+};

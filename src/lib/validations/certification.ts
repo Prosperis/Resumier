@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 /**
  * Certification Validation Schema
@@ -12,12 +12,12 @@ export const certificationSchema = z.object({
   expiryDate: z.string().optional().or(z.literal("")),
   credentialId: z.string().optional().or(z.literal("")),
   url: z.string().url("Invalid URL").optional().or(z.literal("")),
-})
+});
 
-export type CertificationFormData = z.infer<typeof certificationSchema>
+export type CertificationFormData = z.infer<typeof certificationSchema>;
 
 /**
  * Schema for creating new certification (without ID)
  */
-export const createCertificationSchema = certificationSchema.omit({ id: true })
-export type CreateCertificationFormData = z.infer<typeof createCertificationSchema>
+export const createCertificationSchema = certificationSchema.omit({ id: true });
+export type CreateCertificationFormData = z.infer<typeof createCertificationSchema>;

@@ -1,5 +1,5 @@
-import { FadeIn } from "@/components/ui/animated"
-import { LoadingDots, LoadingSpinner } from "./loading-spinner"
+import { FadeIn } from "@/components/ui/animated";
+import { LoadingDots, LoadingSpinner } from "./loading-spinner";
 
 /**
  * Generic loading component for route pending states
@@ -11,32 +11,32 @@ export function RouteLoadingFallback({ message = "Loading..." }: { message?: str
       <FadeIn>
         <div className="flex flex-col items-center gap-4">
           <LoadingSpinner size="lg" variant="primary" />
-          <span className="text-lg text-muted-foreground">{message}</span>
+          <span className="text-muted-foreground text-lg">{message}</span>
         </div>
       </FadeIn>
     </div>
-  )
+  );
 }
 
 /**
  * Dashboard-specific loading component
  */
 export function DashboardLoading() {
-  return <RouteLoadingFallback message="Loading your resumes..." />
+  return <RouteLoadingFallback message="Loading your resumes..." />;
 }
 
 /**
  * Resume editor loading component
  */
 export function ResumeEditorLoading() {
-  return <RouteLoadingFallback message="Loading resume editor..." />
+  return <RouteLoadingFallback message="Loading resume editor..." />;
 }
 
 /**
  * Settings loading component
  */
 export function SettingsLoading() {
-  return <RouteLoadingFallback message="Loading settings..." />
+  return <RouteLoadingFallback message="Loading settings..." />;
 }
 
 /**
@@ -44,9 +44,9 @@ export function SettingsLoading() {
  */
 export function InlineLoading({ message }: { message?: string }) {
   return (
-    <div className="flex items-center gap-2 text-muted-foreground">
+    <div className="text-muted-foreground flex items-center gap-2">
       <LoadingDots size="sm" variant="muted" />
       {message && <span className="text-sm">{message}</span>}
     </div>
-  )
+  );
 }

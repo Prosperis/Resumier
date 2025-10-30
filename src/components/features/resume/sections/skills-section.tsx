@@ -1,22 +1,22 @@
-import { Plus, Trash } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select } from "@/components/ui/select"
-import type { Skill } from "@/stores"
+import { Plus, Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
+import type { Skill } from "@/stores";
 
 interface SkillsProps {
-  skills: Skill[]
-  addSkill: () => void
-  updateSkill: (i: number, field: keyof Skill, value: string) => void
-  removeSkill: (i: number) => void
+  skills: Skill[];
+  addSkill: () => void;
+  updateSkill: (i: number, field: keyof Skill, value: string) => void;
+  removeSkill: (i: number) => void;
 }
 
 export function SkillsSection({ skills, addSkill, updateSkill, removeSkill }: SkillsProps) {
   return (
     <div className="grid gap-4">
       {skills.map((skill, i) => (
-        <div key={i} className="border p-4 rounded-md grid gap-2">
+        <div key={i} className="grid gap-2 rounded-md border p-4">
           <div className="grid gap-2">
             <Label>Skill</Label>
             <Input
@@ -47,12 +47,12 @@ export function SkillsSection({ skills, addSkill, updateSkill, removeSkill }: Sk
               <option value="professional">Professional</option>
               <option value="expert">Expert</option>
               {[...Array(10)].map((_, idx) => {
-                const val = (idx + 1).toString()
+                const val = (idx + 1).toString();
                 return (
                   <option key={val} value={val}>
                     {val}
                   </option>
-                )
+                );
               })}
             </Select>
           </div>
@@ -65,5 +65,5 @@ export function SkillsSection({ skills, addSkill, updateSkill, removeSkill }: Sk
         <Plus className="mr-2 h-4 w-4" /> Add Skill
       </Button>
     </div>
-  )
+  );
 }

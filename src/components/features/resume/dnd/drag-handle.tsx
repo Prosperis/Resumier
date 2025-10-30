@@ -1,9 +1,9 @@
-import { GripVertical } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { GripVertical } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface DragHandleProps {
-  className?: string
-  isDragging?: boolean
+  className?: string;
+  isDragging?: boolean;
 }
 
 export function DragHandle({ className, isDragging = false }: DragHandleProps) {
@@ -12,15 +12,15 @@ export function DragHandle({ className, isDragging = false }: DragHandleProps) {
       type="button"
       tabIndex={-1}
       className={cn(
-        "flex items-center justify-center cursor-grab active:cursor-grabbing",
+        "flex cursor-grab items-center justify-center active:cursor-grabbing",
         "text-muted-foreground hover:text-foreground transition-colors",
-        "touch-none select-none p-1",
-        isDragging && "cursor-grabbing text-primary",
-        className,
+        "touch-none p-1 select-none",
+        isDragging && "text-primary cursor-grabbing",
+        className
       )}
       aria-label="Drag to reorder"
     >
       <GripVertical className="h-5 w-5" />
     </button>
-  )
+  );
 }

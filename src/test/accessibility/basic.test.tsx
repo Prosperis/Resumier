@@ -7,86 +7,86 @@
  * of TanStack Router and React Query contexts.
  */
 
-import { describe, expect, it } from "vitest"
-import { axe, renderWithQuery } from "@/test/accessibility-utils"
+import { describe, expect, it } from "vitest";
+import { axe, renderWithQuery } from "@/test/accessibility-utils";
 
 describe("Accessibility Infrastructure", () => {
   describe("Axe Configuration", () => {
     it("should have axe configured with WCAG rules", () => {
-      expect(axe).toBeDefined()
-      expect(typeof axe).toBe("function")
-    })
-  })
+      expect(axe).toBeDefined();
+      expect(typeof axe).toBe("function");
+    });
+  });
 
   describe("Test Utilities", () => {
     it("should provide renderWithQuery helper", () => {
-      expect(renderWithQuery).toBeDefined()
-      expect(typeof renderWithQuery).toBe("function")
-    })
-  })
+      expect(renderWithQuery).toBeDefined();
+      expect(typeof renderWithQuery).toBe("function");
+    });
+  });
 
   describe("Basic HTML Accessibility", () => {
     it("should detect missing alt text", async () => {
       const { container } = renderWithQuery(
         <div>
           <img src="test.jpg" />
-        </div>,
-      )
+        </div>
+      );
 
-      const results = await axe(container)
-      const altTextViolations = results.violations.filter((v) => v.id === "image-alt")
-      expect(altTextViolations.length).toBeGreaterThan(0)
-    })
+      const results = await axe(container);
+      const altTextViolations = results.violations.filter((v) => v.id === "image-alt");
+      expect(altTextViolations.length).toBeGreaterThan(0);
+    });
 
     it("should pass with proper alt text", async () => {
       const { container } = renderWithQuery(
         <div>
           <img src="test.jpg" alt="Test graphic" />
-        </div>,
-      )
+        </div>
+      );
 
-      const results = await axe(container)
-      const altTextViolations = results.violations.filter((v) => v.id === "image-alt")
-      expect(altTextViolations.length).toBe(0)
-    })
+      const results = await axe(container);
+      const altTextViolations = results.violations.filter((v) => v.id === "image-alt");
+      expect(altTextViolations.length).toBe(0);
+    });
 
     it("should detect buttons without accessible names", async () => {
       const { container } = renderWithQuery(
         <div>
           <button />
-        </div>,
-      )
+        </div>
+      );
 
-      const results = await axe(container)
-      const buttonNameViolations = results.violations.filter((v) => v.id === "button-name")
-      expect(buttonNameViolations.length).toBeGreaterThan(0)
-    })
+      const results = await axe(container);
+      const buttonNameViolations = results.violations.filter((v) => v.id === "button-name");
+      expect(buttonNameViolations.length).toBeGreaterThan(0);
+    });
 
     it("should pass with proper button labels", async () => {
       const { container } = renderWithQuery(
         <div>
           <button>Click me</button>
           <button aria-label="Close" />
-        </div>,
-      )
+        </div>
+      );
 
-      const results = await axe(container)
-      const buttonNameViolations = results.violations.filter((v) => v.id === "button-name")
-      expect(buttonNameViolations.length).toBe(0)
-    })
+      const results = await axe(container);
+      const buttonNameViolations = results.violations.filter((v) => v.id === "button-name");
+      expect(buttonNameViolations.length).toBe(0);
+    });
 
     it("should detect invalid ARIA attributes", async () => {
       const { container } = renderWithQuery(
         <div>
           {/* biome-ignore lint/a11y/useSemanticElements: intentionally testing invalid ARIA */}
           <div role="region" aria-labelledby="nonexistent" />
-        </div>,
-      )
+        </div>
+      );
 
-      const results = await axe(container)
-      const ariaViolations = results.violations.filter((v) => v.id.includes("aria"))
-      expect(ariaViolations.length).toBeGreaterThan(0)
-    })
+      const results = await axe(container);
+      const ariaViolations = results.violations.filter((v) => v.id.includes("aria"));
+      expect(ariaViolations.length).toBeGreaterThan(0);
+    });
 
     it("should pass with valid ARIA attributes", async () => {
       const { container } = renderWithQuery(
@@ -96,39 +96,39 @@ describe("Accessibility Infrastructure", () => {
           </div>
           <input aria-invalid="true" aria-describedby="error" />
           <div id="error">Error message</div>
-        </div>,
-      )
+        </div>
+      );
 
-      const results = await axe(container)
-      const ariaViolations = results.violations.filter((v) => v.id.includes("aria-valid"))
-      expect(ariaViolations.length).toBe(0)
-    })
+      const results = await axe(container);
+      const ariaViolations = results.violations.filter((v) => v.id.includes("aria-valid"));
+      expect(ariaViolations.length).toBe(0);
+    });
 
     it("should detect forms without labels", async () => {
       const { container } = renderWithQuery(
         <form>
           <input type="text" />
-        </form>,
-      )
+        </form>
+      );
 
-      const results = await axe(container)
-      const labelViolations = results.violations.filter((v) => v.id === "label")
-      expect(labelViolations.length).toBeGreaterThan(0)
-    })
+      const results = await axe(container);
+      const labelViolations = results.violations.filter((v) => v.id === "label");
+      expect(labelViolations.length).toBeGreaterThan(0);
+    });
 
     it("should pass with proper form labels", async () => {
       const { container } = renderWithQuery(
         <form>
           <label htmlFor="name">Name</label>
           <input id="name" type="text" />
-        </form>,
-      )
+        </form>
+      );
 
-      const results = await axe(container)
-      const labelViolations = results.violations.filter((v) => v.id === "label")
-      expect(labelViolations.length).toBe(0)
-    })
-  })
+      const results = await axe(container);
+      const labelViolations = results.violations.filter((v) => v.id === "label");
+      expect(labelViolations.length).toBe(0);
+    });
+  });
 
   describe("Landmark Structure", () => {
     it("should recognize landmark roles", async () => {
@@ -137,63 +137,63 @@ describe("Accessibility Infrastructure", () => {
           <header>Header</header>
           <nav>Nav</nav>
           <main>Main content</main>
-        </div>,
-      )
+        </div>
+      );
 
-      const results = await axe(container)
+      const results = await axe(container);
       // Should have no violations for landmarks
-      expect(results.violations.length).toBe(0)
-    })
-  })
+      expect(results.violations.length).toBe(0);
+    });
+  });
 
   describe("Focus Management", () => {
     it("should allow tabindex=0", async () => {
       const { container } = renderWithQuery(
         <div>
           <div>Focusable div</div>
-        </div>,
-      )
+        </div>
+      );
 
-      const results = await axe(container)
-      expect(results.violations.length).toBe(0)
-    })
+      const results = await axe(container);
+      expect(results.violations.length).toBe(0);
+    });
 
     it("should allow tabindex=-1 for programmatic focus", async () => {
       const { container } = renderWithQuery(
         <div>
           <div tabIndex={-1}>Programmatically focusable</div>
-        </div>,
-      )
+        </div>
+      );
 
-      const results = await axe(container)
-      expect(results.violations.length).toBe(0)
-    })
-  })
+      const results = await axe(container);
+      expect(results.violations.length).toBe(0);
+    });
+  });
 
   describe("Color Contrast", () => {
     it("should pass with sufficient contrast", async () => {
       const { container } = renderWithQuery(
         <div style={{ backgroundColor: "white", color: "black" }}>
           <p>High contrast text</p>
-        </div>,
-      )
+        </div>
+      );
 
-      const results = await axe(container)
-      const contrastViolations = results.violations.filter((v) => v.id === "color-contrast")
+      const results = await axe(container);
+      const contrastViolations = results.violations.filter((v) => v.id === "color-contrast");
       // Note: This may still fail depending on actual computed styles
       // In production, our OKLCH colors provide ~15:1 contrast
-      expect(contrastViolations).toBeDefined()
-    })
-  })
-})
+      expect(contrastViolations).toBeDefined();
+    });
+  });
+});
 
 describe("Route Tree Structure", () => {
   it("should have importable route tree", async () => {
-    const { routeTree } = await import("@/app/routeTree.gen")
-    expect(routeTree).toBeDefined()
-    expect(typeof routeTree).toBe("object")
-  })
-})
+    const { routeTree } = await import("@/app/routeTree.gen");
+    expect(routeTree).toBeDefined();
+    expect(typeof routeTree).toBe("object");
+  });
+});
 
 /**
  * NOTES ON COMPREHENSIVE TESTING:

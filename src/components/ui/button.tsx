@@ -1,10 +1,10 @@
-import { Slot } from "@radix-ui/react-slot"
-import type { VariantProps } from "class-variance-authority"
-import { motion } from "framer-motion"
-import type * as React from "react"
-import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "./button-variants"
+import { Slot } from "@radix-ui/react-slot";
+import type { VariantProps } from "class-variance-authority";
+import { motion } from "framer-motion";
+import type * as React from "react";
+import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "./button-variants";
 
 function Button({
   className,
@@ -14,10 +14,10 @@ function Button({
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
+    asChild?: boolean;
   }) {
-  const prefersReducedMotion = useReducedMotion()
-  const Comp = asChild ? Slot : "button"
+  const prefersReducedMotion = useReducedMotion();
+  const Comp = asChild ? Slot : "button";
 
   // If asChild, don't wrap with motion (let child handle animations)
   if (asChild) {
@@ -27,10 +27,10 @@ function Button({
         className={cn(buttonVariants({ variant, size, className }))}
         {...props}
       />
-    )
+    );
   }
 
-  const MotionButton = motion.button
+  const MotionButton = motion.button;
 
   return (
     <MotionButton
@@ -42,7 +42,7 @@ function Button({
       }
       {...(props as React.ComponentProps<typeof MotionButton>)}
     />
-  )
+  );
 }
 
-export { Button }
+export { Button };

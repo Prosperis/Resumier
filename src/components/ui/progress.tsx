@@ -3,17 +3,17 @@
  * Animated progress indicators
  */
 
-import { motion } from "framer-motion"
-import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion"
-import { cn } from "@/lib/utils"
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion";
+import { cn } from "@/lib/utils";
 
 interface ProgressProps {
-  value: number // 0-100
-  max?: number
-  variant?: "default" | "primary" | "success" | "warning" | "destructive"
-  size?: "sm" | "md" | "lg"
-  showValue?: boolean
-  className?: string
+  value: number; // 0-100
+  max?: number;
+  variant?: "default" | "primary" | "success" | "warning" | "destructive";
+  size?: "sm" | "md" | "lg";
+  showValue?: boolean;
+  className?: string;
 }
 
 /**
@@ -32,14 +32,14 @@ export function Progress({
   showValue = false,
   className,
 }: ProgressProps) {
-  const prefersReducedMotion = useReducedMotion()
-  const percentage = Math.min(Math.max((value / max) * 100, 0), 100)
+  const prefersReducedMotion = useReducedMotion();
+  const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
   const sizeClasses = {
     sm: "h-1",
     md: "h-2",
     lg: "h-3",
-  }
+  };
 
   const variantClasses = {
     default: "bg-muted-foreground",
@@ -47,12 +47,12 @@ export function Progress({
     success: "bg-green-500",
     warning: "bg-yellow-500",
     destructive: "bg-destructive",
-  }
+  };
 
   return (
     <div className={cn("space-y-1", className)}>
       <div
-        className={cn("relative w-full overflow-hidden rounded-full bg-muted", sizeClasses[size])}
+        className={cn("bg-muted relative w-full overflow-hidden rounded-full", sizeClasses[size])}
       >
         <motion.div
           className={cn("h-full rounded-full", variantClasses[variant])}
@@ -69,20 +69,20 @@ export function Progress({
         />
       </div>
       {showValue && (
-        <div className="text-xs text-muted-foreground text-right">{Math.round(percentage)}%</div>
+        <div className="text-muted-foreground text-right text-xs">{Math.round(percentage)}%</div>
       )}
     </div>
-  )
+  );
 }
 
 interface CircularProgressProps {
-  value: number // 0-100
-  max?: number
-  size?: number
-  strokeWidth?: number
-  variant?: "default" | "primary" | "success" | "warning" | "destructive"
-  showValue?: boolean
-  className?: string
+  value: number; // 0-100
+  max?: number;
+  size?: number;
+  strokeWidth?: number;
+  variant?: "default" | "primary" | "success" | "warning" | "destructive";
+  showValue?: boolean;
+  className?: string;
 }
 
 /**
@@ -102,12 +102,12 @@ export function CircularProgress({
   showValue = false,
   className,
 }: CircularProgressProps) {
-  const prefersReducedMotion = useReducedMotion()
-  const percentage = Math.min(Math.max((value / max) * 100, 0), 100)
+  const prefersReducedMotion = useReducedMotion();
+  const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
-  const radius = (size - strokeWidth) / 2
-  const circumference = 2 * Math.PI * radius
-  const offset = circumference - (percentage / 100) * circumference
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (percentage / 100) * circumference;
 
   const variantColors = {
     default: "stroke-muted-foreground",
@@ -115,14 +115,14 @@ export function CircularProgress({
     success: "stroke-green-500",
     warning: "stroke-yellow-500",
     destructive: "stroke-destructive",
-  }
+  };
 
   return (
     <div className={cn("relative inline-flex items-center justify-center", className)}>
       <svg
         width={size}
         height={size}
-        className="transform -rotate-90"
+        className="-rotate-90 transform"
         role="img"
         aria-label={`Progress: ${Math.round(percentage)}%`}
       >
@@ -177,13 +177,13 @@ export function CircularProgress({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 interface IndeterminateProgressProps {
-  variant?: "default" | "primary"
-  size?: "sm" | "md" | "lg"
-  className?: string
+  variant?: "default" | "primary";
+  size?: "sm" | "md" | "lg";
+  className?: string;
 }
 
 /**
@@ -199,35 +199,35 @@ export function IndeterminateProgress({
   size = "md",
   className,
 }: IndeterminateProgressProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   const sizeClasses = {
     sm: "h-1",
     md: "h-2",
     lg: "h-3",
-  }
+  };
 
   const variantClasses = {
     default: "bg-muted-foreground",
     primary: "bg-primary",
-  }
+  };
 
   if (prefersReducedMotion) {
     return (
       <div
-        className={cn("w-full overflow-hidden rounded-full bg-muted", sizeClasses[size], className)}
+        className={cn("bg-muted w-full overflow-hidden rounded-full", sizeClasses[size], className)}
       >
         <div className={cn("h-full w-1/3 animate-pulse rounded-full", variantClasses[variant])} />
       </div>
-    )
+    );
   }
 
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden rounded-full bg-muted",
+        "bg-muted relative w-full overflow-hidden rounded-full",
         sizeClasses[size],
-        className,
+        className
       )}
     >
       <motion.div
@@ -242,5 +242,5 @@ export function IndeterminateProgress({
         }}
       />
     </div>
-  )
+  );
 }

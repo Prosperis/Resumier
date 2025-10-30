@@ -1,16 +1,16 @@
-import type { Resume } from "./types"
+import type { Resume } from "./types";
 
 /**
  * In-Memory Mock Database
  * Simulates a backend database for development
  */
 class MockDatabase {
-  private resumes: Map<string, Resume> = new Map()
-  private idCounter = 1
+  private resumes: Map<string, Resume> = new Map();
+  private idCounter = 1;
 
   constructor() {
     // Initialize with sample data
-    this.seedData()
+    this.seedData();
   }
 
   /**
@@ -109,57 +109,57 @@ class MockDatabase {
       },
       createdAt: "2024-01-15T10:00:00Z",
       updatedAt: "2024-10-15T14:30:00Z",
-    }
+    };
 
-    this.resumes.set(sampleResume.id, sampleResume)
-    this.idCounter = 2
+    this.resumes.set(sampleResume.id, sampleResume);
+    this.idCounter = 2;
   }
 
   /**
    * Generate new ID
    */
   private generateId(): string {
-    return `${this.idCounter++}`
+    return `${this.idCounter++}`;
   }
 
   /**
    * Get all resumes for a user (or all if no userId provided)
    */
   getResumes(userId?: string): Resume[] {
-    const allResumes = Array.from(this.resumes.values())
-    if (!userId) return allResumes
-    return allResumes.filter((resume) => resume.userId === userId)
+    const allResumes = Array.from(this.resumes.values());
+    if (!userId) return allResumes;
+    return allResumes.filter((resume) => resume.userId === userId);
   }
 
   /**
    * Get single resume by ID
    */
   getResume(id: string): Resume | undefined {
-    return this.resumes.get(id)
+    return this.resumes.get(id);
   }
 
   /**
    * Create new resume
    */
   createResume(data: Omit<Resume, "id" | "createdAt" | "updatedAt">): Resume {
-    const now = new Date().toISOString()
+    const now = new Date().toISOString();
     const resume: Resume = {
       ...data,
       id: this.generateId(),
       createdAt: now,
       updatedAt: now,
-    }
+    };
 
-    this.resumes.set(resume.id, resume)
-    return resume
+    this.resumes.set(resume.id, resume);
+    return resume;
   }
 
   /**
    * Update existing resume
    */
   updateResume(id: string, updates: Partial<Omit<Resume, "id" | "createdAt">>): Resume | null {
-    const existing = this.resumes.get(id)
-    if (!existing) return null
+    const existing = this.resumes.get(id);
+    if (!existing) return null;
 
     const updated: Resume = {
       ...existing,
@@ -181,42 +181,42 @@ class MockDatabase {
               : existing.content.skills,
           }
         : existing.content,
-    }
+    };
 
-    this.resumes.set(id, updated)
-    return updated
+    this.resumes.set(id, updated);
+    return updated;
   }
 
   /**
    * Delete resume
    */
   deleteResume(id: string): boolean {
-    return this.resumes.delete(id)
+    return this.resumes.delete(id);
   }
 
   /**
    * Check if resume exists
    */
   exists(id: string): boolean {
-    return this.resumes.has(id)
+    return this.resumes.has(id);
   }
 
   /**
    * Clear all data (for testing)
    */
   clear() {
-    this.resumes.clear()
-    this.idCounter = 1
+    this.resumes.clear();
+    this.idCounter = 1;
   }
 
   /**
    * Reset to initial state (for testing)
    */
   reset() {
-    this.clear()
-    this.seedData()
+    this.clear();
+    this.seedData();
   }
 }
 
 // Singleton instance
-export const mockDb = new MockDatabase()
+export const mockDb = new MockDatabase();

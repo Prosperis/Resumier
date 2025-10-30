@@ -10,28 +10,28 @@
  * Removes dangerous HTML tags and attributes
  */
 export function sanitizeHtml(input: string): string {
-  if (!input) return ""
+  if (!input) return "";
 
   // Remove script tags and their content
-  let sanitized = input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+  let sanitized = input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
 
   // Remove event handlers (onclick, onerror, etc.)
-  sanitized = sanitized.replace(/\s*on\w+\s*=\s*["'][^"']*["']/gi, "")
-  sanitized = sanitized.replace(/\s*on\w+\s*=\s*[^\s>]*/gi, "")
+  sanitized = sanitized.replace(/\s*on\w+\s*=\s*["'][^"']*["']/gi, "");
+  sanitized = sanitized.replace(/\s*on\w+\s*=\s*[^\s>]*/gi, "");
 
   // Remove javascript: protocols
-  sanitized = sanitized.replace(/javascript:/gi, "")
+  sanitized = sanitized.replace(/javascript:/gi, "");
 
   // Remove data: protocols (except for images)
-  sanitized = sanitized.replace(/data:(?!image)/gi, "")
+  sanitized = sanitized.replace(/data:(?!image)/gi, "");
 
   // Remove iframe tags
-  sanitized = sanitized.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+  sanitized = sanitized.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "");
 
   // Remove object and embed tags
-  sanitized = sanitized.replace(/<(object|embed)\b[^<]*(?:(?!<\/\1>)<[^<]*)*<\/\1>/gi, "")
+  sanitized = sanitized.replace(/<(object|embed)\b[^<]*(?:(?!<\/\1>)<[^<]*)*<\/\1>/gi, "");
 
-  return sanitized.trim()
+  return sanitized.trim();
 }
 
 /**
@@ -39,7 +39,7 @@ export function sanitizeHtml(input: string): string {
  * Converts special characters to HTML entities
  */
 export function sanitizeText(input: string): string {
-  if (!input) return ""
+  if (!input) return "";
 
   // Use a map for HTML entity conversion (works in both browser and Node.js)
   const entityMap: Record<string, string> = {
@@ -49,9 +49,9 @@ export function sanitizeText(input: string): string {
     '"': "&quot;",
     "'": "&#39;",
     "/": "&#x2F;",
-  }
+  };
 
-  return input.replace(/[&<>"'/]/g, (char) => entityMap[char] || char)
+  return input.replace(/[&<>"'/]/g, (char) => entityMap[char] || char);
 }
 
 /**
@@ -59,21 +59,21 @@ export function sanitizeText(input: string): string {
  * Ensures URL is safe and uses allowed protocols
  */
 export function sanitizeUrl(url: string): string {
-  if (!url) return ""
+  if (!url) return "";
 
   try {
-    const parsed = new URL(url)
+    const parsed = new URL(url);
 
     // Only allow safe protocols
-    const allowedProtocols = ["http:", "https:", "mailto:", "tel:"]
+    const allowedProtocols = ["http:", "https:", "mailto:", "tel:"];
     if (!allowedProtocols.includes(parsed.protocol)) {
-      return ""
+      return "";
     }
 
-    return parsed.toString()
+    return parsed.toString();
   } catch {
     // Invalid URL
-    return ""
+    return "";
   }
 }
 
@@ -81,60 +81,60 @@ export function sanitizeUrl(url: string): string {
  * Validate email format
  */
 export function isValidEmail(email: string): boolean {
-  if (!email) return false
+  if (!email) return false;
 
   // RFC 5322 compliant regex (simplified)
   const emailRegex =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-  return emailRegex.test(email)
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  return emailRegex.test(email);
 }
 
 /**
  * Validate phone number format (international)
  */
 export function isValidPhone(phone: string): boolean {
-  if (!phone) return false
+  if (!phone) return false;
 
   // Remove spaces, dashes, parentheses for validation
-  const cleaned = phone.replace(/[\s\-()]/g, "")
+  const cleaned = phone.replace(/[\s\-()]/g, "");
 
   // Must start with + (optional) followed by 7-15 digits
-  const phoneRegex = /^\+?[1-9]\d{6,14}$/
-  return phoneRegex.test(cleaned)
+  const phoneRegex = /^\+?[1-9]\d{6,14}$/;
+  return phoneRegex.test(cleaned);
 }
 
 /**
  * Sanitize filename to prevent directory traversal
  */
 export function sanitizeFilename(filename: string): string {
-  if (!filename) return "unnamed"
+  if (!filename) return "unnamed";
 
   // Remove path separators
-  let sanitized = filename.replace(/[/\\]/g, "")
+  let sanitized = filename.replace(/[/\\]/g, "");
 
   // Remove dangerous characters
-  sanitized = sanitized.replace(/[<>:"|?*]/g, "")
+  sanitized = sanitized.replace(/[<>:"|?*]/g, "");
 
   // Remove control characters (0-31) by filtering each character
   sanitized = sanitized
     .split("")
     .filter((char) => char.charCodeAt(0) > 31)
-    .join("")
+    .join("");
 
   // Remove leading/trailing dots and spaces
-  sanitized = sanitized.replace(/^[.\s]+|[.\s]+$/g, "")
+  sanitized = sanitized.replace(/^[.\s]+|[.\s]+$/g, "");
 
   // If empty after sanitization, return default
-  if (!sanitized) return "unnamed"
+  if (!sanitized) return "unnamed";
 
   // Limit length
   if (sanitized.length > 255) {
-    const ext = sanitized.split(".").pop()
-    const name = sanitized.slice(0, 255 - (ext?.length || 0) - 1)
-    sanitized = ext ? `${name}.${ext}` : name
+    const ext = sanitized.split(".").pop();
+    const name = sanitized.slice(0, 255 - (ext?.length || 0) - 1);
+    sanitized = ext ? `${name}.${ext}` : name;
   }
 
-  return sanitized
+  return sanitized;
 }
 
 /**
@@ -142,7 +142,7 @@ export function sanitizeFilename(filename: string): string {
  * Tracks function calls and prevents excessive requests
  */
 export class RateLimiter {
-  private calls: Map<string, number[]> = new Map()
+  private calls: Map<string, number[]> = new Map();
 
   /**
    * Check if action is allowed
@@ -151,39 +151,39 @@ export class RateLimiter {
    * @param windowMs - Time window in milliseconds
    */
   isAllowed(key: string, maxCalls: number, windowMs: number): boolean {
-    const now = Date.now()
-    const calls = this.calls.get(key) || []
+    const now = Date.now();
+    const calls = this.calls.get(key) || [];
 
     // Remove old calls outside the window
-    const recentCalls = calls.filter((time) => now - time < windowMs)
+    const recentCalls = calls.filter((time) => now - time < windowMs);
 
     if (recentCalls.length >= maxCalls) {
-      return false
+      return false;
     }
 
     // Add current call
-    recentCalls.push(now)
-    this.calls.set(key, recentCalls)
+    recentCalls.push(now);
+    this.calls.set(key, recentCalls);
 
     // Cleanup old entries periodically
     if (this.calls.size > 1000) {
-      this.cleanup(windowMs)
+      this.cleanup(windowMs);
     }
 
-    return true
+    return true;
   }
 
   /**
    * Clean up old entries
    */
   private cleanup(windowMs: number): void {
-    const now = Date.now()
+    const now = Date.now();
     for (const [key, calls] of this.calls.entries()) {
-      const recentCalls = calls.filter((time) => now - time < windowMs)
+      const recentCalls = calls.filter((time) => now - time < windowMs);
       if (recentCalls.length === 0) {
-        this.calls.delete(key)
+        this.calls.delete(key);
       } else {
-        this.calls.set(key, recentCalls)
+        this.calls.set(key, recentCalls);
       }
     }
   }
@@ -192,30 +192,30 @@ export class RateLimiter {
    * Reset rate limit for a specific key
    */
   reset(key: string): void {
-    this.calls.delete(key)
+    this.calls.delete(key);
   }
 
   /**
    * Clear all rate limits
    */
   clear(): void {
-    this.calls.clear()
+    this.calls.clear();
   }
 }
 
 /**
  * Global rate limiter instance
  */
-export const globalRateLimiter = new RateLimiter()
+export const globalRateLimiter = new RateLimiter();
 
 /**
  * Secure random string generator
  * Uses crypto API for cryptographically secure randomness
  */
 export function generateSecureToken(length = 32): string {
-  const array = new Uint8Array(length)
-  crypto.getRandomValues(array)
-  return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join("")
+  const array = new Uint8Array(length);
+  crypto.getRandomValues(array);
+  return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 /**
@@ -223,18 +223,18 @@ export function generateSecureToken(length = 32): string {
  * Useful for client-side integrity checks (not for passwords!)
  */
 export async function hashString(input: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(input)
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map((byte) => byte.toString(16).padStart(2, "0")).join("")
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 /**
  * Validate content length to prevent DoS
  */
 export function validateContentLength(content: string, maxLength: number): boolean {
-  return content.length <= maxLength
+  return content.length <= maxLength;
 }
 
 /**
@@ -242,26 +242,26 @@ export function validateContentLength(content: string, maxLength: number): boole
  * Checks if regex execution takes too long
  */
 export function safeRegexTest(pattern: RegExp, input: string, timeoutMs = 100): boolean {
-  const start = Date.now()
+  const start = Date.now();
 
   try {
     // Set a timeout
     const timer = setTimeout(() => {
-      throw new Error("Regex timeout")
-    }, timeoutMs)
+      throw new Error("Regex timeout");
+    }, timeoutMs);
 
-    const result = pattern.test(input)
-    clearTimeout(timer)
+    const result = pattern.test(input);
+    clearTimeout(timer);
 
-    const duration = Date.now() - start
+    const duration = Date.now() - start;
     if (duration > timeoutMs / 2) {
-      console.warn(`Slow regex execution: ${duration}ms`)
+      console.warn(`Slow regex execution: ${duration}ms`);
     }
 
-    return result
+    return result;
   } catch (error) {
-    console.error("Regex execution failed:", error)
-    return false
+    console.error("Regex execution failed:", error);
+    return false;
   }
 }
 
@@ -270,26 +270,26 @@ export function safeRegexTest(pattern: RegExp, input: string, timeoutMs = 100): 
  * Check if CSP and other security headers are present
  */
 export function validateSecurityHeaders(headers: Headers): {
-  valid: boolean
-  missing: string[]
-  warnings: string[]
+  valid: boolean;
+  missing: string[];
+  warnings: string[];
 } {
-  const requiredHeaders = ["content-security-policy", "x-frame-options", "x-content-type-options"]
+  const requiredHeaders = ["content-security-policy", "x-frame-options", "x-content-type-options"];
 
-  const recommendedHeaders = ["strict-transport-security", "referrer-policy", "permissions-policy"]
+  const recommendedHeaders = ["strict-transport-security", "referrer-policy", "permissions-policy"];
 
-  const missing: string[] = []
-  const warnings: string[] = []
+  const missing: string[] = [];
+  const warnings: string[] = [];
 
   for (const header of requiredHeaders) {
     if (!headers.has(header)) {
-      missing.push(header)
+      missing.push(header);
     }
   }
 
   for (const header of recommendedHeaders) {
     if (!headers.has(header)) {
-      warnings.push(header)
+      warnings.push(header);
     }
   }
 
@@ -297,5 +297,5 @@ export function validateSecurityHeaders(headers: Headers): {
     valid: missing.length === 0,
     missing,
     warnings,
-  }
+  };
 }

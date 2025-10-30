@@ -1,1 +1,1 @@
-export { PersonalInfoForm } from "./personal-info-form"
+export { PersonalInfoForm } from "./personal-info-form";

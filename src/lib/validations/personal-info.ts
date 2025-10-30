@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 /**
  * Personal Info Validation Schema
@@ -17,6 +17,6 @@ export const personalInfoSchema = z.object({
     .max(500, "Summary must be less than 500 characters")
     .optional()
     .or(z.literal("")),
-})
+});
 
-export type PersonalInfoFormData = z.infer<typeof personalInfoSchema>
+export type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;

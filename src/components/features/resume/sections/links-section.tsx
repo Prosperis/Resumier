@@ -1,16 +1,16 @@
-import { Plus, Trash } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import type { Link } from "@/stores"
+import { Plus, Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { Link } from "@/stores";
 
 interface LinksProps {
-  customUrl: string
-  links: Link[]
-  setCustomUrl: (v: string) => void
-  addLink: () => void
-  updateLink: (i: number, field: keyof Link, value: string) => void
-  removeLink: (i: number) => void
+  customUrl: string;
+  links: Link[];
+  setCustomUrl: (v: string) => void;
+  addLink: () => void;
+  updateLink: (i: number, field: keyof Link, value: string) => void;
+  removeLink: (i: number) => void;
 }
 
 export function LinksSection({
@@ -33,7 +33,7 @@ export function LinksSection({
         />
       </div>
       {links.map((link, i) => (
-        <div key={i} className="border p-4 rounded-md grid gap-2">
+        <div key={i} className="grid gap-2 rounded-md border p-4">
           <div className="grid gap-2">
             <Label>Label</Label>
             <Input
@@ -59,5 +59,5 @@ export function LinksSection({
         <Plus className="mr-2 h-4 w-4" /> Add Link
       </Button>
     </div>
-  )
+  );
 }

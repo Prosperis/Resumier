@@ -3,7 +3,7 @@
  * Reusable transition configurations for Framer Motion
  */
 
-import type { Transition } from "framer-motion"
+import type { Transition } from "framer-motion";
 
 /**
  * Duration presets in seconds
@@ -14,7 +14,7 @@ export const durations = {
   normal: 0.3,
   slow: 0.5,
   slower: 0.75,
-} as const
+} as const;
 
 /**
  * Easing functions
@@ -32,7 +32,7 @@ export const easings = {
   // Custom easing
   bounce: [0.68, -0.55, 0.265, 1.55] as const,
   smooth: [0.645, 0.045, 0.355, 1] as const,
-}
+};
 
 /**
  * Default transition
@@ -41,7 +41,7 @@ export const easings = {
 export const defaultTransition: Transition = {
   duration: durations.normal,
   ease: easings.easeInOut,
-}
+};
 
 /**
  * Fast transition
@@ -50,7 +50,7 @@ export const defaultTransition: Transition = {
 export const fastTransition: Transition = {
   duration: durations.fast,
   ease: easings.easeOut,
-}
+};
 
 /**
  * Slow transition
@@ -59,7 +59,7 @@ export const fastTransition: Transition = {
 export const slowTransition: Transition = {
   duration: durations.slow,
   ease: easings.smooth,
-}
+};
 
 /**
  * Spring transition
@@ -69,7 +69,7 @@ export const springTransition: Transition = {
   type: "spring",
   stiffness: 300,
   damping: 30,
-}
+};
 
 /**
  * Bouncy spring transition
@@ -80,7 +80,7 @@ export const bouncySpringTransition: Transition = {
   stiffness: 400,
   damping: 17,
   mass: 0.8,
-}
+};
 
 /**
  * Smooth spring transition
@@ -90,7 +90,7 @@ export const smoothSpringTransition: Transition = {
   type: "spring",
   stiffness: 100,
   damping: 20,
-}
+};
 
 /**
  * Stiff spring transition
@@ -100,7 +100,7 @@ export const stiffSpringTransition: Transition = {
   type: "spring",
   stiffness: 500,
   damping: 25,
-}
+};
 
 /**
  * Page transition
@@ -109,7 +109,7 @@ export const stiffSpringTransition: Transition = {
 export const pageTransition: Transition = {
   duration: durations.normal,
   ease: easings.easeInOut,
-}
+};
 
 /**
  * Modal transition
@@ -119,7 +119,7 @@ export const modalTransition: Transition = {
   type: "spring",
   stiffness: 300,
   damping: 30,
-}
+};
 
 /**
  * Dropdown transition
@@ -129,7 +129,7 @@ export const dropdownTransition: Transition = {
   type: "spring",
   stiffness: 400,
   damping: 30,
-}
+};
 
 /**
  * Stagger transition
@@ -138,7 +138,7 @@ export const dropdownTransition: Transition = {
 export const staggerTransition: Transition = {
   staggerChildren: 0.1,
   delayChildren: 0.05,
-}
+};
 
 /**
  * Layout transition
@@ -149,7 +149,7 @@ export const layoutTransition: Transition = {
   stiffness: 300,
   damping: 30,
   mass: 0.8,
-}
+};
 
 /**
  * Collapse transition
@@ -158,7 +158,7 @@ export const layoutTransition: Transition = {
 export const collapseTransition: Transition = {
   duration: durations.normal,
   ease: easings.easeInOut,
-}
+};
 
 /**
  * Instant transition
@@ -166,7 +166,7 @@ export const collapseTransition: Transition = {
  */
 export const instantTransition: Transition = {
   duration: durations.instant,
-}
+};
 
 /**
  * Create custom transition
@@ -176,7 +176,7 @@ export function createTransition(overrides: Partial<Transition> = {}): Transitio
   return {
     ...defaultTransition,
     ...overrides,
-  }
+  };
 }
 
 /**
@@ -187,5 +187,5 @@ export function createSpringTransition(overrides: Partial<Transition> = {}): Tra
   return {
     ...springTransition,
     ...overrides,
-  }
+  };
 }

@@ -1,4 +1,4 @@
-import { type Metric, onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals"
+import { type Metric, onCLS, onFCP, onINP, onLCP, onTTFB } from "web-vitals";
 
 /**
  * Web Vitals tracking utilities
@@ -12,18 +12,18 @@ const THRESHOLDS = {
   INP: { good: 200, poor: 500 },
   LCP: { good: 2500, poor: 4000 },
   TTFB: { good: 800, poor: 1800 },
-}
+};
 
 /**
  * Get rating based on value and thresholds
  */
 function getRating(
   value: number,
-  thresholds: { good: number; poor: number },
+  thresholds: { good: number; poor: number }
 ): "good" | "needs-improvement" | "poor" {
-  if (value <= thresholds.good) return "good"
-  if (value <= thresholds.poor) return "needs-improvement"
-  return "poor"
+  if (value <= thresholds.good) return "good";
+  if (value <= thresholds.poor) return "needs-improvement";
+  return "poor";
 }
 
 /**
@@ -32,19 +32,19 @@ function getRating(
  */
 function sendToAnalytics(metric: Metric) {
   // Get rating
-  const thresholds = THRESHOLDS[metric.name as keyof typeof THRESHOLDS]
-  const rating = thresholds ? getRating(metric.value, thresholds) : "unknown"
+  const thresholds = THRESHOLDS[metric.name as keyof typeof THRESHOLDS];
+  const rating = thresholds ? getRating(metric.value, thresholds) : "unknown";
 
   // Log to console in development
   if (import.meta.env.DEV) {
-    const emoji = rating === "good" ? "✅" : rating === "needs-improvement" ? "⚠️" : "❌"
+    const emoji = rating === "good" ? "✅" : rating === "needs-improvement" ? "⚠️" : "❌";
     console.group(
-      `${emoji} ${metric.name}: ${metric.value.toFixed(2)}${metric.name === "CLS" ? "" : "ms"}`,
-    )
-    console.log(`Rating: ${rating}`)
-    console.log(`ID: ${metric.id}`)
-    console.log(`Navigation Type: ${metric.navigationType}`)
-    console.groupEnd()
+      `${emoji} ${metric.name}: ${metric.value.toFixed(2)}${metric.name === "CLS" ? "" : "ms"}`
+    );
+    console.log(`Rating: ${rating}`);
+    console.log(`ID: ${metric.id}`);
+    console.log(`Navigation Type: ${metric.navigationType}`);
+    console.groupEnd();
   }
 
   // In production, send to analytics service
@@ -81,16 +81,16 @@ function sendToAnalytics(metric: Metric) {
  */
 export function initWebVitals() {
   // Only run in browser
-  if (typeof window === "undefined") return
+  if (typeof window === "undefined") return;
 
   // Track all Core Web Vitals
-  onCLS(sendToAnalytics)
-  onFCP(sendToAnalytics)
-  onINP(sendToAnalytics)
-  onLCP(sendToAnalytics)
-  onTTFB(sendToAnalytics)
+  onCLS(sendToAnalytics);
+  onFCP(sendToAnalytics);
+  onINP(sendToAnalytics);
+  onLCP(sendToAnalytics);
+  onTTFB(sendToAnalytics);
 
-  console.log("📊 Web Vitals tracking initialized")
+  console.log("📊 Web Vitals tracking initialized");
 }
 
 /**
@@ -98,48 +98,48 @@ export function initWebVitals() {
  * Useful for debugging or displaying in UI
  */
 export async function getWebVitalsReport() {
-  const { onCLS, onFCP, onINP, onLCP, onTTFB } = await import("web-vitals")
+  const { onCLS, onFCP, onINP, onLCP, onTTFB } = await import("web-vitals");
 
   return new Promise<Record<string, Metric>>((resolve) => {
-    const vitals: Record<string, Metric> = {}
-    let count = 0
-    const total = 5
+    const vitals: Record<string, Metric> = {};
+    let count = 0;
+    const total = 5;
 
     const checkComplete = () => {
-      count++
+      count++;
       if (count === total) {
-        resolve(vitals)
+        resolve(vitals);
       }
-    }
+    };
 
     onCLS((metric) => {
-      vitals.CLS = metric
-      checkComplete()
-    })
+      vitals.CLS = metric;
+      checkComplete();
+    });
     onFCP((metric) => {
-      vitals.FCP = metric
-      checkComplete()
-    })
+      vitals.FCP = metric;
+      checkComplete();
+    });
     onINP((metric) => {
-      vitals.INP = metric
-      checkComplete()
-    })
+      vitals.INP = metric;
+      checkComplete();
+    });
     onLCP((metric) => {
-      vitals.LCP = metric
-      checkComplete()
-    })
+      vitals.LCP = metric;
+      checkComplete();
+    });
     onTTFB((metric) => {
-      vitals.TTFB = metric
-      checkComplete()
-    })
-  })
+      vitals.TTFB = metric;
+      checkComplete();
+    });
+  });
 }
 
 // Export for development/debugging
 if (import.meta.env.DEV) {
   // biome-ignore lint/suspicious/noExplicitAny: dev-only debugging utilities on window object
-  ;(window as any).webVitals = {
+  (window as any).webVitals = {
     getReport: getWebVitalsReport,
-  }
-  console.log("💡 Web vitals available: window.webVitals.getReport()")
+  };
+  console.log("💡 Web vitals available: window.webVitals.getReport()");
 }

@@ -4,9 +4,9 @@
  */
 
 // Hooks
-export * from "./hooks/use-reduced-motion"
+export * from "./hooks/use-reduced-motion";
 
 // Transitions
-export * from "./transitions"
+export * from "./transitions";
 // Variants
-export * from "./variants"
+export * from "./variants";

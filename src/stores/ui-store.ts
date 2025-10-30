@@ -1,46 +1,46 @@
-import { create } from "zustand"
-import { createJSONStorage, devtools, persist } from "zustand/middleware"
+import { create } from "zustand";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 export interface Notification {
-  id: string
-  type: "info" | "success" | "warning" | "error"
-  title: string
-  message?: string
-  duration?: number
+  id: string;
+  type: "info" | "success" | "warning" | "error";
+  title: string;
+  message?: string;
+  duration?: number;
 }
 
 interface UIStore {
   // Sidebar State
-  sidebarOpen: boolean
-  sidebarCollapsed: boolean
+  sidebarOpen: boolean;
+  sidebarCollapsed: boolean;
 
   // Dialog State
-  activeDialog: string | null
-  dialogData: Record<string, unknown>
+  activeDialog: string | null;
+  dialogData: Record<string, unknown>;
 
   // Notification State
-  notifications: Notification[]
+  notifications: Notification[];
 
   // Loading State
-  globalLoading: boolean
+  globalLoading: boolean;
 
   // Sidebar Actions
-  setSidebarOpen: (open: boolean) => void
-  toggleSidebar: () => void
-  setSidebarCollapsed: (collapsed: boolean) => void
-  toggleSidebarCollapsed: () => void
+  setSidebarOpen: (open: boolean) => void;
+  toggleSidebar: () => void;
+  setSidebarCollapsed: (collapsed: boolean) => void;
+  toggleSidebarCollapsed: () => void;
 
   // Dialog Actions
-  openDialog: (name: string, data?: Record<string, unknown>) => void
-  closeDialog: () => void
+  openDialog: (name: string, data?: Record<string, unknown>) => void;
+  closeDialog: () => void;
 
   // Notification Actions
-  addNotification: (notification: Omit<Notification, "id">) => void
-  removeNotification: (id: string) => void
-  clearNotifications: () => void
+  addNotification: (notification: Omit<Notification, "id">) => void;
+  removeNotification: (id: string) => void;
+  clearNotifications: () => void;
 
   // Loading Actions
-  setGlobalLoading: (loading: boolean) => void
+  setGlobalLoading: (loading: boolean) => void;
 }
 
 const initialState = {
@@ -50,7 +50,7 @@ const initialState = {
   dialogData: {},
   notifications: [],
   globalLoading: false,
-}
+};
 
 export const useUIStore = create<UIStore>()(
   devtools(
@@ -88,7 +88,7 @@ export const useUIStore = create<UIStore>()(
 
         // Notification Actions
         addNotification: (notification) => {
-          const id = `notification-${Date.now()}-${Math.random()}`
+          const id = `notification-${Date.now()}-${Math.random()}`;
           set((state) => ({
             notifications: [
               ...state.notifications,
@@ -97,16 +97,16 @@ export const useUIStore = create<UIStore>()(
                 id,
               },
             ],
-          }))
+          }));
 
           // Auto-remove after duration (default 5s)
-          const duration = notification.duration ?? 5000
+          const duration = notification.duration ?? 5000;
           if (duration > 0) {
             setTimeout(() => {
               set((state) => ({
                 notifications: state.notifications.filter((n) => n.id !== id),
-              }))
-            }, duration)
+              }));
+            }, duration);
           }
         },
 
@@ -128,34 +128,34 @@ export const useUIStore = create<UIStore>()(
           sidebarOpen: state.sidebarOpen,
           sidebarCollapsed: state.sidebarCollapsed,
         }),
-      },
+      }
     ),
-    { name: "UIStore" },
-  ),
-)
+    { name: "UIStore" }
+  )
+);
 
 // Selectors for optimized access
-export const selectSidebarOpen = (state: UIStore) => state.sidebarOpen
-export const selectSidebarCollapsed = (state: UIStore) => state.sidebarCollapsed
-export const selectActiveDialog = (state: UIStore) => state.activeDialog
-export const selectDialogData = (state: UIStore) => state.dialogData
-export const selectNotifications = (state: UIStore) => state.notifications
-export const selectGlobalLoading = (state: UIStore) => state.globalLoading
+export const selectSidebarOpen = (state: UIStore) => state.sidebarOpen;
+export const selectSidebarCollapsed = (state: UIStore) => state.sidebarCollapsed;
+export const selectActiveDialog = (state: UIStore) => state.activeDialog;
+export const selectDialogData = (state: UIStore) => state.dialogData;
+export const selectNotifications = (state: UIStore) => state.notifications;
+export const selectGlobalLoading = (state: UIStore) => state.globalLoading;
 
 export const selectSidebarActions = (state: UIStore) => ({
   setSidebarOpen: state.setSidebarOpen,
   toggleSidebar: state.toggleSidebar,
   setSidebarCollapsed: state.setSidebarCollapsed,
   toggleSidebarCollapsed: state.toggleSidebarCollapsed,
-})
+});
 
 export const selectDialogActions = (state: UIStore) => ({
   openDialog: state.openDialog,
   closeDialog: state.closeDialog,
-})
+});
 
 export const selectNotificationActions = (state: UIStore) => ({
   addNotification: state.addNotification,
   removeNotification: state.removeNotification,
   clearNotifications: state.clearNotifications,
-})
+});

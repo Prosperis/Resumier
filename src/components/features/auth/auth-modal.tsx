@@ -1,78 +1,78 @@
-import { Github, Mail } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Github, Mail } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface AuthModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 export function AuthModal({ open, onOpenChange }: AuthModalProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOAuthSignIn = async (provider: string) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       // TODO: Implement Better Auth OAuth sign in
-      console.log(`Sign in with ${provider}`)
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      console.log(`Sign in with ${provider}`);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
-      console.error(`${provider} sign in error:`, error)
+      console.error(`${provider} sign in error:`, error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
     try {
-      const formData = new FormData(e.currentTarget)
-      const email = formData.get("email") as string
-      const password = formData.get("password") as string
+      const formData = new FormData(e.currentTarget);
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
       // TODO: Implement Better Auth email sign in
-      console.log("Email sign in:", { email, password })
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      console.log("Email sign in:", { email, password });
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
-      console.error("Email sign in error:", error)
+      console.error("Email sign in error:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleEmailSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
     try {
-      const formData = new FormData(e.currentTarget)
-      const name = formData.get("name") as string
-      const email = formData.get("email") as string
-      const password = formData.get("password") as string
+      const formData = new FormData(e.currentTarget);
+      const name = formData.get("name") as string;
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
       // TODO: Implement Better Auth email sign up
-      console.log("Email sign up:", { name, email, password })
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      console.log("Email sign up:", { name, email, password });
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error) {
-      console.error("Email sign up error:", error)
+      console.error("Email sign up error:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">Welcome to Resumier</DialogTitle>
+          <DialogTitle className="text-center text-2xl font-bold">Welcome to Resumier</DialogTitle>
           <DialogDescription className="text-center">
             Sign in or create an account to get started with your professional resume
           </DialogDescription>
@@ -118,7 +118,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-background text-muted-foreground px-2">Or continue with</span>
               </div>
             </div>
 
@@ -231,7 +231,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-background text-muted-foreground px-2">Or continue with</span>
               </div>
             </div>
 
@@ -300,5 +300,5 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
         </Tabs>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

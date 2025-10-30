@@ -1,5 +1,5 @@
-import * as Sentry from "@sentry/react"
-import logger from "@/lib/utils/console"
+import * as Sentry from "@sentry/react";
+import logger from "@/lib/utils/console";
 
 /**
  * Initialize Sentry error tracking and performance monitoring
@@ -7,10 +7,10 @@ import logger from "@/lib/utils/console"
  */
 export function initSentry() {
   // Only initialize if DSN is provided and we're in production
-  const dsn = import.meta.env.VITE_SENTRY_DSN
+  const dsn = import.meta.env.VITE_SENTRY_DSN;
   if (!dsn) {
-    logger.debug("Sentry DSN not configured, skipping initialization")
-    return
+    logger.debug("Sentry DSN not configured, skipping initialization");
+    return;
   }
 
   Sentry.init({
@@ -60,23 +60,23 @@ export function initSentry() {
     // Error filtering
     beforeSend(event, hint) {
       // Filter out known browser extension errors
-      const error = hint.originalException
+      const error = hint.originalException;
       if (error instanceof Error) {
         // Ignore browser extension errors
         if (
           error.message.includes("chrome-extension://") ||
           error.message.includes("moz-extension://")
         ) {
-          return null
+          return null;
         }
 
         // Ignore ResizeObserver errors (common, harmless)
         if (error.message.includes("ResizeObserver")) {
-          return null
+          return null;
         }
       }
 
-      return event
+      return event;
     },
 
     // Ignore certain errors
@@ -90,12 +90,12 @@ export function initSentry() {
       // ResizeObserver loop errors (harmless)
       "ResizeObserver loop",
     ],
-  })
+  });
 
   logger.success("Sentry initialized", {
     environment: import.meta.env.MODE,
     release: import.meta.env.VITE_APP_VERSION,
-  })
+  });
 }
 
 /**
@@ -107,9 +107,9 @@ export function setUser(user: { id: string; email: string; name?: string } | nul
       id: user.id,
       email: user.email,
       username: user.name,
-    })
+    });
   } else {
-    Sentry.setUser(null)
+    Sentry.setUser(null);
   }
 }
 
@@ -120,7 +120,7 @@ export function trackBreadcrumb(
   category: string,
   message: string,
   data?: Record<string, unknown>,
-  level: Sentry.SeverityLevel = "info",
+  level: Sentry.SeverityLevel = "info"
 ) {
   Sentry.addBreadcrumb({
     category,
@@ -128,7 +128,7 @@ export function trackBreadcrumb(
     level,
     data,
     timestamp: Date.now() / 1000,
-  })
+  });
 }
 
 /**
@@ -137,7 +137,7 @@ export function trackBreadcrumb(
 export async function trackOperation<T>(
   name: string,
   operation: () => Promise<T>,
-  tags?: Record<string, string>,
+  tags?: Record<string, string>
 ): Promise<T> {
   return await Sentry.startSpan(
     {
@@ -147,18 +147,18 @@ export async function trackOperation<T>(
     },
     async () => {
       try {
-        return await operation()
+        return await operation();
       } catch (error) {
         Sentry.captureException(error, {
           tags: {
             operation: name,
             ...tags,
           },
-        })
-        throw error
+        });
+        throw error;
       }
-    },
-  )
+    }
+  );
 }
 
 /**
@@ -167,16 +167,16 @@ export async function trackOperation<T>(
 export function captureError(
   error: Error,
   context?: {
-    tags?: Record<string, string>
-    level?: Sentry.SeverityLevel
-    extra?: Record<string, unknown>
-  },
+    tags?: Record<string, string>;
+    level?: Sentry.SeverityLevel;
+    extra?: Record<string, unknown>;
+  }
 ) {
   Sentry.captureException(error, {
     level: context?.level || "error",
     tags: context?.tags,
     extra: context?.extra,
-  })
+  });
 }
 
 /**
@@ -185,10 +185,10 @@ export function captureError(
 export function captureMessage(
   message: string,
   level: Sentry.SeverityLevel = "info",
-  context?: Record<string, unknown>,
+  context?: Record<string, unknown>
 ) {
   Sentry.captureMessage(message, {
     level,
     extra: context,
-  })
+  });
 }

@@ -6,21 +6,21 @@ import {
   Mail,
   MapPin,
   Phone,
-} from "lucide-react"
-import type { Resume } from "@/lib/api/types"
+} from "lucide-react";
+import type { Resume } from "@/lib/api/types";
 
 interface ModernTemplateProps {
-  resume: Resume
+  resume: Resume;
 }
 
 export function ModernTemplate({ resume }: ModernTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications, links } = resume.content
+  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
 
   return (
-    <div className="bg-white text-gray-900 shadow-lg max-w-[21cm] mx-auto">
+    <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg">
       {/* Header Section */}
       <div className="bg-primary text-primary-foreground p-8">
-        <h1 className="text-4xl font-bold mb-2">{personalInfo.name || "Your Name"}</h1>
+        <h1 className="mb-2 text-4xl font-bold">{personalInfo.name || "Your Name"}</h1>
         <div className="flex flex-wrap gap-4 text-sm">
           {personalInfo.email && (
             <div className="flex items-center gap-1">
@@ -49,35 +49,35 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
           {/* Summary */}
           {personalInfo.summary && (
             <section>
-              <h2 className="text-xl font-bold text-primary mb-3 pb-1 border-b-2 border-primary">
+              <h2 className="text-primary border-primary mb-3 border-b-2 pb-1 text-xl font-bold">
                 Professional Summary
               </h2>
-              <p className="text-sm text-gray-700 leading-relaxed">{personalInfo.summary}</p>
+              <p className="text-sm leading-relaxed text-gray-700">{personalInfo.summary}</p>
             </section>
           )}
 
           {/* Experience */}
           {experience.length > 0 && (
             <section>
-              <h2 className="text-xl font-bold text-primary mb-3 pb-1 border-b-2 border-primary flex items-center gap-2">
+              <h2 className="text-primary border-primary mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold">
                 <Briefcase className="h-5 w-5" />
                 Experience
               </h2>
               <div className="space-y-4">
                 {experience.map((exp) => (
                   <div key={exp.id}>
-                    <div className="flex justify-between items-start mb-1">
-                      <h3 className="font-bold text-base">{exp.position}</h3>
+                    <div className="mb-1 flex items-start justify-between">
+                      <h3 className="text-base font-bold">{exp.position}</h3>
                       <span className="text-sm text-gray-600">
                         {exp.startDate} - {exp.current ? "Present" : exp.endDate}
                       </span>
                     </div>
-                    <p className="text-sm font-semibold text-gray-700 mb-2">{exp.company}</p>
+                    <p className="mb-2 text-sm font-semibold text-gray-700">{exp.company}</p>
                     {exp.description && (
-                      <p className="text-sm text-gray-700 mb-2">{exp.description}</p>
+                      <p className="mb-2 text-sm text-gray-700">{exp.description}</p>
                     )}
                     {exp.highlights && exp.highlights.length > 0 && (
-                      <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                      <ul className="list-inside list-disc space-y-1 text-sm text-gray-700">
                         {exp.highlights.map((highlight, idx) => (
                           <li key={idx}>{highlight}</li>
                         ))}
@@ -92,15 +92,15 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
           {/* Education */}
           {education.length > 0 && (
             <section>
-              <h2 className="text-xl font-bold text-primary mb-3 pb-1 border-b-2 border-primary flex items-center gap-2">
+              <h2 className="text-primary border-primary mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold">
                 <GraduationCap className="h-5 w-5" />
                 Education
               </h2>
               <div className="space-y-4">
                 {education.map((edu) => (
                   <div key={edu.id}>
-                    <div className="flex justify-between items-start mb-1">
-                      <h3 className="font-bold text-base">{edu.degree}</h3>
+                    <div className="mb-1 flex items-start justify-between">
+                      <h3 className="text-base font-bold">{edu.degree}</h3>
                       <span className="text-sm text-gray-600">
                         {edu.startDate} - {edu.current ? "Present" : edu.endDate}
                       </span>
@@ -109,7 +109,7 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
                     <p className="text-sm text-gray-600">{edu.field}</p>
                     {edu.gpa && <p className="text-sm text-gray-600">GPA: {edu.gpa}</p>}
                     {edu.honors && edu.honors.length > 0 && (
-                      <ul className="list-disc list-inside text-sm text-gray-700 mt-1">
+                      <ul className="mt-1 list-inside list-disc text-sm text-gray-700">
                         {edu.honors.map((honor, idx) => (
                           <li key={idx}>{honor}</li>
                         ))}
@@ -130,18 +130,18 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
             skills.tools?.length > 0 ||
             skills.soft?.length > 0) && (
             <section>
-              <h2 className="text-lg font-bold text-primary mb-3 pb-1 border-b-2 border-primary">
+              <h2 className="text-primary border-primary mb-3 border-b-2 pb-1 text-lg font-bold">
                 Skills
               </h2>
               <div className="space-y-3">
                 {skills.technical && skills.technical.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-800 mb-1">Technical</h3>
+                    <h3 className="mb-1 text-sm font-semibold text-gray-800">Technical</h3>
                     <div className="flex flex-wrap gap-1">
                       {skills.technical.map((skill, idx) => (
                         <span
                           key={idx}
-                          className="text-xs bg-primary/10 text-primary px-2 py-1 rounded"
+                          className="bg-primary/10 text-primary rounded px-2 py-1 text-xs"
                         >
                           {skill}
                         </span>
@@ -151,12 +151,12 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
                 )}
                 {skills.languages && skills.languages.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-800 mb-1">Languages</h3>
+                    <h3 className="mb-1 text-sm font-semibold text-gray-800">Languages</h3>
                     <div className="flex flex-wrap gap-1">
                       {skills.languages.map((lang, idx) => (
                         <span
                           key={idx}
-                          className="text-xs bg-primary/10 text-primary px-2 py-1 rounded"
+                          className="bg-primary/10 text-primary rounded px-2 py-1 text-xs"
                         >
                           {lang}
                         </span>
@@ -166,12 +166,12 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
                 )}
                 {skills.tools && skills.tools.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-800 mb-1">Tools</h3>
+                    <h3 className="mb-1 text-sm font-semibold text-gray-800">Tools</h3>
                     <div className="flex flex-wrap gap-1">
                       {skills.tools.map((tool, idx) => (
                         <span
                           key={idx}
-                          className="text-xs bg-primary/10 text-primary px-2 py-1 rounded"
+                          className="bg-primary/10 text-primary rounded px-2 py-1 text-xs"
                         >
                           {tool}
                         </span>
@@ -181,12 +181,12 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
                 )}
                 {skills.soft && skills.soft.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold text-gray-800 mb-1">Soft Skills</h3>
+                    <h3 className="mb-1 text-sm font-semibold text-gray-800">Soft Skills</h3>
                     <div className="flex flex-wrap gap-1">
                       {skills.soft.map((skill, idx) => (
                         <span
                           key={idx}
-                          className="text-xs bg-primary/10 text-primary px-2 py-1 rounded"
+                          className="bg-primary/10 text-primary rounded px-2 py-1 text-xs"
                         >
                           {skill}
                         </span>
@@ -201,7 +201,7 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
           {/* Certifications */}
           {certifications.length > 0 && (
             <section>
-              <h2 className="text-lg font-bold text-primary mb-3 pb-1 border-b-2 border-primary flex items-center gap-2">
+              <h2 className="text-primary border-primary mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold">
                 <Award className="h-4 w-4" />
                 Certifications
               </h2>
@@ -220,21 +220,21 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
           {/* Links */}
           {links.length > 0 && (
             <section>
-              <h2 className="text-lg font-bold text-primary mb-3 pb-1 border-b-2 border-primary flex items-center gap-2">
+              <h2 className="text-primary border-primary mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold">
                 <LinkIcon className="h-4 w-4" />
                 Links
               </h2>
               <div className="space-y-2">
                 {links.map((link) => (
                   <div key={link.id} className="flex items-start gap-2">
-                    <LinkIcon className="h-3 w-3 mt-0.5 flex-shrink-0 text-primary" />
+                    <LinkIcon className="text-primary mt-0.5 h-3 w-3 flex-shrink-0" />
                     <div>
                       <p className="text-xs font-semibold text-gray-800">{link.label}</p>
                       <a
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-primary hover:underline break-all"
+                        className="text-primary text-xs break-all hover:underline"
                       >
                         {link.url}
                       </a>
@@ -247,5 +247,5 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

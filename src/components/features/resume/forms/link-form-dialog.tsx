@@ -1,6 +1,6 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -17,18 +17,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Select } from "@/components/ui/select"
-import { type CreateLinkFormData, createLinkSchema } from "@/lib/validations/links"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { type CreateLinkFormData, createLinkSchema } from "@/lib/validations/links";
 
 interface LinkFormDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onSubmit: (values: CreateLinkFormData) => void
-  defaultValues?: Partial<CreateLinkFormData>
-  title?: string
-  description?: string
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (values: CreateLinkFormData) => void;
+  defaultValues?: Partial<CreateLinkFormData>;
+  title?: string;
+  description?: string;
 }
 
 export function LinkFormDialog({
@@ -47,13 +47,13 @@ export function LinkFormDialog({
       type: "other",
       ...defaultValues,
     },
-  })
+  });
 
   const handleSubmit = (values: CreateLinkFormData) => {
-    onSubmit(values)
-    onOpenChange(false)
-    form.reset()
-  }
+    onSubmit(values);
+    onOpenChange(false);
+    form.reset();
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -127,5 +127,5 @@ export function LinkFormDialog({
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

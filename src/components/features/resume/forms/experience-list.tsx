@@ -6,23 +6,23 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core"
+} from "@dnd-kit/core";
 import {
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable"
-import { CalendarIcon, EditIcon, TrashIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import type { Experience } from "@/lib/api/types"
-import { SortableItem } from "../dnd/sortable-item"
+} from "@dnd-kit/sortable";
+import { CalendarIcon, EditIcon, TrashIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import type { Experience } from "@/lib/api/types";
+import { SortableItem } from "../dnd/sortable-item";
 
 interface ExperienceListProps {
-  experiences: Experience[]
-  onEdit: (experience: Experience) => void
-  onDelete: (id: string) => void
-  onReorder?: (experiences: Experience[]) => void
+  experiences: Experience[];
+  onEdit: (experience: Experience) => void;
+  onDelete: (id: string) => void;
+  onReorder?: (experiences: Experience[]) => void;
 }
 
 export function ExperienceList({ experiences, onEdit, onDelete, onReorder }: ExperienceListProps) {
@@ -30,43 +30,43 @@ export function ExperienceList({ experiences, onEdit, onDelete, onReorder }: Exp
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  )
+    })
+  );
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event
+    const { active, over } = event;
 
     if (!over || active.id === over.id) {
-      return
+      return;
     }
 
-    const oldIndex = experiences.findIndex((exp) => exp.id === active.id)
-    const newIndex = experiences.findIndex((exp) => exp.id === over.id)
+    const oldIndex = experiences.findIndex((exp) => exp.id === active.id);
+    const newIndex = experiences.findIndex((exp) => exp.id === over.id);
 
     if (oldIndex !== -1 && newIndex !== -1 && onReorder) {
-      const result = Array.from(experiences)
-      const [removed] = result.splice(oldIndex, 1)
-      result.splice(newIndex, 0, removed)
-      onReorder(result)
+      const result = Array.from(experiences);
+      const [removed] = result.splice(oldIndex, 1);
+      result.splice(newIndex, 0, removed);
+      onReorder(result);
     }
-  }
+  };
 
   if (experiences.length === 0) {
     return (
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-          <p className="text-sm text-muted-foreground">No experience added yet.</p>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-sm">No experience added yet.</p>
+          <p className="text-muted-foreground mt-1 text-xs">
             Click "Add Experience" to get started.
           </p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   const formatDate = (date: string) => {
-    if (!date) return ""
-    const [year, month] = date.split("-")
+    if (!date) return "";
+    const [year, month] = date.split("-");
     const monthNames = [
       "Jan",
       "Feb",
@@ -80,15 +80,15 @@ export function ExperienceList({ experiences, onEdit, onDelete, onReorder }: Exp
       "Oct",
       "Nov",
       "Dec",
-    ]
-    return `${monthNames[parseInt(month, 10) - 1]} ${year}`
-  }
+    ];
+    return `${monthNames[parseInt(month, 10) - 1]} ${year}`;
+  };
 
   const formatDateRange = (exp: Experience) => {
-    const start = formatDate(exp.startDate)
-    const end = exp.current ? "Present" : formatDate(exp.endDate || "")
-    return `${start} – ${end}`
-  }
+    const start = formatDate(exp.startDate);
+    const end = exp.current ? "Present" : formatDate(exp.endDate || "");
+    return `${start} – ${end}`;
+  };
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -104,8 +104,8 @@ export function ExperienceList({ experiences, onEdit, onDelete, onReorder }: Exp
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <h3 className="font-semibold">{exp.position}</h3>
-                      <p className="text-sm text-muted-foreground">{exp.company}</p>
-                      <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">{exp.company}</p>
+                      <div className="text-muted-foreground mt-1 flex items-center gap-1 text-xs">
                         <CalendarIcon className="h-3 w-3" />
                         <span>{formatDateRange(exp)}</span>
                       </div>
@@ -133,7 +133,7 @@ export function ExperienceList({ experiences, onEdit, onDelete, onReorder }: Exp
                 {(exp.description || (exp.highlights && exp.highlights.length > 0)) && (
                   <CardContent>
                     {exp.description && (
-                      <p className="text-sm text-muted-foreground">{exp.description}</p>
+                      <p className="text-muted-foreground text-sm">{exp.description}</p>
                     )}
                     {exp.highlights && exp.highlights.length > 0 && (
                       <ul className="mt-2 space-y-1 text-sm">
@@ -153,5 +153,5 @@ export function ExperienceList({ experiences, onEdit, onDelete, onReorder }: Exp
         </div>
       </SortableContext>
     </DndContext>
-  )
+  );
 }

@@ -1,20 +1,20 @@
-import { Check } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { TEMPLATES, type TemplateType } from "@/lib/types/templates"
+} from "@/components/ui/dropdown-menu";
+import { TEMPLATES, type TemplateType } from "@/lib/types/templates";
 
 interface TemplateSelectorProps {
-  selected: TemplateType
-  onSelect: (template: TemplateType) => void
+  selected: TemplateType;
+  onSelect: (template: TemplateType) => void;
 }
 
 export function TemplateSelector({ selected, onSelect }: TemplateSelectorProps) {
-  const selectedTemplate = TEMPLATES.find((t) => t.id === selected)
+  const selectedTemplate = TEMPLATES.find((t) => t.id === selected);
 
   return (
     <DropdownMenu>
@@ -28,18 +28,18 @@ export function TemplateSelector({ selected, onSelect }: TemplateSelectorProps) 
           <DropdownMenuItem
             key={template.id}
             onClick={() => onSelect(template.id)}
-            className="flex items-start gap-3 cursor-pointer"
+            className="flex cursor-pointer items-start gap-3"
           >
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className="font-medium">{template.name}</span>
-                {selected === template.id && <Check className="h-4 w-4 text-primary" />}
+                {selected === template.id && <Check className="text-primary h-4 w-4" />}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">{template.description}</p>
+              <p className="text-muted-foreground mt-1 text-xs">{template.description}</p>
             </div>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

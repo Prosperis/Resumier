@@ -8,38 +8,38 @@
  * - Main route components pass accessibility checks in isolation
  */
 
-import { describe, expect, it } from "vitest"
-import { routeTree } from "@/app/routeTree.gen"
+import { describe, expect, it } from "vitest";
+import { routeTree } from "@/app/routeTree.gen";
 
 describe("Route Tree Accessibility", () => {
   it("should have a valid route tree structure", () => {
-    expect(routeTree).toBeDefined()
-    expect(typeof routeTree).toBe("object")
-  })
+    expect(routeTree).toBeDefined();
+    expect(typeof routeTree).toBe("object");
+  });
 
   it("should have route tree methods", () => {
     // Verify routeTree has TanStack Router structure
-    expect(routeTree).toHaveProperty("options")
-  })
+    expect(routeTree).toHaveProperty("options");
+  });
 
   it("should export properly from generated file", () => {
     // Verify route tree can be imported without errors
-    expect(routeTree).toBeTruthy()
-  })
-})
+    expect(routeTree).toBeTruthy();
+  });
+});
 
 describe("Route Configuration", () => {
   it("should verify route tree exports properly", () => {
     // Verify route tree can be imported without errors
-    expect(routeTree).toBeTruthy()
-    expect(typeof routeTree).toBe("object")
-  })
+    expect(routeTree).toBeTruthy();
+    expect(typeof routeTree).toBe("object");
+  });
 
   it("should have proper route structure", () => {
     // Verify routes have necessary properties for accessibility
-    expect(routeTree).toHaveProperty("path")
-  })
-})
+    expect(routeTree).toHaveProperty("path");
+  });
+});
 
 /**
  * NOTE ON FULL ROUTE TESTING:

@@ -1,2 +1,2 @@
+bun run format
 bun run lint:check
-bun run format:check

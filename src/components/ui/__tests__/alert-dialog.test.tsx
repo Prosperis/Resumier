@@ -1,6 +1,6 @@
-import { render, screen, waitFor } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import { describe, expect, it, vi } from "vitest"
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,11 +11,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 
 describe("AlertDialog", () => {
   it("renders with trigger and content", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
     render(
       <AlertDialog>
         <AlertDialogTrigger>Open Dialog</AlertDialogTrigger>
@@ -29,17 +29,17 @@ describe("AlertDialog", () => {
             <AlertDialogAction>Continue</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByText("Open Dialog")).toBeInTheDocument()
+    expect(screen.getByText("Open Dialog")).toBeInTheDocument();
 
-    await user.click(screen.getByText("Open Dialog"))
+    await user.click(screen.getByText("Open Dialog"));
 
     await waitFor(() => {
-      expect(screen.getByText("Are you sure?")).toBeInTheDocument()
-    })
-  })
+      expect(screen.getByText("Are you sure?")).toBeInTheDocument();
+    });
+  });
 
   it("renders with open prop controlled", () => {
     render(
@@ -48,11 +48,11 @@ describe("AlertDialog", () => {
         <AlertDialogContent>
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByText("Title")).toBeInTheDocument()
-  })
+    expect(screen.getByText("Title")).toBeInTheDocument();
+  });
 
   it("renders with defaultOpen prop", () => {
     render(
@@ -61,15 +61,15 @@ describe("AlertDialog", () => {
         <AlertDialogContent>
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByText("Title")).toBeInTheDocument()
-  })
+    expect(screen.getByText("Title")).toBeInTheDocument();
+  });
 
   it("calls onOpenChange when dialog state changes", async () => {
-    const user = userEvent.setup()
-    const handleOpenChange = vi.fn()
+    const user = userEvent.setup();
+    const handleOpenChange = vi.fn();
 
     render(
       <AlertDialog onOpenChange={handleOpenChange}>
@@ -78,16 +78,16 @@ describe("AlertDialog", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    await user.click(screen.getByText("Open"))
+    await user.click(screen.getByText("Open"));
 
     await waitFor(() => {
-      expect(handleOpenChange).toHaveBeenCalledWith(true)
-    })
-  })
-})
+      expect(handleOpenChange).toHaveBeenCalledWith(true);
+    });
+  });
+});
 
 describe("AlertDialogTrigger", () => {
   it("renders children correctly", () => {
@@ -97,30 +97,30 @@ describe("AlertDialogTrigger", () => {
         <AlertDialogContent>
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByText("Trigger Button")).toBeInTheDocument()
-  })
+    expect(screen.getByText("Trigger Button")).toBeInTheDocument();
+  });
 
   it("opens dialog when clicked", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
     render(
       <AlertDialog>
         <AlertDialogTrigger>Open</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogTitle>Dialog Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    await user.click(screen.getByText("Open"))
+    await user.click(screen.getByText("Open"));
 
     await waitFor(() => {
-      expect(screen.getByText("Dialog Title")).toBeInTheDocument()
-    })
-  })
-})
+      expect(screen.getByText("Dialog Title")).toBeInTheDocument();
+    });
+  });
+});
 
 describe("AlertDialogContent", () => {
   it("renders content with overlay", () => {
@@ -130,11 +130,11 @@ describe("AlertDialogContent", () => {
         <AlertDialogContent data-testid="content">
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("content")).toBeInTheDocument()
-  })
+    expect(screen.getByTestId("content")).toBeInTheDocument();
+  });
 
   it("renders with custom className", () => {
     render(
@@ -143,11 +143,11 @@ describe("AlertDialogContent", () => {
         <AlertDialogContent className="custom-dialog" data-testid="content">
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("content")).toHaveClass("custom-dialog")
-  })
+    expect(screen.getByTestId("content")).toHaveClass("custom-dialog");
+  });
 
   it("applies animation classes", () => {
     render(
@@ -156,13 +156,13 @@ describe("AlertDialogContent", () => {
         <AlertDialogContent data-testid="content">
           <AlertDialogTitle>Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    const content = screen.getByTestId("content")
-    expect(content).toHaveClass("duration-200")
-  })
-})
+    const content = screen.getByTestId("content");
+    expect(content).toHaveClass("duration-200");
+  });
+});
 
 describe("AlertDialogHeader", () => {
   it("renders children correctly", () => {
@@ -174,11 +174,11 @@ describe("AlertDialogHeader", () => {
             <AlertDialogTitle>Title</AlertDialogTitle>
           </AlertDialogHeader>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("header")).toBeInTheDocument()
-  })
+    expect(screen.getByTestId("header")).toBeInTheDocument();
+  });
 
   it("applies flex layout classes", () => {
     render(
@@ -189,11 +189,11 @@ describe("AlertDialogHeader", () => {
             <AlertDialogTitle>Title</AlertDialogTitle>
           </AlertDialogHeader>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("header")).toHaveClass("flex", "flex-col")
-  })
+    expect(screen.getByTestId("header")).toHaveClass("flex", "flex-col");
+  });
 
   it("renders with custom className", () => {
     render(
@@ -204,12 +204,12 @@ describe("AlertDialogHeader", () => {
             <AlertDialogTitle>Title</AlertDialogTitle>
           </AlertDialogHeader>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("header")).toHaveClass("custom-header")
-  })
-})
+    expect(screen.getByTestId("header")).toHaveClass("custom-header");
+  });
+});
 
 describe("AlertDialogFooter", () => {
   it("renders children correctly", () => {
@@ -222,11 +222,11 @@ describe("AlertDialogFooter", () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("footer")).toBeInTheDocument()
-  })
+    expect(screen.getByTestId("footer")).toBeInTheDocument();
+  });
 
   it("applies flex layout classes", () => {
     render(
@@ -238,11 +238,11 @@ describe("AlertDialogFooter", () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("footer")).toHaveClass("flex")
-  })
+    expect(screen.getByTestId("footer")).toHaveClass("flex");
+  });
 
   it("renders with custom className", () => {
     render(
@@ -254,12 +254,12 @@ describe("AlertDialogFooter", () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("footer")).toHaveClass("custom-footer")
-  })
-})
+    expect(screen.getByTestId("footer")).toHaveClass("custom-footer");
+  });
+});
 
 describe("AlertDialogTitle", () => {
   it("renders title text", () => {
@@ -269,11 +269,11 @@ describe("AlertDialogTitle", () => {
         <AlertDialogContent>
           <AlertDialogTitle>Dialog Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByText("Dialog Title")).toBeInTheDocument()
-  })
+    expect(screen.getByText("Dialog Title")).toBeInTheDocument();
+  });
 
   it("applies font styling classes", () => {
     render(
@@ -282,11 +282,11 @@ describe("AlertDialogTitle", () => {
         <AlertDialogContent>
           <AlertDialogTitle data-testid="title">Title</AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("title")).toHaveClass("text-lg", "font-semibold")
-  })
+    expect(screen.getByTestId("title")).toHaveClass("text-lg", "font-semibold");
+  });
 
   it("renders with custom className", () => {
     render(
@@ -297,12 +297,12 @@ describe("AlertDialogTitle", () => {
             Title
           </AlertDialogTitle>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("title")).toHaveClass("custom-title")
-  })
-})
+    expect(screen.getByTestId("title")).toHaveClass("custom-title");
+  });
+});
 
 describe("AlertDialogDescription", () => {
   it("renders description text", () => {
@@ -313,11 +313,11 @@ describe("AlertDialogDescription", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogDescription>This is a description</AlertDialogDescription>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByText("This is a description")).toBeInTheDocument()
-  })
+    expect(screen.getByText("This is a description")).toBeInTheDocument();
+  });
 
   it("applies text styling classes", () => {
     render(
@@ -327,11 +327,11 @@ describe("AlertDialogDescription", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogDescription data-testid="description">Description</AlertDialogDescription>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("description")).toHaveClass("text-sm", "text-muted-foreground")
-  })
+    expect(screen.getByTestId("description")).toHaveClass("text-sm", "text-muted-foreground");
+  });
 
   it("renders with custom className", () => {
     render(
@@ -343,12 +343,12 @@ describe("AlertDialogDescription", () => {
             Description
           </AlertDialogDescription>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("description")).toHaveClass("custom-desc")
-  })
-})
+    expect(screen.getByTestId("description")).toHaveClass("custom-desc");
+  });
+});
 
 describe("AlertDialogAction", () => {
   it("renders action button", () => {
@@ -359,14 +359,14 @@ describe("AlertDialogAction", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogAction>Confirm</AlertDialogAction>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByText("Confirm")).toBeInTheDocument()
-  })
+    expect(screen.getByText("Confirm")).toBeInTheDocument();
+  });
 
   it("closes dialog when clicked", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
     render(
       <AlertDialog defaultOpen={true}>
         <AlertDialogTrigger>Open</AlertDialogTrigger>
@@ -374,19 +374,19 @@ describe("AlertDialogAction", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogAction>Confirm</AlertDialogAction>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    await user.click(screen.getByText("Confirm"))
+    await user.click(screen.getByText("Confirm"));
 
     await waitFor(() => {
-      expect(screen.queryByText("Title")).not.toBeInTheDocument()
-    })
-  })
+      expect(screen.queryByText("Title")).not.toBeInTheDocument();
+    });
+  });
 
   it("calls onClick handler", async () => {
-    const user = userEvent.setup()
-    const handleClick = vi.fn()
+    const user = userEvent.setup();
+    const handleClick = vi.fn();
 
     render(
       <AlertDialog defaultOpen={true}>
@@ -395,12 +395,12 @@ describe("AlertDialogAction", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogAction onClick={handleClick}>Confirm</AlertDialogAction>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    await user.click(screen.getByText("Confirm"))
-    expect(handleClick).toHaveBeenCalled()
-  })
+    await user.click(screen.getByText("Confirm"));
+    expect(handleClick).toHaveBeenCalled();
+  });
 
   it("renders with custom className", () => {
     render(
@@ -412,12 +412,12 @@ describe("AlertDialogAction", () => {
             Confirm
           </AlertDialogAction>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("action")).toHaveClass("custom-action")
-  })
-})
+    expect(screen.getByTestId("action")).toHaveClass("custom-action");
+  });
+});
 
 describe("AlertDialogCancel", () => {
   it("renders cancel button", () => {
@@ -428,14 +428,14 @@ describe("AlertDialogCancel", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByText("Cancel")).toBeInTheDocument()
-  })
+    expect(screen.getByText("Cancel")).toBeInTheDocument();
+  });
 
   it("closes dialog when clicked", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
     render(
       <AlertDialog defaultOpen={true}>
         <AlertDialogTrigger>Open</AlertDialogTrigger>
@@ -443,19 +443,19 @@ describe("AlertDialogCancel", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    await user.click(screen.getByText("Cancel"))
+    await user.click(screen.getByText("Cancel"));
 
     await waitFor(() => {
-      expect(screen.queryByText("Title")).not.toBeInTheDocument()
-    })
-  })
+      expect(screen.queryByText("Title")).not.toBeInTheDocument();
+    });
+  });
 
   it("calls onClick handler", async () => {
-    const user = userEvent.setup()
-    const handleClick = vi.fn()
+    const user = userEvent.setup();
+    const handleClick = vi.fn();
 
     render(
       <AlertDialog defaultOpen={true}>
@@ -464,12 +464,12 @@ describe("AlertDialogCancel", () => {
           <AlertDialogTitle>Title</AlertDialogTitle>
           <AlertDialogCancel onClick={handleClick}>Cancel</AlertDialogCancel>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    await user.click(screen.getByText("Cancel"))
-    expect(handleClick).toHaveBeenCalled()
-  })
+    await user.click(screen.getByText("Cancel"));
+    expect(handleClick).toHaveBeenCalled();
+  });
 
   it("renders with custom className", () => {
     render(
@@ -481,12 +481,12 @@ describe("AlertDialogCancel", () => {
             Cancel
           </AlertDialogCancel>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    expect(screen.getByTestId("cancel")).toHaveClass("custom-cancel")
-  })
-})
+    expect(screen.getByTestId("cancel")).toHaveClass("custom-cancel");
+  });
+});
 
 describe("AlertDialog accessibility", () => {
   it("has proper role attributes", () => {
@@ -497,15 +497,15 @@ describe("AlertDialog accessibility", () => {
           <AlertDialogTitle>Alert Title</AlertDialogTitle>
           <AlertDialogDescription>Alert Description</AlertDialogDescription>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
     // Radix UI adds proper ARIA roles
-    expect(screen.getByRole("alertdialog")).toBeInTheDocument()
-  })
+    expect(screen.getByRole("alertdialog")).toBeInTheDocument();
+  });
 
   it("supports keyboard navigation", async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
     render(
       <AlertDialog>
         <AlertDialogTrigger>Open</AlertDialogTrigger>
@@ -514,15 +514,15 @@ describe("AlertDialog accessibility", () => {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction>Confirm</AlertDialogAction>
         </AlertDialogContent>
-      </AlertDialog>,
-    )
+      </AlertDialog>
+    );
 
-    const trigger = screen.getByText("Open")
-    trigger.focus()
-    await user.keyboard("{Enter}")
+    const trigger = screen.getByText("Open");
+    trigger.focus();
+    await user.keyboard("{Enter}");
 
     await waitFor(() => {
-      expect(screen.getByText("Title")).toBeInTheDocument()
-    })
-  })
-})
+      expect(screen.getByText("Title")).toBeInTheDocument();
+    });
+  });
+});

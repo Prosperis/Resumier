@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 /**
  * Skills Validation Schema
@@ -9,6 +9,6 @@ export const skillsSchema = z.object({
   languages: z.array(z.string()).optional(),
   tools: z.array(z.string()).optional(),
   soft: z.array(z.string()).optional(),
-})
+});
 
-export type SkillsFormData = z.infer<typeof skillsSchema>
+export type SkillsFormData = z.infer<typeof skillsSchema>;

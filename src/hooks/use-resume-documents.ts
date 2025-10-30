@@ -1,14 +1,14 @@
-import { create } from "zustand"
-import { createJSONStorage, persist } from "zustand/middleware"
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface ResumeDocument {
-  id: string
-  name: string
+  id: string;
+  name: string;
 }
 
 interface DocumentsState {
-  documents: ResumeDocument[]
-  addDocument: (doc: ResumeDocument) => void
+  documents: ResumeDocument[];
+  addDocument: (doc: ResumeDocument) => void;
 }
 
 export const useResumeDocuments = create<DocumentsState>()(
@@ -20,6 +20,6 @@ export const useResumeDocuments = create<DocumentsState>()(
     {
       name: "resumier-documents",
       storage: createJSONStorage(() => localStorage),
-    },
-  ),
-)
+    }
+  )
+);

@@ -3,20 +3,20 @@
  * Wrapper for page transitions using AnimatePresence
  */
 
-import type { HTMLMotionProps } from "framer-motion"
-import { AnimatePresence, motion } from "framer-motion"
+import type { HTMLMotionProps } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   useAnimationTransition,
   useAnimationVariants,
-} from "@/lib/animations/hooks/use-reduced-motion"
-import { pageTransition } from "@/lib/animations/transitions"
-import { fadeUpVariants } from "@/lib/animations/variants"
+} from "@/lib/animations/hooks/use-reduced-motion";
+import { pageTransition } from "@/lib/animations/transitions";
+import { fadeUpVariants } from "@/lib/animations/variants";
 
 interface PageTransitionProps extends Omit<HTMLMotionProps<"div">, "variants"> {
-  children: React.ReactNode
-  pageKey: string
-  className?: string
-  mode?: "wait" | "sync" | "popLayout"
+  children: React.ReactNode;
+  pageKey: string;
+  className?: string;
+  mode?: "wait" | "sync" | "popLayout";
 }
 
 /**
@@ -36,8 +36,8 @@ export function PageTransition({
   mode = "wait",
   ...props
 }: PageTransitionProps) {
-  const variants = useAnimationVariants(fadeUpVariants)
-  const transition = useAnimationTransition(pageTransition)
+  const variants = useAnimationVariants(fadeUpVariants);
+  const transition = useAnimationTransition(pageTransition);
 
   return (
     <AnimatePresence mode={mode}>
@@ -54,5 +54,5 @@ export function PageTransition({
         {children}
       </motion.div>
     </AnimatePresence>
-  )
+  );
 }

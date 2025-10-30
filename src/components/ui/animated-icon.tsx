@@ -3,14 +3,14 @@
  * Reusable icon animation wrappers for micro-interactions
  */
 
-import type { HTMLMotionProps } from "framer-motion"
-import { motion } from "framer-motion"
-import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion"
-import { cn } from "@/lib/utils"
+import type { HTMLMotionProps } from "framer-motion";
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion";
+import { cn } from "@/lib/utils";
 
 interface AnimatedIconProps extends Omit<HTMLMotionProps<"div">, "children"> {
-  children: React.ReactNode
-  className?: string
+  children: React.ReactNode;
+  className?: string;
 }
 
 /**
@@ -24,7 +24,7 @@ interface AnimatedIconProps extends Omit<HTMLMotionProps<"div">, "children"> {
  * ```
  */
 export function RotateOnHover({ children, className, ...props }: AnimatedIconProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
@@ -35,7 +35,7 @@ export function RotateOnHover({ children, className, ...props }: AnimatedIconPro
     >
       {children}
     </motion.div>
-  )
+  );
 }
 
 /**
@@ -54,7 +54,7 @@ export function ScaleOnHover({
   scale = 1.1,
   ...props
 }: AnimatedIconProps & { scale?: number }) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
@@ -68,7 +68,7 @@ export function ScaleOnHover({
     >
       {children}
     </motion.div>
-  )
+  );
 }
 
 /**
@@ -82,7 +82,7 @@ export function ScaleOnHover({
  * ```
  */
 export function BounceOnHover({ children, className, ...props }: AnimatedIconProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
@@ -106,7 +106,7 @@ export function BounceOnHover({ children, className, ...props }: AnimatedIconPro
     >
       {children}
     </motion.div>
-  )
+  );
 }
 
 /**
@@ -120,7 +120,7 @@ export function BounceOnHover({ children, className, ...props }: AnimatedIconPro
  * ```
  */
 export function ShakeOnHover({ children, className, ...props }: AnimatedIconProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
@@ -144,7 +144,7 @@ export function ShakeOnHover({ children, className, ...props }: AnimatedIconProp
     >
       {children}
     </motion.div>
-  )
+  );
 }
 
 /**
@@ -158,7 +158,7 @@ export function ShakeOnHover({ children, className, ...props }: AnimatedIconProp
  * ```
  */
 export function PulseOnHover({ children, className, ...props }: AnimatedIconProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
@@ -182,7 +182,7 @@ export function PulseOnHover({ children, className, ...props }: AnimatedIconProp
     >
       {children}
     </motion.div>
-  )
+  );
 }
 
 /**
@@ -196,7 +196,7 @@ export function PulseOnHover({ children, className, ...props }: AnimatedIconProp
  * ```
  */
 export function SpinOnClick({ children, className, ...props }: AnimatedIconProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
@@ -220,5 +220,5 @@ export function SpinOnClick({ children, className, ...props }: AnimatedIconProps
     >
       {children}
     </motion.div>
-  )
+  );
 }

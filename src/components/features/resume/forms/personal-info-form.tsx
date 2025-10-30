@@ -1,7 +1,7 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -10,16 +10,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { formatLastSaved, useAutoSave } from "@/hooks/use-auto-save"
-import { type PersonalInfoFormData, personalInfoSchema } from "@/lib/validations"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { formatLastSaved, useAutoSave } from "@/hooks/use-auto-save";
+import { type PersonalInfoFormData, personalInfoSchema } from "@/lib/validations";
 
 interface PersonalInfoFormProps {
-  resumeId: string
-  defaultValues?: Partial<PersonalInfoFormData>
-  enabled?: boolean
+  resumeId: string;
+  defaultValues?: Partial<PersonalInfoFormData>;
+  enabled?: boolean;
 }
 
 export function PersonalInfoForm({
@@ -37,24 +37,24 @@ export function PersonalInfoForm({
       summary: defaultValues?.summary ?? "",
     },
     mode: "onBlur", // Validate on blur to avoid too many validations
-  })
+  });
 
   const { save, isSaving, error, lastSaved } = useAutoSave({
     resumeId,
     enabled,
-  })
+  });
 
   // Handle form changes with auto-save
   const handleFieldChange = (field: keyof PersonalInfoFormData, value: string) => {
-    form.setValue(field, value)
+    form.setValue(field, value);
 
     // Only save if enabled and the field is valid
-    if (!enabled) return
+    if (!enabled) return;
 
-    const isValid = form.formState.errors[field] === undefined
+    const isValid = form.formState.errors[field] === undefined;
     if (isValid) {
       // Get all current form values
-      const formValues = form.getValues()
+      const formValues = form.getValues();
 
       save({
         content: {
@@ -66,9 +66,9 @@ export function PersonalInfoForm({
             summary: formValues.summary || "", // Provide default empty string
           },
         },
-      })
+      });
     }
-  }
+  };
 
   return (
     <Card>
@@ -80,7 +80,7 @@ export function PersonalInfoForm({
               Your basic contact information and professional summary
             </CardDescription>
           </div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="text-muted-foreground flex items-center gap-2 text-sm">
             {isSaving && (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -95,7 +95,7 @@ export function PersonalInfoForm({
             )}
             {error && (
               <>
-                <AlertCircle className="h-4 w-4 text-destructive" />
+                <AlertCircle className="text-destructive h-4 w-4" />
                 <span>Failed to save</span>
               </>
             )}
@@ -119,8 +119,8 @@ export function PersonalInfoForm({
                         placeholder="John Doe"
                         disabled={!enabled}
                         onBlur={(e) => {
-                          field.onBlur()
-                          handleFieldChange("name", e.target.value)
+                          field.onBlur();
+                          handleFieldChange("name", e.target.value);
                         }}
                       />
                     </FormControl>
@@ -143,8 +143,8 @@ export function PersonalInfoForm({
                         placeholder="john@example.com"
                         disabled={!enabled}
                         onBlur={(e) => {
-                          field.onBlur()
-                          handleFieldChange("email", e.target.value)
+                          field.onBlur();
+                          handleFieldChange("email", e.target.value);
                         }}
                       />
                     </FormControl>
@@ -167,8 +167,8 @@ export function PersonalInfoForm({
                         placeholder="+1 (555) 123-4567"
                         disabled={!enabled}
                         onBlur={(e) => {
-                          field.onBlur()
-                          handleFieldChange("phone", e.target.value)
+                          field.onBlur();
+                          handleFieldChange("phone", e.target.value);
                         }}
                       />
                     </FormControl>
@@ -190,8 +190,8 @@ export function PersonalInfoForm({
                         placeholder="San Francisco, CA"
                         disabled={!enabled}
                         onBlur={(e) => {
-                          field.onBlur()
-                          handleFieldChange("location", e.target.value)
+                          field.onBlur();
+                          handleFieldChange("location", e.target.value);
                         }}
                       />
                     </FormControl>
@@ -216,8 +216,8 @@ export function PersonalInfoForm({
                       disabled={!enabled}
                       rows={4}
                       onBlur={(e) => {
-                        field.onBlur()
-                        handleFieldChange("summary", e.target.value)
+                        field.onBlur();
+                        handleFieldChange("summary", e.target.value);
                       }}
                     />
                   </FormControl>
@@ -232,5 +232,5 @@ export function PersonalInfoForm({
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }

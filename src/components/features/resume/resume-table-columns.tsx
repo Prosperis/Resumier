@@ -3,10 +3,10 @@
  * TanStack Table column configuration for resume data
  */
 
-import type { ColumnDef } from "@tanstack/react-table"
-import { Copy, MoreHorizontal, Pencil, Trash2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
+import type { ColumnDef } from "@tanstack/react-table";
+import { Copy, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,23 +14,23 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import type { Resume } from "@/lib/api/types"
-import { DeleteResumeDialog, RenameResumeDialog } from "./mutations"
+} from "@/components/ui/dropdown-menu";
+import type { Resume } from "@/lib/api/types";
+import { DeleteResumeDialog, RenameResumeDialog } from "./mutations";
 
 /**
  * Format date string to readable format
  */
 function formatDate(dateString: string): string {
   try {
-    const date = new Date(dateString)
+    const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
-    }).format(date)
+    }).format(date);
   } catch {
-    return dateString
+    return dateString;
   }
 }
 
@@ -39,16 +39,16 @@ function formatDate(dateString: string): string {
  */
 function formatDateTime(dateString: string): string {
   try {
-    const date = new Date(dateString)
+    const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
       hour: "numeric",
       minute: "2-digit",
-    }).format(date)
+    }).format(date);
   } catch {
-    return dateString
+    return dateString;
   }
 }
 
@@ -56,9 +56,9 @@ function formatDateTime(dateString: string): string {
  * Actions menu for each resume row
  */
 interface RowActionsProps {
-  resume: Resume
-  onEdit: (resume: Resume) => void
-  onDuplicate: (resume: Resume) => void
+  resume: Resume;
+  onEdit: (resume: Resume) => void;
+  onDuplicate: (resume: Resume) => void;
 }
 
 function RowActions({ resume, onEdit, onDuplicate }: RowActionsProps) {
@@ -106,15 +106,15 @@ function RowActions({ resume, onEdit, onDuplicate }: RowActionsProps) {
         />
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 /**
  * Create resume table columns
  */
 export function createResumeColumns(handlers: {
-  onEdit: (resume: Resume) => void
-  onDuplicate: (resume: Resume) => void
+  onEdit: (resume: Resume) => void;
+  onDuplicate: (resume: Resume) => void;
 }): ColumnDef<Resume>[] {
   return [
     {
@@ -125,23 +125,23 @@ export function createResumeColumns(handlers: {
           <div className="flex flex-col gap-1">
             <span className="font-medium">{row.getValue("title")}</span>
             {/* Show updated date on mobile when date columns are hidden */}
-            <span className="text-xs text-muted-foreground md:hidden">
+            <span className="text-muted-foreground text-xs md:hidden">
               Updated {formatDate(row.original.updatedAt)}
             </span>
           </div>
-        )
+        );
       },
     },
     {
       accessorKey: "createdAt",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Created" />,
       cell: ({ row }) => {
-        const dateString = row.getValue("createdAt") as string
+        const dateString = row.getValue("createdAt") as string;
         return (
-          <div className="text-sm text-muted-foreground" title={formatDateTime(dateString)}>
+          <div className="text-muted-foreground text-sm" title={formatDateTime(dateString)}>
             {formatDate(dateString)}
           </div>
-        )
+        );
       },
       enableSorting: true,
       enableHiding: true,
@@ -150,12 +150,12 @@ export function createResumeColumns(handlers: {
       accessorKey: "updatedAt",
       header: ({ column }) => <DataTableColumnHeader column={column} title="Updated" />,
       cell: ({ row }) => {
-        const dateString = row.getValue("updatedAt") as string
+        const dateString = row.getValue("updatedAt") as string;
         return (
-          <div className="text-sm text-muted-foreground" title={formatDateTime(dateString)}>
+          <div className="text-muted-foreground text-sm" title={formatDateTime(dateString)}>
             {formatDate(dateString)}
           </div>
-        )
+        );
       },
       enableSorting: true,
       enableHiding: true,
@@ -165,5 +165,5 @@ export function createResumeColumns(handlers: {
       cell: ({ row }) => <RowActions resume={row.original} {...handlers} />,
       enableHiding: false,
     },
-  ]
+  ];
 }

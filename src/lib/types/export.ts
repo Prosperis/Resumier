@@ -6,36 +6,36 @@
 /**
  * Supported export formats
  */
-export type ExportFormatType = "pdf" | "docx" | "html" | "markdown" | "txt" | "json"
+export type ExportFormatType = "pdf" | "docx" | "html" | "markdown" | "txt" | "json";
 
 /**
  * Export format metadata
  */
 export interface ExportFormat {
-  id: ExportFormatType
-  label: string
-  description: string
-  extension: string
-  mimeType: string
+  id: ExportFormatType;
+  label: string;
+  description: string;
+  extension: string;
+  mimeType: string;
 }
 
 /**
  * Export options
  */
 export interface ExportOptions {
-  format: ExportFormatType
-  includeMetadata?: boolean
-  filename?: string
+  format: ExportFormatType;
+  includeMetadata?: boolean;
+  filename?: string;
 }
 
 /**
  * Export result
  */
 export interface ExportResult {
-  success: boolean
-  format: ExportFormatType
-  filename: string
-  error?: string
+  success: boolean;
+  format: ExportFormatType;
+  filename: string;
+  error?: string;
 }
 
 /**
@@ -84,4 +84,4 @@ export const EXPORT_FORMATS: Record<ExportFormatType, ExportFormat> = {
     extension: ".json",
     mimeType: "application/json",
   },
-}
+};

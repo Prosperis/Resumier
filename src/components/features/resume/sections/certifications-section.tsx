@@ -1,14 +1,14 @@
-import { Plus, Trash } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import type { Certification } from "@/stores"
+import { Plus, Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { Certification } from "@/stores";
 
 interface CertProps {
-  certifications: Certification[]
-  addCertification: () => void
-  updateCertification: (i: number, field: keyof Certification, value: string) => void
-  removeCertification: (i: number) => void
+  certifications: Certification[];
+  addCertification: () => void;
+  updateCertification: (i: number, field: keyof Certification, value: string) => void;
+  removeCertification: (i: number) => void;
 }
 
 export function CertificationsSection({
@@ -20,7 +20,7 @@ export function CertificationsSection({
   return (
     <div className="grid gap-4">
       {certifications.map((cert, i) => (
-        <div key={i} className="border p-4 rounded-md grid gap-2">
+        <div key={i} className="grid gap-2 rounded-md border p-4">
           <div className="grid gap-2">
             <Label>Certification</Label>
             <Input
@@ -46,5 +46,5 @@ export function CertificationsSection({
         <Plus className="mr-2 h-4 w-4" /> Add Certification
       </Button>
     </div>
-  )
+  );
 }

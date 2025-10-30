@@ -1,5 +1,5 @@
-import { useEffect } from "react"
-import { reportWebVitals } from "@/lib/monitoring/web-vitals"
+import { useEffect } from "react";
+import { reportWebVitals } from "@/lib/monitoring/web-vitals";
 
 /**
  * Hook to initialize Web Vitals tracking
@@ -15,7 +15,7 @@ export function useWebVitals() {
   useEffect(() => {
     // Only run in production
     if (import.meta.env.PROD) {
-      reportWebVitals()
+      reportWebVitals();
     }
-  }, [])
+  }, []);
 }

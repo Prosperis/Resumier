@@ -1,18 +1,18 @@
-import { useEffect, useRef, useState } from "react"
-import type { UpdateResumeDto } from "@/lib/api/types"
-import { useUpdateResume } from "./api"
+import { useEffect, useRef, useState } from "react";
+import type { UpdateResumeDto } from "@/lib/api/types";
+import { useUpdateResume } from "./api";
 
 interface UseAutoSaveOptions {
-  resumeId: string
-  debounceMs?: number
-  enabled?: boolean
+  resumeId: string;
+  debounceMs?: number;
+  enabled?: boolean;
 }
 
 interface UseAutoSaveReturn {
-  save: (data: UpdateResumeDto) => void
-  isSaving: boolean
-  error: Error | null
-  lastSaved: Date | null
+  save: (data: UpdateResumeDto) => void;
+  isSaving: boolean;
+  error: Error | null;
+  lastSaved: Date | null;
 }
 
 /**
@@ -36,37 +36,37 @@ export function useAutoSave({
   debounceMs = 1000,
   enabled = true,
 }: UseAutoSaveOptions): UseAutoSaveReturn {
-  const { mutate, isPending, error: mutationError } = useUpdateResume()
-  const [lastSaved, setLastSaved] = useState<Date | null>(null)
-  const [error, setError] = useState<Error | null>(null)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const pendingDataRef = useRef<UpdateResumeDto | null>(null)
+  const { mutate, isPending, error: mutationError } = useUpdateResume();
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingDataRef = useRef<UpdateResumeDto | null>(null);
 
   // Clear timeout on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
+        clearTimeout(timeoutRef.current);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   // Update error state when mutation error changes
   useEffect(() => {
     if (mutationError) {
-      setError(mutationError as Error)
+      setError(mutationError as Error);
     }
-  }, [mutationError])
+  }, [mutationError]);
 
   const save = (data: UpdateResumeDto) => {
-    if (!enabled) return
+    if (!enabled) return;
 
     // Store the latest data
-    pendingDataRef.current = data
+    pendingDataRef.current = data;
 
     // Clear existing timeout
     if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
+      clearTimeout(timeoutRef.current);
     }
 
     // Set new timeout
@@ -79,25 +79,25 @@ export function useAutoSave({
           },
           {
             onSuccess: () => {
-              setLastSaved(new Date())
-              setError(null)
-              pendingDataRef.current = null
+              setLastSaved(new Date());
+              setError(null);
+              pendingDataRef.current = null;
             },
             onError: (err: Error) => {
-              setError(err)
+              setError(err);
             },
-          },
-        )
+          }
+        );
       }
-    }, debounceMs)
-  }
+    }, debounceMs);
+  };
 
   return {
     save,
     isSaving: isPending,
     error,
     lastSaved,
-  }
+  };
 }
 
 /**
@@ -111,25 +111,25 @@ export function useAutoSave({
  * ```
  */
 export function formatLastSaved(lastSaved: Date | null): string {
-  if (!lastSaved) return ""
+  if (!lastSaved) return "";
 
-  const now = new Date()
-  const diffMs = now.getTime() - lastSaved.getTime()
-  const diffSeconds = Math.floor(diffMs / 1000)
-  const diffMinutes = Math.floor(diffSeconds / 60)
+  const now = new Date();
+  const diffMs = now.getTime() - lastSaved.getTime();
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
 
   if (diffSeconds < 10) {
-    return "Saved just now"
+    return "Saved just now";
   }
   if (diffSeconds < 60) {
-    return `Saved ${diffSeconds} seconds ago`
+    return `Saved ${diffSeconds} seconds ago`;
   }
   if (diffMinutes === 1) {
-    return "Saved 1 minute ago"
+    return "Saved 1 minute ago";
   }
   if (diffMinutes < 60) {
-    return `Saved ${diffMinutes} minutes ago`
+    return `Saved ${diffMinutes} minutes ago`;
   }
 
-  return `Saved at ${lastSaved.toLocaleTimeString()}`
+  return `Saved at ${lastSaved.toLocaleTimeString()}`;
 }

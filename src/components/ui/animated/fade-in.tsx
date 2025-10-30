@@ -3,20 +3,20 @@
  * Wrapper component that fades in its children
  */
 
-import type { HTMLMotionProps } from "framer-motion"
-import { motion } from "framer-motion"
+import type { HTMLMotionProps } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   useAnimationTransition,
   useAnimationVariants,
-} from "@/lib/animations/hooks/use-reduced-motion"
-import { defaultTransition } from "@/lib/animations/transitions"
-import { fadeVariants } from "@/lib/animations/variants"
+} from "@/lib/animations/hooks/use-reduced-motion";
+import { defaultTransition } from "@/lib/animations/transitions";
+import { fadeVariants } from "@/lib/animations/variants";
 
 interface FadeInProps extends Omit<HTMLMotionProps<"div">, "variants"> {
-  children: React.ReactNode
-  delay?: number
-  duration?: number
-  className?: string
+  children: React.ReactNode;
+  delay?: number;
+  duration?: number;
+  className?: string;
 }
 
 /**
@@ -30,12 +30,12 @@ interface FadeInProps extends Omit<HTMLMotionProps<"div">, "variants"> {
  * ```
  */
 export function FadeIn({ children, delay = 0, duration, className, ...props }: FadeInProps) {
-  const variants = useAnimationVariants(fadeVariants)
+  const variants = useAnimationVariants(fadeVariants);
   const transition = useAnimationTransition({
     ...defaultTransition,
     delay,
     ...(duration && { duration }),
-  })
+  });
 
   return (
     <motion.div
@@ -49,5 +49,5 @@ export function FadeIn({ children, delay = 0, duration, className, ...props }: F
     >
       {children}
     </motion.div>
-  )
+  );
 }

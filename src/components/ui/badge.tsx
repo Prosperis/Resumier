@@ -1,10 +1,10 @@
-import { Slot } from "@radix-ui/react-slot"
-import type { VariantProps } from "class-variance-authority"
-import { motion } from "framer-motion"
-import type * as React from "react"
-import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion"
-import { cn } from "@/lib/utils"
-import { badgeVariants } from "./badge-variants"
+import { Slot } from "@radix-ui/react-slot";
+import type { VariantProps } from "class-variance-authority";
+import { motion } from "framer-motion";
+import type * as React from "react";
+import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion";
+import { cn } from "@/lib/utils";
+import { badgeVariants } from "./badge-variants";
 
 function Badge({
   className,
@@ -14,19 +14,19 @@ function Badge({
   ...props
 }: React.ComponentProps<"span"> &
   VariantProps<typeof badgeVariants> & {
-    asChild?: boolean
-    animated?: boolean
+    asChild?: boolean;
+    animated?: boolean;
   }) {
-  const prefersReducedMotion = useReducedMotion()
-  const Comp = asChild ? Slot : "span"
+  const prefersReducedMotion = useReducedMotion();
+  const Comp = asChild ? Slot : "span";
 
   if (!animated || asChild) {
     return (
       <Comp data-slot="badge" className={cn(badgeVariants({ variant }), className)} {...props} />
-    )
+    );
   }
 
-  const MotionSpan = motion.span
+  const MotionSpan = motion.span;
 
   return (
     <MotionSpan
@@ -39,7 +39,7 @@ function Badge({
       }
       {...(props as React.ComponentProps<typeof MotionSpan>)}
     />
-  )
+  );
 }
 
-export { Badge }
+export { Badge };

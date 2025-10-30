@@ -3,16 +3,16 @@
  * Extended badge animations for notifications and counts
  */
 
-import { motion } from "framer-motion"
-import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion"
-import { cn } from "@/lib/utils"
-import { Badge } from "./badge"
+import { motion } from "framer-motion";
+import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion";
+import { cn } from "@/lib/utils";
+import { Badge } from "./badge";
 
 interface NotificationBadgeProps {
-  count: number
-  max?: number
-  className?: string
-  variant?: "default" | "destructive" | "outline" | "secondary"
+  count: number;
+  max?: number;
+  className?: string;
+  variant?: "default" | "destructive" | "outline" | "secondary";
 }
 
 /**
@@ -29,10 +29,10 @@ export function NotificationBadge({
   variant = "destructive",
   className,
 }: NotificationBadgeProps) {
-  const prefersReducedMotion = useReducedMotion()
-  const displayCount = count > max ? `${max}+` : count
+  const prefersReducedMotion = useReducedMotion();
+  const displayCount = count > max ? `${max}+` : count;
 
-  if (count === 0) return null
+  if (count === 0) return null;
 
   return (
     <motion.div
@@ -75,14 +75,14 @@ export function NotificationBadge({
         {displayCount}
       </Badge>
     </motion.div>
-  )
+  );
 }
 
 interface PulseBadgeProps {
-  children: React.ReactNode
-  pulse?: boolean
-  className?: string
-  variant?: "default" | "destructive" | "outline" | "secondary"
+  children: React.ReactNode;
+  pulse?: boolean;
+  className?: string;
+  variant?: "default" | "destructive" | "outline" | "secondary";
 }
 
 /**
@@ -99,7 +99,7 @@ export function PulseBadge({
   variant = "default",
   className,
 }: PulseBadgeProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
@@ -124,13 +124,13 @@ export function PulseBadge({
     >
       <Badge variant={variant}>{children}</Badge>
     </motion.div>
-  )
+  );
 }
 
 interface StatusBadgeProps {
-  status: "online" | "offline" | "away" | "busy"
-  showText?: boolean
-  className?: string
+  status: "online" | "offline" | "away" | "busy";
+  showText?: boolean;
+  className?: string;
 }
 
 /**
@@ -142,7 +142,7 @@ interface StatusBadgeProps {
  * ```
  */
 export function StatusBadge({ status, showText = false, className }: StatusBadgeProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   const statusConfig = {
     online: {
@@ -165,9 +165,9 @@ export function StatusBadge({ status, showText = false, className }: StatusBadge
       text: "Busy",
       pulse: true,
     },
-  }
+  };
 
-  const config = statusConfig[status]
+  const config = statusConfig[status];
 
   return (
     <div className={cn("inline-flex items-center gap-2", className)}>
@@ -207,7 +207,7 @@ export function StatusBadge({ status, showText = false, className }: StatusBadge
           />
         )}
       </div>
-      {showText && <span className="text-sm text-muted-foreground">{config.text}</span>}
+      {showText && <span className="text-muted-foreground text-sm">{config.text}</span>}
     </div>
-  )
+  );
 }

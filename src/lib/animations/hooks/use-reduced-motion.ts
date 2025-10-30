@@ -3,8 +3,8 @@
  * Respects user's motion preferences for accessibility
  */
 
-import type { Transition, Variants } from "framer-motion"
-import { useEffect, useState } from "react"
+import type { Transition, Variants } from "framer-motion";
+import { useEffect, useState } from "react";
 
 /**
  * Detects if user has requested reduced motion
@@ -21,50 +21,50 @@ import { useEffect, useState } from "react"
  * ```
  */
 export function useReducedMotion(): boolean {
-  const [shouldReduceMotion, setShouldReduceMotion] = useState(false)
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
 
   useEffect(() => {
     // Check if matchMedia is supported (for SSR and test environments)
     if (typeof window === "undefined" || !window.matchMedia) {
-      return
+      return;
     }
 
     // Create media query for prefers-reduced-motion
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     // Additional guard for test environments
     if (!mediaQuery) {
-      return
+      return;
     }
 
     // Set initial value
-    setShouldReduceMotion(mediaQuery.matches)
+    setShouldReduceMotion(mediaQuery.matches);
 
     // Create event listener for changes
     const handleChange = (event: MediaQueryListEvent) => {
-      setShouldReduceMotion(event.matches)
-    }
+      setShouldReduceMotion(event.matches);
+    };
 
     // Add listener (use deprecated addListener for Safari < 14)
     if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener("change", handleChange)
+      mediaQuery.addEventListener("change", handleChange);
     } else {
       // @ts-expect-error - fallback for older browsers
-      mediaQuery.addListener(handleChange)
+      mediaQuery.addListener(handleChange);
     }
 
     // Cleanup
     return () => {
       if (mediaQuery.removeEventListener) {
-        mediaQuery.removeEventListener("change", handleChange)
+        mediaQuery.removeEventListener("change", handleChange);
       } else {
         // @ts-expect-error - fallback for older browsers
-        mediaQuery.removeListener(handleChange)
+        mediaQuery.removeListener(handleChange);
       }
-    }
-  }, [])
+    };
+  }, []);
 
-  return shouldReduceMotion
+  return shouldReduceMotion;
 }
 
 /**
@@ -85,13 +85,13 @@ export function useReducedMotion(): boolean {
  * ```
  */
 export function useAnimationTransition(transition: Transition = {}): Transition {
-  const shouldReduceMotion = useReducedMotion()
+  const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
-    return { duration: 0 }
+    return { duration: 0 };
   }
 
-  return transition
+  return transition;
 }
 
 /**
@@ -113,11 +113,11 @@ export function useAnimationTransition(transition: Transition = {}): Transition 
  * ```
  */
 export function useAnimationVariants(variants: Variants): Variants | Record<string, never> {
-  const shouldReduceMotion = useReducedMotion()
+  const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
-    return {}
+    return {};
   }
 
-  return variants
+  return variants;
 }

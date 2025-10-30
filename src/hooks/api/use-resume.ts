@@ -1,11 +1,11 @@
-import { useQuery } from "@tanstack/react-query"
-import { apiClient } from "../../lib/api/client"
-import type { Resume } from "../../lib/api/types"
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "../../lib/api/client";
+import type { Resume } from "../../lib/api/types";
 
 /**
  * Query key factory for single resume
  */
-export const resumeQueryKey = (id: string) => ["resumes", id] as const
+export const resumeQueryKey = (id: string) => ["resumes", id] as const;
 
 /**
  * Fetch resume by ID
@@ -19,5 +19,5 @@ export function useResume(id: string) {
     gcTime: 10 * 60 * 1000, // 10 minutes
     // Only fetch if ID is provided
     enabled: Boolean(id),
-  })
+  });
 }

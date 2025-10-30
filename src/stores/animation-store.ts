@@ -1,21 +1,21 @@
-import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface AnimationSettings {
-  dotGridEnabled: boolean
-  reducedMotion: boolean
+  dotGridEnabled: boolean;
+  reducedMotion: boolean;
 }
 
 interface AnimationStore extends AnimationSettings {
-  setDotGridEnabled: (enabled: boolean) => void
-  setReducedMotion: (enabled: boolean) => void
-  reset: () => void
+  setDotGridEnabled: (enabled: boolean) => void;
+  setReducedMotion: (enabled: boolean) => void;
+  reset: () => void;
 }
 
 const defaultSettings: AnimationSettings = {
   dotGridEnabled: true,
   reducedMotion: false,
-}
+};
 
 /**
  * Animation settings store
@@ -34,6 +34,6 @@ export const useAnimationStore = create<AnimationStore>()(
     }),
     {
       name: "resumier-animation-settings",
-    },
-  ),
-)
+    }
+  )
+);

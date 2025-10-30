@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 /**
  * Education Validation Schema
@@ -14,12 +14,12 @@ export const educationSchema = z.object({
   current: z.boolean().optional(),
   gpa: z.string().max(10, "GPA must be less than 10 characters").optional().or(z.literal("")),
   honors: z.array(z.string()).optional(),
-})
+});
 
-export type EducationFormData = z.infer<typeof educationSchema>
+export type EducationFormData = z.infer<typeof educationSchema>;
 
 /**
  * Schema for creating new education (without ID)
  */
-export const createEducationSchema = educationSchema.omit({ id: true })
-export type CreateEducationFormData = z.infer<typeof createEducationSchema>
+export const createEducationSchema = educationSchema.omit({ id: true });
+export type CreateEducationFormData = z.infer<typeof createEducationSchema>;

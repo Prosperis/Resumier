@@ -8,17 +8,17 @@
  * Extended by specific error types
  */
 export class ApiError extends Error {
-  status: number
-  code?: string
-  details?: unknown
+  status: number;
+  code?: string;
+  details?: unknown;
 
   constructor(message: string, status: number, code?: string, details?: unknown) {
-    super(message)
-    this.name = "ApiError"
-    this.status = status
-    this.code = code
-    this.details = details
-    Object.setPrototypeOf(this, ApiError.prototype)
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.code = code;
+    this.details = details;
+    Object.setPrototypeOf(this, ApiError.prototype);
   }
 }
 
@@ -27,13 +27,13 @@ export class ApiError extends Error {
  * Contains field-specific validation errors
  */
 export class ValidationError extends ApiError {
-  errors: Record<string, string[]>
+  errors: Record<string, string[]>;
 
   constructor(message: string, errors: Record<string, string[]>) {
-    super(message, 422, "VALIDATION_ERROR", errors)
-    this.name = "ValidationError"
-    this.errors = errors
-    Object.setPrototypeOf(this, ValidationError.prototype)
+    super(message, 422, "VALIDATION_ERROR", errors);
+    this.name = "ValidationError";
+    this.errors = errors;
+    Object.setPrototypeOf(this, ValidationError.prototype);
   }
 }
 
@@ -43,9 +43,9 @@ export class ValidationError extends ApiError {
  */
 export class NotFoundError extends ApiError {
   constructor(message: string) {
-    super(message, 404, "NOT_FOUND")
-    this.name = "NotFoundError"
-    Object.setPrototypeOf(this, NotFoundError.prototype)
+    super(message, 404, "NOT_FOUND");
+    this.name = "NotFoundError";
+    Object.setPrototypeOf(this, NotFoundError.prototype);
   }
 }
 
@@ -55,9 +55,9 @@ export class NotFoundError extends ApiError {
  */
 export class UnauthorizedError extends ApiError {
   constructor(message: string) {
-    super(message, 401, "UNAUTHORIZED")
-    this.name = "UnauthorizedError"
-    Object.setPrototypeOf(this, UnauthorizedError.prototype)
+    super(message, 401, "UNAUTHORIZED");
+    this.name = "UnauthorizedError";
+    Object.setPrototypeOf(this, UnauthorizedError.prototype);
   }
 }
 
@@ -67,9 +67,9 @@ export class UnauthorizedError extends ApiError {
  */
 export class ForbiddenError extends ApiError {
   constructor(message: string) {
-    super(message, 403, "FORBIDDEN")
-    this.name = "ForbiddenError"
-    Object.setPrototypeOf(this, ForbiddenError.prototype)
+    super(message, 403, "FORBIDDEN");
+    this.name = "ForbiddenError";
+    Object.setPrototypeOf(this, ForbiddenError.prototype);
   }
 }
 
@@ -79,9 +79,9 @@ export class ForbiddenError extends ApiError {
  */
 export class ConflictError extends ApiError {
   constructor(message: string) {
-    super(message, 409, "CONFLICT")
-    this.name = "ConflictError"
-    Object.setPrototypeOf(this, ConflictError.prototype)
+    super(message, 409, "CONFLICT");
+    this.name = "ConflictError";
+    Object.setPrototypeOf(this, ConflictError.prototype);
   }
 }
 
@@ -91,9 +91,9 @@ export class ConflictError extends ApiError {
  */
 export class ServerError extends ApiError {
   constructor(message: string) {
-    super(message, 500, "SERVER_ERROR")
-    this.name = "ServerError"
-    Object.setPrototypeOf(this, ServerError.prototype)
+    super(message, 500, "SERVER_ERROR");
+    this.name = "ServerError";
+    Object.setPrototypeOf(this, ServerError.prototype);
   }
 }
 
@@ -103,9 +103,9 @@ export class ServerError extends ApiError {
  */
 export class NetworkError extends ApiError {
   constructor(message: string) {
-    super(message, 0, "NETWORK_ERROR")
-    this.name = "NetworkError"
-    Object.setPrototypeOf(this, NetworkError.prototype)
+    super(message, 0, "NETWORK_ERROR");
+    this.name = "NetworkError";
+    Object.setPrototypeOf(this, NetworkError.prototype);
   }
 }
 
@@ -114,28 +114,28 @@ export class NetworkError extends ApiError {
  */
 export function parseErrorResponse(status: number, data: unknown): never {
   // biome-ignore lint/suspicious/noExplicitAny: error responses have dynamic structure
-  const message = (data as any)?.message || (data as any)?.error || "An unexpected error occurred"
+  const message = (data as any)?.message || (data as any)?.error || "An unexpected error occurred";
 
   switch (status) {
     case 400:
-      throw new ApiError(message, 400, "BAD_REQUEST", data)
+      throw new ApiError(message, 400, "BAD_REQUEST", data);
     case 401:
-      throw new UnauthorizedError(message)
+      throw new UnauthorizedError(message);
     case 403:
-      throw new ForbiddenError(message)
+      throw new ForbiddenError(message);
     case 404:
-      throw new NotFoundError(message)
+      throw new NotFoundError(message);
     case 409:
-      throw new ConflictError(message)
+      throw new ConflictError(message);
     case 422:
       // biome-ignore lint/suspicious/noExplicitAny: validation errors have dynamic structure
-      throw new ValidationError(message, (data as any)?.errors || {})
+      throw new ValidationError(message, (data as any)?.errors || {});
     case 500:
     case 502:
     case 503:
-      throw new ServerError(message)
+      throw new ServerError(message);
     default:
-      throw new ApiError(message, status, "UNKNOWN_ERROR", data)
+      throw new ApiError(message, status, "UNKNOWN_ERROR", data);
   }
 }
 
@@ -143,7 +143,7 @@ export function parseErrorResponse(status: number, data: unknown): never {
  * Check if error is an API error
  */
 export function isApiError(error: unknown): error is ApiError {
-  return error instanceof ApiError
+  return error instanceof ApiError;
 }
 
 /**
@@ -151,12 +151,12 @@ export function isApiError(error: unknown): error is ApiError {
  */
 export function getErrorMessage(error: unknown): string {
   if (isApiError(error)) {
-    return error.message
+    return error.message;
   }
 
   if (error instanceof Error) {
-    return error.message
+    return error.message;
   }
 
-  return "An unexpected error occurred"
+  return "An unexpected error occurred";
 }

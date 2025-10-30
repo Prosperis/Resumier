@@ -6,23 +6,23 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core"
+} from "@dnd-kit/core";
 import {
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable"
-import { CalendarIcon, EditIcon, TrashIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import type { Education } from "@/lib/api/types"
-import { SortableItem } from "../dnd/sortable-item"
+} from "@dnd-kit/sortable";
+import { CalendarIcon, EditIcon, TrashIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import type { Education } from "@/lib/api/types";
+import { SortableItem } from "../dnd/sortable-item";
 
 interface EducationListProps {
-  education: Education[]
-  onEdit: (education: Education) => void
-  onDelete: (id: string) => void
-  onReorder?: (education: Education[]) => void
+  education: Education[];
+  onEdit: (education: Education) => void;
+  onDelete: (id: string) => void;
+  onReorder?: (education: Education[]) => void;
 }
 
 export function EducationList({ education, onEdit, onDelete, onReorder }: EducationListProps) {
@@ -30,43 +30,43 @@ export function EducationList({ education, onEdit, onDelete, onReorder }: Educat
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  )
+    })
+  );
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event
+    const { active, over } = event;
 
     if (!over || active.id === over.id) {
-      return
+      return;
     }
 
-    const oldIndex = education.findIndex((edu) => edu.id === active.id)
-    const newIndex = education.findIndex((edu) => edu.id === over.id)
+    const oldIndex = education.findIndex((edu) => edu.id === active.id);
+    const newIndex = education.findIndex((edu) => edu.id === over.id);
 
     if (oldIndex !== -1 && newIndex !== -1 && onReorder) {
-      const result = Array.from(education)
-      const [removed] = result.splice(oldIndex, 1)
-      result.splice(newIndex, 0, removed)
-      onReorder(result)
+      const result = Array.from(education);
+      const [removed] = result.splice(oldIndex, 1);
+      result.splice(newIndex, 0, removed);
+      onReorder(result);
     }
-  }
+  };
 
   if (education.length === 0) {
     return (
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-          <p className="text-sm text-muted-foreground">No education added yet.</p>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-sm">No education added yet.</p>
+          <p className="text-muted-foreground mt-1 text-xs">
             Click "Add Education" to get started.
           </p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   const formatDate = (date: string) => {
-    if (!date) return ""
-    const [year, month] = date.split("-")
+    if (!date) return "";
+    const [year, month] = date.split("-");
     const monthNames = [
       "Jan",
       "Feb",
@@ -80,15 +80,15 @@ export function EducationList({ education, onEdit, onDelete, onReorder }: Educat
       "Oct",
       "Nov",
       "Dec",
-    ]
-    return `${monthNames[parseInt(month, 10) - 1]} ${year}`
-  }
+    ];
+    return `${monthNames[parseInt(month, 10) - 1]} ${year}`;
+  };
 
   const formatDateRange = (edu: Education) => {
-    const start = formatDate(edu.startDate)
-    const end = edu.current ? "Present" : formatDate(edu.endDate)
-    return `${start} – ${end}`
-  }
+    const start = formatDate(edu.startDate);
+    const end = edu.current ? "Present" : formatDate(edu.endDate);
+    return `${start} – ${end}`;
+  };
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -105,8 +105,8 @@ export function EducationList({ education, onEdit, onDelete, onReorder }: Educat
                     <div className="flex-1">
                       <h3 className="font-semibold">{edu.degree}</h3>
                       <p className="text-sm font-medium">{edu.institution}</p>
-                      <p className="text-sm text-muted-foreground">{edu.field}</p>
-                      <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">{edu.field}</p>
+                      <div className="text-muted-foreground mt-1 flex items-center gap-1 text-xs">
                         <CalendarIcon className="h-3 w-3" />
                         <span>{formatDateRange(edu)}</span>
                       </div>
@@ -159,5 +159,5 @@ export function EducationList({ education, onEdit, onDelete, onReorder }: Educat
         </div>
       </SortableContext>
     </DndContext>
-  )
+  );
 }

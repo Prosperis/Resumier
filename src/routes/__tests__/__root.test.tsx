@@ -1,11 +1,11 @@
-import { render, screen } from "@testing-library/react"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock dependencies
 vi.mock("@tanstack/react-router", () => ({
   createRootRoute: vi.fn((config: any) => ({ ...config })),
   Outlet: () => <div data-testid="outlet">Outlet Content</div>,
-}))
+}));
 
 vi.mock("@tanstack/router-devtools", () => ({
   TanStackRouterDevtools: ({ position }: { position: string }) => (
@@ -13,100 +13,100 @@ vi.mock("@tanstack/router-devtools", () => ({
       Router Devtools
     </div>
   ),
-}))
+}));
 
 vi.mock("@/components/layouts/root-layout", () => ({
   RootLayout: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="root-layout">{children}</div>
   ),
-}))
+}));
 
 vi.mock("@/components/ui/route-error", () => ({
   NotFoundError: () => <div data-testid="not-found-error">404 Not Found</div>,
-}))
+}));
 
 // Import the route module after setting up mocks
-const { Route: rootRoute } = await import("../__root")
+const { Route: rootRoute } = await import("../__root");
 
 describe("Root Route", () => {
   beforeEach(() => {
     // Mock reset handled by vitest config (clearMocks: true)
-  })
+  });
 
   const renderRootRoute = () => {
     // Get the component from the route definition
-    const Component = (rootRoute as any).component
+    const Component = (rootRoute as any).component;
     if (!Component) {
-      throw new Error("Component not found in route")
+      throw new Error("Component not found in route");
     }
-    return render(<Component />)
-  }
+    return render(<Component />);
+  };
 
   describe("Component Structure", () => {
     it("renders the RootLayout component", () => {
-      renderRootRoute()
-      expect(screen.getByTestId("root-layout")).toBeInTheDocument()
-    })
+      renderRootRoute();
+      expect(screen.getByTestId("root-layout")).toBeInTheDocument();
+    });
 
     it("renders the Outlet component", () => {
-      renderRootRoute()
-      expect(screen.getByTestId("outlet")).toBeInTheDocument()
-    })
+      renderRootRoute();
+      expect(screen.getByTestId("outlet")).toBeInTheDocument();
+    });
 
     it("renders outlet content", () => {
-      renderRootRoute()
-      expect(screen.getByText("Outlet Content")).toBeInTheDocument()
-    })
-  })
+      renderRootRoute();
+      expect(screen.getByText("Outlet Content")).toBeInTheDocument();
+    });
+  });
 
   describe("Development Tools", () => {
     it("renders router devtools in development mode", () => {
-      const originalEnv = import.meta.env.DEV
+      const originalEnv = import.meta.env.DEV;
       // @ts-expect-error - Mocking env variable
-      import.meta.env.DEV = true
+      import.meta.env.DEV = true;
 
-      renderRootRoute()
+      renderRootRoute();
 
-      expect(screen.getByTestId("router-devtools")).toBeInTheDocument()
+      expect(screen.getByTestId("router-devtools")).toBeInTheDocument();
 
       // @ts-expect-error - Restoring env variable
-      import.meta.env.DEV = originalEnv
-    })
+      import.meta.env.DEV = originalEnv;
+    });
 
     it("devtools are positioned at bottom-right", () => {
-      const originalEnv = import.meta.env.DEV
+      const originalEnv = import.meta.env.DEV;
       // @ts-expect-error - Mocking env variable
-      import.meta.env.DEV = true
+      import.meta.env.DEV = true;
 
-      renderRootRoute()
+      renderRootRoute();
 
-      const devtools = screen.getByTestId("router-devtools")
-      expect(devtools).toHaveAttribute("data-position", "bottom-right")
+      const devtools = screen.getByTestId("router-devtools");
+      expect(devtools).toHaveAttribute("data-position", "bottom-right");
 
       // @ts-expect-error - Restoring env variable
-      import.meta.env.DEV = originalEnv
-    })
-  })
+      import.meta.env.DEV = originalEnv;
+    });
+  });
 
   describe("Route Configuration", () => {
     it("has a component property", () => {
-      expect(rootRoute).toHaveProperty("component")
-    })
+      expect(rootRoute).toHaveProperty("component");
+    });
 
     it("has a notFoundComponent property", () => {
-      expect(rootRoute).toHaveProperty("notFoundComponent")
-    })
-  })
+      expect(rootRoute).toHaveProperty("notFoundComponent");
+    });
+  });
 
   describe("Layout Wrapping", () => {
     it("wraps content in RootLayout", () => {
-      const { container } = renderRootRoute()
-      const rootLayout = container.querySelector('[data-testid="root-layout"]')
-      const outlet = container.querySelector('[data-testid="outlet"]')
+      const { container } = renderRootRoute();
+      const rootLayout = container.querySelector('[data-testid="root-layout"]');
+      const outlet = container.querySelector('[data-testid="outlet"]');
 
-      expect(rootLayout).toBeInTheDocument()
-      expect(outlet).toBeInTheDocument()
-      expect(rootLayout).toContainElement(outlet)
-    })
-  })
-})
+      expect(rootLayout).toBeInTheDocument();
+      expect(outlet).toBeInTheDocument();
+      expect(rootLayout).toContainElement(outlet);
+    });
+  });
+});

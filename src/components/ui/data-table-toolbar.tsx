@@ -1,13 +1,13 @@
-import type { Table } from "@tanstack/react-table"
-import { X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { DataTableViewOptions } from "./data-table-view-options"
+import type { Table } from "@tanstack/react-table";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { DataTableViewOptions } from "./data-table-view-options";
 
 interface DataTableToolbarProps<TData> {
-  table: Table<TData>
-  searchKey?: string
-  searchPlaceholder?: string
+  table: Table<TData>;
+  searchKey?: string;
+  searchPlaceholder?: string;
 }
 
 export function DataTableToolbar<TData>({
@@ -15,7 +15,7 @@ export function DataTableToolbar<TData>({
   searchKey,
   searchPlaceholder = "Search...",
 }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0
+  const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
     <div className="flex items-center justify-between">
@@ -41,5 +41,5 @@ export function DataTableToolbar<TData>({
       </div>
       <DataTableViewOptions table={table} />
     </div>
-  )
+  );
 }

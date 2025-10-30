@@ -1,7 +1,7 @@
-import { useNavigate } from "@tanstack/react-router"
-import { Loader2, Plus } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useNavigate } from "@tanstack/react-router";
+import { Loader2, Plus } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,42 +10,42 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useCreateResume } from "@/hooks/api"
-import { useToast } from "@/hooks/use-toast"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useCreateResume } from "@/hooks/api";
+import { useToast } from "@/hooks/use-toast";
 
 interface CreateResumeDialogProps {
-  trigger?: React.ReactNode
-  onSuccess?: (id: string) => void
+  trigger?: React.ReactNode;
+  onSuccess?: (id: string) => void;
 }
 
 export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogProps) {
-  const [open, setOpen] = useState(false)
-  const [title, setTitle] = useState("")
-  const [validationError, setValidationError] = useState("")
-  const navigate = useNavigate()
-  const { toast } = useToast()
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [validationError, setValidationError] = useState("");
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const { mutate, isPending, error } = useCreateResume()
+  const { mutate, isPending, error } = useCreateResume();
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Clear previous validation error
-    setValidationError("")
+    setValidationError("");
 
     if (!title.trim()) {
-      setValidationError("Please enter a resume title")
+      setValidationError("Please enter a resume title");
       toast({
         title: "Error",
         description: "Please enter a resume title",
         variant: "destructive",
-      })
+      });
       // Focus the input field
-      document.getElementById("title")?.focus()
-      return
+      document.getElementById("title")?.focus();
+      return;
     }
 
     mutate(
@@ -76,15 +76,15 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
           toast({
             title: "Success",
             description: "Resume created successfully",
-          })
-          setOpen(false)
-          setTitle("")
+          });
+          setOpen(false);
+          setTitle("");
 
           if (onSuccess) {
-            onSuccess(data.id)
+            onSuccess(data.id);
           } else {
             // Default: navigate to edit page
-            navigate({ to: "/resume/$id", params: { id: data.id } })
+            navigate({ to: "/resume/$id", params: { id: data.id } });
           }
         },
         onError: (err) => {
@@ -92,11 +92,11 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
             title: "Error",
             description: err.message || "Failed to create resume",
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -121,10 +121,10 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
               id="title"
               value={title}
               onChange={(e) => {
-                setTitle(e.target.value)
+                setTitle(e.target.value);
                 // Clear validation error on change
                 if (validationError) {
-                  setValidationError("")
+                  setValidationError("");
                 }
               }}
               placeholder="e.g., Software Engineer Resume"
@@ -137,12 +137,12 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
               }
             />
             {validationError && (
-              <p id="title-validation-error" className="mt-2 text-sm text-destructive" role="alert">
+              <p id="title-validation-error" className="text-destructive mt-2 text-sm" role="alert">
                 {validationError}
               </p>
             )}
             {error && !validationError && (
-              <p id="title-api-error" className="mt-2 text-sm text-destructive" role="alert">
+              <p id="title-api-error" className="text-destructive mt-2 text-sm" role="alert">
                 {error.message || "An error occurred"}
               </p>
             )}
@@ -169,5 +169,5 @@ export function CreateResumeDialog({ trigger, onSuccess }: CreateResumeDialogPro
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

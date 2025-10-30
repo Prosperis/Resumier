@@ -1,11 +1,11 @@
-import { QueryClientProvider } from "@tanstack/react-query"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import { queryClient } from "./query-client"
-import { ThemeProvider } from "./theme-provider"
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { queryClient } from "./query-client";
+import { ThemeProvider } from "./theme-provider";
 
 type ProvidersProps = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 /**
  * Application providers wrapper
@@ -20,5 +20,5 @@ export function Providers({ children }: ProvidersProps) {
         {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </ThemeProvider>
-  )
+  );
 }

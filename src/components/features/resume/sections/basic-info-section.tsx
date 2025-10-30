@@ -1,21 +1,21 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface BasicInfoProps {
-  name: string
-  email: string
-  phone: string
-  address: string
-  linkedInUrl: string
-  onNameChange: (v: string) => void
-  onEmailChange: (v: string) => void
-  onPhoneChange: (v: string) => void
-  onAddressChange: (v: string) => void
-  onLinkedInUrlChange: (v: string) => void
-  onImport: () => void
-  importing: boolean
-  onSave: (e: React.FormEvent) => void
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  linkedInUrl: string;
+  onNameChange: (v: string) => void;
+  onEmailChange: (v: string) => void;
+  onPhoneChange: (v: string) => void;
+  onAddressChange: (v: string) => void;
+  onLinkedInUrlChange: (v: string) => void;
+  onImport: () => void;
+  importing: boolean;
+  onSave: (e: React.FormEvent) => void;
 }
 
 export function BasicInfoSection({
@@ -88,5 +88,5 @@ export function BasicInfoSection({
         Save
       </Button>
     </form>
-  )
+  );
 }

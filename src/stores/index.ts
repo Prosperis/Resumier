@@ -1,7 +1,7 @@
 // Store exports
 
-export { useAnimationStore } from "./animation-store"
-export type { User } from "./auth-store"
+export { useAnimationStore } from "./animation-store";
+export type { User } from "./auth-store";
 export {
   selectAuthActions,
   selectError,
@@ -9,7 +9,7 @@ export {
   selectIsLoading,
   selectUser,
   useAuthStore,
-} from "./auth-store"
+} from "./auth-store";
 export type {
   Certification,
   Education,
@@ -20,7 +20,7 @@ export type {
   Skill,
   UserInfo,
   WorkExperience,
-} from "./resume-store"
+} from "./resume-store";
 export {
   selectContent,
   selectContentActions,
@@ -33,10 +33,10 @@ export {
   selectUserInfo,
   selectUserInfoActions,
   useResumeStore,
-} from "./resume-store"
-export type { Theme } from "./theme-store"
-export { selectSetTheme, selectTheme, selectToggleTheme, useThemeStore } from "./theme-store"
-export type { Notification } from "./ui-store"
+} from "./resume-store";
+export type { Theme } from "./theme-store";
+export { selectSetTheme, selectTheme, selectToggleTheme, useThemeStore } from "./theme-store";
+export type { Notification } from "./ui-store";
 export {
   selectActiveDialog,
   selectDialogActions,
@@ -48,4 +48,4 @@ export {
   selectSidebarCollapsed,
   selectSidebarOpen,
   useUIStore,
-} from "./ui-store"
+} from "./ui-store";

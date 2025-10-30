@@ -1,12 +1,12 @@
-import * as TooltipPrimitive from "@radix-ui/react-tooltip"
-import { motion } from "framer-motion"
-import type * as React from "react"
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { motion } from "framer-motion";
+import type * as React from "react";
 import {
   useAnimationTransition,
   useAnimationVariants,
-} from "@/lib/animations/hooks/use-reduced-motion"
-import { fadeVariants } from "@/lib/animations/variants"
-import { cn } from "@/lib/utils"
+} from "@/lib/animations/hooks/use-reduced-motion";
+import { fadeVariants } from "@/lib/animations/variants";
+import { cn } from "@/lib/utils";
 
 function TooltipProvider({
   delayDuration = 0,
@@ -18,7 +18,7 @@ function TooltipProvider({
       delayDuration={delayDuration}
       {...props}
     />
-  )
+  );
 }
 
 function Tooltip({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
@@ -26,11 +26,11 @@ function Tooltip({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Root
     <TooltipProvider>
       <TooltipPrimitive.Root data-slot="tooltip" {...props} />
     </TooltipProvider>
-  )
+  );
 }
 
 function TooltipTrigger({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
+  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
 }
 
 function TooltipContent({
@@ -39,8 +39,8 @@ function TooltipContent({
   children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Content>) {
-  const variants = useAnimationVariants(fadeVariants)
-  const transition = useAnimationTransition({ duration: 0.15 })
+  const variants = useAnimationVariants(fadeVariants);
+  const transition = useAnimationTransition({ duration: 0.15 });
 
   return (
     <TooltipPrimitive.Portal>
@@ -58,7 +58,7 @@ function TooltipContent({
           transition={transition}
           className={cn(
             "bg-primary text-primary-foreground z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-xs text-balance",
-            className,
+            className
           )}
         >
           {children}
@@ -66,7 +66,7 @@ function TooltipContent({
         </motion.div>
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
-  )
+  );
 }
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };

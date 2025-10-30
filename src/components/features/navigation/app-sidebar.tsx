@@ -1,9 +1,9 @@
-import { Link } from "@tanstack/react-router"
-import { FileText, LayoutDashboard, LifeBuoy, Send, Settings2 } from "lucide-react"
-import type * as React from "react"
-import { NavMain } from "@/components/features/navigation/nav-main"
-import { NavSecondary } from "@/components/features/navigation/nav-secondary"
-import { NavUser } from "@/components/features/navigation/nav-user"
+import { Link } from "@tanstack/react-router";
+import { FileText, LayoutDashboard, LifeBuoy, Send, Settings2 } from "lucide-react";
+import type * as React from "react";
+import { NavMain } from "@/components/features/navigation/nav-main";
+import { NavSecondary } from "@/components/features/navigation/nav-secondary";
+import { NavUser } from "@/components/features/navigation/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -12,8 +12,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { useAuthStore } from "@/stores"
+} from "@/components/ui/sidebar";
+import { useAuthStore } from "@/stores";
 
 const data = {
   navMain: [
@@ -56,16 +56,16 @@ const data = {
       icon: Send,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const user = useAuthStore((state) => state.user)
+  const user = useAuthStore((state) => state.user);
 
   const userData = {
     name: user?.name || "User",
     email: user?.email || "user@example.com",
     avatar: user?.avatar || "/avatars/default.jpg",
-  }
+  };
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -94,5 +94,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser user={userData} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

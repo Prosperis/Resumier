@@ -3,14 +3,14 @@
  * Success, error, and validation animations
  */
 
-import { motion } from "framer-motion"
-import { AlertCircle, Check, X } from "lucide-react"
-import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion"
-import { cn } from "@/lib/utils"
+import { motion } from "framer-motion";
+import { AlertCircle, Check, X } from "lucide-react";
+import { useReducedMotion } from "@/lib/animations/hooks/use-reduced-motion";
+import { cn } from "@/lib/utils";
 
 interface SuccessCheckmarkProps {
-  size?: "sm" | "md" | "lg"
-  className?: string
+  size?: "sm" | "md" | "lg";
+  className?: string;
 }
 
 /**
@@ -22,26 +22,26 @@ interface SuccessCheckmarkProps {
  * ```
  */
 export function SuccessCheckmark({ size = "md", className }: SuccessCheckmarkProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   const sizeClasses = {
     sm: "h-4 w-4",
     md: "h-8 w-8",
     lg: "h-12 w-12",
-  }
+  };
 
   const iconSizeClasses = {
     sm: "h-3 w-3",
     md: "h-5 w-5",
     lg: "h-8 w-8",
-  }
+  };
 
   return (
     <motion.div
       className={cn(
         "flex items-center justify-center rounded-full bg-green-500",
         sizeClasses[size],
-        className,
+        className
       )}
       initial={
         prefersReducedMotion
@@ -86,13 +86,13 @@ export function SuccessCheckmark({ size = "md", className }: SuccessCheckmarkPro
         <Check className={cn("text-white", iconSizeClasses[size])} />
       </motion.div>
     </motion.div>
-  )
+  );
 }
 
 interface ErrorShakeProps {
-  children: React.ReactNode
-  trigger?: boolean
-  className?: string
+  children: React.ReactNode;
+  trigger?: boolean;
+  className?: string;
 }
 
 /**
@@ -106,7 +106,7 @@ interface ErrorShakeProps {
  * ```
  */
 export function ErrorShake({ children, trigger = false, className }: ErrorShakeProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   return (
     <motion.div
@@ -125,12 +125,12 @@ export function ErrorShake({ children, trigger = false, className }: ErrorShakeP
     >
       {children}
     </motion.div>
-  )
+  );
 }
 
 interface ErrorCrossProps {
-  size?: "sm" | "md" | "lg"
-  className?: string
+  size?: "sm" | "md" | "lg";
+  className?: string;
 }
 
 /**
@@ -142,26 +142,26 @@ interface ErrorCrossProps {
  * ```
  */
 export function ErrorCross({ size = "md", className }: ErrorCrossProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   const sizeClasses = {
     sm: "h-4 w-4",
     md: "h-8 w-8",
     lg: "h-12 w-12",
-  }
+  };
 
   const iconSizeClasses = {
     sm: "h-3 w-3",
     md: "h-5 w-5",
     lg: "h-8 w-8",
-  }
+  };
 
   return (
     <motion.div
       className={cn(
-        "flex items-center justify-center rounded-full bg-destructive",
+        "bg-destructive flex items-center justify-center rounded-full",
         sizeClasses[size],
-        className,
+        className
       )}
       initial={
         prefersReducedMotion
@@ -206,12 +206,12 @@ export function ErrorCross({ size = "md", className }: ErrorCrossProps) {
         <X className={cn("text-white", iconSizeClasses[size])} />
       </motion.div>
     </motion.div>
-  )
+  );
 }
 
 interface WarningPulseProps {
-  size?: "sm" | "md" | "lg"
-  className?: string
+  size?: "sm" | "md" | "lg";
+  className?: string;
 }
 
 /**
@@ -223,26 +223,26 @@ interface WarningPulseProps {
  * ```
  */
 export function WarningPulse({ size = "md", className }: WarningPulseProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   const sizeClasses = {
     sm: "h-4 w-4",
     md: "h-8 w-8",
     lg: "h-12 w-12",
-  }
+  };
 
   const iconSizeClasses = {
     sm: "h-3 w-3",
     md: "h-5 w-5",
     lg: "h-8 w-8",
-  }
+  };
 
   return (
     <motion.div
       className={cn(
         "flex items-center justify-center rounded-full bg-yellow-500",
         sizeClasses[size],
-        className,
+        className
       )}
       animate={
         prefersReducedMotion
@@ -263,13 +263,13 @@ export function WarningPulse({ size = "md", className }: WarningPulseProps) {
     >
       <AlertCircle className={cn("text-white", iconSizeClasses[size])} />
     </motion.div>
-  )
+  );
 }
 
 interface CountUpProps {
-  value: number
-  duration?: number
-  className?: string
+  value: number;
+  duration?: number;
+  className?: string;
 }
 
 /**
@@ -281,10 +281,10 @@ interface CountUpProps {
  * ```
  */
 export function CountUp({ value, duration = 1, className }: CountUpProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = useReducedMotion();
 
   if (prefersReducedMotion) {
-    return <span className={className}>{value}</span>
+    return <span className={className}>{value}</span>;
   }
 
   return (
@@ -307,5 +307,5 @@ export function CountUp({ value, duration = 1, className }: CountUpProps) {
         {value}
       </motion.span>
     </motion.span>
-  )
+  );
 }

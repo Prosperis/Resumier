@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 /**
  * Experience Validation Schema
@@ -23,20 +23,20 @@ export const experienceSchema = z
     (data) => {
       // If not current position, end date is required
       if (!data.current && !data.endDate) {
-        return false
+        return false;
       }
-      return true
+      return true;
     },
     {
       message: "End date is required for past positions",
       path: ["endDate"],
-    },
-  )
+    }
+  );
 
-export type ExperienceFormData = z.infer<typeof experienceSchema>
+export type ExperienceFormData = z.infer<typeof experienceSchema>;
 
 /**
  * Schema for creating new experience (without ID)
  */
-export const createExperienceSchema = experienceSchema.omit({ id: true })
-export type CreateExperienceFormData = z.infer<typeof createExperienceSchema>
+export const createExperienceSchema = experienceSchema.omit({ id: true });
+export type CreateExperienceFormData = z.infer<typeof createExperienceSchema>;

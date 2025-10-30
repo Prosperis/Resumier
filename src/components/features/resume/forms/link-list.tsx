@@ -6,52 +6,52 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core"
+} from "@dnd-kit/core";
 import {
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable"
-import { ExternalLink, Github, Linkedin, Link as LinkIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import type { LinkFormData } from "@/lib/validations/links"
-import { SortableItem } from "../dnd/sortable-item"
+} from "@dnd-kit/sortable";
+import { ExternalLink, Github, Linkedin, Link as LinkIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import type { LinkFormData } from "@/lib/validations/links";
+import { SortableItem } from "../dnd/sortable-item";
 
 interface LinkListProps {
-  links: LinkFormData[]
-  onEdit: (link: LinkFormData) => void
-  onDelete: (id: string) => void
-  onReorder?: (links: LinkFormData[]) => void
+  links: LinkFormData[];
+  onEdit: (link: LinkFormData) => void;
+  onDelete: (id: string) => void;
+  onReorder?: (links: LinkFormData[]) => void;
 }
 
 function getLinkIcon(type: LinkFormData["type"]) {
   switch (type) {
     case "linkedin":
-      return <Linkedin className="h-4 w-4" />
+      return <Linkedin className="h-4 w-4" />;
     case "github":
-      return <Github className="h-4 w-4" />
+      return <Github className="h-4 w-4" />;
     case "portfolio":
-      return <ExternalLink className="h-4 w-4" />
+      return <ExternalLink className="h-4 w-4" />;
     case "other":
-      return <LinkIcon className="h-4 w-4" />
+      return <LinkIcon className="h-4 w-4" />;
     default:
-      return <LinkIcon className="h-4 w-4" />
+      return <LinkIcon className="h-4 w-4" />;
   }
 }
 
 function getLinkTypeLabel(type: LinkFormData["type"]) {
   switch (type) {
     case "linkedin":
-      return "LinkedIn"
+      return "LinkedIn";
     case "github":
-      return "GitHub"
+      return "GitHub";
     case "portfolio":
-      return "Portfolio"
+      return "Portfolio";
     case "other":
-      return "Other"
+      return "Other";
     default:
-      return type
+      return type;
   }
 }
 
@@ -60,39 +60,39 @@ export function LinkList({ links, onEdit, onDelete, onReorder }: LinkListProps) 
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  )
+    })
+  );
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event
+    const { active, over } = event;
 
     if (!over || active.id === over.id) {
-      return
+      return;
     }
 
-    const oldIndex = links.findIndex((link) => link.id === active.id)
-    const newIndex = links.findIndex((link) => link.id === over.id)
+    const oldIndex = links.findIndex((link) => link.id === active.id);
+    const newIndex = links.findIndex((link) => link.id === over.id);
 
     if (oldIndex !== -1 && newIndex !== -1 && onReorder) {
-      const result = Array.from(links)
-      const [removed] = result.splice(oldIndex, 1)
-      result.splice(newIndex, 0, removed)
-      onReorder(result)
+      const result = Array.from(links);
+      const [removed] = result.splice(oldIndex, 1);
+      result.splice(newIndex, 0, removed);
+      onReorder(result);
     }
-  }
+  };
 
   if (links.length === 0) {
     return (
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-          <LinkIcon className="h-12 w-12 text-muted-foreground mb-4" />
+          <LinkIcon className="text-muted-foreground mb-4 h-12 w-12" />
           <p className="text-muted-foreground">No links added yet</p>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-1 text-sm">
             Add your portfolio, LinkedIn, GitHub, or other professional links
           </p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -108,7 +108,7 @@ export function LinkList({ links, onEdit, onDelete, onReorder }: LinkListProps) 
                       <div className="flex items-center gap-2">
                         {getLinkIcon(link.type)}
                         <h3 className="font-semibold">{link.label}</h3>
-                        <span className="text-xs text-muted-foreground px-2 py-0.5 rounded-full bg-muted">
+                        <span className="text-muted-foreground bg-muted rounded-full px-2 py-0.5 text-xs">
                           {getLinkTypeLabel(link.type)}
                         </span>
                       </div>
@@ -117,7 +117,7 @@ export function LinkList({ links, onEdit, onDelete, onReorder }: LinkListProps) 
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-primary hover:underline flex items-center gap-1"
+                        className="text-primary flex items-center gap-1 text-sm hover:underline"
                       >
                         {link.url}
                         <ExternalLink className="h-3 w-3" />
@@ -140,5 +140,5 @@ export function LinkList({ links, onEdit, onDelete, onReorder }: LinkListProps) 
         </div>
       </SortableContext>
     </DndContext>
-  )
+  );
 }

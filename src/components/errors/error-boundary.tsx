@@ -1,31 +1,31 @@
-import * as Sentry from "@sentry/react"
-import { useRouter } from "@tanstack/react-router"
-import { AlertCircle, Home, RefreshCw } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import * as Sentry from "@sentry/react";
+import { useRouter } from "@tanstack/react-router";
+import { AlertCircle, Home, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 /**
  * Error fallback component shown when an error occurs
  */
 function ErrorFallback({ error }: { error?: Error }) {
-  const router = useRouter()
+  const router = useRouter();
 
-  const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred"
+  const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
 
   const handleReload = () => {
-    window.location.reload()
-  }
+    window.location.reload();
+  };
 
   const handleGoHome = () => {
-    router.navigate({ to: "/" })
-  }
+    router.navigate({ to: "/" });
+  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="bg-background flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6 text-center">
         {/* Error Icon */}
         <div className="flex justify-center">
-          <div className="rounded-full bg-destructive/10 p-6">
-            <AlertCircle className="h-12 w-12 text-destructive" />
+          <div className="bg-destructive/10 rounded-full p-6">
+            <AlertCircle className="text-destructive h-12 w-12" />
           </div>
         </div>
 
@@ -39,9 +39,9 @@ function ErrorFallback({ error }: { error?: Error }) {
 
         {/* Error Details (dev only) */}
         {import.meta.env.DEV && (
-          <details className="rounded-lg border bg-muted p-4 text-left">
+          <details className="bg-muted rounded-lg border p-4 text-left">
             <summary className="cursor-pointer font-mono text-sm">Error Details</summary>
-            <pre className="mt-2 whitespace-pre-wrap break-words text-xs">
+            <pre className="mt-2 text-xs break-words whitespace-pre-wrap">
               {errorMessage}
               {error instanceof Error && error.stack && (
                 <>
@@ -66,25 +66,25 @@ function ErrorFallback({ error }: { error?: Error }) {
         </div>
 
         {/* Feedback Link */}
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Need help?{" "}
           <button
             type="button"
             onClick={() => {
               // Trigger Sentry feedback widget
               const feedbackButton = document.querySelector(
-                "[data-sentry-feedback]",
-              ) as HTMLButtonElement
-              feedbackButton?.click()
+                "[data-sentry-feedback]"
+              ) as HTMLButtonElement;
+              feedbackButton?.click();
             }}
-            className="underline underline-offset-4 hover:text-foreground"
+            className="hover:text-foreground underline underline-offset-4"
           >
             Report this issue
           </button>
         </p>
       </div>
     </div>
-  )
+  );
 }
 
 /**
@@ -100,13 +100,13 @@ export const ErrorBoundary = Sentry.withErrorBoundary(
       // Add React error info
       scope.setContext("react_errorInfo", {
         componentStack: typeof errorInfo === "string" ? errorInfo : "",
-      })
+      });
 
       // Add additional tags
-      scope.setTag("error_boundary", "react")
+      scope.setTag("error_boundary", "react");
     },
-  },
-)
+  }
+);
 
 /**
  * Route-level error boundary for TanStack Router
@@ -118,8 +118,8 @@ export function RouteErrorBoundary({ error }: { error?: Error }) {
       tags: {
         error_boundary: "route",
       },
-    })
+    });
   }
 
-  return <ErrorFallback error={error} />
+  return <ErrorFallback error={error} />;
 }

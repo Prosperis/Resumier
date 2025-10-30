@@ -1,89 +1,89 @@
-import { beforeEach, describe, expect, it, vi } from "vitest"
-import { delay, mockDb } from "@/lib/api/mock/db"
-import type { CreateResumeDto, UpdateResumeDto } from "@/lib/api/types"
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { delay, mockDb } from "@/lib/api/mock/db";
+import type { CreateResumeDto, UpdateResumeDto } from "@/lib/api/types";
 
 // Mock localStorage
 const localStorageMock = (() => {
-  let store: Record<string, string> = {}
+  let store: Record<string, string> = {};
 
   return {
     getItem: (key: string) => store[key] || null,
     setItem: (key: string, value: string) => {
-      store[key] = value
+      store[key] = value;
     },
     removeItem: (key: string) => {
-      delete store[key]
+      delete store[key];
     },
     clear: () => {
-      store = {}
+      store = {};
     },
-  }
-})()
+  };
+})();
 
 Object.defineProperty(global, "localStorage", {
   value: localStorageMock,
   writable: true,
-})
+});
 
 describe("MockDatabase", () => {
   beforeEach(() => {
     // Clear localStorage before each test
-    localStorage.clear()
+    localStorage.clear();
     // Reset database to sample data
-    mockDb.reset()
-  })
+    mockDb.reset();
+  });
 
   describe("getResumes", () => {
     it("returns all resumes", () => {
-      const resumes = mockDb.getResumes()
-      expect(resumes).toHaveLength(2)
-      expect(resumes[0].title).toBe("Software Engineer Resume")
-      expect(resumes[1].title).toBe("Product Manager Resume")
-    })
+      const resumes = mockDb.getResumes();
+      expect(resumes).toHaveLength(2);
+      expect(resumes[0].title).toBe("Software Engineer Resume");
+      expect(resumes[1].title).toBe("Product Manager Resume");
+    });
 
     it("returns a copy of resumes array", () => {
-      const resumes1 = mockDb.getResumes()
-      const resumes2 = mockDb.getResumes()
-      expect(resumes1).not.toBe(resumes2)
-      expect(resumes1).toEqual(resumes2)
-    })
-  })
+      const resumes1 = mockDb.getResumes();
+      const resumes2 = mockDb.getResumes();
+      expect(resumes1).not.toBe(resumes2);
+      expect(resumes1).toEqual(resumes2);
+    });
+  });
 
   describe("getResumeById", () => {
     it("returns resume when ID exists", () => {
-      const resume = mockDb.getResumeById("1")
-      expect(resume).not.toBeNull()
-      expect(resume?.title).toBe("Software Engineer Resume")
-    })
+      const resume = mockDb.getResumeById("1");
+      expect(resume).not.toBeNull();
+      expect(resume?.title).toBe("Software Engineer Resume");
+    });
 
     it("returns null when ID does not exist", () => {
-      const resume = mockDb.getResumeById("999")
-      expect(resume).toBeNull()
-    })
+      const resume = mockDb.getResumeById("999");
+      expect(resume).toBeNull();
+    });
 
     it("returns correct resume by ID", () => {
-      const resume = mockDb.getResumeById("2")
-      expect(resume).not.toBeNull()
-      expect(resume?.title).toBe("Product Manager Resume")
-    })
-  })
+      const resume = mockDb.getResumeById("2");
+      expect(resume).not.toBeNull();
+      expect(resume?.title).toBe("Product Manager Resume");
+    });
+  });
 
   describe("createResume", () => {
     it("creates a new resume with minimal data", () => {
       const createDto: CreateResumeDto = {
         title: "New Resume",
-      }
+      };
 
-      const resume = mockDb.createResume(createDto)
+      const resume = mockDb.createResume(createDto);
 
-      expect(resume.id).toBe("3")
-      expect(resume.title).toBe("New Resume")
-      expect(resume.version).toBe(1)
-      expect(resume.content).toHaveProperty("personalInfo")
-      expect(resume.content).toHaveProperty("experience")
-      expect(resume.content).toHaveProperty("education")
-      expect(resume.content).toHaveProperty("skills")
-    })
+      expect(resume.id).toBe("3");
+      expect(resume.title).toBe("New Resume");
+      expect(resume.version).toBe(1);
+      expect(resume.content).toHaveProperty("personalInfo");
+      expect(resume.content).toHaveProperty("experience");
+      expect(resume.content).toHaveProperty("education");
+      expect(resume.content).toHaveProperty("skills");
+    });
 
     it("creates a new resume with full content", () => {
       const createDto: CreateResumeDto = {
@@ -118,67 +118,67 @@ describe("MockDatabase", () => {
           certifications: [],
           links: [],
         },
-      }
+      };
 
-      const resume = mockDb.createResume(createDto)
+      const resume = mockDb.createResume(createDto);
 
-      expect(resume.title).toBe("Full Resume")
-      expect(resume.content.personalInfo.name).toBe("Test User")
-      expect(resume.content.experience).toHaveLength(1)
-      expect(resume.content.skills.technical).toContain("JavaScript")
-    })
+      expect(resume.title).toBe("Full Resume");
+      expect(resume.content.personalInfo.name).toBe("Test User");
+      expect(resume.content.experience).toHaveLength(1);
+      expect(resume.content.skills.technical).toContain("JavaScript");
+    });
 
     it("increments ID for each new resume", () => {
-      const resume1 = mockDb.createResume({ title: "Resume 1" })
-      const resume2 = mockDb.createResume({ title: "Resume 2" })
+      const resume1 = mockDb.createResume({ title: "Resume 1" });
+      const resume2 = mockDb.createResume({ title: "Resume 2" });
 
-      expect(resume1.id).toBe("3")
-      expect(resume2.id).toBe("4")
-    })
+      expect(resume1.id).toBe("3");
+      expect(resume2.id).toBe("4");
+    });
 
     it("adds new resume to the list", () => {
-      const initialCount = mockDb.getResumes().length
-      mockDb.createResume({ title: "New Resume" })
-      const newCount = mockDb.getResumes().length
+      const initialCount = mockDb.getResumes().length;
+      mockDb.createResume({ title: "New Resume" });
+      const newCount = mockDb.getResumes().length;
 
-      expect(newCount).toBe(initialCount + 1)
-    })
+      expect(newCount).toBe(initialCount + 1);
+    });
 
     it("persists resume to localStorage", () => {
-      mockDb.createResume({ title: "Persisted Resume" })
+      mockDb.createResume({ title: "Persisted Resume" });
 
-      const stored = localStorage.getItem("resumier-mock-db")
-      expect(stored).not.toBeNull()
+      const stored = localStorage.getItem("resumier-mock-db");
+      expect(stored).not.toBeNull();
 
-      const data = JSON.parse(stored!)
-      expect(data.resumes).toHaveLength(3)
-      expect(data.resumes[2].title).toBe("Persisted Resume")
-    })
+      const data = JSON.parse(stored!);
+      expect(data.resumes).toHaveLength(3);
+      expect(data.resumes[2].title).toBe("Persisted Resume");
+    });
 
     it("sets createdAt and updatedAt timestamps", () => {
-      const before = new Date().toISOString()
-      const resume = mockDb.createResume({ title: "Timestamped Resume" })
-      const after = new Date().toISOString()
+      const before = new Date().toISOString();
+      const resume = mockDb.createResume({ title: "Timestamped Resume" });
+      const after = new Date().toISOString();
 
-      expect(resume.createdAt).toBeDefined()
-      expect(resume.updatedAt).toBeDefined()
-      expect(resume.createdAt).toBe(resume.updatedAt)
-      expect(resume.createdAt >= before).toBe(true)
-      expect(resume.createdAt <= after).toBe(true)
-    })
-  })
+      expect(resume.createdAt).toBeDefined();
+      expect(resume.updatedAt).toBeDefined();
+      expect(resume.createdAt).toBe(resume.updatedAt);
+      expect(resume.createdAt >= before).toBe(true);
+      expect(resume.createdAt <= after).toBe(true);
+    });
+  });
 
   describe("updateResume", () => {
     it("updates resume title", () => {
       const updateDto: UpdateResumeDto = {
         title: "Updated Title",
-      }
+      };
 
-      const updated = mockDb.updateResume("1", updateDto)
+      const updated = mockDb.updateResume("1", updateDto);
 
-      expect(updated).not.toBeNull()
-      expect(updated?.title).toBe("Updated Title")
-    })
+      expect(updated).not.toBeNull();
+      expect(updated?.title).toBe("Updated Title");
+    });
 
     it("updates resume content", () => {
       const updateDto: UpdateResumeDto = {
@@ -191,67 +191,67 @@ describe("MockDatabase", () => {
             summary: "",
           },
         },
-      }
+      };
 
-      const updated = mockDb.updateResume("1", updateDto)
+      const updated = mockDb.updateResume("1", updateDto);
 
-      expect(updated).not.toBeNull()
-      expect(updated?.content.personalInfo.name).toBe("Updated Name")
-      expect(updated?.content.personalInfo.email).toBe("updated@example.com")
-    })
+      expect(updated).not.toBeNull();
+      expect(updated?.content.personalInfo.name).toBe("Updated Name");
+      expect(updated?.content.personalInfo.email).toBe("updated@example.com");
+    });
 
     it("increments version on update", () => {
-      const original = mockDb.getResumeById("1")
-      const originalVersion = original?.version || 0
+      const original = mockDb.getResumeById("1");
+      const originalVersion = original?.version || 0;
 
-      const updated = mockDb.updateResume("1", { title: "Updated" })
+      const updated = mockDb.updateResume("1", { title: "Updated" });
 
-      expect(updated?.version).toBe(originalVersion + 1)
-    })
+      expect(updated?.version).toBe(originalVersion + 1);
+    });
 
     it("updates updatedAt timestamp", () => {
-      const original = mockDb.getResumeById("1")
-      const originalUpdatedAt = original?.updatedAt
+      const original = mockDb.getResumeById("1");
+      const originalUpdatedAt = original?.updatedAt;
 
       // Wait a bit to ensure timestamp changes
-      vi.useFakeTimers()
-      vi.advanceTimersByTime(1000)
+      vi.useFakeTimers();
+      vi.advanceTimersByTime(1000);
 
-      const updated = mockDb.updateResume("1", { title: "Updated" })
+      const updated = mockDb.updateResume("1", { title: "Updated" });
 
-      vi.useRealTimers()
+      vi.useRealTimers();
 
-      expect(updated?.updatedAt).not.toBe(originalUpdatedAt)
-    })
+      expect(updated?.updatedAt).not.toBe(originalUpdatedAt);
+    });
 
     it("returns null when resume does not exist", () => {
-      const updated = mockDb.updateResume("999", { title: "Does Not Exist" })
-      expect(updated).toBeNull()
-    })
+      const updated = mockDb.updateResume("999", { title: "Does Not Exist" });
+      expect(updated).toBeNull();
+    });
 
     it("persists update to localStorage", () => {
-      mockDb.updateResume("1", { title: "Persisted Update" })
+      mockDb.updateResume("1", { title: "Persisted Update" });
 
-      const stored = localStorage.getItem("resumier-mock-db")
-      expect(stored).not.toBeNull()
+      const stored = localStorage.getItem("resumier-mock-db");
+      expect(stored).not.toBeNull();
 
-      const data = JSON.parse(stored!)
-      const resume = data.resumes.find((r: any) => r.id === "1")
-      expect(resume.title).toBe("Persisted Update")
-    })
+      const data = JSON.parse(stored!);
+      const resume = data.resumes.find((r: any) => r.id === "1");
+      expect(resume.title).toBe("Persisted Update");
+    });
 
     it("preserves existing content when updating title", () => {
-      const original = mockDb.getResumeById("1")
-      const originalContent = original?.content
+      const original = mockDb.getResumeById("1");
+      const originalContent = original?.content;
 
-      const updated = mockDb.updateResume("1", { title: "New Title" })
+      const updated = mockDb.updateResume("1", { title: "New Title" });
 
-      expect(updated?.content).toEqual(originalContent)
-    })
+      expect(updated?.content).toEqual(originalContent);
+    });
 
     it("merges content updates with existing content", () => {
-      const original = mockDb.getResumeById("1")
-      const originalExperience = original?.content.experience
+      const original = mockDb.getResumeById("1");
+      const originalExperience = original?.content.experience;
 
       const updated = mockDb.updateResume("1", {
         content: {
@@ -263,169 +263,169 @@ describe("MockDatabase", () => {
             summary: "",
           },
         },
-      })
+      });
 
-      expect(updated?.content.personalInfo.name).toBe("Updated Name")
-      expect(updated?.content.experience).toEqual(originalExperience)
-    })
-  })
+      expect(updated?.content.personalInfo.name).toBe("Updated Name");
+      expect(updated?.content.experience).toEqual(originalExperience);
+    });
+  });
 
   describe("deleteResume", () => {
     it("deletes resume when ID exists", () => {
-      const success = mockDb.deleteResume("1")
-      expect(success).toBe(true)
+      const success = mockDb.deleteResume("1");
+      expect(success).toBe(true);
 
-      const deleted = mockDb.getResumeById("1")
-      expect(deleted).toBeNull()
-    })
+      const deleted = mockDb.getResumeById("1");
+      expect(deleted).toBeNull();
+    });
 
     it("returns false when ID does not exist", () => {
-      const success = mockDb.deleteResume("999")
-      expect(success).toBe(false)
-    })
+      const success = mockDb.deleteResume("999");
+      expect(success).toBe(false);
+    });
 
     it("removes resume from list", () => {
-      const initialCount = mockDb.getResumes().length
-      mockDb.deleteResume("1")
-      const newCount = mockDb.getResumes().length
+      const initialCount = mockDb.getResumes().length;
+      mockDb.deleteResume("1");
+      const newCount = mockDb.getResumes().length;
 
-      expect(newCount).toBe(initialCount - 1)
-    })
+      expect(newCount).toBe(initialCount - 1);
+    });
 
     it("persists deletion to localStorage", () => {
-      mockDb.deleteResume("1")
+      mockDb.deleteResume("1");
 
-      const stored = localStorage.getItem("resumier-mock-db")
-      expect(stored).not.toBeNull()
+      const stored = localStorage.getItem("resumier-mock-db");
+      expect(stored).not.toBeNull();
 
-      const data = JSON.parse(stored!)
-      const resume = data.resumes.find((r: any) => r.id === "1")
-      expect(resume).toBeUndefined()
-    })
-  })
+      const data = JSON.parse(stored!);
+      const resume = data.resumes.find((r: any) => r.id === "1");
+      expect(resume).toBeUndefined();
+    });
+  });
 
   describe("clear", () => {
     it("removes all resumes", () => {
-      mockDb.clear()
-      const resumes = mockDb.getResumes()
-      expect(resumes).toHaveLength(0)
-    })
+      mockDb.clear();
+      const resumes = mockDb.getResumes();
+      expect(resumes).toHaveLength(0);
+    });
 
     it("resets nextId to 1", () => {
-      mockDb.clear()
-      const resume = mockDb.createResume({ title: "First After Clear" })
-      expect(resume.id).toBe("1")
-    })
+      mockDb.clear();
+      const resume = mockDb.createResume({ title: "First After Clear" });
+      expect(resume.id).toBe("1");
+    });
 
     it("persists cleared state to localStorage", () => {
-      mockDb.clear()
+      mockDb.clear();
 
-      const stored = localStorage.getItem("resumier-mock-db")
-      expect(stored).not.toBeNull()
+      const stored = localStorage.getItem("resumier-mock-db");
+      expect(stored).not.toBeNull();
 
-      const data = JSON.parse(stored!)
-      expect(data.resumes).toHaveLength(0)
-      expect(data.nextId).toBe(1)
-    })
-  })
+      const data = JSON.parse(stored!);
+      expect(data.resumes).toHaveLength(0);
+      expect(data.nextId).toBe(1);
+    });
+  });
 
   describe("reset", () => {
     it("resets to sample data", () => {
-      mockDb.clear()
-      mockDb.reset()
+      mockDb.clear();
+      mockDb.reset();
 
-      const resumes = mockDb.getResumes()
-      expect(resumes).toHaveLength(2)
-    })
+      const resumes = mockDb.getResumes();
+      expect(resumes).toHaveLength(2);
+    });
 
     it("resets nextId to 3", () => {
-      mockDb.clear()
-      mockDb.reset()
+      mockDb.clear();
+      mockDb.reset();
 
-      const resume = mockDb.createResume({ title: "First After Reset" })
-      expect(resume.id).toBe("3")
-    })
+      const resume = mockDb.createResume({ title: "First After Reset" });
+      expect(resume.id).toBe("3");
+    });
 
     it("restores sample resumes", () => {
-      mockDb.clear()
-      mockDb.reset()
+      mockDb.clear();
+      mockDb.reset();
 
-      const resumes = mockDb.getResumes()
-      expect(resumes[0].title).toBe("Software Engineer Resume")
-      expect(resumes[1].title).toBe("Product Manager Resume")
-    })
-  })
+      const resumes = mockDb.getResumes();
+      expect(resumes[0].title).toBe("Software Engineer Resume");
+      expect(resumes[1].title).toBe("Product Manager Resume");
+    });
+  });
 
   describe("localStorage persistence", () => {
     it("handles localStorage errors gracefully on load", () => {
       vi.spyOn(Storage.prototype, "getItem").mockImplementationOnce(() => {
-        throw new Error("Storage error")
-      })
+        throw new Error("Storage error");
+      });
 
       // Should not throw and return sample data
-      const resumes = mockDb.getResumes()
-      expect(resumes).toBeDefined()
-    })
+      const resumes = mockDb.getResumes();
+      expect(resumes).toBeDefined();
+    });
 
     it("handles localStorage errors gracefully on save", () => {
-      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
+      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
       // Mock setItem to throw an error
-      const originalSetItem = Storage.prototype.setItem
+      const originalSetItem = Storage.prototype.setItem;
       Storage.prototype.setItem = vi.fn(() => {
-        throw new Error("Storage error")
-      })
+        throw new Error("Storage error");
+      });
 
       // Should not throw, but should handle the error gracefully
-      expect(() => mockDb.createResume({ title: "Test" })).not.toThrow()
+      expect(() => mockDb.createResume({ title: "Test" })).not.toThrow();
 
       // Restore original
-      Storage.prototype.setItem = originalSetItem
-      consoleWarnSpy.mockRestore()
-    })
+      Storage.prototype.setItem = originalSetItem;
+      consoleWarnSpy.mockRestore();
+    });
 
     it("handles invalid JSON in localStorage", () => {
-      localStorage.setItem("resumier-mock-db", "invalid json")
+      localStorage.setItem("resumier-mock-db", "invalid json");
 
       // Should not throw and return sample data
-      mockDb.reset()
-      const resumes = mockDb.getResumes()
-      expect(resumes).toHaveLength(2)
-    })
-  })
-})
+      mockDb.reset();
+      const resumes = mockDb.getResumes();
+      expect(resumes).toHaveLength(2);
+    });
+  });
+});
 
 describe("delay", () => {
   it("returns a promise", () => {
-    const result = delay(100)
-    expect(result).toBeInstanceOf(Promise)
-  })
+    const result = delay(100);
+    expect(result).toBeInstanceOf(Promise);
+  });
 
   it("resolves after specified time", async () => {
-    vi.useFakeTimers()
+    vi.useFakeTimers();
 
-    const promise = delay(100)
-    let resolved = false
+    const promise = delay(100);
+    let resolved = false;
 
     promise.then(() => {
-      resolved = true
-    })
+      resolved = true;
+    });
 
-    expect(resolved).toBe(false)
+    expect(resolved).toBe(false);
 
-    vi.advanceTimersByTime(50)
-    await Promise.resolve()
-    expect(resolved).toBe(false)
+    vi.advanceTimersByTime(50);
+    await Promise.resolve();
+    expect(resolved).toBe(false);
 
-    vi.advanceTimersByTime(50)
-    await Promise.resolve()
-    expect(resolved).toBe(true)
+    vi.advanceTimersByTime(50);
+    await Promise.resolve();
+    expect(resolved).toBe(true);
 
-    vi.useRealTimers()
-  })
+    vi.useRealTimers();
+  });
 
   it("resolves with void", async () => {
-    const result = await delay(0)
-    expect(result).toBeUndefined()
-  })
-})
+    const result = await delay(0);
+    expect(result).toBeUndefined();
+  });
+});

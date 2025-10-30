@@ -1,99 +1,99 @@
-import { del, get, set } from "idb-keyval"
-import { create } from "zustand"
-import { createJSONStorage, persist } from "zustand/middleware"
+import { del, get, set } from "idb-keyval";
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 /**
  * Reorder an array by moving an item from one index to another
  */
 function reorderArray<T>(list: T[], startIndex: number, endIndex: number): T[] {
-  const result = Array.from(list)
-  const [removed] = result.splice(startIndex, 1)
-  result.splice(endIndex, 0, removed)
-  return result
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+  return result;
 }
 
 export interface WorkExperience {
-  company?: string
-  title?: string
-  startDate?: string
-  endDate?: string
-  current?: boolean
-  description?: string
-  awards?: string[]
+  company?: string;
+  title?: string;
+  startDate?: string;
+  endDate?: string;
+  current?: boolean;
+  description?: string;
+  awards?: string[];
 }
 
 export interface Education {
-  school?: string
-  degree?: string
-  startDate?: string
-  endDate?: string
-  description?: string
+  school?: string;
+  degree?: string;
+  startDate?: string;
+  endDate?: string;
+  description?: string;
 }
 
 export interface Skill {
-  name?: string
-  years?: string
-  proficiency?: string
+  name?: string;
+  years?: string;
+  proficiency?: string;
 }
 
 export interface Certification {
-  name?: string
-  expiration?: string
+  name?: string;
+  expiration?: string;
 }
 
 export interface Link {
-  label?: string
-  url?: string
+  label?: string;
+  url?: string;
 }
 
 export interface UserInfo {
-  name?: string
-  email?: string
-  phone?: string
-  address?: string
-  customUrl?: string
-  links?: Link[]
-  experiences?: WorkExperience[]
-  education?: Education[]
-  skills?: Skill[]
-  certifications?: Certification[]
-  [key: string]: unknown
+  name?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  customUrl?: string;
+  links?: Link[];
+  experiences?: WorkExperience[];
+  education?: Education[];
+  skills?: Skill[];
+  certifications?: Certification[];
+  [key: string]: unknown;
 }
 
 export interface JobInfo {
-  title?: string
-  company?: string
-  location?: string
-  description?: string
-  benefits?: string[]
-  workType?: "onsite" | "remote" | "hybrid"
-  basePay?: string
-  bonus?: string
-  stocks?: string
-  [key: string]: unknown
+  title?: string;
+  company?: string;
+  location?: string;
+  description?: string;
+  benefits?: string[];
+  workType?: "onsite" | "remote" | "hybrid";
+  basePay?: string;
+  bonus?: string;
+  stocks?: string;
+  [key: string]: unknown;
 }
 
 export interface ResumeContent {
-  [key: string]: unknown
+  [key: string]: unknown;
 }
 
 export interface ResumeStore {
-  userInfo: UserInfo
-  jobInfo: JobInfo
-  jobs: JobInfo[]
-  content: ResumeContent
-  setUserInfo: (info: UserInfo) => void
-  setJobInfo: (info: JobInfo) => void
-  addJob: (job: JobInfo) => void
-  removeJob: (index: number) => void
-  setContent: (data: ResumeContent) => void
-  reset: () => void
+  userInfo: UserInfo;
+  jobInfo: JobInfo;
+  jobs: JobInfo[];
+  content: ResumeContent;
+  setUserInfo: (info: UserInfo) => void;
+  setJobInfo: (info: JobInfo) => void;
+  addJob: (job: JobInfo) => void;
+  removeJob: (index: number) => void;
+  setContent: (data: ResumeContent) => void;
+  reset: () => void;
   // Reordering actions for drag and drop
-  reorderExperiences: (startIndex: number, endIndex: number) => void
-  reorderEducation: (startIndex: number, endIndex: number) => void
-  reorderSkills: (startIndex: number, endIndex: number) => void
-  reorderCertifications: (startIndex: number, endIndex: number) => void
-  reorderLinks: (startIndex: number, endIndex: number) => void
+  reorderExperiences: (startIndex: number, endIndex: number) => void;
+  reorderEducation: (startIndex: number, endIndex: number) => void;
+  reorderSkills: (startIndex: number, endIndex: number) => void;
+  reorderCertifications: (startIndex: number, endIndex: number) => void;
+  reorderLinks: (startIndex: number, endIndex: number) => void;
 }
 
 export const useResumeStore = create<ResumeStore>()(
@@ -150,16 +150,16 @@ export const useResumeStore = create<ResumeStore>()(
       name: "resumier-web-store",
       storage: createJSONStorage(() => ({
         async getItem(name: string) {
-          const value = await get(name)
-          return value ?? null
+          const value = await get(name);
+          return value ?? null;
         },
         async setItem(name: string, value: unknown) {
-          await set(name, value)
+          await set(name, value);
         },
         async removeItem(name: string) {
-          await del(name)
+          await del(name);
         },
       })),
-    },
-  ),
-)
+    }
+  )
+);

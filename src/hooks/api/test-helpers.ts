@@ -1,4 +1,4 @@
-import type { Resume, ResumeContent } from "../../lib/api/types"
+import type { Resume, ResumeContent } from "../../lib/api/types";
 
 /**
  * Helper function to create mock resume content
@@ -21,7 +21,7 @@ export const createMockResumeContent = (): ResumeContent => ({
   },
   certifications: [],
   links: [],
-})
+});
 
 /**
  * Helper function to create a complete mock resume
@@ -34,4 +34,4 @@ export const createMockResume = (overrides?: Partial<Resume>): Resume => ({
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   ...overrides,
-})
+});

@@ -1,7 +1,7 @@
-import { createLazyFileRoute } from "@tanstack/react-router"
-import { useEffect } from "react"
-import { ResumeBuilder } from "@/components/features/resume/resume-builder"
-import { useResumeStore } from "@/stores"
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { ResumeBuilder } from "@/components/features/resume/resume-builder";
+import { useResumeStore } from "@/stores";
 
 /**
  * Create new resume route component (lazy loaded)
@@ -9,15 +9,15 @@ import { useResumeStore } from "@/stores"
  */
 export const Route = createLazyFileRoute("/resume/new")({
   component: NewResumeComponent,
-})
+});
 
 function NewResumeComponent() {
-  const resetContent = useResumeStore((state) => state.resetContent)
+  const resetContent = useResumeStore((state) => state.resetContent);
 
   // Reset content when creating a new resume
   useEffect(() => {
-    resetContent()
-  }, [resetContent])
+    resetContent();
+  }, [resetContent]);
 
   return (
     <div className="container mx-auto p-8">
@@ -30,5 +30,5 @@ function NewResumeComponent() {
 
       <ResumeBuilder />
     </div>
-  )
+  );
 }

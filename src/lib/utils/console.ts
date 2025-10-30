@@ -3,7 +3,7 @@
  * Uses appropriate console methods for different log types
  */
 
-const isDev = import.meta.env.DEV
+const isDev = import.meta.env.DEV;
 
 /**
  * Debug-level logging - only in development
@@ -11,9 +11,9 @@ const isDev = import.meta.env.DEV
  */
 export const debug = (...args: unknown[]): void => {
   if (isDev) {
-    console.debug(...args)
+    console.debug(...args);
   }
-}
+};
 
 /**
  * Info-level logging - only in development
@@ -21,25 +21,25 @@ export const debug = (...args: unknown[]): void => {
  */
 export const info = (...args: unknown[]): void => {
   if (isDev) {
-    console.info(...args)
+    console.info(...args);
   }
-}
+};
 
 /**
  * Warning-level logging
  * Use for potentially harmful situations
  */
 export const warn = (...args: unknown[]): void => {
-  console.warn(...args)
-}
+  console.warn(...args);
+};
 
 /**
  * Error-level logging
  * Use for error events
  */
 export const error = (...args: unknown[]): void => {
-  console.error(...args)
-}
+  console.error(...args);
+};
 
 /**
  * Table display - only in development
@@ -47,9 +47,9 @@ export const error = (...args: unknown[]): void => {
  */
 export const table = (data: unknown): void => {
   if (isDev) {
-    console.table(data)
+    console.table(data);
   }
-}
+};
 
 /**
  * Group logging - only in development
@@ -57,9 +57,9 @@ export const table = (data: unknown): void => {
  */
 export const group = (label: string): void => {
   if (isDev) {
-    console.group(label)
+    console.group(label);
   }
-}
+};
 
 /**
  * Collapsed group - only in development
@@ -67,18 +67,18 @@ export const group = (label: string): void => {
  */
 export const groupCollapsed = (label: string): void => {
   if (isDev) {
-    console.groupCollapsed(label)
+    console.groupCollapsed(label);
   }
-}
+};
 
 /**
  * End group - only in development
  */
 export const groupEnd = (): void => {
   if (isDev) {
-    console.groupEnd()
+    console.groupEnd();
   }
-}
+};
 
 /**
  * Time measurement - only in development
@@ -86,18 +86,18 @@ export const groupEnd = (): void => {
  */
 export const time = (label: string): void => {
   if (isDev) {
-    console.time(label)
+    console.time(label);
   }
-}
+};
 
 /**
  * Time measurement end - only in development
  */
 export const timeEnd = (label: string): void => {
   if (isDev) {
-    console.timeEnd(label)
+    console.timeEnd(label);
   }
-}
+};
 
 /**
  * Time log - only in development
@@ -105,9 +105,9 @@ export const timeEnd = (label: string): void => {
  */
 export const timeLog = (label: string, ...args: unknown[]): void => {
   if (isDev) {
-    console.timeLog(label, ...args)
+    console.timeLog(label, ...args);
   }
-}
+};
 
 /**
  * Trace logging - only in development
@@ -115,16 +115,16 @@ export const timeLog = (label: string, ...args: unknown[]): void => {
  */
 export const trace = (...args: unknown[]): void => {
   if (isDev) {
-    console.trace(...args)
+    console.trace(...args);
   }
-}
+};
 
 /**
  * Assert - logs error if condition is false
  */
 export const assert = (condition: boolean, ...args: unknown[]): void => {
-  console.assert(condition, ...args)
-}
+  console.assert(condition, ...args);
+};
 
 /**
  * Count - only in development
@@ -132,64 +132,64 @@ export const assert = (condition: boolean, ...args: unknown[]): void => {
  */
 export const count = (label?: string): void => {
   if (isDev) {
-    console.count(label)
+    console.count(label);
   }
-}
+};
 
 /**
  * Count reset - only in development
  */
 export const countReset = (label?: string): void => {
   if (isDev) {
-    console.countReset(label)
+    console.countReset(label);
   }
-}
+};
 
 /**
  * Clear console - only in development
  */
 export const clear = (): void => {
   if (isDev) {
-    console.clear()
+    console.clear();
   }
-}
+};
 
 /**
  * Pretty print an object - only in development
  */
 export const dir = (item: unknown, options?: unknown): void => {
   if (isDev) {
-    console.dir(item, options)
+    console.dir(item, options);
   }
-}
+};
 
 /**
  * Styled console output - only in development
  */
 export const styled = (message: string, styles: string): void => {
   if (isDev) {
-    console.log(`%c${message}`, styles)
+    console.log(`%c${message}`, styles);
   }
-}
+};
 
 /**
  * Success message - only in development
  */
 export const success = (message: string, ...args: unknown[]): void => {
   if (isDev) {
-    console.log(`%c✓ ${message}`, "color: #10b981; font-weight: bold", ...args)
+    console.log(`%c✓ ${message}`, "color: #10b981; font-weight: bold", ...args);
   }
-}
+};
 
 /**
  * Performance marker - only in development
  */
 export const perf = (label: string, startTime: number): void => {
   if (isDev) {
-    const duration = performance.now() - startTime
-    console.log(`%c⚡ ${label}`, "color: #f59e0b; font-weight: bold", `${duration.toFixed(2)}ms`)
+    const duration = performance.now() - startTime;
+    console.log(`%c⚡ ${label}`, "color: #f59e0b; font-weight: bold", `${duration.toFixed(2)}ms`);
   }
-}
+};
 
 // Export as default object for easier importing
 export default {
@@ -213,4 +213,4 @@ export default {
   styled,
   success,
   perf,
-}
+};

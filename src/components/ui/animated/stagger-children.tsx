@@ -3,18 +3,18 @@
  * Wrapper component that staggers animations of its children
  */
 
-import type { HTMLMotionProps } from "framer-motion"
-import { motion } from "framer-motion"
+import type { HTMLMotionProps } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   useAnimationTransition,
   useAnimationVariants,
-} from "@/lib/animations/hooks/use-reduced-motion"
-import { staggerContainerVariants, staggerItemVariants } from "@/lib/animations/variants"
+} from "@/lib/animations/hooks/use-reduced-motion";
+import { staggerContainerVariants, staggerItemVariants } from "@/lib/animations/variants";
 
 interface StaggerChildrenProps extends Omit<HTMLMotionProps<"div">, "variants"> {
-  children: React.ReactNode
-  staggerDelay?: number
-  className?: string
+  children: React.ReactNode;
+  staggerDelay?: number;
+  className?: string;
 }
 
 /**
@@ -35,10 +35,10 @@ export function StaggerChildren({
   className,
   ...props
 }: StaggerChildrenProps) {
-  const variants = useAnimationVariants(staggerContainerVariants)
+  const variants = useAnimationVariants(staggerContainerVariants);
   const transition = useAnimationTransition({
     staggerChildren: staggerDelay,
-  })
+  });
 
   return (
     <motion.div
@@ -52,12 +52,12 @@ export function StaggerChildren({
     >
       {children}
     </motion.div>
-  )
+  );
 }
 
 interface StaggerItemProps extends Omit<HTMLMotionProps<"div">, "variants"> {
-  children: React.ReactNode
-  className?: string
+  children: React.ReactNode;
+  className?: string;
 }
 
 /**
@@ -71,11 +71,11 @@ interface StaggerItemProps extends Omit<HTMLMotionProps<"div">, "variants"> {
  * ```
  */
 export function StaggerItem({ children, className, ...props }: StaggerItemProps) {
-  const variants = useAnimationVariants(staggerItemVariants)
+  const variants = useAnimationVariants(staggerItemVariants);
 
   return (
     <motion.div variants={variants} className={className} {...props}>
       {children}
     </motion.div>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react"
-import { describe, expect, it } from "vitest"
-import { Calendar, CalendarDayButton } from "@/components/ui/calendar"
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 
 // Mock dependencies
 vi.mock("react-day-picker", () => ({
@@ -35,7 +35,7 @@ vi.mock("react-day-picker", () => ({
     disabled: "rdp-disabled",
     hidden: "rdp-hidden",
   }),
-}))
+}));
 
 vi.mock("@/components/ui/button", () => ({
   Button: ({ children, ...props }: any) => (
@@ -43,93 +43,93 @@ vi.mock("@/components/ui/button", () => ({
       {children}
     </button>
   ),
-}))
+}));
 
 vi.mock("@/components/ui/button-variants", () => ({
   buttonVariants: ({ variant }: any) => `button-${variant}`,
-}))
+}));
 
 vi.mock("lucide-react", () => ({
   ChevronDownIcon: (props: any) => <div data-testid="chevron-down" {...props} />,
   ChevronLeftIcon: (props: any) => <div data-testid="chevron-left" {...props} />,
   ChevronRightIcon: (props: any) => <div data-testid="chevron-right" {...props} />,
-}))
+}));
 
 describe("Calendar", () => {
   it("renders calendar component", () => {
-    render(<Calendar />)
-    expect(screen.getByTestId("day-picker")).toBeInTheDocument()
-  })
+    render(<Calendar />);
+    expect(screen.getByTestId("day-picker")).toBeInTheDocument();
+  });
 
   it("applies custom className", () => {
-    render(<Calendar className="custom-calendar" />)
-    const dayPicker = screen.getByTestId("day-picker")
-    expect(dayPicker.className).toContain("custom-calendar")
-  })
+    render(<Calendar className="custom-calendar" />);
+    const dayPicker = screen.getByTestId("day-picker");
+    expect(dayPicker.className).toContain("custom-calendar");
+  });
 
   it("shows outside days by default", () => {
-    render(<Calendar />)
-    const dayPicker = screen.getByTestId("day-picker")
-    expect(dayPicker).toBeInTheDocument()
-  })
+    render(<Calendar />);
+    const dayPicker = screen.getByTestId("day-picker");
+    expect(dayPicker).toBeInTheDocument();
+  });
 
   it("hides outside days when specified", () => {
-    render(<Calendar showOutsideDays={false} />)
-    const dayPicker = screen.getByTestId("day-picker")
-    expect(dayPicker).toBeInTheDocument()
-  })
+    render(<Calendar showOutsideDays={false} />);
+    const dayPicker = screen.getByTestId("day-picker");
+    expect(dayPicker).toBeInTheDocument();
+  });
 
   it("uses label caption layout by default", () => {
-    render(<Calendar />)
-    const dayPicker = screen.getByTestId("day-picker")
-    expect(dayPicker).toHaveAttribute("captionLayout", "label")
-  })
+    render(<Calendar />);
+    const dayPicker = screen.getByTestId("day-picker");
+    expect(dayPicker).toHaveAttribute("captionLayout", "label");
+  });
 
   it("accepts custom caption layout", () => {
-    render(<Calendar captionLayout="dropdown" />)
-    const dayPicker = screen.getByTestId("day-picker")
-    expect(dayPicker).toHaveAttribute("captionLayout", "dropdown")
-  })
+    render(<Calendar captionLayout="dropdown" />);
+    const dayPicker = screen.getByTestId("day-picker");
+    expect(dayPicker).toHaveAttribute("captionLayout", "dropdown");
+  });
 
   it("uses ghost button variant by default", () => {
-    render(<Calendar />)
-    expect(screen.getByTestId("day-picker")).toBeInTheDocument()
-  })
+    render(<Calendar />);
+    expect(screen.getByTestId("day-picker")).toBeInTheDocument();
+  });
 
   it("accepts custom button variant", () => {
-    render(<Calendar buttonVariant="outline" />)
-    expect(screen.getByTestId("day-picker")).toBeInTheDocument()
-  })
+    render(<Calendar buttonVariant="outline" />);
+    expect(screen.getByTestId("day-picker")).toBeInTheDocument();
+  });
 
   it("accepts custom formatters", () => {
-    const customFormatter = (_date: Date) => "Custom Format"
+    const customFormatter = (_date: Date) => "Custom Format";
     render(
       <Calendar
         formatters={{
           formatMonthDropdown: customFormatter,
         }}
-      />,
-    )
-    expect(screen.getByTestId("day-picker")).toBeInTheDocument()
-  })
+      />
+    );
+    expect(screen.getByTestId("day-picker")).toBeInTheDocument();
+  });
 
   it("accepts custom components", () => {
-    const CustomComponent = () => <div>Custom Component</div>
+    const CustomComponent = () => <div>Custom Component</div>;
     render(
       <Calendar
         components={{
           Root: CustomComponent as any,
         }}
-      />,
-    )
-    expect(screen.getByTestId("day-picker")).toBeInTheDocument()
-  })
+      />
+    );
+    expect(screen.getByTestId("day-picker")).toBeInTheDocument();
+  });
 
   it("passes through additional props", () => {
-    render(<Calendar mode="single" />)
-    const dayPicker = screen.getByTestId("day-picker")
-    expect(dayPicker).toHaveAttribute("mode", "single")
-  })
+    render(<Calendar mode="single" />);
+    const dayPicker = screen.getByTestId("day-picker");
+    expect(dayPicker).toHaveAttribute("mode", "single");
+  });
 
   it("applies custom classNames", () => {
     render(
@@ -137,11 +137,11 @@ describe("Calendar", () => {
         classNames={{
           day: "custom-day",
         }}
-      />,
-    )
-    expect(screen.getByTestId("day-picker")).toBeInTheDocument()
-  })
-})
+      />
+    );
+    expect(screen.getByTestId("day-picker")).toBeInTheDocument();
+  });
+});
 
 describe("CalendarDayButton", () => {
   const mockDay = {
@@ -150,7 +150,7 @@ describe("CalendarDayButton", () => {
     dateLib: {} as any,
     outside: false,
     isEqualTo: () => false,
-  }
+  };
 
   const mockModifiers = {
     focused: false,
@@ -162,35 +162,35 @@ describe("CalendarDayButton", () => {
     outside: false,
     disabled: false,
     hidden: false,
-  }
+  };
 
   it("renders day button", () => {
     render(
       <CalendarDayButton day={mockDay} modifiers={mockModifiers}>
         15
-      </CalendarDayButton>,
-    )
-    expect(screen.getByTestId("button")).toBeInTheDocument()
-  })
+      </CalendarDayButton>
+    );
+    expect(screen.getByTestId("button")).toBeInTheDocument();
+  });
 
   it("displays day number", () => {
     render(
       <CalendarDayButton day={mockDay} modifiers={mockModifiers}>
         15
-      </CalendarDayButton>,
-    )
-    expect(screen.getByText("15")).toBeInTheDocument()
-  })
+      </CalendarDayButton>
+    );
+    expect(screen.getByText("15")).toBeInTheDocument();
+  });
 
   it("sets data-day attribute", () => {
     render(
       <CalendarDayButton day={mockDay} modifiers={mockModifiers}>
         15
-      </CalendarDayButton>,
-    )
-    const button = screen.getByTestId("button")
-    expect(button).toHaveAttribute("data-day", mockDay.date.toLocaleDateString())
-  })
+      </CalendarDayButton>
+    );
+    const button = screen.getByTestId("button");
+    expect(button).toHaveAttribute("data-day", mockDay.date.toLocaleDateString());
+  });
 
   it("sets data-selected-single when only selected", () => {
     render(
@@ -202,11 +202,11 @@ describe("CalendarDayButton", () => {
         }}
       >
         15
-      </CalendarDayButton>,
-    )
-    const button = screen.getByTestId("button")
-    expect(button).toHaveAttribute("data-selected-single", "true")
-  })
+      </CalendarDayButton>
+    );
+    const button = screen.getByTestId("button");
+    expect(button).toHaveAttribute("data-selected-single", "true");
+  });
 
   it("does not set data-selected-single when range_start is true", () => {
     render(
@@ -219,11 +219,11 @@ describe("CalendarDayButton", () => {
         }}
       >
         15
-      </CalendarDayButton>,
-    )
-    const button = screen.getByTestId("button")
-    expect(button).toHaveAttribute("data-selected-single", "false")
-  })
+      </CalendarDayButton>
+    );
+    const button = screen.getByTestId("button");
+    expect(button).toHaveAttribute("data-selected-single", "false");
+  });
 
   it("sets data-range-start when range_start is true", () => {
     render(
@@ -235,11 +235,11 @@ describe("CalendarDayButton", () => {
         }}
       >
         15
-      </CalendarDayButton>,
-    )
-    const button = screen.getByTestId("button")
-    expect(button).toHaveAttribute("data-range-start", "true")
-  })
+      </CalendarDayButton>
+    );
+    const button = screen.getByTestId("button");
+    expect(button).toHaveAttribute("data-range-start", "true");
+  });
 
   it("sets data-range-end when range_end is true", () => {
     render(
@@ -251,11 +251,11 @@ describe("CalendarDayButton", () => {
         }}
       >
         15
-      </CalendarDayButton>,
-    )
-    const button = screen.getByTestId("button")
-    expect(button).toHaveAttribute("data-range-end", "true")
-  })
+      </CalendarDayButton>
+    );
+    const button = screen.getByTestId("button");
+    expect(button).toHaveAttribute("data-range-end", "true");
+  });
 
   it("sets data-range-middle when range_middle is true", () => {
     render(
@@ -267,39 +267,39 @@ describe("CalendarDayButton", () => {
         }}
       >
         15
-      </CalendarDayButton>,
-    )
-    const button = screen.getByTestId("button")
-    expect(button).toHaveAttribute("data-range-middle", "true")
-  })
+      </CalendarDayButton>
+    );
+    const button = screen.getByTestId("button");
+    expect(button).toHaveAttribute("data-range-middle", "true");
+  });
 
   it("applies custom className", () => {
     render(
       <CalendarDayButton day={mockDay} modifiers={mockModifiers} className="custom-day-button">
         15
-      </CalendarDayButton>,
-    )
-    const button = screen.getByTestId("button")
-    expect(button.className).toContain("custom-day-button")
-  })
+      </CalendarDayButton>
+    );
+    const button = screen.getByTestId("button");
+    expect(button.className).toContain("custom-day-button");
+  });
 
   it("uses ghost variant", () => {
     render(
       <CalendarDayButton day={mockDay} modifiers={mockModifiers}>
         15
-      </CalendarDayButton>,
-    )
-    const button = screen.getByTestId("button")
-    expect(button).toHaveAttribute("variant", "ghost")
-  })
+      </CalendarDayButton>
+    );
+    const button = screen.getByTestId("button");
+    expect(button).toHaveAttribute("variant", "ghost");
+  });
 
   it("uses icon size", () => {
     render(
       <CalendarDayButton day={mockDay} modifiers={mockModifiers}>
         15
-      </CalendarDayButton>,
-    )
-    const button = screen.getByTestId("button")
-    expect(button).toBeInTheDocument()
-  })
-})
+      </CalendarDayButton>
+    );
+    const button = screen.getByTestId("button");
+    expect(button).toBeInTheDocument();
+  });
+});

@@ -7,4 +7,4 @@ export {
   useAnimationTransition,
   useAnimationVariants,
   useReducedMotion,
-} from "./use-reduced-motion"
+} from "./use-reduced-motion";

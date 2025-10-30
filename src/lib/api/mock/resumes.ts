@@ -1,6 +1,6 @@
-import { ConflictError, NotFoundError } from "../errors"
-import type { CreateResumeDto, Resume, UpdateResumeDto } from "../types"
-import { delay, mockDb } from "./db"
+import { ConflictError, NotFoundError } from "../errors";
+import type { CreateResumeDto, Resume, UpdateResumeDto } from "../types";
+import { delay, mockDb } from "./db";
 
 /**
  * Mock Resume API Endpoints
@@ -10,14 +10,14 @@ import { delay, mockDb } from "./db"
 /**
  * Simulated network delay range (in ms)
  */
-const MIN_DELAY = 100
-const MAX_DELAY = 500
+const MIN_DELAY = 100;
+const MAX_DELAY = 500;
 
 /**
  * Get random delay
  */
 function randomDelay(): number {
-  return Math.floor(Math.random() * (MAX_DELAY - MIN_DELAY + 1)) + MIN_DELAY
+  return Math.floor(Math.random() * (MAX_DELAY - MIN_DELAY + 1)) + MIN_DELAY;
 }
 
 /**
@@ -29,8 +29,8 @@ export const mockResumeApi = {
    * Fetch all resumes
    */
   async getAll(): Promise<Resume[]> {
-    await delay(randomDelay())
-    return mockDb.getResumes()
+    await delay(randomDelay());
+    return mockDb.getResumes();
   },
 
   /**
@@ -38,14 +38,14 @@ export const mockResumeApi = {
    * Fetch resume by ID
    */
   async getById(id: string): Promise<Resume> {
-    await delay(randomDelay())
+    await delay(randomDelay());
 
-    const resume = mockDb.getResumeById(id)
+    const resume = mockDb.getResumeById(id);
     if (!resume) {
-      throw new NotFoundError(`Resume with ID "${id}" not found`)
+      throw new NotFoundError(`Resume with ID "${id}" not found`);
     }
 
-    return resume
+    return resume;
   },
 
   /**
@@ -53,20 +53,20 @@ export const mockResumeApi = {
    * Create new resume
    */
   async create(data: CreateResumeDto): Promise<Resume> {
-    await delay(randomDelay())
+    await delay(randomDelay());
 
     // Validate title
     if (!data.title || data.title.trim().length === 0) {
-      throw new Error("Resume title is required")
+      throw new Error("Resume title is required");
     }
 
     // Check for duplicate title
-    const existing = mockDb.getResumes().find((r) => r.title === data.title)
+    const existing = mockDb.getResumes().find((r) => r.title === data.title);
     if (existing) {
-      throw new ConflictError(`Resume with title "${data.title}" already exists`)
+      throw new ConflictError(`Resume with title "${data.title}" already exists`);
     }
 
-    return mockDb.createResume(data)
+    return mockDb.createResume(data);
   },
 
   /**
@@ -74,33 +74,33 @@ export const mockResumeApi = {
    * Update resume
    */
   async update(id: string, data: UpdateResumeDto): Promise<Resume> {
-    await delay(randomDelay())
+    await delay(randomDelay());
 
     // Check if resume exists
-    const existing = mockDb.getResumeById(id)
+    const existing = mockDb.getResumeById(id);
     if (!existing) {
-      throw new NotFoundError(`Resume with ID "${id}" not found`)
+      throw new NotFoundError(`Resume with ID "${id}" not found`);
     }
 
     // Validate title if provided
     if (data.title !== undefined && data.title.trim().length === 0) {
-      throw new Error("Resume title cannot be empty")
+      throw new Error("Resume title cannot be empty");
     }
 
     // Check for duplicate title
     if (data.title && data.title !== existing.title) {
-      const duplicate = mockDb.getResumes().find((r) => r.id !== id && r.title === data.title)
+      const duplicate = mockDb.getResumes().find((r) => r.id !== id && r.title === data.title);
       if (duplicate) {
-        throw new ConflictError(`Resume with title "${data.title}" already exists`)
+        throw new ConflictError(`Resume with title "${data.title}" already exists`);
       }
     }
 
-    const updated = mockDb.updateResume(id, data)
+    const updated = mockDb.updateResume(id, data);
     if (!updated) {
-      throw new NotFoundError(`Resume with ID "${id}" not found`)
+      throw new NotFoundError(`Resume with ID "${id}" not found`);
     }
 
-    return updated
+    return updated;
   },
 
   /**
@@ -108,11 +108,11 @@ export const mockResumeApi = {
    * Delete resume
    */
   async delete(id: string): Promise<void> {
-    await delay(randomDelay())
+    await delay(randomDelay());
 
-    const success = mockDb.deleteResume(id)
+    const success = mockDb.deleteResume(id);
     if (!success) {
-      throw new NotFoundError(`Resume with ID "${id}" not found`)
+      throw new NotFoundError(`Resume with ID "${id}" not found`);
     }
   },
-}
+};

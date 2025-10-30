@@ -1,11 +1,11 @@
-import { Link, useRouter } from "@tanstack/react-router"
-import { AlertCircle, Home, RefreshCw } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Link, useRouter } from "@tanstack/react-router";
+import { AlertCircle, Home, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface RouteErrorProps {
-  error: Error
-  reset?: () => void
-  title?: string
+  error: Error;
+  reset?: () => void;
+  title?: string;
 }
 
 /**
@@ -13,23 +13,23 @@ interface RouteErrorProps {
  * Provides consistent error handling with retry and navigation options
  */
 export function RouteError({ error, reset, title = "Something went wrong" }: RouteErrorProps) {
-  const router = useRouter()
+  const router = useRouter();
 
   const handleReset = () => {
     if (reset) {
-      reset()
+      reset();
     } else {
       // Fallback: reload the page
-      router.invalidate()
+      router.invalidate();
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="max-w-md space-y-6 text-center">
         <div className="flex justify-center">
-          <div className="rounded-full bg-destructive/10 p-6">
-            <AlertCircle className="h-12 w-12 text-destructive" />
+          <div className="bg-destructive/10 rounded-full p-6">
+            <AlertCircle className="text-destructive h-12 w-12" />
           </div>
         </div>
 
@@ -52,7 +52,7 @@ export function RouteError({ error, reset, title = "Something went wrong" }: Rou
         </div>
 
         {process.env.NODE_ENV === "development" && (
-          <details className="mt-8 rounded-lg border bg-muted/50 p-4 text-left text-sm">
+          <details className="bg-muted/50 mt-8 rounded-lg border p-4 text-left text-sm">
             <summary className="cursor-pointer font-semibold">
               Error Details (Development Only)
             </summary>
@@ -61,7 +61,7 @@ export function RouteError({ error, reset, title = "Something went wrong" }: Rou
         )}
       </div>
     </div>
-  )
+  );
 }
 
 /**
@@ -87,5 +87,5 @@ export function NotFoundError() {
         </Link>
       </div>
     </div>
-  )
+  );
 }

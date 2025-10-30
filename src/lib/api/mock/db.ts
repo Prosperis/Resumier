@@ -1,18 +1,18 @@
-import type { CreateResumeDto, Resume, ResumeContent, UpdateResumeDto } from "../types"
+import type { CreateResumeDto, Resume, ResumeContent, UpdateResumeDto } from "../types";
 
 /**
  * In-Memory Mock Database
  * Simulates a database with localStorage persistence
  */
 
-const STORAGE_KEY = "resumier-mock-db"
+const STORAGE_KEY = "resumier-mock-db";
 
 /**
  * Database state
  */
 interface DbState {
-  resumes: Resume[]
-  nextId: number
+  resumes: Resume[];
+  nextId: number;
 }
 
 /**
@@ -20,19 +20,19 @@ interface DbState {
  */
 function loadState(): DbState {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY)
+    const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
-      return JSON.parse(stored)
+      return JSON.parse(stored);
     }
   } catch (error) {
-    console.warn("Failed to load mock DB from localStorage:", error)
+    console.warn("Failed to load mock DB from localStorage:", error);
   }
 
   // Return initial state with sample data
   return {
     resumes: generateSampleResumes(),
     nextId: 3,
-  }
+  };
 }
 
 /**
@@ -40,9 +40,9 @@ function loadState(): DbState {
  */
 function saveState(state: DbState): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (error) {
-    console.warn("Failed to save mock DB to localStorage:", error)
+    console.warn("Failed to save mock DB to localStorage:", error);
   }
 }
 
@@ -50,7 +50,7 @@ function saveState(state: DbState): void {
  * Generate sample resumes for development
  */
 function generateSampleResumes(): Resume[] {
-  const now = new Date().toISOString()
+  const now = new Date().toISOString();
 
   const defaultContent: ResumeContent = {
     personalInfo: {
@@ -70,7 +70,7 @@ function generateSampleResumes(): Resume[] {
     },
     certifications: [],
     links: [],
-  }
+  };
 
   return [
     {
@@ -130,38 +130,38 @@ function generateSampleResumes(): Resume[] {
       updatedAt: now,
       version: 1,
     },
-  ]
+  ];
 }
 
 /**
  * Mock Database API
  */
 class MockDatabase {
-  private state: DbState
+  private state: DbState;
 
   constructor() {
-    this.state = loadState()
+    this.state = loadState();
   }
 
   /**
    * Get all resumes
    */
   getResumes(): Resume[] {
-    return [...this.state.resumes]
+    return [...this.state.resumes];
   }
 
   /**
    * Get resume by ID
    */
   getResumeById(id: string): Resume | null {
-    return this.state.resumes.find((r) => r.id === id) || null
+    return this.state.resumes.find((r) => r.id === id) || null;
   }
 
   /**
    * Create resume
    */
   createResume(data: CreateResumeDto): Resume {
-    const now = new Date().toISOString()
+    const now = new Date().toISOString();
 
     const defaultContent: ResumeContent = {
       personalInfo: {
@@ -181,7 +181,7 @@ class MockDatabase {
       },
       certifications: [],
       links: [],
-    }
+    };
 
     const resume: Resume = {
       id: String(this.state.nextId++),
@@ -190,22 +190,22 @@ class MockDatabase {
       createdAt: now,
       updatedAt: now,
       version: 1,
-    }
+    };
 
-    this.state.resumes.push(resume)
-    saveState(this.state)
+    this.state.resumes.push(resume);
+    saveState(this.state);
 
-    return resume
+    return resume;
   }
 
   /**
    * Update resume
    */
   updateResume(id: string, data: UpdateResumeDto): Resume | null {
-    const index = this.state.resumes.findIndex((r) => r.id === id)
-    if (index === -1) return null
+    const index = this.state.resumes.findIndex((r) => r.id === id);
+    if (index === -1) return null;
 
-    const existing = this.state.resumes[index]
+    const existing = this.state.resumes[index];
     const updated: Resume = {
       ...existing,
       ...(data.title && { title: data.title }),
@@ -214,25 +214,25 @@ class MockDatabase {
       }),
       updatedAt: new Date().toISOString(),
       version: existing.version + 1,
-    }
+    };
 
-    this.state.resumes[index] = updated
-    saveState(this.state)
+    this.state.resumes[index] = updated;
+    saveState(this.state);
 
-    return updated
+    return updated;
   }
 
   /**
    * Delete resume
    */
   deleteResume(id: string): boolean {
-    const index = this.state.resumes.findIndex((r) => r.id === id)
-    if (index === -1) return false
+    const index = this.state.resumes.findIndex((r) => r.id === id);
+    if (index === -1) return false;
 
-    this.state.resumes.splice(index, 1)
-    saveState(this.state)
+    this.state.resumes.splice(index, 1);
+    saveState(this.state);
 
-    return true
+    return true;
   }
 
   /**
@@ -242,8 +242,8 @@ class MockDatabase {
     this.state = {
       resumes: [],
       nextId: 1,
-    }
-    saveState(this.state)
+    };
+    saveState(this.state);
   }
 
   /**
@@ -253,19 +253,19 @@ class MockDatabase {
     this.state = {
       resumes: generateSampleResumes(),
       nextId: 3,
-    }
-    saveState(this.state)
+    };
+    saveState(this.state);
   }
 }
 
 /**
  * Singleton database instance
  */
-export const mockDb = new MockDatabase()
+export const mockDb = new MockDatabase();
 
 /**
  * Simulate network delay
  */
 export function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

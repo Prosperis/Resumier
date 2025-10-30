@@ -1,19 +1,19 @@
-import { useParams } from "@tanstack/react-router"
-import { Plus } from "lucide-react"
-import { Suspense, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { useResume, useUpdateResume } from "@/hooks/api"
-import { useToast } from "@/hooks/use-toast"
-import type { Certification, Education, Experience, Link } from "@/lib/api/types"
+import { useParams } from "@tanstack/react-router";
+import { Plus } from "lucide-react";
+import { Suspense, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { useResume, useUpdateResume } from "@/hooks/api";
+import { useToast } from "@/hooks/use-toast";
+import type { Certification, Education, Experience, Link } from "@/lib/api/types";
 import type {
   CertificationFormData,
   CreateCertificationFormData,
-} from "@/lib/validations/certification"
-import type { CreateEducationFormData, EducationFormData } from "@/lib/validations/education"
-import type { CreateExperienceFormData, ExperienceFormData } from "@/lib/validations/experience"
-import type { CreateLinkFormData, LinkFormData } from "@/lib/validations/links"
+} from "@/lib/validations/certification";
+import type { CreateEducationFormData, EducationFormData } from "@/lib/validations/education";
+import type { CreateExperienceFormData, ExperienceFormData } from "@/lib/validations/experience";
+import type { CreateLinkFormData, LinkFormData } from "@/lib/validations/links";
 import {
   FormDialogSkeleton,
   FormSkeleton,
@@ -28,32 +28,32 @@ import {
   LazyPersonalInfoForm,
   LazySkillsForm,
   ListSkeleton,
-} from "./lazy"
+} from "./lazy";
 
 export function ResumeBuilder() {
-  const { id } = useParams({ strict: false })
-  const resumeId = id || ""
-  const { data: resume } = useResume(resumeId)
-  const { mutate: updateResume } = useUpdateResume()
-  const { toast } = useToast()
+  const { id } = useParams({ strict: false });
+  const resumeId = id || "";
+  const { data: resume } = useResume(resumeId);
+  const { mutate: updateResume } = useUpdateResume();
+  const { toast } = useToast();
 
   // Dialog states
-  const [experienceDialogOpen, setExperienceDialogOpen] = useState(false)
-  const [editingExperience, setEditingExperience] = useState<ExperienceFormData | null>(null)
+  const [experienceDialogOpen, setExperienceDialogOpen] = useState(false);
+  const [editingExperience, setEditingExperience] = useState<ExperienceFormData | null>(null);
 
-  const [educationDialogOpen, setEducationDialogOpen] = useState(false)
-  const [editingEducation, setEditingEducation] = useState<EducationFormData | null>(null)
+  const [educationDialogOpen, setEducationDialogOpen] = useState(false);
+  const [editingEducation, setEditingEducation] = useState<EducationFormData | null>(null);
 
-  const [certificationDialogOpen, setCertificationDialogOpen] = useState(false)
+  const [certificationDialogOpen, setCertificationDialogOpen] = useState(false);
   const [editingCertification, setEditingCertification] = useState<CertificationFormData | null>(
-    null,
-  )
+    null
+  );
 
-  const [linkDialogOpen, setLinkDialogOpen] = useState(false)
-  const [editingLink, setEditingLink] = useState<LinkFormData | null>(null)
+  const [linkDialogOpen, setLinkDialogOpen] = useState(false);
+  const [editingLink, setEditingLink] = useState<LinkFormData | null>(null);
 
   if (!resume) {
-    return null
+    return null;
   }
 
   const content = resume.content || {
@@ -69,35 +69,35 @@ export function ResumeBuilder() {
     skills: { technical: [], languages: [], tools: [], soft: [] },
     certifications: [],
     links: [],
-  }
+  };
 
   // Experience handlers
   const handleAddExperience = () => {
-    setEditingExperience(null)
-    setExperienceDialogOpen(true)
-  }
+    setEditingExperience(null);
+    setExperienceDialogOpen(true);
+  };
 
   const handleEditExperience = (experience: ExperienceFormData) => {
-    setEditingExperience(experience)
-    setExperienceDialogOpen(true)
-  }
+    setEditingExperience(experience);
+    setExperienceDialogOpen(true);
+  };
 
   const handleSaveExperience = (data: CreateExperienceFormData | ExperienceFormData) => {
-    const experiences = content.experience || []
-    let updatedExperiences: Experience[]
+    const experiences = content.experience || [];
+    let updatedExperiences: Experience[];
 
     if (editingExperience) {
       // Update existing
       updatedExperiences = experiences.map((exp) =>
-        exp.id === editingExperience.id ? { ...exp, ...data } : exp,
-      )
+        exp.id === editingExperience.id ? { ...exp, ...data } : exp
+      );
     } else {
       // Add new
       const newExperience: Experience = {
         id: crypto.randomUUID(),
         ...data,
-      } as Experience
-      updatedExperiences = [...experiences, newExperience]
+      } as Experience;
+      updatedExperiences = [...experiences, newExperience];
     }
 
     updateResume(
@@ -116,24 +116,24 @@ export function ResumeBuilder() {
             description: editingExperience
               ? "Experience updated successfully"
               : "Experience added successfully",
-          })
-          setExperienceDialogOpen(false)
-          setEditingExperience(null)
+          });
+          setExperienceDialogOpen(false);
+          setEditingExperience(null);
         },
         onError: (error) => {
           toast({
             title: "Error",
             description: `Failed to save experience: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   const handleDeleteExperience = (id: string) => {
-    const experiences = content.experience || []
-    const updatedExperiences = experiences.filter((exp) => exp.id !== id)
+    const experiences = content.experience || [];
+    const updatedExperiences = experiences.filter((exp) => exp.id !== id);
 
     updateResume(
       {
@@ -149,18 +149,18 @@ export function ResumeBuilder() {
           toast({
             title: "Success",
             description: "Experience deleted successfully",
-          })
+          });
         },
         onError: (error) => {
           toast({
             title: "Error",
             description: `Failed to delete experience: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   const handleReorderExperiences = (reorderedExperiences: Experience[]) => {
     updateResume(
@@ -181,39 +181,39 @@ export function ResumeBuilder() {
             title: "Error",
             description: `Failed to reorder experiences: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   // Education handlers
   const handleAddEducation = () => {
-    setEditingEducation(null)
-    setEducationDialogOpen(true)
-  }
+    setEditingEducation(null);
+    setEducationDialogOpen(true);
+  };
 
   const handleEditEducation = (education: EducationFormData) => {
-    setEditingEducation(education)
-    setEducationDialogOpen(true)
-  }
+    setEditingEducation(education);
+    setEducationDialogOpen(true);
+  };
 
   const handleSaveEducation = (data: CreateEducationFormData | EducationFormData) => {
-    const educations = content.education || []
-    let updatedEducations: Education[]
+    const educations = content.education || [];
+    let updatedEducations: Education[];
 
     if (editingEducation) {
       // Update existing
       updatedEducations = educations.map((edu) =>
-        edu.id === editingEducation.id ? { ...edu, ...data } : edu,
-      )
+        edu.id === editingEducation.id ? { ...edu, ...data } : edu
+      );
     } else {
       // Add new
       const newEducation: Education = {
         id: crypto.randomUUID(),
         ...data,
-      } as Education
-      updatedEducations = [...educations, newEducation]
+      } as Education;
+      updatedEducations = [...educations, newEducation];
     }
 
     updateResume(
@@ -232,24 +232,24 @@ export function ResumeBuilder() {
             description: editingEducation
               ? "Education updated successfully"
               : "Education added successfully",
-          })
-          setEducationDialogOpen(false)
-          setEditingEducation(null)
+          });
+          setEducationDialogOpen(false);
+          setEditingEducation(null);
         },
         onError: (error) => {
           toast({
             title: "Error",
             description: `Failed to save education: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   const handleDeleteEducation = (id: string) => {
-    const educations = content.education || []
-    const updatedEducations = educations.filter((edu) => edu.id !== id)
+    const educations = content.education || [];
+    const updatedEducations = educations.filter((edu) => edu.id !== id);
 
     updateResume(
       {
@@ -265,18 +265,18 @@ export function ResumeBuilder() {
           toast({
             title: "Success",
             description: "Education deleted successfully",
-          })
+          });
         },
         onError: (error) => {
           toast({
             title: "Error",
             description: `Failed to delete education: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   const handleReorderEducation = (reorderedEducation: Education[]) => {
     updateResume(
@@ -297,39 +297,39 @@ export function ResumeBuilder() {
             title: "Error",
             description: `Failed to reorder education: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   // Certification handlers
   const handleAddCertification = () => {
-    setEditingCertification(null)
-    setCertificationDialogOpen(true)
-  }
+    setEditingCertification(null);
+    setCertificationDialogOpen(true);
+  };
 
   const handleEditCertification = (certification: CertificationFormData) => {
-    setEditingCertification(certification)
-    setCertificationDialogOpen(true)
-  }
+    setEditingCertification(certification);
+    setCertificationDialogOpen(true);
+  };
 
   const handleSaveCertification = (data: CreateCertificationFormData | CertificationFormData) => {
-    const certifications = content.certifications || []
-    let updatedCertifications: Certification[]
+    const certifications = content.certifications || [];
+    let updatedCertifications: Certification[];
 
     if (editingCertification) {
       // Update existing
       updatedCertifications = certifications.map((cert) =>
-        cert.id === editingCertification.id ? { ...cert, ...data } : cert,
-      )
+        cert.id === editingCertification.id ? { ...cert, ...data } : cert
+      );
     } else {
       // Add new
       const newCertification: Certification = {
         id: crypto.randomUUID(),
         ...data,
-      } as Certification
-      updatedCertifications = [...certifications, newCertification]
+      } as Certification;
+      updatedCertifications = [...certifications, newCertification];
     }
 
     updateResume(
@@ -348,24 +348,24 @@ export function ResumeBuilder() {
             description: editingCertification
               ? "Certification updated successfully"
               : "Certification added successfully",
-          })
-          setCertificationDialogOpen(false)
-          setEditingCertification(null)
+          });
+          setCertificationDialogOpen(false);
+          setEditingCertification(null);
         },
         onError: (error) => {
           toast({
             title: "Error",
             description: `Failed to save certification: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   const handleDeleteCertification = (id: string) => {
-    const certifications = content.certifications || []
-    const updatedCertifications = certifications.filter((cert) => cert.id !== id)
+    const certifications = content.certifications || [];
+    const updatedCertifications = certifications.filter((cert) => cert.id !== id);
 
     updateResume(
       {
@@ -381,18 +381,18 @@ export function ResumeBuilder() {
           toast({
             title: "Success",
             description: "Certification deleted successfully",
-          })
+          });
         },
         onError: (error) => {
           toast({
             title: "Error",
             description: `Failed to delete certification: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   const handleReorderCertifications = (reorderedCertifications: Certification[]) => {
     updateResume(
@@ -413,37 +413,39 @@ export function ResumeBuilder() {
             title: "Error",
             description: `Failed to reorder certifications: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   // Link handlers
   const handleAddLink = () => {
-    setEditingLink(null)
-    setLinkDialogOpen(true)
-  }
+    setEditingLink(null);
+    setLinkDialogOpen(true);
+  };
 
   const handleEditLink = (link: LinkFormData) => {
-    setEditingLink(link)
-    setLinkDialogOpen(true)
-  }
+    setEditingLink(link);
+    setLinkDialogOpen(true);
+  };
 
   const handleSaveLink = (data: CreateLinkFormData | LinkFormData) => {
-    const links = content.links || []
-    let updatedLinks: Link[]
+    const links = content.links || [];
+    let updatedLinks: Link[];
 
     if (editingLink) {
       // Update existing
-      updatedLinks = links.map((link) => (link.id === editingLink.id ? { ...link, ...data } : link))
+      updatedLinks = links.map((link) =>
+        link.id === editingLink.id ? { ...link, ...data } : link
+      );
     } else {
       // Add new
       const newLink: Link = {
         id: crypto.randomUUID(),
         ...data,
-      } as Link
-      updatedLinks = [...links, newLink]
+      } as Link;
+      updatedLinks = [...links, newLink];
     }
 
     updateResume(
@@ -460,24 +462,24 @@ export function ResumeBuilder() {
           toast({
             title: "Success",
             description: editingLink ? "Link updated successfully" : "Link added successfully",
-          })
-          setLinkDialogOpen(false)
-          setEditingLink(null)
+          });
+          setLinkDialogOpen(false);
+          setEditingLink(null);
         },
         onError: (error) => {
           toast({
             title: "Error",
             description: `Failed to save link: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   const handleDeleteLink = (id: string) => {
-    const links = content.links || []
-    const updatedLinks = links.filter((link) => link.id !== id)
+    const links = content.links || [];
+    const updatedLinks = links.filter((link) => link.id !== id);
 
     updateResume(
       {
@@ -493,18 +495,18 @@ export function ResumeBuilder() {
           toast({
             title: "Success",
             description: "Link deleted successfully",
-          })
+          });
         },
         onError: (error) => {
           toast({
             title: "Error",
             description: `Failed to delete link: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   const handleReorderLinks = (reorderedLinks: Link[]) => {
     updateResume(
@@ -525,11 +527,11 @@ export function ResumeBuilder() {
             title: "Error",
             description: `Failed to reorder links: ${error.message}`,
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-8">
@@ -561,7 +563,7 @@ export function ResumeBuilder() {
               </CardDescription>
             </div>
             <Button onClick={handleAddExperience}>
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="mr-2 h-4 w-4" />
               Add Experience
             </Button>
           </div>
@@ -589,7 +591,7 @@ export function ResumeBuilder() {
               <CardDescription>Add your educational background and achievements</CardDescription>
             </div>
             <Button onClick={handleAddEducation}>
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="mr-2 h-4 w-4" />
               Add Education
             </Button>
           </div>
@@ -635,7 +637,7 @@ export function ResumeBuilder() {
               <CardDescription>Add professional certifications and credentials</CardDescription>
             </div>
             <Button onClick={handleAddCertification}>
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="mr-2 h-4 w-4" />
               Add Certification
             </Button>
           </div>
@@ -665,7 +667,7 @@ export function ResumeBuilder() {
               </CardDescription>
             </div>
             <Button onClick={handleAddLink}>
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="mr-2 h-4 w-4" />
               Add Link
             </Button>
           </div>
@@ -719,5 +721,5 @@ export function ResumeBuilder() {
         />
       </Suspense>
     </div>
-  )
+  );
 }

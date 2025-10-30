@@ -1,13 +1,13 @@
-import { renderHook } from "@testing-library/react"
-import { describe, expect, it, vi } from "vitest"
-import { useIsMobile } from "@/hooks/use-mobile"
+import { renderHook } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 function setupWindowWidth(width: number) {
   Object.defineProperty(window, "innerWidth", {
     writable: true,
     configurable: true,
     value: width,
-  })
+  });
   Object.defineProperty(window, "matchMedia", {
     writable: true,
     configurable: true,
@@ -20,30 +20,30 @@ function setupWindowWidth(width: number) {
       removeListener: vi.fn(),
       dispatchEvent: vi.fn(),
     }),
-  })
+  });
 }
 describe("useIsMobile", () => {
   beforeEach(() => {
-    vi.restoreAllMocks()
-  })
+    vi.restoreAllMocks();
+  });
   it("detects mobile width (< 768px)", () => {
-    setupWindowWidth(500)
-    const { result } = renderHook(() => useIsMobile())
-    expect(result.current).toBe(true)
-  })
+    setupWindowWidth(500);
+    const { result } = renderHook(() => useIsMobile());
+    expect(result.current).toBe(true);
+  });
   it("detects tablet width (border case)", () => {
-    setupWindowWidth(767)
-    const { result } = renderHook(() => useIsMobile())
-    expect(result.current).toBe(true)
-  })
+    setupWindowWidth(767);
+    const { result } = renderHook(() => useIsMobile());
+    expect(result.current).toBe(true);
+  });
   it("detects desktop width (>= 768px)", () => {
-    setupWindowWidth(768)
-    const { result } = renderHook(() => useIsMobile())
-    expect(result.current).toBe(false)
-  })
+    setupWindowWidth(768);
+    const { result } = renderHook(() => useIsMobile());
+    expect(result.current).toBe(false);
+  });
   it("detects large desktop width", () => {
-    setupWindowWidth(1920)
-    const { result } = renderHook(() => useIsMobile())
-    expect(result.current).toBe(false)
-  })
-})
+    setupWindowWidth(1920);
+    const { result } = renderHook(() => useIsMobile());
+    expect(result.current).toBe(false);
+  });
+});

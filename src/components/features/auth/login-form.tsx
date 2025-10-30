@@ -1,65 +1,65 @@
-import { useNavigate, useSearch } from "@tanstack/react-router"
-import { Loader2 } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { cn } from "@/lib/utils"
-import { useAuthStore } from "@/stores"
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
-  const navigate = useNavigate()
-  const search = useSearch({ strict: false }) as { redirect?: string }
-  const login = useAuthStore((state) => state.login)
-  const isLoading = useAuthStore((state) => state.isLoading)
-  const error = useAuthStore((state) => state.error)
+  const navigate = useNavigate();
+  const search = useSearch({ strict: false }) as { redirect?: string };
+  const login = useAuthStore((state) => state.login);
+  const isLoading = useAuthStore((state) => state.isLoading);
+  const error = useAuthStore((state) => state.error);
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [validationErrors, setValidationErrors] = useState<{
-    email?: string
-    password?: string
-  }>({})
+    email?: string;
+    password?: string;
+  }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Clear previous validation errors
-    setValidationErrors({})
+    setValidationErrors({});
 
     // Basic client-side validation
-    const errors: { email?: string; password?: string } = {}
+    const errors: { email?: string; password?: string } = {};
 
     if (!email.trim()) {
-      errors.email = "Email is required"
+      errors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors.email = "Please enter a valid email address"
+      errors.email = "Please enter a valid email address";
     }
 
     if (!password.trim()) {
-      errors.password = "Password is required"
+      errors.password = "Password is required";
     }
 
     if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors)
+      setValidationErrors(errors);
       // Focus first error field
       if (errors.email) {
-        document.getElementById("email")?.focus()
+        document.getElementById("email")?.focus();
       } else if (errors.password) {
-        document.getElementById("password")?.focus()
+        document.getElementById("password")?.focus();
       }
-      return
+      return;
     }
 
     try {
-      await login(email, password)
+      await login(email, password);
       // Redirect to intended destination or dashboard
-      navigate({ to: search.redirect || "/dashboard" })
+      navigate({ to: search.redirect || "/dashboard" });
     } catch (err) {
       // Error is handled by the store
-      console.error("Login failed:", err)
+      console.error("Login failed:", err);
     }
-  }
+  };
 
   return (
     <form className={cn("flex flex-col gap-6", className)} onSubmit={handleSubmit} {...props}>
@@ -71,7 +71,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
       </div>
 
       {/* Demo credentials banner */}
-      <div className="rounded-md bg-blue-50 dark:bg-blue-950 p-3 text-sm">
+      <div className="rounded-md bg-blue-50 p-3 text-sm dark:bg-blue-950">
         <p className="font-medium text-blue-900 dark:text-blue-100">Demo Credentials:</p>
         <p className="text-blue-700 dark:text-blue-300">
           Email: <code className="font-mono">demo@example.com</code>
@@ -85,7 +85,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
         <div
           role="alert"
           aria-live="assertive"
-          className="rounded-md bg-destructive/10 p-3 text-sm text-destructive"
+          className="bg-destructive/10 text-destructive rounded-md p-3 text-sm"
         >
           {error}
         </div>
@@ -101,10 +101,10 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
             required
             value={email}
             onChange={(e) => {
-              setEmail(e.target.value)
+              setEmail(e.target.value);
               // Clear validation error on change
               if (validationErrors.email) {
-                setValidationErrors((prev) => ({ ...prev, email: undefined }))
+                setValidationErrors((prev) => ({ ...prev, email: undefined }));
               }
             }}
             disabled={isLoading}
@@ -112,7 +112,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
             aria-describedby={validationErrors.email ? "email-error" : undefined}
           />
           {validationErrors.email && (
-            <p id="email-error" className="text-sm text-destructive" role="alert">
+            <p id="email-error" className="text-destructive text-sm" role="alert">
               {validationErrors.email}
             </p>
           )}
@@ -126,7 +126,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
               disabled={isLoading}
               onClick={() => {
                 // TODO: Implement forgot password functionality
-                console.log("Forgot password clicked")
+                console.log("Forgot password clicked");
               }}
             >
               Forgot your password?
@@ -138,10 +138,10 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
             required
             value={password}
             onChange={(e) => {
-              setPassword(e.target.value)
+              setPassword(e.target.value);
               // Clear validation error on change
               if (validationErrors.password) {
-                setValidationErrors((prev) => ({ ...prev, password: undefined }))
+                setValidationErrors((prev) => ({ ...prev, password: undefined }));
               }
             }}
             disabled={isLoading}
@@ -149,7 +149,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
             aria-describedby={validationErrors.password ? "password-error" : undefined}
           />
           {validationErrors.password && (
-            <p id="password-error" className="text-sm text-destructive" role="alert">
+            <p id="password-error" className="text-destructive text-sm" role="alert">
               {validationErrors.password}
             </p>
           )}
@@ -204,12 +204,12 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
           disabled={isLoading}
           onClick={() => {
             // TODO: Navigate to sign up page
-            console.log("Sign up clicked")
+            console.log("Sign up clicked");
           }}
         >
           Sign up
         </button>
       </div>
     </form>
-  )
+  );
 }

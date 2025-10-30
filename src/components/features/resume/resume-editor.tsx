@@ -1,23 +1,23 @@
-import { Eye, FileEdit } from "lucide-react"
-import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { Resume } from "@/lib/api/types"
-import type { TemplateType } from "@/lib/types/templates"
-import { ExportMenu } from "./export/export-menu"
-import { ResumePreview } from "./preview/resume-preview"
-import { TemplateSelector } from "./preview/template-selector"
-import { ResumeBuilder } from "./resume-builder"
+import { Eye, FileEdit } from "lucide-react";
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { Resume } from "@/lib/api/types";
+import type { TemplateType } from "@/lib/types/templates";
+import { ExportMenu } from "./export/export-menu";
+import { ResumePreview } from "./preview/resume-preview";
+import { TemplateSelector } from "./preview/template-selector";
+import { ResumeBuilder } from "./resume-builder";
 
 interface ResumeEditorProps {
-  resume: Resume
+  resume: Resume;
 }
 
 export function ResumeEditor({ resume }: ResumeEditorProps) {
-  const [template, setTemplate] = useState<TemplateType>("modern")
+  const [template, setTemplate] = useState<TemplateType>("modern");
 
   return (
     <Tabs defaultValue="edit" className="w-full">
-      <div className="flex items-center justify-between mb-6 gap-4">
+      <div className="mb-6 flex items-center justify-between gap-4">
         <TabsList>
           <TabsTrigger value="edit" className="gap-2">
             <FileEdit className="h-4 w-4" />
@@ -40,10 +40,10 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
       </TabsContent>
 
       <TabsContent value="preview" className="mt-0">
-        <div className="bg-gray-100 rounded-lg p-8 min-h-[600px]">
+        <div className="min-h-[600px] rounded-lg bg-gray-100 p-8">
           <ResumePreview resume={resume} template={template} />
         </div>
       </TabsContent>
     </Tabs>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import { Loader2, Pencil } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Loader2, Pencil } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,17 +9,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useUpdateResume } from "@/hooks/api"
-import { useToast } from "@/hooks/use-toast"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useUpdateResume } from "@/hooks/api";
+import { useToast } from "@/hooks/use-toast";
 
 interface RenameResumeDialogProps {
-  resumeId: string
-  currentTitle: string
-  trigger?: React.ReactNode
-  onSuccess?: () => void
+  resumeId: string;
+  currentTitle: string;
+  trigger?: React.ReactNode;
+  onSuccess?: () => void;
 }
 
 export function RenameResumeDialog({
@@ -28,34 +28,34 @@ export function RenameResumeDialog({
   trigger,
   onSuccess,
 }: RenameResumeDialogProps) {
-  const [open, setOpen] = useState(false)
-  const [title, setTitle] = useState(currentTitle)
-  const [validationError, setValidationError] = useState("")
-  const { toast } = useToast()
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState(currentTitle);
+  const [validationError, setValidationError] = useState("");
+  const { toast } = useToast();
 
-  const { mutate, isPending, error } = useUpdateResume()
+  const { mutate, isPending, error } = useUpdateResume();
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Clear previous validation error
-    setValidationError("")
+    setValidationError("");
 
     if (!title.trim()) {
-      setValidationError("Please enter a resume title")
+      setValidationError("Please enter a resume title");
       toast({
         title: "Error",
         description: "Please enter a resume title",
         variant: "destructive",
-      })
+      });
       // Focus the input field
-      document.getElementById("title")?.focus()
-      return
+      document.getElementById("title")?.focus();
+      return;
     }
 
     if (title.trim() === currentTitle) {
-      setOpen(false)
-      return
+      setOpen(false);
+      return;
     }
 
     mutate(
@@ -70,11 +70,11 @@ export function RenameResumeDialog({
           toast({
             title: "Success",
             description: "Resume title updated successfully",
-          })
-          setOpen(false)
+          });
+          setOpen(false);
 
           if (onSuccess) {
-            onSuccess()
+            onSuccess();
           }
         },
         onError: (err) => {
@@ -82,11 +82,11 @@ export function RenameResumeDialog({
             title: "Error",
             description: err.message || "Failed to update resume title",
             variant: "destructive",
-          })
+          });
         },
-      },
-    )
-  }
+      }
+    );
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -111,10 +111,10 @@ export function RenameResumeDialog({
               id="title"
               value={title}
               onChange={(e) => {
-                setTitle(e.target.value)
+                setTitle(e.target.value);
                 // Clear validation error on change
                 if (validationError) {
-                  setValidationError("")
+                  setValidationError("");
                 }
               }}
               placeholder="e.g., Software Engineer Resume"
@@ -126,12 +126,12 @@ export function RenameResumeDialog({
               }
             />
             {validationError && (
-              <p id="title-validation-error" className="mt-2 text-sm text-destructive" role="alert">
+              <p id="title-validation-error" className="text-destructive mt-2 text-sm" role="alert">
                 {validationError}
               </p>
             )}
             {error && !validationError && (
-              <p id="title-api-error" className="mt-2 text-sm text-destructive" role="alert">
+              <p id="title-api-error" className="text-destructive mt-2 text-sm" role="alert">
                 {error.message || "An error occurred"}
               </p>
             )}
@@ -142,8 +142,8 @@ export function RenameResumeDialog({
               type="button"
               variant="outline"
               onClick={() => {
-                setOpen(false)
-                setTitle(currentTitle) // Reset on cancel
+                setOpen(false);
+                setTitle(currentTitle); // Reset on cancel
               }}
               disabled={isPending}
             >
@@ -161,5 +161,5 @@ export function RenameResumeDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

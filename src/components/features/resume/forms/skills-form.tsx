@@ -1,9 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { XIcon } from "lucide-react"
-import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { XIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -12,51 +12,51 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { useAutoSave } from "@/hooks/use-auto-save"
-import type { Skills } from "@/lib/api/types"
-import { type SkillsFormData, skillsSchema } from "@/lib/validations/skills"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useAutoSave } from "@/hooks/use-auto-save";
+import type { Skills } from "@/lib/api/types";
+import { type SkillsFormData, skillsSchema } from "@/lib/validations/skills";
 
 interface SkillsFormProps {
-  resumeId: string
-  skills?: Skills
+  resumeId: string;
+  skills?: Skills;
 }
 
 interface TagInputProps {
-  value: string[]
-  onChange: (value: string[]) => void
-  placeholder?: string
+  value: string[];
+  onChange: (value: string[]) => void;
+  placeholder?: string;
 }
 
 function TagInput({ value = [], onChange, placeholder }: TagInputProps) {
-  const [inputValue, setInputValue] = useState("")
+  const [inputValue, setInputValue] = useState("");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim()) {
-      e.preventDefault()
+      e.preventDefault();
       if (!value.includes(inputValue.trim())) {
-        onChange([...value, inputValue.trim()])
+        onChange([...value, inputValue.trim()]);
       }
-      setInputValue("")
+      setInputValue("");
     } else if (e.key === "Backspace" && !inputValue && value.length > 0) {
-      onChange(value.slice(0, -1))
+      onChange(value.slice(0, -1));
     }
-  }
+  };
 
   const removeTag = (indexToRemove: number) => {
-    onChange(value.filter((_, index) => index !== indexToRemove))
-  }
+    onChange(value.filter((_, index) => index !== indexToRemove));
+  };
 
   return (
-    <div className="flex flex-wrap gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+    <div className="border-input bg-background ring-offset-background focus-within:ring-ring flex flex-wrap gap-2 rounded-md border px-3 py-2 text-sm focus-within:ring-2 focus-within:ring-offset-2">
       {value.map((tag, index) => (
         <Badge key={index} variant="secondary" className="gap-1">
           {tag}
           <button
             type="button"
             onClick={() => removeTag(index)}
-            className="ml-1 rounded-full hover:bg-secondary-foreground/20"
+            className="hover:bg-secondary-foreground/20 ml-1 rounded-full"
             aria-label={`Remove ${tag}`}
           >
             <XIcon className="h-3 w-3" />
@@ -71,7 +71,7 @@ function TagInput({ value = [], onChange, placeholder }: TagInputProps) {
         className="flex-1 border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
       />
     </div>
-  )
+  );
 }
 
 export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
@@ -83,15 +83,15 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
       tools: skills?.tools || [],
       soft: skills?.soft || [],
     },
-  })
+  });
 
   const { save, isSaving } = useAutoSave({
     resumeId,
     enabled: form.formState.isDirty,
-  })
+  });
 
   // Auto-save on form changes
-  const watchedValues = form.watch()
+  const watchedValues = form.watch();
   useEffect(() => {
     if (form.formState.isDirty) {
       save({
@@ -103,9 +103,9 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
             soft: watchedValues.soft || [],
           },
         },
-      })
+      });
     }
-  }, [watchedValues, form.formState.isDirty, save])
+  }, [watchedValues, form.formState.isDirty, save]);
 
   return (
     <Card>
@@ -113,7 +113,7 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
         <CardTitle>Skills</CardTitle>
         <CardDescription>
           Add your skills by category. Press Enter to add a skill, Backspace to remove the last one.
-          {isSaving && <span className="ml-2 text-xs text-muted-foreground">Saving...</span>}
+          {isSaving && <span className="text-muted-foreground ml-2 text-xs">Saving...</span>}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -200,5 +200,5 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }

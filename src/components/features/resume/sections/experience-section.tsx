@@ -1,24 +1,24 @@
-import { ChevronDown, Plus, Trash } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import type { WorkExperience } from "@/stores"
+import { ChevronDown, Plus, Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import type { WorkExperience } from "@/stores";
 
 interface ExperienceProps {
-  experiences: WorkExperience[]
-  awardInputs: Record<number, string>
-  addExperience: () => void
+  experiences: WorkExperience[];
+  awardInputs: Record<number, string>;
+  addExperience: () => void;
   updateExperience: (
     i: number,
     field: keyof WorkExperience,
-    value: string | string[] | boolean,
-  ) => void
-  removeExperience: (i: number) => void
-  setAwardInput: (i: number, value: string) => void
-  addExperienceAward: (i: number) => void
-  removeExperienceAward: (i: number, j: number) => void
+    value: string | string[] | boolean
+  ) => void;
+  removeExperience: (i: number) => void;
+  setAwardInput: (i: number, value: string) => void;
+  addExperienceAward: (i: number) => void;
+  removeExperienceAward: (i: number, j: number) => void;
 }
 
 export function ExperienceSection({
@@ -139,5 +139,5 @@ export function ExperienceSection({
         <Plus className="mr-2 h-4 w-4" /> Add Experience
       </Button>
     </div>
-  )
+  );
 }

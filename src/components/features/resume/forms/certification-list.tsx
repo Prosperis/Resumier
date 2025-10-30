@@ -6,23 +6,23 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core"
+} from "@dnd-kit/core";
 import {
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable"
-import { CalendarIcon, EditIcon, ExternalLinkIcon, TrashIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import type { Certification } from "@/lib/api/types"
-import { SortableItem } from "../dnd/sortable-item"
+} from "@dnd-kit/sortable";
+import { CalendarIcon, EditIcon, ExternalLinkIcon, TrashIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import type { Certification } from "@/lib/api/types";
+import { SortableItem } from "../dnd/sortable-item";
 
 interface CertificationListProps {
-  certifications: Certification[]
-  onEdit: (certification: Certification) => void
-  onDelete: (id: string) => void
-  onReorder?: (certifications: Certification[]) => void
+  certifications: Certification[];
+  onEdit: (certification: Certification) => void;
+  onDelete: (id: string) => void;
+  onReorder?: (certifications: Certification[]) => void;
 }
 
 export function CertificationList({
@@ -35,43 +35,43 @@ export function CertificationList({
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  )
+    })
+  );
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event
+    const { active, over } = event;
 
     if (!over || active.id === over.id) {
-      return
+      return;
     }
 
-    const oldIndex = certifications.findIndex((cert) => cert.id === active.id)
-    const newIndex = certifications.findIndex((cert) => cert.id === over.id)
+    const oldIndex = certifications.findIndex((cert) => cert.id === active.id);
+    const newIndex = certifications.findIndex((cert) => cert.id === over.id);
 
     if (oldIndex !== -1 && newIndex !== -1 && onReorder) {
-      const result = Array.from(certifications)
-      const [removed] = result.splice(oldIndex, 1)
-      result.splice(newIndex, 0, removed)
-      onReorder(result)
+      const result = Array.from(certifications);
+      const [removed] = result.splice(oldIndex, 1);
+      result.splice(newIndex, 0, removed);
+      onReorder(result);
     }
-  }
+  };
 
   if (certifications.length === 0) {
     return (
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-          <p className="text-sm text-muted-foreground">No certifications added yet.</p>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-sm">No certifications added yet.</p>
+          <p className="text-muted-foreground mt-1 text-xs">
             Click "Add Certification" to get started.
           </p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   const formatDate = (date: string) => {
-    if (!date) return ""
-    const [year, month] = date.split("-")
+    if (!date) return "";
+    const [year, month] = date.split("-");
     const monthNames = [
       "Jan",
       "Feb",
@@ -85,9 +85,9 @@ export function CertificationList({
       "Oct",
       "Nov",
       "Dec",
-    ]
-    return `${monthNames[parseInt(month, 10) - 1]} ${year}`
-  }
+    ];
+    return `${monthNames[parseInt(month, 10) - 1]} ${year}`;
+  };
 
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -116,14 +116,14 @@ export function CertificationList({
                           </a>
                         )}
                       </div>
-                      <p className="text-sm text-muted-foreground">{cert.issuer}</p>
-                      <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">{cert.issuer}</p>
+                      <div className="text-muted-foreground mt-1 flex items-center gap-1 text-xs">
                         <CalendarIcon className="h-3 w-3" />
                         <span>Issued {formatDate(cert.date)}</span>
                         {cert.expiryDate && <span> · Expires {formatDate(cert.expiryDate)}</span>}
                       </div>
                       {cert.credentialId && (
-                        <p className="mt-1 text-xs text-muted-foreground">
+                        <p className="text-muted-foreground mt-1 text-xs">
                           Credential ID: {cert.credentialId}
                         </p>
                       )}
@@ -154,5 +154,5 @@ export function CertificationList({
         </div>
       </SortableContext>
     </DndContext>
-  )
+  );
 }

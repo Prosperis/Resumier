@@ -1,18 +1,18 @@
-import { ArrowLeft } from "lucide-react"
-import { ThemeToggle } from "@/components/features/navigation/theme-toggle"
-import { Button } from "@/components/ui/button"
+import { ArrowLeft } from "lucide-react";
+import { ThemeToggle } from "@/components/features/navigation/theme-toggle";
+import { Button } from "@/components/ui/button";
 
 export function AppHeader({
   onPersonalInfoClick,
   onJobInfoClick,
   onBackClick,
 }: {
-  onPersonalInfoClick?: () => void
-  onJobInfoClick?: () => void
-  onBackClick?: () => void
+  onPersonalInfoClick?: () => void;
+  onJobInfoClick?: () => void;
+  onBackClick?: () => void;
 }) {
   return (
-    <header className="fixed inset-x-0 top-0 z-20 flex h-16 items-center justify-between gap-4 border-b bg-background px-4">
+    <header className="bg-background fixed inset-x-0 top-0 z-20 flex h-16 items-center justify-between gap-4 border-b px-4">
       <div className="flex items-center gap-2">
         <picture>
           <source srcSet={`${import.meta.env.BASE_URL}logo_dark.webp`} type="image/webp" />
@@ -27,7 +27,7 @@ export function AppHeader({
         </picture>
         {onBackClick && (
           <Button variant="ghost" size="sm" onClick={onBackClick} className="ml-2">
-            <ArrowLeft className="size-4 mr-1" /> Dashboard
+            <ArrowLeft className="mr-1 size-4" /> Dashboard
           </Button>
         )}
       </div>
@@ -42,5 +42,5 @@ export function AppHeader({
         <ThemeToggle />
       </nav>
     </header>
-  )
+  );
 }

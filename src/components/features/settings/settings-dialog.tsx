@@ -11,8 +11,8 @@ import {
   Paintbrush,
   Settings,
   Video,
-} from "lucide-react"
-import * as React from "react"
+} from "lucide-react";
+import * as React from "react";
 
 import {
   Breadcrumb,
@@ -20,15 +20,15 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Sidebar,
   SidebarContent,
@@ -38,7 +38,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const data = {
   nav: [
@@ -55,10 +55,10 @@ const data = {
     { name: "Privacy & visibility", icon: Lock },
     { name: "Advanced", icon: Settings },
   ],
-}
+};
 
 export function SettingsDialog() {
-  const [open, setOpen] = React.useState(true)
+  const [open, setOpen] = React.useState(true);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -112,5 +112,5 @@ export function SettingsDialog() {
         </SidebarProvider>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { Plus, Trash } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select } from "@/components/ui/select"
+import { Plus, Trash } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
 import {
   Sidebar,
   SidebarContent,
@@ -14,56 +14,56 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-} from "@/components/ui/sidebar"
-import { Textarea } from "@/components/ui/textarea"
-import { useResumeStore } from "@/stores"
+} from "@/components/ui/sidebar";
+import { Textarea } from "@/components/ui/textarea";
+import { useResumeStore } from "@/stores";
 
-type Section = "details" | "list"
+type Section = "details" | "list";
 
 export function JobInfoDialog({
   open,
   onOpenChange,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const jobInfo = useResumeStore((state) => state.jobInfo)
-  const setJobInfo = useResumeStore((state) => state.setJobInfo)
-  const jobs = useResumeStore((state) => state.jobs)
-  const addJob = useResumeStore((state) => state.addJob)
-  const removeJob = useResumeStore((state) => state.removeJob)
+  const jobInfo = useResumeStore((state) => state.jobInfo);
+  const setJobInfo = useResumeStore((state) => state.setJobInfo);
+  const jobs = useResumeStore((state) => state.jobs);
+  const addJob = useResumeStore((state) => state.addJob);
+  const removeJob = useResumeStore((state) => state.removeJob);
   const typedJobInfo = jobInfo as {
-    title?: string
-    company?: string
-    location?: string
-    description?: string
-    benefits?: string[]
-    workType?: "onsite" | "remote" | "hybrid"
-    basePay?: string
-    bonus?: string
-    stocks?: string
-  }
+    title?: string;
+    company?: string;
+    location?: string;
+    description?: string;
+    benefits?: string[];
+    workType?: "onsite" | "remote" | "hybrid";
+    basePay?: string;
+    bonus?: string;
+    stocks?: string;
+  };
   const standardBenefits = [
     "Health Insurance",
     "Dental Insurance",
     "Vision Insurance",
     "401(k)",
     "Paid Time Off",
-  ]
-  const [section, setSection] = useState<Section>("details")
-  const [title, setTitle] = useState(typedJobInfo.title ?? "")
-  const [company, setCompany] = useState(typedJobInfo.company ?? "")
-  const [location, setLocation] = useState(typedJobInfo.location ?? "")
-  const [description, setDescription] = useState(typedJobInfo.description ?? "")
-  const [benefits, setBenefits] = useState<string[]>(typedJobInfo.benefits ?? [])
-  const [benefitInput, setBenefitInput] = useState("")
-  const [workType, setWorkType] = useState(typedJobInfo.workType)
-  const [basePay, setBasePay] = useState(typedJobInfo.basePay ?? "")
-  const [bonus, setBonus] = useState(typedJobInfo.bonus ?? "")
-  const [stocks, setStocks] = useState(typedJobInfo.stocks ?? "")
+  ];
+  const [section, setSection] = useState<Section>("details");
+  const [title, setTitle] = useState(typedJobInfo.title ?? "");
+  const [company, setCompany] = useState(typedJobInfo.company ?? "");
+  const [location, setLocation] = useState(typedJobInfo.location ?? "");
+  const [description, setDescription] = useState(typedJobInfo.description ?? "");
+  const [benefits, setBenefits] = useState<string[]>(typedJobInfo.benefits ?? []);
+  const [benefitInput, setBenefitInput] = useState("");
+  const [workType, setWorkType] = useState(typedJobInfo.workType);
+  const [basePay, setBasePay] = useState(typedJobInfo.basePay ?? "");
+  const [bonus, setBonus] = useState(typedJobInfo.bonus ?? "");
+  const [stocks, setStocks] = useState(typedJobInfo.stocks ?? "");
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
     const job = {
       title,
       company,
@@ -74,18 +74,18 @@ export function JobInfoDialog({
       stocks,
       workType,
       benefits,
-    }
-    setJobInfo(job)
-    addJob(job)
-    setTitle("")
-    setCompany("")
-    setLocation("")
-    setDescription("")
-    setBenefits([])
-    setWorkType(undefined)
-    setBasePay("")
-    setBonus("")
-    setStocks("")
+    };
+    setJobInfo(job);
+    addJob(job);
+    setTitle("");
+    setCompany("");
+    setLocation("");
+    setDescription("");
+    setBenefits([]);
+    setWorkType(undefined);
+    setBasePay("");
+    setBonus("");
+    setStocks("");
   }
 
   return (
@@ -180,9 +180,9 @@ export function JobInfoDialog({
                         value={benefit}
                         onChange={(e) =>
                           setBenefits((prev) => {
-                            const next = [...prev]
-                            next[i] = e.target.value
-                            return next
+                            const next = [...prev];
+                            next[i] = e.target.value;
+                            return next;
                           })
                         }
                         placeholder="Benefit"
@@ -207,9 +207,9 @@ export function JobInfoDialog({
                       type="button"
                       variant="outline"
                       onClick={() => {
-                        if (!benefitInput.trim()) return
-                        setBenefits([...benefits, benefitInput.trim()])
-                        setBenefitInput("")
+                        if (!benefitInput.trim()) return;
+                        setBenefits([...benefits, benefitInput.trim()]);
+                        setBenefitInput("");
                       }}
                     >
                       <Plus className="mr-2 h-4 w-4" /> Add Benefit
@@ -260,11 +260,11 @@ export function JobInfoDialog({
                 <table className="w-full text-sm">
                   <thead className="border-b">
                     <tr>
-                      <th className="text-left p-2">Title</th>
-                      <th className="text-left p-2">Company</th>
-                      <th className="text-left p-2">Work Type</th>
-                      <th className="text-left p-2">Location</th>
-                      <th className="text-left p-2">Base Pay</th>
+                      <th className="p-2 text-left">Title</th>
+                      <th className="p-2 text-left">Company</th>
+                      <th className="p-2 text-left">Work Type</th>
+                      <th className="p-2 text-left">Location</th>
+                      <th className="p-2 text-left">Base Pay</th>
                       <th className="p-2" />
                     </tr>
                   </thead>
@@ -296,5 +296,5 @@ export function JobInfoDialog({
         </SidebarProvider>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

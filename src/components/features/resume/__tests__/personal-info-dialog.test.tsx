@@ -1,9 +1,9 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { fireEvent, render, screen, waitFor } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-import { beforeEach, describe, expect, it, vi } from "vitest"
-import { useResumeStore } from "@/stores"
-import { PersonalInfoDialog } from "../personal-info-dialog"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useResumeStore } from "@/stores";
+import { PersonalInfoDialog } from "../personal-info-dialog";
 
 // Create query client for tests
 const queryClient = new QueryClient({
@@ -11,17 +11,17 @@ const queryClient = new QueryClient({
     queries: { retry: false },
     mutations: { retry: false },
   },
-})
+});
 
 // Wrapper component
 const Wrapper = ({ children }: { children: React.ReactNode }) => (
   <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-)
+);
 
 // Mock the store
 vi.mock("@/stores", () => ({
   useResumeStore: vi.fn(),
-}))
+}));
 
 // Mock UI components
 vi.mock("@/components/ui/dialog", () => ({
@@ -37,7 +37,7 @@ vi.mock("@/components/ui/dialog", () => ({
       {children}
     </h2>
   ),
-}))
+}));
 
 vi.mock("@/components/ui/sidebar", () => ({
   Sidebar: ({ children }: any) => <aside data-testid="sidebar">{children}</aside>,
@@ -56,7 +56,7 @@ vi.mock("@/components/ui/sidebar", () => ({
   ),
   SidebarProvider: ({ children }: any) => <div data-testid="sidebar-provider">{children}</div>,
   SidebarSeparator: () => <hr data-testid="sidebar-separator" />,
-}))
+}));
 
 // Mock section components
 vi.mock("@/components/features/resume/sections", () => ({
@@ -109,15 +109,15 @@ vi.mock("@/components/features/resume/sections", () => ({
       </button>
     </div>
   ),
-}))
+}));
 
 describe("PersonalInfoDialog", () => {
-  const mockSetUserInfo = vi.fn()
-  const mockOnOpenChange = vi.fn()
+  const mockSetUserInfo = vi.fn();
+  const mockOnOpenChange = vi.fn();
 
   beforeEach(() => {
     // Mock reset handled by vitest config (clearMocks: true)
-    ;(useResumeStore as any).mockReturnValue({
+    (useResumeStore as any).mockReturnValue({
       userInfo: {
         name: "",
         email: "",
@@ -130,318 +130,318 @@ describe("PersonalInfoDialog", () => {
         links: [],
       },
       setUserInfo: mockSetUserInfo,
-    })
-  })
+    });
+  });
 
   describe("Dialog Rendering", () => {
     it("should render dialog when open", () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      expect(screen.getByTestId("dialog")).toBeInTheDocument()
-    })
+      });
+      expect(screen.getByTestId("dialog")).toBeInTheDocument();
+    });
 
     it("should not render dialog when closed", () => {
       render(<PersonalInfoDialog open={false} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      expect(screen.queryByTestId("dialog")).not.toBeInTheDocument()
-    })
+      });
+      expect(screen.queryByTestId("dialog")).not.toBeInTheDocument();
+    });
 
     it("should render dialog title", () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const titles = screen.getAllByTestId("dialog-title")
-      expect(titles[0]).toHaveTextContent("Personal Information")
-    })
+      });
+      const titles = screen.getAllByTestId("dialog-title");
+      expect(titles[0]).toHaveTextContent("Personal Information");
+    });
 
     it("should render sidebar", () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      expect(screen.getByTestId("sidebar")).toBeInTheDocument()
-    })
+      });
+      expect(screen.getByTestId("sidebar")).toBeInTheDocument();
+    });
 
     it("should render sidebar separator", () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      expect(screen.getByTestId("sidebar-separator")).toBeInTheDocument()
-    })
-  })
+      });
+      expect(screen.getByTestId("sidebar-separator")).toBeInTheDocument();
+    });
+  });
 
   describe("Section Navigation", () => {
     it("should render all navigation menu items", () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      expect(screen.getByText("Basic Info")).toBeInTheDocument()
-      expect(screen.getByText("Experience")).toBeInTheDocument()
-      expect(screen.getByText("Education")).toBeInTheDocument()
-      expect(screen.getByText("Skills")).toBeInTheDocument()
-      expect(screen.getByText("Certifications")).toBeInTheDocument()
-      expect(screen.getByText("Links")).toBeInTheDocument()
-    })
+      });
+      expect(screen.getByText("Basic Info")).toBeInTheDocument();
+      expect(screen.getByText("Experience")).toBeInTheDocument();
+      expect(screen.getByText("Education")).toBeInTheDocument();
+      expect(screen.getByText("Skills")).toBeInTheDocument();
+      expect(screen.getByText("Certifications")).toBeInTheDocument();
+      expect(screen.getByText("Links")).toBeInTheDocument();
+    });
 
     it("should show Basic Info section by default", () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      expect(screen.getByTestId("basic-info-section")).toBeInTheDocument()
-    })
+      });
+      expect(screen.getByTestId("basic-info-section")).toBeInTheDocument();
+    });
 
     it("should switch to Experience section", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[1]) // Experience
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[1]); // Experience
       await waitFor(() => {
-        expect(screen.getByTestId("experience-section")).toBeInTheDocument()
-      })
-    })
+        expect(screen.getByTestId("experience-section")).toBeInTheDocument();
+      });
+    });
 
     it("should switch to Education section", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[2]) // Education
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[2]); // Education
       await waitFor(() => {
-        expect(screen.getByTestId("education-section")).toBeInTheDocument()
-      })
-    })
+        expect(screen.getByTestId("education-section")).toBeInTheDocument();
+      });
+    });
 
     it("should switch to Skills section", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[3]) // Skills
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[3]); // Skills
       await waitFor(() => {
-        expect(screen.getByTestId("skills-section")).toBeInTheDocument()
-      })
-    })
+        expect(screen.getByTestId("skills-section")).toBeInTheDocument();
+      });
+    });
 
     it("should switch to Certifications section", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[4]) // Certifications
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[4]); // Certifications
       await waitFor(() => {
-        expect(screen.getByTestId("certifications-section")).toBeInTheDocument()
-      })
-    })
+        expect(screen.getByTestId("certifications-section")).toBeInTheDocument();
+      });
+    });
 
     it("should switch to Links section", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[5]) // Links
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[5]); // Links
       await waitFor(() => {
-        expect(screen.getByTestId("links-section")).toBeInTheDocument()
-      })
-    })
+        expect(screen.getByTestId("links-section")).toBeInTheDocument();
+      });
+    });
 
     it("should switch between sections multiple times", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
 
-      fireEvent.click(buttons[3]) // Skills
+      fireEvent.click(buttons[3]); // Skills
       await waitFor(() => {
-        expect(screen.getByTestId("skills-section")).toBeInTheDocument()
-      })
+        expect(screen.getByTestId("skills-section")).toBeInTheDocument();
+      });
 
-      fireEvent.click(buttons[0]) // Back to Basic
+      fireEvent.click(buttons[0]); // Back to Basic
       await waitFor(() => {
-        expect(screen.getByTestId("basic-info-section")).toBeInTheDocument()
-      })
-    })
-  })
+        expect(screen.getByTestId("basic-info-section")).toBeInTheDocument();
+      });
+    });
+  });
 
   describe("Experience Management", () => {
     it("should add experience", async () => {
-      const user = userEvent.setup()
+      const user = userEvent.setup();
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[1]) // Experience section
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[1]); // Experience section
 
       await waitFor(async () => {
-        const addButton = screen.getByTestId("add-experience-button")
-        await user.click(addButton)
-        expect(screen.getByText("Experiences: 1")).toBeInTheDocument()
-      })
-    })
+        const addButton = screen.getByTestId("add-experience-button");
+        await user.click(addButton);
+        expect(screen.getByText("Experiences: 1")).toBeInTheDocument();
+      });
+    });
 
     it("should show initial experience count", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[1])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[1]);
 
       await waitFor(() => {
-        expect(screen.getByText("Experiences: 0")).toBeInTheDocument()
-      })
-    })
-  })
+        expect(screen.getByText("Experiences: 0")).toBeInTheDocument();
+      });
+    });
+  });
 
   describe("Education Management", () => {
     it("should add education", async () => {
-      const user = userEvent.setup()
+      const user = userEvent.setup();
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[2]) // Education section
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[2]); // Education section
 
       await waitFor(async () => {
-        const addButton = screen.getByTestId("add-education-button")
-        await user.click(addButton)
-        expect(screen.getByText("Education: 1")).toBeInTheDocument()
-      })
-    })
+        const addButton = screen.getByTestId("add-education-button");
+        await user.click(addButton);
+        expect(screen.getByText("Education: 1")).toBeInTheDocument();
+      });
+    });
 
     it("should show initial education count", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[2])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[2]);
 
       await waitFor(() => {
-        expect(screen.getByText("Education: 0")).toBeInTheDocument()
-      })
-    })
-  })
+        expect(screen.getByText("Education: 0")).toBeInTheDocument();
+      });
+    });
+  });
 
   describe("Skills Management", () => {
     it("should add skill", async () => {
-      const user = userEvent.setup()
+      const user = userEvent.setup();
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[3]) // Skills section
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[3]); // Skills section
 
       await waitFor(async () => {
-        const addButton = screen.getByTestId("add-skill-button")
-        await user.click(addButton)
-        expect(screen.getByText("Skills: 1")).toBeInTheDocument()
-      })
-    })
+        const addButton = screen.getByTestId("add-skill-button");
+        await user.click(addButton);
+        expect(screen.getByText("Skills: 1")).toBeInTheDocument();
+      });
+    });
 
     it("should show initial skills count", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[3])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[3]);
 
       await waitFor(() => {
-        expect(screen.getByText("Skills: 0")).toBeInTheDocument()
-      })
-    })
-  })
+        expect(screen.getByText("Skills: 0")).toBeInTheDocument();
+      });
+    });
+  });
 
   describe("Certifications Management", () => {
     it("should add certification", async () => {
-      const user = userEvent.setup()
+      const user = userEvent.setup();
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[4]) // Certifications section
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[4]); // Certifications section
 
       await waitFor(async () => {
-        const addButton = screen.getByTestId("add-certification-button")
-        await user.click(addButton)
-        expect(screen.getByText("Certifications: 1")).toBeInTheDocument()
-      })
-    })
+        const addButton = screen.getByTestId("add-certification-button");
+        await user.click(addButton);
+        expect(screen.getByText("Certifications: 1")).toBeInTheDocument();
+      });
+    });
 
     it("should show initial certifications count", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[4])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[4]);
 
       await waitFor(() => {
-        expect(screen.getByText("Certifications: 0")).toBeInTheDocument()
-      })
-    })
-  })
+        expect(screen.getByText("Certifications: 0")).toBeInTheDocument();
+      });
+    });
+  });
 
   describe("Links Management", () => {
     it("should add link", async () => {
-      const user = userEvent.setup()
+      const user = userEvent.setup();
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[5]) // Links section
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[5]); // Links section
 
       await waitFor(async () => {
-        const addButton = screen.getByTestId("add-link-button")
-        await user.click(addButton)
-        expect(screen.getByText("Links: 1")).toBeInTheDocument()
-      })
-    })
+        const addButton = screen.getByTestId("add-link-button");
+        await user.click(addButton);
+        expect(screen.getByText("Links: 1")).toBeInTheDocument();
+      });
+    });
 
     it("should show initial links count", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[5])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[5]);
 
       await waitFor(() => {
-        expect(screen.getByText("Links: 0")).toBeInTheDocument()
-      })
-    })
-  })
+        expect(screen.getByText("Links: 0")).toBeInTheDocument();
+      });
+    });
+  });
 
   describe("Form Submission", () => {
     it("should call setUserInfo on save", async () => {
-      const user = userEvent.setup()
+      const user = userEvent.setup();
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
+      });
 
-      const saveButton = screen.getByTestId("save-button")
-      await user.click(saveButton)
+      const saveButton = screen.getByTestId("save-button");
+      await user.click(saveButton);
 
-      expect(mockSetUserInfo).toHaveBeenCalled()
-    })
+      expect(mockSetUserInfo).toHaveBeenCalled();
+    });
 
     it("should close dialog on save", async () => {
-      const user = userEvent.setup()
+      const user = userEvent.setup();
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
+      });
 
-      const saveButton = screen.getByTestId("save-button")
-      await user.click(saveButton)
+      const saveButton = screen.getByTestId("save-button");
+      await user.click(saveButton);
 
-      expect(mockOnOpenChange).toHaveBeenCalledWith(false)
-    })
+      expect(mockOnOpenChange).toHaveBeenCalledWith(false);
+    });
 
     it("should save with initial empty data", async () => {
-      const user = userEvent.setup()
+      const user = userEvent.setup();
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
+      });
 
-      const saveButton = screen.getByTestId("save-button")
-      await user.click(saveButton)
+      const saveButton = screen.getByTestId("save-button");
+      await user.click(saveButton);
 
       expect(mockSetUserInfo).toHaveBeenCalledWith({
         name: "",
@@ -454,13 +454,13 @@ describe("PersonalInfoDialog", () => {
         education: [],
         skills: [],
         certifications: [],
-      })
-    })
-  })
+      });
+    });
+  });
 
   describe("Pre-filled Data", () => {
     beforeEach(() => {
-      ;(useResumeStore as any).mockReturnValue({
+      (useResumeStore as any).mockReturnValue({
         userInfo: {
           name: "John Doe",
           email: "john@example.com",
@@ -473,147 +473,147 @@ describe("PersonalInfoDialog", () => {
           links: [{ url: "https://example.com" }],
         },
         setUserInfo: mockSetUserInfo,
-      })
-    })
+      });
+    });
 
     it("should display pre-filled basic info", () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      expect(screen.getByText("Name: John Doe")).toBeInTheDocument()
-      expect(screen.getByText("Email: john@example.com")).toBeInTheDocument()
-    })
+      });
+      expect(screen.getByText("Name: John Doe")).toBeInTheDocument();
+      expect(screen.getByText("Email: john@example.com")).toBeInTheDocument();
+    });
 
     it("should display pre-filled experiences count", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[1])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[1]);
 
       await waitFor(() => {
-        expect(screen.getByText("Experiences: 1")).toBeInTheDocument()
-      })
-    })
+        expect(screen.getByText("Experiences: 1")).toBeInTheDocument();
+      });
+    });
 
     it("should display pre-filled education count", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[2])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[2]);
 
       await waitFor(() => {
-        expect(screen.getByText("Education: 1")).toBeInTheDocument()
-      })
-    })
+        expect(screen.getByText("Education: 1")).toBeInTheDocument();
+      });
+    });
 
     it("should display pre-filled skills count", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[3])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[3]);
 
       await waitFor(() => {
-        expect(screen.getByText("Skills: 1")).toBeInTheDocument()
-      })
-    })
+        expect(screen.getByText("Skills: 1")).toBeInTheDocument();
+      });
+    });
 
     it("should display pre-filled certifications count", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[4])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[4]);
 
       await waitFor(() => {
-        expect(screen.getByText("Certifications: 1")).toBeInTheDocument()
-      })
-    })
+        expect(screen.getByText("Certifications: 1")).toBeInTheDocument();
+      });
+    });
 
     it("should display pre-filled links count", async () => {
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[5])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[5]);
 
       await waitFor(() => {
-        expect(screen.getByText("Links: 1")).toBeInTheDocument()
-      })
-    })
-  })
+        expect(screen.getByText("Links: 1")).toBeInTheDocument();
+      });
+    });
+  });
 
   describe("Multiple Additions", () => {
     it("should add multiple experiences", async () => {
-      const user = userEvent.setup()
+      const user = userEvent.setup();
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[1])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[1]);
 
       await waitFor(async () => {
-        const addButton = screen.getByTestId("add-experience-button")
-        await user.click(addButton)
-        await user.click(addButton)
-        await user.click(addButton)
-        expect(screen.getByText("Experiences: 3")).toBeInTheDocument()
-      })
-    })
+        const addButton = screen.getByTestId("add-experience-button");
+        await user.click(addButton);
+        await user.click(addButton);
+        await user.click(addButton);
+        expect(screen.getByText("Experiences: 3")).toBeInTheDocument();
+      });
+    });
 
     it("should add multiple skills", async () => {
-      const user = userEvent.setup()
+      const user = userEvent.setup();
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[3])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[3]);
 
       await waitFor(async () => {
-        const addButton = screen.getByTestId("add-skill-button")
-        await user.click(addButton)
-        await user.click(addButton)
-        expect(screen.getByText("Skills: 2")).toBeInTheDocument()
-      })
-    })
+        const addButton = screen.getByTestId("add-skill-button");
+        await user.click(addButton);
+        await user.click(addButton);
+        expect(screen.getByText("Skills: 2")).toBeInTheDocument();
+      });
+    });
 
     it("should add multiple links", async () => {
-      const user = userEvent.setup()
+      const user = userEvent.setup();
       render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
         wrapper: Wrapper,
-      })
-      const buttons = screen.getAllByTestId("sidebar-menu-button")
-      fireEvent.click(buttons[5])
+      });
+      const buttons = screen.getAllByTestId("sidebar-menu-button");
+      fireEvent.click(buttons[5]);
 
       await waitFor(async () => {
-        const addButton = screen.getByTestId("add-link-button")
-        await user.click(addButton)
-        await user.click(addButton)
-        await user.click(addButton)
-        await user.click(addButton)
-        expect(screen.getByText("Links: 4")).toBeInTheDocument()
-      })
-    })
-  })
+        const addButton = screen.getByTestId("add-link-button");
+        await user.click(addButton);
+        await user.click(addButton);
+        await user.click(addButton);
+        await user.click(addButton);
+        expect(screen.getByText("Links: 4")).toBeInTheDocument();
+      });
+    });
+  });
 
   describe("Edge Cases", () => {
     it("should handle undefined userInfo gracefully", () => {
-      ;(useResumeStore as any).mockReturnValue({
+      (useResumeStore as any).mockReturnValue({
         userInfo: {},
         setUserInfo: mockSetUserInfo,
-      })
+      });
 
       expect(() =>
         render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
           wrapper: Wrapper,
-        }),
-      ).not.toThrow()
-    })
+        })
+      ).not.toThrow();
+    });
 
     it("should handle null arrays in userInfo", () => {
-      ;(useResumeStore as any).mockReturnValue({
+      (useResumeStore as any).mockReturnValue({
         userInfo: {
           experiences: null,
           education: null,
@@ -622,13 +622,13 @@ describe("PersonalInfoDialog", () => {
           links: null,
         },
         setUserInfo: mockSetUserInfo,
-      })
+      });
 
       expect(() =>
         render(<PersonalInfoDialog open={true} onOpenChange={mockOnOpenChange} />, {
           wrapper: Wrapper,
-        }),
-      ).not.toThrow()
-    })
-  })
-})
+        })
+      ).not.toThrow();
+    });
+  });
+});

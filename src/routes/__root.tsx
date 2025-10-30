@@ -1,8 +1,8 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router"
-import { TanStackRouterDevtools } from "@tanstack/router-devtools"
-import { RootLayout } from "@/components/layouts/root-layout"
-import { NotFoundError } from "@/components/ui/route-error"
-import { useCacheCleanup } from "@/hooks/use-cache-cleanup"
+import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { RootLayout } from "@/components/layouts/root-layout";
+import { NotFoundError } from "@/components/ui/route-error";
+import { useCacheCleanup } from "@/hooks/use-cache-cleanup";
 
 /**
  * Root route component
@@ -11,7 +11,7 @@ import { useCacheCleanup } from "@/hooks/use-cache-cleanup"
 export const Route = createRootRoute({
   component: RootComponent,
   notFoundComponent: NotFoundError,
-})
+});
 
 function RootComponent() {
   // Enable automatic cache cleanup
@@ -19,7 +19,7 @@ function RootComponent() {
     enabled: true,
     interval: 1000 * 60 * 5, // 5 minutes
     logStats: import.meta.env.DEV,
-  })
+  });
 
   return (
     <>
@@ -29,5 +29,5 @@ function RootComponent() {
       {/* Show router devtools in development */}
       {import.meta.env.DEV && <TanStackRouterDevtools position="bottom-right" />}
     </>
-  )
+  );
 }

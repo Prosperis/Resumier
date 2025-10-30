@@ -1,0 +1,40 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "rules": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "style": "warn",
+    "perf": "warn"
+  },
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "jsx-a11y": {
+    "rules": {
+      "alt-text": "warn",
+      "aria-props": "error",
+      "click-events-have-key-events": "warn",
+      "no-static-element-interactions": "warn"
+    }
+  },
+  "typescript": {
+    "rules": {
+      "no-explicit-any": "warn",
+      "no-unused-vars": "error"
+    }
+  },
+  "react": {
+    "rules": {
+      "jsx-no-undef": "error",
+      "no-children-prop": "warn",
+      "react-in-jsx-scope": "off"
+    }
+  },
+  "import": {
+    "rules": {
+      "no-unused-modules": "warn"
+    }
+  }
+}

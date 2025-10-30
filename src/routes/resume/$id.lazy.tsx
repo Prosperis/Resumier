@@ -1,8 +1,8 @@
-import { createLazyFileRoute, useParams } from "@tanstack/react-router"
-import { ResumeEditor } from "@/components/features/resume/resume-editor"
-import { RouteError } from "@/components/ui/route-error"
-import { ResumeEditorLoading } from "@/components/ui/route-loading"
-import { useResume } from "@/hooks/api"
+import { createLazyFileRoute, useParams } from "@tanstack/react-router";
+import { ResumeEditor } from "@/components/features/resume/resume-editor";
+import { RouteError } from "@/components/ui/route-error";
+import { ResumeEditorLoading } from "@/components/ui/route-loading";
+import { useResume } from "@/hooks/api";
 
 /**
  * Edit resume route component (lazy loaded)
@@ -10,14 +10,14 @@ import { useResume } from "@/hooks/api"
  */
 export const Route = createLazyFileRoute("/resume/$id")({
   component: EditResumeComponent,
-})
+});
 
 function EditResumeComponent() {
-  const { id } = useParams({ from: "/resume/$id" })
-  const { data: resume, isLoading, error } = useResume(id)
+  const { id } = useParams({ from: "/resume/$id" });
+  const { data: resume, isLoading, error } = useResume(id);
 
   if (isLoading) {
-    return <ResumeEditorLoading />
+    return <ResumeEditorLoading />;
   }
 
   if (error) {
@@ -27,7 +27,7 @@ function EditResumeComponent() {
         reset={() => window.location.reload()}
         title="Failed to load resume"
       />
-    )
+    );
   }
 
   if (!resume) {
@@ -37,12 +37,12 @@ function EditResumeComponent() {
         reset={() => window.location.reload()}
         title="Resume not found"
       />
-    )
+    );
   }
 
   return (
     <div className="container mx-auto p-8">
       <ResumeEditor resume={resume} />
     </div>
-  )
+  );
 }

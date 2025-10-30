@@ -1,12 +1,12 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { renderHook, waitFor } from "@testing-library/react"
-import { beforeEach, describe, expect, it, vi } from "vitest"
-import { apiClient } from "../../../lib/api/client"
-import type { UpdateResumeDto } from "../../../lib/api/types"
-import { createMockResume } from "../test-helpers"
-import { resumeQueryKey } from "../use-resume"
-import { resumesQueryKey } from "../use-resumes"
-import { useUpdateResume } from "../use-update-resume"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { renderHook, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { apiClient } from "../../../lib/api/client";
+import type { UpdateResumeDto } from "../../../lib/api/types";
+import { createMockResume } from "../test-helpers";
+import { resumeQueryKey } from "../use-resume";
+import { resumesQueryKey } from "../use-resumes";
+import { useUpdateResume } from "../use-update-resume";
 
 // Mock the API client
 vi.mock("../../../lib/api/client", () => ({
@@ -16,10 +16,10 @@ vi.mock("../../../lib/api/client", () => ({
     put: vi.fn(),
     delete: vi.fn(),
   },
-}))
+}));
 
 describe("useUpdateResume", () => {
-  let queryClient: QueryClient
+  let queryClient: QueryClient;
 
   const createWrapper = () => {
     queryClient = new QueryClient({
@@ -31,245 +31,245 @@ describe("useUpdateResume", () => {
           retry: false,
         },
       },
-    })
+    });
 
     return ({ children }: any) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    )
-  }
+    );
+  };
 
   beforeEach(() => {
     // Mock reset handled by vitest config (clearMocks: true)
-  })
+  });
 
   it("updates a resume successfully", async () => {
-    const resumeId = "resume-123"
+    const resumeId = "resume-123";
     const updateData: UpdateResumeDto = {
       title: "Updated Title",
-    }
+    };
 
     const updatedResume = createMockResume({
       id: resumeId,
       title: "Updated Title",
-    })
-    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
+    });
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume);
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
-    })
+    });
 
     // Trigger mutation
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
     // Wait for mutation to complete
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(result.current.data).toEqual(updatedResume)
-    expect(apiClient.put).toHaveBeenCalledWith(`/api/resumes/${resumeId}`, updateData)
-  })
+    expect(result.current.data).toEqual(updatedResume);
+    expect(apiClient.put).toHaveBeenCalledWith(`/api/resumes/${resumeId}`, updateData);
+  });
 
   it("updates the resume in cache after mutation", async () => {
-    const resumeId = "resume-123"
+    const resumeId = "resume-123";
     const originalResume = createMockResume({
       id: resumeId,
       title: "Original Title",
-    })
+    });
 
     const updateData: UpdateResumeDto = {
       title: "Updated Title",
-    }
+    };
 
     const updatedResume = createMockResume({
       id: resumeId,
       title: "Updated Title",
-    })
+    });
 
     // Set original resume in cache
-    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume)
-    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
+    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume);
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume);
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
-    })
+    });
 
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
     // Wait for mutation to complete
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(result.current.data).toEqual(updatedResume)
-  })
+    expect(result.current.data).toEqual(updatedResume);
+  });
 
   it("updates resume and invalidates list cache", async () => {
-    const resumeId = "resume-2"
+    const resumeId = "resume-2";
     const resumes = [
       createMockResume({ id: "resume-1", title: "Resume 1" }),
       createMockResume({ id: resumeId, title: "Original Title" }),
       createMockResume({ id: "resume-3", title: "Resume 3" }),
-    ]
+    ];
 
     const updateData: UpdateResumeDto = {
       title: "Updated Title",
-    }
+    };
 
     const updatedResume = createMockResume({
       id: resumeId,
       title: "Updated Title",
-    })
+    });
 
     // Set resumes list in cache
-    queryClient.setQueryData(resumesQueryKey, resumes)
-    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
+    queryClient.setQueryData(resumesQueryKey, resumes);
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume);
 
-    const wrapper = createWrapper()
-    const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries")
+    const wrapper = createWrapper();
+    const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
 
-    const { result } = renderHook(() => useUpdateResume(), { wrapper })
+    const { result } = renderHook(() => useUpdateResume(), { wrapper });
 
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     // Verify invalidation was called
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: resumesQueryKey })
-  })
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: resumesQueryKey });
+  });
 
   it("handles error when update fails", async () => {
-    const resumeId = "resume-123"
+    const resumeId = "resume-123";
     const originalResume = createMockResume({
       id: resumeId,
       title: "Original Title",
-    })
+    });
 
     const updateData: UpdateResumeDto = {
       title: "Failed Update",
-    }
+    };
 
     // Set original resume in cache
-    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume)
+    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume);
 
-    const error = new Error("Update failed")
-    vi.mocked(apiClient.put).mockRejectedValueOnce(error)
+    const error = new Error("Update failed");
+    vi.mocked(apiClient.put).mockRejectedValueOnce(error);
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
-    })
+    });
 
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
-    await waitFor(() => expect(result.current.isError).toBe(true))
+    await waitFor(() => expect(result.current.isError).toBe(true));
 
     // Check error is captured
-    expect(result.current.error).toBe(error)
-  })
+    expect(result.current.error).toBe(error);
+  });
 
   it("invalidates queries after successful update", async () => {
-    const resumeId = "resume-123"
-    const updateData: UpdateResumeDto = { title: "Updated" }
-    const updatedResume = createMockResume({ id: resumeId })
-    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
+    const resumeId = "resume-123";
+    const updateData: UpdateResumeDto = { title: "Updated" };
+    const updatedResume = createMockResume({ id: resumeId });
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume);
 
-    const wrapper = createWrapper()
-    const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries")
+    const wrapper = createWrapper();
+    const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
 
-    const { result } = renderHook(() => useUpdateResume(), { wrapper })
+    const { result } = renderHook(() => useUpdateResume(), { wrapper });
 
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: resumeQueryKey(resumeId) })
-    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: resumesQueryKey })
-  })
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: resumeQueryKey(resumeId) });
+    expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: resumesQueryKey });
+  });
 
   it("handles API errors correctly", async () => {
-    const resumeId = "resume-123"
-    const updateData: UpdateResumeDto = { title: "Failed" }
-    const error = new Error("Update failed")
-    vi.mocked(apiClient.put).mockRejectedValueOnce(error)
+    const resumeId = "resume-123";
+    const updateData: UpdateResumeDto = { title: "Failed" };
+    const error = new Error("Update failed");
+    vi.mocked(apiClient.put).mockRejectedValueOnce(error);
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
-    })
+    });
 
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
-    await waitFor(() => expect(result.current.isError).toBe(true))
+    await waitFor(() => expect(result.current.isError).toBe(true));
 
-    expect(result.current.error).toBe(error)
-  })
+    expect(result.current.error).toBe(error);
+  });
 
   it("returns updated data on success", async () => {
-    const resumeId = "resume-123"
+    const resumeId = "resume-123";
     const originalResume = createMockResume({
       id: resumeId,
       updatedAt: "2024-01-01T00:00:00.000Z",
-    })
+    });
 
-    const updateData: UpdateResumeDto = { title: "Updated" }
+    const updateData: UpdateResumeDto = { title: "Updated" };
 
     const updatedResume = createMockResume({
       id: resumeId,
       title: "Updated",
       updatedAt: new Date().toISOString(),
-    })
+    });
 
-    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume)
-    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
+    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume);
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume);
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
-    })
+    });
 
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(result.current.data).toEqual(updatedResume)
-  })
+    expect(result.current.data).toEqual(updatedResume);
+  });
 
   it("handles optimistic update when resume not in cache", async () => {
-    const resumeId = "resume-new"
-    const updateData: UpdateResumeDto = { title: "Updated" }
-    const updatedResume = createMockResume({ id: resumeId, title: "Updated" })
+    const resumeId = "resume-new";
+    const updateData: UpdateResumeDto = { title: "Updated" };
+    const updatedResume = createMockResume({ id: resumeId, title: "Updated" });
     // Don't set any initial data in cache
-    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume);
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
-    })
+    });
 
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(result.current.data).toEqual(updatedResume)
-  })
+    expect(result.current.data).toEqual(updatedResume);
+  });
 
   it("handles optimistic update when list not in cache", async () => {
-    const resumeId = "resume-123"
-    const originalResume = createMockResume({ id: resumeId, title: "Original" })
-    const updateData: UpdateResumeDto = { title: "Updated" }
-    const updatedResume = createMockResume({ id: resumeId, title: "Updated" })
+    const resumeId = "resume-123";
+    const originalResume = createMockResume({ id: resumeId, title: "Original" });
+    const updateData: UpdateResumeDto = { title: "Updated" };
+    const updatedResume = createMockResume({ id: resumeId, title: "Updated" });
 
     // Set resume in cache but not the list
-    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume)
+    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume);
     // Don't set resumesQueryKey
-    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume);
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
-    })
+    });
 
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(result.current.data).toEqual(updatedResume)
-  })
+    expect(result.current.data).toEqual(updatedResume);
+  });
 
   it("merges content when updating with content field", async () => {
-    const resumeId = "resume-123"
+    const resumeId = "resume-123";
     const originalResume = createMockResume({
       id: resumeId,
       content: {
@@ -291,7 +291,7 @@ describe("useUpdateResume", () => {
         certifications: [],
         links: [],
       },
-    })
+    });
 
     const contentUpdate: UpdateResumeDto["content"] = {
       personalInfo: {
@@ -307,11 +307,11 @@ describe("useUpdateResume", () => {
         tools: [],
         soft: [],
       },
-    }
+    };
 
     const updateData: UpdateResumeDto = {
       content: contentUpdate,
-    }
+    };
 
     const updatedResume = createMockResume({
       id: resumeId,
@@ -320,47 +320,47 @@ describe("useUpdateResume", () => {
         personalInfo: contentUpdate.personalInfo!,
         skills: contentUpdate.skills!,
       },
-    })
+    });
 
-    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume)
-    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
+    queryClient.setQueryData(resumeQueryKey(resumeId), originalResume);
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume);
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
-    })
+    });
 
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(result.current.data).toEqual(updatedResume)
-  })
+    expect(result.current.data).toEqual(updatedResume);
+  });
 
   it("handles error rollback without previous resume context", async () => {
-    const resumeId = "resume-123"
-    const updateData: UpdateResumeDto = { title: "Failed" }
-    const error = new Error("Update failed")
+    const resumeId = "resume-123";
+    const updateData: UpdateResumeDto = { title: "Failed" };
+    const error = new Error("Update failed");
     // Don't set any initial data
-    vi.mocked(apiClient.put).mockRejectedValueOnce(error)
+    vi.mocked(apiClient.put).mockRejectedValueOnce(error);
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
-    })
+    });
 
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
-    await waitFor(() => expect(result.current.isError).toBe(true))
+    await waitFor(() => expect(result.current.isError).toBe(true));
 
-    expect(result.current.error).toBe(error)
-  })
+    expect(result.current.error).toBe(error);
+  });
 
   it("updates resume in list view optimistically", async () => {
-    const resumeId = "resume-2"
+    const resumeId = "resume-2";
     const resumes = [
       createMockResume({ id: "resume-1", title: "Resume 1" }),
       createMockResume({ id: resumeId, title: "Original" }),
       createMockResume({ id: "resume-3", title: "Resume 3" }),
-    ]
+    ];
 
     const contentUpdate: UpdateResumeDto["content"] = {
       personalInfo: {
@@ -370,11 +370,11 @@ describe("useUpdateResume", () => {
         location: "NY",
         summary: "Engineer",
       },
-    }
+    };
 
     const updateData: UpdateResumeDto = {
       content: contentUpdate,
-    }
+    };
 
     const updatedResume = createMockResume({
       id: resumeId,
@@ -382,20 +382,20 @@ describe("useUpdateResume", () => {
         ...resumes[1].content,
         personalInfo: contentUpdate.personalInfo!,
       },
-    })
+    });
 
-    queryClient.setQueryData(resumesQueryKey, resumes)
-    queryClient.setQueryData(resumeQueryKey(resumeId), resumes[1])
-    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume)
+    queryClient.setQueryData(resumesQueryKey, resumes);
+    queryClient.setQueryData(resumeQueryKey(resumeId), resumes[1]);
+    vi.mocked(apiClient.put).mockResolvedValueOnce(updatedResume);
 
     const { result } = renderHook(() => useUpdateResume(), {
       wrapper: createWrapper(),
-    })
+    });
 
-    result.current.mutate({ id: resumeId, data: updateData })
+    result.current.mutate({ id: resumeId, data: updateData });
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(result.current.data).toEqual(updatedResume)
-  })
-})
+    expect(result.current.data).toEqual(updatedResume);
+  });
+});

@@ -1,20 +1,20 @@
-import * as Sentry from "@sentry/react"
-import { NetworkError, parseErrorResponse } from "./errors"
-import { mockApi, useMockApi } from "./mock"
+import * as Sentry from "@sentry/react";
+import { NetworkError, parseErrorResponse } from "./errors";
+import { mockApi, useMockApi } from "./mock";
 
 /**
  * API Client Configuration
  */
 interface ApiClientConfig {
-  baseUrl: string
-  getAuthToken?: () => string | null
+  baseUrl: string;
+  getAuthToken?: () => string | null;
 }
 
 /**
  * API Request Options
  */
 interface RequestOptions extends Omit<RequestInit, "body"> {
-  body?: unknown
+  body?: unknown;
 }
 
 /**
@@ -22,12 +22,12 @@ interface RequestOptions extends Omit<RequestInit, "body"> {
  * Handles HTTP requests with automatic error handling and auth token injection
  */
 export class ApiClient {
-  private baseUrl: string
-  private getAuthToken: () => string | null
+  private baseUrl: string;
+  private getAuthToken: () => string | null;
 
   constructor(config: ApiClientConfig) {
-    this.baseUrl = config.baseUrl
-    this.getAuthToken = config.getAuthToken || (() => null)
+    this.baseUrl = config.baseUrl;
+    this.getAuthToken = config.getAuthToken || (() => null);
   }
 
   /**
@@ -36,47 +36,47 @@ export class ApiClient {
   private async request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
     // Use mock API in development
     if (useMockApi()) {
-      const result = await mockApi.route(endpoint, options.method || "GET", options.body)
-      return result as T
+      const result = await mockApi.route(endpoint, options.method || "GET", options.body);
+      return result as T;
     }
 
     // Real API request
-    const url = `${this.baseUrl}${endpoint}`
+    const url = `${this.baseUrl}${endpoint}`;
 
     // Build headers
     const headers: HeadersInit = {
       "Content-Type": "application/json",
       ...options.headers,
-    }
+    };
 
     // Add auth token if available
-    const token = this.getAuthToken()
+    const token = this.getAuthToken();
     if (token) {
-      headers.Authorization = `Bearer ${token}`
+      headers.Authorization = `Bearer ${token}`;
     }
 
     // Build request init
     const init: RequestInit = {
       ...options,
       headers,
-    }
+    };
 
     // Stringify body if present
     if (options.body !== undefined) {
-      init.body = JSON.stringify(options.body)
+      init.body = JSON.stringify(options.body);
     }
 
     try {
       // Make request
-      const response = await fetch(url, init)
+      const response = await fetch(url, init);
 
       // Handle non-2xx responses
       if (!response.ok) {
-        let errorData: unknown
+        let errorData: unknown;
         try {
-          errorData = await response.json()
+          errorData = await response.json();
         } catch {
-          errorData = { message: response.statusText }
+          errorData = { message: response.statusText };
         }
 
         // Track API errors in Sentry
@@ -94,33 +94,33 @@ export class ApiClient {
             statusText: response.statusText,
             errorData,
           },
-        })
+        });
 
-        parseErrorResponse(response.status, errorData)
+        parseErrorResponse(response.status, errorData);
       }
 
       // Parse response
       // Handle 204 No Content
       if (response.status === 204) {
-        return undefined as T
+        return undefined as T;
       }
 
       // Try to parse JSON
-      const contentType = response.headers.get("content-type")
+      const contentType = response.headers.get("content-type");
       if (contentType?.includes("application/json")) {
-        return await response.json()
+        return await response.json();
       }
 
       // Return response as-is for non-JSON responses
-      return (await response.text()) as T
+      return (await response.text()) as T;
     } catch (error) {
       // Handle network errors
       if (error instanceof TypeError) {
-        throw new NetworkError("Network request failed. Please check your connection.")
+        throw new NetworkError("Network request failed. Please check your connection.");
       }
 
       // Re-throw API errors
-      throw error
+      throw error;
     }
   }
 
@@ -131,7 +131,7 @@ export class ApiClient {
     return this.request<T>(endpoint, {
       ...options,
       method: "GET",
-    })
+    });
   }
 
   /**
@@ -142,7 +142,7 @@ export class ApiClient {
       ...options,
       method: "POST",
       body,
-    })
+    });
   }
 
   /**
@@ -153,7 +153,7 @@ export class ApiClient {
       ...options,
       method: "PUT",
       body,
-    })
+    });
   }
 
   /**
@@ -164,7 +164,7 @@ export class ApiClient {
       ...options,
       method: "PATCH",
       body,
-    })
+    });
   }
 
   /**
@@ -174,7 +174,7 @@ export class ApiClient {
     return this.request<T>(endpoint, {
       ...options,
       method: "DELETE",
-    })
+    });
   }
 }
 
@@ -187,14 +187,14 @@ export const apiClient = new ApiClient({
   getAuthToken: () => {
     // Get token from localStorage (where auth store persists it)
     try {
-      const authState = localStorage.getItem("auth-storage")
+      const authState = localStorage.getItem("auth-storage");
       if (authState) {
-        const parsed = JSON.parse(authState)
-        return parsed?.state?.user?.token || null
+        const parsed = JSON.parse(authState);
+        return parsed?.state?.user?.token || null;
       }
     } catch {
       // Ignore errors
     }
-    return null
+    return null;
   },
-})
+});

@@ -3,13 +3,13 @@
  * Type definitions for resume templates
  */
 
-export type TemplateType = "modern" | "classic" | "minimal"
+export type TemplateType = "modern" | "classic" | "minimal";
 
 export interface TemplateInfo {
-  id: TemplateType
-  name: string
-  description: string
-  preview?: string
+  id: TemplateType;
+  name: string;
+  description: string;
+  preview?: string;
 }
 
 export const TEMPLATES: TemplateInfo[] = [
@@ -28,4 +28,4 @@ export const TEMPLATES: TemplateInfo[] = [
     name: "Minimal",
     description: "Ultra-clean design with lots of white space",
   },
-]
+];

@@ -1,14 +1,14 @@
-import "@testing-library/jest-dom/vitest"
-import { vi } from "vitest"
+import "@testing-library/jest-dom/vitest";
+import { vi } from "vitest";
 
 // Helper function for mocking (replaces vi.mocked from newer Vitest versions)
 export function mocked<T>(fn: T): T {
-  return fn
+  return fn;
 }
 
 // Add mocked to vi namespace for compatibility
 if (!("mocked" in vi)) {
-  Object.assign(vi, { mocked })
+  Object.assign(vi, { mocked });
 }
 
 // Mock matchMedia BEFORE any imports (for Framer Motion)
@@ -21,29 +21,29 @@ const mockMatchMedia = vi.fn((query: string) => ({
   addListener: vi.fn(), // deprecated
   removeListener: vi.fn(), // deprecated
   dispatchEvent: vi.fn(),
-}))
+}));
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,
   configurable: true,
   value: mockMatchMedia,
-})
+});
 
 // Also set on global for Framer Motion
-global.matchMedia = mockMatchMedia
+global.matchMedia = mockMatchMedia;
 
 // Mock ResizeObserver for Framer Motion
 class MockResizeObserver {
   constructor(callback: ResizeObserverCallback) {
-    this.callback = callback
+    this.callback = callback;
   }
-  callback: ResizeObserverCallback
-  observe = vi.fn()
-  unobserve = vi.fn()
-  disconnect = vi.fn()
+  callback: ResizeObserverCallback;
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: test environment requires global mock
-global.ResizeObserver = MockResizeObserver as any
+global.ResizeObserver = MockResizeObserver as any;
 // @ts-expect-error - global mock
-window.ResizeObserver = MockResizeObserver
+window.ResizeObserver = MockResizeObserver;

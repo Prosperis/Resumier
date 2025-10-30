@@ -1,21 +1,21 @@
-import { AlertCircle, Plus } from "lucide-react"
-import { FadeIn } from "@/components/ui/animated"
-import { Button } from "@/components/ui/button"
-import { RouteLoadingFallback } from "@/components/ui/route-loading"
-import { useDuplicateResume, useResumes } from "@/hooks/api"
-import { useToast } from "@/hooks/use-toast"
-import type { Resume } from "@/lib/api/types"
-import { CreateResumeDialog } from "./mutations"
-import { ResumeTable } from "./resume-table"
+import { AlertCircle, Plus } from "lucide-react";
+import { FadeIn } from "@/components/ui/animated";
+import { Button } from "@/components/ui/button";
+import { RouteLoadingFallback } from "@/components/ui/route-loading";
+import { useDuplicateResume, useResumes } from "@/hooks/api";
+import { useToast } from "@/hooks/use-toast";
+import type { Resume } from "@/lib/api/types";
+import { CreateResumeDialog } from "./mutations";
+import { ResumeTable } from "./resume-table";
 
 interface ResumeDashboardProps {
-  onResumeClick?: (id: string) => void
+  onResumeClick?: (id: string) => void;
 }
 
 export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
-  const { data: resumes, isLoading, error } = useResumes()
-  const { mutate: duplicateResume } = useDuplicateResume()
-  const { toast } = useToast()
+  const { data: resumes, isLoading, error } = useResumes();
+  const { mutate: duplicateResume } = useDuplicateResume();
+  const { toast } = useToast();
 
   // Handle duplicate action
   const handleDuplicate = (resume: Resume) => {
@@ -24,7 +24,7 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
         toast({
           title: "Success",
           description: `Resume "${newResume.title}" has been created`,
-        })
+        });
         // Optionally navigate to the new resume
         // onResumeClick?.(newResume.id)
       },
@@ -33,31 +33,31 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
           title: "Error",
           description: err instanceof Error ? err.message : "Failed to duplicate resume",
           variant: "destructive",
-        })
+        });
       },
-    })
-  }
+    });
+  };
 
   if (isLoading) {
-    return <RouteLoadingFallback message="Loading your resumes..." />
+    return <RouteLoadingFallback message="Loading your resumes..." />;
   }
 
   if (error) {
     return (
       <div className="p-4">
-        <div className="rounded-lg border border-destructive bg-destructive/10 p-4" role="alert">
+        <div className="border-destructive bg-destructive/10 rounded-lg border p-4" role="alert">
           <div className="flex items-start gap-3">
-            <AlertCircle className="h-5 w-5 text-destructive mt-0.5" aria-hidden="true" />
+            <AlertCircle className="text-destructive mt-0.5 h-5 w-5" aria-hidden="true" />
             <div>
-              <h3 className="font-semibold text-destructive">Failed to load resumes</h3>
-              <p className="text-sm text-destructive/90 mt-1">
+              <h3 className="text-destructive font-semibold">Failed to load resumes</h3>
+              <p className="text-destructive/90 mt-1 text-sm">
                 {error instanceof Error ? error.message : "Unknown error"}
               </p>
             </div>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   // Empty state
@@ -66,8 +66,8 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
       <div className="p-4">
         <FadeIn>
           <div className="rounded-lg border-2 border-dashed p-12 text-center">
-            <h3 className="text-lg font-semibold mb-2">No resumes yet</h3>
-            <p className="text-sm text-muted-foreground mb-4">
+            <h3 className="mb-2 text-lg font-semibold">No resumes yet</h3>
+            <p className="text-muted-foreground mb-4 text-sm">
               Create your first resume to get started
             </p>
             <CreateResumeDialog
@@ -82,12 +82,12 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
           </div>
         </FadeIn>
       </div>
-    )
+    );
   }
 
   return (
     <FadeIn>
-      <div className="p-4 space-y-4">
+      <div className="space-y-4 p-4">
         {/* Header with create button */}
         <div className="flex items-center justify-between">
           <div>
@@ -113,5 +113,5 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
         />
       </div>
     </FadeIn>
-  )
+  );
 }

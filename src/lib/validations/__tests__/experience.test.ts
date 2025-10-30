@@ -1,10 +1,10 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it } from "vitest";
 import {
   type CreateExperienceFormData,
   createExperienceSchema,
   type ExperienceFormData,
   experienceSchema,
-} from "../experience"
+} from "../experience";
 
 describe("experienceSchema", () => {
   describe("Valid Data", () => {
@@ -18,10 +18,10 @@ describe("experienceSchema", () => {
         current: false,
         description: "Led development of web applications",
         highlights: ["Built React app", "Mentored team"],
-      }
-      const result = experienceSchema.safeParse(validData)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = experienceSchema.safeParse(validData);
+      expect(result.success).toBe(true);
+    });
 
     it("validates current position without end date", () => {
       const data = {
@@ -30,10 +30,10 @@ describe("experienceSchema", () => {
         position: "Developer",
         startDate: "2023-01",
         current: true,
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
 
     it("validates with empty optional fields", () => {
       const data = {
@@ -43,10 +43,10 @@ describe("experienceSchema", () => {
         startDate: "2020-01",
         endDate: "2021-01",
         description: "",
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
 
     it("validates with omitted optional fields", () => {
       const data = {
@@ -55,10 +55,10 @@ describe("experienceSchema", () => {
         position: "Position",
         startDate: "2020-01",
         endDate: "2021-01",
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
 
     it("validates with empty highlights array", () => {
       const data = {
@@ -68,11 +68,11 @@ describe("experienceSchema", () => {
         startDate: "2020-01",
         endDate: "2021-01",
         highlights: [],
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
-  })
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
+  });
 
   describe("Invalid Data", () => {
     it("fails when company is missing", () => {
@@ -81,13 +81,13 @@ describe("experienceSchema", () => {
         position: "Developer",
         startDate: "2020-01",
         endDate: "2021-01",
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(false)
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain("company")
+        expect(result.error.issues[0].path).toContain("company");
       }
-    })
+    });
 
     it("fails when position is missing", () => {
       const data = {
@@ -95,13 +95,13 @@ describe("experienceSchema", () => {
         company: "Company",
         startDate: "2020-01",
         endDate: "2021-01",
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(false)
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain("position")
+        expect(result.error.issues[0].path).toContain("position");
       }
-    })
+    });
 
     it("fails when start date is missing", () => {
       const data = {
@@ -109,13 +109,13 @@ describe("experienceSchema", () => {
         company: "Company",
         position: "Developer",
         endDate: "2021-01",
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(false)
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain("startDate")
+        expect(result.error.issues[0].path).toContain("startDate");
       }
-    })
+    });
 
     it("fails when end date is missing for past position", () => {
       const data = {
@@ -124,13 +124,13 @@ describe("experienceSchema", () => {
         position: "Developer",
         startDate: "2020-01",
         current: false,
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(false)
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toBe("End date is required for past positions")
+        expect(result.error.issues[0].message).toBe("End date is required for past positions");
       }
-    })
+    });
 
     it("fails when description exceeds 1000 characters", () => {
       const data = {
@@ -140,13 +140,13 @@ describe("experienceSchema", () => {
         startDate: "2020-01",
         endDate: "2021-01",
         description: "a".repeat(1001),
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(false)
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toContain("description")
+        expect(result.error.issues[0].path).toContain("description");
       }
-    })
+    });
 
     it("fails when company is empty string", () => {
       const data = {
@@ -155,10 +155,10 @@ describe("experienceSchema", () => {
         position: "Developer",
         startDate: "2020-01",
         endDate: "2021-01",
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(false)
-    })
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(false);
+    });
 
     it("fails when position is empty string", () => {
       const data = {
@@ -167,11 +167,11 @@ describe("experienceSchema", () => {
         position: "",
         startDate: "2020-01",
         endDate: "2021-01",
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(false)
-    })
-  })
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(false);
+    });
+  });
 
   describe("Edge Cases", () => {
     it("accepts description at exactly 1000 characters", () => {
@@ -182,10 +182,10 @@ describe("experienceSchema", () => {
         startDate: "2020-01",
         endDate: "2021-01",
         description: "a".repeat(1000),
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
 
     it("validates with current=true and empty end date", () => {
       const data = {
@@ -195,10 +195,10 @@ describe("experienceSchema", () => {
         startDate: "2020-01",
         endDate: "",
         current: true,
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
 
     it("validates with multiple highlights", () => {
       const data = {
@@ -208,12 +208,12 @@ describe("experienceSchema", () => {
         startDate: "2020-01",
         endDate: "2021-01",
         highlights: ["Achievement 1", "Achievement 2", "Achievement 3"],
-      }
-      const result = experienceSchema.safeParse(data)
-      expect(result.success).toBe(true)
-    })
-  })
-})
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
+  });
+});
 
 describe("createExperienceSchema", () => {
   it("validates new experience without ID", () => {
@@ -222,10 +222,10 @@ describe("createExperienceSchema", () => {
       position: "Junior Developer",
       startDate: "2023-01",
       current: true,
-    }
-    const result = createExperienceSchema.safeParse(validData)
-    expect(result.success).toBe(true)
-  })
+    };
+    const result = createExperienceSchema.safeParse(validData);
+    expect(result.success).toBe(true);
+  });
 
   it("fails when ID is provided", () => {
     const data = {
@@ -234,15 +234,15 @@ describe("createExperienceSchema", () => {
       position: "Developer",
       startDate: "2020-01",
       endDate: "2021-01",
-    }
-    const result = createExperienceSchema.safeParse(data)
+    };
+    const result = createExperienceSchema.safeParse(data);
     // Should succeed but ID will be ignored
-    expect(result.success).toBe(true)
+    expect(result.success).toBe(true);
     if (result.success) {
       // @ts-expect-error - ID should not be in the parsed data
-      expect(result.data.id).toBeUndefined()
+      expect(result.data.id).toBeUndefined();
     }
-  })
+  });
 
   it("validates complete data without ID", () => {
     const data = {
@@ -252,8 +252,8 @@ describe("createExperienceSchema", () => {
       endDate: "2021-01",
       description: "Description",
       highlights: ["Highlight 1"],
-    }
-    const result = createExperienceSchema.safeParse(data)
-    expect(result.success).toBe(true)
-  })
-})
+    };
+    const result = createExperienceSchema.safeParse(data);
+    expect(result.success).toBe(true);
+  });
+});

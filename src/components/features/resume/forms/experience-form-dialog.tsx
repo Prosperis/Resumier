@@ -1,9 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { PlusIcon, XIcon } from "lucide-react"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PlusIcon, XIcon } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -11,7 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -20,18 +20,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { type CreateExperienceFormData, createExperienceSchema } from "@/lib/validations/experience"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  type CreateExperienceFormData,
+  createExperienceSchema,
+} from "@/lib/validations/experience";
 
 interface ExperienceFormDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onSubmit: (values: CreateExperienceFormData) => void
-  defaultValues?: Partial<CreateExperienceFormData>
-  title?: string
-  description?: string
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (values: CreateExperienceFormData) => void;
+  defaultValues?: Partial<CreateExperienceFormData>;
+  title?: string;
+  description?: string;
 }
 
 export function ExperienceFormDialog({
@@ -42,7 +45,7 @@ export function ExperienceFormDialog({
   title = "Add Experience",
   description = "Add your work experience details.",
 }: ExperienceFormDialogProps) {
-  const [highlights, setHighlights] = useState<string[]>(defaultValues?.highlights || [""])
+  const [highlights, setHighlights] = useState<string[]>(defaultValues?.highlights || [""]);
 
   const form = useForm<CreateExperienceFormData>({
     resolver: zodResolver(createExperienceSchema),
@@ -56,32 +59,32 @@ export function ExperienceFormDialog({
       highlights: [],
       ...defaultValues,
     },
-  })
+  });
 
-  const isCurrent = form.watch("current")
+  const isCurrent = form.watch("current");
 
   const handleSubmit = (values: CreateExperienceFormData) => {
     // Filter out empty highlights
-    const filteredHighlights = highlights.filter((h) => h.trim() !== "")
-    onSubmit({ ...values, highlights: filteredHighlights })
-    onOpenChange(false)
-    form.reset()
-    setHighlights([""])
-  }
+    const filteredHighlights = highlights.filter((h) => h.trim() !== "");
+    onSubmit({ ...values, highlights: filteredHighlights });
+    onOpenChange(false);
+    form.reset();
+    setHighlights([""]);
+  };
 
   const addHighlight = () => {
-    setHighlights([...highlights, ""])
-  }
+    setHighlights([...highlights, ""]);
+  };
 
   const removeHighlight = (index: number) => {
-    setHighlights(highlights.filter((_, i) => i !== index))
-  }
+    setHighlights(highlights.filter((_, i) => i !== index));
+  };
 
   const updateHighlight = (index: number, value: string) => {
-    const newHighlights = [...highlights]
-    newHighlights[index] = value
-    setHighlights(newHighlights)
-  }
+    const newHighlights = [...highlights];
+    newHighlights[index] = value;
+    setHighlights(newHighlights);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -159,14 +162,14 @@ export function ExperienceFormDialog({
               control={form.control}
               name="current"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormItem className="flex flex-row items-start space-y-0 space-x-3">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
                       onCheckedChange={(checked) => {
-                        field.onChange(checked)
+                        field.onChange(checked);
                         if (checked) {
-                          form.setValue("endDate", "")
+                          form.setValue("endDate", "");
                         }
                       }}
                     />
@@ -243,5 +246,5 @@ export function ExperienceFormDialog({
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

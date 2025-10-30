@@ -1,9 +1,9 @@
-import { zodResolver } from "@hookform/resolvers/zod"
-import { PlusIcon, XIcon } from "lucide-react"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PlusIcon, XIcon } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -11,7 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -20,17 +20,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { type CreateEducationFormData, createEducationSchema } from "@/lib/validations/education"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { type CreateEducationFormData, createEducationSchema } from "@/lib/validations/education";
 
 interface EducationFormDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  onSubmit: (values: CreateEducationFormData) => void
-  defaultValues?: Partial<CreateEducationFormData>
-  title?: string
-  description?: string
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (values: CreateEducationFormData) => void;
+  defaultValues?: Partial<CreateEducationFormData>;
+  title?: string;
+  description?: string;
 }
 
 export function EducationFormDialog({
@@ -41,7 +41,7 @@ export function EducationFormDialog({
   title = "Add Education",
   description = "Add your education details.",
 }: EducationFormDialogProps) {
-  const [honors, setHonors] = useState<string[]>(defaultValues?.honors || [])
+  const [honors, setHonors] = useState<string[]>(defaultValues?.honors || []);
 
   const form = useForm<CreateEducationFormData>({
     resolver: zodResolver(createEducationSchema),
@@ -56,32 +56,32 @@ export function EducationFormDialog({
       honors: [],
       ...defaultValues,
     },
-  })
+  });
 
-  const isCurrent = form.watch("current")
+  const isCurrent = form.watch("current");
 
   const handleSubmit = (values: CreateEducationFormData) => {
     // Filter out empty honors
-    const filteredHonors = honors.filter((h) => h.trim() !== "")
-    onSubmit({ ...values, honors: filteredHonors })
-    onOpenChange(false)
-    form.reset()
-    setHonors([])
-  }
+    const filteredHonors = honors.filter((h) => h.trim() !== "");
+    onSubmit({ ...values, honors: filteredHonors });
+    onOpenChange(false);
+    form.reset();
+    setHonors([]);
+  };
 
   const addHonor = () => {
-    setHonors([...honors, ""])
-  }
+    setHonors([...honors, ""]);
+  };
 
   const removeHonor = (index: number) => {
-    setHonors(honors.filter((_, i) => i !== index))
-  }
+    setHonors(honors.filter((_, i) => i !== index));
+  };
 
   const updateHonor = (index: number, value: string) => {
-    const newHonors = [...honors]
-    newHonors[index] = value
-    setHonors(newHonors)
-  }
+    const newHonors = [...honors];
+    newHonors[index] = value;
+    setHonors(newHonors);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -175,14 +175,14 @@ export function EducationFormDialog({
               control={form.control}
               name="current"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormItem className="flex flex-row items-start space-y-0 space-x-3">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
                       onCheckedChange={(checked) => {
-                        field.onChange(checked)
+                        field.onChange(checked);
                         if (checked) {
-                          form.setValue("endDate", "")
+                          form.setValue("endDate", "");
                         }
                       }}
                     />
@@ -250,5 +250,5 @@ export function EducationFormDialog({
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
