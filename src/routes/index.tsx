@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
-import { useState } from "react"
 import { ArrowRight, Cloud, Download, FileText, Sparkles, Zap } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react"
 import { AuthModal } from "@/components/features/auth/auth-modal"
+import { Button } from "@/components/ui/button"
 
 /**
  * Index (home) route
