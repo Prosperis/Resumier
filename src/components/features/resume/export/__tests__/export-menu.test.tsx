@@ -13,8 +13,13 @@ vi.mock("@/hooks/use-toast", () => ({
 }))
 
 // Mock export utils
-vi.mock("./export-utils", () => ({
+vi.mock("@/components/features/resume/export/export-utils", () => ({
   printResume: vi.fn(),
+  downloadDOCX: vi.fn(),
+  downloadHTML: vi.fn(),
+  downloadMarkdown: vi.fn(),
+  downloadPlainText: vi.fn(),
+  downloadJSON: vi.fn(),
 }))
 
 describe("ExportMenu", () => {
@@ -56,17 +61,33 @@ describe("ExportMenu", () => {
     const exportButton = screen.getByRole("button", { name: /export/i })
     await user.click(exportButton)
 
-    expect(screen.getByText("Export Options")).toBeInTheDocument()
+    expect(screen.getByText("Export Formats")).toBeInTheDocument()
   })
 
-  it("should display PDF download option", async () => {
+  it("should display all export format options", async () => {
     const user = userEvent.setup()
     render(<ExportMenu resume={mockResume} />)
 
     const exportButton = screen.getByRole("button", { name: /export/i })
     await user.click(exportButton)
 
-    expect(screen.getByText("Download as PDF")).toBeInTheDocument()
+    // Check for all format options
+    expect(screen.getByText("PDF")).toBeInTheDocument()
+    expect(screen.getByText("Word Document")).toBeInTheDocument()
+    expect(screen.getByText("HTML")).toBeInTheDocument()
+    expect(screen.getByText("Markdown")).toBeInTheDocument()
+    expect(screen.getByText("Plain Text")).toBeInTheDocument()
+    expect(screen.getByText("JSON")).toBeInTheDocument()
+  })
+
+  it("should display PDF download option with description", async () => {
+    const user = userEvent.setup()
+    render(<ExportMenu resume={mockResume} />)
+
+    const exportButton = screen.getByRole("button", { name: /export/i })
+    await user.click(exportButton)
+
+    expect(screen.getByText("PDF")).toBeInTheDocument()
     expect(screen.getByText("Via browser print dialog")).toBeInTheDocument()
   })
 
@@ -105,10 +126,55 @@ describe("ExportMenu", () => {
     const exportButton = screen.getByRole("button", { name: /export/i })
     await user.click(exportButton)
 
-    const downloadOption = screen.getByText("Download as PDF")
+    const downloadOption = screen.getByText("PDF")
     await user.click(downloadOption)
 
     expect(printResumeSpy).toHaveBeenCalledWith("Software Engineer Resume")
+  })
+
+  it("should call downloadDOCX when Word Document is clicked", async () => {
+    const user = userEvent.setup()
+    const downloadDOCXSpy = vi.spyOn(exportUtils, "downloadDOCX")
+
+    render(<ExportMenu resume={mockResume} />)
+
+    const exportButton = screen.getByRole("button", { name: /export/i })
+    await user.click(exportButton)
+
+    const wordOption = screen.getByText("Word Document")
+    await user.click(wordOption)
+
+    expect(downloadDOCXSpy).toHaveBeenCalledWith(mockResume)
+  })
+
+  it("should call downloadMarkdown when Markdown is clicked", async () => {
+    const user = userEvent.setup()
+    const downloadMarkdownSpy = vi.spyOn(exportUtils, "downloadMarkdown")
+
+    render(<ExportMenu resume={mockResume} />)
+
+    const exportButton = screen.getByRole("button", { name: /export/i })
+    await user.click(exportButton)
+
+    const markdownOption = screen.getByText("Markdown")
+    await user.click(markdownOption)
+
+    expect(downloadMarkdownSpy).toHaveBeenCalledWith(mockResume)
+  })
+
+  it("should call downloadJSON when JSON is clicked", async () => {
+    const user = userEvent.setup()
+    const downloadJSONSpy = vi.spyOn(exportUtils, "downloadJSON")
+
+    render(<ExportMenu resume={mockResume} />)
+
+    const exportButton = screen.getByRole("button", { name: /export/i })
+    await user.click(exportButton)
+
+    const jsonOption = screen.getByText("JSON")
+    await user.click(jsonOption)
+
+    expect(downloadJSONSpy).toHaveBeenCalledWith(mockResume)
   })
 
   it("should render with different resume title", () => {
