@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
   Cloud,
@@ -105,23 +105,6 @@ function IndexComponent() {
               anywhere, anytime.
             </p>
           </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="bg-muted/50 space-y-4 rounded-lg border p-8 text-center">
-          <h3 className="text-2xl font-semibold">
-            Ready to create your resume?
-          </h3>
-          <p className="text-muted-foreground mx-auto max-w-2xl">
-            Join thousands of job seekers who have built their perfect resume
-            with Resumier. Start for free today!
-          </p>
-          <Link to="/resume/new">
-            <Button size="lg" className="mt-4">
-              Create Your Resume
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
         </div>
       </div>
     </div>

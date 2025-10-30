@@ -145,34 +145,6 @@ describe("Index Route", () => {
     });
   });
 
-  describe("CTA Section", () => {
-    it("renders the CTA heading", () => {
-      renderIndexRoute();
-
-      expect(
-        screen.getByRole("heading", { name: /ready to create your resume/i }),
-      ).toBeInTheDocument();
-    });
-
-    it("renders the CTA description", () => {
-      renderIndexRoute();
-
-      expect(
-        screen.getByText(/join thousands of job seekers/i),
-      ).toBeInTheDocument();
-    });
-
-    it("renders Create Your Resume button with link", () => {
-      renderIndexRoute();
-
-      const createButton = screen.getByRole("link", {
-        name: /create your resume/i,
-      });
-      expect(createButton).toBeInTheDocument();
-      expect(createButton).toHaveAttribute("href", "/resume/new");
-    });
-  });
-
   describe("Layout", () => {
     it("renders within a container", () => {
       const { container } = renderIndexRoute();
@@ -191,14 +163,9 @@ describe("Index Route", () => {
       const featuresHeading = screen.getByRole("heading", {
         name: /multiple templates/i,
       });
-      // CTA section heading
-      const ctaHeading = screen.getByRole("heading", {
-        name: /ready to create your resume/i,
-      });
 
       expect(heroHeading).toBeInTheDocument();
       expect(featuresHeading).toBeInTheDocument();
-      expect(ctaHeading).toBeInTheDocument();
     });
 
     it("uses proper heading hierarchy", () => {
@@ -206,11 +173,9 @@ describe("Index Route", () => {
 
       const h1 = screen.getByRole("heading", { level: 1 });
       const h2s = screen.getAllByRole("heading", { level: 2 });
-      const h3 = screen.getByRole("heading", { level: 3 });
 
       expect(h1).toBeInTheDocument();
       expect(h2s.length).toBeGreaterThan(0);
-      expect(h3).toBeInTheDocument();
     });
   });
 
