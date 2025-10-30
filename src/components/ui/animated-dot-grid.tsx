@@ -25,6 +25,7 @@ export function AnimatedDotGrid({
   const mouseRef = useRef({ x: -1000, y: -1000 })
   const animationFrameRef = useRef<number | undefined>(undefined)
   const isAnimatingRef = useRef(false)
+  const lastUpdateTimeRef = useRef(0)
   const { theme } = useTheme()
 
   useEffect(() => {
@@ -59,6 +60,9 @@ export function AnimatedDotGrid({
       // Create dot elements with performance optimizations
       const fragment = document.createDocumentFragment()
       
+      // Pre-calculate styles that don't change
+      const staticStyles = `width: ${dotSize}px; height: ${dotSize}px; transform: translate(-50%, -50%); will-change: transform; contain: layout style paint;`
+      
       for (let i = 0; i < cols; i++) {
         for (let j = 0; j < rows; j++) {
           const x = i * dotSpacing + dotSpacing / 2
@@ -67,18 +71,11 @@ export function AnimatedDotGrid({
           const dot = document.createElement("div")
           dot.className = "dot absolute rounded-full pointer-events-none"
           
-          // Batch style updates
-          const styles = [
-            `width: ${dotSize}px`,
-            `height: ${dotSize}px`,
-            `left: ${x}px`,
-            `top: ${y}px`,
-            "transform: translate(-50%, -50%)",
-            "will-change: transform",
-            "contain: layout style paint",
-          ].join("; ")
-          
-          dot.style.cssText = styles
+          // Apply static styles + position
+          dot.style.cssText = `${staticStyles} left: ${x}px; top: ${y}px;`
+
+          // Add dot to fragment
+          fragment.appendChild(dot)
 
           dots.push({
             x,
@@ -109,11 +106,25 @@ export function AnimatedDotGrid({
       }
     }
 
-    const animateDots = () => {
+    const animateDots = (timestamp: number) => {
+      // Throttle to 60fps max (16ms per frame)
+      if (timestamp - lastUpdateTimeRef.current < 16) {
+        animationFrameRef.current = requestAnimationFrame(animateDots)
+        return
+      }
+      lastUpdateTimeRef.current = timestamp
+
       const mouseX = mouseRef.current.x
       const mouseY = mouseRef.current.y
 
+      // Pre-calculate inverse wave radius for performance
+      const invWaveRadius = 1 / waveRadius
+      const invWaveIntensity = 1 / waveIntensity
+
       // Batch DOM updates for better performance
+      // Only update dots within a reasonable distance to reduce calculations
+      const maxCheckDistanceSq = waveRadiusSq * 4 // Check 2x the wave radius
+
       for (let i = 0; i < dotsRef.current.length; i++) {
         const dot = dotsRef.current[i]
         if (!dot.element) continue
@@ -122,17 +133,20 @@ export function AnimatedDotGrid({
         const dy = mouseY - dot.baseY
         const distanceSq = dx * dx + dy * dy
 
+        // Skip dots that are too far away (optimization)
+        if (distanceSq > maxCheckDistanceSq) continue
+
         // Use squared distance to avoid expensive sqrt
         if (distanceSq < waveRadiusSq) {
-          // Only calculate sqrt when needed
+          // Only calculate sqrt and trig when needed
           const distance = Math.sqrt(distanceSq)
-          const force = (1 - distance / waveRadius) * waveIntensity
+          const force = (1 - distance * invWaveRadius) * waveIntensity
           const angle = Math.atan2(dy, dx)
 
           // Apply transform directly for smooth animation
           const translateX = Math.cos(angle) * force
           const translateY = Math.sin(angle) * force
-          const scale = 1 + (force / waveIntensity) * 0.5
+          const scale = 1 + force * invWaveIntensity * 0.5
           
           // Use will-change for optimization hint
           dot.element.style.transform = `translate(calc(-50% + ${translateX}px), calc(-50% + ${translateY}px)) scale(${scale})`
@@ -157,9 +171,7 @@ export function AnimatedDotGrid({
         // Throttle animations - only start if not already animating
         if (!isAnimatingRef.current) {
           isAnimatingRef.current = true
-          animationFrameRef.current = requestAnimationFrame(() => {
-            animateDots()
-          })
+          animationFrameRef.current = requestAnimationFrame(animateDots)
         }
       }
     }
@@ -169,10 +181,12 @@ export function AnimatedDotGrid({
       mouseRef.current = { x: -1000, y: -1000 }
 
       // Reset all dots to original position
-      dotsRef.current.forEach((dot) => {
-        if (!dot.element) return
-        dot.element.style.transform = "translate(-50%, -50%) scale(1)"
-      })
+      for (let i = 0; i < dotsRef.current.length; i++) {
+        const dot = dotsRef.current[i]
+        if (dot.element) {
+          dot.element.style.transform = "translate(-50%, -50%) scale(1)"
+        }
+      }
     }
 
     // Initialize
