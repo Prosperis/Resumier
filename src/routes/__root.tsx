@@ -1,5 +1,5 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { RootLayout } from "@/components/layouts/root-layout";
 import { NotFoundError } from "@/components/ui/route-error";
 import { useCacheCleanup } from "@/hooks/use-cache-cleanup";

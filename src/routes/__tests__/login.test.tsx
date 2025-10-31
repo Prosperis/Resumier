@@ -12,6 +12,11 @@ vi.mock("@/stores", () => ({
 vi.mock("@tanstack/react-router", () => ({
   createFileRoute: vi.fn(() => (config: any) => ({ ...config })),
   createLazyFileRoute: vi.fn(() => (config: any) => ({ ...config })),
+  Navigate: ({ to, ...props }: any) => (
+    <div data-testid="navigate" data-to={to} {...props}>
+      Navigate to {to}
+    </div>
+  ),
   Link: ({ to, children, ...props }: any) => (
     <a href={to} {...props}>
       {children}

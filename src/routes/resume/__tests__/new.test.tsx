@@ -16,6 +16,7 @@ vi.mock("@tanstack/react-router", () => ({
     ...config,
     options: config,
   })),
+  useNavigate: vi.fn(() => vi.fn()),
 }));
 
 vi.mock("@/components/features/resume/resume-builder", () => ({
@@ -33,6 +34,19 @@ vi.mock("@/components/ui/route-error", () => ({
 
 vi.mock("@/components/ui/route-loading", () => ({
   ResumeEditorLoading: () => <div data-testid="resume-loading">Loading...</div>,
+}));
+
+vi.mock("@/hooks/use-toast", () => ({
+  useToast: vi.fn(() => ({
+    toast: vi.fn(),
+  })),
+}));
+
+vi.mock("@/hooks/api", () => ({
+  useCreateResume: vi.fn(() => ({
+    mutate: vi.fn(),
+    isPending: false,
+  })),
 }));
 
 // Import the route module after setting up mocks
@@ -76,14 +90,14 @@ describe("New Resume Route (/resume/new)", () => {
       renderNewResumeRoute();
       expect(
         screen.getByText(
-          "Fill in your information to create a professional resume",
+          "Enter a title for your resume to get started",
         ),
       ).toBeInTheDocument();
     });
 
-    it("renders the ResumeBuilder component", () => {
+    it("renders the resume title input", () => {
       renderNewResumeRoute();
-      expect(screen.getByTestId("resume-builder")).toBeInTheDocument();
+      expect(screen.getByLabelText("Resume Title")).toBeInTheDocument();
     });
   });
 
@@ -93,29 +107,29 @@ describe("New Resume Route (/resume/new)", () => {
       expect(container.querySelector(".container")).toBeInTheDocument();
     });
 
-    it("applies proper container styling", () => {
+    it("renders a Card component", () => {
       const { container } = renderNewResumeRoute();
-      const mainContainer = container.querySelector(".container.mx-auto.p-8");
-      expect(mainContainer).toBeInTheDocument();
+      const card = container.querySelector("[class*='rounded-lg'][class*='border']");
+      expect(card).toBeInTheDocument();
     });
 
-    it("has a header section with margin", () => {
-      const { container } = renderNewResumeRoute();
-      const header = container.querySelector(".mb-8");
-      expect(header).toBeInTheDocument();
+    it("has a form element", () => {
+      renderNewResumeRoute();
+      const form = screen.getByRole("form", { hidden: true });
+      expect(form).toBeInTheDocument();
     });
   });
 
   describe("Typography", () => {
     it("uses proper heading styles", () => {
       const { container } = renderNewResumeRoute();
-      const heading = container.querySelector("h1.text-3xl.font-bold");
+      const heading = container.querySelector("[class*='text-2xl'][class*='font-semibold']");
       expect(heading).toBeInTheDocument();
     });
 
     it("uses muted foreground for description", () => {
       const { container } = renderNewResumeRoute();
-      const description = container.querySelector(".text-muted-foreground");
+      const description = container.querySelector("[class*='text-muted-foreground']");
       expect(description).toBeInTheDocument();
     });
   });
@@ -151,7 +165,7 @@ describe("New Resume Route (/resume/new)", () => {
     it("displays instructions for creating resume", () => {
       renderNewResumeRoute();
       const instructions = screen.getByText(
-        /fill in your information to create a professional resume/i,
+        /enter a title for your resume to get started/i,
       );
       expect(instructions).toBeInTheDocument();
     });

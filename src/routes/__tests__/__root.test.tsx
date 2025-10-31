@@ -7,7 +7,7 @@ vi.mock("@tanstack/react-router", () => ({
   Outlet: () => <div data-testid="outlet">Outlet Content</div>,
 }));
 
-vi.mock("@tanstack/router-devtools", () => ({
+vi.mock("@tanstack/react-router-devtools", () => ({
   TanStackRouterDevtools: ({ position }: { position: string }) => (
     <div data-testid="router-devtools" data-position={position}>
       Router Devtools
