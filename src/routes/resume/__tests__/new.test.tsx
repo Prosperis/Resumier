@@ -89,9 +89,7 @@ describe("New Resume Route (/resume/new)", () => {
     it("renders the page description", () => {
       renderNewResumeRoute();
       expect(
-        screen.getByText(
-          "Enter a title for your resume to get started",
-        ),
+        screen.getByText("Enter a title for your resume to get started"),
       ).toBeInTheDocument();
     });
 
@@ -109,7 +107,9 @@ describe("New Resume Route (/resume/new)", () => {
 
     it("renders a Card component", () => {
       const { container } = renderNewResumeRoute();
-      const card = container.querySelector("[class*='rounded-lg'][class*='border']");
+      const card = container.querySelector(
+        "[class*='rounded-lg'][class*='border']",
+      );
       expect(card).toBeInTheDocument();
     });
 
@@ -123,13 +123,17 @@ describe("New Resume Route (/resume/new)", () => {
   describe("Typography", () => {
     it("uses proper heading styles", () => {
       const { container } = renderNewResumeRoute();
-      const heading = container.querySelector("[class*='text-2xl'][class*='font-semibold']");
+      const heading = container.querySelector(
+        "[class*='text-2xl'][class*='font-semibold']",
+      );
       expect(heading).toBeInTheDocument();
     });
 
     it("uses muted foreground for description", () => {
       const { container } = renderNewResumeRoute();
-      const description = container.querySelector("[class*='text-muted-foreground']");
+      const description = container.querySelector(
+        "[class*='text-muted-foreground']",
+      );
       expect(description).toBeInTheDocument();
     });
   });
