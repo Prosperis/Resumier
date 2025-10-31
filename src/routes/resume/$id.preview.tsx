@@ -10,11 +10,12 @@ import { useAuthStore } from "@/stores";
  */
 export const Route = createFileRoute("/resume/$id/preview")({
   beforeLoad: () => {
-    const { isAuthenticated } = useAuthStore.getState();
+    const { isAuthenticated, isGuest } = useAuthStore.getState();
 
-    if (!isAuthenticated) {
+    // Allow both authenticated users and guests to preview resumes
+    if (!isAuthenticated && !isGuest) {
       throw redirect({
-        to: "/login",
+        to: "/",
       });
     }
   },

@@ -12,9 +12,10 @@ export const Route = createFileRoute("/settings")({
   beforeLoad: () => {
     const { isAuthenticated } = useAuthStore.getState();
 
+    // Settings require full authentication (not available for guests)
     if (!isAuthenticated) {
       throw redirect({
-        to: "/login",
+        to: "/",
       });
     }
   },

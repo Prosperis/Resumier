@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useAuthStore } from "@/stores/auth-store";
 
 interface AuthModalProps {
   open: boolean;
@@ -15,6 +16,7 @@ interface AuthModalProps {
 
 export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const navigate = useNavigate();
+  const loginAsGuest = useAuthStore((state) => state.loginAsGuest);
 
   const handleOAuthSignIn = (provider: string) => {
     console.log(`Sign in with ${provider}`);
@@ -22,6 +24,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   };
 
   const handleContinueAsGuest = () => {
+    // Enable guest mode - this will allow IndexedDB access
+    loginAsGuest();
     onOpenChange(false);
     navigate({ to: "/resume/new" });
   };

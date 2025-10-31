@@ -15,11 +15,12 @@ import { useAuthStore } from "@/stores";
  */
 export const Route = createFileRoute("/resume/$id")({
   beforeLoad: () => {
-    const { isAuthenticated } = useAuthStore.getState();
+    const { isAuthenticated, isGuest } = useAuthStore.getState();
 
-    if (!isAuthenticated) {
+    // Allow both authenticated users and guests to edit resumes
+    if (!isAuthenticated && !isGuest) {
       throw redirect({
-        to: "/login",
+        to: "/",
       });
     }
   },

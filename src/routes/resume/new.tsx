@@ -10,11 +10,13 @@ import { useAuthStore } from "@/stores";
  */
 export const Route = createFileRoute("/resume/new")({
   beforeLoad: () => {
-    const { isAuthenticated } = useAuthStore.getState();
+    const { isAuthenticated, isGuest } = useAuthStore.getState();
 
-    if (!isAuthenticated) {
+    // Allow both authenticated users and guests to create resumes
+    // Guest data is stored in IndexedDB
+    if (!isAuthenticated && !isGuest) {
       throw redirect({
-        to: "/login",
+        to: "/",
       });
     }
   },

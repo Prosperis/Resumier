@@ -1,3 +1,4 @@
+import { del, get, set as idbSet } from "idb-keyval";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -20,7 +21,19 @@ export const useResumeDocuments = create<DocumentsState>()(
     }),
     {
       name: "resumier-documents",
-      storage: createJSONStorage(() => localStorage),
+      // Use IndexedDB for consistency with resume store
+      storage: createJSONStorage(() => ({
+        async getItem(name: string) {
+          const value = await get(name);
+          return value ?? null;
+        },
+        async setItem(name: string, value: unknown) {
+          await idbSet(name, value);
+        },
+        async removeItem(name: string) {
+          await del(name);
+        },
+      })),
     },
   ),
 );

@@ -14,12 +14,12 @@ import { useAuthStore } from "@/stores";
  */
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: () => {
-    const { isAuthenticated } = useAuthStore.getState();
+    const { isAuthenticated, isGuest } = useAuthStore.getState();
 
-    // Redirect to login if not authenticated
-    if (!isAuthenticated) {
+    // Redirect to home if not authenticated or guest (home has AuthModal)
+    if (!isAuthenticated && !isGuest) {
       throw redirect({
-        to: "/login",
+        to: "/",
       });
     }
   },
