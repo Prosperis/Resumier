@@ -18,13 +18,6 @@ function DashboardComponent() {
 
   return (
     <div className="container mx-auto p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">My Resumes</h1>
-        <p className="text-muted-foreground">
-          Manage your resumes and create new ones
-        </p>
-      </div>
-
       <ResumeDashboard onResumeClick={handleResumeClick} />
     </div>
   );
