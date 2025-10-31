@@ -20,11 +20,7 @@ export function DataTableViewOptions<TData>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-9"
-        >
+        <Button variant="outline" size="sm" className="h-9">
           <Columns3 className="mr-2 h-4 w-4" />
           Columns
         </Button>
@@ -40,12 +36,13 @@ export function DataTableViewOptions<TData>({
           )
           .map((column) => {
             // Use custom label from meta or format column id
-            const label = (column.columnDef.meta as any)?.label || 
+            const label =
+              (column.columnDef.meta as any)?.label ||
               column.id
-                .replace(/([A-Z])/g, ' $1')
+                .replace(/([A-Z])/g, " $1")
                 .replace(/^./, (str) => str.toUpperCase())
                 .trim();
-            
+
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}

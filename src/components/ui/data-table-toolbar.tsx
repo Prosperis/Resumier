@@ -49,7 +49,7 @@ export function DataTableToolbar<TData>({
               />
             </div>
           )}
-          
+
           {/* Status filter dropdown */}
           {statusFilter && (
             <DropdownMenu>
@@ -78,7 +78,7 @@ export function DataTableToolbar<TData>({
               </DropdownMenuContent>
             </DropdownMenu>
           )}
-          
+
           {/* Clear filters */}
           {isFiltered && (
             <Button
@@ -91,13 +91,13 @@ export function DataTableToolbar<TData>({
             </Button>
           )}
         </div>
-        
+
         {/* Right side actions */}
         <div className="flex items-center gap-2">
           <DataTableViewOptions table={table} />
         </div>
       </div>
-      
+
       {/* Selection summary */}
       {selectedRows > 0 && (
         <div className="bg-muted/50 flex items-center justify-between rounded-lg border p-2 px-3">

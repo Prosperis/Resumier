@@ -78,44 +78,57 @@ function formatRelativeTime(dateString: string): string {
 /**
  * Determine resume completion status with color coding
  */
-function getCompletionStatus(resume: Resume): { 
-  status: string; 
+function getCompletionStatus(resume: Resume): {
+  status: string;
   variant: "default" | "secondary" | "destructive" | "outline";
   className: string;
 } {
   try {
     const { content } = resume;
-    const hasPersonalInfo = content.personalInfo.name && content.personalInfo.email;
+    const hasPersonalInfo =
+      content.personalInfo.name && content.personalInfo.email;
     const hasExperience = content.experience.length > 0;
     const hasEducation = content.education.length > 0;
-    const hasSkills = (content.skills.technical?.length || 0) + (content.skills.soft?.length || 0) > 0;
-    
-    const completeness = [hasPersonalInfo, hasExperience, hasEducation, hasSkills].filter(Boolean).length;
-    
+    const hasSkills =
+      (content.skills.technical?.length || 0) +
+        (content.skills.soft?.length || 0) >
+      0;
+
+    const completeness = [
+      hasPersonalInfo,
+      hasExperience,
+      hasEducation,
+      hasSkills,
+    ].filter(Boolean).length;
+
     if (completeness === 4) {
-      return { 
-        status: "Complete", 
+      return {
+        status: "Complete",
         variant: "default",
-        className: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20"
+        className:
+          "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
       };
     }
     if (completeness >= 2) {
-      return { 
-        status: "In Progress", 
+      return {
+        status: "In Progress",
         variant: "outline",
-        className: "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20"
+        className:
+          "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20",
       };
     }
-    return { 
-      status: "Draft", 
+    return {
+      status: "Draft",
       variant: "secondary",
-      className: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20"
+      className:
+        "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
     };
   } catch {
-    return { 
-      status: "Draft", 
+    return {
+      status: "Draft",
       variant: "secondary",
-      className: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20"
+      className:
+        "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
     };
   }
 }
@@ -221,7 +234,9 @@ export function createResumeColumns(_handlers?: {
         const resume = row.original;
         return (
           <div className="flex flex-col gap-1 min-w-0">
-            <span className="font-medium truncate">{row.getValue("title")}</span>
+            <span className="font-medium truncate">
+              {row.getValue("title")}
+            </span>
             {/* Show updated date on mobile when date columns are hidden */}
             <span className="text-muted-foreground text-xs md:hidden">
               Updated {formatRelativeTime(resume.updatedAt)}
@@ -242,11 +257,7 @@ export function createResumeColumns(_handlers?: {
       cell: ({ row }) => {
         const resume = row.original;
         const version = resume.version || 1;
-        return (
-          <div className="text-muted-foreground text-sm">
-            v{version}
-          </div>
-        );
+        return <div className="text-muted-foreground text-sm">v{version}</div>;
       },
       enableSorting: true,
       enableHiding: true,
@@ -266,9 +277,7 @@ export function createResumeColumns(_handlers?: {
         const field = (resume as any).field || "";
         return (
           <div className="text-muted-foreground text-sm">
-            {field || (
-              <span className="italic opacity-50">Not set</span>
-            )}
+            {field || <span className="italic opacity-50">Not set</span>}
           </div>
         );
       },
@@ -288,7 +297,10 @@ export function createResumeColumns(_handlers?: {
         const resume = row.original;
         const statusInfo = getCompletionStatus(resume);
         return (
-          <Badge variant={statusInfo.variant} className={`text-xs ${statusInfo.className}`}>
+          <Badge
+            variant={statusInfo.variant}
+            className={`text-xs ${statusInfo.className}`}
+          >
             {statusInfo.status}
           </Badge>
         );

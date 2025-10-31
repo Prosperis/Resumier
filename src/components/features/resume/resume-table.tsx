@@ -96,16 +96,20 @@ export function ResumeTable({
                   const isTitle = header.column.id === "title";
                   const isStatus = header.column.id === "status";
                   const isUpdatedAt = header.column.id === "updatedAt";
-                  
+
                   return (
-                    <TableHead 
+                    <TableHead
                       key={header.id}
                       className={
-                        isSelect ? "w-[50px]" : 
-                        isTitle ? "w-auto" : 
-                        isStatus ? "w-[150px]" : 
-                        isUpdatedAt ? "w-[150px]" : 
-                        "w-[150px]"
+                        isSelect
+                          ? "w-[50px]"
+                          : isTitle
+                            ? "w-auto"
+                            : isStatus
+                              ? "w-[150px]"
+                              : isUpdatedAt
+                                ? "w-[150px]"
+                                : "w-[150px]"
                       }
                     >
                       {header.isPlaceholder
@@ -135,14 +139,16 @@ export function ResumeTable({
                       {row.getVisibleCells().map((cell) => {
                         const isSelect = cell.column.id === "select";
                         const isTitle = cell.column.id === "title";
-                        
+
                         return (
-                          <TableCell 
+                          <TableCell
                             key={cell.id}
                             className={
-                              isSelect ? "w-[50px]" : 
-                              isTitle ? "w-auto max-w-0" : 
-                              "w-[150px]"
+                              isSelect
+                                ? "w-[50px]"
+                                : isTitle
+                                  ? "w-auto max-w-0"
+                                  : "w-[150px]"
                             }
                           >
                             {flexRender(
