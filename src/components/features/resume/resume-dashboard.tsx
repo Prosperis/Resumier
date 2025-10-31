@@ -99,12 +99,7 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
       <div className="space-y-4 p-4 bg-background">
         {/* Header with create button */}
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight">Resumes</h2>
-            <p className="text-muted-foreground">
-              Manage your resume documents ({resumes.length})
-            </p>
-          </div>
+          <h2 className="text-2xl font-bold tracking-tight">Resumes</h2>
           <CreateResumeDialog
             onSuccess={(id) => onResumeClick?.(id)}
             trigger={
