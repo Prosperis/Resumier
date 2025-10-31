@@ -1,163 +1,218 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { useThemeStore } from "@/stores";
+import { ThemeProvider } from "@/app/theme-provider";
 import { ThemeToggle } from "../theme-toggle";
 
-// Mock the stores
-vi.mock("@/stores", () => ({
-  useThemeStore: vi.fn(),
-}));
+// Ensure localStorage is available in test environment
+if (typeof global.localStorage === 'undefined') {
+  global.localStorage = {
+    store: {} as Record<string, string>,
+    getItem(key: string) {
+      return this.store[key] || null;
+    },
+    setItem(key: string, value: string) {
+      this.store[key] = value;
+    },
+    removeItem(key: string) {
+      delete this.store[key];
+    },
+    clear() {
+      this.store = {};
+    },
+    get length() {
+      return Object.keys(this.store).length;
+    },
+    key(index: number) {
+      return Object.keys(this.store)[index] || null;
+    },
+  } as Storage;
+}
 
 describe("ThemeToggle", () => {
-  let mockToggleTheme: any;
-  let mockUseThemeStore: any;
-
   beforeEach(() => {
-    // Clear all mocks to ensure clean state between tests
-    vi.clearAllMocks();
-    // Create a fresh mock for each test
-    mockToggleTheme = vi.fn();
-    mockUseThemeStore = vi.mocked(useThemeStore);
+    // Clear localStorage and DOM classes before each test
+    global.localStorage.clear();
+    document.documentElement.classList.remove("light", "dark");
+
+    // Mock matchMedia
+    window.matchMedia = vi.fn().mockImplementation((query) => ({
+      matches: false, // Default to light mode
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
   });
 
   afterEach(() => {
-    // Additional cleanup to ensure no state leaks between tests
     vi.resetAllMocks();
   });
 
   describe("Dark Theme", () => {
     beforeEach(() => {
-      // Mock the store to return different values based on the selector
-      mockUseThemeStore.mockImplementation((selector: any) => {
-        const state = {
-          theme: "dark",
-          toggleTheme: mockToggleTheme,
-          setTheme: vi.fn(),
-        };
-        return selector(state);
-      });
+      // Set theme to dark in localStorage
+      localStorage.setItem("resumier-theme", "dark");
     });
 
     it("renders sun icon in dark mode", () => {
-      render(<ThemeToggle />);
+      render(
+        <ThemeProvider>
+          <ThemeToggle />
+        </ThemeProvider>,
+      );
 
       // Sun icon should be visible in dark mode
-      const button = screen.getByRole("button", { name: /toggle theme/i });
+      const button = screen.getByRole("button", {
+        name: /switch to light theme/i,
+      });
       expect(button).toBeInTheDocument();
     });
 
     it("has accessible label", () => {
-      render(<ThemeToggle />);
+      render(
+        <ThemeProvider>
+          <ThemeToggle />
+        </ThemeProvider>,
+      );
 
       expect(
-        screen.getByRole("button", { name: /toggle theme/i }),
+        screen.getByRole("button", { name: /switch to light theme/i }),
       ).toBeInTheDocument();
     });
 
     it("calls toggleTheme when clicked", async () => {
       const user = userEvent.setup();
-      render(<ThemeToggle />);
+      render(
+        <ThemeProvider>
+          <ThemeToggle />
+        </ThemeProvider>,
+      );
 
-      const button = screen.getByRole("button", { name: /toggle theme/i });
+      const button = screen.getByRole("button", {
+        name: /switch to light theme/i,
+      });
       await user.click(button);
 
-      expect(mockToggleTheme).toHaveBeenCalledTimes(1);
+      // After clicking, should switch to light
+      expect(
+        screen.getByRole("button", { name: /switch to dark theme/i }),
+      ).toBeInTheDocument();
     });
   });
 
   describe("Light Theme", () => {
     beforeEach(() => {
-      // Mock the store to return different values based on the selector
-      mockUseThemeStore.mockImplementation((selector: any) => {
-        const state = {
-          theme: "light",
-          toggleTheme: mockToggleTheme,
-          setTheme: vi.fn(),
-        };
-        return selector(state);
-      });
+      // Set theme to light in localStorage
+      localStorage.setItem("resumier-theme", "light");
     });
 
     it("renders moon icon in light mode", () => {
-      render(<ThemeToggle />);
+      render(
+        <ThemeProvider>
+          <ThemeToggle />
+        </ThemeProvider>,
+      );
 
-      const button = screen.getByRole("button", { name: /toggle theme/i });
+      const button = screen.getByRole("button", {
+        name: /switch to dark theme/i,
+      });
       expect(button).toBeInTheDocument();
     });
 
     it("calls toggleTheme when clicked", async () => {
       const user = userEvent.setup();
-      render(<ThemeToggle />);
+      render(
+        <ThemeProvider>
+          <ThemeToggle />
+        </ThemeProvider>,
+      );
 
-      // Verify that mockToggleTheme starts with 0 calls
-      expect(mockToggleTheme).toHaveBeenCalledTimes(0);
-
-      const button = screen.getByRole("button", { name: /toggle theme/i });
+      const button = screen.getByRole("button", {
+        name: /switch to dark theme/i,
+      });
       await user.click(button);
 
-      expect(mockToggleTheme).toHaveBeenCalledTimes(1);
+      // After clicking, should switch to dark
+      expect(
+        screen.getByRole("button", { name: /switch to light theme/i }),
+      ).toBeInTheDocument();
     });
   });
 
   describe("Styling", () => {
     beforeEach(() => {
-      // Mock the store to return different values based on the selector
-      mockUseThemeStore.mockImplementation((selector: any) => {
-        const state = {
-          theme: "dark",
-          toggleTheme: mockToggleTheme,
-          setTheme: vi.fn(),
-        };
-        return selector(state);
-      });
+      localStorage.setItem("resumier-theme", "dark");
     });
 
     it("renders as an outline button", () => {
-      render(<ThemeToggle />);
+      render(
+        <ThemeProvider>
+          <ThemeToggle />
+        </ThemeProvider>,
+      );
 
-      const button = screen.getByRole("button", { name: /toggle theme/i });
+      const button = screen.getByRole("button", {
+        name: /switch to light theme/i,
+      });
       expect(button).toBeInTheDocument();
     });
 
     it("renders as an icon button", () => {
-      render(<ThemeToggle />);
+      render(
+        <ThemeProvider>
+          <ThemeToggle />
+        </ThemeProvider>,
+      );
 
-      const button = screen.getByRole("button", { name: /toggle theme/i });
+      const button = screen.getByRole("button", {
+        name: /switch to light theme/i,
+      });
       expect(button).toBeInTheDocument();
     });
   });
 
   describe("Accessibility", () => {
     beforeEach(() => {
-      // Mock the store to return different values based on the selector
-      mockUseThemeStore.mockImplementation((selector: any) => {
-        const state = {
-          theme: "dark",
-          toggleTheme: mockToggleTheme,
-          setTheme: vi.fn(),
-        };
-        return selector(state);
-      });
+      localStorage.setItem("resumier-theme", "dark");
     });
 
     it("has screen reader only text", () => {
-      const { container } = render(<ThemeToggle />);
+      render(
+        <ThemeProvider>
+          <ThemeToggle />
+        </ThemeProvider>,
+      );
 
-      const srText = container.querySelector(".sr-only");
-      expect(srText).toBeInTheDocument();
-      expect(srText?.textContent).toBe("Toggle theme");
+      // The aria-label serves as the accessible name
+      const button = screen.getByRole("button", {
+        name: /switch to light theme/i,
+      });
+      expect(button).toHaveAttribute("aria-label", "Switch to light theme");
     });
 
     it("is keyboard accessible", async () => {
       const user = userEvent.setup();
-      render(<ThemeToggle />);
+      render(
+        <ThemeProvider>
+          <ThemeToggle />
+        </ThemeProvider>,
+      );
 
-      const button = screen.getByRole("button", { name: /toggle theme/i });
+      const button = screen.getByRole("button", {
+        name: /switch to light theme/i,
+      });
       button.focus();
 
       await user.keyboard("{Enter}");
-      expect(mockToggleTheme).toHaveBeenCalledTimes(1);
+
+      // After pressing Enter, theme should toggle
+      expect(
+        screen.getByRole("button", { name: /switch to dark theme/i }),
+      ).toBeInTheDocument();
     });
   });
 });

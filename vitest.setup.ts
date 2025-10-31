@@ -59,6 +59,19 @@ if (typeof global !== 'undefined') {
   }
 }
 
+// Make localStorage and sessionStorage available globally without needing window prefix
+if (typeof window !== 'undefined') {
+  if (!window.localStorage) {
+    window.localStorage = new LocalStorageMock()
+  }
+  if (!window.sessionStorage) {
+    window.sessionStorage = new LocalStorageMock()
+  }
+  // Make them available as bare globals too
+  ;(global as any).localStorage = window.localStorage
+  ;(global as any).sessionStorage = window.sessionStorage
+}
+
 // Extend vitest expect with jest-dom matchers
 import * as matchers from "@testing-library/jest-dom/matchers"
 import { expect as vitestExpect, vi } from "vitest"

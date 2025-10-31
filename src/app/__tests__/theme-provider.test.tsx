@@ -8,10 +8,35 @@ import {
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ThemeProvider, useTheme } from "../theme-provider";
 
+// Ensure localStorage is available in test environment
+if (typeof global.localStorage === 'undefined') {
+  global.localStorage = {
+    store: {} as Record<string, string>,
+    getItem(key: string) {
+      return this.store[key] || null;
+    },
+    setItem(key: string, value: string) {
+      this.store[key] = value;
+    },
+    removeItem(key: string) {
+      delete this.store[key];
+    },
+    clear() {
+      this.store = {};
+    },
+    get length() {
+      return Object.keys(this.store).length;
+    },
+    key(index: number) {
+      return Object.keys(this.store)[index] || null;
+    },
+  } as Storage;
+}
+
 describe("ThemeProvider", () => {
   beforeEach(() => {
     // Clear localStorage and DOM classes before each test
-    localStorage.clear();
+    global.localStorage.clear();
     document.documentElement.classList.remove("light", "dark");
 
     // Mock matchMedia
@@ -59,19 +84,39 @@ describe("ThemeProvider", () => {
   });
 
   describe("Default Theme", () => {
-    it("should default to 'system' theme", () => {
+    it("should default to light theme when no preference is stored and system prefers light", () => {
+      window.matchMedia = vi.fn().mockImplementation((query) => ({
+        matches: false, // System prefers light
+        media: query,
+        onchange: null,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }));
+
       const { result } = renderHook(() => useTheme(), {
         wrapper: ({ children }) => <ThemeProvider>{children}</ThemeProvider>,
       });
 
-      expect(result.current.theme).toBe("system");
+      expect(result.current.theme).toBe("light");
     });
 
-    it("should use custom default theme when provided", () => {
+    it("should default to dark theme when system prefers dark", () => {
+      window.matchMedia = vi.fn().mockImplementation((query) => ({
+        matches: query === "(prefers-color-scheme: dark)",
+        media: query,
+        onchange: null,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }));
+
       const { result } = renderHook(() => useTheme(), {
-        wrapper: ({ children }) => (
-          <ThemeProvider defaultTheme="dark">{children}</ThemeProvider>
-        ),
+        wrapper: ({ children }) => <ThemeProvider>{children}</ThemeProvider>,
       });
 
       expect(result.current.theme).toBe("dark");
@@ -125,18 +170,21 @@ describe("ThemeProvider", () => {
       expect(result.current.theme).toBe("light");
     });
 
-    it("should update theme to system", () => {
+    it("should toggle between light and dark", () => {
       const { result } = renderHook(() => useTheme(), {
-        wrapper: ({ children }) => (
-          <ThemeProvider defaultTheme="dark">{children}</ThemeProvider>
-        ),
+        wrapper: ({ children }) => <ThemeProvider>{children}</ThemeProvider>,
       });
+
+      // Start with light (or dark depending on system)
+      const initialTheme = result.current.theme;
 
       act(() => {
-        result.current.setTheme("system");
+        result.current.setTheme(initialTheme === "light" ? "dark" : "light");
       });
 
-      expect(result.current.theme).toBe("system");
+      expect(result.current.theme).toBe(
+        initialTheme === "light" ? "dark" : "light",
+      );
     });
 
     it("should persist theme to localStorage", () => {
@@ -220,7 +268,7 @@ describe("ThemeProvider", () => {
       });
     });
 
-    it("should use system preference when theme is system", async () => {
+    it("should detect system dark preference on initial load", async () => {
       // Mock dark mode preference
       window.matchMedia = vi.fn().mockImplementation((query) => ({
         matches: query === "(prefers-color-scheme: dark)",
@@ -237,13 +285,13 @@ describe("ThemeProvider", () => {
         wrapper: ({ children }) => <ThemeProvider>{children}</ThemeProvider>,
       });
 
-      // Default is 'system'
+      // Should detect system dark preference and apply it
       await waitFor(() => {
         expect(document.documentElement.classList.contains("dark")).toBe(true);
       });
     });
 
-    it("should use light system preference when not dark", async () => {
+    it("should detect system light preference on initial load", async () => {
       // Mock light mode preference
       window.matchMedia = vi.fn().mockImplementation((query) => ({
         matches: false,
@@ -260,7 +308,7 @@ describe("ThemeProvider", () => {
         wrapper: ({ children }) => <ThemeProvider>{children}</ThemeProvider>,
       });
 
-      // Default is 'system' and system preference is light
+      // Should detect system light preference and apply it
       await waitFor(() => {
         expect(document.documentElement.classList.contains("light")).toBe(true);
       });
@@ -288,14 +336,15 @@ describe("ThemeProvider", () => {
       expect(result.current.setTheme).toBeTypeOf("function");
     });
 
-    it("should have correct initial theme", () => {
+    it("should have correct initial theme based on system or storage", () => {
+      // Set a stored theme
+      localStorage.setItem("resumier-theme", "dark");
+
       const { result } = renderHook(() => useTheme(), {
-        wrapper: ({ children }) => (
-          <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
-        ),
+        wrapper: ({ children }) => <ThemeProvider>{children}</ThemeProvider>,
       });
 
-      expect(result.current.theme).toBe("light");
+      expect(result.current.theme).toBe("dark");
     });
   });
 
@@ -333,10 +382,10 @@ describe("ThemeProvider", () => {
         result.current.setTheme("light");
       });
       act(() => {
-        result.current.setTheme("system");
+        result.current.setTheme("dark");
       });
 
-      expect(localStorage.getItem("resumier-theme")).toBe("system");
+      expect(localStorage.getItem("resumier-theme")).toBe("dark");
     });
   });
 });
