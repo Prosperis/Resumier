@@ -28,6 +28,7 @@ interface DataTableProps<TData, TValue> {
   searchKey?: string;
   searchPlaceholder?: string;
   initialColumnVisibility?: VisibilityState;
+  statusFilter?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -36,6 +37,7 @@ export function DataTable<TData, TValue>({
   searchKey,
   searchPlaceholder = "Search...",
   initialColumnVisibility = {},
+  statusFilter = false,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -70,6 +72,7 @@ export function DataTable<TData, TValue>({
         table={table}
         searchKey={searchKey}
         searchPlaceholder={searchPlaceholder}
+        statusFilter={statusFilter}
       />
       <div className="rounded-md border">
         <Table>

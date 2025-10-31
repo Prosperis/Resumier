@@ -96,14 +96,19 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
 
   return (
     <FadeIn>
-      <div className="space-y-4 p-4 bg-background">
+      <div className="space-y-6 p-4 bg-background">
         {/* Header with create button */}
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold tracking-tight">Resumes</h2>
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight">Resumes</h2>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Manage and organize your resume documents
+            </p>
+          </div>
           <CreateResumeDialog
             onSuccess={(id) => onResumeClick?.(id)}
             trigger={
-              <Button aria-label="Create new resume">
+              <Button size="default" aria-label="Create new resume">
                 <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
                 New Resume
               </Button>
