@@ -79,12 +79,12 @@ export function ResumeTable({
   });
 
   const handleDuplicateSelected = (selectedResumes: Resume[]) => {
-    selectedResumes.forEach(resume => onDuplicate(resume));
+    selectedResumes.forEach((resume) => onDuplicate(resume));
   };
 
   const handleOpenInNewTab = (selectedResumes: Resume[]) => {
     if (selectedResumes.length === 1) {
-      window.open(`/resume/${selectedResumes[0].id}`, '_blank');
+      window.open(`/resume/${selectedResumes[0].id}`, "_blank");
     }
   };
 

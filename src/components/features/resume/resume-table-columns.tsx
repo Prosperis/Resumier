@@ -149,7 +149,7 @@ export function RowContextMenu({
   children,
 }: RowActionsProps & { children: React.ReactNode }) {
   const handleOpenInNewTab = () => {
-    window.open(`/resume/${resume.id}`, '_blank');
+    window.open(`/resume/${resume.id}`, "_blank");
   };
 
   return (

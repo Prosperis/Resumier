@@ -1,5 +1,12 @@
 import type { Table } from "@tanstack/react-table";
-import { Copy, ExternalLink, ListFilter, Search, Trash2, X } from "lucide-react";
+import {
+  Copy,
+  ExternalLink,
+  ListFilter,
+  Search,
+  Trash2,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -37,19 +44,19 @@ export function DataTableToolbar<TData>({
 
   const handleDuplicate = () => {
     if (onDuplicateSelected && selectedRows.length > 0) {
-      onDuplicateSelected(selectedRows.map(row => row.original));
+      onDuplicateSelected(selectedRows.map((row) => row.original));
     }
   };
 
   const handleDelete = () => {
     if (onDeleteSelected && selectedRows.length > 0) {
-      onDeleteSelected(selectedRows.map(row => row.original));
+      onDeleteSelected(selectedRows.map((row) => row.original));
     }
   };
 
   const handleOpenInNewTab = () => {
     if (onOpenInNewTab && selectedRows.length > 0) {
-      onOpenInNewTab(selectedRows.map(row => row.original));
+      onOpenInNewTab(selectedRows.map((row) => row.original));
     }
   };
 
@@ -131,21 +138,13 @@ export function DataTableToolbar<TData>({
           </span>
           <div className="flex items-center gap-2">
             {selectedCount === 1 && onOpenInNewTab && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleOpenInNewTab}
-              >
+              <Button variant="outline" size="sm" onClick={handleOpenInNewTab}>
                 <ExternalLink className="mr-2 h-3.5 w-3.5" aria-hidden="true" />
                 Open in new tab
               </Button>
             )}
             {onDuplicateSelected && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleDuplicate}
-              >
+              <Button variant="outline" size="sm" onClick={handleDuplicate}>
                 <Copy className="mr-2 h-3.5 w-3.5" aria-hidden="true" />
                 Duplicate {selectedCount > 1 ? `(${selectedCount})` : ""}
               </Button>
@@ -158,8 +157,8 @@ export function DataTableToolbar<TData>({
               Clear selection
             </Button>
             {onDeleteSelected && (
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={handleDelete}
                 className="text-destructive hover:text-destructive"
