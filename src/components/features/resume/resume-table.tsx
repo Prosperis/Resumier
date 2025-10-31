@@ -78,6 +78,16 @@ export function ResumeTable({
     columnResizeMode: "onChange",
   });
 
+  const handleDuplicateSelected = (selectedResumes: Resume[]) => {
+    selectedResumes.forEach(resume => onDuplicate(resume));
+  };
+
+  const handleOpenInNewTab = (selectedResumes: Resume[]) => {
+    if (selectedResumes.length === 1) {
+      window.open(`/resume/${selectedResumes[0].id}`, '_blank');
+    }
+  };
+
   return (
     <div className="space-y-4">
       <DataTableToolbar
@@ -85,6 +95,8 @@ export function ResumeTable({
         searchKey="title"
         searchPlaceholder="Search resumes by title..."
         statusFilter={true}
+        onDuplicateSelected={handleDuplicateSelected}
+        onOpenInNewTab={handleOpenInNewTab}
       />
       <div className="rounded-md border">
         <Table>

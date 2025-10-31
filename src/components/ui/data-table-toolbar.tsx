@@ -1,5 +1,5 @@
 import type { Table } from "@tanstack/react-table";
-import { ListFilter, Search, X } from "lucide-react";
+import { Copy, ExternalLink, ListFilter, Search, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,6 +17,9 @@ interface DataTableToolbarProps<TData> {
   searchKey?: string;
   searchPlaceholder?: string;
   statusFilter?: boolean;
+  onDuplicateSelected?: (rows: TData[]) => void;
+  onDeleteSelected?: (rows: TData[]) => void;
+  onOpenInNewTab?: (rows: TData[]) => void;
 }
 
 export function DataTableToolbar<TData>({
@@ -24,9 +27,31 @@ export function DataTableToolbar<TData>({
   searchKey,
   searchPlaceholder = "Search...",
   statusFilter = false,
+  onDuplicateSelected,
+  onDeleteSelected,
+  onOpenInNewTab,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
-  const selectedRows = table.getFilteredSelectedRowModel().rows.length;
+  const selectedRows = table.getFilteredSelectedRowModel().rows;
+  const selectedCount = selectedRows.length;
+
+  const handleDuplicate = () => {
+    if (onDuplicateSelected && selectedRows.length > 0) {
+      onDuplicateSelected(selectedRows.map(row => row.original));
+    }
+  };
+
+  const handleDelete = () => {
+    if (onDeleteSelected && selectedRows.length > 0) {
+      onDeleteSelected(selectedRows.map(row => row.original));
+    }
+  };
+
+  const handleOpenInNewTab = () => {
+    if (onOpenInNewTab && selectedRows.length > 0) {
+      onOpenInNewTab(selectedRows.map(row => row.original));
+    }
+  };
 
   return (
     <div className="space-y-3">
@@ -99,12 +124,32 @@ export function DataTableToolbar<TData>({
       </div>
 
       {/* Selection summary */}
-      {selectedRows > 0 && (
+      {selectedCount > 0 && (
         <div className="bg-muted/50 flex items-center justify-between rounded-lg border p-2 px-3">
           <span className="text-sm font-medium">
-            {selectedRows} row{selectedRows > 1 ? "s" : ""} selected
+            {selectedCount} row{selectedCount > 1 ? "s" : ""} selected
           </span>
           <div className="flex items-center gap-2">
+            {selectedCount === 1 && onOpenInNewTab && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleOpenInNewTab}
+              >
+                <ExternalLink className="mr-2 h-3.5 w-3.5" aria-hidden="true" />
+                Open in new tab
+              </Button>
+            )}
+            {onDuplicateSelected && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDuplicate}
+              >
+                <Copy className="mr-2 h-3.5 w-3.5" aria-hidden="true" />
+                Duplicate {selectedCount > 1 ? `(${selectedCount})` : ""}
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"
@@ -112,9 +157,17 @@ export function DataTableToolbar<TData>({
             >
               Clear selection
             </Button>
-            <Button variant="outline" size="sm">
-              Delete selected
-            </Button>
+            {onDeleteSelected && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={handleDelete}
+                className="text-destructive hover:text-destructive"
+              >
+                <Trash2 className="mr-2 h-3.5 w-3.5" aria-hidden="true" />
+                Delete {selectedCount > 1 ? `(${selectedCount})` : ""}
+              </Button>
+            )}
           </div>
         </div>
       )}

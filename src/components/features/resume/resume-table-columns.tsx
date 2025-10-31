@@ -4,7 +4,7 @@
  */
 
 import type { ColumnDef } from "@tanstack/react-table";
-import { Copy, Pencil, Trash2 } from "lucide-react";
+import { Copy, ExternalLink, FileEdit, Pencil, Trash2 } from "lucide-react";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
@@ -148,6 +148,10 @@ export function RowContextMenu({
   onDuplicate,
   children,
 }: RowActionsProps & { children: React.ReactNode }) {
+  const handleOpenInNewTab = () => {
+    window.open(`/resume/${resume.id}`, '_blank');
+  };
+
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
@@ -155,9 +159,14 @@ export function RowContextMenu({
         <ContextMenuLabel>Actions</ContextMenuLabel>
         <ContextMenuSeparator />
         <ContextMenuItem onClick={() => onEdit(resume)}>
-          <Pencil className="mr-2 h-4 w-4" aria-hidden="true" />
+          <FileEdit className="mr-2 h-4 w-4" aria-hidden="true" />
           Open
         </ContextMenuItem>
+        <ContextMenuItem onClick={handleOpenInNewTab}>
+          <ExternalLink className="mr-2 h-4 w-4" aria-hidden="true" />
+          Open in new tab
+        </ContextMenuItem>
+        <ContextMenuSeparator />
         <RenameResumeDialog
           resumeId={resume.id}
           currentTitle={resume.title}
