@@ -67,7 +67,7 @@ interface StaggerItemProps {
 
 /**
  * StaggerItem - Child item for StaggerChildren container
- * 
+ *
  * This component doesn't render a wrapper element - it applies the stagger
  * animation variants directly to its child. The child must be a single element
  * that can accept className and other props.
@@ -79,10 +79,7 @@ interface StaggerItemProps {
  * </StaggerItem>
  * ```
  */
-export function StaggerItem({
-  children,
-  className,
-}: StaggerItemProps) {
+export function StaggerItem({ children, className }: StaggerItemProps) {
   const variants = useAnimationVariants(staggerItemVariants);
 
   // Clone the child and add motion variants and className
@@ -92,8 +89,8 @@ export function StaggerItem({
 
   // Get child's existing className
   const childProps = children.props as any;
-  const combinedClassName = className 
-    ? `${childProps.className || ''} ${className}`.trim()
+  const combinedClassName = className
+    ? `${childProps.className || ""} ${className}`.trim()
     : childProps.className;
 
   // Clone child with motion variants applied via a wrapper

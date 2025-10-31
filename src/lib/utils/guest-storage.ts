@@ -84,7 +84,7 @@ export async function hasGuestData(): Promise<boolean> {
 
     // Initialize mock DB by calling getResumes() - this ensures localStorage is populated
     const resumes = mockDb.getResumes();
-    
+
     // Check if there are any resumes
     if (resumes && resumes.length > 0) {
       return true;

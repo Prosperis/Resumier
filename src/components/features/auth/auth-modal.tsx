@@ -27,11 +27,11 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const handleContinueAsGuest = async () => {
     // Check if guest has existing data BEFORE enabling guest mode
     const hasData = await hasGuestData();
-    
+
     // Enable guest mode - this will allow IndexedDB access
     loginAsGuest();
     onOpenChange(false);
-    
+
     // Navigate to dashboard if they have resumes, otherwise to create new resume
     if (hasData) {
       navigate({ to: "/dashboard" });
