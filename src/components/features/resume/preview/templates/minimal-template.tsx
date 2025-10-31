@@ -9,7 +9,7 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
     resume.content;
 
   return (
-    <div className="mx-auto max-w-[21cm] bg-white p-16 font-sans text-gray-900 shadow-lg">
+    <div className="mx-auto max-w-[21cm] bg-white p-16 font-sans text-gray-900 shadow-lg" style={{ colorScheme: 'light' }}>
       {/* Header Section */}
       <header className="mb-12">
         <h1 className="mb-3 text-5xl font-light tracking-tight">

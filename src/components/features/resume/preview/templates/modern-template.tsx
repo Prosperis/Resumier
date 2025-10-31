@@ -18,9 +18,9 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
     resume.content;
 
   return (
-    <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg">
+    <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg" style={{ colorScheme: 'light' }}>
       {/* Header Section */}
-      <div className="bg-primary text-primary-foreground p-8">
+      <div className="p-8" style={{ backgroundColor: '#8b5cf6', color: 'white' }}>
         <h1 className="mb-2 text-4xl font-bold">
           {personalInfo.name || "Your Name"}
         </h1>
@@ -52,7 +52,7 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
           {/* Summary */}
           {personalInfo.summary && (
             <section>
-              <h2 className="text-primary border-primary mb-3 border-b-2 pb-1 text-xl font-bold">
+              <h2 className="mb-3 border-b-2 pb-1 text-xl font-bold" style={{ color: '#8b5cf6', borderColor: '#8b5cf6' }}>
                 Professional Summary
               </h2>
               <p className="text-sm leading-relaxed text-gray-700">
@@ -64,7 +64,7 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
           {/* Experience */}
           {experience.length > 0 && (
             <section>
-              <h2 className="text-primary border-primary mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold">
+              <h2 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold" style={{ color: '#8b5cf6', borderColor: '#8b5cf6' }}>
                 <Briefcase className="h-5 w-5" />
                 Experience
               </h2>
@@ -102,7 +102,7 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
           {/* Education */}
           {education.length > 0 && (
             <section>
-              <h2 className="text-primary border-primary mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold">
+              <h2 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold" style={{ color: '#8b5cf6', borderColor: '#8b5cf6' }}>
                 <GraduationCap className="h-5 w-5" />
                 Education
               </h2>
@@ -145,7 +145,7 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
             skills.tools?.length > 0 ||
             skills.soft?.length > 0) && (
             <section>
-              <h2 className="text-primary border-primary mb-3 border-b-2 pb-1 text-lg font-bold">
+              <h2 className="mb-3 border-b-2 pb-1 text-lg font-bold" style={{ color: '#8b5cf6', borderColor: '#8b5cf6' }}>
                 Skills
               </h2>
               <div className="space-y-3">
@@ -158,7 +158,8 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
                       {skills.technical.map((skill, idx) => (
                         <span
                           key={idx}
-                          className="bg-primary/10 text-primary rounded px-2 py-1 text-xs"
+                          className="rounded px-2 py-1 text-xs"
+                          style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' }}
                         >
                           {skill}
                         </span>
@@ -175,7 +176,8 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
                       {skills.languages.map((lang, idx) => (
                         <span
                           key={idx}
-                          className="bg-primary/10 text-primary rounded px-2 py-1 text-xs"
+                          className="rounded px-2 py-1 text-xs"
+                          style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' }}
                         >
                           {lang}
                         </span>
@@ -192,7 +194,8 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
                       {skills.tools.map((tool, idx) => (
                         <span
                           key={idx}
-                          className="bg-primary/10 text-primary rounded px-2 py-1 text-xs"
+                          className="rounded px-2 py-1 text-xs"
+                          style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' }}
                         >
                           {tool}
                         </span>
@@ -209,7 +212,8 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
                       {skills.soft.map((skill, idx) => (
                         <span
                           key={idx}
-                          className="bg-primary/10 text-primary rounded px-2 py-1 text-xs"
+                          className="rounded px-2 py-1 text-xs"
+                          style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' }}
                         >
                           {skill}
                         </span>
@@ -224,7 +228,7 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
           {/* Certifications */}
           {certifications.length > 0 && (
             <section>
-              <h2 className="text-primary border-primary mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold">
+              <h2 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold" style={{ color: '#8b5cf6', borderColor: '#8b5cf6' }}>
                 <Award className="h-4 w-4" />
                 Certifications
               </h2>
@@ -245,14 +249,14 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
           {/* Links */}
           {links.length > 0 && (
             <section>
-              <h2 className="text-primary border-primary mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold">
+              <h2 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold" style={{ color: '#8b5cf6', borderColor: '#8b5cf6' }}>
                 <LinkIcon className="h-4 w-4" />
                 Links
               </h2>
               <div className="space-y-2">
                 {links.map((link) => (
                   <div key={link.id} className="flex items-start gap-2">
-                    <LinkIcon className="text-primary mt-0.5 h-3 w-3 flex-shrink-0" />
+                    <LinkIcon className="mt-0.5 h-3 w-3 flex-shrink-0" style={{ color: '#8b5cf6' }} />
                     <div>
                       <p className="text-xs font-semibold text-gray-800">
                         {link.label}
@@ -261,7 +265,8 @@ export function ModernTemplate({ resume }: ModernTemplateProps) {
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary text-xs break-all hover:underline"
+                        className="text-xs break-all hover:underline"
+                        style={{ color: '#8b5cf6' }}
                       >
                         {link.url}
                       </a>

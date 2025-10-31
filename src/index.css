@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant light (&:is(.light *));
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -116,6 +117,58 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Force resume templates to always display in light mode */
+.resume-light-mode {
+  /* This creates a new light mode context that overrides parent dark mode */
+  color-scheme: light !important;
+}
+
+/* Override dark mode - ensure resume always displays in light mode regardless of site theme */
+.light .resume-light-mode,
+.dark .resume-light-mode {
+  color-scheme: light !important;
+}
+
+/* Ensure all resume content ignores dark mode */
+.resume-light-mode *,
+.light .resume-light-mode *,
+.dark .resume-light-mode * {
+  color-scheme: light !important;
+}
+
+/* Specifically override common dark mode backgrounds in resumes */
+.dark .resume-light-mode .bg-white,
+.dark .resume-light-mode [class*="bg-white"] {
+  background-color: white !important;
+}
+
+.dark .resume-light-mode .text-black,
+.dark .resume-light-mode [class*="text-black"],
+.dark .resume-light-mode .text-gray-900,
+.dark .resume-light-mode [class*="text-gray-900"] {
+  color: rgb(17 24 39) !important; /* gray-900 */
+}
+
+.dark .resume-light-mode .text-gray-800,
+.dark .resume-light-mode [class*="text-gray-800"] {
+  color: rgb(31 41 55) !important; /* gray-800 */
+}
+
+.dark .resume-light-mode .text-gray-700,
+.dark .resume-light-mode [class*="text-gray-700"] {
+  color: rgb(55 65 81) !important; /* gray-700 */
+}
+
+.dark .resume-light-mode .text-gray-600,
+.dark .resume-light-mode [class*="text-gray-600"] {
+  color: rgb(75 85 99) !important; /* gray-600 */
+}
+
+.dark .resume-light-mode .text-gray-500,
+.dark .resume-light-mode [class*="text-gray-500"] {
+  color: rgb(107 114 128) !important; /* gray-500 */
 }
 
 /* Ensure native date pickers match the current theme */
