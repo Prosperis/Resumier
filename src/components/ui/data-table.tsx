@@ -11,7 +11,6 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import { StaggerChildren, StaggerItem } from "@/components/ui/animated";
 import {
   Table,
   TableBody,
@@ -94,22 +93,18 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              <StaggerChildren staggerDelay={0.05}>
-                {table.getRowModel().rows.map((row) => (
-                  <StaggerItem key={row.id}>
-                    <TableRow data-state={row.getIsSelected() && "selected"}>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </StaggerItem>
-                ))}
-              </StaggerChildren>
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
             ) : (
               <TableRow>
                 <TableCell

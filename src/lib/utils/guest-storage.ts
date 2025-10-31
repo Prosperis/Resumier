@@ -1,4 +1,5 @@
 import { del, entries, set } from "idb-keyval";
+import { mockDb } from "../api/mock/db";
 
 /**
  * Guest Mode Storage Utilities
@@ -73,12 +74,20 @@ export async function importGuestData(data: {
  */
 export async function hasGuestData(): Promise<boolean> {
   try {
+    // Check IndexedDB for resume data
     const allEntries = await entries();
-
     for (const [key] of allEntries) {
       if (key === "resumier-web-store" || key === "resumier-documents") {
         return true;
       }
+    }
+
+    // Initialize mock DB by calling getResumes() - this ensures localStorage is populated
+    const resumes = mockDb.getResumes();
+    
+    // Check if there are any resumes
+    if (resumes && resumes.length > 0) {
+      return true;
     }
 
     return false;

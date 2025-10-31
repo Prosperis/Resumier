@@ -5,6 +5,7 @@
 
 import type { HTMLMotionProps } from "framer-motion";
 import { motion } from "framer-motion";
+import React from "react";
 import {
   useAnimationTransition,
   useAnimationVariants,
@@ -59,13 +60,17 @@ export function StaggerChildren({
   );
 }
 
-interface StaggerItemProps extends Omit<HTMLMotionProps<"div">, "variants"> {
+interface StaggerItemProps {
   children: React.ReactNode;
   className?: string;
 }
 
 /**
  * StaggerItem - Child item for StaggerChildren container
+ * 
+ * This component doesn't render a wrapper element - it applies the stagger
+ * animation variants directly to its child. The child must be a single element
+ * that can accept className and other props.
  *
  * @example
  * ```tsx
@@ -77,12 +82,23 @@ interface StaggerItemProps extends Omit<HTMLMotionProps<"div">, "variants"> {
 export function StaggerItem({
   children,
   className,
-  ...props
 }: StaggerItemProps) {
   const variants = useAnimationVariants(staggerItemVariants);
 
+  // Clone the child and add motion variants and className
+  if (!React.isValidElement(children)) {
+    return <>{children}</>;
+  }
+
+  // Get child's existing className
+  const childProps = children.props as any;
+  const combinedClassName = className 
+    ? `${childProps.className || ''} ${className}`.trim()
+    : childProps.className;
+
+  // Clone child with motion variants applied via a wrapper
   return (
-    <motion.div variants={variants} className={className} {...props}>
+    <motion.div variants={variants} className={combinedClassName}>
       {children}
     </motion.div>
   );

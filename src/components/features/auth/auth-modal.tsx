@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useAuthStore } from "@/stores/auth-store";
+import { hasGuestData } from "@/lib/utils/guest-storage";
 
 interface AuthModalProps {
   open: boolean;
@@ -23,11 +24,20 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     // TODO: Implement OAuth sign in
   };
 
-  const handleContinueAsGuest = () => {
+  const handleContinueAsGuest = async () => {
+    // Check if guest has existing data BEFORE enabling guest mode
+    const hasData = await hasGuestData();
+    
     // Enable guest mode - this will allow IndexedDB access
     loginAsGuest();
     onOpenChange(false);
-    navigate({ to: "/resume/new" });
+    
+    // Navigate to dashboard if they have resumes, otherwise to create new resume
+    if (hasData) {
+      navigate({ to: "/dashboard" });
+    } else {
+      navigate({ to: "/resume/new" });
+    }
   };
 
   return (
