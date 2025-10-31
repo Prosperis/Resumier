@@ -18,25 +18,16 @@ export function RootLayout({ children }: RootLayoutProps) {
   const dotGridEnabled = useAnimationStore((state) => state.dotGridEnabled);
 
   const toggleTheme = () => {
-    if (theme === "light") {
-      setTheme("dark");
-    } else if (theme === "dark") {
-      setTheme("system");
-    } else {
-      setTheme("light");
-    }
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
+  const isDark = theme === "dark";
   const getThemeIcon = () => {
-    if (theme === "light") return <Sun className="size-5" />;
-    if (theme === "dark") return <Moon className="size-5" />;
-    return <Sun className="size-5" />;
+    return isDark ? <Sun className="size-5" /> : <Moon className="size-5" />;
   };
 
   const getThemeLabel = () => {
-    if (theme === "light") return "Switch to dark theme";
-    if (theme === "dark") return "Switch to system theme";
-    return "Switch to light theme";
+    return `Switch to ${isDark ? "light" : "dark"} theme`;
   };
 
   return (

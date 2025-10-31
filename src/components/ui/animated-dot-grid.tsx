@@ -102,10 +102,7 @@ export function AnimatedDotGrid({
     };
 
     const updateDotColors = () => {
-      const isDark =
-        theme === "dark" ||
-        (theme === "system" &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches);
+      const isDark = theme === "dark";
       const dotColor = isDark
         ? "rgba(255, 255, 255, 0.2)"
         : "rgba(0, 0, 0, 0.15)";

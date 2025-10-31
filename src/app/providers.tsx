@@ -13,7 +13,7 @@ type ProvidersProps = {
  */
 export function Providers({ children }: ProvidersProps) {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="resumier-theme">
+    <ThemeProvider storageKey="resumier-theme">
       <QueryClientProvider client={queryClient}>
         {children}
         {/* Show React Query devtools in development */}
