@@ -18,7 +18,7 @@ const getInitialTheme = (storageKey: string): Theme => {
   if (stored === "light" || stored === "dark") {
     return stored;
   }
-  
+
   // Otherwise, use system preference
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"

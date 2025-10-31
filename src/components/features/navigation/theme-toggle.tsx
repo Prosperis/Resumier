@@ -19,7 +19,11 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={ariaLabel}
     >
-      {isDark ? <Sun className="size-5" aria-hidden /> : <Moon className="size-5" aria-hidden />}
+      {isDark ? (
+        <Sun className="size-5" aria-hidden />
+      ) : (
+        <Moon className="size-5" aria-hidden />
+      )}
     </Button>
   );
 }
