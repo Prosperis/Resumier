@@ -53,7 +53,7 @@ export function RootLayout({ children }: RootLayoutProps) {
       <header className="relative sticky top-0 z-50 w-full border-b border-purple-500/20 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
         {/* Gradient accent line */}
         <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600" />
-        
+
         <div className="flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
             to="/"
@@ -96,13 +96,21 @@ export function RootLayout({ children }: RootLayoutProps) {
       <footer className="relative border-t border-purple-500/20 bg-gradient-to-b from-background to-purple-500/5 py-6 md:py-0">
         {/* Gradient accent line */}
         <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-        
+
         <div className="text-muted-foreground container flex h-20 items-center justify-center text-sm">
           <span className="flex items-center gap-2">
-            Built with 
-            <span className="font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">React</span>, 
-            <span className="font-semibold bg-gradient-to-r from-fuchsia-600 to-pink-600 bg-clip-text text-transparent">TanStack</span>, and 
-            <span className="font-semibold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">shadcn/ui</span>
+            Built with
+            <span className="font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
+              React
+            </span>
+            ,
+            <span className="font-semibold bg-gradient-to-r from-fuchsia-600 to-pink-600 bg-clip-text text-transparent">
+              TanStack
+            </span>
+            , and
+            <span className="font-semibold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
+              shadcn/ui
+            </span>
           </span>
         </div>
       </footer>

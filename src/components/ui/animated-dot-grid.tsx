@@ -57,7 +57,7 @@ export function AnimatedDotGrid({
       const dots: typeof dotsRef.current = [];
       const containerWidth = container.clientWidth;
       const containerHeight = container.clientHeight;
-      
+
       // Extend grid beyond container boundaries to fill edges
       // Add extra columns and rows to cover the overflow areas
       const cols = Math.ceil(containerWidth / dotSpacing) + 2; // +2 extra columns
@@ -88,49 +88,70 @@ export function AnimatedDotGrid({
           dot.className = "dot absolute pointer-events-none";
 
           // Create SVG hexagon outline with vibrant modern design
-          const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          const svg = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "svg",
+          );
           svg.setAttribute("width", hexSize.toString());
           svg.setAttribute("height", hexSize.toString());
           svg.setAttribute("viewBox", `0 0 ${hexSize} ${hexSize}`);
-          svg.style.transition = "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-          
+          svg.style.transition =
+            "opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
+
           // Add gradient definition for each hexagon
-          const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-          const gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+          const defs = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "defs",
+          );
+          const gradient = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "linearGradient",
+          );
           const gradientId = `hex-gradient-${i}-${j}`;
           gradient.setAttribute("id", gradientId);
           gradient.setAttribute("x1", "0%");
           gradient.setAttribute("y1", "0%");
           gradient.setAttribute("x2", "100%");
           gradient.setAttribute("y2", "100%");
-          
-          const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+
+          const stop1 = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "stop",
+          );
           stop1.setAttribute("offset", "0%");
           stop1.setAttribute("stop-opacity", "1");
           stop1.className.baseVal = "hex-gradient-start";
-          
-          const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+
+          const stop2 = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "stop",
+          );
           stop2.setAttribute("offset", "100%");
           stop2.setAttribute("stop-opacity", "0.7");
           stop2.className.baseVal = "hex-gradient-end";
-          
+
           gradient.appendChild(stop1);
           gradient.appendChild(stop2);
           defs.appendChild(gradient);
           svg.appendChild(defs);
-          
-          const hexagon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+
+          const hexagon = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "polygon",
+          );
           // Flat-top hexagon points (perfect regular hexagon with small padding for gaps)
           const inset = 0.05; // Smaller inset for subtle gaps with larger hexagons
           const points = [
-            [hexSize * 0.5, hexSize * (0.067 + inset)],          // top
-            [hexSize * (0.933 - inset), hexSize * (0.25 + inset/2)],   // top-right
-            [hexSize * (0.933 - inset), hexSize * (0.75 - inset/2)],   // bottom-right
-            [hexSize * 0.5, hexSize * (0.933 - inset)],          // bottom
-            [hexSize * (0.067 + inset), hexSize * (0.75 - inset/2)],   // bottom-left
-            [hexSize * (0.067 + inset), hexSize * (0.25 + inset/2)],   // top-left
-          ].map(p => p.join(',')).join(' ');
-          
+            [hexSize * 0.5, hexSize * (0.067 + inset)], // top
+            [hexSize * (0.933 - inset), hexSize * (0.25 + inset / 2)], // top-right
+            [hexSize * (0.933 - inset), hexSize * (0.75 - inset / 2)], // bottom-right
+            [hexSize * 0.5, hexSize * (0.933 - inset)], // bottom
+            [hexSize * (0.067 + inset), hexSize * (0.75 - inset / 2)], // bottom-left
+            [hexSize * (0.067 + inset), hexSize * (0.25 + inset / 2)], // top-left
+          ]
+            .map((p) => p.join(","))
+            .join(" ");
+
           hexagon.setAttribute("points", points);
           hexagon.setAttribute("fill", "none");
           hexagon.setAttribute("stroke", `url(#${gradientId})`);
@@ -138,10 +159,11 @@ export function AnimatedDotGrid({
           hexagon.setAttribute("stroke-linecap", "round");
           hexagon.setAttribute("stroke-linejoin", "round");
           hexagon.className.baseVal = "hexagon-stroke";
-          
+
           // Add smooth transitions for modern feel
-          hexagon.style.transition = "stroke-width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease";
-          
+          hexagon.style.transition =
+            "stroke-width 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease";
+
           svg.appendChild(hexagon);
           dot.appendChild(svg);
 
@@ -171,24 +193,26 @@ export function AnimatedDotGrid({
       const isDark = theme === "dark";
       // Balanced gradients - subtle for dark mode, bold for light mode
       const gradientStart = isDark
-        ? "rgba(139, 92, 246, 0.25)"  // Subtle violet for dark mode
-        : "rgba(124, 58, 237, 0.4)";  // Bold violet for light mode
-      
+        ? "rgba(139, 92, 246, 0.25)" // Subtle violet for dark mode
+        : "rgba(124, 58, 237, 0.4)"; // Bold violet for light mode
+
       const gradientEnd = isDark
-        ? "rgba(217, 70, 239, 0.18)"  // Subtle fuchsia accent for dark mode
-        : "rgba(192, 38, 211, 0.3)";  // Strong fuchsia for light mode
+        ? "rgba(217, 70, 239, 0.18)" // Subtle fuchsia accent for dark mode
+        : "rgba(192, 38, 211, 0.3)"; // Strong fuchsia for light mode
 
       // Batch color updates for better performance
       for (let i = 0; i < dotsRef.current.length; i++) {
         const dot = dotsRef.current[i];
         if (dot.element) {
           // Update gradient stop colors
-          const gradientStart_el = dot.element.querySelector('.hex-gradient-start');
-          const gradientEnd_el = dot.element.querySelector('.hex-gradient-end');
-          
+          const gradientStart_el = dot.element.querySelector(
+            ".hex-gradient-start",
+          );
+          const gradientEnd_el = dot.element.querySelector(".hex-gradient-end");
+
           if (gradientStart_el && gradientEnd_el) {
-            gradientStart_el.setAttribute('stop-color', gradientStart);
-            gradientEnd_el.setAttribute('stop-color', gradientEnd);
+            gradientStart_el.setAttribute("stop-color", gradientStart);
+            gradientEnd_el.setAttribute("stop-color", gradientEnd);
           }
         }
       }
@@ -238,19 +262,19 @@ export function AnimatedDotGrid({
 
           // Use will-change for optimization hint
           dot.element.style.transform = `translate(calc(-50% + ${translateX}px), calc(-50% + ${translateY}px)) scale(${scale}) rotate(${force * 3}deg)`;
-          
+
           // Add vibrant dynamic effects matching site theme
-          const svg = dot.element.querySelector('svg');
-          const hexagon = dot.element.querySelector('.hexagon-stroke');
+          const svg = dot.element.querySelector("svg");
+          const hexagon = dot.element.querySelector(".hexagon-stroke");
           if (svg && hexagon) {
             // Dynamic opacity boost - full brightness on interaction
-            const opacityBoost = 0.5 + (force * invWaveIntensity * 0.5); // 0.5 to 1.0 range
+            const opacityBoost = 0.5 + force * invWaveIntensity * 0.5; // 0.5 to 1.0 range
             svg.style.opacity = opacityBoost.toString();
-            
+
             // Dynamic stroke width - dramatic thickening
-            const strokeWidth = 3 + (force * invWaveIntensity * 2.5); // 3.0 to 5.5
-            hexagon.setAttribute('stroke-width', strokeWidth.toString());
-            
+            const strokeWidth = 3 + force * invWaveIntensity * 2.5; // 3.0 to 5.5
+            hexagon.setAttribute("stroke-width", strokeWidth.toString());
+
             // Multi-layer glow effect with vibrant colors
             const glowIntensity = force * invWaveIntensity * 12; // 0 to 12px blur
             const innerGlow = glowIntensity * 0.6;
@@ -262,14 +286,15 @@ export function AnimatedDotGrid({
           }
         } else {
           // Return to original position
-          dot.element.style.transform = "translate(-50%, -50%) scale(1) rotate(0deg)";
-          
+          dot.element.style.transform =
+            "translate(-50%, -50%) scale(1) rotate(0deg)";
+
           // Reset effects
-          const svg = dot.element.querySelector('svg');
-          const hexagon = dot.element.querySelector('.hexagon-stroke');
+          const svg = dot.element.querySelector("svg");
+          const hexagon = dot.element.querySelector(".hexagon-stroke");
           if (svg && hexagon) {
             svg.style.opacity = "1";
-            hexagon.setAttribute('stroke-width', "3");
+            hexagon.setAttribute("stroke-width", "3");
             svg.style.filter = "none";
           }
         }
