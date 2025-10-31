@@ -28,7 +28,10 @@ interface ResumePreviewProps {
 // Template loading skeleton
 function TemplateLoadingSkeleton() {
   return (
-    <div className="mx-auto w-full max-w-[21cm] space-y-8 bg-white p-16 shadow-lg" style={{ colorScheme: 'light' }}>
+    <div
+      className="mx-auto w-full max-w-[21cm] space-y-8 bg-white p-16 shadow-lg"
+      style={{ colorScheme: "light" }}
+    >
       <div className="space-y-4">
         <Skeleton className="h-12 w-2/3" />
         <Skeleton className="h-4 w-1/2" />
@@ -65,7 +68,10 @@ export function ResumePreview({ resume, template }: ResumePreviewProps) {
   };
 
   return (
-    <div className="h-full w-full overflow-auto p-8" style={{ backgroundColor: '#f3f4f6' }}>
+    <div
+      className="h-full w-full overflow-auto p-8"
+      style={{ backgroundColor: "#f3f4f6" }}
+    >
       {/* Remove dark mode context for resume display */}
       <div className="resume-light-mode light print:bg-white print:p-0">
         <Suspense fallback={<TemplateLoadingSkeleton />}>

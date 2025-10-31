@@ -9,7 +9,10 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
     resume.content;
 
   return (
-    <div className="mx-auto max-w-[21cm] bg-white p-12 font-serif text-black shadow-lg" style={{ colorScheme: 'light' }}>
+    <div
+      className="mx-auto max-w-[21cm] bg-white p-12 font-serif text-black shadow-lg"
+      style={{ colorScheme: "light" }}
+    >
       {/* Header Section - Centered */}
       <header className="mb-8 border-b-2 border-black pb-4 text-center">
         <h1 className="mb-2 text-3xl font-bold">
