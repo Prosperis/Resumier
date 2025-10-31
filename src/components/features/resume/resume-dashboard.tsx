@@ -96,7 +96,7 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
 
   return (
     <FadeIn>
-      <div className="space-y-4 p-4">
+      <div className="space-y-4 p-4 bg-background">
         {/* Header with create button */}
         <div className="flex items-center justify-between">
           <div>
