@@ -32,10 +32,7 @@ export async function exportGuestData(): Promise<{
     const data: Record<string, unknown> = {};
 
     for (const [key, value] of allEntries) {
-      if (
-        key === "resumier-web-store" ||
-        key === "resumier-documents"
-      ) {
+      if (key === "resumier-web-store" || key === "resumier-documents") {
         data[key] = value;
       }
     }
@@ -77,16 +74,13 @@ export async function importGuestData(data: {
 export async function hasGuestData(): Promise<boolean> {
   try {
     const allEntries = await entries();
-    
+
     for (const [key] of allEntries) {
-      if (
-        key === "resumier-web-store" ||
-        key === "resumier-documents"
-      ) {
+      if (key === "resumier-web-store" || key === "resumier-documents") {
         return true;
       }
     }
-    
+
     return false;
   } catch (error) {
     console.error("Failed to check guest data:", error);

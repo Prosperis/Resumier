@@ -75,8 +75,8 @@ export const useAuthStore = create<AuthStore>()(
           // Guest users get a temporary ID and can use IndexedDB storage
           const guestUser: User = {
             id: `guest-${Date.now()}`,
-            email: '',
-            name: 'Guest User',
+            email: "",
+            name: "Guest User",
           };
 
           set({

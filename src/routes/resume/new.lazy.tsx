@@ -1,7 +1,13 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCreateResume } from "@/hooks/api";
@@ -23,13 +29,15 @@ function NewResumeComponent() {
 
   // Auto-focus title input on mount
   useEffect(() => {
-    const input = document.querySelector('input[name="title"]') as HTMLInputElement;
+    const input = document.querySelector(
+      'input[name="title"]',
+    ) as HTMLInputElement;
     input?.focus();
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!title.trim()) {
       toast({
         title: "Error",
@@ -57,7 +65,7 @@ function NewResumeComponent() {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -88,13 +96,9 @@ function NewResumeComponent() {
                 You can change this later
               </p>
             </div>
-            
+
             <div className="flex gap-2">
-              <Button
-                type="submit"
-                disabled={isPending}
-                className="flex-1"
-              >
+              <Button type="submit" disabled={isPending} className="flex-1">
                 {isPending ? "Creating..." : "Create Resume"}
               </Button>
               <Button
