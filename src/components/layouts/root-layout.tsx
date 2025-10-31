@@ -32,12 +32,12 @@ export function RootLayout({ children }: RootLayoutProps) {
 
   return (
     <div className="relative flex min-h-screen flex-col">
-      {/* Animated dot grid background */}
+      {/* Animated honeycomb background */}
       <AnimatedDotGrid
         dotSize={2}
-        dotSpacing={40}
-        waveRadius={150}
-        waveIntensity={20}
+        dotSpacing={120}
+        waveRadius={250}
+        waveIntensity={40}
         enabled={dotGridEnabled}
       />
 
@@ -49,24 +49,33 @@ export function RootLayout({ children }: RootLayoutProps) {
         Skip to main content
       </a>
 
-      {/* Header */}
-      <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 relative sticky top-0 z-50 w-full border-b backdrop-blur">
-        <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+      {/* Header - Modern Gradient Design */}
+      <header className="relative sticky top-0 z-50 w-full border-b border-purple-500/20 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+        {/* Gradient accent line */}
+        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600" />
+        
+        <div className="flex h-20 items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link
             to="/"
-            className="flex items-center gap-2 font-semibold"
+            className="group flex items-center gap-3 transition-all duration-300 hover:scale-105"
             aria-label="Resumier home"
           >
-            <FileText className="size-6" aria-hidden="true" />
-            <span className="text-xl">Resumier</span>
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 shadow-lg shadow-purple-500/30 transition-all duration-300 group-hover:shadow-purple-500/50">
+              <FileText className="size-5 text-white" aria-hidden="true" />
+              <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            </div>
+            <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 bg-clip-text text-2xl font-black tracking-tight text-transparent">
+              Resumier
+            </span>
           </Link>
 
-          <nav className="flex items-center gap-4" aria-label="Main navigation">
+          <nav className="flex items-center gap-3" aria-label="Main navigation">
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
               aria-label={getThemeLabel()}
+              className="h-10 w-10 rounded-xl transition-all duration-300 hover:scale-105 hover:bg-purple-500/10"
             >
               {getThemeIcon()}
             </Button>
@@ -83,10 +92,18 @@ export function RootLayout({ children }: RootLayoutProps) {
         {children}
       </main>
 
-      {/* Footer */}
-      <footer className="relative border-t py-6 md:py-0">
-        <div className="text-muted-foreground container flex h-16 items-center justify-center text-sm">
-          Built with React, TanStack, and shadcn/ui
+      {/* Footer - Modern Design */}
+      <footer className="relative border-t border-purple-500/20 bg-gradient-to-b from-background to-purple-500/5 py-6 md:py-0">
+        {/* Gradient accent line */}
+        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+        
+        <div className="text-muted-foreground container flex h-20 items-center justify-center text-sm">
+          <span className="flex items-center gap-2">
+            Built with 
+            <span className="font-semibold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">React</span>, 
+            <span className="font-semibold bg-gradient-to-r from-fuchsia-600 to-pink-600 bg-clip-text text-transparent">TanStack</span>, and 
+            <span className="font-semibold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">shadcn/ui</span>
+          </span>
         </div>
       </footer>
     </div>
