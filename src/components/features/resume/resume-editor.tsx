@@ -16,7 +16,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
   const [template, setTemplate] = useState<TemplateType>("modern");
 
   return (
-    <Tabs defaultValue="edit" className="w-full">
+    <Tabs defaultValue="preview" className="w-full">
       <div className="mb-6 flex items-center justify-between gap-4">
         <TabsList>
           <TabsTrigger value="edit" className="gap-2">
