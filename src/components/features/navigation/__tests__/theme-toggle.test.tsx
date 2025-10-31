@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/app/theme-provider";
 import { ThemeToggle } from "../theme-toggle";
 
 // Ensure localStorage is available in test environment
-if (typeof global.localStorage === 'undefined') {
+if (typeof global.localStorage === "undefined") {
   global.localStorage = {
     store: {} as Record<string, string>,
     getItem(key: string) {

@@ -9,7 +9,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ThemeProvider, useTheme } from "../theme-provider";
 
 // Ensure localStorage is available in test environment
-if (typeof global.localStorage === 'undefined') {
+if (typeof global.localStorage === "undefined") {
   global.localStorage = {
     store: {} as Record<string, string>,
     getItem(key: string) {
