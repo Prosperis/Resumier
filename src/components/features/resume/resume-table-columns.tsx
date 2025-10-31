@@ -60,12 +60,15 @@ interface RowActionsProps {
   onDuplicate: (resume: Resume) => void;
 }
 
-function RowContextMenu({ resume, onEdit, onDuplicate, children }: RowActionsProps & { children: React.ReactNode }) {
+function RowContextMenu({
+  resume,
+  onEdit,
+  onDuplicate,
+  children,
+}: RowActionsProps & { children: React.ReactNode }) {
   return (
     <ContextMenu>
-      <ContextMenuTrigger asChild>
-        {children}
-      </ContextMenuTrigger>
+      <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuLabel>Actions</ContextMenuLabel>
         <ContextMenuSeparator />
