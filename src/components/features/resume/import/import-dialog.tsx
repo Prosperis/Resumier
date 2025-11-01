@@ -153,7 +153,9 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>
-            {selectedSource ? `Import from ${selectedSource.name}` : "Import Resume"}
+            {selectedSource
+              ? `Import from ${selectedSource.name}`
+              : "Import Resume"}
           </DialogTitle>
           <DialogDescription>
             {selectedSource
@@ -274,7 +276,9 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
             )}
 
             <div className="bg-muted/50 rounded-lg p-4">
-              <h4 className="mb-2 text-sm font-medium">What will be imported?</h4>
+              <h4 className="mb-2 text-sm font-medium">
+                What will be imported?
+              </h4>
               <ul className="text-muted-foreground space-y-1 text-sm">
                 <li>• Personal information</li>
                 <li>• Work experience</li>
@@ -283,8 +287,8 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                 <li>• Links and contact information</li>
               </ul>
               <p className="text-muted-foreground mt-2 text-xs">
-                Note: Imported data will be merged with your existing resume. You
-                can review and edit everything before saving.
+                Note: Imported data will be merged with your existing resume.
+                You can review and edit everything before saving.
               </p>
             </div>
           </div>

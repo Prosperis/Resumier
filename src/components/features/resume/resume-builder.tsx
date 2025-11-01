@@ -617,7 +617,8 @@ export function ResumeBuilder() {
         onSuccess: () => {
           toast({
             title: "Import Successful",
-            description: "Resume data has been imported and merged successfully",
+            description:
+              "Resume data has been imported and merged successfully",
           });
         },
         onError: (error) => {

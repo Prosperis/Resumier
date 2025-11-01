@@ -1,6 +1,6 @@
 /**
  * Import Dialog Component Tests
- * 
+ *
  * Note: These tests require a browser environment with proper DOM setup.
  * Run with: bun test --environment jsdom
  */
