@@ -53,18 +53,18 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
       console.log("Initializing demo mode...");
       await initializeDemoMode({ multipleResumes: true, clearExisting: true });
       console.log("Demo mode initialized successfully");
-      
+
       // Set auth state to demo
       loginAsDemo();
       console.log("Auth state set to demo");
-      
+
       // Invalidate resumes cache to force refetch with demo data
       await queryClient.invalidateQueries({ queryKey: resumesQueryKey });
       console.log("Resumes cache invalidated");
-      
+
       // Close modal
       onOpenChange(false);
-      
+
       // Navigate to dashboard to view demo resumes
       console.log("Navigating to dashboard...");
       navigate({ to: "/dashboard" });

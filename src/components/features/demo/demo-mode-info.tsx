@@ -8,11 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useDemoMode } from "@/hooks/use-demo-mode";
 import { useAuthStore } from "@/stores/auth-store";
 import { useNavigate } from "@tanstack/react-router";
@@ -23,11 +19,19 @@ import { useNavigate } from "@tanstack/react-router";
  */
 export function DemoModeInfo() {
   const navigate = useNavigate();
-  const { isDemo, hasData, isChecking, demoResumes, initializeDemo, exitDemo, exportData, refreshData } =
-    useDemoMode();
+  const {
+    isDemo,
+    hasData,
+    isChecking,
+    demoResumes,
+    initializeDemo,
+    exitDemo,
+    exportData,
+    refreshData,
+  } = useDemoMode();
   const loginAsDemo = useAuthStore((state) => state.loginAsDemo);
   const logout = useAuthStore((state) => state.logout);
-  
+
   const [isInitializing, setIsInitializing] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
@@ -37,13 +41,13 @@ export function DemoModeInfo() {
     try {
       // Initialize demo mode with data
       await initializeDemo({ multipleResumes: true, clearExisting: true });
-      
+
       // Set auth state to demo
       loginAsDemo();
-      
+
       // Refresh to load demo data
       await refreshData();
-      
+
       // Navigate to dashboard
       navigate({ to: "/dashboard" });
     } catch (error) {
@@ -57,7 +61,7 @@ export function DemoModeInfo() {
   const handleExitDemo = async () => {
     if (
       !window.confirm(
-        "Exit demo mode? This will clear all demo data and return you to the home screen."
+        "Exit demo mode? This will clear all demo data and return you to the home screen.",
       )
     ) {
       return;
@@ -111,7 +115,8 @@ export function DemoModeInfo() {
             Try Demo Mode
           </CardTitle>
           <CardDescription className="text-blue-700 dark:text-blue-300">
-            Explore Resumier with a fully populated resume example featuring John Doe's professional profile.
+            Explore Resumier with a fully populated resume example featuring
+            John Doe's professional profile.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -168,7 +173,8 @@ export function DemoModeInfo() {
                     📊 Demo Data Loaded
                   </p>
                   <p className="text-xs text-blue-700 dark:text-blue-300">
-                    {demoResumes.length} resume{demoResumes.length !== 1 ? "s" : ""} available
+                    {demoResumes.length} resume
+                    {demoResumes.length !== 1 ? "s" : ""} available
                   </p>
                   <ul className="mt-2 space-y-1">
                     {demoResumes.map((resume) => (
@@ -214,7 +220,9 @@ export function DemoModeInfo() {
 
             <Alert className="border-blue-300 dark:border-blue-800">
               <AlertDescription className="text-blue-800 dark:text-blue-200 text-xs">
-                <strong>Note:</strong> Demo mode uses temporary storage. Your changes won't be saved permanently. Sign up to save your own resumes!
+                <strong>Note:</strong> Demo mode uses temporary storage. Your
+                changes won't be saved permanently. Sign up to save your own
+                resumes!
               </AlertDescription>
             </Alert>
           </>

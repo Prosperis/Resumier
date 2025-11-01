@@ -17,13 +17,13 @@ export interface DemoModeConfig {
  * Loads complete resume data into IndexedDB
  */
 export async function initializeDemoMode(
-  config: DemoModeConfig = {}
+  config: DemoModeConfig = {},
 ): Promise<void> {
   const { multipleResumes = false, clearExisting = false } = config;
 
   try {
     console.log("Demo mode config:", config);
-    
+
     // Optionally clear existing data
     if (clearExisting) {
       console.log("Clearing existing demo data...");
@@ -31,8 +31,13 @@ export async function initializeDemoMode(
     }
 
     // Create demo resume(s)
-    const demoResumes = multipleResumes ? createDemoResumes() : [createDemoResume()];
-    console.log(`Created ${demoResumes.length} demo resume(s):`, demoResumes.map(r => r.title));
+    const demoResumes = multipleResumes
+      ? createDemoResumes()
+      : [createDemoResume()];
+    console.log(
+      `Created ${demoResumes.length} demo resume(s):`,
+      demoResumes.map((r) => r.title),
+    );
 
     // Store in IndexedDB (resumier-web-store)
     // This matches the structure used by the app

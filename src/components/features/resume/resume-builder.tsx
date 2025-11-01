@@ -648,8 +648,8 @@ export function ResumeBuilder() {
                     Quick Start
                   </CardTitle>
                   <CardDescription>
-                    Import your resume from LinkedIn, JSON, or other sources to get
-                    started quickly
+                    Import your resume from LinkedIn, JSON, or other sources to
+                    get started quickly
                   </CardDescription>
                 </div>
                 <ImportDialog
