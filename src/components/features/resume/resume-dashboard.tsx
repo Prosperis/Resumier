@@ -105,15 +105,17 @@ export function ResumeDashboard({ onResumeClick }: ResumeDashboardProps) {
               Manage and organize your resume documents
             </p>
           </div>
-          <CreateResumeDialog
-            onSuccess={(id) => onResumeClick?.(id)}
-            trigger={
-              <Button size="default" aria-label="Create new resume">
-                <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
-                New Resume
-              </Button>
-            }
-          />
+          <div className="flex items-center gap-2">
+            <CreateResumeDialog
+              onSuccess={(id) => onResumeClick?.(id)}
+              trigger={
+                <Button size="default" aria-label="Create new resume">
+                  <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+                  New Resume
+                </Button>
+              }
+            />
+          </div>
         </div>
 
         {/* Resume table */}

@@ -1,5 +1,5 @@
 import { useParams } from "@tanstack/react-router";
-import { Plus } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 import { Suspense, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,7 @@ import type {
   Education,
   Experience,
   Link,
+  ResumeContent,
 } from "@/lib/api/types";
 import type {
   CertificationFormData,
@@ -31,6 +32,7 @@ import type {
   ExperienceFormData,
 } from "@/lib/validations/experience";
 import type { CreateLinkFormData, LinkFormData } from "@/lib/validations/links";
+import { ImportDialog } from "./import/import-dialog";
 import {
   FormDialogSkeleton,
   FormSkeleton,
@@ -563,8 +565,103 @@ export function ResumeBuilder() {
     );
   };
 
+  // Import handler
+  const handleImportSuccess = (importedData: Partial<ResumeContent>) => {
+    // Merge imported data with existing content
+    const mergedContent: Partial<ResumeContent> = {
+      personalInfo: {
+        ...content.personalInfo,
+        ...importedData.personalInfo,
+      },
+      experience: [
+        ...(content.experience || []),
+        ...(importedData.experience || []),
+      ],
+      education: [
+        ...(content.education || []),
+        ...(importedData.education || []),
+      ],
+      skills: {
+        technical: [
+          ...(content.skills?.technical || []),
+          ...(importedData.skills?.technical || []),
+        ],
+        languages: [
+          ...(content.skills?.languages || []),
+          ...(importedData.skills?.languages || []),
+        ],
+        tools: [
+          ...(content.skills?.tools || []),
+          ...(importedData.skills?.tools || []),
+        ],
+        soft: [
+          ...(content.skills?.soft || []),
+          ...(importedData.skills?.soft || []),
+        ],
+      },
+      certifications: [
+        ...(content.certifications || []),
+        ...(importedData.certifications || []),
+      ],
+      links: [...(content.links || []), ...(importedData.links || [])],
+    };
+
+    updateResume(
+      {
+        id: resumeId,
+        data: {
+          content: mergedContent,
+        },
+      },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Import Successful",
+            description: "Resume data has been imported and merged successfully",
+          });
+        },
+        onError: (error) => {
+          toast({
+            title: "Error",
+            description: `Failed to save imported data: ${error.message}`,
+            variant: "destructive",
+          });
+        },
+      },
+    );
+  };
+
   return (
     <div className="mx-auto w-full max-w-4xl space-y-8">
+      {/* Import Section */}
+      <Card className="border-primary/50 bg-gradient-to-br from-primary/5 to-primary/10">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Upload className="h-5 w-5" />
+                Quick Start
+              </CardTitle>
+              <CardDescription>
+                Import your resume from LinkedIn, JSON, or other sources to get
+                started quickly
+              </CardDescription>
+            </div>
+            <ImportDialog
+              trigger={
+                <Button variant="default">
+                  <Upload className="mr-2 h-4 w-4" />
+                  Import Resume
+                </Button>
+              }
+              onImportSuccess={handleImportSuccess}
+            />
+          </div>
+        </CardHeader>
+      </Card>
+
+      <Separator />
+
       {/* Personal Information Section */}
       <Card>
         <CardHeader>
