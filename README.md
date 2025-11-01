@@ -8,8 +8,19 @@ A modern, feature-rich resume builder application built with React, TypeScript, 
 
 🌐 **Live Demo:** [https://prosperis.github.io/Resumier/](https://prosperis.github.io/Resumier/)
 
+## 🎭 Try Demo Mode
+
+Want to see Resumier in action without creating content? Click **"Try Demo Mode"** on the welcome screen to explore a fully populated resume with:
+- Complete professional profile (John Doe)
+- 3 work experiences with detailed descriptions
+- Education history, skills, certifications, and links
+- All features ready to explore!
+
+[Learn more about Demo Mode →](./DEMO_MODE_GUIDE.md)
+
 ## ✨ Features
 
+- 🎭 **Demo Mode** - Explore with pre-populated resume data (NEW!)
 - 📝 **Multiple Templates** - Choose from Classic, Modern, and Minimal designs
 - 🎨 **Real-time Preview** - See changes instantly as you edit
 - 💾 **Local Storage** - Your data is saved locally in your browser

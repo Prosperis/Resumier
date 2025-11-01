@@ -12,6 +12,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { useResume, useUpdateResume } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
+import { useAuthStore, selectIsDemo } from "@/stores/auth-store";
 import type {
   Certification,
   Education,
@@ -55,6 +56,7 @@ export function ResumeBuilder() {
   const { data: resume } = useResume(resumeId);
   const { mutate: updateResume } = useUpdateResume();
   const { toast } = useToast();
+  const isDemo = useAuthStore(selectIsDemo);
 
   // Dialog states
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false);
@@ -634,34 +636,38 @@ export function ResumeBuilder() {
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-8">
-      {/* Import Section */}
-      <Card className="border-primary/50 bg-gradient-to-br from-primary/5 to-primary/10">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <Upload className="h-5 w-5" />
-                Quick Start
-              </CardTitle>
-              <CardDescription>
-                Import your resume from LinkedIn, JSON, or other sources to get
-                started quickly
-              </CardDescription>
-            </div>
-            <ImportDialog
-              trigger={
-                <Button variant="default">
-                  <Upload className="mr-2 h-4 w-4" />
-                  Import Resume
-                </Button>
-              }
-              onImportSuccess={handleImportSuccess}
-            />
-          </div>
-        </CardHeader>
-      </Card>
+      {/* Import Resume Section - Hidden in demo mode */}
+      {!isDemo && (
+        <>
+          <Card className="border-blue-200 bg-blue-50/50 dark:border-blue-900 dark:bg-blue-950/20">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <Upload className="h-5 w-5" />
+                    Quick Start
+                  </CardTitle>
+                  <CardDescription>
+                    Import your resume from LinkedIn, JSON, or other sources to get
+                    started quickly
+                  </CardDescription>
+                </div>
+                <ImportDialog
+                  trigger={
+                    <Button variant="default">
+                      <Upload className="mr-2 h-4 w-4" />
+                      Import Resume
+                    </Button>
+                  }
+                  onImportSuccess={handleImportSuccess}
+                />
+              </div>
+            </CardHeader>
+          </Card>
 
-      <Separator />
+          <Separator />
+        </>
+      )}
 
       {/* Personal Information Section */}
       <Card>

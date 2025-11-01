@@ -1,6 +1,9 @@
+import { get } from "idb-keyval";
 import { ConflictError, NotFoundError } from "../errors";
 import type { CreateResumeDto, Resume, UpdateResumeDto } from "../types";
 import { delay, mockDb } from "./db";
+
+const IDB_STORE_KEY = "resumier-web-store";
 
 /**
  * Mock Resume API Endpoints
@@ -26,20 +29,57 @@ function randomDelay(): number {
 export const mockResumeApi = {
   /**
    * GET /api/resumes
-   * Fetch all resumes
+   * Fetch all resumes (checks IndexedDB first for demo mode)
    */
   async getAll(): Promise<Resume[]> {
     await delay(randomDelay());
-    return mockDb.getResumes();
+    
+    console.log("MockAPI: Fetching all resumes...");
+    
+    // Check IndexedDB first (for demo mode data)
+    try {
+      const idbData = await get(IDB_STORE_KEY);
+      console.log("MockAPI: IndexedDB data:", idbData);
+      
+      if (idbData && typeof idbData === "object" && "resumes" in idbData) {
+        const resumes = (idbData as { resumes: Resume[] }).resumes;
+        if (resumes && resumes.length > 0) {
+          console.log(`MockAPI: ✅ Returning ${resumes.length} resume(s) from IndexedDB`);
+          return resumes;
+        }
+      }
+    } catch (error) {
+      console.warn("MockAPI: Failed to load from IndexedDB, falling back to localStorage:", error);
+    }
+    
+    // Fallback to localStorage mock DB
+    const localResumes = mockDb.getResumes();
+    console.log(`MockAPI: ✅ Returning ${localResumes.length} resume(s) from localStorage`);
+    return localResumes;
   },
 
   /**
    * GET /api/resumes/:id
-   * Fetch resume by ID
+   * Fetch resume by ID (checks IndexedDB first for demo mode)
    */
   async getById(id: string): Promise<Resume> {
     await delay(randomDelay());
 
+    // Check IndexedDB first (for demo mode data)
+    try {
+      const idbData = await get(IDB_STORE_KEY);
+      if (idbData && typeof idbData === "object" && "resumes" in idbData) {
+        const resumes = (idbData as { resumes: Resume[] }).resumes;
+        const resume = resumes.find((r) => r.id === id);
+        if (resume) {
+          return resume;
+        }
+      }
+    } catch (error) {
+      console.warn("Failed to load from IndexedDB, falling back to localStorage:", error);
+    }
+
+    // Fallback to localStorage mock DB
     const resume = mockDb.getResumeById(id);
     if (!resume) {
       throw new NotFoundError(`Resume with ID "${id}" not found`);

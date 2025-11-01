@@ -16,16 +16,19 @@ interface AuthStore {
   user: User | null;
   isAuthenticated: boolean;
   isGuest: boolean; // Flag for guest mode
+  isDemo: boolean; // Flag for demo mode
   isLoading: boolean;
   error: string | null;
 
   // Actions
   setUser: (user: User | null) => void;
   setGuest: (isGuest: boolean) => void;
+  setDemo: (isDemo: boolean) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   login: (email: string, password: string) => Promise<void>;
   loginAsGuest: () => void; // New action for guest mode
+  loginAsDemo: () => void; // New action for demo mode
   logout: () => void;
   clearError: () => void;
 }
@@ -34,6 +37,7 @@ const initialState = {
   user: null,
   isAuthenticated: false,
   isGuest: false,
+  isDemo: false,
   isLoading: false,
   error: null,
 };
@@ -60,11 +64,14 @@ export const useAuthStore = create<AuthStore>()(
             user,
             isAuthenticated: !!user,
             isGuest: false, // Clear guest mode when user logs in
+            isDemo: false, // Clear demo mode when user logs in
             error: null,
           });
         },
 
         setGuest: (isGuest) => set({ isGuest }),
+
+        setDemo: (isDemo) => set({ isDemo }),
 
         setLoading: (isLoading) => set({ isLoading }),
 
@@ -83,6 +90,26 @@ export const useAuthStore = create<AuthStore>()(
             user: guestUser,
             isAuthenticated: false, // Guest users are not authenticated
             isGuest: true,
+            isDemo: false,
+            isLoading: false,
+            error: null,
+          });
+        },
+
+        loginAsDemo: () => {
+          // Set demo mode with pre-populated data
+          // Demo users get a special ID and use pre-loaded John Doe data
+          const demoUser: User = {
+            id: `demo-${Date.now()}`,
+            email: "demo@resumier.app",
+            name: "Demo User",
+          };
+
+          set({
+            user: demoUser,
+            isAuthenticated: false, // Demo users are not authenticated
+            isGuest: true, // Demo mode is a type of guest mode
+            isDemo: true,
             isLoading: false,
             error: null,
           });
@@ -158,11 +185,12 @@ export const useAuthStore = create<AuthStore>()(
       {
         name: "resumier-auth",
         storage: createJSONStorage(() => localStorage),
-        // Persist user, auth status, and guest mode
+        // Persist user, auth status, guest mode, and demo mode
         partialize: (state) => ({
           user: state.user,
           isAuthenticated: state.isAuthenticated,
           isGuest: state.isGuest,
+          isDemo: state.isDemo,
         }),
       },
     ),
@@ -175,6 +203,7 @@ export const selectUser = (state: AuthStore) => state.user;
 export const selectIsAuthenticated = (state: AuthStore) =>
   state.isAuthenticated;
 export const selectIsGuest = (state: AuthStore) => state.isGuest;
+export const selectIsDemo = (state: AuthStore) => state.isDemo;
 export const selectIsLoading = (state: AuthStore) => state.isLoading;
 export const selectError = (state: AuthStore) => state.error;
 

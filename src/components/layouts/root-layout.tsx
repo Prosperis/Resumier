@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { FileText, Moon, Sun } from "lucide-react";
+import { FileText, Moon, Sun, Sparkles } from "lucide-react";
 import { useTheme } from "@/app/theme-provider";
 import { AnimatedDotGrid } from "@/components/ui/animated-dot-grid";
 import { Button } from "@/components/ui/button";
 import { useAnimationStore } from "@/stores/animation-store";
+import { useAuthStore, selectIsDemo } from "@/stores/auth-store";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ type RootLayoutProps = {
 export function RootLayout({ children }: RootLayoutProps) {
   const { theme, setTheme } = useTheme();
   const dotGridEnabled = useAnimationStore((state) => state.dotGridEnabled);
+  const isDemo = useAuthStore(selectIsDemo);
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -82,6 +84,18 @@ export function RootLayout({ children }: RootLayoutProps) {
           </nav>
         </div>
       </header>
+
+      {/* Demo Mode Banner - Thin strip under navbar */}
+      {isDemo && (
+        <div className="sticky top-20 z-40 border-b border-blue-500/30 bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 px-4 py-2 shadow-md">
+          <div className="container mx-auto flex items-center justify-center gap-2 text-sm font-medium text-white">
+            <Sparkles className="h-4 w-4 animate-pulse" />
+            <span>🎭 Demo Mode</span>
+            <span className="hidden sm:inline">•</span>
+            <span className="hidden sm:inline">Exploring with sample data</span>
+          </div>
+        </div>
+      )}
 
       {/* Main content */}
       <main

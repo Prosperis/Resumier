@@ -1,3 +1,4 @@
+import { get } from "idb-keyval";
 import type {
   CreateResumeDto,
   Resume,
@@ -8,9 +9,11 @@ import type {
 /**
  * In-Memory Mock Database
  * Simulates a database with localStorage persistence
+ * Also checks IndexedDB for demo mode data
  */
 
 const STORAGE_KEY = "resumier-mock-db";
+const IDB_STORE_KEY = "resumier-web-store";
 
 /**
  * Database state
@@ -21,7 +24,7 @@ interface DbState {
 }
 
 /**
- * Load state from localStorage
+ * Load state from localStorage or IndexedDB (for demo mode)
  */
 function loadState(): DbState {
   try {
@@ -38,6 +41,22 @@ function loadState(): DbState {
     resumes: generateSampleResumes(),
     nextId: 3,
   };
+}
+
+/**
+ * Load state from IndexedDB (async)
+ * Used for demo mode data
+ */
+async function loadStateFromIndexedDB(): Promise<Resume[] | null> {
+  try {
+    const data = await get(IDB_STORE_KEY);
+    if (data && typeof data === "object" && "resumes" in data) {
+      return (data as { resumes: Resume[] }).resumes;
+    }
+  } catch (error) {
+    console.warn("Failed to load from IndexedDB:", error);
+  }
+  return null;
 }
 
 /**
@@ -144,15 +163,40 @@ function generateSampleResumes(): Resume[] {
  */
 class MockDatabase {
   private state: DbState;
+  private idbCache: Resume[] | null = null;
+  private idbCacheTime = 0;
+  private readonly CACHE_TTL = 1000; // 1 second cache
 
   constructor() {
     this.state = loadState();
   }
 
   /**
-   * Get all resumes
+   * Get all resumes (checks both localStorage and IndexedDB)
    */
   getResumes(): Resume[] {
+    // Check if we need to refresh IDB cache
+    const now = Date.now();
+    if (this.idbCache && now - this.idbCacheTime < this.CACHE_TTL) {
+      // Use cached IDB data if available and fresh
+      return [...this.idbCache];
+    }
+
+    // Try to load from IndexedDB asynchronously
+    // This will populate the cache for next call
+    loadStateFromIndexedDB().then((resumes) => {
+      if (resumes && resumes.length > 0) {
+        this.idbCache = resumes;
+        this.idbCacheTime = Date.now();
+      }
+    });
+
+    // If we have cached IDB data, return it
+    if (this.idbCache && this.idbCache.length > 0) {
+      return [...this.idbCache];
+    }
+
+    // Otherwise return localStorage state
     return [...this.state.resumes];
   }
 
@@ -219,7 +263,7 @@ class MockDatabase {
         content: { ...existing.content, ...data.content },
       }),
       updatedAt: new Date().toISOString(),
-      version: existing.version + 1,
+      version: (existing.version || 1) + 1,
     };
 
     this.state.resumes[index] = updated;

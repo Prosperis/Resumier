@@ -1,4 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,6 +10,9 @@ import {
 } from "@/components/ui/dialog";
 import { useAuthStore } from "@/stores/auth-store";
 import { hasGuestData } from "@/lib/utils/guest-storage";
+import { initializeDemoMode } from "@/lib/utils/demo-mode";
+import { queryClient } from "@/app/query-client";
+import { resumesQueryKey } from "@/hooks/api";
 
 interface AuthModalProps {
   open: boolean;
@@ -18,6 +22,8 @@ interface AuthModalProps {
 export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const navigate = useNavigate();
   const loginAsGuest = useAuthStore((state) => state.loginAsGuest);
+  const loginAsDemo = useAuthStore((state) => state.loginAsDemo);
+  const [isLoadingDemo, setIsLoadingDemo] = useState(false);
 
   const handleOAuthSignIn = (provider: string) => {
     console.log(`Sign in with ${provider}`);
@@ -37,6 +43,36 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
       navigate({ to: "/dashboard" });
     } else {
       navigate({ to: "/resume/new" });
+    }
+  };
+
+  const handleTryDemo = async () => {
+    setIsLoadingDemo(true);
+    try {
+      // Initialize demo mode with pre-populated data
+      console.log("Initializing demo mode...");
+      await initializeDemoMode({ multipleResumes: true, clearExisting: true });
+      console.log("Demo mode initialized successfully");
+      
+      // Set auth state to demo
+      loginAsDemo();
+      console.log("Auth state set to demo");
+      
+      // Invalidate resumes cache to force refetch with demo data
+      await queryClient.invalidateQueries({ queryKey: resumesQueryKey });
+      console.log("Resumes cache invalidated");
+      
+      // Close modal
+      onOpenChange(false);
+      
+      // Navigate to dashboard to view demo resumes
+      console.log("Navigating to dashboard...");
+      navigate({ to: "/dashboard" });
+    } catch (error) {
+      console.error("Failed to start demo:", error);
+      alert("Failed to start demo mode. Please try again.");
+    } finally {
+      setIsLoadingDemo(false);
     }
   };
 
@@ -179,6 +215,31 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
               <span className="font-semibold text-base">GitLab</span>
             </Button>
           </div>
+
+          <div className="relative mt-2">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-dashed opacity-30" />
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="bg-background text-muted-foreground/50 px-3 text-[10px] uppercase tracking-wider">
+                Or
+              </span>
+            </div>
+          </div>
+
+          <Button
+            variant="outline"
+            type="button"
+            onClick={handleTryDemo}
+            disabled={isLoadingDemo}
+            className="w-full h-12 relative group overflow-hidden border-2 border-dashed hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/20 hover:scale-[1.02] transition-all duration-300 bg-gradient-to-br from-background to-blue-50/30 dark:to-blue-950/10"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+            <span className="text-2xl mr-2">🎭</span>
+            <span className="font-semibold text-base">
+              {isLoadingDemo ? "Loading Demo..." : "Try Demo Mode"}
+            </span>
+          </Button>
 
           <div className="relative mt-2">
             <div className="absolute inset-0 flex items-center">
