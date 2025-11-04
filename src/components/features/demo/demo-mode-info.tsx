@@ -16,12 +16,7 @@ import { useAuthStore } from "@/stores/auth-store";
  * Shows demo mode status and provides controls for demo mode
  */
 export function DemoModeInfo() {
-  const {
-    isDemo,
-    initializeDemo,
-    exitDemo,
-    refreshData,
-  } = useDemoMode();
+  const { isDemo, initializeDemo, exitDemo, refreshData } = useDemoMode();
   const loginAsDemo = useAuthStore((state) => state.loginAsDemo);
   const setDemo = useAuthStore((state) => state.setDemo);
 
@@ -53,13 +48,13 @@ export function DemoModeInfo() {
     try {
       // Update Zustand store state
       setDemo(false);
-      
+
       // Exit demo mode and restore user data
       await exitDemo();
-      
+
       // Refresh the data to show restored content
       await refreshData();
-      
+
       setIsExiting(false);
     } catch (error) {
       console.error("Failed to exit demo:", error);
@@ -82,11 +77,7 @@ export function DemoModeInfo() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button
-            onClick={handleStartDemo}
-            disabled={isInitializing}
-            size="sm"
-          >
+          <Button onClick={handleStartDemo} disabled={isInitializing} size="sm">
             <Play className="mr-2 h-4 w-4" />
             {isInitializing ? "Starting..." : "Start Demo"}
           </Button>
@@ -103,9 +94,7 @@ export function DemoModeInfo() {
           <span>🎭</span>
           Demo Mode
         </CardTitle>
-        <CardDescription>
-          Currently exploring with demo data
-        </CardDescription>
+        <CardDescription>Currently exploring with demo data</CardDescription>
       </CardHeader>
       <CardContent>
         <Button

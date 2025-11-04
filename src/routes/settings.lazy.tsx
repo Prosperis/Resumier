@@ -2,7 +2,13 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useSettingsStore } from "@/stores";
 import { useAuthStore } from "@/stores/auth-store";
 import { DemoModeInfo } from "@/components/features/demo";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select } from "@/components/ui/select";
@@ -18,7 +24,9 @@ function SettingsComponent() {
   const { user, isGuest, isDemo } = useAuthStore();
 
   const handleResetSettings = () => {
-    if (window.confirm("Reset all settings to defaults? This cannot be undone.")) {
+    if (
+      window.confirm("Reset all settings to defaults? This cannot be undone.")
+    ) {
       resetSettings();
     }
   };
@@ -38,7 +46,9 @@ function SettingsComponent() {
           <CardHeader>
             <CardTitle>Account</CardTitle>
             <CardDescription>
-              {isGuest ? "You're using Resumier as a guest" : `Logged in as ${user?.email || "User"}`}
+              {isGuest
+                ? "You're using Resumier as a guest"
+                : `Logged in as ${user?.email || "User"}`}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -46,7 +56,11 @@ function SettingsComponent() {
               <div className="space-y-0.5">
                 <Label>Status</Label>
                 <p className="text-sm text-muted-foreground">
-                  {isDemo ? "Demo Mode" : isGuest ? "Guest User" : "Authenticated"}
+                  {isDemo
+                    ? "Demo Mode"
+                    : isGuest
+                      ? "Guest User"
+                      : "Authenticated"}
                 </p>
               </div>
             </div>
@@ -66,13 +80,19 @@ function SettingsComponent() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor="theme">Theme</Label>
-                <p className="text-sm text-muted-foreground">Select your color theme</p>
+                <p className="text-sm text-muted-foreground">
+                  Select your color theme
+                </p>
               </div>
               <Select
                 id="theme"
                 className="w-[180px]"
                 value={settings.theme}
-                onChange={(e) => updateSettings({ theme: e.target.value as "light" | "dark" | "system" })}
+                onChange={(e) =>
+                  updateSettings({
+                    theme: e.target.value as "light" | "dark" | "system",
+                  })
+                }
               >
                 <option value="light">Light</option>
                 <option value="dark">Dark</option>
@@ -82,12 +102,16 @@ function SettingsComponent() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor="reducedMotion">Reduced Motion</Label>
-                <p className="text-sm text-muted-foreground">Minimize animations</p>
+                <p className="text-sm text-muted-foreground">
+                  Minimize animations
+                </p>
               </div>
               <Switch
                 id="reducedMotion"
                 checked={settings.reducedMotion}
-                onCheckedChange={(checked: boolean) => updateSettings({ reducedMotion: checked })}
+                onCheckedChange={(checked: boolean) =>
+                  updateSettings({ reducedMotion: checked })
+                }
               />
             </div>
           </CardContent>
@@ -102,12 +126,16 @@ function SettingsComponent() {
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <Label htmlFor="autoSave">Auto Save</Label>
-                <p className="text-sm text-muted-foreground">Automatically save changes</p>
+                <p className="text-sm text-muted-foreground">
+                  Automatically save changes
+                </p>
               </div>
               <Switch
                 id="autoSave"
                 checked={settings.autoSave}
-                onCheckedChange={(checked: boolean) => updateSettings({ autoSave: checked })}
+                onCheckedChange={(checked: boolean) =>
+                  updateSettings({ autoSave: checked })
+                }
               />
             </div>
           </CardContent>
@@ -120,7 +148,11 @@ function SettingsComponent() {
             <CardDescription>Restore defaults</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button variant="outline" onClick={handleResetSettings} className="w-full sm:w-auto">
+            <Button
+              variant="outline"
+              onClick={handleResetSettings}
+              className="w-full sm:w-auto"
+            >
               <RotateCcw className="mr-2 h-4 w-4" />
               Reset to Defaults
             </Button>
@@ -129,4 +161,4 @@ function SettingsComponent() {
       </div>
     </div>
   );
-} 
+}

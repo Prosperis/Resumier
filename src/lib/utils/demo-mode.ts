@@ -156,11 +156,11 @@ async function restoreUserData(): Promise<void> {
     if (backupStore || backupDocuments) {
       await set("resumier-web-store", backupStore || { resumes: [] });
       await set("resumier-documents", backupDocuments || []);
-      
+
       // Clear backup data
       await set("resumier-backup-store", null);
       await set("resumier-backup-documents", null);
-      
+
       console.log("✅ User data restored successfully");
     } else {
       // No backup exists, just clear demo data
@@ -179,7 +179,7 @@ async function restoreUserData(): Promise<void> {
 export async function disableDemoMode(): Promise<void> {
   try {
     console.log("Disabling demo mode...");
-    
+
     // Restore user data before clearing demo flag
     await restoreUserData();
 
