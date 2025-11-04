@@ -15,6 +15,7 @@ export interface DemoModeConfig {
 /**
  * Initialize demo mode with pre-populated John Doe data
  * Loads complete resume data into IndexedDB
+ * Backs up existing user data before loading demo data
  */
 export async function initializeDemoMode(
   config: DemoModeConfig = {},
@@ -23,6 +24,9 @@ export async function initializeDemoMode(
 
   try {
     console.log("Demo mode config:", config);
+
+    // Backup existing user data before entering demo mode
+    await backupUserData();
 
     // Optionally clear existing data
     if (clearExisting) {
@@ -116,10 +120,69 @@ export function enableDemoMode(): void {
 }
 
 /**
- * Disable demo mode and clear demo data
+ * Backup user data before entering demo mode
+ */
+async function backupUserData(): Promise<void> {
+  const { get } = await import("idb-keyval");
+  try {
+    console.log("Backing up user data...");
+    const resumeStore = await get("resumier-web-store");
+    const documents = await get("resumier-documents");
+
+    // Only backup if there's actual data
+    if (resumeStore?.resumes?.length > 0 || documents?.length > 0) {
+      await set("resumier-backup-store", resumeStore);
+      await set("resumier-backup-documents", documents);
+      console.log("✅ User data backed up successfully");
+    } else {
+      console.log("No user data to backup");
+    }
+  } catch (error) {
+    console.error("Failed to backup user data:", error);
+    // Don't throw - continue with demo mode even if backup fails
+  }
+}
+
+/**
+ * Restore user data after exiting demo mode
+ */
+async function restoreUserData(): Promise<void> {
+  const { get } = await import("idb-keyval");
+  try {
+    console.log("Restoring user data...");
+    const backupStore = await get("resumier-backup-store");
+    const backupDocuments = await get("resumier-backup-documents");
+
+    if (backupStore || backupDocuments) {
+      await set("resumier-web-store", backupStore || { resumes: [] });
+      await set("resumier-documents", backupDocuments || []);
+      
+      // Clear backup data
+      await set("resumier-backup-store", null);
+      await set("resumier-backup-documents", null);
+      
+      console.log("✅ User data restored successfully");
+    } else {
+      // No backup exists, just clear demo data
+      await clearDemoData();
+      console.log("No backup found, cleared demo data");
+    }
+  } catch (error) {
+    console.error("Failed to restore user data:", error);
+    throw error;
+  }
+}
+
+/**
+ * Disable demo mode and restore user data
  */
 export async function disableDemoMode(): Promise<void> {
   try {
+    console.log("Disabling demo mode...");
+    
+    // Restore user data before clearing demo flag
+    await restoreUserData();
+
     // Clear demo flag from auth
     const authData = localStorage.getItem("resumier-auth");
     if (authData) {
@@ -132,8 +195,7 @@ export async function disableDemoMode(): Promise<void> {
       localStorage.setItem("resumier-auth", JSON.stringify(auth));
     }
 
-    // Optionally clear demo data
-    await clearDemoData();
+    console.log("✅ Demo mode disabled successfully");
   } catch (error) {
     console.error("Failed to disable demo mode:", error);
     throw error;

@@ -41,6 +41,15 @@ export {
   selectToggleTheme,
   useThemeStore,
 } from "./theme-store";
+export type { UserSettings } from "./settings-store";
+export {
+  selectAutoSave,
+  selectAutoSaveInterval,
+  selectReducedMotion,
+  selectSettings,
+  selectTheme as selectSettingsTheme,
+  useSettingsStore,
+} from "./settings-store";
 export type { Notification } from "./ui-store";
 export {
   selectActiveDialog,

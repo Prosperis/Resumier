@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { FileText, Moon, Sun, Sparkles } from "lucide-react";
+import { FileText, Moon, Sun, Sparkles, Settings } from "lucide-react";
 import { useTheme } from "@/app/theme-provider";
 import { AnimatedDotGrid } from "@/components/ui/animated-dot-grid";
 import { Button } from "@/components/ui/button";
@@ -72,6 +72,17 @@ export function RootLayout({ children }: RootLayoutProps) {
           </Link>
 
           <nav className="flex items-center gap-3" aria-label="Main navigation">
+            <Button
+              variant="ghost"
+              size="icon"
+              asChild
+              aria-label="Settings"
+              className="h-10 w-10 rounded-xl transition-all duration-300 hover:scale-105 hover:bg-purple-500/10"
+            >
+              <Link to="/settings">
+                <Settings className="size-5" />
+              </Link>
+            </Button>
             <Button
               variant="ghost"
               size="icon"

@@ -1,24 +1,13 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { RouteError } from "@/components/ui/route-error";
 import { SettingsLoading } from "@/components/ui/route-loading";
-import { useAuthStore } from "@/stores";
 
 /**
  * Settings route
- * Protected route for user settings and preferences
- * Requires authentication
+ * Available to all users (authenticated, guest, and demo)
+ * Stores user preferences and configuration in local storage
  */
 export const Route = createFileRoute("/settings")({
-  beforeLoad: () => {
-    const { isAuthenticated } = useAuthStore.getState();
-
-    // Settings require full authentication (not available for guests)
-    if (!isAuthenticated) {
-      throw redirect({
-        to: "/",
-      });
-    }
-  },
   pendingComponent: SettingsLoading,
   errorComponent: ({ error, reset }) => (
     <RouteError error={error} reset={reset} title="Settings Error" />
