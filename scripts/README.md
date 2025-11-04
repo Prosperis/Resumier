@@ -1,49 +1,38 @@
-# Resumier Wiki Scripts
+# Resumier Scripts
 
-This folder contains various utility scripts used during development and testing.
+This folder contains utility scripts for build optimization and testing.
 
-## Script Categories
+## Available Scripts
 
 ### Build & Optimization
-- `generate-pwa-icons.mjs` - Generate PWA icons from source images
-- `optimize-images.mjs` - Optimize project images
+- **`generate-pwa-icons.mjs`** - Generate PWA icons from source images
+  ```bash
+  npm run generate:pwa-icons
+  ```
 
-### Testing & Import Fixes
-- `fix-imports.cjs` - Fix module imports
-- `fix-mock-hoisting.mjs` - Fix mock hoisting issues
-- `fix-vi-mocked.mjs` - Fix vi.mocked() calls
-- `fix-vitest-imports.mjs` - Fix Vitest imports
-- `fix-vitest-imports.ps1` - PowerShell script for fixing Vitest imports
-- `revert-vitest-imports.mjs` - Revert Vitest import changes
-- `update-vi-imports.mjs` - Update vi imports
+- **`optimize-images.mjs`** - Optimize project images (PNG to WebP conversion)
+  ```bash
+  npm run optimize:images
+  ```
 
-### Test Utilities
-- `remove-reset-mocks.mjs` - Remove reset mocks from tests
-- `replace-clear-with-reset.mjs` - Replace clearAllMocks with resetAllMocks
+### Testing & Validation
+- **`test-security-headers.js`** - Test security headers on preview server
+  ```bash
+  node scripts/test-security-headers.js
+  ```
 
-### Debug
-- `debug.compiled.js` - Compiled debug utilities
+- **`validate-workflow.js`** - Validate GitHub Actions workflow configuration
+  ```bash
+  node scripts/validate-workflow.js
+  ```
 
 ## Usage
 
-Most scripts can be run directly with Node.js:
+Scripts can be run directly with Node.js or Bun:
 
 ```bash
 node scripts/<script-name>.mjs
-```
-
-Or with Bun:
-
-```bash
 bun scripts/<script-name>.mjs
 ```
 
-For PowerShell scripts:
-
-```powershell
-.\scripts\<script-name>.ps1
-```
-
-## Note
-
-These are utility scripts used during development. Most are not part of the regular build or test process.
+Some scripts are also available as npm/bun commands (see individual script descriptions above).
