@@ -104,7 +104,7 @@ export function TemplateGallery({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-7xl h-[90vh] p-0">
         {/* Header */}
-        <DialogHeader className="px-6 py-4 border-b">
+        <DialogHeader className="px-6 py-4 border-b dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
               <DialogTitle className="text-2xl font-bold flex items-center gap-2">
@@ -129,7 +129,7 @@ export function TemplateGallery({
           <div className="flex items-center gap-4 mt-4">
             {/* Search */}
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
               <Input
                 placeholder="Search templates by name, industry, or style..."
                 value={search}
@@ -139,7 +139,7 @@ export function TemplateGallery({
               {search && (
                 <button
                   onClick={() => setSearch("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -171,9 +171,9 @@ export function TemplateGallery({
         {/* Main Content */}
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar - Categories */}
-          <div className="w-56 border-r bg-gray-50/50 p-4">
+          <div className="w-56 border-r dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 p-4">
             <div className="space-y-1">
-              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                 Categories
               </p>
               {categories.map((cat) => (
@@ -182,8 +182,8 @@ export function TemplateGallery({
                   onClick={() => setCategory(cat.id)}
                   className={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
                     category === cat.id
-                      ? "bg-violet-100 text-violet-900 font-medium"
-                      : "text-gray-700 hover:bg-gray-100"
+                      ? "bg-violet-100 dark:bg-violet-950 text-violet-900 dark:text-violet-200 font-medium"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                   }`}
                 >
                   {cat.label}
@@ -197,7 +197,7 @@ export function TemplateGallery({
             <div className="p-6">
               {/* Results Count */}
               <div className="mb-4 flex items-center justify-between">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   {filteredTemplates.length} template
                   {filteredTemplates.length !== 1 ? "s" : ""} found
                 </p>
@@ -206,11 +206,11 @@ export function TemplateGallery({
               {/* Empty State */}
               {filteredTemplates.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <Filter className="h-12 w-12 text-gray-300 mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <Filter className="h-12 w-12 text-gray-300 dark:text-gray-600 mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                     No templates found
                   </h3>
-                  <p className="text-sm text-gray-500 max-w-md">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md">
                     Try adjusting your search or filters to find what you're
                     looking for.
                   </p>
@@ -1367,8 +1367,8 @@ function TemplateCard({
     <div
       className={`group relative rounded-lg border-2 overflow-hidden transition-all cursor-pointer ${
         selected
-          ? "border-violet-600 shadow-lg shadow-violet-200"
-          : "border-gray-200 hover:border-violet-300 hover:shadow-md"
+          ? "border-violet-600 shadow-lg shadow-violet-200 dark:shadow-violet-900"
+          : "border-gray-200 dark:border-gray-700 hover:border-violet-300 dark:hover:border-violet-500 hover:shadow-md"
       }`}
       onClick={onSelect}
       onMouseEnter={() => onHover(template.id)}
@@ -1400,13 +1400,13 @@ function TemplateCard({
       </div>
 
       {/* Template Info */}
-      <div className="p-4">
+      <div className="p-4 bg-white dark:bg-gray-800">
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-base text-gray-900 truncate">
+            <h3 className="font-semibold text-base text-gray-900 dark:text-white truncate">
               {template.name}
             </h3>
-            <p className="text-xs text-gray-500 line-clamp-2 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mt-1">
               {template.description}
             </p>
           </div>
@@ -1439,7 +1439,7 @@ function TemplateCard({
           {template.tags.slice(0, 3).map((tag: string) => (
             <span
               key={tag}
-              className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600"
+              className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
             >
               {tag}
             </span>
@@ -1468,8 +1468,8 @@ function TemplateListItem({
     <div
       className={`flex items-center gap-4 p-4 rounded-lg border-2 cursor-pointer transition-all ${
         selected
-          ? "border-violet-600 bg-violet-50"
-          : "border-gray-200 hover:border-violet-300 hover:bg-gray-50"
+          ? "border-violet-600 bg-violet-50 dark:bg-violet-950 dark:border-violet-500"
+          : "border-gray-200 dark:border-gray-700 hover:border-violet-300 dark:hover:border-violet-500 hover:bg-gray-50 dark:hover:bg-gray-900"
       }`}
       onClick={onSelect}
     >
@@ -1506,14 +1506,16 @@ function TemplateListItem({
       {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <h3 className="font-semibold text-lg text-gray-900">
+          <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
             {template.name}
           </h3>
           {selected && (
             <Check className="h-5 w-5 text-violet-600 flex-shrink-0" />
           )}
         </div>
-        <p className="text-sm text-gray-600 mb-2">{template.description}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+          {template.description}
+        </p>
 
         <div className="flex items-center gap-2 flex-wrap">
           {/* Badges */}
@@ -1537,7 +1539,7 @@ function TemplateListItem({
           {template.tags.slice(0, 4).map((tag: string) => (
             <span
               key={tag}
-              className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600"
+              className="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
             >
               {tag}
             </span>
@@ -1545,7 +1547,7 @@ function TemplateListItem({
         </div>
 
         {/* Meta Info */}
-        <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+        <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
           <span className="capitalize">{template.style}</span>
           <span>•</span>
           <span className="capitalize">
