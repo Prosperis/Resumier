@@ -1,6 +1,7 @@
 import { del, get, set } from "idb-keyval";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
+import type { TemplateType } from "@/lib/types/templates";
 
 // Types
 export interface WorkExperience {
@@ -77,6 +78,10 @@ export interface ResumeDocument {
 
 // Store interface
 interface ResumeStore {
+  // Template
+  template: TemplateType;
+  setTemplate: (template: TemplateType) => void;
+
   // User Info
   userInfo: UserInfo;
   setUserInfo: (info: UserInfo) => void;
@@ -114,6 +119,7 @@ interface ResumeStore {
 }
 
 const initialState = {
+  template: "modern" as TemplateType,
   userInfo: {},
   jobInfo: {},
   jobs: [],
@@ -126,6 +132,9 @@ export const useResumeStore = create<ResumeStore>()(
     persist(
       (set) => ({
         ...initialState,
+
+        // Template Actions
+        setTemplate: (template) => set({ template }),
 
         // User Info Actions
         setUserInfo: (info) => set({ userInfo: { ...info } }),

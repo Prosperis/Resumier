@@ -1,8 +1,7 @@
 import { Eye, FileEdit } from "lucide-react";
-import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Resume } from "@/lib/api/types";
-import type { TemplateType } from "@/lib/types/templates";
+import { useResumeStore } from "@/stores/resume-store";
 import { ExportMenu } from "./export/export-menu";
 import { ResumePreview } from "./preview/resume-preview";
 import { TemplateSelector } from "./preview/template-selector";
@@ -13,7 +12,8 @@ interface ResumeEditorProps {
 }
 
 export function ResumeEditor({ resume }: ResumeEditorProps) {
-  const [template, setTemplate] = useState<TemplateType>("modern");
+  const template = useResumeStore((state) => state.template);
+  const setTemplate = useResumeStore((state) => state.setTemplate);
 
   return (
     <Tabs defaultValue="preview" className="w-full">

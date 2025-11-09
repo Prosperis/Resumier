@@ -20,7 +20,8 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
     resume.content;
 
   // Get colors from config or use defaults
-  const primaryColor = config?.colorScheme?.primary || "#8b5cf6";
+  const primaryColor = config?.colorScheme?.primary || "{primaryColor}";
+  const accentColor = config?.colorScheme?.accent || "{primaryColor}";
 
   return (
     <div
@@ -65,7 +66,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 border-b-2 pb-1 text-xl font-bold"
-                style={{ color: primaryColor, borderColor: primaryColor }}
+                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
               >
                 Professional Summary
               </h2>
@@ -80,7 +81,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
-                style={{ color: primaryColor, borderColor: primaryColor }}
+                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
               >
                 <Briefcase className="h-5 w-5" />
                 Experience
@@ -121,7 +122,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
-                style={{ color: "#8b5cf6", borderColor: "#8b5cf6" }}
+                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
               >
                 <GraduationCap className="h-5 w-5" />
                 Education
@@ -167,7 +168,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 border-b-2 pb-1 text-lg font-bold"
-                style={{ color: "#8b5cf6", borderColor: "#8b5cf6" }}
+                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
               >
                 Skills
               </h2>
@@ -184,7 +185,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                           className="rounded px-2 py-1 text-xs"
                           style={{
                             backgroundColor: "rgba(139, 92, 246, 0.1)",
-                            color: "#8b5cf6",
+                            color: "{primaryColor}",
                           }}
                         >
                           {skill}
@@ -205,7 +206,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                           className="rounded px-2 py-1 text-xs"
                           style={{
                             backgroundColor: "rgba(139, 92, 246, 0.1)",
-                            color: "#8b5cf6",
+                            color: "{primaryColor}",
                           }}
                         >
                           {lang}
@@ -226,7 +227,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                           className="rounded px-2 py-1 text-xs"
                           style={{
                             backgroundColor: "rgba(139, 92, 246, 0.1)",
-                            color: "#8b5cf6",
+                            color: "{primaryColor}",
                           }}
                         >
                           {tool}
@@ -247,7 +248,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                           className="rounded px-2 py-1 text-xs"
                           style={{
                             backgroundColor: "rgba(139, 92, 246, 0.1)",
-                            color: "#8b5cf6",
+                            color: "{primaryColor}",
                           }}
                         >
                           {skill}
@@ -265,7 +266,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
-                style={{ color: "#8b5cf6", borderColor: "#8b5cf6" }}
+                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
               >
                 <Award className="h-4 w-4" />
                 Certifications
@@ -289,7 +290,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
-                style={{ color: "#8b5cf6", borderColor: "#8b5cf6" }}
+                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
               >
                 <LinkIcon className="h-4 w-4" />
                 Links
@@ -299,7 +300,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                   <div key={link.id} className="flex items-start gap-2">
                     <LinkIcon
                       className="mt-0.5 h-3 w-3 flex-shrink-0"
-                      style={{ color: "#8b5cf6" }}
+                      style={{ color: "{primaryColor}" }}
                     />
                     <div>
                       <p className="text-xs font-semibold text-gray-800">
@@ -310,7 +311,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-xs break-all hover:underline"
-                        style={{ color: "#8b5cf6" }}
+                        style={{ color: "{primaryColor}" }}
                       >
                         {link.url}
                       </a>

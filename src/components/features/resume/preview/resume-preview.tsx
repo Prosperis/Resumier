@@ -1,24 +1,8 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateType } from "@/lib/types/templates";
-
-// Lazy load templates for better code splitting
-const ModernTemplate = lazy(() =>
-  import("./templates/modern-template").then((m) => ({
-    default: m.ModernTemplate,
-  })),
-);
-const ClassicTemplate = lazy(() =>
-  import("./templates/classic-template").then((m) => ({
-    default: m.ClassicTemplate,
-  })),
-);
-const MinimalTemplate = lazy(() =>
-  import("./templates/minimal-template").then((m) => ({
-    default: m.MinimalTemplate,
-  })),
-);
+import { getTemplateComponent, getTemplateInfo } from "./templates/template-registry";
 
 interface ResumePreviewProps {
   resume: Resume;
@@ -54,17 +38,15 @@ function TemplateLoadingSkeleton() {
 }
 
 export function ResumePreview({ resume, template }: ResumePreviewProps) {
-  const renderTemplate = () => {
-    switch (template) {
-      case "modern":
-        return <ModernTemplate resume={resume} />;
-      case "classic":
-        return <ClassicTemplate resume={resume} />;
-      case "minimal":
-        return <MinimalTemplate resume={resume} />;
-      default:
-        return <ModernTemplate resume={resume} />;
-    }
+  // Get the template component and metadata from the registry
+  const TemplateComponent = getTemplateComponent(template);
+  const templateInfo = getTemplateInfo(template);
+
+  // Create config from template info
+  const config = {
+    colorScheme: templateInfo?.colorScheme,
+    typography: templateInfo?.typography,
+    spacing: templateInfo?.spacing,
   };
 
   return (
@@ -75,7 +57,7 @@ export function ResumePreview({ resume, template }: ResumePreviewProps) {
       {/* Remove dark mode context for resume display */}
       <div className="resume-light-mode light print:bg-white print:p-0">
         <Suspense fallback={<TemplateLoadingSkeleton />}>
-          {renderTemplate()}
+          <TemplateComponent resume={resume} config={config} />
         </Suspense>
       </div>
     </div>
