@@ -47,7 +47,10 @@ export function EducationEntry({
           </p>
         )}
         {education.honors && education.honors.length > 0 && (
-          <ul className="mt-1 list-inside list-disc text-sm" style={{ color: textLightColor }}>
+          <ul
+            className="mt-1 list-inside list-disc text-sm"
+            style={{ color: textLightColor }}
+          >
             {education.honors.map((honor, idx) => (
               <li key={idx}>{honor}</li>
             ))}
@@ -66,7 +69,8 @@ export function EducationEntry({
             {education.degree} in {education.field}
           </h3>
           <span className="text-xs" style={{ color: textLightColor }}>
-            {education.startDate} - {education.current ? "Present" : education.endDate}
+            {education.startDate} -{" "}
+            {education.current ? "Present" : education.endDate}
           </span>
         </div>
         <p className="text-sm" style={{ color: textLightColor }}>
@@ -90,7 +94,10 @@ export function EducationEntry({
             <h3 className="text-lg font-bold" style={{ color: textColor }}>
               {education.degree}
             </h3>
-            <p className="text-base font-semibold" style={{ color: colorScheme?.primary || "#8b5cf6" }}>
+            <p
+              className="text-base font-semibold"
+              style={{ color: colorScheme?.primary || "#8b5cf6" }}
+            >
               {education.institution}
             </p>
             <p className="text-sm" style={{ color: textLightColor }}>
@@ -98,9 +105,15 @@ export function EducationEntry({
             </p>
           </div>
           <div className="text-right text-sm" style={{ color: textLightColor }}>
-            <div>{education.startDate} - {education.current ? "Present" : education.endDate}</div>
+            <div>
+              {education.startDate} -{" "}
+              {education.current ? "Present" : education.endDate}
+            </div>
             {education.gpa && (
-              <div className="mt-1 font-semibold" style={{ color: colorScheme?.primary }}>
+              <div
+                className="mt-1 font-semibold"
+                style={{ color: colorScheme?.primary }}
+              >
                 GPA: {education.gpa}
               </div>
             )}
@@ -108,10 +121,16 @@ export function EducationEntry({
         </div>
         {education.honors && education.honors.length > 0 && (
           <div>
-            <p className="mb-1 text-xs font-semibold uppercase" style={{ color: textLightColor }}>
+            <p
+              className="mb-1 text-xs font-semibold uppercase"
+              style={{ color: textLightColor }}
+            >
               Honors & Awards
             </p>
-            <ul className="list-inside list-disc space-y-1 text-sm" style={{ color: textLightColor }}>
+            <ul
+              className="list-inside list-disc space-y-1 text-sm"
+              style={{ color: textLightColor }}
+            >
               {education.honors.map((honor, idx) => (
                 <li key={idx}>{honor}</li>
               ))}

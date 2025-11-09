@@ -4,13 +4,7 @@
  * Layout: 40% dark sidebar + 60% light content
  */
 
-import {
-  Briefcase,
-  GraduationCap,
-  Mail,
-  MapPin,
-  Phone,
-} from "lucide-react";
+import { Briefcase, GraduationCap, Mail, MapPin, Phone } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
 
@@ -19,8 +13,12 @@ interface SplitScreenTemplateProps {
   config?: TemplateConfig;
 }
 
-export function SplitScreenTemplate({ resume, config }: SplitScreenTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } = resume.content;
+export function SplitScreenTemplate({
+  resume,
+  config,
+}: SplitScreenTemplateProps) {
+  const { personalInfo, experience, education, skills, certifications } =
+    resume.content;
   const primaryColor = config?.colorScheme?.primary || "#7c3aed";
 
   return (
@@ -79,13 +77,16 @@ export function SplitScreenTemplate({ resume, config }: SplitScreenTemplateProps
               Skills
             </h2>
             <div className="space-y-2">
-              {typeof skills === 'object' && 'technical' in skills && Array.isArray(skills.technical) && 
-                skills.technical.slice(0, 10).map((skill: any, index: number) => (
-                  <div key={index} className="text-sm">
-                    • {skill.name || skill}
-                  </div>
-                ))
-              }
+              {typeof skills === "object" &&
+                "technical" in skills &&
+                Array.isArray(skills.technical) &&
+                skills.technical
+                  .slice(0, 10)
+                  .map((skill: any, index: number) => (
+                    <div key={index} className="text-sm">
+                      • {skill.name || skill}
+                    </div>
+                  ))}
             </div>
           </div>
         )}
@@ -115,7 +116,7 @@ export function SplitScreenTemplate({ resume, config }: SplitScreenTemplateProps
         {/* Experience */}
         {experience && experience.length > 0 && (
           <div className="mb-8">
-            <h2 
+            <h2
               className="mb-6 flex items-center gap-3 text-2xl font-bold pb-3 border-b-2"
               style={{ borderColor: primaryColor, color: primaryColor }}
             >
@@ -126,13 +127,19 @@ export function SplitScreenTemplate({ resume, config }: SplitScreenTemplateProps
               {experience.map((exp, index) => (
                 <div key={index}>
                   <div className="mb-2">
-                    <h3 className="text-lg font-bold text-gray-900">{exp.position}</h3>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      {exp.position}
+                    </h3>
                     <div className="flex items-center justify-between flex-wrap gap-2">
-                      <p className="font-semibold" style={{ color: primaryColor }}>
+                      <p
+                        className="font-semibold"
+                        style={{ color: primaryColor }}
+                      >
                         {exp.company}
                       </p>
                       <p className="text-sm text-gray-600">
-                        {exp.startDate} - {exp.current ? "Present" : exp.endDate}
+                        {exp.startDate} -{" "}
+                        {exp.current ? "Present" : exp.endDate}
                       </p>
                     </div>
                   </div>
@@ -160,7 +167,7 @@ export function SplitScreenTemplate({ resume, config }: SplitScreenTemplateProps
         {/* Education */}
         {education && education.length > 0 && (
           <div>
-            <h2 
+            <h2
               className="mb-6 flex items-center gap-3 text-2xl font-bold pb-3 border-b-2"
               style={{ borderColor: primaryColor, color: primaryColor }}
             >
@@ -183,7 +190,9 @@ export function SplitScreenTemplate({ resume, config }: SplitScreenTemplateProps
                     </p>
                   </div>
                   {edu.honors && edu.honors.length > 0 && (
-                    <p className="mt-2 text-sm text-gray-700">{edu.honors.join(', ')}</p>
+                    <p className="mt-2 text-sm text-gray-700">
+                      {edu.honors.join(", ")}
+                    </p>
                   )}
                 </div>
               ))}

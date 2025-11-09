@@ -26,7 +26,11 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import type { Resume } from "@/lib/api/types";
-import type { TemplateType, TemplateInfo, TemplateCategory } from "@/lib/types/templates";
+import type {
+  TemplateType,
+  TemplateInfo,
+  TemplateCategory,
+} from "@/lib/types/templates";
 import { getAllTemplates } from "./templates/template-registry";
 
 interface TemplateGalleryProps {
@@ -69,8 +73,12 @@ export function TemplateGallery({
         (t: TemplateInfo) =>
           t.name.toLowerCase().includes(searchLower) ||
           t.description.toLowerCase().includes(searchLower) ||
-          t.tags.some((tag: string) => tag.toLowerCase().includes(searchLower)) ||
-          t.industries.some((ind: string) => ind.toLowerCase().includes(searchLower))
+          t.tags.some((tag: string) =>
+            tag.toLowerCase().includes(searchLower),
+          ) ||
+          t.industries.some((ind: string) =>
+            ind.toLowerCase().includes(searchLower),
+          ),
       );
     }
 
@@ -260,17 +268,21 @@ export function TemplateGallery({
  * Template Preview Mini - Shows actual template layout
  */
 function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
-  const { colorScheme = { 
-    primary: "#8b5cf6", 
-    secondary: "#7c3aed", 
-    background: "#ffffff", 
-    text: "#111827",
-    textLight: "#6b7280",
-    border: "#e5e7eb"
-  }, layout, style } = template;
+  const {
+    colorScheme = {
+      primary: "#8b5cf6",
+      secondary: "#7c3aed",
+      background: "#ffffff",
+      text: "#111827",
+      textLight: "#6b7280",
+      border: "#e5e7eb",
+    },
+    layout,
+    style,
+  } = template;
 
   // EXISTING TEMPLATES WITH COMPONENTS
-  
+
   // Modern template - Two column with colored header (Full page)
   if (template.id === "modern") {
     return (
@@ -289,7 +301,10 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
           <div className="flex-[2] space-y-2">
             {/* Experience section */}
             <div className="space-y-1">
-              <div className="h-1.5 w-14 rounded" style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }} />
+              <div
+                className="h-1.5 w-14 rounded"
+                style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }}
+              />
               <div className="h-1 w-full bg-gray-300 rounded" />
               <div className="h-0.5 w-full bg-gray-200 rounded" />
               <div className="h-0.5 w-full bg-gray-200 rounded" />
@@ -304,13 +319,19 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
             </div>
             {/* Education section */}
             <div className="space-y-1">
-              <div className="h-1.5 w-12 rounded" style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }} />
+              <div
+                className="h-1.5 w-12 rounded"
+                style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }}
+              />
               <div className="h-1 w-full bg-gray-300 rounded" />
               <div className="h-0.5 w-4/5 bg-gray-200 rounded" />
             </div>
             {/* Projects section */}
             <div className="space-y-1">
-              <div className="h-1.5 w-10 rounded" style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }} />
+              <div
+                className="h-1.5 w-10 rounded"
+                style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }}
+              />
               <div className="h-0.5 w-full bg-gray-200 rounded" />
               <div className="h-0.5 w-5/6 bg-gray-200 rounded" />
             </div>
@@ -319,7 +340,10 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
           <div className="flex-1 space-y-2">
             {/* Contact section */}
             <div className="space-y-1">
-              <div className="h-1.5 w-10 rounded" style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }} />
+              <div
+                className="h-1.5 w-10 rounded"
+                style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }}
+              />
               <div className="h-0.5 w-full bg-gray-200 rounded" />
               <div className="h-0.5 w-3/4 bg-gray-200 rounded" />
               <div className="h-0.5 w-full bg-gray-200 rounded" />
@@ -327,7 +351,10 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
             </div>
             {/* Skills section */}
             <div className="space-y-1">
-              <div className="h-1.5 w-8 rounded" style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }} />
+              <div
+                className="h-1.5 w-8 rounded"
+                style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }}
+              />
               <div className="h-0.5 w-full bg-gray-200 rounded" />
               <div className="h-0.5 w-4/5 bg-gray-200 rounded" />
               <div className="h-0.5 w-full bg-gray-200 rounded" />
@@ -335,7 +362,10 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
             </div>
             {/* Languages section */}
             <div className="space-y-1">
-              <div className="h-1.5 w-11 rounded" style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }} />
+              <div
+                className="h-1.5 w-11 rounded"
+                style={{ backgroundColor: colorScheme.primary, opacity: 0.8 }}
+              />
               <div className="h-0.5 w-3/4 bg-gray-200 rounded" />
               <div className="h-0.5 w-2/3 bg-gray-200 rounded" />
               <div className="h-0.5 w-full bg-gray-200 rounded" />
@@ -404,7 +434,10 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
       <div className="w-full h-full flex flex-col text-[4px] leading-relaxed p-4">
         {/* Minimalist header */}
         <div className="space-y-1.5 mb-3">
-          <div className="h-3 w-32 rounded" style={{ backgroundColor: colorScheme.text }} />
+          <div
+            className="h-3 w-32 rounded"
+            style={{ backgroundColor: colorScheme.text }}
+          />
           <div className="h-1 w-24 bg-gray-400 rounded" />
           <div className="h-0.5 w-28 bg-gray-300 rounded" />
         </div>
@@ -446,7 +479,7 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
   }
 
   // NEW TEMPLATES - PHASE 1
-  
+
   // Executive - Bold serif with thick border
   if (template.id === "executive") {
     return (
@@ -583,9 +616,11 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
     return (
       <div className="w-full h-full flex flex-col text-[4px] leading-tight">
         {/* Gradient header */}
-        <div 
+        <div
           className="p-3 space-y-1"
-          style={{ background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" }}
+          style={{
+            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          }}
         >
           <div className="h-2 w-20 bg-white/90 rounded" />
           <div className="h-1 w-16 bg-white/70 rounded" />
@@ -730,19 +765,19 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
         <div className="space-y-2 relative">
           {/* Timeline line */}
           <div className="absolute left-1 top-0 bottom-0 w-0.5 bg-emerald-300" />
-          
+
           <div className="pl-3 relative">
             <div className="absolute left-0 top-1 w-1.5 h-1.5 bg-emerald-600 rounded-full" />
             <div className="h-1 w-full bg-gray-700 rounded mb-0.5" />
             <div className="h-0.5 w-full bg-gray-300 rounded" />
           </div>
-          
+
           <div className="pl-3 relative">
             <div className="absolute left-0 top-1 w-1.5 h-1.5 bg-emerald-500 rounded-full" />
             <div className="h-1 w-full bg-gray-700 rounded mb-0.5" />
             <div className="h-0.5 w-4/5 bg-gray-300 rounded" />
           </div>
-          
+
           <div className="pl-3 relative">
             <div className="absolute left-0 top-1 w-1.5 h-1.5 bg-emerald-400 rounded-full" />
             <div className="h-1 w-full bg-gray-700 rounded mb-0.5" />
@@ -1019,7 +1054,7 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
         {/* Geometric shapes in background */}
         <div className="absolute top-0 right-0 w-12 h-12 bg-cyan-200 opacity-30 rotate-45" />
         <div className="absolute bottom-0 left-2 w-8 h-8 bg-cyan-300 opacity-30 rounded-full" />
-        
+
         {/* Content */}
         <div className="relative z-10">
           <div className="mb-2 flex items-center gap-2">
@@ -1262,9 +1297,18 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
         </div>
       )}
       {style === "contemporary" && (
-        <div className="p-2 mb-2 space-y-1" style={{ backgroundColor: colorScheme.primary, opacity: 0.2 }}>
-          <div className="h-2 w-20 rounded" style={{ backgroundColor: colorScheme.primary }} />
-          <div className="h-1 w-16 rounded" style={{ backgroundColor: colorScheme.primary, opacity: 0.7 }} />
+        <div
+          className="p-2 mb-2 space-y-1"
+          style={{ backgroundColor: colorScheme.primary, opacity: 0.2 }}
+        >
+          <div
+            className="h-2 w-20 rounded"
+            style={{ backgroundColor: colorScheme.primary }}
+          />
+          <div
+            className="h-1 w-16 rounded"
+            style={{ backgroundColor: colorScheme.primary, opacity: 0.7 }}
+          />
         </div>
       )}
       {style === "minimal" && (
@@ -1504,7 +1548,9 @@ function TemplateListItem({
         <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
           <span className="capitalize">{template.style}</span>
           <span>•</span>
-          <span className="capitalize">{template.layout.replace("-", " ")}</span>
+          <span className="capitalize">
+            {template.layout.replace("-", " ")}
+          </span>
           {template.bestFor.length > 0 && (
             <>
               <span>•</span>

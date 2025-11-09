@@ -70,7 +70,10 @@ export function SectionHeader({
     return (
       <h2
         className={`mb-3 border-l-4 pl-3 text-xl font-bold ${className}`}
-        style={{ borderColor: primaryColor, color: colorScheme?.text || "#111827" }}
+        style={{
+          borderColor: primaryColor,
+          color: colorScheme?.text || "#111827",
+        }}
       >
         {title}
       </h2>
@@ -94,8 +97,6 @@ export function SectionHeader({
 
   // Default to minimal
   return (
-    <h2 className={`mb-3 text-xl font-bold uppercase ${className}`}>
-      {title}
-    </h2>
+    <h2 className={`mb-3 text-xl font-bold uppercase ${className}`}>{title}</h2>
   );
 }

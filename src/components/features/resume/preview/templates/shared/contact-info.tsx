@@ -30,7 +30,10 @@ export function ContactInfo({
   if (style === "centered") {
     return (
       <div className={`text-center ${className}`}>
-        <div className="flex flex-wrap justify-center gap-3 text-sm" style={{ color: textColor }}>
+        <div
+          className="flex flex-wrap justify-center gap-3 text-sm"
+          style={{ color: textColor }}
+        >
           {personalInfo.email && (
             <div className="flex items-center gap-1">
               {showIcons && <Mail className="h-4 w-4" />}
@@ -57,7 +60,10 @@ export function ContactInfo({
           )}
         </div>
         {links.length > 0 && (
-          <div className="mt-2 flex flex-wrap justify-center gap-3 text-sm" style={{ color: textColor }}>
+          <div
+            className="mt-2 flex flex-wrap justify-center gap-3 text-sm"
+            style={{ color: textColor }}
+          >
             {links.map((link) => (
               <a
                 key={link.id}
@@ -113,8 +119,13 @@ export function ContactInfo({
   // Split style - horizontal layout
   if (style === "split") {
     return (
-      <div className={`flex flex-wrap items-center justify-between gap-4 ${className}`}>
-        <div className="flex flex-wrap gap-3 text-sm" style={{ color: textColor }}>
+      <div
+        className={`flex flex-wrap items-center justify-between gap-4 ${className}`}
+      >
+        <div
+          className="flex flex-wrap gap-3 text-sm"
+          style={{ color: textColor }}
+        >
           {personalInfo.email && (
             <div className="flex items-center gap-1">
               {showIcons && <Mail className="h-4 w-4" />}
@@ -135,7 +146,10 @@ export function ContactInfo({
           )}
         </div>
         {links.length > 0 && (
-          <div className="flex flex-wrap gap-3 text-sm" style={{ color: textColor }}>
+          <div
+            className="flex flex-wrap gap-3 text-sm"
+            style={{ color: textColor }}
+          >
             {links.map((link) => (
               <a
                 key={link.id}
@@ -162,7 +176,9 @@ export function ContactInfo({
           personalInfo.location,
           ...links.map((l) => l.url),
         ]
+
           .filter(Boolean)
+
           .join(" • ")}
       </div>
     );
@@ -170,7 +186,10 @@ export function ContactInfo({
 
   // Default to centered
   return (
-    <div className={`text-center text-sm ${className}`} style={{ color: textColor }}>
+    <div
+      className={`text-center text-sm ${className}`}
+      style={{ color: textColor }}
+    >
       {personalInfo.email && <div>{personalInfo.email}</div>}
       {personalInfo.phone && <div>{personalInfo.phone}</div>}
       {personalInfo.location && <div>{personalInfo.location}</div>}

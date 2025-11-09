@@ -59,9 +59,15 @@ export function CertificationsList({
       <div className={`space-y-2 ${className}`}>
         {certifications.map((cert) => (
           <div key={cert.id} className="flex items-center gap-2">
-            <Award className="h-4 w-4" style={{ color: colorScheme?.primary }} />
+            <Award
+              className="h-4 w-4"
+              style={{ color: colorScheme?.primary }}
+            />
             <div className="flex-1">
-              <span className="text-sm font-semibold" style={{ color: textColor }}>
+              <span
+                className="text-sm font-semibold"
+                style={{ color: textColor }}
+              >
                 {cert.name}
               </span>
               <span className="text-sm" style={{ color: textLightColor }}>
@@ -90,10 +96,16 @@ export function CertificationsList({
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h3 className="text-base font-bold" style={{ color: textColor }}>
+                <h3
+                  className="text-base font-bold"
+                  style={{ color: textColor }}
+                >
                   {cert.name}
                 </h3>
-                <p className="text-sm font-semibold" style={{ color: colorScheme?.primary }}>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: colorScheme?.primary }}
+                >
                   {cert.issuer}
                 </p>
                 <p className="mt-1 text-xs" style={{ color: textLightColor }}>
@@ -106,7 +118,10 @@ export function CertificationsList({
                   </p>
                 )}
               </div>
-              <Award className="h-5 w-5" style={{ color: colorScheme?.primary }} />
+              <Award
+                className="h-5 w-5"
+                style={{ color: colorScheme?.primary }}
+              />
             </div>
           </div>
         ))}

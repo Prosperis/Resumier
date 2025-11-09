@@ -13,7 +13,8 @@ interface CompactTemplateProps {
 }
 
 export function CompactTemplate({ resume, config }: CompactTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } = resume.content;
+  const { personalInfo, experience, education, skills, certifications } =
+    resume.content;
   const primaryColor = config?.colorScheme?.primary || "#525252";
 
   return (
@@ -23,7 +24,9 @@ export function CompactTemplate({ resume, config }: CompactTemplateProps) {
     >
       {/* Compact Header */}
       <div className="mb-4 pb-2 border-b border-gray-300">
-        <h1 className="text-2xl font-bold mb-1">{personalInfo.name || "Your Name"}</h1>
+        <h1 className="text-2xl font-bold mb-1">
+          {personalInfo.name || "Your Name"}
+        </h1>
         <div className="flex flex-wrap gap-3 text-xs text-gray-600">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && <span>{personalInfo.phone}</span>}
@@ -41,7 +44,10 @@ export function CompactTemplate({ resume, config }: CompactTemplateProps) {
       {/* Experience - Dense */}
       {experience && experience.length > 0 && (
         <div className="mb-4">
-          <h2 className="text-sm font-bold mb-2 uppercase" style={{ color: primaryColor }}>
+          <h2
+            className="text-sm font-bold mb-2 uppercase"
+            style={{ color: primaryColor }}
+          >
             Experience
           </h2>
           <div className="space-y-3">
@@ -53,7 +59,9 @@ export function CompactTemplate({ resume, config }: CompactTemplateProps) {
                     {exp.startDate} - {exp.current ? "Present" : exp.endDate}
                   </span>
                 </div>
-                <p className="font-semibold text-gray-700 mb-1">{exp.company}</p>
+                <p className="font-semibold text-gray-700 mb-1">
+                  {exp.company}
+                </p>
                 {exp.description && (
                   <p className="text-gray-700 mb-1">{exp.description}</p>
                 )}
@@ -77,7 +85,10 @@ export function CompactTemplate({ resume, config }: CompactTemplateProps) {
         {/* Education */}
         {education && education.length > 0 && (
           <div className="mb-4">
-            <h2 className="text-sm font-bold mb-2 uppercase" style={{ color: primaryColor }}>
+            <h2
+              className="text-sm font-bold mb-2 uppercase"
+              style={{ color: primaryColor }}
+            >
               Education
             </h2>
             <div className="space-y-2">
@@ -88,7 +99,9 @@ export function CompactTemplate({ resume, config }: CompactTemplateProps) {
                     <span className="text-xs text-gray-600">{edu.endDate}</span>
                   </div>
                   <p className="text-gray-700">{edu.institution}</p>
-                  {edu.gpa && <p className="text-xs text-gray-600">GPA: {edu.gpa}</p>}
+                  {edu.gpa && (
+                    <p className="text-xs text-gray-600">GPA: {edu.gpa}</p>
+                  )}
                 </div>
               ))}
             </div>
@@ -98,17 +111,21 @@ export function CompactTemplate({ resume, config }: CompactTemplateProps) {
         {/* Skills */}
         {skills && (
           <div className="mb-4">
-            <h2 className="text-sm font-bold mb-2 uppercase" style={{ color: primaryColor }}>
+            <h2
+              className="text-sm font-bold mb-2 uppercase"
+              style={{ color: primaryColor }}
+            >
               Skills
             </h2>
             <div className="space-y-1">
-              {typeof skills === 'object' && 'technical' in skills && Array.isArray(skills.technical) && 
+              {typeof skills === "object" &&
+                "technical" in skills &&
+                Array.isArray(skills.technical) &&
                 skills.technical.map((skill: any, index: number) => (
                   <div key={index} className="text-gray-800">
                     {skill.name || skill}
                   </div>
-                ))
-              }
+                ))}
             </div>
           </div>
         )}
@@ -117,12 +134,18 @@ export function CompactTemplate({ resume, config }: CompactTemplateProps) {
       {/* Certifications - Compact */}
       {certifications && certifications.length > 0 && (
         <div>
-          <h2 className="text-sm font-bold mb-2 uppercase" style={{ color: primaryColor }}>
+          <h2
+            className="text-sm font-bold mb-2 uppercase"
+            style={{ color: primaryColor }}
+          >
             Certifications
           </h2>
           <div className="flex flex-wrap gap-2">
             {certifications.map((cert, index) => (
-              <span key={index} className="text-xs px-2 py-1 bg-gray-100 rounded">
+              <span
+                key={index}
+                className="text-xs px-2 py-1 bg-gray-100 rounded"
+              >
                 {cert.name}
               </span>
             ))}

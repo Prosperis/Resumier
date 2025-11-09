@@ -44,7 +44,10 @@ export function ExperienceEntry({
           </p>
         )}
         {experience.highlights && experience.highlights.length > 0 && (
-          <ul className="list-inside list-disc space-y-1 text-sm" style={{ color: textLightColor }}>
+          <ul
+            className="list-inside list-disc space-y-1 text-sm"
+            style={{ color: textLightColor }}
+          >
             {experience.highlights.map((highlight, idx) => (
               <li key={idx}>{highlight}</li>
             ))}
@@ -63,14 +66,18 @@ export function ExperienceEntry({
             {experience.position}
           </h3>
           <span className="text-xs" style={{ color: textLightColor }}>
-            {experience.startDate} - {experience.current ? "Present" : experience.endDate}
+            {experience.startDate} -{" "}
+            {experience.current ? "Present" : experience.endDate}
           </span>
         </div>
         <p className="text-sm" style={{ color: textLightColor }}>
           {experience.company}
         </p>
         {experience.highlights && experience.highlights.length > 0 && (
-          <ul className="mt-1 list-inside list-disc text-sm" style={{ color: textLightColor }}>
+          <ul
+            className="mt-1 list-inside list-disc text-sm"
+            style={{ color: textLightColor }}
+          >
             {experience.highlights.slice(0, 3).map((highlight, idx) => (
               <li key={idx}>{highlight}</li>
             ))}
@@ -83,20 +90,32 @@ export function ExperienceEntry({
   // Detailed variant - more information
   if (variant === "detailed") {
     return (
-      <div className={`${className} border-l-2 pl-4`} style={{ borderColor: colorScheme?.primary || "#8b5cf6" }}>
+      <div
+        className={`${className} border-l-2 pl-4`}
+        style={{ borderColor: colorScheme?.primary || "#8b5cf6" }}
+      >
         <div className="mb-2 flex items-start justify-between">
           <div>
             <h3 className="text-lg font-bold" style={{ color: textColor }}>
               {experience.position}
             </h3>
-            <p className="text-base font-semibold" style={{ color: colorScheme?.primary || "#8b5cf6" }}>
+            <p
+              className="text-base font-semibold"
+              style={{ color: colorScheme?.primary || "#8b5cf6" }}
+            >
               {experience.company}
             </p>
           </div>
           <div className="text-right text-sm" style={{ color: textLightColor }}>
-            <div>{experience.startDate} - {experience.current ? "Present" : experience.endDate}</div>
+            <div>
+              {experience.startDate} -{" "}
+              {experience.current ? "Present" : experience.endDate}
+            </div>
             {experience.current && (
-              <div className="mt-1 text-xs font-semibold" style={{ color: colorScheme?.primary }}>
+              <div
+                className="mt-1 text-xs font-semibold"
+                style={{ color: colorScheme?.primary }}
+              >
                 Current Position
               </div>
             )}
@@ -109,10 +128,16 @@ export function ExperienceEntry({
         )}
         {experience.highlights && experience.highlights.length > 0 && (
           <div>
-            <p className="mb-1 text-xs font-semibold uppercase" style={{ color: textLightColor }}>
+            <p
+              className="mb-1 text-xs font-semibold uppercase"
+              style={{ color: textLightColor }}
+            >
               Key Achievements
             </p>
-            <ul className="list-inside list-disc space-y-1 text-sm" style={{ color: textLightColor }}>
+            <ul
+              className="list-inside list-disc space-y-1 text-sm"
+              style={{ color: textLightColor }}
+            >
               {experience.highlights.map((highlight, idx) => (
                 <li key={idx}>{highlight}</li>
               ))}
@@ -137,13 +162,17 @@ export function ExperienceEntry({
           className="absolute left-[5px] top-4 h-full w-0.5"
           style={{ backgroundColor: colorScheme?.border || "#e5e7eb" }}
         />
-        
+
         <div className="mb-1 flex items-start justify-between">
           <h3 className="text-base font-bold" style={{ color: textColor }}>
             {experience.position}
           </h3>
-          <span className="text-sm font-semibold" style={{ color: colorScheme?.primary }}>
-            {experience.startDate} - {experience.current ? "Present" : experience.endDate}
+          <span
+            className="text-sm font-semibold"
+            style={{ color: colorScheme?.primary }}
+          >
+            {experience.startDate} -{" "}
+            {experience.current ? "Present" : experience.endDate}
           </span>
         </div>
         <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
@@ -155,7 +184,10 @@ export function ExperienceEntry({
           </p>
         )}
         {experience.highlights && experience.highlights.length > 0 && (
-          <ul className="list-inside list-disc space-y-1 text-sm" style={{ color: textLightColor }}>
+          <ul
+            className="list-inside list-disc space-y-1 text-sm"
+            style={{ color: textLightColor }}
+          >
             {experience.highlights.map((highlight, idx) => (
               <li key={idx}>{highlight}</li>
             ))}

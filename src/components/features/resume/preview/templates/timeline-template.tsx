@@ -4,13 +4,7 @@
  * Layout: Timeline-style experience with vertical line
  */
 
-import {
-  Briefcase,
-  GraduationCap,
-  Mail,
-  MapPin,
-  Phone,
-} from "lucide-react";
+import { Briefcase, GraduationCap, Mail, MapPin, Phone } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
 
@@ -30,7 +24,9 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
     >
       {/* Header */}
       <div className="mb-8">
-        <h1 className="mb-2 text-4xl font-bold">{personalInfo.name || "Your Name"}</h1>
+        <h1 className="mb-2 text-4xl font-bold">
+          {personalInfo.name || "Your Name"}
+        </h1>
         <div className="flex flex-wrap gap-4 text-sm text-gray-600">
           {personalInfo.email && (
             <div className="flex items-center gap-1">
@@ -56,47 +52,57 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
       {/* Summary */}
       {personalInfo.summary && (
         <div className="mb-8">
-          <p className="text-gray-700 leading-relaxed">{personalInfo.summary}</p>
+          <p className="text-gray-700 leading-relaxed">
+            {personalInfo.summary}
+          </p>
         </div>
       )}
 
       {/* Experience Timeline */}
       {experience && experience.length > 0 && (
         <div className="mb-8">
-          <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold" style={{ color: primaryColor }}>
+          <h2
+            className="mb-6 flex items-center gap-2 text-2xl font-bold"
+            style={{ color: primaryColor }}
+          >
             <Briefcase className="h-6 w-6" />
             Experience
           </h2>
           <div className="relative">
             {/* Vertical timeline line */}
-            <div 
+            <div
               className="absolute left-[7px] top-2 bottom-2 w-0.5"
               style={{ backgroundColor: primaryColor }}
             />
-            
+
             <div className="space-y-8">
               {experience.map((exp, index) => (
                 <div key={index} className="relative pl-8">
                   {/* Timeline dot */}
-                  <div 
+                  <div
                     className="absolute left-0 top-1.5 h-4 w-4 rounded-full border-4 border-white shadow"
                     style={{ backgroundColor: primaryColor }}
                   />
-                  
+
                   <div className="mb-2">
                     <h3 className="text-lg font-bold">{exp.position}</h3>
                     <div className="flex items-center justify-between flex-wrap gap-2">
-                      <p className="font-semibold text-gray-700">{exp.company}</p>
+                      <p className="font-semibold text-gray-700">
+                        {exp.company}
+                      </p>
                       <p className="text-sm text-gray-600">
-                        {exp.startDate} - {exp.current ? "Present" : exp.endDate}
+                        {exp.startDate} -{" "}
+                        {exp.current ? "Present" : exp.endDate}
                       </p>
                     </div>
                   </div>
-                  
+
                   {exp.description && (
-                    <p className="mb-3 text-gray-700 text-sm">{exp.description}</p>
+                    <p className="mb-3 text-gray-700 text-sm">
+                      {exp.description}
+                    </p>
                   )}
-                  
+
                   {exp.highlights && exp.highlights.length > 0 && (
                     <ul className="space-y-1.5 text-sm">
                       {exp.highlights.map((highlight, i) => (
@@ -117,31 +123,36 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
       {/* Education Timeline */}
       {education && education.length > 0 && (
         <div className="mb-8">
-          <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold" style={{ color: primaryColor }}>
+          <h2
+            className="mb-6 flex items-center gap-2 text-2xl font-bold"
+            style={{ color: primaryColor }}
+          >
             <GraduationCap className="h-6 w-6" />
             Education
           </h2>
           <div className="relative">
             {/* Vertical timeline line */}
-            <div 
+            <div
               className="absolute left-[7px] top-2 bottom-2 w-0.5"
               style={{ backgroundColor: primaryColor }}
             />
-            
+
             <div className="space-y-6">
               {education.map((edu, index) => (
                 <div key={index} className="relative pl-8">
                   {/* Timeline dot */}
-                  <div 
+                  <div
                     className="absolute left-0 top-1.5 h-4 w-4 rounded-full border-4 border-white shadow"
                     style={{ backgroundColor: primaryColor }}
                   />
-                  
+
                   <div className="flex items-start justify-between flex-wrap gap-2">
                     <div>
                       <h3 className="font-bold">{edu.degree}</h3>
                       <p className="text-gray-700">{edu.institution}</p>
-                      {edu.gpa && <p className="text-sm text-gray-600">GPA: {edu.gpa}</p>}
+                      {edu.gpa && (
+                        <p className="text-sm text-gray-600">GPA: {edu.gpa}</p>
+                      )}
                     </div>
                     <p className="text-sm text-gray-600">
                       {edu.startDate} - {edu.endDate}
@@ -157,21 +168,25 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
       {/* Skills */}
       {skills && (
         <div>
-          <h2 className="mb-4 text-2xl font-bold" style={{ color: primaryColor }}>
+          <h2
+            className="mb-4 text-2xl font-bold"
+            style={{ color: primaryColor }}
+          >
             Skills
           </h2>
           <div className="flex flex-wrap gap-2">
-            {typeof skills === 'object' && 'technical' in skills && Array.isArray(skills.technical) && 
+            {typeof skills === "object" &&
+              "technical" in skills &&
+              Array.isArray(skills.technical) &&
               skills.technical.map((skill: any, index: number) => (
-                <span 
+                <span
                   key={index}
                   className="px-3 py-1 rounded-full text-sm text-white"
                   style={{ backgroundColor: primaryColor }}
                 >
                   {skill.name || skill}
                 </span>
-              ))
-            }
+              ))}
           </div>
         </div>
       )}

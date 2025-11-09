@@ -66,7 +66,10 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 border-b-2 pb-1 text-xl font-bold"
-                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
+                style={{
+                  color: "{primaryColor}",
+                  borderColor: "{primaryColor}",
+                }}
               >
                 Professional Summary
               </h2>
@@ -81,7 +84,10 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
-                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
+                style={{
+                  color: "{primaryColor}",
+                  borderColor: "{primaryColor}",
+                }}
               >
                 <Briefcase className="h-5 w-5" />
                 Experience
@@ -122,7 +128,10 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
-                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
+                style={{
+                  color: "{primaryColor}",
+                  borderColor: "{primaryColor}",
+                }}
               >
                 <GraduationCap className="h-5 w-5" />
                 Education
@@ -168,7 +177,10 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 border-b-2 pb-1 text-lg font-bold"
-                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
+                style={{
+                  color: "{primaryColor}",
+                  borderColor: "{primaryColor}",
+                }}
               >
                 Skills
               </h2>
@@ -266,7 +278,10 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
-                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
+                style={{
+                  color: "{primaryColor}",
+                  borderColor: "{primaryColor}",
+                }}
               >
                 <Award className="h-4 w-4" />
                 Certifications
@@ -290,7 +305,10 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
-                style={{ color: "{primaryColor}", borderColor: "{primaryColor}" }}
+                style={{
+                  color: "{primaryColor}",
+                  borderColor: "{primaryColor}",
+                }}
               >
                 <LinkIcon className="h-4 w-4" />
                 Links

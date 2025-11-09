@@ -2,7 +2,10 @@ import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateType } from "@/lib/types/templates";
-import { getTemplateComponent, getTemplateInfo } from "./templates/template-registry";
+import {
+  getTemplateComponent,
+  getTemplateInfo,
+} from "./templates/template-registry";
 
 interface ResumePreviewProps {
   resume: Resume;

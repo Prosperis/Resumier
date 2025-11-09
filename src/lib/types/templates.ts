@@ -343,9 +343,9 @@ export const TYPOGRAPHY_PRESETS: Record<string, Typography> = {
 /**
  * Template type union of all available templates
  */
-export type TemplateType = 
-  | "modern" 
-  | "classic" 
+export type TemplateType =
+  | "modern"
+  | "classic"
   | "minimal"
   | "executive"
   | "academic"

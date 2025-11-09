@@ -4,12 +4,7 @@
  * Layout: Centered header, single column, prominent sections
  */
 
-import {
-  Award,
-  Mail,
-  MapPin,
-  Phone,
-} from "lucide-react";
+import { Award, Mail, MapPin, Phone } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
 
@@ -27,20 +22,20 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
   return (
     <div
       className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg"
-      style={{ 
+      style={{
         colorScheme: "light",
-        fontFamily: "Georgia, 'Times New Roman', serif"
+        fontFamily: "Georgia, 'Times New Roman', serif",
       }}
     >
       {/* Thick top border */}
       <div style={{ borderTop: `8px solid ${primaryColor}` }} />
-      
+
       {/* Header - Centered */}
       <div className="border-b-4 border-gray-900 px-12 py-8 text-center">
         <h1 className="mb-4 text-5xl font-bold tracking-tight">
           {personalInfo.name || "Your Name"}
         </h1>
-        
+
         {/* Contact Info - Horizontal */}
         <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-700">
           {personalInfo.email && (
@@ -67,7 +62,7 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
       {/* Executive Profile Section */}
       {personalInfo.summary && (
         <div className="border-b-2 border-gray-300 px-12 py-8">
-          <h2 
+          <h2
             className="mb-4 text-2xl font-bold uppercase tracking-wide"
             style={{ color: primaryColor }}
           >
@@ -82,7 +77,7 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
       {/* Professional Experience */}
       {experience && experience.length > 0 && (
         <div className="border-b-2 border-gray-300 px-12 py-8">
-          <h2 
+          <h2
             className="mb-6 text-2xl font-bold uppercase tracking-wide"
             style={{ color: primaryColor }}
           >
@@ -111,7 +106,12 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
                   <ul className="space-y-2">
                     {exp.highlights.map((highlight, i) => (
                       <li key={i} className="flex gap-2 text-gray-800">
-                        <span className="font-bold" style={{ color: primaryColor }}>•</span>
+                        <span
+                          className="font-bold"
+                          style={{ color: primaryColor }}
+                        >
+                          •
+                        </span>
                         <span>{highlight}</span>
                       </li>
                     ))}
@@ -126,7 +126,7 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
       {/* Education */}
       {education && education.length > 0 && (
         <div className="border-b-2 border-gray-300 px-12 py-8">
-          <h2 
+          <h2
             className="mb-6 text-2xl font-bold uppercase tracking-wide"
             style={{ color: primaryColor }}
           >
@@ -145,7 +145,7 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
                   </p>
                 </div>
                 {edu.honors && edu.honors.length > 0 && (
-                  <p className="mt-2 text-gray-700">{edu.honors.join(', ')}</p>
+                  <p className="mt-2 text-gray-700">{edu.honors.join(", ")}</p>
                 )}
               </div>
             ))}
@@ -158,20 +158,21 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
         {/* Skills */}
         {skills && (
           <div>
-            <h2 
+            <h2
               className="mb-4 text-2xl font-bold uppercase tracking-wide"
               style={{ color: primaryColor }}
             >
               Core Competencies
             </h2>
             <div className="space-y-2">
-              {typeof skills === 'object' && 'technical' in skills && Array.isArray(skills.technical) && 
+              {typeof skills === "object" &&
+                "technical" in skills &&
+                Array.isArray(skills.technical) &&
                 skills.technical.map((skill: any, index: number) => (
                   <div key={index} className="text-gray-800">
                     <span className="font-semibold">{skill.name || skill}</span>
                   </div>
-                ))
-              }
+                ))}
             </div>
           </div>
         )}
@@ -179,7 +180,7 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
         {/* Certifications */}
         {certifications && certifications.length > 0 && (
           <div>
-            <h2 
+            <h2
               className="mb-4 text-2xl font-bold uppercase tracking-wide"
               style={{ color: primaryColor }}
             >
@@ -189,8 +190,13 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
               {certifications.map((cert, index) => (
                 <div key={index}>
                   <div className="flex items-center gap-2">
-                    <Award className="h-4 w-4" style={{ color: primaryColor }} />
-                    <span className="font-semibold text-gray-800">{cert.name}</span>
+                    <Award
+                      className="h-4 w-4"
+                      style={{ color: primaryColor }}
+                    />
+                    <span className="font-semibold text-gray-800">
+                      {cert.name}
+                    </span>
                   </div>
                   {cert.issuer && (
                     <p className="ml-6 text-sm text-gray-600">{cert.issuer}</p>

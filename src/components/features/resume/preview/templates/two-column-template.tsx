@@ -35,8 +35,8 @@ export function TwoColumnTemplate({ resume, config }: TwoColumnTemplateProps) {
       {/* Left Sidebar - 1/3 width */}
       <div
         className="w-1/3 p-8 text-white"
-        style={{ 
-          background: `linear-gradient(180deg, ${primaryColor} 0%, ${secondaryColor} 100%)`
+        style={{
+          background: `linear-gradient(180deg, ${primaryColor} 0%, ${secondaryColor} 100%)`,
         }}
       >
         {/* Profile */}
@@ -81,21 +81,26 @@ export function TwoColumnTemplate({ resume, config }: TwoColumnTemplateProps) {
               Skills
             </h2>
             <div className="space-y-3">
-              {typeof skills === 'object' && 'technical' in skills && Array.isArray(skills.technical) && 
-                skills.technical.slice(0, 8).map((skill: any, index: number) => (
-                  <div key={index}>
-                    <div className="flex items-center justify-between text-sm mb-1">
-                      <span className="font-medium">{skill.name || skill}</span>
+              {typeof skills === "object" &&
+                "technical" in skills &&
+                Array.isArray(skills.technical) &&
+                skills.technical
+                  .slice(0, 8)
+                  .map((skill: any, index: number) => (
+                    <div key={index}>
+                      <div className="flex items-center justify-between text-sm mb-1">
+                        <span className="font-medium">
+                          {skill.name || skill}
+                        </span>
+                      </div>
+                      <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-white rounded-full"
+                          style={{ width: `${85 - index * 5}%` }}
+                        />
+                      </div>
                     </div>
-                    <div className="h-2 bg-white/20 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-white rounded-full"
-                        style={{ width: `${85 - index * 5}%` }}
-                      />
-                    </div>
-                  </div>
-                ))
-              }
+                  ))}
             </div>
           </div>
         )}
@@ -128,7 +133,7 @@ export function TwoColumnTemplate({ resume, config }: TwoColumnTemplateProps) {
         {/* Summary */}
         {personalInfo.summary && (
           <div className="mb-8">
-            <h2 
+            <h2
               className="mb-4 text-2xl font-bold"
               style={{ color: primaryColor }}
             >
@@ -143,7 +148,7 @@ export function TwoColumnTemplate({ resume, config }: TwoColumnTemplateProps) {
         {/* Experience */}
         {experience && experience.length > 0 && (
           <div className="mb-8">
-            <h2 
+            <h2
               className="mb-6 flex items-center gap-3 text-2xl font-bold"
               style={{ color: primaryColor }}
             >
@@ -152,19 +157,29 @@ export function TwoColumnTemplate({ resume, config }: TwoColumnTemplateProps) {
             </h2>
             <div className="space-y-6">
               {experience.map((exp, index) => (
-                <div key={index} className="relative pl-6 border-l-2" style={{ borderColor: primaryColor }}>
-                  <div 
+                <div
+                  key={index}
+                  className="relative pl-6 border-l-2"
+                  style={{ borderColor: primaryColor }}
+                >
+                  <div
                     className="absolute left-[-5px] top-1.5 h-2 w-2 rounded-full"
                     style={{ backgroundColor: primaryColor }}
                   />
                   <div className="mb-2">
-                    <h3 className="text-lg font-bold text-gray-900">{exp.position}</h3>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      {exp.position}
+                    </h3>
                     <div className="flex items-center justify-between flex-wrap gap-2">
-                      <p className="font-semibold" style={{ color: primaryColor }}>
+                      <p
+                        className="font-semibold"
+                        style={{ color: primaryColor }}
+                      >
                         {exp.company}
                       </p>
                       <p className="text-sm text-gray-600">
-                        {exp.startDate} - {exp.current ? "Present" : exp.endDate}
+                        {exp.startDate} -{" "}
+                        {exp.current ? "Present" : exp.endDate}
                       </p>
                     </div>
                   </div>
@@ -192,7 +207,7 @@ export function TwoColumnTemplate({ resume, config }: TwoColumnTemplateProps) {
         {/* Education */}
         {education && education.length > 0 && (
           <div>
-            <h2 
+            <h2
               className="mb-6 flex items-center gap-3 text-2xl font-bold"
               style={{ color: primaryColor }}
             >
@@ -201,8 +216,12 @@ export function TwoColumnTemplate({ resume, config }: TwoColumnTemplateProps) {
             </h2>
             <div className="space-y-4">
               {education.map((edu, index) => (
-                <div key={index} className="relative pl-6 border-l-2" style={{ borderColor: primaryColor }}>
-                  <div 
+                <div
+                  key={index}
+                  className="relative pl-6 border-l-2"
+                  style={{ borderColor: primaryColor }}
+                >
+                  <div
                     className="absolute left-[-5px] top-1.5 h-2 w-2 rounded-full"
                     style={{ backgroundColor: primaryColor }}
                   />
@@ -219,7 +238,9 @@ export function TwoColumnTemplate({ resume, config }: TwoColumnTemplateProps) {
                     </p>
                   </div>
                   {edu.honors && edu.honors.length > 0 && (
-                    <p className="mt-2 text-sm text-gray-700">{edu.honors.join(', ')}</p>
+                    <p className="mt-2 text-sm text-gray-700">
+                      {edu.honors.join(", ")}
+                    </p>
                   )}
                 </div>
               ))}

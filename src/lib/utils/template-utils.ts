@@ -19,7 +19,7 @@ import { COLOR_SCHEMES, TYPOGRAPHY_PRESETS } from "@/lib/types/templates";
  */
 export function filterTemplates(
   templates: TemplateInfo[],
-  filters: TemplateFilterOptions
+  filters: TemplateFilterOptions,
 ): TemplateInfo[] {
   return templates.filter((template) => {
     // Category filter
@@ -40,7 +40,7 @@ export function filterTemplates(
     // Industries filter
     if (filters.industries && filters.industries.length > 0) {
       const hasMatchingIndustry = filters.industries.some((industry) =>
-        template.industries.includes(industry)
+        template.industries.includes(industry),
       );
       if (!hasMatchingIndustry) return false;
     }
@@ -49,7 +49,7 @@ export function filterTemplates(
     if (filters.experienceLevel && filters.experienceLevel.length > 0) {
       if (!template.experienceLevel) return false;
       const hasMatchingLevel = filters.experienceLevel.some((level) =>
-        template.experienceLevel?.includes(level)
+        template.experienceLevel?.includes(level),
       );
       if (!hasMatchingLevel) return false;
     }
@@ -57,7 +57,7 @@ export function filterTemplates(
     // Features filter
     if (filters.features && filters.features.length > 0) {
       const hasMatchingFeature = filters.features.some((feature) =>
-        template.features.includes(feature)
+        template.features.includes(feature),
       );
       if (!hasMatchingFeature) return false;
     }
@@ -80,7 +80,7 @@ export function filterTemplates(
         template.description.toLowerCase().includes(searchLower) ||
         template.tags.some((tag) => tag.toLowerCase().includes(searchLower)) ||
         template.industries.some((industry) =>
-          industry.toLowerCase().includes(searchLower)
+          industry.toLowerCase().includes(searchLower),
         );
       if (!matchesSearch) return false;
     }
@@ -95,7 +95,7 @@ export function filterTemplates(
 export function sortTemplates(
   templates: TemplateInfo[],
   sortBy: TemplateSortBy,
-  order: TemplateSortOrder = "asc"
+  order: TemplateSortOrder = "asc",
 ): TemplateInfo[] {
   const sorted = [...templates];
 
@@ -149,7 +149,7 @@ export function getTypography(name: string): Typography {
  */
 export function mergeTemplateConfig(
   defaultConfig: Partial<TemplateConfig>,
-  userConfig?: TemplateConfig
+  userConfig?: TemplateConfig,
 ): TemplateConfig {
   if (!userConfig) return defaultConfig as TemplateConfig;
 
@@ -178,7 +178,7 @@ export function calculateTemplateMatchScore(
       style?: string[];
       features?: string[];
     };
-  }
+  },
 ): number {
   let score = 0;
 
@@ -206,7 +206,7 @@ export function calculateTemplateMatchScore(
   // Feature preference match (low weight)
   if (userProfile.preferences?.features) {
     const matchingFeatures = userProfile.preferences.features.filter(
-      (feature) => template.features.includes(feature as any)
+      (feature) => template.features.includes(feature as any),
     );
     score += matchingFeatures.length * 5;
   }
@@ -230,7 +230,7 @@ export function getRecommendedTemplates(
       features?: string[];
     };
   },
-  limit: number = 5
+  limit: number = 5,
 ): TemplateInfo[] {
   const scored = templates.map((template) => ({
     template,
@@ -246,7 +246,7 @@ export function getRecommendedTemplates(
  * Group templates by category
  */
 export function groupTemplatesByCategory(
-  templates: TemplateInfo[]
+  templates: TemplateInfo[],
 ): Record<string, TemplateInfo[]> {
   return templates.reduce(
     (acc, template) => {
@@ -256,7 +256,7 @@ export function groupTemplatesByCategory(
       acc[template.category].push(template);
       return acc;
     },
-    {} as Record<string, TemplateInfo[]>
+    {} as Record<string, TemplateInfo[]>,
   );
 }
 
@@ -265,7 +265,7 @@ export function groupTemplatesByCategory(
  */
 export function getPopularTemplates(
   templates: TemplateInfo[],
-  limit: number = 10
+  limit: number = 10,
 ): TemplateInfo[] {
   return templates.filter((t) => t.isPopular).slice(0, limit);
 }
@@ -275,7 +275,7 @@ export function getPopularTemplates(
  */
 export function getNewTemplates(
   templates: TemplateInfo[],
-  limit: number = 10
+  limit: number = 10,
 ): TemplateInfo[] {
   return templates.filter((t) => t.isNew).slice(0, limit);
 }
@@ -285,7 +285,7 @@ export function getNewTemplates(
  */
 export function getATSTemplates(
   templates: TemplateInfo[],
-  minScore: number = 8
+  minScore: number = 8,
 ): TemplateInfo[] {
   return templates.filter((t) => t.atsScore >= minScore);
 }
