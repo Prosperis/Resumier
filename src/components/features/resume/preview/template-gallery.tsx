@@ -6,7 +6,6 @@
 import { useState, useMemo } from "react";
 import {
   Search,
-  X,
   Sparkles,
   TrendingUp,
   Award,
@@ -105,24 +104,14 @@ export function TemplateGallery({
       <DialogContent className="max-w-7xl h-[90vh] p-0">
         {/* Header */}
         <DialogHeader className="px-6 py-4 border-b dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-                <Sparkles className="h-6 w-6 text-violet-600" />
-                Choose Your Template
-              </DialogTitle>
-              <DialogDescription className="mt-1">
-                Select from {allTemplates.length} professional resume templates
-              </DialogDescription>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onOpenChange(false)}
-              className="h-8 w-8"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+          <div>
+            <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+              <Sparkles className="h-6 w-6 text-violet-600" />
+              Choose Your Template
+            </DialogTitle>
+            <DialogDescription className="mt-1">
+              Select from {allTemplates.length} professional resume templates
+            </DialogDescription>
           </div>
 
           {/* Search and Filters */}
@@ -134,16 +123,8 @@ export function TemplateGallery({
                 placeholder="Search templates by name, industry, or style..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 pr-10"
+                className="pl-10"
               />
-              {search && (
-                <button
-                  onClick={() => setSearch("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
             </div>
 
             {/* View Mode Toggle */}
