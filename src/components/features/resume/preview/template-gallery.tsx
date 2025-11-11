@@ -3,7 +3,7 @@
  * Full-screen template selection portal with previews, filtering, and search
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
 import {
   Search,
   Sparkles,
@@ -52,9 +52,9 @@ export function TemplateGallery({
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<FilterCategory>("all");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [hoveredTemplate, setHoveredTemplate] = useState<string | null>(null);
 
-  const allTemplates = getAllTemplates();
+  // Cache templates to prevent re-fetching
+  const allTemplates = useMemo(() => getAllTemplates(), []);
 
   // Filter templates
   const filteredTemplates = useMemo(() => {
@@ -84,10 +84,10 @@ export function TemplateGallery({
     return filtered;
   }, [allTemplates, category, search]);
 
-  const handleSelectTemplate = (templateId: string) => {
+  const handleSelectTemplate = useCallback((templateId: string) => {
     onSelect(templateId as TemplateType);
     onOpenChange(false);
-  };
+  }, [onSelect, onOpenChange]);
 
   const categories: { id: FilterCategory; label: string; icon?: any }[] = [
     { id: "all", label: "All Templates" },
@@ -210,15 +210,13 @@ export function TemplateGallery({
 
               {/* Grid View */}
               {viewMode === "grid" && filteredTemplates.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" style={{ willChange: "contents" }}>
                   {filteredTemplates.map((template: TemplateInfo) => (
-                    <TemplateCard
+                    <MemoTemplateCard
                       key={template.id}
                       template={template}
                       selected={selected === template.id}
                       onSelect={() => handleSelectTemplate(template.id)}
-                      onHover={setHoveredTemplate}
-                      isHovered={hoveredTemplate === template.id}
                     />
                   ))}
                 </div>
@@ -226,9 +224,9 @@ export function TemplateGallery({
 
               {/* List View */}
               {viewMode === "list" && filteredTemplates.length > 0 && (
-                <div className="space-y-3">
+                <div className="space-y-3" style={{ willChange: "contents" }}>
                   {filteredTemplates.map((template: TemplateInfo) => (
-                    <TemplateListItem
+                    <MemoTemplateListItem
                       key={template.id}
                       template={template}
                       selected={selected === template.id}
@@ -247,20 +245,27 @@ export function TemplateGallery({
 
 /**
  * Template Preview Mini - Shows actual template layout
+ * Memoized to prevent unnecessary re-renders
+ * Simplified for performance - uses CSS instead of complex DOM
  */
-function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
-  const {
-    colorScheme = {
-      primary: "#8b5cf6",
-      secondary: "#7c3aed",
-      background: "#ffffff",
-      text: "#111827",
-      textLight: "#6b7280",
-      border: "#e5e7eb",
-    },
-    layout,
-    style,
-  } = template;
+const TemplatePreviewMini = memo(function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
+  const colorScheme = template.colorScheme || {
+    primary: "#8b5cf6",
+    secondary: "#7c3aed",
+    background: "#ffffff",
+    text: "#111827",
+    textLight: "#6b7280",
+    border: "#e5e7eb",
+  };
+  const { layout } = template;
+
+  // Lightweight: use CSS gradient as background to simulate layout
+  const bgStyle = {
+    backgroundColor: colorScheme.background,
+    backgroundImage: layout === "two-column"
+      ? `linear-gradient(90deg, ${colorScheme.primary}15 65%, ${colorScheme.primary}25 65%)`
+      : undefined,
+  } as React.CSSProperties;
 
   // EXISTING TEMPLATES WITH COMPONENTS
 
@@ -1268,63 +1273,30 @@ function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
   }
 
   // Default/fallback preview for any other templates
+  // Ultra-lightweight CSS-based preview
   return (
-    <div className="w-full h-full flex flex-col text-[4px] leading-tight p-3">
-      {/* Generic header based on style */}
-      {style === "traditional" && (
-        <div className="space-y-1 text-center border-b border-gray-700 pb-2 mb-2">
-          <div className="h-2 w-20 bg-gray-800 rounded mx-auto" />
-          <div className="h-1 w-16 bg-gray-600 rounded mx-auto" />
-        </div>
-      )}
-      {style === "contemporary" && (
-        <div
-          className="p-2 mb-2 space-y-1"
-          style={{ backgroundColor: colorScheme.primary, opacity: 0.2 }}
-        >
-          <div
-            className="h-2 w-20 rounded"
-            style={{ backgroundColor: colorScheme.primary }}
-          />
-          <div
-            className="h-1 w-16 rounded"
-            style={{ backgroundColor: colorScheme.primary, opacity: 0.7 }}
-          />
-        </div>
-      )}
-      {style === "minimal" && (
-        <div className="space-y-2 mb-3">
-          <div className="h-2 w-24 bg-gray-800 rounded" />
-          <div className="h-1 w-20 bg-gray-400 rounded" />
-        </div>
-      )}
-
-      {/* Content based on layout */}
-      {layout === "two-column" ? (
-        <div className="flex gap-2 flex-1">
-          <div className="flex-[2] space-y-2">
-            <div className="space-y-0.5">
-              <div className="h-1 w-full bg-gray-300 rounded" />
-              <div className="h-1 w-full bg-gray-200 rounded" />
-            </div>
-          </div>
-          <div className="flex-1 space-y-1">
-            <div className="h-1 w-full bg-gray-200 rounded" />
-            <div className="h-1 w-3/4 bg-gray-200 rounded" />
-          </div>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          <div className="space-y-0.5">
-            <div className="h-1 w-full bg-gray-300 rounded" />
-            <div className="h-1 w-full bg-gray-200 rounded" />
-            <div className="h-1 w-4/5 bg-gray-200 rounded" />
-          </div>
-        </div>
-      )}
+    <div 
+      className="w-full h-full flex flex-col p-3"
+      style={bgStyle}
+    >
+      {/* Colored header band */}
+      <div
+        className="h-6 w-full rounded mb-3"
+        style={{
+          backgroundColor: colorScheme.primary,
+          opacity: 0.2,
+        }}
+      />
+      {/* Simple content lines */}
+      <div className="space-y-2 flex-1">
+        <div className="h-2 rounded" style={{ backgroundColor: colorScheme.text, opacity: 0.3, width: "80%" }} />
+        <div className="h-1 rounded" style={{ backgroundColor: colorScheme.text, opacity: 0.2 }} />
+        <div className="h-1 rounded" style={{ backgroundColor: colorScheme.text, opacity: 0.15, width: "90%" }} />
+        <div className="h-1 rounded" style={{ backgroundColor: colorScheme.text, opacity: 0.15, width: "75%" }} />
+      </div>
     </div>
   );
-}
+});
 
 /**
  * Template Card - Grid View
@@ -1333,16 +1305,12 @@ interface TemplateCardProps {
   template: TemplateInfo;
   selected: boolean;
   onSelect: () => void;
-  onHover: (id: string | null) => void;
-  isHovered: boolean;
 }
 
-function TemplateCard({
+const TemplateCard = memo(function TemplateCard({
   template,
   selected,
   onSelect,
-  onHover,
-  isHovered,
 }: TemplateCardProps) {
   return (
     <div
@@ -1352,8 +1320,6 @@ function TemplateCard({
           : "border-gray-200 dark:border-gray-700 hover:border-violet-300 dark:hover:border-violet-500 hover:shadow-md"
       }`}
       onClick={onSelect}
-      onMouseEnter={() => onHover(template.id)}
-      onMouseLeave={() => onHover(null)}
     >
       {/* Preview - Actual Template Layout */}
       <div
@@ -1371,13 +1337,6 @@ function TemplateCard({
             <Check className="h-4 w-4" />
           </div>
         )}
-
-        {/* Hover Overlay */}
-        <div
-          className={`absolute inset-0 bg-black transition-opacity ${
-            isHovered ? "opacity-5" : "opacity-0"
-          }`}
-        />
       </div>
 
       {/* Template Info */}
@@ -1429,7 +1388,9 @@ function TemplateCard({
       </div>
     </div>
   );
-}
+});
+
+const MemoTemplateCard = TemplateCard;
 
 /**
  * Template List Item - List View
@@ -1440,7 +1401,7 @@ interface TemplateListItemProps {
   onSelect: () => void;
 }
 
-function TemplateListItem({
+const TemplateListItem = memo(function TemplateListItem({
   template,
   selected,
   onSelect,
@@ -1544,4 +1505,6 @@ function TemplateListItem({
       </div>
     </div>
   );
-}
+});
+
+const MemoTemplateListItem = TemplateListItem;
