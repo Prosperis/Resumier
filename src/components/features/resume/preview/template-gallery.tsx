@@ -84,10 +84,13 @@ export function TemplateGallery({
     return filtered;
   }, [allTemplates, category, search]);
 
-  const handleSelectTemplate = useCallback((templateId: string) => {
-    onSelect(templateId as TemplateType);
-    onOpenChange(false);
-  }, [onSelect, onOpenChange]);
+  const handleSelectTemplate = useCallback(
+    (templateId: string) => {
+      onSelect(templateId as TemplateType);
+      onOpenChange(false);
+    },
+    [onSelect, onOpenChange],
+  );
 
   const categories: { id: FilterCategory; label: string; icon?: any }[] = [
     { id: "all", label: "All Templates" },
@@ -210,7 +213,10 @@ export function TemplateGallery({
 
               {/* Grid View */}
               {viewMode === "grid" && filteredTemplates.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" style={{ willChange: "contents" }}>
+                <div
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                  style={{ willChange: "contents" }}
+                >
                   {filteredTemplates.map((template: TemplateInfo) => (
                     <MemoTemplateCard
                       key={template.id}
@@ -248,7 +254,11 @@ export function TemplateGallery({
  * Memoized to prevent unnecessary re-renders
  * Simplified for performance - uses CSS instead of complex DOM
  */
-const TemplatePreviewMini = memo(function TemplatePreviewMini({ template }: { template: TemplateInfo }) {
+const TemplatePreviewMini = memo(function TemplatePreviewMini({
+  template,
+}: {
+  template: TemplateInfo;
+}) {
   const colorScheme = template.colorScheme || {
     primary: "#8b5cf6",
     secondary: "#7c3aed",
@@ -262,9 +272,10 @@ const TemplatePreviewMini = memo(function TemplatePreviewMini({ template }: { te
   // Lightweight: use CSS gradient as background to simulate layout
   const bgStyle = {
     backgroundColor: colorScheme.background,
-    backgroundImage: layout === "two-column"
-      ? `linear-gradient(90deg, ${colorScheme.primary}15 65%, ${colorScheme.primary}25 65%)`
-      : undefined,
+    backgroundImage:
+      layout === "two-column"
+        ? `linear-gradient(90deg, ${colorScheme.primary}15 65%, ${colorScheme.primary}25 65%)`
+        : undefined,
   } as React.CSSProperties;
 
   // EXISTING TEMPLATES WITH COMPONENTS
@@ -1275,10 +1286,7 @@ const TemplatePreviewMini = memo(function TemplatePreviewMini({ template }: { te
   // Default/fallback preview for any other templates
   // Ultra-lightweight CSS-based preview
   return (
-    <div 
-      className="w-full h-full flex flex-col p-3"
-      style={bgStyle}
-    >
+    <div className="w-full h-full flex flex-col p-3" style={bgStyle}>
       {/* Colored header band */}
       <div
         className="h-6 w-full rounded mb-3"
@@ -1289,10 +1297,34 @@ const TemplatePreviewMini = memo(function TemplatePreviewMini({ template }: { te
       />
       {/* Simple content lines */}
       <div className="space-y-2 flex-1">
-        <div className="h-2 rounded" style={{ backgroundColor: colorScheme.text, opacity: 0.3, width: "80%" }} />
-        <div className="h-1 rounded" style={{ backgroundColor: colorScheme.text, opacity: 0.2 }} />
-        <div className="h-1 rounded" style={{ backgroundColor: colorScheme.text, opacity: 0.15, width: "90%" }} />
-        <div className="h-1 rounded" style={{ backgroundColor: colorScheme.text, opacity: 0.15, width: "75%" }} />
+        <div
+          className="h-2 rounded"
+          style={{
+            backgroundColor: colorScheme.text,
+            opacity: 0.3,
+            width: "80%",
+          }}
+        />
+        <div
+          className="h-1 rounded"
+          style={{ backgroundColor: colorScheme.text, opacity: 0.2 }}
+        />
+        <div
+          className="h-1 rounded"
+          style={{
+            backgroundColor: colorScheme.text,
+            opacity: 0.15,
+            width: "90%",
+          }}
+        />
+        <div
+          className="h-1 rounded"
+          style={{
+            backgroundColor: colorScheme.text,
+            opacity: 0.15,
+            width: "75%",
+          }}
+        />
       </div>
     </div>
   );
