@@ -8,97 +8,168 @@ import {
   UnderlineType,
 } from "docx";
 import { saveAs } from "file-saver";
-import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import type { Resume } from "@/lib/api/types";
 
 /**
  * Generate and download resume as PDF file
- * Uses html2canvas and jsPDF to convert the resume to a proper PDF document
+ * Uses jsPDF's text rendering to avoid html2canvas oklch color parsing issues
  */
 export async function downloadPDF(resume: Resume): Promise<void> {
   try {
-    // Create a temporary container with the resume content
-    const container = document.createElement("div");
-    container.style.position = "fixed";
-    container.style.left = "-9999px";
-    container.style.top = "-9999px";
-    container.style.width = "210mm"; // A4 width
-    container.style.height = "297mm"; // A4 height
-    container.style.padding = "20px";
-    container.style.backgroundColor = "#FFFFFF"; // Use standard RGB instead of oklch
-    container.style.fontFamily = "Arial, sans-serif";
-    container.style.fontSize = "11px";
-    container.style.lineHeight = "1.4";
-    container.style.color = "#333333"; // Use standard RGB instead of oklch
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
 
-    // Build the resume HTML
-    const {
-      personalInfo,
-      experience,
-      education,
-      skills,
-      certifications,
-      links,
-    } = resume.content;
+    const { personalInfo, experience, education, skills, certifications, links } = resume.content;
 
-    let html = `<div style="padding: 20px; font-family: Arial, sans-serif; color: #333333; line-height: 1.4;">`;
+    let yPosition = 15;
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 15;
+    const contentWidth = pageWidth - 2 * margin;
+
+    // Helper function to manage page breaks and multiline text
+    const addMultilineText = (text: string, x: number, maxWidth: number, options: any = {}) => {
+      const lines = pdf.splitTextToSize(text, maxWidth);
+      const lineHeight = options.maxHeight || 5;
+
+      for (const line of lines) {
+        if (yPosition > pageHeight - 10) {
+          pdf.addPage();
+          yPosition = 15;
+        }
+        pdf.text(line, x, yPosition, { ...options, maxWidth });
+        yPosition += lineHeight;
+      }
+    };
+
+    // Set default font
+    pdf.setFont("helvetica");
+    pdf.setFontSize(12);
+    pdf.setTextColor(0, 0, 0);
 
     // Name
     if (personalInfo.name) {
-      html += `<h1 style="font-size: 24px; margin: 0 0 10px 0; text-align: center; color: #000000;">${personalInfo.name}</h1>`;
+      pdf.setFontSize(20);
+      pdf.setFont("helvetica", "bold");
+      pdf.text(personalInfo.name, margin, yPosition);
+      yPosition += 8;
     }
 
     // Contact Info
+    pdf.setFontSize(9);
+    pdf.setFont("helvetica", "normal");
+    pdf.setTextColor(100, 100, 100);
     const contactParts: string[] = [];
     if (personalInfo.email) contactParts.push(personalInfo.email);
     if (personalInfo.phone) contactParts.push(personalInfo.phone);
     if (personalInfo.location) contactParts.push(personalInfo.location);
 
     if (contactParts.length > 0) {
-      html += `<p style="text-align: center; margin: 0 0 20px 0; font-size: 10px; color: #666666;">${contactParts.join(" | ")}</p>`;
+      pdf.text(contactParts.join(" | "), margin, yPosition);
+      yPosition += 6;
     }
+
+    pdf.setTextColor(0, 0, 0);
+    yPosition += 3;
 
     // Professional Summary
     if (personalInfo.summary) {
-      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">PROFESSIONAL SUMMARY</h2>`;
-      html += `<p style="margin: 0 0 10px 0; font-size: 11px; color: #333333;">${personalInfo.summary}</p>`;
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("PROFESSIONAL SUMMARY", margin, yPosition);
+      yPosition += 5;
+
+      pdf.setFontSize(10);
+      pdf.setFont("helvetica", "normal");
+      addMultilineText(personalInfo.summary, margin, contentWidth, { maxHeight: 4 });
+      yPosition += 4;
     }
 
     // Experience
     if (experience.length > 0) {
-      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">EXPERIENCE</h2>`;
+      if (yPosition > pageHeight - 20) {
+        pdf.addPage();
+        yPosition = 15;
+      }
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("EXPERIENCE", margin, yPosition);
+      yPosition += 5;
+
       for (const exp of experience) {
-        html += `<div style="margin-bottom: 10px;">`;
-        html += `<p style="margin: 0; font-weight: bold; font-size: 11px; color: #000000;">${exp.position} | ${exp.company}</p>`;
-        html += `<p style="margin: 2px 0 5px 0; font-style: italic; font-size: 10px; color: #666666;">${exp.startDate} - ${exp.current ? "Present" : exp.endDate || ""}</p>`;
+        if (yPosition > pageHeight - 15) {
+          pdf.addPage();
+          yPosition = 15;
+        }
+
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "bold");
+        pdf.text(`${exp.position} | ${exp.company}`, margin, yPosition);
+        yPosition += 4;
+
+        pdf.setFontSize(9);
+        pdf.setFont("helvetica", "italic");
+        pdf.setTextColor(100, 100, 100);
+        pdf.text(`${exp.startDate} - ${exp.current ? "Present" : exp.endDate || ""}`, margin, yPosition);
+        yPosition += 4;
+
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFont("helvetica", "normal");
+
         if (exp.description) {
-          html += `<p style="margin: 3px 0; font-size: 10px; color: #333333;">${exp.description}</p>`;
+          addMultilineText(exp.description, margin, contentWidth, { maxHeight: 4 });
+          yPosition += 2;
         }
+
         if (exp.highlights && exp.highlights.length > 0) {
-          html += `<ul style="margin: 3px 0 0 20px; padding: 0; font-size: 10px; color: #333333;">`;
           for (const highlight of exp.highlights) {
-            html += `<li style="margin: 2px 0; color: #333333;">${highlight}</li>`;
+            pdf.setFontSize(9);
+            addMultilineText(`• ${highlight}`, margin + 3, contentWidth - 3, { maxHeight: 4 });
           }
-          html += `</ul>`;
+          yPosition += 2;
         }
-        html += `</div>`;
       }
     }
 
     // Education
     if (education.length > 0) {
-      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">EDUCATION</h2>`;
+      if (yPosition > pageHeight - 20) {
+        pdf.addPage();
+        yPosition = 15;
+      }
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "bold");
+      pdf.setTextColor(0, 0, 0);
+      pdf.text("EDUCATION", margin, yPosition);
+      yPosition += 5;
+
       for (const edu of education) {
-        html += `<div style="margin-bottom: 8px;">`;
-        html += `<p style="margin: 0; font-weight: bold; font-size: 11px; color: #000000;">${edu.degree} | ${edu.institution}</p>`;
+        if (yPosition > pageHeight - 12) {
+          pdf.addPage();
+          yPosition = 15;
+        }
+
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "bold");
+        pdf.text(`${edu.degree} | ${edu.institution}`, margin, yPosition);
+        yPosition += 4;
+
         if (edu.endDate || edu.gpa) {
           const details: string[] = [];
           if (edu.endDate) details.push(edu.endDate);
           if (edu.gpa) details.push(`GPA: ${edu.gpa}`);
-          html += `<p style="margin: 2px 0; font-size: 10px; color: #666666;">${details.join(" | ")}</p>`;
+
+          pdf.setFontSize(9);
+          pdf.setFont("helvetica", "normal");
+          pdf.setTextColor(100, 100, 100);
+          pdf.text(details.join(" | "), margin, yPosition);
+          yPosition += 4;
+          pdf.setTextColor(0, 0, 0);
         }
-        html += `</div>`;
       }
     }
 
@@ -111,80 +182,80 @@ export async function downloadPDF(resume: Resume): Promise<void> {
     ].filter((cat) => cat.items.length > 0);
 
     if (skillCategories.length > 0) {
-      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">SKILLS</h2>`;
+      if (yPosition > pageHeight - 15) {
+        pdf.addPage();
+        yPosition = 15;
+      }
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("SKILLS", margin, yPosition);
+      yPosition += 5;
+
       for (const skillCategory of skillCategories) {
-        html += `<p style="margin: 3px 0; font-size: 10px; color: #333333;"><strong>${skillCategory.name}:</strong> ${skillCategory.items.join(", ")}</p>`;
+        if (yPosition > pageHeight - 10) {
+          pdf.addPage();
+          yPosition = 15;
+        }
+
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "bold");
+        pdf.text(`${skillCategory.name}:`, margin, yPosition);
+
+        pdf.setFont("helvetica", "normal");
+        yPosition += 4;
+        addMultilineText(skillCategory.items.join(", "), margin + 3, contentWidth - 3, { maxHeight: 4 });
+        yPosition += 2;
       }
     }
 
     // Certifications
     if (certifications.length > 0) {
-      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">CERTIFICATIONS</h2>`;
+      if (yPosition > pageHeight - 15) {
+        pdf.addPage();
+        yPosition = 15;
+      }
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("CERTIFICATIONS", margin, yPosition);
+      yPosition += 5;
+
       for (const cert of certifications) {
-        const certText = `${cert.name} - ${cert.issuer}${cert.date ? ` (${cert.date})` : ""}`;
-        html += `<p style="margin: 3px 0; font-size: 10px; color: #333333;">• ${certText}</p>`;
+        if (yPosition > pageHeight - 10) {
+          pdf.addPage();
+          yPosition = 15;
+        }
+
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "normal");
+        const certText = `• ${cert.name} - ${cert.issuer}${cert.date ? ` (${cert.date})` : ""}`;
+        addMultilineText(certText, margin + 2, contentWidth - 2, { maxHeight: 4 });
+        yPosition += 2;
       }
     }
 
     // Links
     if (links.length > 0) {
-      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">LINKS</h2>`;
-      for (const link of links) {
-        html += `<p style="margin: 3px 0; font-size: 10px; color: #333333;">• <strong>${link.label}:</strong> ${link.url}</p>`;
+      if (yPosition > pageHeight - 15) {
+        pdf.addPage();
+        yPosition = 15;
       }
-    }
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "bold");
+      pdf.text("LINKS", margin, yPosition);
+      yPosition += 5;
 
-    html += `</div>`;
+      for (const link of links) {
+        if (yPosition > pageHeight - 10) {
+          pdf.addPage();
+          yPosition = 15;
+        }
 
-    container.innerHTML = html;
-    document.body.appendChild(container);
-
-    // Convert HTML to canvas - use allowTaint to ignore unsupported CSS
-    const canvas = await html2canvas(container, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: "#FFFFFF",
-      logging: false,
-      // Ignore errors from unsupported CSS features
-      onclone: (cloned) => {
-        const styles = cloned.querySelectorAll("[style]");
-        styles.forEach((el) => {
-          if (el instanceof HTMLElement) {
-            // Remove any oklch color references that might cause issues
-            let style = el.getAttribute("style") || "";
-            style = style.replace(/oklch\([^)]*\)/g, "#333333");
-            el.setAttribute("style", style);
-          }
-        });
-      },
-    });
-
-    // Remove temporary container
-    document.body.removeChild(container);
-
-    // Create PDF from canvas
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-    });
-
-    const imgWidth = 210; // A4 width in mm
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    let heightLeft = imgHeight;
-    let position = 0;
-
-    // Add pages if content is longer than one page
-    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= 297; // A4 height in mm
-
-    while (heightLeft >= 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= 297;
+        pdf.setFontSize(10);
+        pdf.setFont("helvetica", "normal");
+        const linkText = `• ${link.label}: ${link.url}`;
+        addMultilineText(linkText, margin + 2, contentWidth - 2, { maxHeight: 4 });
+        yPosition += 2;
+      }
     }
 
     // Save the PDF
