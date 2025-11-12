@@ -3,16 +3,43 @@ import { apiClient } from "../../lib/api/client";
 import type { Resume } from "../../lib/api/types";
 import { resumeQueryKey } from "./use-resume";
 import { resumesQueryKey } from "./use-resumes";
+import { useAuthStore, selectIsGuest } from "../../stores/auth-store";
+import { del, get, set } from "idb-keyval";
 
 /**
  * Delete resume mutation
  * Returns a React Query mutation hook for deleting a resume with optimistic updates
+ * In guest mode, deletes from IndexedDB instead of API
  */
 export function useDeleteResume() {
   const queryClient = useQueryClient();
+  const isGuest = useAuthStore(selectIsGuest);
 
   return useMutation({
-    mutationFn: (id: string) => apiClient.delete<void>(`/api/resumes/${id}`),
+    mutationFn: async (id: string) => {
+      // In guest mode, delete from IndexedDB
+      if (isGuest) {
+        try {
+          // Delete individual resume
+          await del(`resume-${id}`);
+
+          // Remove from resumes list
+          const resumes = (await get("resumier-documents")) as
+            | Resume[]
+            | undefined;
+          if (Array.isArray(resumes)) {
+            const updatedResumes = resumes.filter((r) => r.id !== id);
+            await set("resumier-documents", updatedResumes);
+          }
+        } catch (error) {
+          console.error("Failed to delete resume from local storage:", error);
+          throw error;
+        }
+      } else {
+        // For authenticated users, use API
+        return apiClient.delete<void>(`/api/resumes/${id}`);
+      }
+    },
 
     // Optimistic update
     onMutate: async (id) => {
@@ -41,9 +68,11 @@ export function useDeleteResume() {
       console.error("Failed to delete resume:", error);
     },
 
-    // Always refetch after mutation
+    // Always refetch after mutation (skip for guest mode)
     onSettled: (_data, _error, id) => {
-      queryClient.invalidateQueries({ queryKey: resumesQueryKey });
+      if (!isGuest) {
+        queryClient.invalidateQueries({ queryKey: resumesQueryKey });
+      }
       // Remove individual resume from cache
       queryClient.removeQueries({ queryKey: resumeQueryKey(id) });
     },
