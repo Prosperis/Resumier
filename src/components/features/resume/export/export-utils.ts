@@ -23,7 +23,14 @@ export async function downloadPDF(resume: Resume): Promise<void> {
       format: "a4",
     });
 
-    const { personalInfo, experience, education, skills, certifications, links } = resume.content;
+    const {
+      personalInfo,
+      experience,
+      education,
+      skills,
+      certifications,
+      links,
+    } = resume.content;
 
     let yPosition = 15;
     const pageWidth = pdf.internal.pageSize.getWidth();
@@ -32,7 +39,12 @@ export async function downloadPDF(resume: Resume): Promise<void> {
     const contentWidth = pageWidth - 2 * margin;
 
     // Helper function to manage page breaks and multiline text
-    const addMultilineText = (text: string, x: number, maxWidth: number, options: any = {}) => {
+    const addMultilineText = (
+      text: string,
+      x: number,
+      maxWidth: number,
+      options: any = {},
+    ) => {
       const lines = pdf.splitTextToSize(text, maxWidth);
       const lineHeight = options.maxHeight || 5;
 
@@ -85,7 +97,9 @@ export async function downloadPDF(resume: Resume): Promise<void> {
 
       pdf.setFontSize(10);
       pdf.setFont("helvetica", "normal");
-      addMultilineText(personalInfo.summary, margin, contentWidth, { maxHeight: 4 });
+      addMultilineText(personalInfo.summary, margin, contentWidth, {
+        maxHeight: 4,
+      });
       yPosition += 4;
     }
 
@@ -114,21 +128,29 @@ export async function downloadPDF(resume: Resume): Promise<void> {
         pdf.setFontSize(9);
         pdf.setFont("helvetica", "italic");
         pdf.setTextColor(100, 100, 100);
-        pdf.text(`${exp.startDate} - ${exp.current ? "Present" : exp.endDate || ""}`, margin, yPosition);
+        pdf.text(
+          `${exp.startDate} - ${exp.current ? "Present" : exp.endDate || ""}`,
+          margin,
+          yPosition,
+        );
         yPosition += 4;
 
         pdf.setTextColor(0, 0, 0);
         pdf.setFont("helvetica", "normal");
 
         if (exp.description) {
-          addMultilineText(exp.description, margin, contentWidth, { maxHeight: 4 });
+          addMultilineText(exp.description, margin, contentWidth, {
+            maxHeight: 4,
+          });
           yPosition += 2;
         }
 
         if (exp.highlights && exp.highlights.length > 0) {
           for (const highlight of exp.highlights) {
             pdf.setFontSize(9);
-            addMultilineText(`• ${highlight}`, margin + 3, contentWidth - 3, { maxHeight: 4 });
+            addMultilineText(`• ${highlight}`, margin + 3, contentWidth - 3, {
+              maxHeight: 4,
+            });
           }
           yPosition += 2;
         }
@@ -203,7 +225,12 @@ export async function downloadPDF(resume: Resume): Promise<void> {
 
         pdf.setFont("helvetica", "normal");
         yPosition += 4;
-        addMultilineText(skillCategory.items.join(", "), margin + 3, contentWidth - 3, { maxHeight: 4 });
+        addMultilineText(
+          skillCategory.items.join(", "),
+          margin + 3,
+          contentWidth - 3,
+          { maxHeight: 4 },
+        );
         yPosition += 2;
       }
     }
@@ -228,7 +255,9 @@ export async function downloadPDF(resume: Resume): Promise<void> {
         pdf.setFontSize(10);
         pdf.setFont("helvetica", "normal");
         const certText = `• ${cert.name} - ${cert.issuer}${cert.date ? ` (${cert.date})` : ""}`;
-        addMultilineText(certText, margin + 2, contentWidth - 2, { maxHeight: 4 });
+        addMultilineText(certText, margin + 2, contentWidth - 2, {
+          maxHeight: 4,
+        });
         yPosition += 2;
       }
     }
@@ -253,7 +282,9 @@ export async function downloadPDF(resume: Resume): Promise<void> {
         pdf.setFontSize(10);
         pdf.setFont("helvetica", "normal");
         const linkText = `• ${link.label}: ${link.url}`;
-        addMultilineText(linkText, margin + 2, contentWidth - 2, { maxHeight: 4 });
+        addMultilineText(linkText, margin + 2, contentWidth - 2, {
+          maxHeight: 4,
+        });
         yPosition += 2;
       }
     }
