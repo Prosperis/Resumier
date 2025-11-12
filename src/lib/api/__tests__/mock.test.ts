@@ -342,4 +342,66 @@ describe("mockApi", () => {
       });
     });
   });
+
+  describe("handleLinkedIn", () => {
+    describe("import", () => {
+      it("successfully imports LinkedIn profile from URL", async () => {
+        const result = (await mockApi.handleLinkedIn(
+          "/api/linkedin/import",
+          "POST",
+          { profileUrl: "https://www.linkedin.com/in/johndoe" },
+        )) as any;
+
+        expect(result).toHaveProperty("personalInfo");
+        expect(result).toHaveProperty("experience");
+        expect(result).toHaveProperty("education");
+        expect(result).toHaveProperty("skills");
+        expect(result.personalInfo.name).toBe("John Doe");
+      });
+
+      it("throws 400 when no profile URL provided", async () => {
+        await expect(
+          mockApi.handleLinkedIn("/api/linkedin/import", "POST", {
+            profileUrl: "",
+          }),
+        ).rejects.toEqual({
+          status: 400,
+          message: "No profile URL provided",
+        });
+      });
+
+      it("throws 400 for invalid LinkedIn URL", async () => {
+        await expect(
+          mockApi.handleLinkedIn("/api/linkedin/import", "POST", {
+            profileUrl: "https://www.github.com/johndoe",
+          }),
+        ).rejects.toEqual({
+          status: 400,
+          message: "Invalid LinkedIn URL format",
+        });
+      });
+    });
+
+    describe("unknown endpoints", () => {
+      it("throws 404 for unknown LinkedIn endpoint", async () => {
+        await expect(
+          mockApi.handleLinkedIn("/api/linkedin/unknown", "GET"),
+        ).rejects.toEqual({
+          status: 404,
+          message: "LinkedIn endpoint not found",
+        });
+      });
+    });
+  });
+
+  describe("route LinkedIn requests", () => {
+    it("routes to LinkedIn handler", async () => {
+      const result = (await mockApi.route("/api/linkedin/import", "POST", {
+        profileUrl: "https://www.linkedin.com/in/johndoe",
+      })) as any;
+
+      expect(result).toHaveProperty("personalInfo");
+      expect(result.personalInfo.name).toBe("John Doe");
+    });
+  });
 });

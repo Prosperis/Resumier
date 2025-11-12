@@ -74,10 +74,15 @@ export function useUpdateResume() {
       console.error("Failed to update resume:", error);
     },
 
-    // Always refetch after mutation to ensure data is in sync
+    // Refetch after mutation to ensure UI updates
     onSettled: (_data, _error, { id }) => {
-      queryClient.invalidateQueries({ queryKey: resumeQueryKey(id) });
-      queryClient.invalidateQueries({ queryKey: resumesQueryKey });
+      // Defer refetch outside of the react-query persist cycle
+      // This prevents conflicts with the persist plugin during dehydration
+      // We use a timeout to ensure persist operations complete first
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: resumeQueryKey(id) });
+        queryClient.invalidateQueries({ queryKey: resumesQueryKey });
+      }, 100);
     },
   });
 }

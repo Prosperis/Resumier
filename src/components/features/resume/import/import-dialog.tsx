@@ -28,6 +28,8 @@ import {
   importResume,
   type ImportSource,
 } from "@/lib/services/import-service";
+import { LinkedInImportButton } from "./linkedin-import-button";
+import { useAuthStore, selectIsGuest } from "@/stores/auth-store";
 import { cn } from "@/lib/utils";
 
 interface ImportDialogProps {
@@ -52,6 +54,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
   const [fileInput, setFileInput] = useState<File | null>(null);
   const [isImporting, setIsImporting] = useState(false);
   const { toast } = useToast();
+  const isGuest = useAuthStore(selectIsGuest);
 
   const handleSourceSelect = (source: ImportSource) => {
     if (source.comingSoon) {
@@ -203,94 +206,194 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
         ) : (
           // Import input view
           <div className="space-y-4 py-4">
-            {selectedSource.requiresUrl && (
-              <div className="space-y-2">
-                <Label htmlFor="url">
-                  {selectedSource.name === "LinkedIn"
-                    ? "LinkedIn Profile URL"
-                    : "Profile URL"}
-                </Label>
-                <Input
-                  id="url"
-                  placeholder={
-                    selectedSource.name === "LinkedIn"
-                      ? "https://www.linkedin.com/in/username"
-                      : "Enter profile URL"
-                  }
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  disabled={isImporting}
-                />
-                <p className="text-muted-foreground text-sm">
-                  {selectedSource.name === "LinkedIn"
-                    ? "Make sure your LinkedIn profile is public or accessible"
-                    : "Enter the full URL to your profile"}
-                </p>
-              </div>
-            )}
+            {selectedSource.id === "linkedin" ? (
+              // LinkedIn import - show OAuth for authenticated users, URL for guests
+              isGuest ? (
+                // Guest mode: simple URL input
+                <div className="space-y-4">
+                  <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4">
+                    <h4 className="mb-2 font-medium">Import from LinkedIn Profile URL</h4>
+                    <p className="text-muted-foreground mb-4 text-sm">
+                      Enter your public LinkedIn profile URL to import your profile data.
+                      Your profile must be publicly visible.
+                    </p>
+                  </div>
 
-            {selectedSource.requiresFile && (
-              <div className="space-y-2">
-                <Label htmlFor="file">
-                  {selectedSource.name === "JSON File"
-                    ? "Select JSON File"
-                    : "Select File"}
-                </Label>
-                <div className="flex items-center gap-2">
-                  <Input
-                    id="file"
-                    type="file"
-                    accept={
-                      selectedSource.id === "json"
-                        ? ".json"
-                        : selectedSource.id === "pdf"
-                          ? ".pdf"
-                          : "*"
-                    }
-                    onChange={handleFileChange}
-                    disabled={isImporting}
-                    className="cursor-pointer"
-                  />
-                  {fileInput && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setFileInput(null)}
+                  <div className="space-y-2">
+                    <Label htmlFor="linkedin-url">LinkedIn Profile URL</Label>
+                    <Input
+                      id="linkedin-url"
+                      placeholder="https://www.linkedin.com/in/yourprofile"
+                      value={urlInput}
+                      onChange={(e) => setUrlInput(e.target.value)}
                       disabled={isImporting}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-                {fileInput && (
-                  <p className="text-muted-foreground text-sm">
-                    Selected: {fileInput.name}
-                  </p>
-                )}
-                <p className="text-muted-foreground text-sm">
-                  {selectedSource.name === "JSON File"
-                    ? "Import a resume previously exported from Resumier"
-                    : "Upload your resume file"}
-                </p>
-              </div>
-            )}
+                    />
+                    <p className="text-muted-foreground text-sm">
+                      Example: https://www.linkedin.com/in/john-doe-12345
+                    </p>
+                  </div>
 
-            <div className="bg-muted/50 rounded-lg p-4">
-              <h4 className="mb-2 text-sm font-medium">
-                What will be imported?
-              </h4>
-              <ul className="text-muted-foreground space-y-1 text-sm">
-                <li>• Personal information</li>
-                <li>• Work experience</li>
-                <li>• Education history</li>
-                <li>• Skills and certifications</li>
-                <li>• Links and contact information</li>
-              </ul>
-              <p className="text-muted-foreground mt-2 text-xs">
-                Note: Imported data will be merged with your existing resume.
-                You can review and edit everything before saving.
-              </p>
-            </div>
+                  <div className="bg-muted/50 rounded-lg p-4">
+                    <h4 className="mb-2 text-sm font-medium">
+                      What will be imported?
+                    </h4>
+                    <ul className="text-muted-foreground space-y-1 text-sm">
+                      <li>• Personal information</li>
+                      <li>• Work experience</li>
+                      <li>• Education history</li>
+                      <li>• Skills and certifications</li>
+                      <li>• Links and contact information</li>
+                    </ul>
+                    <p className="text-muted-foreground mt-2 text-xs">
+                      Note: Public profile information will be imported. Make sure your LinkedIn profile is set to public.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                // Authenticated mode: OAuth flow
+                <div className="space-y-4">
+                  <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4">
+                    <h4 className="mb-2 font-medium">Connect with LinkedIn</h4>
+                    <p className="text-muted-foreground mb-4 text-sm">
+                      Click the button below to securely connect your LinkedIn
+                      profile. You'll be redirected to LinkedIn to authorize
+                      access to your profile information.
+                    </p>
+                    <LinkedInImportButton
+                      onImportStart={() => {
+                        // Close dialog when OAuth starts
+                        setOpen(false);
+                      }}
+                    />
+                  </div>
+
+                  <div className="bg-muted/50 rounded-lg p-4">
+                    <h4 className="mb-2 text-sm font-medium">
+                      What will be imported?
+                    </h4>
+                    <ul className="text-muted-foreground space-y-1 text-sm">
+                      <li>• Personal information</li>
+                      <li>• Work experience</li>
+                      <li>• Education history</li>
+                      <li>• Skills and certifications</li>
+                      <li>• Links and contact information</li>
+                    </ul>
+                    <p className="text-muted-foreground mt-2 text-xs">
+                      Note: Imported data will be merged with your existing
+                      resume. You can review and edit everything before saving.
+                    </p>
+                  </div>
+                </div>
+              )
+            ) : selectedSource.requiresUrl ? (
+              // URL-based import
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="url">
+                    {selectedSource.name === "LinkedIn"
+                      ? "LinkedIn Profile URL"
+                      : "Profile URL"}
+                  </Label>
+                  <Input
+                    id="url"
+                    placeholder={
+                      selectedSource.name === "LinkedIn"
+                        ? "https://www.linkedin.com/in/username"
+                        : "Enter profile URL"
+                    }
+                    value={urlInput}
+                    onChange={(e) => setUrlInput(e.target.value)}
+                    disabled={isImporting}
+                  />
+                  <p className="text-muted-foreground text-sm">
+                    {selectedSource.name === "LinkedIn"
+                      ? "Make sure your LinkedIn profile is public or accessible"
+                      : "Enter the full URL to your profile"}
+                  </p>
+                </div>
+
+                <div className="bg-muted/50 rounded-lg p-4">
+                  <h4 className="mb-2 text-sm font-medium">
+                    What will be imported?
+                  </h4>
+                  <ul className="text-muted-foreground space-y-1 text-sm">
+                    <li>• Personal information</li>
+                    <li>• Work experience</li>
+                    <li>• Education history</li>
+                    <li>• Skills and certifications</li>
+                    <li>• Links and contact information</li>
+                  </ul>
+                  <p className="text-muted-foreground mt-2 text-xs">
+                    Note: Imported data will be merged with your existing
+                    resume. You can review and edit everything before saving.
+                  </p>
+                </div>
+              </div>
+            ) : selectedSource.requiresFile ? (
+              // File-based import
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="file">
+                    {selectedSource.name === "JSON File"
+                      ? "Select JSON File"
+                      : "Select File"}
+                  </Label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="file"
+                      type="file"
+                      accept={
+                        selectedSource.id === "json"
+                          ? ".json"
+                          : selectedSource.id === "pdf"
+                            ? ".pdf"
+                            : "*"
+                      }
+                      onChange={handleFileChange}
+                      disabled={isImporting}
+                      className="cursor-pointer"
+                    />
+                    {fileInput && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setFileInput(null)}
+                        disabled={isImporting}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                  {fileInput && (
+                    <p className="text-muted-foreground text-sm">
+                      Selected: {fileInput.name}
+                    </p>
+                  )}
+                  <p className="text-muted-foreground text-sm">
+                    {selectedSource.name === "JSON File"
+                      ? "Import a resume previously exported from Resumier"
+                      : "Upload your resume file"}
+                  </p>
+                </div>
+
+                <div className="bg-muted/50 rounded-lg p-4">
+                  <h4 className="mb-2 text-sm font-medium">
+                    What will be imported?
+                  </h4>
+                  <ul className="text-muted-foreground space-y-1 text-sm">
+                    <li>• Personal information</li>
+                    <li>• Work experience</li>
+                    <li>• Education history</li>
+                    <li>• Skills and certifications</li>
+                    <li>• Links and contact information</li>
+                  </ul>
+                  <p className="text-muted-foreground mt-2 text-xs">
+                    Note: Imported data will be merged with your existing
+                    resume. You can review and edit everything before saving.
+                  </p>
+                </div>
+              </div>
+            ) : null}
           </div>
         )}
 
@@ -300,23 +403,25 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
               <Button
                 variant="outline"
                 onClick={handleBack}
-                disabled={isImporting}
+                disabled={selectedSource.id === "linkedin" && !isGuest || isImporting}
               >
                 Back
               </Button>
-              <Button onClick={handleImport} disabled={isImporting}>
-                {isImporting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Importing...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="mr-2 h-4 w-4" />
-                    Import
-                  </>
-                )}
-              </Button>
+              {!(selectedSource.id === "linkedin" && !isGuest) && (
+                <Button onClick={handleImport} disabled={isImporting}>
+                  {isImporting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Importing...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="mr-2 h-4 w-4" />
+                      Import
+                    </>
+                  )}
+                </Button>
+              )}
             </>
           ) : (
             <Button variant="outline" onClick={() => setOpen(false)}>

@@ -49,6 +49,12 @@ persistQueryClient({
   dehydrateOptions: {
     shouldDehydrateQuery: (query) => {
       const queryKey = query.queryKey[0];
+      // Don't persist queries in error or pending state as they will cause
+      // "query ended up rejecting" errors during dehydration when queries are
+      // cancelled due to mutations or other state changes
+      if (query.state.status === "error" || query.state.status === "pending") {
+        return false;
+      }
       // Persist resumes list and individual resume queries
       return queryKey === "resumes" || queryKey === "resume";
     },
