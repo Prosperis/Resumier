@@ -8,7 +8,192 @@ import {
   UnderlineType,
 } from "docx";
 import { saveAs } from "file-saver";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 import type { Resume } from "@/lib/api/types";
+
+/**
+ * Generate and download resume as PDF file
+ * Uses html2canvas and jsPDF to convert the resume to a proper PDF document
+ */
+export async function downloadPDF(resume: Resume): Promise<void> {
+  try {
+    // Create a temporary container with the resume content
+    const container = document.createElement("div");
+    container.style.position = "fixed";
+    container.style.left = "-9999px";
+    container.style.top = "-9999px";
+    container.style.width = "210mm"; // A4 width
+    container.style.height = "297mm"; // A4 height
+    container.style.padding = "20px";
+    container.style.backgroundColor = "#FFFFFF"; // Use standard RGB instead of oklch
+    container.style.fontFamily = "Arial, sans-serif";
+    container.style.fontSize = "11px";
+    container.style.lineHeight = "1.4";
+    container.style.color = "#333333"; // Use standard RGB instead of oklch
+
+    // Build the resume HTML
+    const {
+      personalInfo,
+      experience,
+      education,
+      skills,
+      certifications,
+      links,
+    } = resume.content;
+
+    let html = `<div style="padding: 20px; font-family: Arial, sans-serif; color: #333333; line-height: 1.4;">`;
+
+    // Name
+    if (personalInfo.name) {
+      html += `<h1 style="font-size: 24px; margin: 0 0 10px 0; text-align: center; color: #000000;">${personalInfo.name}</h1>`;
+    }
+
+    // Contact Info
+    const contactParts: string[] = [];
+    if (personalInfo.email) contactParts.push(personalInfo.email);
+    if (personalInfo.phone) contactParts.push(personalInfo.phone);
+    if (personalInfo.location) contactParts.push(personalInfo.location);
+
+    if (contactParts.length > 0) {
+      html += `<p style="text-align: center; margin: 0 0 20px 0; font-size: 10px; color: #666666;">${contactParts.join(" | ")}</p>`;
+    }
+
+    // Professional Summary
+    if (personalInfo.summary) {
+      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">PROFESSIONAL SUMMARY</h2>`;
+      html += `<p style="margin: 0 0 10px 0; font-size: 11px; color: #333333;">${personalInfo.summary}</p>`;
+    }
+
+    // Experience
+    if (experience.length > 0) {
+      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">EXPERIENCE</h2>`;
+      for (const exp of experience) {
+        html += `<div style="margin-bottom: 10px;">`;
+        html += `<p style="margin: 0; font-weight: bold; font-size: 11px; color: #000000;">${exp.position} | ${exp.company}</p>`;
+        html += `<p style="margin: 2px 0 5px 0; font-style: italic; font-size: 10px; color: #666666;">${exp.startDate} - ${exp.current ? "Present" : exp.endDate || ""}</p>`;
+        if (exp.description) {
+          html += `<p style="margin: 3px 0; font-size: 10px; color: #333333;">${exp.description}</p>`;
+        }
+        if (exp.highlights && exp.highlights.length > 0) {
+          html += `<ul style="margin: 3px 0 0 20px; padding: 0; font-size: 10px; color: #333333;">`;
+          for (const highlight of exp.highlights) {
+            html += `<li style="margin: 2px 0; color: #333333;">${highlight}</li>`;
+          }
+          html += `</ul>`;
+        }
+        html += `</div>`;
+      }
+    }
+
+    // Education
+    if (education.length > 0) {
+      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">EDUCATION</h2>`;
+      for (const edu of education) {
+        html += `<div style="margin-bottom: 8px;">`;
+        html += `<p style="margin: 0; font-weight: bold; font-size: 11px; color: #000000;">${edu.degree} | ${edu.institution}</p>`;
+        if (edu.endDate || edu.gpa) {
+          const details: string[] = [];
+          if (edu.endDate) details.push(edu.endDate);
+          if (edu.gpa) details.push(`GPA: ${edu.gpa}`);
+          html += `<p style="margin: 2px 0; font-size: 10px; color: #666666;">${details.join(" | ")}</p>`;
+        }
+        html += `</div>`;
+      }
+    }
+
+    // Skills
+    const skillCategories = [
+      { name: "Technical", items: skills.technical },
+      { name: "Languages", items: skills.languages },
+      { name: "Tools", items: skills.tools },
+      { name: "Soft Skills", items: skills.soft },
+    ].filter((cat) => cat.items.length > 0);
+
+    if (skillCategories.length > 0) {
+      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">SKILLS</h2>`;
+      for (const skillCategory of skillCategories) {
+        html += `<p style="margin: 3px 0; font-size: 10px; color: #333333;"><strong>${skillCategory.name}:</strong> ${skillCategory.items.join(", ")}</p>`;
+      }
+    }
+
+    // Certifications
+    if (certifications.length > 0) {
+      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">CERTIFICATIONS</h2>`;
+      for (const cert of certifications) {
+        const certText = `${cert.name} - ${cert.issuer}${cert.date ? ` (${cert.date})` : ""}`;
+        html += `<p style="margin: 3px 0; font-size: 10px; color: #333333;">• ${certText}</p>`;
+      }
+    }
+
+    // Links
+    if (links.length > 0) {
+      html += `<h2 style="font-size: 14px; font-weight: bold; margin: 15px 0 8px 0; border-bottom: 2px solid #333333; padding-bottom: 3px; color: #000000;">LINKS</h2>`;
+      for (const link of links) {
+        html += `<p style="margin: 3px 0; font-size: 10px; color: #333333;">• <strong>${link.label}:</strong> ${link.url}</p>`;
+      }
+    }
+
+    html += `</div>`;
+
+    container.innerHTML = html;
+    document.body.appendChild(container);
+
+    // Convert HTML to canvas - use allowTaint to ignore unsupported CSS
+    const canvas = await html2canvas(container, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: "#FFFFFF",
+      logging: false,
+      // Ignore errors from unsupported CSS features
+      onclone: (cloned) => {
+        const styles = cloned.querySelectorAll("[style]");
+        styles.forEach((el) => {
+          if (el instanceof HTMLElement) {
+            // Remove any oklch color references that might cause issues
+            let style = el.getAttribute("style") || "";
+            style = style.replace(/oklch\([^)]*\)/g, "#333333");
+            el.setAttribute("style", style);
+          }
+        });
+      },
+    });
+
+    // Remove temporary container
+    document.body.removeChild(container);
+
+    // Create PDF from canvas
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    const imgWidth = 210; // A4 width in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    // Add pages if content is longer than one page
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= 297; // A4 height in mm
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= 297;
+    }
+
+    // Save the PDF
+    pdf.save(`${sanitizeFilename(resume.title)}.pdf`);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    throw new Error("Failed to generate PDF. Please try again.");
+  }
+}
 
 /**
  * Print the resume using browser's print dialog

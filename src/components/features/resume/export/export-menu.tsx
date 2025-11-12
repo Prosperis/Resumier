@@ -25,6 +25,7 @@ import {
   downloadHTML,
   downloadJSON,
   downloadMarkdown,
+  downloadPDF,
   downloadPlainText,
   printResume,
 } from "./export-utils";
@@ -53,14 +54,21 @@ export function ExportMenu({ resume }: ExportMenuProps) {
     });
   };
 
-  const handleDownloadPDF = () => {
-    // For now, this just opens print dialog
-    // Users can use "Save as PDF" option in their browser
-    toast({
-      title: "Download PDF",
-      description: "Use your browser's print dialog and select 'Save as PDF'",
-    });
-    printResume(resume.title);
+  const handleDownloadPDF = async () => {
+    try {
+      await downloadPDF(resume);
+      toast({
+        title: "PDF Downloaded",
+        description: `${resume.title}.pdf has been downloaded`,
+      });
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      toast({
+        title: "Download Failed",
+        description: "Failed to generate PDF. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleExport = async (
@@ -90,7 +98,7 @@ export function ExportMenu({ resume }: ExportMenuProps) {
     {
       id: "pdf",
       label: "PDF",
-      description: "Via browser print dialog",
+      description: "High-quality PDF document",
       icon: FileText,
       handler: handleDownloadPDF,
     },
