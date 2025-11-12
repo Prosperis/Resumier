@@ -137,11 +137,9 @@ export async function exchangeCodeForToken(code: string): Promise<{
   });
 
   if (!response.ok) {
-    const error = await response
-      .json()
-      .catch(() => ({
-        error: "Failed to exchange authorization code for token",
-      }));
+    const error = await response.json().catch(() => ({
+      error: "Failed to exchange authorization code for token",
+    }));
     throw new Error(
       error.error || "Failed to exchange authorization code for token",
     );
