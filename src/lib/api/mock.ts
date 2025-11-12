@@ -282,7 +282,8 @@ export const mockApi = {
       // Generate unique IDs using timestamp + counter to avoid duplicate key errors
       const timestamp = Date.now();
       let counter = 0;
-      const generateId = (prefix: string) => `${prefix}-${timestamp}-${counter++}`;
+      const generateId = (prefix: string) =>
+        `${prefix}-${timestamp}-${counter++}`;
 
       // Return mock public LinkedIn profile data
       return {
@@ -291,7 +292,8 @@ export const mockApi = {
           email: "john.doe@linkedin.com",
           phone: "+1 (555) 123-4567",
           location: "San Francisco, CA",
-          summary: "Senior Software Engineer with 10+ years of experience building scalable web applications. Passionate about open source and mentoring junior developers.",
+          summary:
+            "Senior Software Engineer with 10+ years of experience building scalable web applications. Passionate about open source and mentoring junior developers.",
         },
         experience: [
           {
@@ -301,7 +303,8 @@ export const mockApi = {
             startDate: "2020-01",
             endDate: "",
             current: true,
-            description: "Led development of core platform features and mentored a team of 5 engineers",
+            description:
+              "Led development of core platform features and mentored a team of 5 engineers",
             highlights: [
               "Increased system performance by 40%",
               "Implemented CI/CD pipeline reducing deployment time by 60%",
@@ -315,7 +318,8 @@ export const mockApi = {
             startDate: "2017-06",
             endDate: "2019-12",
             current: false,
-            description: "Built and maintained multiple web applications using React and Node.js",
+            description:
+              "Built and maintained multiple web applications using React and Node.js",
             highlights: [
               "Built 3 customer-facing web applications",
               "Implemented real-time features using WebSockets",
@@ -334,10 +338,22 @@ export const mockApi = {
           },
         ],
         skills: {
-          technical: ["JavaScript", "TypeScript", "React", "Node.js", "Python", "SQL"],
+          technical: [
+            "JavaScript",
+            "TypeScript",
+            "React",
+            "Node.js",
+            "Python",
+            "SQL",
+          ],
           languages: ["English", "Spanish"],
           tools: ["Git", "Docker", "AWS", "Figma"],
-          soft: ["Leadership", "Communication", "Problem Solving", "Team Collaboration"],
+          soft: [
+            "Leadership",
+            "Communication",
+            "Problem Solving",
+            "Team Collaboration",
+          ],
         },
         certifications: [
           {

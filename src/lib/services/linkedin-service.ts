@@ -3,7 +3,13 @@
  * Handles OAuth 2.0 authentication and data fetching from LinkedIn
  */
 
-import type { ResumeContent, Experience, Education, Certification, Link } from "@/lib/api/types";
+import type {
+  ResumeContent,
+  Experience,
+  Education,
+  Certification,
+  Link,
+} from "@/lib/api/types";
 
 /**
  * LinkedIn OAuth Configuration
@@ -12,7 +18,9 @@ import type { ResumeContent, Experience, Education, Certification, Link } from "
 export const LINKEDIN_CONFIG = {
   clientId: import.meta.env.VITE_LINKEDIN_CLIENT_ID || "",
   clientSecret: import.meta.env.VITE_LINKEDIN_CLIENT_SECRET || "",
-  redirectUri: import.meta.env.VITE_LINKEDIN_REDIRECT_URI || "http://localhost:5173/auth/linkedin/callback",
+  redirectUri:
+    import.meta.env.VITE_LINKEDIN_REDIRECT_URI ||
+    "http://localhost:5173/auth/linkedin/callback",
   authorizationUrl: "https://www.linkedin.com/oauth/v2/authorization",
   tokenUrl: "https://www.linkedin.com/oauth/v2/accessToken",
   apiUrl: "https://api.linkedin.com/v2",
@@ -90,7 +98,10 @@ export interface LinkedInCertification {
 /**
  * Generate LinkedIn OAuth authorization URL
  */
-export function getLinkedInAuthUrl(state: string, scope: string[] = ["openid", "profile", "email"]): string {
+export function getLinkedInAuthUrl(
+  state: string,
+  scope: string[] = ["openid", "profile", "email"],
+): string {
   const params = new URLSearchParams({
     response_type: "code",
     client_id: LINKEDIN_CONFIG.clientId,
@@ -126,8 +137,14 @@ export async function exchangeCodeForToken(code: string): Promise<{
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: "Failed to exchange authorization code for token" }));
-    throw new Error(error.error || "Failed to exchange authorization code for token");
+    const error = await response
+      .json()
+      .catch(() => ({
+        error: "Failed to exchange authorization code for token",
+      }));
+    throw new Error(
+      error.error || "Failed to exchange authorization code for token",
+    );
   }
 
   return response.json();
@@ -136,7 +153,9 @@ export async function exchangeCodeForToken(code: string): Promise<{
 /**
  * Fetch LinkedIn profile information
  */
-export async function fetchLinkedInProfile(accessToken: string): Promise<LinkedInProfile> {
+export async function fetchLinkedInProfile(
+  accessToken: string,
+): Promise<LinkedInProfile> {
   const response = await fetch(`${LINKEDIN_CONFIG.apiUrl}/me`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -155,12 +174,15 @@ export async function fetchLinkedInProfile(accessToken: string): Promise<LinkedI
  * Fetch LinkedIn email address
  */
 export async function fetchLinkedInEmail(accessToken: string): Promise<string> {
-  const response = await fetch(`${LINKEDIN_CONFIG.apiUrl}/emailAddress?q=members&projection=(elements*(handle~))`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "LinkedIn-Version": "202310",
+  const response = await fetch(
+    `${LINKEDIN_CONFIG.apiUrl}/emailAddress?q=members&projection=(elements*(handle~))`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "LinkedIn-Version": "202310",
+      },
     },
-  });
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch LinkedIn email");
@@ -173,13 +195,18 @@ export async function fetchLinkedInEmail(accessToken: string): Promise<string> {
 /**
  * Fetch LinkedIn work experience
  */
-export async function fetchLinkedInExperience(accessToken: string): Promise<LinkedInPosition[]> {
-  const response = await fetch(`${LINKEDIN_CONFIG.apiUrl}/me?projection=(positions)`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "LinkedIn-Version": "202310",
+export async function fetchLinkedInExperience(
+  accessToken: string,
+): Promise<LinkedInPosition[]> {
+  const response = await fetch(
+    `${LINKEDIN_CONFIG.apiUrl}/me?projection=(positions)`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "LinkedIn-Version": "202310",
+      },
     },
-  });
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch LinkedIn experience");
@@ -192,13 +219,18 @@ export async function fetchLinkedInExperience(accessToken: string): Promise<Link
 /**
  * Fetch LinkedIn education
  */
-export async function fetchLinkedInEducation(accessToken: string): Promise<LinkedInEducation[]> {
-  const response = await fetch(`${LINKEDIN_CONFIG.apiUrl}/me?projection=(educations)`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "LinkedIn-Version": "202310",
+export async function fetchLinkedInEducation(
+  accessToken: string,
+): Promise<LinkedInEducation[]> {
+  const response = await fetch(
+    `${LINKEDIN_CONFIG.apiUrl}/me?projection=(educations)`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "LinkedIn-Version": "202310",
+      },
     },
-  });
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch LinkedIn education");
@@ -211,13 +243,18 @@ export async function fetchLinkedInEducation(accessToken: string): Promise<Linke
 /**
  * Fetch LinkedIn skills
  */
-export async function fetchLinkedInSkills(accessToken: string): Promise<LinkedInSkill[]> {
-  const response = await fetch(`${LINKEDIN_CONFIG.apiUrl}/me?projection=(skills)`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "LinkedIn-Version": "202310",
+export async function fetchLinkedInSkills(
+  accessToken: string,
+): Promise<LinkedInSkill[]> {
+  const response = await fetch(
+    `${LINKEDIN_CONFIG.apiUrl}/me?projection=(skills)`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "LinkedIn-Version": "202310",
+      },
     },
-  });
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch LinkedIn skills");
@@ -230,13 +267,18 @@ export async function fetchLinkedInSkills(accessToken: string): Promise<LinkedIn
 /**
  * Fetch LinkedIn certifications
  */
-export async function fetchLinkedInCertifications(accessToken: string): Promise<LinkedInCertification[]> {
-  const response = await fetch(`${LINKEDIN_CONFIG.apiUrl}/me?projection=(certifications)`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "LinkedIn-Version": "202310",
+export async function fetchLinkedInCertifications(
+  accessToken: string,
+): Promise<LinkedInCertification[]> {
+  const response = await fetch(
+    `${LINKEDIN_CONFIG.apiUrl}/me?projection=(certifications)`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "LinkedIn-Version": "202310",
+      },
     },
-  });
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch LinkedIn certifications");
@@ -249,7 +291,9 @@ export async function fetchLinkedInCertifications(accessToken: string): Promise<
 /**
  * Convert LinkedIn experience to Resume Experience
  */
-export function convertLinkedInExperience(positions: LinkedInPosition[]): Experience[] {
+export function convertLinkedInExperience(
+  positions: LinkedInPosition[],
+): Experience[] {
   return positions.map((position) => {
     const startDate = position.startDate
       ? `${position.startDate.year}-${String(position.startDate.month).padStart(2, "0")}`
@@ -274,7 +318,9 @@ export function convertLinkedInExperience(positions: LinkedInPosition[]): Experi
 /**
  * Convert LinkedIn education to Resume Education
  */
-export function convertLinkedInEducation(educations: LinkedInEducation[]): Education[] {
+export function convertLinkedInEducation(
+  educations: LinkedInEducation[],
+): Education[] {
   return educations.map((edu) => {
     const startDate = edu.startDate
       ? `${edu.startDate.year}-${String(edu.startDate.month).padStart(2, "0")}`
@@ -299,7 +345,9 @@ export function convertLinkedInEducation(educations: LinkedInEducation[]): Educa
 /**
  * Convert LinkedIn certifications to Resume Certifications
  */
-export function convertLinkedInCertifications(certs: LinkedInCertification[]): Certification[] {
+export function convertLinkedInCertifications(
+  certs: LinkedInCertification[],
+): Certification[] {
   return certs.map((cert) => {
     const date = cert.issueDate
       ? `${cert.issueDate.year}-${String(cert.issueDate.month).padStart(2, "0")}`
@@ -332,8 +380,11 @@ export function parseLinkedInProfile(
   certifications: LinkedInCertification[],
 ): Partial<ResumeContent> {
   const technicalSkills = skills
+
     .sort((a, b) => b.endorsementCount - a.endorsementCount)
+
     .slice(0, 10)
+
     .map((s) => s.name);
 
   const linkedInProfile: Link = {
@@ -367,7 +418,9 @@ export function parseLinkedInProfile(
 /**
  * Main LinkedIn import handler
  */
-export async function importFromLinkedInOAuth(accessToken: string): Promise<Partial<ResumeContent>> {
+export async function importFromLinkedInOAuth(
+  accessToken: string,
+): Promise<Partial<ResumeContent>> {
   try {
     // Call backend to fetch LinkedIn profile data
     // This keeps the access token secure and avoids CORS issues
@@ -382,13 +435,17 @@ export async function importFromLinkedInOAuth(accessToken: string): Promise<Part
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: "Failed to fetch LinkedIn profile" }));
+      const error = await response
+        .json()
+        .catch(() => ({ error: "Failed to fetch LinkedIn profile" }));
       throw new Error(error.error || "Failed to fetch LinkedIn profile");
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    throw new Error(error instanceof Error ? error.message : "Failed to import from LinkedIn");
+    throw new Error(
+      error instanceof Error ? error.message : "Failed to import from LinkedIn",
+    );
   }
 }

@@ -88,7 +88,9 @@ export async function importFromLinkedIn(
     if (importedDataStr && importedState === "completed") {
       // OAuth mode - use stored data
       try {
-        const importedData = JSON.parse(importedDataStr) as Partial<ResumeContent>;
+        const importedData = JSON.parse(
+          importedDataStr,
+        ) as Partial<ResumeContent>;
 
         // Validate that we have at least some data
         if (
@@ -143,7 +145,9 @@ export async function importFromLinkedIn(
         };
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "Failed to import LinkedIn profile";
+          err instanceof Error
+            ? err.message
+            : "Failed to import LinkedIn profile";
         return {
           success: false,
           error: errorMessage,
@@ -153,7 +157,8 @@ export async function importFromLinkedIn(
 
     return {
       success: false,
-      error: "No LinkedIn data found. Please use the OAuth flow or provide a profile URL.",
+      error:
+        "No LinkedIn data found. Please use the OAuth flow or provide a profile URL.",
     };
   } catch (error) {
     return {

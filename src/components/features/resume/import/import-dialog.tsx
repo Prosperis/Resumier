@@ -212,10 +212,12 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                 // Guest mode: simple URL input
                 <div className="space-y-4">
                   <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4">
-                    <h4 className="mb-2 font-medium">Import from LinkedIn Profile URL</h4>
+                    <h4 className="mb-2 font-medium">
+                      Import from LinkedIn Profile URL
+                    </h4>
                     <p className="text-muted-foreground mb-4 text-sm">
-                      Enter your public LinkedIn profile URL to import your profile data.
-                      Your profile must be publicly visible.
+                      Enter your public LinkedIn profile URL to import your
+                      profile data. Your profile must be publicly visible.
                     </p>
                   </div>
 
@@ -245,7 +247,8 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                       <li>• Links and contact information</li>
                     </ul>
                     <p className="text-muted-foreground mt-2 text-xs">
-                      Note: Public profile information will be imported. Make sure your LinkedIn profile is set to public.
+                      Note: Public profile information will be imported. Make
+                      sure your LinkedIn profile is set to public.
                     </p>
                   </div>
                 </div>
@@ -403,7 +406,9 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
               <Button
                 variant="outline"
                 onClick={handleBack}
-                disabled={selectedSource.id === "linkedin" && !isGuest || isImporting}
+                disabled={
+                  (selectedSource.id === "linkedin" && !isGuest) || isImporting
+                }
               >
                 Back
               </Button>

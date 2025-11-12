@@ -7,7 +7,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { exchangeCodeForToken, importFromLinkedInOAuth } from "@/lib/services/linkedin-service";
+import {
+  exchangeCodeForToken,
+  importFromLinkedInOAuth,
+} from "@/lib/services/linkedin-service";
 
 export function LinkedInCallback() {
   const navigate = useNavigate();
@@ -24,10 +27,12 @@ export function LinkedInCallback() {
         const state = params.get("state");
         const errorParam = params.get("error");
         const errorDescription = params.get("error_description");
-        
+
         // Check for OAuth errors
         if (errorParam) {
-          throw new Error(errorDescription || `LinkedIn OAuth error: ${errorParam}`);
+          throw new Error(
+            errorDescription || `LinkedIn OAuth error: ${errorParam}`,
+          );
         }
 
         // Validate authorization code
@@ -45,10 +50,15 @@ export function LinkedInCallback() {
         const tokenResponse = await exchangeCodeForToken(code);
 
         // Import LinkedIn data
-        const resumeData = await importFromLinkedInOAuth(tokenResponse.access_token);
+        const resumeData = await importFromLinkedInOAuth(
+          tokenResponse.access_token,
+        );
 
         // Store the imported data temporarily
-        sessionStorage.setItem("linkedin_import_data", JSON.stringify(resumeData));
+        sessionStorage.setItem(
+          "linkedin_import_data",
+          JSON.stringify(resumeData),
+        );
         sessionStorage.removeItem("linkedin_oauth_state");
 
         toast({
@@ -59,7 +69,8 @@ export function LinkedInCallback() {
         // Redirect back to resume builder
         navigate({ to: "/dashboard" });
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+        const errorMessage =
+          err instanceof Error ? err.message : "Unknown error occurred";
         setError(errorMessage);
         setIsProcessing(false);
 
@@ -79,7 +90,9 @@ export function LinkedInCallback() {
       <div className="flex h-screen items-center justify-center">
         <div className="space-y-4 text-center">
           <div className="animate-spin rounded-full border-4 border-gray-200 border-t-violet-600 h-12 w-12 mx-auto" />
-          <h1 className="text-2xl font-bold">Importing Your LinkedIn Profile...</h1>
+          <h1 className="text-2xl font-bold">
+            Importing Your LinkedIn Profile...
+          </h1>
           <p className="text-gray-600">Please wait while we fetch your data</p>
         </div>
       </div>
