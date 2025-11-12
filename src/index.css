@@ -286,3 +286,32 @@ input[type="date"] {
   background-size: 200% 200%;
   animation: gradient 3s ease infinite;
 }
+
+/* React Query Devtools - Hide by default and show on hover */
+
+/* Target the main devtools container */
+.react-query-devtools-button-container,
+[role="button"][title*="TanStack"],
+.ReactQueryDevtoolsButton {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.3s ease, pointer-events 0.3s ease !important;
+}
+
+/* Show on hover - multiple selectors for different element types */
+.react-query-devtools-button-container:hover,
+.react-query-devtools-button-container:focus-within,
+[role="button"][title*="TanStack"]:hover,
+.ReactQueryDevtoolsButton:hover {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Also show if hovering near the bottom-right corner where devtools appears */
+body:has(.react-query-devtools-button-container:hover) .react-query-devtools-button-container,
+body:has([role="button"][title*="TanStack"]:hover) [role="button"][title*="TanStack"],
+body:has(.ReactQueryDevtoolsButton:hover) .ReactQueryDevtoolsButton {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
