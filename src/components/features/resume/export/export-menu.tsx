@@ -25,7 +25,7 @@ import {
   downloadHTML,
   downloadJSON,
   downloadMarkdown,
-  downloadPDF,
+  downloadPDFWithTemplate,
   downloadPlainText,
   printResume,
 } from "./export-utils";
@@ -56,7 +56,7 @@ export function ExportMenu({ resume }: ExportMenuProps) {
 
   const handleDownloadPDF = async () => {
     try {
-      await downloadPDF(resume);
+      await downloadPDFWithTemplate(resume);
       toast({
         title: "PDF Downloaded",
         description: `${resume.title}.pdf has been downloaded`,

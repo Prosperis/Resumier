@@ -8,6 +8,7 @@ import {
   UnderlineType,
 } from "docx";
 import { saveAs } from "file-saver";
+import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import type { Resume } from "@/lib/api/types";
 
@@ -291,6 +292,156 @@ export async function downloadPDF(resume: Resume): Promise<void> {
 
     // Save the PDF
     pdf.save(`${sanitizeFilename(resume.title)}.pdf`);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    throw new Error("Failed to generate PDF. Please try again.");
+  }
+}
+
+/**
+ * Alternative PDF export that captures the styled resume template from the DOM
+ * This preserves the template design, colors, and formatting
+ */
+export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
+  try {
+    // Find the resume preview element in the DOM
+    const resumeElement = document.querySelector(".resume-light-mode");
+    
+    if (!resumeElement) {
+      throw new Error("Resume preview not found. Please ensure the resume is displayed on the page.");
+    }
+
+    // Clone the element to avoid modifying the original
+    const clonedElement = resumeElement.cloneNode(true) as HTMLElement;
+    
+    // Create a temporary container off-screen
+    const container = document.createElement("div");
+    container.style.position = "fixed";
+    container.style.left = "-9999px";
+    container.style.top = "-9999px";
+    container.style.width = "210mm";
+    container.style.background = "#FFFFFF";
+    container.appendChild(clonedElement);
+    document.body.appendChild(container);
+
+    try {
+      // Remove any interactive elements that shouldn't be in PDF
+      const interactiveElements = clonedElement.querySelectorAll(
+        "button, [role='button'], .no-print, .print\\:hidden, .export-controls, [data-no-print]"
+      );
+      interactiveElements.forEach((el) => el.remove());
+
+      // Fix oklch colors by converting computed styles to inline RGB styles
+      const fixOklchColors = (element: Element) => {
+        const allElements = element.querySelectorAll("*");
+        allElements.forEach((el) => {
+          const htmlEl = el as HTMLElement;
+          const computed = window.getComputedStyle(htmlEl);
+          
+          // Helper to convert oklch or any color to rgb hex
+          const colorToHex = (colorStr: string): string => {
+            if (!colorStr || colorStr === "transparent") return "transparent";
+            
+            // If it's already hex or rgb, return it
+            if (colorStr.startsWith("#") || colorStr.startsWith("rgb")) {
+              return colorStr;
+            }
+            
+            // For oklch or other color functions, try to parse it
+            try {
+              // Create a temporary element to convert color
+              const tempEl = document.createElement("div");
+              tempEl.style.color = colorStr;
+              document.body.appendChild(tempEl);
+              const computed = window.getComputedStyle(tempEl);
+              const rgbColor = computed.color;
+              document.body.removeChild(tempEl);
+              return rgbColor;
+            } catch (e) {
+              return "#000000"; // Fallback to black
+            }
+          };
+
+          // Get computed styles that aren't oklch
+          const bg = computed.backgroundColor;
+          const text = computed.color;
+          const border = computed.borderColor;
+
+          // Apply safe colors inline
+          if (bg && !bg.includes("transparent")) {
+            const safeColor = colorToHex(bg);
+            htmlEl.style.backgroundColor = safeColor;
+          }
+          if (text) {
+            const safeColor = colorToHex(text);
+            htmlEl.style.color = safeColor;
+          }
+          if (border && !border.includes("transparent")) {
+            const safeColor = colorToHex(border);
+            htmlEl.style.borderColor = safeColor;
+          }
+
+          // Copy other important styles
+          const propertiesToCopy = [
+            "fontSize", "fontWeight", "fontFamily", "fontStyle",
+            "lineHeight", "textAlign", "textDecoration",
+            "padding", "margin", "border", "borderRadius",
+            "display", "width", "height", "maxWidth", "minWidth"
+          ];
+
+          propertiesToCopy.forEach(prop => {
+            const value = computed.getPropertyValue(prop);
+            if (value && value.trim() && value !== "auto") {
+              htmlEl.style.setProperty(prop, value, "important");
+            }
+          });
+        });
+      };
+
+      fixOklchColors(clonedElement);
+
+      // Capture the resume element as canvas with html2canvas
+      const canvas = await html2canvas(clonedElement, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#FFFFFF",
+        logging: false,
+        imageTimeout: 10000,
+        windowHeight: clonedElement.scrollHeight,
+        windowWidth: 800,
+      });
+
+      // Create PDF from canvas
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // Add first page
+      pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= 297; // A4 height in mm
+
+      // Add additional pages if content is longer than one page
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= 297;
+      }
+
+      // Save the PDF
+      pdf.save(`${sanitizeFilename(resume.title)}.pdf`);
+    } finally {
+      // Clean up temporary container
+      document.body.removeChild(container);
+    }
   } catch (error) {
     console.error("Error generating PDF:", error);
     throw new Error("Failed to generate PDF. Please try again.");
