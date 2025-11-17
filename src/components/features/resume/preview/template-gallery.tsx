@@ -3,7 +3,7 @@
  * Full-screen template selection portal with previews, filtering, and search
  */
 
-import { useState, useMemo, useCallback, memo } from "react";
+import { useState, useMemo, useCallback, memo, useEffect } from "react";
 import {
   Search,
   Sparkles,
@@ -13,6 +13,7 @@ import {
   Grid3x3,
   LayoutGrid,
   Check,
+  Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +44,50 @@ interface TemplateGalleryProps {
 type ViewMode = "grid" | "list";
 type FilterCategory = "all" | TemplateCategory;
 
+const FAVORITES_STORAGE_KEY = "resumier-favorite-templates";
+
+function useFavoriteTemplates() {
+  const [favorites, setFavorites] = useState<Set<string>>(() => {
+    if (typeof window === "undefined") return new Set();
+    try {
+      const stored = localStorage.getItem(FAVORITES_STORAGE_KEY);
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        FAVORITES_STORAGE_KEY,
+        JSON.stringify(Array.from(favorites)),
+      );
+    } catch (error) {
+      console.warn("Failed to save favorites to localStorage:", error);
+    }
+  }, [favorites]);
+
+  const toggleFavorite = useCallback((templateId: string) => {
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(templateId)) {
+        next.delete(templateId);
+      } else {
+        next.add(templateId);
+      }
+      return next;
+    });
+  }, []);
+
+  const isFavorite = useCallback(
+    (templateId: string) => favorites.has(templateId),
+    [favorites],
+  );
+
+  return { favorites, toggleFavorite, isFavorite };
+}
+
 export function TemplateGallery({
   open,
   onOpenChange,
@@ -52,6 +97,8 @@ export function TemplateGallery({
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<FilterCategory>("all");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const { toggleFavorite, isFavorite, favorites } = useFavoriteTemplates();
 
   // Cache templates to prevent re-fetching
   const allTemplates = useMemo(() => getAllTemplates(), []);
@@ -59,6 +106,11 @@ export function TemplateGallery({
   // Filter templates
   const filteredTemplates = useMemo(() => {
     let filtered = allTemplates;
+
+    // Filter by favorites first (if enabled)
+    if (showFavoritesOnly) {
+      filtered = filtered.filter((t: TemplateInfo) => favorites.has(t.id));
+    }
 
     // Filter by category
     if (category !== "all") {
@@ -82,7 +134,7 @@ export function TemplateGallery({
     }
 
     return filtered;
-  }, [allTemplates, category, search]);
+  }, [allTemplates, category, search, showFavoritesOnly, favorites]);
 
   const handleSelectTemplate = useCallback(
     (templateId: string) => {
@@ -129,6 +181,28 @@ export function TemplateGallery({
                 className="pl-10"
               />
             </div>
+
+            {/* Favorites Filter Toggle */}
+            <Button
+              variant={showFavoritesOnly ? "secondary" : "outline"}
+              size="sm"
+              onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+              className="gap-2"
+            >
+              <Star
+                className={`h-4 w-4 ${
+                  showFavoritesOnly
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "text-gray-500"
+                }`}
+              />
+              Favorites
+              {favorites.size > 0 && (
+                <span className="ml-1 text-xs bg-violet-100 dark:bg-violet-900 text-violet-700 dark:text-violet-300 px-1.5 py-0.5 rounded-full">
+                  {favorites.size}
+                </span>
+              )}
+            </Button>
 
             {/* View Mode Toggle */}
             <div className="flex items-center gap-1 border rounded-md p-1">
@@ -223,6 +297,8 @@ export function TemplateGallery({
                       template={template}
                       selected={selected === template.id}
                       onSelect={() => handleSelectTemplate(template.id)}
+                      isFavorite={isFavorite(template.id)}
+                      onToggleFavorite={() => toggleFavorite(template.id)}
                     />
                   ))}
                 </div>
@@ -1337,12 +1413,16 @@ interface TemplateCardProps {
   template: TemplateInfo;
   selected: boolean;
   onSelect: () => void;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 }
 
 const TemplateCard = memo(function TemplateCard({
   template,
   selected,
   onSelect,
+  isFavorite,
+  onToggleFavorite,
 }: TemplateCardProps) {
   return (
     <div
@@ -1365,9 +1445,27 @@ const TemplateCard = memo(function TemplateCard({
           <TemplatePreviewMini template={template} />
         </div>
 
+        {/* Favorite Star */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite();
+          }}
+          className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-md hover:bg-white dark:hover:bg-gray-800 transition-colors"
+          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+        >
+          <Star
+            className={`h-4 w-4 transition-colors ${
+              isFavorite
+                ? "fill-yellow-400 text-yellow-400"
+                : "text-gray-400 hover:text-yellow-400"
+            }`}
+          />
+        </button>
+
         {/* Selected Checkmark */}
         {selected && (
-          <div className="absolute top-3 right-3 bg-violet-600 text-white rounded-full p-1.5 shadow-lg">
+          <div className="absolute top-3 left-3 bg-violet-600 text-white rounded-full p-1.5 shadow-lg z-10">
             <Check className="h-4 w-4" />
           </div>
         )}
