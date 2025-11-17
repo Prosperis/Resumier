@@ -306,14 +306,16 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
   try {
     // Find the resume preview element in the DOM
     const resumeElement = document.querySelector(".resume-light-mode");
-    
+
     if (!resumeElement) {
-      throw new Error("Resume preview not found. Please ensure the resume is displayed on the page.");
+      throw new Error(
+        "Resume preview not found. Please ensure the resume is displayed on the page.",
+      );
     }
 
     // Clone the element to avoid modifying the original
     const clonedElement = resumeElement.cloneNode(true) as HTMLElement;
-    
+
     // Create a temporary container off-screen
     const container = document.createElement("div");
     container.style.position = "fixed";
@@ -327,7 +329,7 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
     try {
       // Remove any interactive elements that shouldn't be in PDF
       const interactiveElements = clonedElement.querySelectorAll(
-        "button, [role='button'], .no-print, .print\\:hidden, .export-controls, [data-no-print]"
+        "button, [role='button'], .no-print, .print\\:hidden, .export-controls, [data-no-print]",
       );
       interactiveElements.forEach((el) => el.remove());
 
@@ -337,16 +339,16 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
         allElements.forEach((el) => {
           const htmlEl = el as HTMLElement;
           const computed = window.getComputedStyle(htmlEl);
-          
+
           // Helper to convert oklch or any color to rgb hex
           const colorToHex = (colorStr: string): string => {
             if (!colorStr || colorStr === "transparent") return "transparent";
-            
+
             // If it's already hex or rgb, return it
             if (colorStr.startsWith("#") || colorStr.startsWith("rgb")) {
               return colorStr;
             }
-            
+
             // For oklch or other color functions, try to parse it
             try {
               // Create a temporary element to convert color
@@ -383,13 +385,25 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
 
           // Copy other important styles
           const propertiesToCopy = [
-            "fontSize", "fontWeight", "fontFamily", "fontStyle",
-            "lineHeight", "textAlign", "textDecoration",
-            "padding", "margin", "border", "borderRadius",
-            "display", "width", "height", "maxWidth", "minWidth"
+            "fontSize",
+            "fontWeight",
+            "fontFamily",
+            "fontStyle",
+            "lineHeight",
+            "textAlign",
+            "textDecoration",
+            "padding",
+            "margin",
+            "border",
+            "borderRadius",
+            "display",
+            "width",
+            "height",
+            "maxWidth",
+            "minWidth",
           ];
 
-          propertiesToCopy.forEach(prop => {
+          propertiesToCopy.forEach((prop) => {
             const value = computed.getPropertyValue(prop);
             if (value && value.trim() && value !== "auto") {
               htmlEl.style.setProperty(prop, value, "important");
@@ -425,14 +439,28 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
       let position = 0;
 
       // Add first page
-      pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, position, imgWidth, imgHeight);
+      pdf.addImage(
+        canvas.toDataURL("image/png"),
+        "PNG",
+        0,
+        position,
+        imgWidth,
+        imgHeight,
+      );
       heightLeft -= 297; // A4 height in mm
 
       // Add additional pages if content is longer than one page
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, position, imgWidth, imgHeight);
+        pdf.addImage(
+          canvas.toDataURL("image/png"),
+          "PNG",
+          0,
+          position,
+          imgWidth,
+          imgHeight,
+        );
         heightLeft -= 297;
       }
 
