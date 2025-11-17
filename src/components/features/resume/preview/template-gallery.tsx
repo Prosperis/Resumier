@@ -1346,7 +1346,7 @@ const TemplateCard = memo(function TemplateCard({
 }: TemplateCardProps) {
   return (
     <div
-      className={`group relative rounded-lg border-2 overflow-hidden transition-all cursor-pointer ${
+      className={`group relative rounded-lg border-2 overflow-hidden transition-all cursor-pointer flex flex-col h-full ${
         selected
           ? "border-violet-600 shadow-lg shadow-violet-200 dark:shadow-violet-900"
           : "border-gray-200 dark:border-gray-700 hover:border-violet-300 dark:hover:border-violet-500 hover:shadow-md"
@@ -1355,13 +1355,15 @@ const TemplateCard = memo(function TemplateCard({
     >
       {/* Preview - Actual Template Layout */}
       <div
-        className="aspect-[4/3] relative overflow-hidden"
+        className="aspect-[4/3] relative overflow-hidden flex-shrink-0"
         style={{
           backgroundColor: template.colorScheme?.background || "#ffffff",
         }}
       >
         {/* Render template-specific preview */}
-        <TemplatePreviewMini template={template} />
+        <div className="absolute inset-0 w-full h-full">
+          <TemplatePreviewMini template={template} />
+        </div>
 
         {/* Selected Checkmark */}
         {selected && (
@@ -1372,7 +1374,7 @@ const TemplateCard = memo(function TemplateCard({
       </div>
 
       {/* Template Info */}
-      <div className="p-4 bg-white dark:bg-gray-800">
+      <div className="p-4 bg-white dark:bg-gray-800 flex-1">
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-base text-gray-900 dark:text-white truncate">
