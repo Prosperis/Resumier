@@ -390,36 +390,40 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
               tempEl.style.visibility = "hidden";
               tempEl.style.top = "-9999px";
               tempEl.style.left = "-9999px";
-              
+
               // Set the color property based on context
               if (isBackground) {
                 tempEl.style.backgroundColor = colorStr;
               } else {
                 tempEl.style.color = colorStr;
               }
-              
+
               document.body.appendChild(tempEl);
-              
+
               // Force a reflow to ensure styles are computed
               void tempEl.offsetHeight;
-              
+
               const computed = window.getComputedStyle(tempEl);
-              const rgbColor = isBackground 
-                ? computed.backgroundColor 
+              const rgbColor = isBackground
+                ? computed.backgroundColor
                 : computed.color;
-              
+
               document.body.removeChild(tempEl);
-              
+
               // If conversion failed or still contains oklch, use fallback
-              if (!rgbColor || rgbColor.toLowerCase().includes("oklch") || rgbColor === colorStr) {
+              if (
+                !rgbColor ||
+                rgbColor.toLowerCase().includes("oklch") ||
+                rgbColor === colorStr
+              ) {
                 return isBackground ? "#ffffff" : "#000000";
               }
-              
+
               // Ensure it's in rgb format
               if (!rgbColor.startsWith("rgb") && !rgbColor.startsWith("#")) {
                 return isBackground ? "#ffffff" : "#000000";
               }
-              
+
               return rgbColor;
             } catch (e) {
               // Fallback based on context
@@ -434,28 +438,31 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
             tempEl.style.visibility = "hidden";
             tempEl.style.top = "-9999px";
             tempEl.style.left = "-9999px";
-            
+
             if (isBackground) {
               tempEl.style.backgroundColor = colorStr;
             } else {
               tempEl.style.color = colorStr;
             }
-            
+
             document.body.appendChild(tempEl);
             void tempEl.offsetHeight; // Force reflow
-            
+
             const computed = window.getComputedStyle(tempEl);
-            const rgbColor = isBackground 
-              ? computed.backgroundColor 
+            const rgbColor = isBackground
+              ? computed.backgroundColor
               : computed.color;
-            
+
             document.body.removeChild(tempEl);
-            
+
             // Only return if it's a valid RGB format
-            if (rgbColor && (rgbColor.startsWith("rgb") || rgbColor.startsWith("#"))) {
+            if (
+              rgbColor &&
+              (rgbColor.startsWith("rgb") || rgbColor.startsWith("#"))
+            ) {
               return rgbColor;
             }
-            
+
             return colorStr;
           } catch (e) {
             return colorStr;
@@ -463,8 +470,11 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
         };
 
         // Process all elements including the root
-        const allElements = [element, ...Array.from(element.querySelectorAll("*"))];
-        
+        const allElements = [
+          element,
+          ...Array.from(element.querySelectorAll("*")),
+        ];
+
         allElements.forEach((el) => {
           const htmlEl = el as HTMLElement;
           if (!htmlEl || !htmlEl.style) return;
@@ -473,26 +483,74 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
 
           // Convert all color-related properties
           const colorProperties = [
-            { prop: "backgroundColor", styleProp: "backgroundColor", isBackground: true },
+            {
+              prop: "backgroundColor",
+              styleProp: "backgroundColor",
+              isBackground: true,
+            },
             { prop: "color", styleProp: "color", isBackground: false },
-            { prop: "borderColor", styleProp: "borderColor", isBackground: false },
-            { prop: "borderTopColor", styleProp: "borderTopColor", isBackground: false },
-            { prop: "borderRightColor", styleProp: "borderRightColor", isBackground: false },
-            { prop: "borderBottomColor", styleProp: "borderBottomColor", isBackground: false },
-            { prop: "borderLeftColor", styleProp: "borderLeftColor", isBackground: false },
-            { prop: "outlineColor", styleProp: "outlineColor", isBackground: false },
-            { prop: "textDecorationColor", styleProp: "textDecorationColor", isBackground: false },
-            { prop: "columnRuleColor", styleProp: "columnRuleColor", isBackground: false },
+            {
+              prop: "borderColor",
+              styleProp: "borderColor",
+              isBackground: false,
+            },
+            {
+              prop: "borderTopColor",
+              styleProp: "borderTopColor",
+              isBackground: false,
+            },
+            {
+              prop: "borderRightColor",
+              styleProp: "borderRightColor",
+              isBackground: false,
+            },
+            {
+              prop: "borderBottomColor",
+              styleProp: "borderBottomColor",
+              isBackground: false,
+            },
+            {
+              prop: "borderLeftColor",
+              styleProp: "borderLeftColor",
+              isBackground: false,
+            },
+            {
+              prop: "outlineColor",
+              styleProp: "outlineColor",
+              isBackground: false,
+            },
+            {
+              prop: "textDecorationColor",
+              styleProp: "textDecorationColor",
+              isBackground: false,
+            },
+            {
+              prop: "columnRuleColor",
+              styleProp: "columnRuleColor",
+              isBackground: false,
+            },
           ];
 
           colorProperties.forEach(({ prop, styleProp, isBackground }) => {
             const value = computed.getPropertyValue(prop);
-            if (value && value.trim() && value !== "transparent" && value !== "none") {
+            if (
+              value &&
+              value.trim() &&
+              value !== "transparent" &&
+              value !== "none"
+            ) {
               // Check if value contains oklch or is a CSS variable
               const lowerValue = value.toLowerCase();
-              if (lowerValue.includes("oklch") || lowerValue.includes("var(--")) {
+              if (
+                lowerValue.includes("oklch") ||
+                lowerValue.includes("var(--")
+              ) {
                 const safeColor = colorToRGB(value, isBackground);
-                if (safeColor && safeColor !== value && !safeColor.toLowerCase().includes("oklch")) {
+                if (
+                  safeColor &&
+                  safeColor !== value &&
+                  !safeColor.toLowerCase().includes("oklch")
+                ) {
                   htmlEl.style.setProperty(styleProp, safeColor, "important");
                 }
               }
@@ -510,21 +568,31 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
                   // Get computed value of the CSS variable
                   const varName = cssVar.replace(/var\(|\)/g, "").trim();
                   const computedValue = computed.getPropertyValue(varName);
-                  
-                  if (computedValue && computedValue.toLowerCase().includes("oklch")) {
+
+                  if (
+                    computedValue &&
+                    computedValue.toLowerCase().includes("oklch")
+                  ) {
                     // Determine if this is a background or foreground color
-                    const isBg = varName.includes("background") || 
-                                varName.includes("card") || 
-                                varName.includes("popover") ||
-                                varName.includes("muted") ||
-                                varName.includes("accent") ||
-                                varName.includes("secondary");
-                    
+                    const isBg =
+                      varName.includes("background") ||
+                      varName.includes("card") ||
+                      varName.includes("popover") ||
+                      varName.includes("muted") ||
+                      varName.includes("accent") ||
+                      varName.includes("secondary");
+
                     // Convert and replace in inline style
                     const safeColor = colorToRGB(computedValue, isBg);
-                    if (safeColor && !safeColor.toLowerCase().includes("oklch")) {
+                    if (
+                      safeColor &&
+                      !safeColor.toLowerCase().includes("oklch")
+                    ) {
                       htmlEl.style.cssText = htmlEl.style.cssText.replace(
-                        new RegExp(cssVar.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"),
+                        new RegExp(
+                          cssVar.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+                          "g",
+                        ),
                         safeColor,
                       );
                     }
@@ -592,9 +660,12 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
           // Inject style override in cloned document's head
           const head = clonedDoc.head || clonedDoc.createElement("head");
           if (!clonedDoc.head) {
-            clonedDoc.documentElement.insertBefore(head, clonedDoc.documentElement.firstChild);
+            clonedDoc.documentElement.insertBefore(
+              head,
+              clonedDoc.documentElement.firstChild,
+            );
           }
-          
+
           const overrideStyle = clonedDoc.createElement("style");
           overrideStyle.id = "oklch-override-clone";
           overrideStyle.textContent = `
@@ -632,7 +703,7 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
             }
           `;
           head.appendChild(overrideStyle);
-          
+
           // Remove or override any stylesheets that might contain oklch
           try {
             const styleSheets = Array.from(clonedDoc.styleSheets);
@@ -648,9 +719,10 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
                       const value = style.getPropertyValue(prop);
                       if (value && value.toLowerCase().includes("oklch")) {
                         // Fallback immediately - don't try to compute as it may fail
-                        const fallback = prop.includes("background") || prop.includes("bg")
-                          ? "#ffffff"
-                          : "#000000";
+                        const fallback =
+                          prop.includes("background") || prop.includes("bg")
+                            ? "#ffffff"
+                            : "#000000";
                         style.setProperty(prop, fallback, "important");
                       }
                     }
@@ -694,7 +766,11 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
             if (display === "flex" || display === "inline-flex") {
               const alignItems = computed.getPropertyValue("align-items");
               // Force center alignment for flex containers to prevent shifting
-              if (!alignItems || alignItems === "normal" || alignItems === "stretch") {
+              if (
+                !alignItems ||
+                alignItems === "normal" ||
+                alignItems === "stretch"
+              ) {
                 htmlEl.style.setProperty("align-items", "center", "important");
               }
               // Ensure flex items align properly
@@ -708,11 +784,21 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
               svgEl.style.setProperty("display", "inline-block", "important");
               // Ensure parent container aligns properly
               if (htmlEl.parentElement) {
-                const parentComputed = clonedDoc.defaultView?.getComputedStyle(htmlEl.parentElement);
+                const parentComputed = clonedDoc.defaultView?.getComputedStyle(
+                  htmlEl.parentElement,
+                );
                 if (parentComputed) {
-                  const parentDisplay = parentComputed.getPropertyValue("display");
-                  if (parentDisplay === "flex" || parentDisplay === "inline-flex") {
-                    htmlEl.parentElement.style.setProperty("align-items", "center", "important");
+                  const parentDisplay =
+                    parentComputed.getPropertyValue("display");
+                  if (
+                    parentDisplay === "flex" ||
+                    parentDisplay === "inline-flex"
+                  ) {
+                    htmlEl.parentElement.style.setProperty(
+                      "align-items",
+                      "center",
+                      "important",
+                    );
                   }
                 }
               }
@@ -725,23 +811,42 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
                 svg.style.setProperty("vertical-align", "middle", "important");
                 svg.style.setProperty("display", "inline-block", "important");
                 // Match line-height with parent or siblings
-                const parentLineHeight = computed.getPropertyValue("line-height");
+                const parentLineHeight =
+                  computed.getPropertyValue("line-height");
                 if (parentLineHeight && parentLineHeight !== "normal") {
-                  svg.style.setProperty("line-height", parentLineHeight, "important");
+                  svg.style.setProperty(
+                    "line-height",
+                    parentLineHeight,
+                    "important",
+                  );
                 }
                 // Ensure the wrapper aligns properly
                 if (display === "flex" || display === "inline-flex") {
-                  htmlEl.style.setProperty("align-items", "center", "important");
+                  htmlEl.style.setProperty(
+                    "align-items",
+                    "center",
+                    "important",
+                  );
                   // Ensure all children have matching line-height
                   const children = Array.from(htmlEl.children);
                   children.forEach((child) => {
                     const childEl = child as HTMLElement;
                     if (childEl.style) {
-                      const childLineHeight = clonedDoc.defaultView?.getComputedStyle(childEl).getPropertyValue("line-height");
+                      const childLineHeight = clonedDoc.defaultView
+                        ?.getComputedStyle(childEl)
+                        .getPropertyValue("line-height");
                       if (!childLineHeight || childLineHeight === "normal") {
-                        const computedLineHeight = computed.getPropertyValue("line-height");
-                        if (computedLineHeight && computedLineHeight !== "normal") {
-                          childEl.style.setProperty("line-height", computedLineHeight, "important");
+                        const computedLineHeight =
+                          computed.getPropertyValue("line-height");
+                        if (
+                          computedLineHeight &&
+                          computedLineHeight !== "normal"
+                        ) {
+                          childEl.style.setProperty(
+                            "line-height",
+                            computedLineHeight,
+                            "important",
+                          );
                         }
                       }
                     }
