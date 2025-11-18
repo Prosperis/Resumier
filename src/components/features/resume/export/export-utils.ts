@@ -333,57 +333,210 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
       );
       interactiveElements.forEach((el) => el.remove());
 
+      // Inject comprehensive style override FIRST to convert CSS variables and prevent oklch
+      const styleOverride = document.createElement("style");
+      styleOverride.id = "pdf-export-oklch-override";
+      styleOverride.textContent = `
+        /* Override all CSS variables with RGB equivalents */
+        .resume-light-mode,
+        .resume-light-mode * {
+          --background: #ffffff !important;
+          --foreground: #252525 !important;
+          --card: #ffffff !important;
+          --card-foreground: #252525 !important;
+          --popover: #ffffff !important;
+          --popover-foreground: #252525 !important;
+          --primary: #3a3a3a !important;
+          --primary-foreground: #fafafa !important;
+          --secondary: #f5f5f5 !important;
+          --secondary-foreground: #3a3a3a !important;
+          --muted: #f5f5f5 !important;
+          --muted-foreground: #737373 !important;
+          --accent: #f5f5f5 !important;
+          --accent-foreground: #3a3a3a !important;
+          --destructive: #dc2626 !important;
+          --border: #e5e5e5 !important;
+          --input: #e5e5e5 !important;
+          --ring: #a3a3a3 !important;
+        }
+      `;
+      container.insertBefore(styleOverride, container.firstChild);
+
       // Fix oklch colors by converting computed styles to inline RGB styles
-      const fixOklchColors = (element: Element) => {
-        const allElements = element.querySelectorAll("*");
-        allElements.forEach((el) => {
-          const htmlEl = el as HTMLElement;
-          const computed = window.getComputedStyle(htmlEl);
+      const fixOklchColors = (element: HTMLElement) => {
+        // Helper to convert any color (including oklch) to RGB
+        const colorToRGB = (colorStr: string, isBackground = false): string => {
+          if (!colorStr || colorStr === "transparent" || colorStr === "none") {
+            return colorStr;
+          }
 
-          // Helper to convert oklch or any color to rgb hex
-          const colorToHex = (colorStr: string): string => {
-            if (!colorStr || colorStr === "transparent") return "transparent";
+          // If it's already rgb/rgba, return as-is
+          if (colorStr.startsWith("rgb")) {
+            return colorStr;
+          }
 
-            // If it's already hex or rgb, return it
-            if (colorStr.startsWith("#") || colorStr.startsWith("rgb")) {
-              return colorStr;
-            }
+          // If it's hex, return as-is
+          if (colorStr.startsWith("#")) {
+            return colorStr;
+          }
 
-            // For oklch or other color functions, try to parse it
+          // If it contains oklch, we need to convert it
+          const lowerColorStr = colorStr.toLowerCase();
+          if (lowerColorStr.includes("oklch")) {
             try {
-              // Create a temporary element to convert color
+              // Create a temporary element to get computed RGB value
               const tempEl = document.createElement("div");
-              tempEl.style.color = colorStr;
+              tempEl.style.position = "absolute";
+              tempEl.style.visibility = "hidden";
+              tempEl.style.top = "-9999px";
+              tempEl.style.left = "-9999px";
+              
+              // Set the color property based on context
+              if (isBackground) {
+                tempEl.style.backgroundColor = colorStr;
+              } else {
+                tempEl.style.color = colorStr;
+              }
+              
               document.body.appendChild(tempEl);
+              
+              // Force a reflow to ensure styles are computed
+              void tempEl.offsetHeight;
+              
               const computed = window.getComputedStyle(tempEl);
-              const rgbColor = computed.color;
+              const rgbColor = isBackground 
+                ? computed.backgroundColor 
+                : computed.color;
+              
               document.body.removeChild(tempEl);
+              
+              // If conversion failed or still contains oklch, use fallback
+              if (!rgbColor || rgbColor.toLowerCase().includes("oklch") || rgbColor === colorStr) {
+                return isBackground ? "#ffffff" : "#000000";
+              }
+              
+              // Ensure it's in rgb format
+              if (!rgbColor.startsWith("rgb") && !rgbColor.startsWith("#")) {
+                return isBackground ? "#ffffff" : "#000000";
+              }
+              
               return rgbColor;
             } catch (e) {
-              return "#000000"; // Fallback to black
+              // Fallback based on context
+              return isBackground ? "#ffffff" : "#000000";
             }
-          };
-
-          // Get computed styles that aren't oklch
-          const bg = computed.backgroundColor;
-          const text = computed.color;
-          const border = computed.borderColor;
-
-          // Apply safe colors inline
-          if (bg && !bg.includes("transparent")) {
-            const safeColor = colorToHex(bg);
-            htmlEl.style.backgroundColor = safeColor;
-          }
-          if (text) {
-            const safeColor = colorToHex(text);
-            htmlEl.style.color = safeColor;
-          }
-          if (border && !border.includes("transparent")) {
-            const safeColor = colorToHex(border);
-            htmlEl.style.borderColor = safeColor;
           }
 
-          // Copy other important styles
+          // For other color formats, try to convert via computed style
+          try {
+            const tempEl = document.createElement("div");
+            tempEl.style.position = "absolute";
+            tempEl.style.visibility = "hidden";
+            tempEl.style.top = "-9999px";
+            tempEl.style.left = "-9999px";
+            
+            if (isBackground) {
+              tempEl.style.backgroundColor = colorStr;
+            } else {
+              tempEl.style.color = colorStr;
+            }
+            
+            document.body.appendChild(tempEl);
+            void tempEl.offsetHeight; // Force reflow
+            
+            const computed = window.getComputedStyle(tempEl);
+            const rgbColor = isBackground 
+              ? computed.backgroundColor 
+              : computed.color;
+            
+            document.body.removeChild(tempEl);
+            
+            // Only return if it's a valid RGB format
+            if (rgbColor && (rgbColor.startsWith("rgb") || rgbColor.startsWith("#"))) {
+              return rgbColor;
+            }
+            
+            return colorStr;
+          } catch (e) {
+            return colorStr;
+          }
+        };
+
+        // Process all elements including the root
+        const allElements = [element, ...Array.from(element.querySelectorAll("*"))];
+        
+        allElements.forEach((el) => {
+          const htmlEl = el as HTMLElement;
+          if (!htmlEl || !htmlEl.style) return;
+
+          const computed = window.getComputedStyle(htmlEl);
+
+          // Convert all color-related properties
+          const colorProperties = [
+            { prop: "backgroundColor", styleProp: "backgroundColor", isBackground: true },
+            { prop: "color", styleProp: "color", isBackground: false },
+            { prop: "borderColor", styleProp: "borderColor", isBackground: false },
+            { prop: "borderTopColor", styleProp: "borderTopColor", isBackground: false },
+            { prop: "borderRightColor", styleProp: "borderRightColor", isBackground: false },
+            { prop: "borderBottomColor", styleProp: "borderBottomColor", isBackground: false },
+            { prop: "borderLeftColor", styleProp: "borderLeftColor", isBackground: false },
+            { prop: "outlineColor", styleProp: "outlineColor", isBackground: false },
+            { prop: "textDecorationColor", styleProp: "textDecorationColor", isBackground: false },
+            { prop: "columnRuleColor", styleProp: "columnRuleColor", isBackground: false },
+          ];
+
+          colorProperties.forEach(({ prop, styleProp, isBackground }) => {
+            const value = computed.getPropertyValue(prop);
+            if (value && value.trim() && value !== "transparent" && value !== "none") {
+              // Check if value contains oklch or is a CSS variable
+              const lowerValue = value.toLowerCase();
+              if (lowerValue.includes("oklch") || lowerValue.includes("var(--")) {
+                const safeColor = colorToRGB(value, isBackground);
+                if (safeColor && safeColor !== value && !safeColor.toLowerCase().includes("oklch")) {
+                  htmlEl.style.setProperty(styleProp, safeColor, "important");
+                }
+              }
+            }
+          });
+
+          // Also check for CSS variables in inline styles that might resolve to oklch
+          const inlineStyle = htmlEl.getAttribute("style") || "";
+          if (inlineStyle.includes("var(--")) {
+            // Get all CSS custom properties used in inline styles
+            const cssVars = inlineStyle.match(/var\(--[^)]+\)/g);
+            if (cssVars) {
+              cssVars.forEach((cssVar) => {
+                try {
+                  // Get computed value of the CSS variable
+                  const varName = cssVar.replace(/var\(|\)/g, "").trim();
+                  const computedValue = computed.getPropertyValue(varName);
+                  
+                  if (computedValue && computedValue.toLowerCase().includes("oklch")) {
+                    // Determine if this is a background or foreground color
+                    const isBg = varName.includes("background") || 
+                                varName.includes("card") || 
+                                varName.includes("popover") ||
+                                varName.includes("muted") ||
+                                varName.includes("accent") ||
+                                varName.includes("secondary");
+                    
+                    // Convert and replace in inline style
+                    const safeColor = colorToRGB(computedValue, isBg);
+                    if (safeColor && !safeColor.toLowerCase().includes("oklch")) {
+                      htmlEl.style.cssText = htmlEl.style.cssText.replace(
+                        new RegExp(cssVar.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g"),
+                        safeColor,
+                      );
+                    }
+                  }
+                } catch (e) {
+                  // Ignore errors in CSS variable processing
+                }
+              });
+            }
+          }
+
+          // Copy other important styles including flex properties
           const propertiesToCopy = [
             "fontSize",
             "fontWeight",
@@ -401,6 +554,14 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
             "height",
             "maxWidth",
             "minWidth",
+            "alignItems",
+            "justifyContent",
+            "flexDirection",
+            "flexWrap",
+            "gap",
+            "verticalAlign",
+            "flexShrink",
+            "flex",
           ];
 
           propertiesToCopy.forEach((prop) => {
@@ -414,6 +575,9 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
 
       fixOklchColors(clonedElement);
 
+      // Wait a bit for styles to apply
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       // Capture the resume element as canvas with html2canvas
       const canvas = await html2canvas(clonedElement, {
         scale: 2,
@@ -424,6 +588,193 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
         imageTimeout: 10000,
         windowHeight: clonedElement.scrollHeight,
         windowWidth: 800,
+        onclone: (clonedDoc, element) => {
+          // Inject style override in cloned document's head
+          const head = clonedDoc.head || clonedDoc.createElement("head");
+          if (!clonedDoc.head) {
+            clonedDoc.documentElement.insertBefore(head, clonedDoc.documentElement.firstChild);
+          }
+          
+          const overrideStyle = clonedDoc.createElement("style");
+          overrideStyle.id = "oklch-override-clone";
+          overrideStyle.textContent = `
+            * {
+              --background: #ffffff !important;
+              --foreground: #252525 !important;
+              --card: #ffffff !important;
+              --card-foreground: #252525 !important;
+              --popover: #ffffff !important;
+              --popover-foreground: #252525 !important;
+              --primary: #3a3a3a !important;
+              --primary-foreground: #fafafa !important;
+              --secondary: #f5f5f5 !important;
+              --secondary-foreground: #3a3a3a !important;
+              --muted: #f5f5f5 !important;
+              --muted-foreground: #737373 !important;
+              --accent: #f5f5f5 !important;
+              --accent-foreground: #3a3a3a !important;
+              --destructive: #dc2626 !important;
+              --border: #e5e5e5 !important;
+              --input: #e5e5e5 !important;
+              --ring: #a3a3a3 !important;
+            }
+            svg {
+              vertical-align: middle !important;
+              display: inline-block !important;
+            }
+            /* Fix flex containers that contain SVG icons */
+            [class*="flex"][class*="items-center"] {
+              align-items: center !important;
+            }
+            [class*="flex"][class*="items-center"] svg {
+              vertical-align: middle !important;
+              align-self: center !important;
+            }
+          `;
+          head.appendChild(overrideStyle);
+          
+          // Remove or override any stylesheets that might contain oklch
+          try {
+            const styleSheets = Array.from(clonedDoc.styleSheets);
+            styleSheets.forEach((sheet) => {
+              try {
+                const rules = Array.from(sheet.cssRules || []);
+                rules.forEach((rule) => {
+                  if (rule instanceof CSSStyleRule) {
+                    const style = rule.style;
+                    // Convert any oklch colors in the rule
+                    for (let i = 0; i < style.length; i++) {
+                      const prop = style[i];
+                      const value = style.getPropertyValue(prop);
+                      if (value && value.toLowerCase().includes("oklch")) {
+                        // Fallback immediately - don't try to compute as it may fail
+                        const fallback = prop.includes("background") || prop.includes("bg")
+                          ? "#ffffff"
+                          : "#000000";
+                        style.setProperty(prop, fallback, "important");
+                      }
+                    }
+                  }
+                });
+              } catch (e) {
+                // Cross-origin or other access issues, ignore
+              }
+            });
+          } catch (e) {
+            // Ignore stylesheet access errors
+          }
+
+          // Process all elements in the cloned document
+          const allElements = clonedDoc.querySelectorAll("*");
+          allElements.forEach((el) => {
+            const htmlEl = el as HTMLElement;
+            if (!htmlEl || !htmlEl.style) return;
+
+            const computed = clonedDoc.defaultView?.getComputedStyle(htmlEl);
+            if (!computed) return;
+
+            // Ensure absolutely positioned elements are visible (for timeline elements)
+            const position = computed.getPropertyValue("position");
+            if (position === "absolute") {
+              const visibility = computed.getPropertyValue("visibility");
+              const display = computed.getPropertyValue("display");
+              if (visibility === "hidden" || display === "none") {
+                htmlEl.style.setProperty("visibility", "visible", "important");
+                htmlEl.style.setProperty("display", "block", "important");
+              }
+              // Ensure z-index is set for proper layering
+              const zIndex = computed.getPropertyValue("z-index");
+              if (!zIndex || zIndex === "auto") {
+                htmlEl.style.setProperty("z-index", "1", "important");
+              }
+            }
+
+            // Fix flex containers to ensure proper alignment
+            const display = computed.getPropertyValue("display");
+            if (display === "flex" || display === "inline-flex") {
+              const alignItems = computed.getPropertyValue("align-items");
+              // Force center alignment for flex containers to prevent shifting
+              if (!alignItems || alignItems === "normal" || alignItems === "stretch") {
+                htmlEl.style.setProperty("align-items", "center", "important");
+              }
+              // Ensure flex items align properly
+              htmlEl.style.setProperty("align-items", "center", "important");
+            }
+
+            // Fix SVG icon alignment - html2canvas has issues with SVG alignment
+            if (htmlEl.tagName === "svg") {
+              const svgEl = htmlEl as SVGElement;
+              svgEl.style.setProperty("vertical-align", "middle", "important");
+              svgEl.style.setProperty("display", "inline-block", "important");
+              // Ensure parent container aligns properly
+              if (htmlEl.parentElement) {
+                const parentComputed = clonedDoc.defaultView?.getComputedStyle(htmlEl.parentElement);
+                if (parentComputed) {
+                  const parentDisplay = parentComputed.getPropertyValue("display");
+                  if (parentDisplay === "flex" || parentDisplay === "inline-flex") {
+                    htmlEl.parentElement.style.setProperty("align-items", "center", "important");
+                  }
+                }
+              }
+            }
+
+            // Fix elements containing SVG (like icon wrappers)
+            if (htmlEl.querySelector("svg")) {
+              const svg = htmlEl.querySelector("svg") as SVGElement;
+              if (svg) {
+                svg.style.setProperty("vertical-align", "middle", "important");
+                svg.style.setProperty("display", "inline-block", "important");
+                // Match line-height with parent or siblings
+                const parentLineHeight = computed.getPropertyValue("line-height");
+                if (parentLineHeight && parentLineHeight !== "normal") {
+                  svg.style.setProperty("line-height", parentLineHeight, "important");
+                }
+                // Ensure the wrapper aligns properly
+                if (display === "flex" || display === "inline-flex") {
+                  htmlEl.style.setProperty("align-items", "center", "important");
+                  // Ensure all children have matching line-height
+                  const children = Array.from(htmlEl.children);
+                  children.forEach((child) => {
+                    const childEl = child as HTMLElement;
+                    if (childEl.style) {
+                      const childLineHeight = clonedDoc.defaultView?.getComputedStyle(childEl).getPropertyValue("line-height");
+                      if (!childLineHeight || childLineHeight === "normal") {
+                        const computedLineHeight = computed.getPropertyValue("line-height");
+                        if (computedLineHeight && computedLineHeight !== "normal") {
+                          childEl.style.setProperty("line-height", computedLineHeight, "important");
+                        }
+                      }
+                    }
+                  });
+                }
+              }
+            }
+
+            // Convert all color properties
+            const colorProps = [
+              "backgroundColor",
+              "color",
+              "borderColor",
+              "borderTopColor",
+              "borderRightColor",
+              "borderBottomColor",
+              "borderLeftColor",
+              "outlineColor",
+            ];
+
+            colorProps.forEach((prop) => {
+              const value = computed.getPropertyValue(prop);
+              if (value && value.toLowerCase().includes("oklch")) {
+                // Use fallback
+                const fallback =
+                  prop.includes("background") || prop.includes("bg")
+                    ? "#ffffff"
+                    : "#000000";
+                htmlEl.style.setProperty(prop, fallback, "important");
+              }
+            });
+          });
+        },
       });
 
       // Create PDF from canvas
