@@ -21,8 +21,9 @@ export interface UserSettings {
   notificationSound: boolean;
 
   // Export Settings
-  defaultExportFormat: "pdf" | "docx" | "txt";
+  defaultExportFormat: "latex" | "docx" | "txt";
   includeMetadata: boolean;
+  promptExportFilename: boolean;
 
   // Privacy
   analyticsEnabled: boolean;
@@ -56,8 +57,9 @@ const defaultSettings: UserSettings = {
   notificationSound: false,
 
   // Export Settings
-  defaultExportFormat: "pdf",
+  defaultExportFormat: "latex",
   includeMetadata: true,
+  promptExportFilename: true,
 
   // Privacy
   analyticsEnabled: true,

@@ -7,7 +7,7 @@
  * Supported export formats
  */
 export type ExportFormatType =
-  | "pdf"
+  | "latex"
   | "docx"
   | "html"
   | "markdown"
@@ -48,12 +48,12 @@ export interface ExportResult {
  * Available export formats with their metadata
  */
 export const EXPORT_FORMATS: Record<ExportFormatType, ExportFormat> = {
-  pdf: {
-    id: "pdf",
-    label: "PDF",
-    description: "Portable Document Format - Best for printing and sharing",
-    extension: ".pdf",
-    mimeType: "application/pdf",
+  latex: {
+    id: "latex",
+    label: "LaTeX",
+    description: "LaTeX source document - Compile to PDF with full control",
+    extension: ".tex",
+    mimeType: "text/x-latex",
   },
   docx: {
     id: "docx",

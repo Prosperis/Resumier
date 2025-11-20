@@ -11,19 +11,175 @@ import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import type { Resume } from "@/lib/api/types";
+import { useSettingsStore } from "@/stores/settings-store";
 
 /**
- * Generate and download resume as PDF file
- * Uses jsPDF's text rendering to avoid html2canvas oklch color parsing issues
+ * Helper function to prepare a cloned resume element for export
+ * Removes interactive elements and prepares for rendering
  */
-export async function downloadPDF(resume: Resume): Promise<void> {
-  try {
-    const pdf = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
+function prepareResumeElementForExport(): HTMLElement | null {
+  const resumeElement = document.querySelector(".resume-light-mode");
+  if (!resumeElement) {
+    return null;
+  }
+
+  // Clone the element
+  const clonedElement = resumeElement.cloneNode(true) as HTMLElement;
+
+  // Remove interactive elements
+  const interactiveElements = clonedElement.querySelectorAll(
+    "button, [role='button'], .no-print, .print\\:hidden, .export-controls, [data-no-print]",
+  );
+  interactiveElements.forEach((el) => el.remove());
+
+  return clonedElement;
+}
+
+/**
+ * Helper function to get rendered template HTML from the DOM
+ * This captures the actual template with all its styling and formatting
+ */
+function getRenderedTemplateHTML(): string | null {
+  const clonedElement = prepareResumeElementForExport();
+  if (!clonedElement) {
+    return null;
+  }
+
+  // Convert computed styles to inline styles for portability
+  const allElements = [
+    clonedElement,
+    ...Array.from(clonedElement.querySelectorAll("*")),
+  ];
+  allElements.forEach((el) => {
+    const htmlEl = el as HTMLElement;
+    if (!htmlEl || !htmlEl.style) return;
+
+    const computed = window.getComputedStyle(htmlEl);
+
+    // Apply key computed styles as inline styles
+    const importantProps = [
+      "color",
+      "backgroundColor",
+      "fontSize",
+      "fontFamily",
+      "fontWeight",
+      "fontStyle",
+      "textAlign",
+      "lineHeight",
+      "padding",
+      "margin",
+      "border",
+      "borderRadius",
+      "display",
+      "width",
+      "height",
+      "maxWidth",
+      "minWidth",
+      "minHeight",
+      "gap",
+      "flexShrink",
+      "verticalAlign",
+      "alignItems",
+    ];
+
+    importantProps.forEach((prop) => {
+      const camelProp = prop as keyof CSSStyleDeclaration;
+      const value = computed[camelProp] as string;
+      if (value && value !== "none" && value !== "normal" && value !== "auto") {
+        htmlEl.style[camelProp as any] = value;
+      }
     });
 
+    // Special handling for SVG elements (Lucide icons)
+    if (htmlEl.tagName === "svg" || htmlEl.closest("svg")) {
+      // Ensure SVG size attributes are preserved
+      const width = computed.width;
+      const height = computed.height;
+      if (width && width !== "auto") {
+        htmlEl.style.width = width;
+        htmlEl.setAttribute("width", width);
+      }
+      if (height && height !== "auto") {
+        htmlEl.style.height = height;
+        htmlEl.setAttribute("height", height);
+      }
+      
+      // Preserve viewBox if it exists
+      if (htmlEl.hasAttribute("viewBox")) {
+        const viewBox = htmlEl.getAttribute("viewBox");
+        if (viewBox) htmlEl.setAttribute("viewBox", viewBox);
+      }
+      
+      // Ensure stroke and fill are preserved
+      const stroke = computed.stroke;
+      const fill = computed.fill;
+      const strokeWidth = computed.strokeWidth;
+      
+      if (stroke && stroke !== "none") htmlEl.style.stroke = stroke;
+      if (fill && fill !== "none") htmlEl.style.fill = fill;
+      if (strokeWidth) htmlEl.style.strokeWidth = strokeWidth;
+    }
+  });
+
+  return clonedElement.innerHTML;
+}
+
+/**
+ * Helper function to collect all CSS rules from stylesheets
+ */
+function collectStyleSheets(): string {
+  const styleSheets = Array.from(document.styleSheets);
+  let allStyles = "";
+
+  try {
+    styleSheets.forEach((sheet) => {
+      try {
+        const rules = Array.from(sheet.cssRules || []);
+        rules.forEach((rule) => {
+          allStyles += rule.cssText + "\n";
+        });
+      } catch (e) {
+        // Cross-origin stylesheets - skip them
+      }
+    });
+  } catch (e) {
+    // Error collecting styles
+  }
+
+  return allStyles;
+}
+
+/**
+ * Escape LaTeX special characters
+ */
+function escapeLaTeX(text: string): string {
+  if (!text) return "";
+  
+  const specialChars: Record<string, string> = {
+    "\\": "\\textbackslash{}",
+    "{": "\\{",
+    "}": "\\}",
+    "$": "\\$",
+    "&": "\\&",
+    "%": "\\%",
+    "#": "\\#",
+    "^": "\\textasciicircum{}",
+    "_": "\\_",
+    "~": "\\textasciitilde{}",
+  };
+
+  return text
+    .split("")
+    .map((char) => specialChars[char] || char)
+    .join("");
+}
+
+/**
+ * Generate and download resume as LaTeX file
+ * Creates a professional LaTeX document that can be compiled to PDF
+ */
+export function downloadLaTeX(resume: Resume): void {
+  try {
     const {
       personalInfo,
       experience,
@@ -33,913 +189,589 @@ export async function downloadPDF(resume: Resume): Promise<void> {
       links,
     } = resume.content;
 
-    let yPosition = 15;
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 15;
-    const contentWidth = pageWidth - 2 * margin;
+    let latex = `\\documentclass[11pt,a4paper]{article}
+\\usepackage[utf8]{inputenc}
+\\usepackage[T1]{fontenc}
+\\usepackage[margin=0.75in]{geometry}
+\\usepackage{enumitem}
+\\usepackage{titlesec}
+\\usepackage{xcolor}
+\\usepackage{hyperref}
 
-    // Helper function to manage page breaks and multiline text
-    const addMultilineText = (
-      text: string,
-      x: number,
-      maxWidth: number,
-      options: any = {},
-    ) => {
-      const lines = pdf.splitTextToSize(text, maxWidth);
-      const lineHeight = options.maxHeight || 5;
+% Configure hyperlinks
+\\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=black
+}
 
-      for (const line of lines) {
-        if (yPosition > pageHeight - 10) {
-          pdf.addPage();
-          yPosition = 15;
-        }
-        pdf.text(line, x, yPosition, { ...options, maxWidth });
-        yPosition += lineHeight;
-      }
-    };
+% Remove page numbers
+\\pagestyle{empty}
 
-    // Set default font
-    pdf.setFont("helvetica");
-    pdf.setFontSize(12);
-    pdf.setTextColor(0, 0, 0);
+% Section formatting
+\\titleformat{\\section}
+  {\\Large\\bfseries\\uppercase}
+  {}
+  {0em}
+  {}
+  [\\titlerule[0.5pt]]
 
-    // Name
-    if (personalInfo.name) {
-      pdf.setFontSize(20);
-      pdf.setFont("helvetica", "bold");
-      pdf.text(personalInfo.name, margin, yPosition);
-      yPosition += 8;
-    }
+\\titlespacing*{\\section}{0pt}{12pt}{6pt}
 
-    // Contact Info
-    pdf.setFontSize(9);
-    pdf.setFont("helvetica", "normal");
-    pdf.setTextColor(100, 100, 100);
-    const contactParts: string[] = [];
-    if (personalInfo.email) contactParts.push(personalInfo.email);
-    if (personalInfo.phone) contactParts.push(personalInfo.phone);
-    if (personalInfo.location) contactParts.push(personalInfo.location);
+% Custom commands
+\\newcommand{\\resumeItem}[1]{\\item\\small{#1}}
+\\newcommand{\\resumeItemListStart}{\\begin{itemize}[leftmargin=0.15in, labelsep=0.05in]}
+\\newcommand{\\resumeItemListEnd}{\\end{itemize}}
 
-    if (contactParts.length > 0) {
-      pdf.text(contactParts.join(" | "), margin, yPosition);
-      yPosition += 6;
-    }
+% Document begins
+\\begin{document}
 
-    pdf.setTextColor(0, 0, 0);
-    yPosition += 3;
+% Header
+\\begin{center}
+    {\\Huge\\bfseries ${escapeLaTeX(personalInfo.name || "")}}\\\\[0.5cm]
+    \\small
+    ${personalInfo.email ? escapeLaTeX(personalInfo.email) : ""}${personalInfo.email && personalInfo.phone ? " \\quad $|$ \\quad " : ""}${personalInfo.phone ? escapeLaTeX(personalInfo.phone) : ""}${(personalInfo.email || personalInfo.phone) && personalInfo.location ? " \\quad $|$ \\quad " : ""}${personalInfo.location ? escapeLaTeX(personalInfo.location) : ""}\\\\[0.3cm]
+\\end{center}
+
+`;
 
     // Professional Summary
     if (personalInfo.summary) {
-      pdf.setFontSize(11);
-      pdf.setFont("helvetica", "bold");
-      pdf.text("PROFESSIONAL SUMMARY", margin, yPosition);
-      yPosition += 5;
+      latex += `\\section{Professional Summary}
+${escapeLaTeX(personalInfo.summary)}
 
-      pdf.setFontSize(10);
-      pdf.setFont("helvetica", "normal");
-      addMultilineText(personalInfo.summary, margin, contentWidth, {
-        maxHeight: 4,
-      });
-      yPosition += 4;
+`;
     }
 
     // Experience
     if (experience.length > 0) {
-      if (yPosition > pageHeight - 20) {
-        pdf.addPage();
-        yPosition = 15;
-      }
-      pdf.setFontSize(11);
-      pdf.setFont("helvetica", "bold");
-      pdf.text("EXPERIENCE", margin, yPosition);
-      yPosition += 5;
+      latex += `\\section{Experience}
 
+`;
       for (const exp of experience) {
-        if (yPosition > pageHeight - 15) {
-          pdf.addPage();
-          yPosition = 15;
-        }
-
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "bold");
-        pdf.text(`${exp.position} | ${exp.company}`, margin, yPosition);
-        yPosition += 4;
-
-        pdf.setFontSize(9);
-        pdf.setFont("helvetica", "italic");
-        pdf.setTextColor(100, 100, 100);
-        pdf.text(
-          `${exp.startDate} - ${exp.current ? "Present" : exp.endDate || ""}`,
-          margin,
-          yPosition,
-        );
-        yPosition += 4;
-
-        pdf.setTextColor(0, 0, 0);
-        pdf.setFont("helvetica", "normal");
+        const dateRange = `${exp.startDate} - ${exp.current ? "Present" : exp.endDate || ""}`;
+        latex += `\\textbf{${escapeLaTeX(exp.position)}} \\hfill \\textit{${escapeLaTeX(dateRange)}}\\\\
+\\textit{${escapeLaTeX(exp.company)}}\\\\[0.1cm]
+`;
 
         if (exp.description) {
-          addMultilineText(exp.description, margin, contentWidth, {
-            maxHeight: 4,
-          });
-          yPosition += 2;
+          latex += `${escapeLaTeX(exp.description)}\\\\[0.1cm]
+`;
         }
 
         if (exp.highlights && exp.highlights.length > 0) {
+          latex += `\\resumeItemListStart
+`;
           for (const highlight of exp.highlights) {
-            pdf.setFontSize(9);
-            addMultilineText(`• ${highlight}`, margin + 3, contentWidth - 3, {
-              maxHeight: 4,
-            });
+            latex += `\\resumeItem{${escapeLaTeX(highlight)}}
+`;
           }
-          yPosition += 2;
+          latex += `\\resumeItemListEnd
+`;
         }
+        latex += `\\vspace{0.2cm}
+
+`;
       }
     }
 
     // Education
     if (education.length > 0) {
-      if (yPosition > pageHeight - 20) {
-        pdf.addPage();
-        yPosition = 15;
-      }
-      pdf.setFontSize(11);
-      pdf.setFont("helvetica", "bold");
-      pdf.setTextColor(0, 0, 0);
-      pdf.text("EDUCATION", margin, yPosition);
-      yPosition += 5;
+      latex += `\\section{Education}
 
+`;
       for (const edu of education) {
-        if (yPosition > pageHeight - 12) {
-          pdf.addPage();
-          yPosition = 15;
+        const dateInfo = edu.endDate || (edu.current ? "Present" : "");
+        latex += `\\textbf{${escapeLaTeX(edu.degree)}}${edu.field ? ` in ${escapeLaTeX(edu.field)}` : ""} \\hfill \\textit{${escapeLaTeX(dateInfo)}}\\\\
+\\textit{${escapeLaTeX(edu.institution)}}`;
+        
+        if (edu.gpa) {
+          latex += ` \\quad GPA: ${escapeLaTeX(edu.gpa)}`;
         }
-
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "bold");
-        pdf.text(`${edu.degree} | ${edu.institution}`, margin, yPosition);
-        yPosition += 4;
-
-        if (edu.endDate || edu.gpa) {
-          const details: string[] = [];
-          if (edu.endDate) details.push(edu.endDate);
-          if (edu.gpa) details.push(`GPA: ${edu.gpa}`);
-
-          pdf.setFontSize(9);
-          pdf.setFont("helvetica", "normal");
-          pdf.setTextColor(100, 100, 100);
-          pdf.text(details.join(" | "), margin, yPosition);
-          yPosition += 4;
-          pdf.setTextColor(0, 0, 0);
+        
+        if (edu.honors && edu.honors.length > 0) {
+          latex += ` \\quad Honors: ${edu.honors.map(h => escapeLaTeX(h)).join(", ")}`;
         }
+        
+        latex += `\\vspace{0.1cm}
+
+`;
       }
     }
 
     // Skills
     const skillCategories = [
-      { name: "Technical", items: skills.technical },
+      { name: "Technical Skills", items: skills.technical },
       { name: "Languages", items: skills.languages },
       { name: "Tools", items: skills.tools },
       { name: "Soft Skills", items: skills.soft },
     ].filter((cat) => cat.items.length > 0);
 
     if (skillCategories.length > 0) {
-      if (yPosition > pageHeight - 15) {
-        pdf.addPage();
-        yPosition = 15;
-      }
-      pdf.setFontSize(11);
-      pdf.setFont("helvetica", "bold");
-      pdf.text("SKILLS", margin, yPosition);
-      yPosition += 5;
+      latex += `\\section{Skills}
 
+`;
       for (const skillCategory of skillCategories) {
-        if (yPosition > pageHeight - 10) {
-          pdf.addPage();
-          yPosition = 15;
-        }
-
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "bold");
-        pdf.text(`${skillCategory.name}:`, margin, yPosition);
-
-        pdf.setFont("helvetica", "normal");
-        yPosition += 4;
-        addMultilineText(
-          skillCategory.items.join(", "),
-          margin + 3,
-          contentWidth - 3,
-          { maxHeight: 4 },
-        );
-        yPosition += 2;
+        latex += `\\textbf{${escapeLaTeX(skillCategory.name)}:} ${skillCategory.items.map(s => escapeLaTeX(s)).join(", ")}\\\\[0.1cm]
+`;
       }
+      latex += `
+`;
     }
 
     // Certifications
     if (certifications.length > 0) {
-      if (yPosition > pageHeight - 15) {
-        pdf.addPage();
-        yPosition = 15;
-      }
-      pdf.setFontSize(11);
-      pdf.setFont("helvetica", "bold");
-      pdf.text("CERTIFICATIONS", margin, yPosition);
-      yPosition += 5;
+      latex += `\\section{Certifications}
 
+`;
       for (const cert of certifications) {
-        if (yPosition > pageHeight - 10) {
-          pdf.addPage();
-          yPosition = 15;
+        latex += `\\textbf{${escapeLaTeX(cert.name)}}`;
+        if (cert.issuer) {
+          latex += ` - ${escapeLaTeX(cert.issuer)}`;
         }
+        if (cert.date) {
+          latex += ` (${escapeLaTeX(cert.date)})`;
+        }
+        if (cert.credentialId) {
+          latex += ` \\quad Credential ID: ${escapeLaTeX(cert.credentialId)}`;
+        }
+        if (cert.url) {
+          latex += ` \\quad \\href{${cert.url}}{Link}`;
+        }
+        latex += `\\vspace{0.1cm}
 
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "normal");
-        const certText = `• ${cert.name} - ${cert.issuer}${cert.date ? ` (${cert.date})` : ""}`;
-        addMultilineText(certText, margin + 2, contentWidth - 2, {
-          maxHeight: 4,
-        });
-        yPosition += 2;
+`;
       }
     }
 
     // Links
     if (links.length > 0) {
-      if (yPosition > pageHeight - 15) {
-        pdf.addPage();
-        yPosition = 15;
-      }
-      pdf.setFontSize(11);
-      pdf.setFont("helvetica", "bold");
-      pdf.text("LINKS", margin, yPosition);
-      yPosition += 5;
+      latex += `\\section{Links}
 
+`;
       for (const link of links) {
-        if (yPosition > pageHeight - 10) {
-          pdf.addPage();
-          yPosition = 15;
+        latex += `\\href{${link.url}}{${escapeLaTeX(link.label)}}`;
+        if (link.type) {
+          latex += ` \\quad (${escapeLaTeX(link.type)})`;
         }
+        latex += `\\vspace{0.1cm}
 
-        pdf.setFontSize(10);
-        pdf.setFont("helvetica", "normal");
-        const linkText = `• ${link.label}: ${link.url}`;
-        addMultilineText(linkText, margin + 2, contentWidth - 2, {
-          maxHeight: 4,
-        });
-        yPosition += 2;
+`;
       }
     }
 
-    // Save the PDF
-    pdf.save(`${sanitizeFilename(resume.title)}.pdf`);
+    latex += `\\end{document}
+`;
+
+    // Save the LaTeX file with filename prompt
+    const filename = getFinalFilename(resume, "tex");
+    if (filename) {
+      const blob = new Blob([latex], { type: "text/plain;charset=utf-8" });
+      saveAs(blob, filename);
+    }
   } catch (error) {
-    console.error("Error generating PDF:", error);
-    throw new Error("Failed to generate PDF. Please try again.");
+    console.error("Error generating LaTeX:", error);
+    throw new Error("Failed to generate LaTeX. Please try again.");
+  }
+}
+
+
+/**
+ * Generate PDF from rendered template using html2canvas and jsPDF
+ * This preserves the exact visual appearance of the rendered template
+ */
+async function generatePDFFromRenderedTemplate(
+  resume: Resume,
+): Promise<void> {
+  // Wait a bit for DOM to be ready
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  const resumeElement = document.querySelector(".resume-light-mode");
+  if (!resumeElement) {
+    throw new Error(
+      "Resume preview not found. Please ensure you're viewing the resume preview before exporting.",
+    );
+  }
+
+  // Prepare element for export
+  const clonedElement = prepareResumeElementForExport();
+  if (!clonedElement) {
+    throw new Error("Failed to prepare resume element for export.");
+  }
+
+  // Temporarily add to DOM for rendering (hidden but visible to html2canvas)
+  const container = document.createElement("div");
+  container.style.position = "fixed";
+  container.style.left = "-9999px";
+  container.style.top = "0";
+  container.style.width = `${resumeElement.clientWidth}px`;
+  container.style.backgroundColor = "#ffffff";
+  container.appendChild(clonedElement);
+  document.body.appendChild(container);
+
+  // Wait for element to render
+  await new Promise((resolve) => setTimeout(resolve, 200));
+
+  try {
+    // Convert to canvas
+    const canvas = await html2canvas(clonedElement, {
+      scale: 2, // Higher quality
+      useCORS: true,
+      logging: false,
+      backgroundColor: "#ffffff",
+      width: clonedElement.scrollWidth,
+      height: clonedElement.scrollHeight,
+    });
+
+    if (!canvas || canvas.width === 0 || canvas.height === 0) {
+      throw new Error("Failed to capture resume content. Canvas is empty.");
+    }
+
+    // Create PDF
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    const imgData = canvas.toDataURL("image/png", 1.0);
+    if (!imgData || imgData === "data:,") {
+      throw new Error("Failed to convert canvas to image.");
+    }
+
+    const imgWidth = 210; // A4 width in mm
+    const pageHeight = 297; // A4 height in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    // Add first page
+    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    // Add additional pages if needed
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    // Save PDF with filename prompt
+    const filename = getFinalFilename(resume, "pdf");
+    if (filename) {
+      pdf.save(filename);
+    }
+  } catch (error) {
+    console.error("Error in PDF generation:", error);
+    throw error;
+  } finally {
+    // Clean up
+    if (document.body.contains(container)) {
+      document.body.removeChild(container);
+    }
   }
 }
 
 /**
- * Alternative PDF export that captures the styled resume template from the DOM
- * This preserves the template design, colors, and formatting
+ * Generate LaTeX code from resume data
+ * This creates LaTeX that matches the resume structure
  */
-export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
-  try {
-    // Find the resume preview element in the DOM
-    const resumeElement = document.querySelector(".resume-light-mode");
+function generateLaTeXCode(resume: Resume): string {
+  const {
+    personalInfo,
+    experience,
+    education,
+    skills,
+    certifications,
+    links,
+  } = resume.content;
 
-    if (!resumeElement) {
-      throw new Error(
-        "Resume preview not found. Please ensure the resume is displayed on the page.",
-      );
-    }
+  let latex = `\\documentclass[11pt,a4paper]{article}
+\\usepackage[utf8]{inputenc}
+\\usepackage[T1]{fontenc}
+\\usepackage[margin=0.75in]{geometry}
+\\usepackage{enumitem}
+\\usepackage{titlesec}
+\\usepackage{xcolor}
+\\usepackage{hyperref}
 
-    // Clone the element to avoid modifying the original
-    const clonedElement = resumeElement.cloneNode(true) as HTMLElement;
+% Configure hyperlinks
+\\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=black
+}
 
-    // Create a temporary container off-screen
-    const container = document.createElement("div");
-    container.style.position = "fixed";
-    container.style.left = "-9999px";
-    container.style.top = "-9999px";
-    container.style.width = "210mm";
-    container.style.background = "#FFFFFF";
-    container.appendChild(clonedElement);
-    document.body.appendChild(container);
+% Remove page numbers
+\\pagestyle{empty}
 
-    try {
-      // Remove any interactive elements that shouldn't be in PDF
-      const interactiveElements = clonedElement.querySelectorAll(
-        "button, [role='button'], .no-print, .print\\:hidden, .export-controls, [data-no-print]",
-      );
-      interactiveElements.forEach((el) => el.remove());
+% Section formatting
+\\titleformat{\\section}
+  {\\Large\\bfseries\\uppercase}
+  {}
+  {0em}
+  {}
+  [\\titlerule[0.5pt]]
 
-      // Inject comprehensive style override FIRST to convert CSS variables and prevent oklch
-      const styleOverride = document.createElement("style");
-      styleOverride.id = "pdf-export-oklch-override";
-      styleOverride.textContent = `
-        /* Override all CSS variables with RGB equivalents */
-        .resume-light-mode,
-        .resume-light-mode * {
-          --background: #ffffff !important;
-          --foreground: #252525 !important;
-          --card: #ffffff !important;
-          --card-foreground: #252525 !important;
-          --popover: #ffffff !important;
-          --popover-foreground: #252525 !important;
-          --primary: #3a3a3a !important;
-          --primary-foreground: #fafafa !important;
-          --secondary: #f5f5f5 !important;
-          --secondary-foreground: #3a3a3a !important;
-          --muted: #f5f5f5 !important;
-          --muted-foreground: #737373 !important;
-          --accent: #f5f5f5 !important;
-          --accent-foreground: #3a3a3a !important;
-          --destructive: #dc2626 !important;
-          --border: #e5e5e5 !important;
-          --input: #e5e5e5 !important;
-          --ring: #a3a3a3 !important;
-        }
-      `;
-      container.insertBefore(styleOverride, container.firstChild);
+\\titlespacing*{\\section}{0pt}{12pt}{6pt}
 
-      // Fix oklch colors by converting computed styles to inline RGB styles
-      const fixOklchColors = (element: HTMLElement) => {
-        // Helper to convert any color (including oklch) to RGB
-        const colorToRGB = (colorStr: string, isBackground = false): string => {
-          if (!colorStr || colorStr === "transparent" || colorStr === "none") {
-            return colorStr;
-          }
+% Custom commands
+\\newcommand{\\resumeItem}[1]{\\item\\small{#1}}
+\\newcommand{\\resumeItemListStart}{\\begin{itemize}[leftmargin=0.15in, labelsep=0.05in]}
+\\newcommand{\\resumeItemListEnd}{\\end{itemize}}
 
-          // If it's already rgb/rgba, return as-is
-          if (colorStr.startsWith("rgb")) {
-            return colorStr;
-          }
+% Document begins
+\\begin{document}
 
-          // If it's hex, return as-is
-          if (colorStr.startsWith("#")) {
-            return colorStr;
-          }
+% Header
+\\begin{center}
+    {\\Huge\\bfseries ${escapeLaTeX(personalInfo.name || "")}}\\\\[0.5cm]
+    \\small
+    ${personalInfo.email ? escapeLaTeX(personalInfo.email) : ""}${personalInfo.email && personalInfo.phone ? " \\quad $|$ \\quad " : ""}${personalInfo.phone ? escapeLaTeX(personalInfo.phone) : ""}${(personalInfo.email || personalInfo.phone) && personalInfo.location ? " \\quad $|$ \\quad " : ""}${personalInfo.location ? escapeLaTeX(personalInfo.location) : ""}\\\\[0.3cm]
+\\end{center}
 
-          // If it contains oklch, we need to convert it
-          const lowerColorStr = colorStr.toLowerCase();
-          if (lowerColorStr.includes("oklch")) {
-            try {
-              // Create a temporary element to get computed RGB value
-              const tempEl = document.createElement("div");
-              tempEl.style.position = "absolute";
-              tempEl.style.visibility = "hidden";
-              tempEl.style.top = "-9999px";
-              tempEl.style.left = "-9999px";
+`;
 
-              // Set the color property based on context
-              if (isBackground) {
-                tempEl.style.backgroundColor = colorStr;
-              } else {
-                tempEl.style.color = colorStr;
-              }
+  // Professional Summary
+  if (personalInfo.summary) {
+    latex += `\\section{Professional Summary}
+${escapeLaTeX(personalInfo.summary)}
 
-              document.body.appendChild(tempEl);
+`;
+  }
 
-              // Force a reflow to ensure styles are computed
-              void tempEl.offsetHeight;
+  // Experience
+  if (experience.length > 0) {
+    latex += `\\section{Experience}
 
-              const computed = window.getComputedStyle(tempEl);
-              const rgbColor = isBackground
-                ? computed.backgroundColor
-                : computed.color;
+`;
+    for (const exp of experience) {
+      const dateRange = `${exp.startDate} - ${exp.current ? "Present" : exp.endDate || ""}`;
+      latex += `\\textbf{${escapeLaTeX(exp.position)}} \\hfill \\textit{${escapeLaTeX(dateRange)}}\\\\
+\\textit{${escapeLaTeX(exp.company)}}\\\\[0.1cm]
+`;
 
-              document.body.removeChild(tempEl);
-
-              // If conversion failed or still contains oklch, use fallback
-              if (
-                !rgbColor ||
-                rgbColor.toLowerCase().includes("oklch") ||
-                rgbColor === colorStr
-              ) {
-                return isBackground ? "#ffffff" : "#000000";
-              }
-
-              // Ensure it's in rgb format
-              if (!rgbColor.startsWith("rgb") && !rgbColor.startsWith("#")) {
-                return isBackground ? "#ffffff" : "#000000";
-              }
-
-              return rgbColor;
-            } catch (e) {
-              // Fallback based on context
-              return isBackground ? "#ffffff" : "#000000";
-            }
-          }
-
-          // For other color formats, try to convert via computed style
-          try {
-            const tempEl = document.createElement("div");
-            tempEl.style.position = "absolute";
-            tempEl.style.visibility = "hidden";
-            tempEl.style.top = "-9999px";
-            tempEl.style.left = "-9999px";
-
-            if (isBackground) {
-              tempEl.style.backgroundColor = colorStr;
-            } else {
-              tempEl.style.color = colorStr;
-            }
-
-            document.body.appendChild(tempEl);
-            void tempEl.offsetHeight; // Force reflow
-
-            const computed = window.getComputedStyle(tempEl);
-            const rgbColor = isBackground
-              ? computed.backgroundColor
-              : computed.color;
-
-            document.body.removeChild(tempEl);
-
-            // Only return if it's a valid RGB format
-            if (
-              rgbColor &&
-              (rgbColor.startsWith("rgb") || rgbColor.startsWith("#"))
-            ) {
-              return rgbColor;
-            }
-
-            return colorStr;
-          } catch (e) {
-            return colorStr;
-          }
-        };
-
-        // Process all elements including the root
-        const allElements = [
-          element,
-          ...Array.from(element.querySelectorAll("*")),
-        ];
-
-        allElements.forEach((el) => {
-          const htmlEl = el as HTMLElement;
-          if (!htmlEl || !htmlEl.style) return;
-
-          const computed = window.getComputedStyle(htmlEl);
-
-          // Convert all color-related properties
-          const colorProperties = [
-            {
-              prop: "backgroundColor",
-              styleProp: "backgroundColor",
-              isBackground: true,
-            },
-            { prop: "color", styleProp: "color", isBackground: false },
-            {
-              prop: "borderColor",
-              styleProp: "borderColor",
-              isBackground: false,
-            },
-            {
-              prop: "borderTopColor",
-              styleProp: "borderTopColor",
-              isBackground: false,
-            },
-            {
-              prop: "borderRightColor",
-              styleProp: "borderRightColor",
-              isBackground: false,
-            },
-            {
-              prop: "borderBottomColor",
-              styleProp: "borderBottomColor",
-              isBackground: false,
-            },
-            {
-              prop: "borderLeftColor",
-              styleProp: "borderLeftColor",
-              isBackground: false,
-            },
-            {
-              prop: "outlineColor",
-              styleProp: "outlineColor",
-              isBackground: false,
-            },
-            {
-              prop: "textDecorationColor",
-              styleProp: "textDecorationColor",
-              isBackground: false,
-            },
-            {
-              prop: "columnRuleColor",
-              styleProp: "columnRuleColor",
-              isBackground: false,
-            },
-          ];
-
-          colorProperties.forEach(({ prop, styleProp, isBackground }) => {
-            const value = computed.getPropertyValue(prop);
-            if (
-              value &&
-              value.trim() &&
-              value !== "transparent" &&
-              value !== "none"
-            ) {
-              // Check if value contains oklch or is a CSS variable
-              const lowerValue = value.toLowerCase();
-              if (
-                lowerValue.includes("oklch") ||
-                lowerValue.includes("var(--")
-              ) {
-                const safeColor = colorToRGB(value, isBackground);
-                if (
-                  safeColor &&
-                  safeColor !== value &&
-                  !safeColor.toLowerCase().includes("oklch")
-                ) {
-                  htmlEl.style.setProperty(styleProp, safeColor, "important");
-                }
-              }
-            }
-          });
-
-          // Also check for CSS variables in inline styles that might resolve to oklch
-          const inlineStyle = htmlEl.getAttribute("style") || "";
-          if (inlineStyle.includes("var(--")) {
-            // Get all CSS custom properties used in inline styles
-            const cssVars = inlineStyle.match(/var\(--[^)]+\)/g);
-            if (cssVars) {
-              cssVars.forEach((cssVar) => {
-                try {
-                  // Get computed value of the CSS variable
-                  const varName = cssVar.replace(/var\(|\)/g, "").trim();
-                  const computedValue = computed.getPropertyValue(varName);
-
-                  if (
-                    computedValue &&
-                    computedValue.toLowerCase().includes("oklch")
-                  ) {
-                    // Determine if this is a background or foreground color
-                    const isBg =
-                      varName.includes("background") ||
-                      varName.includes("card") ||
-                      varName.includes("popover") ||
-                      varName.includes("muted") ||
-                      varName.includes("accent") ||
-                      varName.includes("secondary");
-
-                    // Convert and replace in inline style
-                    const safeColor = colorToRGB(computedValue, isBg);
-                    if (
-                      safeColor &&
-                      !safeColor.toLowerCase().includes("oklch")
-                    ) {
-                      htmlEl.style.cssText = htmlEl.style.cssText.replace(
-                        new RegExp(
-                          cssVar.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-                          "g",
-                        ),
-                        safeColor,
-                      );
-                    }
-                  }
-                } catch (e) {
-                  // Ignore errors in CSS variable processing
-                }
-              });
-            }
-          }
-
-          // Copy other important styles including flex properties
-          const propertiesToCopy = [
-            "fontSize",
-            "fontWeight",
-            "fontFamily",
-            "fontStyle",
-            "lineHeight",
-            "textAlign",
-            "textDecoration",
-            "padding",
-            "margin",
-            "border",
-            "borderRadius",
-            "display",
-            "width",
-            "height",
-            "maxWidth",
-            "minWidth",
-            "alignItems",
-            "justifyContent",
-            "flexDirection",
-            "flexWrap",
-            "gap",
-            "verticalAlign",
-            "flexShrink",
-            "flex",
-          ];
-
-          propertiesToCopy.forEach((prop) => {
-            const value = computed.getPropertyValue(prop);
-            if (value && value.trim() && value !== "auto") {
-              htmlEl.style.setProperty(prop, value, "important");
-            }
-          });
-        });
-      };
-
-      fixOklchColors(clonedElement);
-
-      // Wait a bit for styles to apply
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Capture the resume element as canvas with html2canvas
-      const canvas = await html2canvas(clonedElement, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#FFFFFF",
-        logging: false,
-        imageTimeout: 10000,
-        windowHeight: clonedElement.scrollHeight,
-        windowWidth: 800,
-        onclone: (clonedDoc, element) => {
-          // Inject style override in cloned document's head
-          const head = clonedDoc.head || clonedDoc.createElement("head");
-          if (!clonedDoc.head) {
-            clonedDoc.documentElement.insertBefore(
-              head,
-              clonedDoc.documentElement.firstChild,
-            );
-          }
-
-          const overrideStyle = clonedDoc.createElement("style");
-          overrideStyle.id = "oklch-override-clone";
-          overrideStyle.textContent = `
-            * {
-              --background: #ffffff !important;
-              --foreground: #252525 !important;
-              --card: #ffffff !important;
-              --card-foreground: #252525 !important;
-              --popover: #ffffff !important;
-              --popover-foreground: #252525 !important;
-              --primary: #3a3a3a !important;
-              --primary-foreground: #fafafa !important;
-              --secondary: #f5f5f5 !important;
-              --secondary-foreground: #3a3a3a !important;
-              --muted: #f5f5f5 !important;
-              --muted-foreground: #737373 !important;
-              --accent: #f5f5f5 !important;
-              --accent-foreground: #3a3a3a !important;
-              --destructive: #dc2626 !important;
-              --border: #e5e5e5 !important;
-              --input: #e5e5e5 !important;
-              --ring: #a3a3a3 !important;
-            }
-            svg {
-              vertical-align: middle !important;
-              display: inline-block !important;
-            }
-            /* Fix flex containers that contain SVG icons */
-            [class*="flex"][class*="items-center"] {
-              align-items: center !important;
-            }
-            [class*="flex"][class*="items-center"] svg {
-              vertical-align: middle !important;
-              align-self: center !important;
-            }
-          `;
-          head.appendChild(overrideStyle);
-
-          // Remove or override any stylesheets that might contain oklch
-          try {
-            const styleSheets = Array.from(clonedDoc.styleSheets);
-            styleSheets.forEach((sheet) => {
-              try {
-                const rules = Array.from(sheet.cssRules || []);
-                rules.forEach((rule) => {
-                  if (rule instanceof CSSStyleRule) {
-                    const style = rule.style;
-                    // Convert any oklch colors in the rule
-                    for (let i = 0; i < style.length; i++) {
-                      const prop = style[i];
-                      const value = style.getPropertyValue(prop);
-                      if (value && value.toLowerCase().includes("oklch")) {
-                        // Fallback immediately - don't try to compute as it may fail
-                        const fallback =
-                          prop.includes("background") || prop.includes("bg")
-                            ? "#ffffff"
-                            : "#000000";
-                        style.setProperty(prop, fallback, "important");
-                      }
-                    }
-                  }
-                });
-              } catch (e) {
-                // Cross-origin or other access issues, ignore
-              }
-            });
-          } catch (e) {
-            // Ignore stylesheet access errors
-          }
-
-          // Process all elements in the cloned document
-          const allElements = clonedDoc.querySelectorAll("*");
-          allElements.forEach((el) => {
-            const htmlEl = el as HTMLElement;
-            if (!htmlEl || !htmlEl.style) return;
-
-            const computed = clonedDoc.defaultView?.getComputedStyle(htmlEl);
-            if (!computed) return;
-
-            // Ensure absolutely positioned elements are visible (for timeline elements)
-            const position = computed.getPropertyValue("position");
-            if (position === "absolute") {
-              const visibility = computed.getPropertyValue("visibility");
-              const display = computed.getPropertyValue("display");
-              if (visibility === "hidden" || display === "none") {
-                htmlEl.style.setProperty("visibility", "visible", "important");
-                htmlEl.style.setProperty("display", "block", "important");
-              }
-              // Ensure z-index is set for proper layering
-              const zIndex = computed.getPropertyValue("z-index");
-              if (!zIndex || zIndex === "auto") {
-                htmlEl.style.setProperty("z-index", "1", "important");
-              }
-            }
-
-            // Fix flex containers to ensure proper alignment
-            const display = computed.getPropertyValue("display");
-            if (display === "flex" || display === "inline-flex") {
-              const alignItems = computed.getPropertyValue("align-items");
-              // Force center alignment for flex containers to prevent shifting
-              if (
-                !alignItems ||
-                alignItems === "normal" ||
-                alignItems === "stretch"
-              ) {
-                htmlEl.style.setProperty("align-items", "center", "important");
-              }
-              // Ensure flex items align properly
-              htmlEl.style.setProperty("align-items", "center", "important");
-            }
-
-            // Fix SVG icon alignment - html2canvas has issues with SVG alignment
-            if (htmlEl.tagName === "svg") {
-              const svgEl = htmlEl as SVGElement;
-              svgEl.style.setProperty("vertical-align", "middle", "important");
-              svgEl.style.setProperty("display", "inline-block", "important");
-              // Ensure parent container aligns properly
-              if (htmlEl.parentElement) {
-                const parentComputed = clonedDoc.defaultView?.getComputedStyle(
-                  htmlEl.parentElement,
-                );
-                if (parentComputed) {
-                  const parentDisplay =
-                    parentComputed.getPropertyValue("display");
-                  if (
-                    parentDisplay === "flex" ||
-                    parentDisplay === "inline-flex"
-                  ) {
-                    htmlEl.parentElement.style.setProperty(
-                      "align-items",
-                      "center",
-                      "important",
-                    );
-                  }
-                }
-              }
-            }
-
-            // Fix elements containing SVG (like icon wrappers)
-            if (htmlEl.querySelector("svg")) {
-              const svg = htmlEl.querySelector("svg") as SVGElement;
-              if (svg) {
-                svg.style.setProperty("vertical-align", "middle", "important");
-                svg.style.setProperty("display", "inline-block", "important");
-                // Match line-height with parent or siblings
-                const parentLineHeight =
-                  computed.getPropertyValue("line-height");
-                if (parentLineHeight && parentLineHeight !== "normal") {
-                  svg.style.setProperty(
-                    "line-height",
-                    parentLineHeight,
-                    "important",
-                  );
-                }
-                // Ensure the wrapper aligns properly
-                if (display === "flex" || display === "inline-flex") {
-                  htmlEl.style.setProperty(
-                    "align-items",
-                    "center",
-                    "important",
-                  );
-                  // Ensure all children have matching line-height
-                  const children = Array.from(htmlEl.children);
-                  children.forEach((child) => {
-                    const childEl = child as HTMLElement;
-                    if (childEl.style) {
-                      const childLineHeight = clonedDoc.defaultView
-                        ?.getComputedStyle(childEl)
-                        .getPropertyValue("line-height");
-                      if (!childLineHeight || childLineHeight === "normal") {
-                        const computedLineHeight =
-                          computed.getPropertyValue("line-height");
-                        if (
-                          computedLineHeight &&
-                          computedLineHeight !== "normal"
-                        ) {
-                          childEl.style.setProperty(
-                            "line-height",
-                            computedLineHeight,
-                            "important",
-                          );
-                        }
-                      }
-                    }
-                  });
-                }
-              }
-            }
-
-            // Convert all color properties
-            const colorProps = [
-              "backgroundColor",
-              "color",
-              "borderColor",
-              "borderTopColor",
-              "borderRightColor",
-              "borderBottomColor",
-              "borderLeftColor",
-              "outlineColor",
-            ];
-
-            colorProps.forEach((prop) => {
-              const value = computed.getPropertyValue(prop);
-              if (value && value.toLowerCase().includes("oklch")) {
-                // Use fallback
-                const fallback =
-                  prop.includes("background") || prop.includes("bg")
-                    ? "#ffffff"
-                    : "#000000";
-                htmlEl.style.setProperty(prop, fallback, "important");
-              }
-            });
-          });
-        },
-      });
-
-      // Create PDF from canvas
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const imgWidth = 210; // A4 width in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      // Add first page
-      pdf.addImage(
-        canvas.toDataURL("image/png"),
-        "PNG",
-        0,
-        position,
-        imgWidth,
-        imgHeight,
-      );
-      heightLeft -= 297; // A4 height in mm
-
-      // Add additional pages if content is longer than one page
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(
-          canvas.toDataURL("image/png"),
-          "PNG",
-          0,
-          position,
-          imgWidth,
-          imgHeight,
-        );
-        heightLeft -= 297;
+      if (exp.description) {
+        latex += `${escapeLaTeX(exp.description)}\\\\[0.1cm]
+`;
       }
 
-      // Save the PDF
-      pdf.save(`${sanitizeFilename(resume.title)}.pdf`);
-    } finally {
-      // Clean up temporary container
-      document.body.removeChild(container);
+      if (exp.highlights && exp.highlights.length > 0) {
+        latex += `\\resumeItemListStart
+`;
+        for (const highlight of exp.highlights) {
+          latex += `\\resumeItem{${escapeLaTeX(highlight)}}
+`;
+        }
+        latex += `\\resumeItemListEnd
+`;
+      }
+      latex += `\\vspace{0.2cm}
+
+`;
     }
-  } catch (error) {
-    console.error("Error generating PDF:", error);
-    throw new Error("Failed to generate PDF. Please try again.");
   }
+
+  // Education
+  if (education.length > 0) {
+    latex += `\\section{Education}
+
+`;
+    for (const edu of education) {
+      const dateInfo = edu.endDate || (edu.current ? "Present" : "");
+      latex += `\\textbf{${escapeLaTeX(edu.degree)}}${edu.field ? ` in ${escapeLaTeX(edu.field)}` : ""} \\hfill \\textit{${escapeLaTeX(dateInfo)}}\\\\
+\\textit{${escapeLaTeX(edu.institution)}}`;
+      
+      if (edu.gpa) {
+        latex += ` \\quad GPA: ${escapeLaTeX(edu.gpa)}`;
+      }
+      
+      if (edu.honors && edu.honors.length > 0) {
+        latex += ` \\quad Honors: ${edu.honors.map(h => escapeLaTeX(h)).join(", ")}`;
+      }
+      
+      latex += `\\vspace{0.1cm}
+
+`;
+    }
+  }
+
+  // Skills
+  const skillCategories = [
+    { name: "Technical Skills", items: skills.technical },
+    { name: "Languages", items: skills.languages },
+    { name: "Tools", items: skills.tools },
+    { name: "Soft Skills", items: skills.soft },
+  ].filter((cat) => cat.items.length > 0);
+
+  if (skillCategories.length > 0) {
+    latex += `\\section{Skills}
+
+`;
+    for (const skillCategory of skillCategories) {
+      latex += `\\textbf{${escapeLaTeX(skillCategory.name)}:} ${skillCategory.items.map(s => escapeLaTeX(s)).join(", ")}\\\\[0.1cm]
+`;
+    }
+    latex += `
+`;
+  }
+
+  // Certifications
+  if (certifications.length > 0) {
+    latex += `\\section{Certifications}
+
+`;
+    for (const cert of certifications) {
+      latex += `\\textbf{${escapeLaTeX(cert.name)}}`;
+      if (cert.issuer) {
+        latex += ` - ${escapeLaTeX(cert.issuer)}`;
+      }
+      if (cert.date) {
+        latex += ` (${escapeLaTeX(cert.date)})`;
+      }
+      if (cert.credentialId) {
+        latex += ` \\quad Credential ID: ${escapeLaTeX(cert.credentialId)}`;
+      }
+      if (cert.url) {
+        latex += ` \\quad \\href{${cert.url}}{Link}`;
+      }
+      latex += `\\vspace{0.1cm}
+
+`;
+    }
+  }
+
+  // Links
+  if (links.length > 0) {
+    latex += `\\section{Links}
+
+`;
+    for (const link of links) {
+      latex += `\\href{${link.url}}{${escapeLaTeX(link.label)}}`;
+      if (link.type) {
+        latex += ` \\quad (${escapeLaTeX(link.type)})`;
+      }
+      latex += `\\vspace{0.1cm}
+
+`;
+    }
+  }
+
+  latex += `\\end{document}
+`;
+
+  return latex;
+}
+
+/**
+ * Compile LaTeX code to PDF using LaTeX.Online API
+ * Note: This may fail due to CORS restrictions. Falls back to html2canvas method.
+ */
+async function compileLaTeXToPDF(latexCode: string): Promise<Blob> {
+  // Try LaTeX.Online API with CORS proxy or direct call
+  try {
+    const response = await fetch("https://latexonline.cc/compile", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      body: latexCode,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "Unknown error");
+      throw new Error(`LaTeX compilation failed: ${response.status} ${response.statusText}`);
+    }
+
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/pdf")) {
+      const errorText = await response.text().catch(() => "");
+      throw new Error(`Expected PDF but got ${contentType}`);
+    }
+
+    return await response.blob();
+  } catch (error) {
+    // If it's a network/CORS error, throw a specific error
+    if (error instanceof TypeError && error.message.includes("fetch")) {
+      throw new Error("CORS_ERROR: LaTeX compilation service unavailable");
+    }
+    throw error;
+  }
+}
+
+/**
+ * Export PDF using browser's native print-to-PDF functionality
+ * This is the most reliable way to preserve styles in a web app
+ * All modern browsers support "Save as PDF" in the print dialog
+ */
+export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
+  // Generate filename with prompt if enabled
+  const settings = useSettingsStore.getState().settings;
+  let suggestedFilename: string;
+  
+  if (settings.promptExportFilename) {
+    const filename = getFinalFilename(resume, "pdf");
+    if (!filename) {
+      // User cancelled, don't open print dialog
+      return;
+    }
+    // Remove extension for document title
+    suggestedFilename = filename.replace(/\.pdf$/i, "");
+  } else {
+    suggestedFilename = generateDefaultFilename(resume, "pdf").replace(/\.pdf$/i, "");
+  }
+
+  // Set page title for PDF filename suggestion
+  const originalTitle = document.title;
+  document.title = suggestedFilename;
+
+  // Add print-optimized class to resume
+  const resumeElement = document.querySelector(".resume-light-mode");
+  if (resumeElement) {
+    resumeElement.classList.add("print-optimized");
+  }
+
+  // Trigger print dialog
+  // User can save as PDF using browser's built-in functionality
+  window.print();
+
+  // Restore original title after print
+  setTimeout(() => {
+    document.title = originalTitle;
+    if (resumeElement) {
+      resumeElement.classList.remove("print-optimized");
+    }
+  }, 1000);
 }
 
 /**
  * Print the resume using browser's print dialog
  * This creates a PDF through the browser's print-to-PDF functionality
  */
-export function printResume(resumeTitle: string) {
+export function printResume(resume: Resume) {
+  // Generate filename with prompt if enabled
+  const settings = useSettingsStore.getState().settings;
+  let suggestedFilename: string;
+  
+  if (settings.promptExportFilename) {
+    const filename = getFinalFilename(resume, "pdf");
+    if (!filename) {
+      // User cancelled, don't open print dialog
+      return;
+    }
+    // Remove extension for document title
+    suggestedFilename = filename.replace(/\.pdf$/i, "");
+  } else {
+    suggestedFilename = generateDefaultFilename(resume, "pdf").replace(/\.pdf$/i, "");
+  }
+
   // Set page title for PDF filename suggestion
   const originalTitle = document.title;
-  document.title = resumeTitle;
+  document.title = suggestedFilename;
 
   // Trigger print dialog
   window.print();
@@ -959,9 +791,22 @@ export function openPrintPreview() {
 
 /**
  * Download resume as HTML file with embedded styles
+ * Now captures the actual rendered template with all formatting
  */
-export function downloadHTML(resume: Resume, htmlContent: string) {
-  // Add complete HTML structure with styles
+export function downloadHTML(resume: Resume) {
+  // Get the rendered template HTML from the DOM
+  const renderedHTML = getRenderedTemplateHTML();
+
+  if (!renderedHTML) {
+    throw new Error(
+      "Resume preview not found. Please ensure the resume is displayed on the page.",
+    );
+  }
+
+  // Get all stylesheets content
+  const allStyles = collectStyleSheets();
+
+  // Build complete HTML document with embedded styles
   const fullHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -969,34 +814,47 @@ export function downloadHTML(resume: Resume, htmlContent: string) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${resume.title}</title>
   <style>
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      color: #333;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: #f3f4f6;
+      padding: 2rem;
     }
-    h1 { font-size: 28px; margin-bottom: 10px; color: #2563eb; }
-    h2 { font-size: 20px; margin-top: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 5px; }
-    h3 { font-size: 16px; margin: 10px 0 5px; }
-    .contact-info { margin-bottom: 20px; color: #666; }
-    .section { margin-bottom: 25px; }
-    .job, .education-item { margin-bottom: 15px; }
-    .date { color: #666; font-style: italic; }
-    ul { margin: 5px 0; padding-left: 20px; }
+
+    /* Print styles */
     @media print {
-      body { padding: 0; }
+      body {
+        background: white;
+        padding: 0;
+      }
     }
+
+    /* Embedded app styles */
+    ${allStyles}
   </style>
 </head>
 <body>
-  ${htmlContent}
+  <div class="resume-light-mode light">
+    ${renderedHTML}
+  </div>
 </body>
 </html>`;
 
-  const blob = new Blob([fullHTML], { type: "text/html;charset=utf-8" });
-  saveAs(blob, `${sanitizeFilename(resume.title)}.html`);
+  const filename = getFinalFilename(resume, "html");
+  if (filename) {
+    const blob = new Blob([fullHTML], { type: "text/html;charset=utf-8" });
+    saveAs(blob, filename);
+  }
 }
 
 /**
@@ -1233,9 +1091,12 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
     ],
   });
 
-  // Generate and save
-  const blob = await Packer.toBlob(doc);
-  saveAs(blob, `${sanitizeFilename(resume.title)}.docx`);
+  // Generate and save with filename prompt
+  const filename = getFinalFilename(resume, "docx");
+  if (filename) {
+    const blob = await Packer.toBlob(doc);
+    saveAs(blob, filename);
+  }
 }
 
 /**
@@ -1334,8 +1195,11 @@ export function downloadMarkdown(resume: Resume): void {
     }
   }
 
-  const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
-  saveAs(blob, `${sanitizeFilename(resume.title)}.md`);
+  const filename = getFinalFilename(resume, "md");
+  if (filename) {
+    const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+    saveAs(blob, filename);
+  }
 }
 
 /**
@@ -1440,19 +1304,25 @@ export function downloadPlainText(resume: Resume): void {
     }
   }
 
-  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-  saveAs(blob, `${sanitizeFilename(resume.title)}.txt`);
+  const filename = getFinalFilename(resume, "txt");
+  if (filename) {
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    saveAs(blob, filename);
+  }
 }
 
 /**
  * Download resume as JSON file
  */
 export function downloadJSON(resume: Resume): void {
-  const jsonString = JSON.stringify(resume, null, 2);
-  const blob = new Blob([jsonString], {
-    type: "application/json;charset=utf-8",
-  });
-  saveAs(blob, `${sanitizeFilename(resume.title)}.json`);
+  const filename = getFinalFilename(resume, "json");
+  if (filename) {
+    const jsonString = JSON.stringify(resume, null, 2);
+    const blob = new Blob([jsonString], {
+      type: "application/json;charset=utf-8",
+    });
+    saveAs(blob, filename);
+  }
 }
 
 /**
@@ -1460,6 +1330,71 @@ export function downloadJSON(resume: Resume): void {
  */
 function sanitizeFilename(filename: string): string {
   return filename.replace(/[^a-z0-9_-]/gi, "_").replace(/_{2,}/g, "_");
+}
+
+/**
+ * Generate a default filename for export based on resume content
+ * Format: FirstName_LastName_Resume_YYYY-MM-DD or Resume_Title_YYYY-MM-DD
+ */
+export function generateDefaultFilename(resume: Resume, extension: string): string {
+  const today = new Date();
+  const dateStr = today.toISOString().split('T')[0]; // YYYY-MM-DD
+  
+  // Try to use personal name first
+  const personalName = resume.content.personalInfo?.name;
+  if (personalName) {
+    const nameParts = personalName.trim().split(/\s+/);
+    if (nameParts.length >= 2) {
+      // Use first and last name
+      const firstName = nameParts[0];
+      const lastName = nameParts[nameParts.length - 1];
+      return sanitizeFilename(`${firstName}_${lastName}_Resume_${dateStr}.${extension}`);
+    } else if (nameParts.length === 1) {
+      // Use single name
+      return sanitizeFilename(`${nameParts[0]}_Resume_${dateStr}.${extension}`);
+    }
+  }
+  
+  // Fallback to resume title
+  const title = resume.title || "Resume";
+  return sanitizeFilename(`${title}_${dateStr}.${extension}`);
+}
+
+/**
+ * Prompt user for filename with a default value
+ * Returns the filename (without extension) or null if cancelled
+ */
+export function promptForFilename(defaultFilename: string, extension: string): string | null {
+  const filenameWithoutExt = defaultFilename.replace(new RegExp(`\\.${extension}$`), '');
+  
+  const userInput = window.prompt(
+    `Enter filename for your resume (without extension):`,
+    filenameWithoutExt
+  );
+  
+  if (userInput === null) {
+    // User cancelled
+    return null;
+  }
+  
+  // Return sanitized filename with extension
+  const sanitized = sanitizeFilename(userInput || filenameWithoutExt);
+  return sanitized ? `${sanitized}.${extension}` : `${filenameWithoutExt}.${extension}`;
+}
+
+/**
+ * Get the final filename for export, prompting user if setting is enabled
+ * Returns null if user cancels the prompt
+ */
+export function getFinalFilename(resume: Resume, extension: string): string | null {
+  const settings = useSettingsStore.getState().settings;
+  const defaultFilename = generateDefaultFilename(resume, extension);
+  
+  if (settings.promptExportFilename) {
+    return promptForFilename(defaultFilename, extension);
+  }
+  
+  return defaultFilename;
 }
 
 /**

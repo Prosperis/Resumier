@@ -9,6 +9,7 @@ import {
   Printer,
 } from "lucide-react";
 import { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -47,7 +48,7 @@ export function ExportMenu({ resume }: ExportMenuProps) {
   const [isExporting, setIsExporting] = useState(false);
 
   const handlePrint = () => {
-    printResume(resume.title);
+    printResume(resume);
     toast({
       title: "Opening print dialog",
       description: "You can save as PDF using your browser's print dialog",
@@ -58,14 +59,16 @@ export function ExportMenu({ resume }: ExportMenuProps) {
     try {
       await downloadPDFWithTemplate(resume);
       toast({
-        title: "PDF Downloaded",
-        description: `${resume.title}.pdf has been downloaded`,
+        title: "Print Dialog Opened",
+        description: 'Select "Save as PDF" in the print dialog to save your resume with perfect formatting.',
+        duration: 5000,
       });
     } catch (error) {
-      console.error("Error downloading PDF:", error);
+      console.error("Error opening print dialog:", error);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
-        title: "Download Failed",
-        description: "Failed to generate PDF. Please try again.",
+        title: "Print Failed",
+        description: `Failed to open print dialog: ${errorMessage}`,
         variant: "destructive",
       });
     }
@@ -98,7 +101,7 @@ export function ExportMenu({ resume }: ExportMenuProps) {
     {
       id: "pdf",
       label: "PDF",
-      description: "High-quality PDF document",
+      description: "Print to PDF - perfect style preservation",
       icon: FileText,
       handler: handleDownloadPDF,
     },
@@ -114,11 +117,7 @@ export function ExportMenu({ resume }: ExportMenuProps) {
       label: "HTML",
       description: "Web page with styles",
       icon: FileCode,
-      handler: () =>
-        downloadHTML(
-          resume,
-          `<h1>${resume.content.personalInfo.name}</h1><p>Resume content here</p>`,
-        ),
+      handler: () => downloadHTML(resume),
     },
     {
       id: "markdown",
@@ -165,8 +164,18 @@ export function ExportMenu({ resume }: ExportMenuProps) {
               disabled={isExporting}
             >
               <Icon className="mr-2 h-4 w-4" />
-              <div className="flex flex-col">
-                <span>{format.label}</span>
+              <div className="flex flex-col flex-1">
+                <div className="flex items-center gap-2">
+                  <span>{format.label}</span>
+                  {format.id === "pdf" && (
+                    <Badge
+                      variant="outline"
+                      className="text-xs px-1.5 py-0 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20"
+                    >
+                      Recommended
+                    </Badge>
+                  )}
+                </div>
                 <span className="text-muted-foreground text-xs">
                   {format.description}
                 </span>

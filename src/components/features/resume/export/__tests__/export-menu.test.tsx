@@ -12,14 +12,27 @@ vi.mock("@/hooks/use-toast", () => ({
   }),
 }));
 
+// Mock settings store
+vi.mock("@/stores/settings-store", () => ({
+  useSettingsStore: {
+    getState: () => ({
+      settings: {
+        promptExportFilename: false, // Disable prompts in tests
+      },
+    }),
+  },
+}));
+
 // Mock export utils
 vi.mock("@/components/features/resume/export/export-utils", () => ({
   printResume: vi.fn(),
+  downloadLaTeX: vi.fn(),
   downloadDOCX: vi.fn(),
   downloadHTML: vi.fn(),
   downloadMarkdown: vi.fn(),
   downloadPlainText: vi.fn(),
   downloadJSON: vi.fn(),
+  downloadPDFWithTemplate: vi.fn(),
 }));
 
 describe("ExportMenu", () => {
@@ -72,7 +85,7 @@ describe("ExportMenu", () => {
     await user.click(exportButton);
 
     // Check for all format options
-    expect(screen.getByText("PDF")).toBeInTheDocument();
+    expect(screen.getByText("LaTeX")).toBeInTheDocument();
     expect(screen.getByText("Word Document")).toBeInTheDocument();
     expect(screen.getByText("HTML")).toBeInTheDocument();
     expect(screen.getByText("Markdown")).toBeInTheDocument();
@@ -80,15 +93,15 @@ describe("ExportMenu", () => {
     expect(screen.getByText("JSON")).toBeInTheDocument();
   });
 
-  it("should display PDF download option with description", async () => {
+  it("should display LaTeX download option with description", async () => {
     const user = userEvent.setup();
     render(<ExportMenu resume={mockResume} />);
 
     const exportButton = screen.getByRole("button", { name: /export/i });
     await user.click(exportButton);
 
-    expect(screen.getByText("PDF")).toBeInTheDocument();
-    expect(screen.getByText("Via browser print dialog")).toBeInTheDocument();
+    expect(screen.getByText("LaTeX")).toBeInTheDocument();
+    expect(screen.getByText(/compile to pdf/i)).toBeInTheDocument();
   });
 
   it("should display print option", async () => {
@@ -114,22 +127,22 @@ describe("ExportMenu", () => {
     const printOption = screen.getByText("Print");
     await user.click(printOption);
 
-    expect(printResumeSpy).toHaveBeenCalledWith("Software Engineer Resume");
+    expect(printResumeSpy).toHaveBeenCalledWith(mockResume);
   });
 
-  it("should call printResume when download PDF is clicked", async () => {
+  it("should call downloadLaTeX when LaTeX is clicked", async () => {
     const user = userEvent.setup();
-    const printResumeSpy = vi.spyOn(exportUtils, "printResume");
+    const downloadLaTeXSpy = vi.spyOn(exportUtils, "downloadLaTeX");
 
     render(<ExportMenu resume={mockResume} />);
 
     const exportButton = screen.getByRole("button", { name: /export/i });
     await user.click(exportButton);
 
-    const downloadOption = screen.getByText("PDF");
-    await user.click(downloadOption);
+    const latexOption = screen.getByText("LaTeX");
+    await user.click(latexOption);
 
-    expect(printResumeSpy).toHaveBeenCalledWith("Software Engineer Resume");
+    expect(downloadLaTeXSpy).toHaveBeenCalledWith(mockResume);
   });
 
   it("should call downloadDOCX when Word Document is clicked", async () => {

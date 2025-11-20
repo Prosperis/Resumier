@@ -13,7 +13,39 @@ vi.mock("file-saver", () => ({
   saveAs: vi.fn(),
 }));
 
+// Mock settings store
+vi.mock("@/stores/settings-store", () => ({
+  useSettingsStore: {
+    getState: () => ({
+      settings: {
+        promptExportFilename: false, // Disable prompts in tests
+      },
+    }),
+  },
+}));
+
 describe("export-utils", () => {
+  const mockResume: Resume = {
+    id: "1",
+    title: "My Resume",
+    content: {
+      personalInfo: {
+        name: "John Doe",
+        email: "john@example.com",
+        phone: "123-456-7890",
+        location: "New York, NY",
+        summary: "Software Engineer",
+      },
+      experience: [],
+      education: [],
+      skills: { technical: [], soft: [], languages: [], tools: [] },
+      certifications: [],
+      links: [],
+    },
+    createdAt: "2024-01-01",
+    updatedAt: "2024-01-01",
+  };
+
   describe("printResume", () => {
     beforeEach(() => {
       vi.useFakeTimers();
@@ -29,16 +61,17 @@ describe("export-utils", () => {
       const originalTitle = document.title;
       document.title = "Original Title";
 
-      printResume("My Resume");
+      printResume(mockResume);
 
-      expect(document.title).toBe("My Resume");
+      // Title should be set to generated filename without extension
+      expect(document.title).toContain("John_Doe_Resume_");
       expect(window.print).toHaveBeenCalled();
 
       document.title = originalTitle;
     });
 
     it("should call window.print", () => {
-      printResume("Test Resume");
+      printResume(mockResume);
 
       expect(window.print).toHaveBeenCalledTimes(1);
     });
@@ -46,9 +79,10 @@ describe("export-utils", () => {
     it("should restore original title after timeout", () => {
       document.title = "Original Title";
 
-      printResume("My Resume");
+      printResume(mockResume);
 
-      expect(document.title).toBe("My Resume");
+      // Title should be changed temporarily
+      expect(document.title).not.toBe("Original Title");
 
       vi.advanceTimersByTime(1000);
 
@@ -73,10 +107,20 @@ describe("export-utils", () => {
       const fileSaver = await import("file-saver");
       saveAsMock = fileSaver.saveAs as any;
       saveAsMock.mockClear();
+
+      // Mock DOM elements for template extraction
+      const mockResumeElement = document.createElement("div");
+      mockResumeElement.className = "resume-light-mode";
+      mockResumeElement.innerHTML =
+        "<div><h1>John Doe</h1><p>Resume content</p></div>";
+      document.body.appendChild(mockResumeElement);
     });
 
     afterEach(() => {
       vi.restoreAllMocks();
+      // Clean up DOM
+      const elements = document.querySelectorAll(".resume-light-mode");
+      elements.forEach((el) => el.remove());
     });
 
     it("should create a blob with HTML content", () => {
@@ -101,9 +145,7 @@ describe("export-utils", () => {
         updatedAt: "2024-01-01",
       };
 
-      const htmlContent = "<html><body>Resume Content</body></html>";
-
-      downloadHTML(resume, htmlContent);
+      downloadHTML(resume);
 
       expect(saveAsMock).toHaveBeenCalled();
       const blob = saveAsMock.mock.calls[0][0];
@@ -133,11 +175,13 @@ describe("export-utils", () => {
         updatedAt: "2024-01-01",
       };
 
-      downloadHTML(resume, "<html></html>");
+      downloadHTML(resume);
 
       expect(saveAsMock).toHaveBeenCalled();
       const filename = saveAsMock.mock.calls[0][1];
-      expect(filename).toBe("Software_Engineer_Resume.html");
+      // Filename should now include date and use personal name
+      expect(filename).toContain("Jane_Smith_Resume_");
+      expect(filename).toContain(".html");
     });
 
     it("should trigger download using saveAs", () => {
@@ -162,7 +206,7 @@ describe("export-utils", () => {
         updatedAt: "2024-01-01",
       };
 
-      downloadHTML(resume, "<html></html>");
+      downloadHTML(resume);
 
       expect(saveAsMock).toHaveBeenCalledTimes(1);
     });
@@ -189,7 +233,7 @@ describe("export-utils", () => {
         updatedAt: "2024-01-01",
       };
 
-      downloadHTML(resume, "<html></html>");
+      downloadHTML(resume);
 
       expect(saveAsMock).toHaveBeenCalled();
       const blob = saveAsMock.mock.calls[0][0];

@@ -141,6 +141,33 @@ function SettingsComponent() {
           </CardContent>
         </Card>
 
+        {/* Export Settings */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Export Settings</CardTitle>
+            <CardDescription>
+              Customize how your resumes are exported
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="promptExportFilename">Prompt for Filename</Label>
+                <p className="text-sm text-muted-foreground">
+                  Ask for a filename before exporting (includes a smart default)
+                </p>
+              </div>
+              <Switch
+                id="promptExportFilename"
+                checked={settings.promptExportFilename}
+                onCheckedChange={(checked: boolean) =>
+                  updateSettings({ promptExportFilename: checked })
+                }
+              />
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Reset Settings */}
         <Card>
           <CardHeader>
