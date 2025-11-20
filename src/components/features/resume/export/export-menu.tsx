@@ -60,12 +60,14 @@ export function ExportMenu({ resume }: ExportMenuProps) {
       await downloadPDFWithTemplate(resume);
       toast({
         title: "Print Dialog Opened",
-        description: 'Select "Save as PDF" in the print dialog to save your resume with perfect formatting.',
+        description:
+          'Select "Save as PDF" in the print dialog to save your resume with perfect formatting.',
         duration: 5000,
       });
     } catch (error) {
       console.error("Error opening print dialog:", error);
-      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Print Failed",
         description: `Failed to open print dialog: ${errorMessage}`,

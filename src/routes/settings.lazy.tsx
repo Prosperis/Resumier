@@ -152,7 +152,9 @@ function SettingsComponent() {
           <CardContent className="space-y-6">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="promptExportFilename">Prompt for Filename</Label>
+                <Label htmlFor="promptExportFilename">
+                  Prompt for Filename
+                </Label>
                 <p className="text-sm text-muted-foreground">
                   Ask for a filename before exporting (includes a smart default)
                 </p>

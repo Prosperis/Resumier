@@ -103,18 +103,18 @@ function getRenderedTemplateHTML(): string | null {
         htmlEl.style.height = height;
         htmlEl.setAttribute("height", height);
       }
-      
+
       // Preserve viewBox if it exists
       if (htmlEl.hasAttribute("viewBox")) {
         const viewBox = htmlEl.getAttribute("viewBox");
         if (viewBox) htmlEl.setAttribute("viewBox", viewBox);
       }
-      
+
       // Ensure stroke and fill are preserved
       const stroke = computed.stroke;
       const fill = computed.fill;
       const strokeWidth = computed.strokeWidth;
-      
+
       if (stroke && stroke !== "none") htmlEl.style.stroke = stroke;
       if (fill && fill !== "none") htmlEl.style.fill = fill;
       if (strokeWidth) htmlEl.style.strokeWidth = strokeWidth;
@@ -154,17 +154,17 @@ function collectStyleSheets(): string {
  */
 function escapeLaTeX(text: string): string {
   if (!text) return "";
-  
+
   const specialChars: Record<string, string> = {
     "\\": "\\textbackslash{}",
     "{": "\\{",
     "}": "\\}",
-    "$": "\\$",
+    $: "\\$",
     "&": "\\&",
     "%": "\\%",
     "#": "\\#",
     "^": "\\textasciicircum{}",
-    "_": "\\_",
+    _: "\\_",
     "~": "\\textasciitilde{}",
   };
 
@@ -285,15 +285,15 @@ ${escapeLaTeX(personalInfo.summary)}
         const dateInfo = edu.endDate || (edu.current ? "Present" : "");
         latex += `\\textbf{${escapeLaTeX(edu.degree)}}${edu.field ? ` in ${escapeLaTeX(edu.field)}` : ""} \\hfill \\textit{${escapeLaTeX(dateInfo)}}\\\\
 \\textit{${escapeLaTeX(edu.institution)}}`;
-        
+
         if (edu.gpa) {
           latex += ` \\quad GPA: ${escapeLaTeX(edu.gpa)}`;
         }
-        
+
         if (edu.honors && edu.honors.length > 0) {
-          latex += ` \\quad Honors: ${edu.honors.map(h => escapeLaTeX(h)).join(", ")}`;
+          latex += ` \\quad Honors: ${edu.honors.map((h) => escapeLaTeX(h)).join(", ")}`;
         }
-        
+
         latex += `\\vspace{0.1cm}
 
 `;
@@ -313,7 +313,7 @@ ${escapeLaTeX(personalInfo.summary)}
 
 `;
       for (const skillCategory of skillCategories) {
-        latex += `\\textbf{${escapeLaTeX(skillCategory.name)}:} ${skillCategory.items.map(s => escapeLaTeX(s)).join(", ")}\\\\[0.1cm]
+        latex += `\\textbf{${escapeLaTeX(skillCategory.name)}:} ${skillCategory.items.map((s) => escapeLaTeX(s)).join(", ")}\\\\[0.1cm]
 `;
       }
       latex += `
@@ -376,14 +376,11 @@ ${escapeLaTeX(personalInfo.summary)}
   }
 }
 
-
 /**
  * Generate PDF from rendered template using html2canvas and jsPDF
  * This preserves the exact visual appearance of the rendered template
  */
-async function generatePDFFromRenderedTemplate(
-  resume: Resume,
-): Promise<void> {
+async function generatePDFFromRenderedTemplate(resume: Resume): Promise<void> {
   // Wait a bit for DOM to be ready
   await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -479,14 +476,8 @@ async function generatePDFFromRenderedTemplate(
  * This creates LaTeX that matches the resume structure
  */
 function generateLaTeXCode(resume: Resume): string {
-  const {
-    personalInfo,
-    experience,
-    education,
-    skills,
-    certifications,
-    links,
-  } = resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } =
+    resume.content;
 
   let latex = `\\documentclass[11pt,a4paper]{article}
 \\usepackage[utf8]{inputenc}
@@ -584,15 +575,15 @@ ${escapeLaTeX(personalInfo.summary)}
       const dateInfo = edu.endDate || (edu.current ? "Present" : "");
       latex += `\\textbf{${escapeLaTeX(edu.degree)}}${edu.field ? ` in ${escapeLaTeX(edu.field)}` : ""} \\hfill \\textit{${escapeLaTeX(dateInfo)}}\\\\
 \\textit{${escapeLaTeX(edu.institution)}}`;
-      
+
       if (edu.gpa) {
         latex += ` \\quad GPA: ${escapeLaTeX(edu.gpa)}`;
       }
-      
+
       if (edu.honors && edu.honors.length > 0) {
-        latex += ` \\quad Honors: ${edu.honors.map(h => escapeLaTeX(h)).join(", ")}`;
+        latex += ` \\quad Honors: ${edu.honors.map((h) => escapeLaTeX(h)).join(", ")}`;
       }
-      
+
       latex += `\\vspace{0.1cm}
 
 `;
@@ -612,7 +603,7 @@ ${escapeLaTeX(personalInfo.summary)}
 
 `;
     for (const skillCategory of skillCategories) {
-      latex += `\\textbf{${escapeLaTeX(skillCategory.name)}:} ${skillCategory.items.map(s => escapeLaTeX(s)).join(", ")}\\\\[0.1cm]
+      latex += `\\textbf{${escapeLaTeX(skillCategory.name)}:} ${skillCategory.items.map((s) => escapeLaTeX(s)).join(", ")}\\\\[0.1cm]
 `;
     }
     latex += `
@@ -684,7 +675,9 @@ async function compileLaTeXToPDF(latexCode: string): Promise<Blob> {
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => "Unknown error");
-      throw new Error(`LaTeX compilation failed: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `LaTeX compilation failed: ${response.status} ${response.statusText}`,
+      );
     }
 
     const contentType = response.headers.get("content-type") || "";
@@ -712,7 +705,7 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
   // Generate filename with prompt if enabled
   const settings = useSettingsStore.getState().settings;
   let suggestedFilename: string;
-  
+
   if (settings.promptExportFilename) {
     const filename = getFinalFilename(resume, "pdf");
     if (!filename) {
@@ -722,7 +715,10 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
     // Remove extension for document title
     suggestedFilename = filename.replace(/\.pdf$/i, "");
   } else {
-    suggestedFilename = generateDefaultFilename(resume, "pdf").replace(/\.pdf$/i, "");
+    suggestedFilename = generateDefaultFilename(resume, "pdf").replace(
+      /\.pdf$/i,
+      "",
+    );
   }
 
   // Set page title for PDF filename suggestion
@@ -756,7 +752,7 @@ export function printResume(resume: Resume) {
   // Generate filename with prompt if enabled
   const settings = useSettingsStore.getState().settings;
   let suggestedFilename: string;
-  
+
   if (settings.promptExportFilename) {
     const filename = getFinalFilename(resume, "pdf");
     if (!filename) {
@@ -766,7 +762,10 @@ export function printResume(resume: Resume) {
     // Remove extension for document title
     suggestedFilename = filename.replace(/\.pdf$/i, "");
   } else {
-    suggestedFilename = generateDefaultFilename(resume, "pdf").replace(/\.pdf$/i, "");
+    suggestedFilename = generateDefaultFilename(resume, "pdf").replace(
+      /\.pdf$/i,
+      "",
+    );
   }
 
   // Set page title for PDF filename suggestion
@@ -1336,10 +1335,13 @@ function sanitizeFilename(filename: string): string {
  * Generate a default filename for export based on resume content
  * Format: FirstName_LastName_Resume_YYYY-MM-DD or Resume_Title_YYYY-MM-DD
  */
-export function generateDefaultFilename(resume: Resume, extension: string): string {
+export function generateDefaultFilename(
+  resume: Resume,
+  extension: string,
+): string {
   const today = new Date();
-  const dateStr = today.toISOString().split('T')[0]; // YYYY-MM-DD
-  
+  const dateStr = today.toISOString().split("T")[0]; // YYYY-MM-DD
+
   // Try to use personal name first
   const personalName = resume.content.personalInfo?.name;
   if (personalName) {
@@ -1348,13 +1350,15 @@ export function generateDefaultFilename(resume: Resume, extension: string): stri
       // Use first and last name
       const firstName = nameParts[0];
       const lastName = nameParts[nameParts.length - 1];
-      return sanitizeFilename(`${firstName}_${lastName}_Resume_${dateStr}.${extension}`);
+      return sanitizeFilename(
+        `${firstName}_${lastName}_Resume_${dateStr}.${extension}`,
+      );
     } else if (nameParts.length === 1) {
       // Use single name
       return sanitizeFilename(`${nameParts[0]}_Resume_${dateStr}.${extension}`);
     }
   }
-  
+
   // Fallback to resume title
   const title = resume.title || "Resume";
   return sanitizeFilename(`${title}_${dateStr}.${extension}`);
@@ -1364,36 +1368,47 @@ export function generateDefaultFilename(resume: Resume, extension: string): stri
  * Prompt user for filename with a default value
  * Returns the filename (without extension) or null if cancelled
  */
-export function promptForFilename(defaultFilename: string, extension: string): string | null {
-  const filenameWithoutExt = defaultFilename.replace(new RegExp(`\\.${extension}$`), '');
-  
+export function promptForFilename(
+  defaultFilename: string,
+  extension: string,
+): string | null {
+  const filenameWithoutExt = defaultFilename.replace(
+    new RegExp(`\\.${extension}$`),
+    "",
+  );
+
   const userInput = window.prompt(
     `Enter filename for your resume (without extension):`,
-    filenameWithoutExt
+    filenameWithoutExt,
   );
-  
+
   if (userInput === null) {
     // User cancelled
     return null;
   }
-  
+
   // Return sanitized filename with extension
   const sanitized = sanitizeFilename(userInput || filenameWithoutExt);
-  return sanitized ? `${sanitized}.${extension}` : `${filenameWithoutExt}.${extension}`;
+  return sanitized
+    ? `${sanitized}.${extension}`
+    : `${filenameWithoutExt}.${extension}`;
 }
 
 /**
  * Get the final filename for export, prompting user if setting is enabled
  * Returns null if user cancels the prompt
  */
-export function getFinalFilename(resume: Resume, extension: string): string | null {
+export function getFinalFilename(
+  resume: Resume,
+  extension: string,
+): string | null {
   const settings = useSettingsStore.getState().settings;
   const defaultFilename = generateDefaultFilename(resume, extension);
-  
+
   if (settings.promptExportFilename) {
     return promptForFilename(defaultFilename, extension);
   }
-  
+
   return defaultFilename;
 }
 
