@@ -39,7 +39,9 @@ export function RootLayout({ children }: RootLayoutProps) {
             <div className="flex items-center justify-center gap-2 text-[10px] font-medium text-blue-700">
               <span>🎭 Demo Mode</span>
               <span className="hidden sm:inline">•</span>
-              <span className="hidden sm:inline">Exploring with sample data</span>
+              <span className="hidden sm:inline">
+                Exploring with sample data
+              </span>
             </div>
           </div>
         )}
