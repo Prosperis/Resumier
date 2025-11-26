@@ -27,7 +27,7 @@ export function CertificationsList({
 
   // Filter out certifications with no meaningful content
   const validCertifications = certifications.filter(
-    (cert) => cert.name || cert.issuer || cert.date
+    (cert) => cert.name || cert.issuer || cert.date,
   );
 
   if (validCertifications.length === 0) return null;
@@ -40,7 +40,10 @@ export function CertificationsList({
           <div key={cert.id}>
             <div className="flex items-start justify-between">
               {cert.name && (
-                <h3 className="text-base font-bold" style={{ color: textColor }}>
+                <h3
+                  className="text-base font-bold"
+                  style={{ color: textColor }}
+                >
                   {cert.name}
                 </h3>
               )}
@@ -87,7 +90,8 @@ export function CertificationsList({
               )}
               {cert.issuer && (
                 <span className="text-sm" style={{ color: textLightColor }}>
-                  {cert.name ? " - " : ""}{cert.issuer}
+                  {cert.name ? " - " : ""}
+                  {cert.issuer}
                 </span>
               )}
             </div>
@@ -133,7 +137,8 @@ export function CertificationsList({
                 {(cert.date || cert.expiryDate) && (
                   <p className="mt-1 text-xs" style={{ color: textLightColor }}>
                     {cert.date && `Issued: ${cert.date}`}
-                    {cert.expiryDate && `${cert.date ? " • " : ""}Expires: ${cert.expiryDate}`}
+                    {cert.expiryDate &&
+                      `${cert.date ? " • " : ""}Expires: ${cert.expiryDate}`}
                   </p>
                 )}
                 {cert.credentialId && (

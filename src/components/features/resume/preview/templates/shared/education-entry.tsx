@@ -24,7 +24,8 @@ export function EducationEntry({
 
   // Helper to format date range
   const formatDateRange = () => {
-    if (!education.startDate && !education.endDate && !education.current) return null;
+    if (!education.startDate && !education.endDate && !education.current)
+      return null;
     const start = education.startDate || "";
     const end = education.current ? "Present" : education.endDate || "";
     if (!start && !end) return null;
@@ -81,8 +82,10 @@ export function EducationEntry({
   // Compact variant
   if (variant === "compact") {
     // Build degree/field string
-    const degreeField = [education.degree, education.field].filter(Boolean).join(" in ");
-    
+    const degreeField = [education.degree, education.field]
+      .filter(Boolean)
+      .join(" in ");
+
     return (
       <div className={className}>
         <div className="flex items-baseline justify-between">
@@ -137,7 +140,10 @@ export function EducationEntry({
             )}
           </div>
           {(dateRange || education.gpa) && (
-            <div className="text-right text-sm" style={{ color: textLightColor }}>
+            <div
+              className="text-right text-sm"
+              style={{ color: textLightColor }}
+            >
               {dateRange && <div>{dateRange}</div>}
               {education.gpa && (
                 <div

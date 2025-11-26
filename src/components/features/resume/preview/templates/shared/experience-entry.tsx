@@ -24,7 +24,8 @@ export function ExperienceEntry({
 
   // Helper to format date range
   const formatDateRange = () => {
-    if (!experience.startDate && !experience.endDate && !experience.current) return null;
+    if (!experience.startDate && !experience.endDate && !experience.current)
+      return null;
     const start = experience.startDate || "";
     const end = experience.current ? "Present" : experience.endDate || "";
     if (!start && !end) return null;
@@ -50,7 +51,10 @@ export function ExperienceEntry({
           )}
         </div>
         {experience.company && (
-          <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
+          <p
+            className="mb-2 text-sm font-semibold"
+            style={{ color: textColor }}
+          >
             {experience.company}
           </p>
         )}
@@ -132,7 +136,10 @@ export function ExperienceEntry({
             )}
           </div>
           {(dateRange || experience.current) && (
-            <div className="text-right text-sm" style={{ color: textLightColor }}>
+            <div
+              className="text-right text-sm"
+              style={{ color: textLightColor }}
+            >
               {dateRange && <div>{dateRange}</div>}
               {experience.current && (
                 <div
@@ -203,7 +210,10 @@ export function ExperienceEntry({
           )}
         </div>
         {experience.company && (
-          <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
+          <p
+            className="mb-2 text-sm font-semibold"
+            style={{ color: textColor }}
+          >
             {experience.company}
           </p>
         )}

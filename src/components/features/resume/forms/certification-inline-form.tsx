@@ -194,9 +194,7 @@ export function CertificationInlineForm({
                 name="expiryDate"
                 render={({ field }) => (
                   <FormItem className="space-y-0.5">
-                    <FormLabel className="text-[10px]">
-                      Expiry
-                    </FormLabel>
+                    <FormLabel className="text-[10px]">Expiry</FormLabel>
                     <FormControl>
                       <Input
                         type="month"
@@ -215,9 +213,7 @@ export function CertificationInlineForm({
               name="credentialId"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">
-                    Credential ID
-                  </FormLabel>
+                  <FormLabel className="text-[10px]">Credential ID</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="ABC123XYZ"

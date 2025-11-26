@@ -62,9 +62,7 @@ describe("PersonalInfoForm", () => {
       render(<PersonalInfoForm {...defaultProps} />);
       expect(screen.getByText(/city and state\/country/i)).toBeInTheDocument();
       expect(
-        screen.getByText(
-          /a brief professional summary/i,
-        ),
+        screen.getByText(/a brief professional summary/i),
       ).toBeInTheDocument();
     });
     it("shows placeholder text for all fields", () => {
@@ -224,9 +222,7 @@ describe("PersonalInfoForm", () => {
     it("shows summary description", () => {
       render(<PersonalInfoForm {...defaultProps} />);
       expect(
-        screen.getByText(
-          /a brief professional summary/i,
-        ),
+        screen.getByText(/a brief professional summary/i),
       ).toBeInTheDocument();
     });
     it("triggers auto-save on blur with summary", async () => {
