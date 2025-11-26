@@ -121,7 +121,7 @@ export function useAutoSave({
                 setError(null);
                 pendingDataRef.current = null;
                 previousDataRef.current = undefined;
-                
+
                 // Clear any existing timeouts
                 if (fadeTimeoutRef.current) {
                   clearTimeout(fadeTimeoutRef.current);
@@ -129,7 +129,7 @@ export function useAutoSave({
                 if (hideTimeoutRef.current) {
                   clearTimeout(hideTimeoutRef.current);
                 }
-                
+
                 // Start fade out after 2.5 seconds
                 fadeTimeoutRef.current = setTimeout(() => {
                   setIsFadingOut(true);
