@@ -23,7 +23,11 @@ export function BoldHeadersTemplate({
           className="text-5xl font-black mb-3"
           style={{ color: primaryColor }}
         >
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "YOUR NAME"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "YOUR NAME"}
         </h1>
         <div className="text-gray-600">
           {personalInfo.email && <span>{personalInfo.email}</span>}

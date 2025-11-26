@@ -34,7 +34,11 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
       {/* Header - Centered */}
       <div className="border-b-4 border-gray-900 px-12 py-8 text-center">
         <h1 className="mb-4 text-5xl font-bold tracking-tight">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
 
         {/* Contact Info - Horizontal */}

@@ -33,7 +33,11 @@ export function InfographicLiteTemplate({
         </div>
         <div className="flex-1">
           <h1 className="text-3xl font-bold mb-2">
-            {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+            {getFullName(
+              personalInfo.firstName,
+              personalInfo.lastName,
+              personalInfo.nameOrder,
+            ) || "Your Name"}
           </h1>
           <div className="flex flex-wrap gap-3 text-sm">
             {personalInfo.email && (

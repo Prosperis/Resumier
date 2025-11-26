@@ -23,7 +23,11 @@ export function GovernmentTemplate({
         style={{ borderColor: primaryColor }}
       >
         <h1 className="text-center text-3xl font-bold uppercase tracking-widest mb-2">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "YOUR NAME"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "YOUR NAME"}
         </h1>
         <div className="text-center text-sm text-gray-700">
           {personalInfo.email && <span>{personalInfo.email}</span>}

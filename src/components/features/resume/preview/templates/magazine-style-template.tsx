@@ -23,14 +23,14 @@ export function MagazineStyleTemplate({
             className="text-6xl font-black leading-none"
             style={{ color: primaryColor }}
           >
-            {personalInfo.nameOrder === "lastFirst" 
-              ? (personalInfo.lastName || "Last")
-              : (personalInfo.firstName || "First")}
+            {personalInfo.nameOrder === "lastFirst"
+              ? personalInfo.lastName || "Last"
+              : personalInfo.firstName || "First"}
           </h1>
           <h2 className="text-4xl font-light pb-2">
             {personalInfo.nameOrder === "lastFirst"
-              ? (personalInfo.firstName || "First")
-              : (personalInfo.lastName || "Last")}
+              ? personalInfo.firstName || "First"
+              : personalInfo.lastName || "Last"}
           </h2>
         </div>
         <div className="flex gap-4 text-sm text-gray-600">

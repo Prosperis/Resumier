@@ -25,7 +25,11 @@ export function CreativeProTemplate({
         }}
       >
         <h1 className="text-4xl font-bold mb-2">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <div className="flex flex-wrap gap-4 text-sm opacity-90">
           {personalInfo.email && <span>{personalInfo.email}</span>}

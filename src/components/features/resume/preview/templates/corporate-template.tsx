@@ -22,7 +22,11 @@ export function CorporateTemplate({ resume, config }: CorporateTemplateProps) {
           className="text-3xl font-bold tracking-wide uppercase mb-2"
           style={{ color: primaryColor }}
         >
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <div className="text-sm text-gray-700 space-x-3">
           {personalInfo.email && <span>{personalInfo.email}</span>}

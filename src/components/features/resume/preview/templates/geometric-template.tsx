@@ -32,7 +32,11 @@ export function GeometricTemplate({ resume, config }: GeometricTemplateProps) {
           </div>
           <div>
             <h1 className="text-4xl font-bold" style={{ color: primaryColor }}>
-              {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+              {getFullName(
+                personalInfo.firstName,
+                personalInfo.lastName,
+                personalInfo.nameOrder,
+              ) || "Your Name"}
             </h1>
             <div className="text-sm text-gray-600">
               {personalInfo.email && <span>{personalInfo.email}</span>}

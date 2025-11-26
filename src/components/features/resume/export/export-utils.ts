@@ -867,7 +867,11 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
   const sections: Paragraph[] = [];
 
   // Name (Title)
-  const fullName = getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder);
+  const fullName = getFullName(
+    personalInfo.firstName,
+    personalInfo.lastName,
+    personalInfo.nameOrder,
+  );
   if (fullName) {
     sections.push(
       new Paragraph({
@@ -1110,7 +1114,11 @@ export function downloadMarkdown(resume: Resume): void {
   let markdown = "";
 
   // Name
-  const markdownName = getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder);
+  const markdownName = getFullName(
+    personalInfo.firstName,
+    personalInfo.lastName,
+    personalInfo.nameOrder,
+  );
   if (markdownName) {
     markdown += `# ${markdownName}\n\n`;
   }
@@ -1214,7 +1222,11 @@ export function downloadPlainText(resume: Resume): void {
   let text = "";
 
   // Name
-  const textName = getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder);
+  const textName = getFullName(
+    personalInfo.firstName,
+    personalInfo.lastName,
+    personalInfo.nameOrder,
+  );
   if (textName) {
     text += `${textName}\n`;
     text += `${"=".repeat(textName.length)}\n\n`;
@@ -1356,7 +1368,9 @@ export function generateDefaultFilename(
       );
     } else {
       // Use whichever name is available
-      return sanitizeFilename(`${firstName || lastName}_Resume_${dateStr}.${extension}`);
+      return sanitizeFilename(
+        `${firstName || lastName}_Resume_${dateStr}.${extension}`,
+      );
     }
   }
 

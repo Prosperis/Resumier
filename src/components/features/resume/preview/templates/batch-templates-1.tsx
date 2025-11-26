@@ -30,7 +30,11 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
       {/* Executive Header */}
       <div className="border-b-4 border-gray-900 pb-6 mb-8">
         <h1 className="text-5xl font-bold mb-2 tracking-tight">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <p className="text-2xl text-gray-600 font-light mb-4">
           {personalInfo.title || "Executive Title"}
@@ -138,7 +142,11 @@ export function AcademicTemplate({ resume }: TemplateProps) {
       {/* Centered Academic Header */}
       <div className="text-center border-b-2 border-gray-400 pb-6 mb-8">
         <h1 className="text-4xl font-bold mb-2">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <p className="text-xl text-gray-600 mb-3">
           {personalInfo.title || "Academic Title"}
@@ -239,7 +247,11 @@ export function CorporateTemplate({ resume }: TemplateProps) {
       {/* Conservative Centered Header */}
       <div className="text-center border-b border-gray-300 pb-5 mb-6">
         <h1 className="text-3xl font-bold tracking-wide uppercase mb-2">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <div className="text-sm text-gray-700 space-x-3">
           {personalInfo.email && <span>{personalInfo.email}</span>}
@@ -353,7 +365,11 @@ export function TechModernTemplate({ resume }: TemplateProps) {
         style={{ backgroundColor: "#3b82f6", color: "white" }}
       >
         <h1 className="text-4xl font-bold mb-2">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <p className="text-xl mb-3">{personalInfo.title || "Developer"}</p>
         <div className="flex flex-wrap gap-4 text-sm">
@@ -462,7 +478,11 @@ export function CreativeProfessionalTemplate({ resume }: TemplateProps) {
         }}
       >
         <h1 className="text-4xl font-bold mb-2">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <p className="text-xl font-light mb-4">
           {personalInfo.title || "Creative Professional"}

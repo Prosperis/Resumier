@@ -17,7 +17,11 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
       {/* Header Section */}
       <header className="mb-12">
         <h1 className="mb-3 text-5xl font-light tracking-tight">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <div className="space-x-4 text-sm text-gray-600">
           {personalInfo.email && <span>{personalInfo.email}</span>}

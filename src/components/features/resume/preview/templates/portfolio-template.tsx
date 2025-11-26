@@ -23,7 +23,11 @@ export function PortfolioTemplate({ resume, config }: PortfolioTemplateProps) {
         }}
       >
         <h1 className="text-5xl font-bold mb-2">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <p className="text-xl opacity-90 mb-4">Creative Portfolio</p>
         <div className="flex flex-wrap gap-4 text-sm opacity-80">

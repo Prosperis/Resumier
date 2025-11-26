@@ -20,7 +20,11 @@ export function ElegantTemplate({ resume, config }: ElegantTemplateProps) {
           className="text-5xl font-light tracking-wider mb-4"
           style={{ color: primaryColor }}
         >
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <div
           className="w-32 h-px mx-auto mb-4"

@@ -1,5 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, ArrowRightLeft, CheckCircle2, Loader2 } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowRightLeft,
+  CheckCircle2,
+  Loader2,
+} from "lucide-react";
 import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -69,7 +74,10 @@ export function PersonalInfoForm({
   // Handler to flip name order
   const handleFlipNameOrder = () => {
     const currentOrder = form.getValues("nameOrder");
-    form.setValue("nameOrder", currentOrder === "firstLast" ? "lastFirst" : "firstLast");
+    form.setValue(
+      "nameOrder",
+      currentOrder === "firstLast" ? "lastFirst" : "firstLast",
+    );
   };
 
   // Auto-save on form value changes
@@ -77,7 +85,12 @@ export function PersonalInfoForm({
     if (!enabled) return;
 
     // Only save if we have at least some data
-    if (!watchedValues.firstName && !watchedValues.lastName && !watchedValues.email) return;
+    if (
+      !watchedValues.firstName &&
+      !watchedValues.lastName &&
+      !watchedValues.email
+    )
+      return;
 
     save({
       content: {
@@ -145,7 +158,9 @@ export function PersonalInfoForm({
                     >
                       <ArrowRightLeft className="h-3 w-3" />
                       <span className="hidden sm:inline">
-                        {watchedValues.nameOrder === "lastFirst" ? "Last First" : "First Last"}
+                        {watchedValues.nameOrder === "lastFirst"
+                          ? "Last First"
+                          : "First Last"}
                       </span>
                     </Button>
                   </TooltipTrigger>
@@ -170,13 +185,19 @@ export function PersonalInfoForm({
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder={watchedValues.nameOrder === "lastFirst" ? "太郎" : "John"}
+                          placeholder={
+                            watchedValues.nameOrder === "lastFirst"
+                              ? "太郎"
+                              : "John"
+                          }
                           disabled={!enabled}
                           className="h-8 text-xs"
                         />
                       </FormControl>
                       <FormDescription className="text-[10px]">
-                        {watchedValues.nameOrder === "lastFirst" ? "Given name" : "First name"}
+                        {watchedValues.nameOrder === "lastFirst"
+                          ? "Given name"
+                          : "First name"}
                       </FormDescription>
                       <FormMessage className="text-[10px]" />
                     </FormItem>
@@ -191,13 +212,19 @@ export function PersonalInfoForm({
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder={watchedValues.nameOrder === "lastFirst" ? "田中" : "Doe"}
+                          placeholder={
+                            watchedValues.nameOrder === "lastFirst"
+                              ? "田中"
+                              : "Doe"
+                          }
                           disabled={!enabled}
                           className="h-8 text-xs"
                         />
                       </FormControl>
                       <FormDescription className="text-[10px]">
-                        {watchedValues.nameOrder === "lastFirst" ? "Family name" : "Last name"}
+                        {watchedValues.nameOrder === "lastFirst"
+                          ? "Family name"
+                          : "Last name"}
                       </FormDescription>
                       <FormMessage className="text-[10px]" />
                     </FormItem>

@@ -17,7 +17,11 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
       {/* Header Section - Centered */}
       <header className="mb-8 border-b-2 border-black pb-4 text-center">
         <h1 className="mb-2 text-3xl font-bold">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <div className="space-x-3 text-sm">
           {personalInfo.email && <span>{personalInfo.email}</span>}

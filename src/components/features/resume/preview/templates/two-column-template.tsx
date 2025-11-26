@@ -44,7 +44,11 @@ export function TwoColumnTemplate({ resume, config }: TwoColumnTemplateProps) {
         <div className="mb-8">
           <div className="mb-4 h-32 w-32 rounded-full bg-white/20 mx-auto" />
           <h1 className="mb-2 text-2xl font-bold text-center">
-            {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+            {getFullName(
+              personalInfo.firstName,
+              personalInfo.lastName,
+              personalInfo.nameOrder,
+            ) || "Your Name"}
           </h1>
         </div>
 

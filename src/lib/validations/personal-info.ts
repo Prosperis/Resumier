@@ -45,7 +45,7 @@ export type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
 export function getFullName(
   firstName: string,
   lastName: string,
-  nameOrder: NameOrder = "firstLast"
+  nameOrder: NameOrder = "firstLast",
 ): string {
   const first = firstName?.trim() || "";
   const last = lastName?.trim() || "";

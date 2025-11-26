@@ -26,7 +26,11 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
       {/* Header */}
       <div className="mb-8">
         <h1 className="mb-2 text-4xl font-bold">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <div
           className="flex flex-wrap gap-4 text-sm text-gray-600"

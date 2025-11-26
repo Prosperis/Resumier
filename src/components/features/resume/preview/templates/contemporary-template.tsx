@@ -27,7 +27,11 @@ export function ContemporaryTemplate({
     <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg p-10">
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-4">
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <div className="flex flex-wrap gap-4 text-sm text-gray-600">
           {personalInfo.email && (

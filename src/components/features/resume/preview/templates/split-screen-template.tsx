@@ -35,7 +35,11 @@ export function SplitScreenTemplate({
         {/* Name */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 leading-tight">
-            {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+            {getFullName(
+              personalInfo.firstName,
+              personalInfo.lastName,
+              personalInfo.nameOrder,
+            ) || "Your Name"}
           </h1>
           {personalInfo.summary && (
             <p className="text-sm leading-relaxed text-white/90 mt-4">

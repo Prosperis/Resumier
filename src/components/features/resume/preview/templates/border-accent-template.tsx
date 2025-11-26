@@ -29,7 +29,11 @@ export function BorderAccentTemplate({
           className="text-4xl font-bold text-center mb-2"
           style={{ color: primaryColor }}
         >
-          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
+          {getFullName(
+            personalInfo.firstName,
+            personalInfo.lastName,
+            personalInfo.nameOrder,
+          ) || "Your Name"}
         </h1>
         <p className="text-center text-gray-600">
           {personalInfo.email && <span>{personalInfo.email}</span>}
