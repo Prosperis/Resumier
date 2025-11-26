@@ -22,22 +22,38 @@ export function ExperienceEntry({
   const textColor = colorScheme?.text || "#111827";
   const textLightColor = colorScheme?.textLight || "#6b7280";
 
+  // Helper to format date range
+  const formatDateRange = () => {
+    if (!experience.startDate && !experience.endDate && !experience.current) return null;
+    const start = experience.startDate || "";
+    const end = experience.current ? "Present" : experience.endDate || "";
+    if (!start && !end) return null;
+    return `${start}${start && end ? " - " : ""}${end}`;
+  };
+
+  const dateRange = formatDateRange();
+
   // Default variant
   if (variant === "default") {
     return (
       <div className={className}>
         <div className="mb-1 flex items-start justify-between">
-          <h3 className="text-base font-bold" style={{ color: textColor }}>
-            {experience.position}
-          </h3>
-          <span className="text-sm" style={{ color: textLightColor }}>
-            {experience.startDate} -{" "}
-            {experience.current ? "Present" : experience.endDate}
-          </span>
+          {experience.position && (
+            <h3 className="text-base font-bold" style={{ color: textColor }}>
+              {experience.position}
+            </h3>
+          )}
+          {dateRange && (
+            <span className="text-sm" style={{ color: textLightColor }}>
+              {dateRange}
+            </span>
+          )}
         </div>
-        <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
-          {experience.company}
-        </p>
+        {experience.company && (
+          <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
+            {experience.company}
+          </p>
+        )}
         {experience.description && (
           <p className="mb-2 text-sm" style={{ color: textLightColor }}>
             {experience.description}
@@ -62,17 +78,22 @@ export function ExperienceEntry({
     return (
       <div className={className}>
         <div className="flex items-baseline justify-between">
-          <h3 className="font-bold" style={{ color: textColor }}>
-            {experience.position}
-          </h3>
-          <span className="text-xs" style={{ color: textLightColor }}>
-            {experience.startDate} -{" "}
-            {experience.current ? "Present" : experience.endDate}
-          </span>
+          {experience.position && (
+            <h3 className="font-bold" style={{ color: textColor }}>
+              {experience.position}
+            </h3>
+          )}
+          {dateRange && (
+            <span className="text-xs" style={{ color: textLightColor }}>
+              {dateRange}
+            </span>
+          )}
         </div>
-        <p className="text-sm" style={{ color: textLightColor }}>
-          {experience.company}
-        </p>
+        {experience.company && (
+          <p className="text-sm" style={{ color: textLightColor }}>
+            {experience.company}
+          </p>
+        )}
         {experience.highlights && experience.highlights.length > 0 && (
           <ul
             className="mt-1 list-inside list-disc text-sm"
@@ -96,30 +117,33 @@ export function ExperienceEntry({
       >
         <div className="mb-2 flex items-start justify-between">
           <div>
-            <h3 className="text-lg font-bold" style={{ color: textColor }}>
-              {experience.position}
-            </h3>
-            <p
-              className="text-base font-semibold"
-              style={{ color: colorScheme?.primary || "#8b5cf6" }}
-            >
-              {experience.company}
-            </p>
-          </div>
-          <div className="text-right text-sm" style={{ color: textLightColor }}>
-            <div>
-              {experience.startDate} -{" "}
-              {experience.current ? "Present" : experience.endDate}
-            </div>
-            {experience.current && (
-              <div
-                className="mt-1 text-xs font-semibold"
-                style={{ color: colorScheme?.primary }}
+            {experience.position && (
+              <h3 className="text-lg font-bold" style={{ color: textColor }}>
+                {experience.position}
+              </h3>
+            )}
+            {experience.company && (
+              <p
+                className="text-base font-semibold"
+                style={{ color: colorScheme?.primary || "#8b5cf6" }}
               >
-                Current Position
-              </div>
+                {experience.company}
+              </p>
             )}
           </div>
+          {(dateRange || experience.current) && (
+            <div className="text-right text-sm" style={{ color: textLightColor }}>
+              {dateRange && <div>{dateRange}</div>}
+              {experience.current && (
+                <div
+                  className="mt-1 text-xs font-semibold"
+                  style={{ color: colorScheme?.primary }}
+                >
+                  Current Position
+                </div>
+              )}
+            </div>
+          )}
         </div>
         {experience.description && (
           <p className="mb-3 text-sm" style={{ color: textColor }}>
@@ -164,20 +188,25 @@ export function ExperienceEntry({
         />
 
         <div className="mb-1 flex items-start justify-between">
-          <h3 className="text-base font-bold" style={{ color: textColor }}>
-            {experience.position}
-          </h3>
-          <span
-            className="text-sm font-semibold"
-            style={{ color: colorScheme?.primary }}
-          >
-            {experience.startDate} -{" "}
-            {experience.current ? "Present" : experience.endDate}
-          </span>
+          {experience.position && (
+            <h3 className="text-base font-bold" style={{ color: textColor }}>
+              {experience.position}
+            </h3>
+          )}
+          {dateRange && (
+            <span
+              className="text-sm font-semibold"
+              style={{ color: colorScheme?.primary }}
+            >
+              {dateRange}
+            </span>
+          )}
         </div>
-        <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
-          {experience.company}
-        </p>
+        {experience.company && (
+          <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
+            {experience.company}
+          </p>
+        )}
         {experience.description && (
           <p className="mb-2 text-sm" style={{ color: textLightColor }}>
             {experience.description}

@@ -71,47 +71,38 @@ describe("certificationSchema", () => {
     });
   });
 
-  describe("Invalid Data", () => {
-    it("fails when name is missing", () => {
+  describe("Optional Fields", () => {
+    it("accepts when name is missing (all fields optional)", () => {
       const data = {
         id: "cert-1",
         issuer: "Issuer",
         date: "2023-01",
       };
       const result = certificationSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("name");
-      }
+      expect(result.success).toBe(true);
     });
 
-    it("fails when issuer is missing", () => {
+    it("accepts when issuer is missing (all fields optional)", () => {
       const data = {
         id: "cert-1",
         name: "Certification",
         date: "2023-01",
       };
       const result = certificationSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("issuer");
-      }
+      expect(result.success).toBe(true);
     });
 
-    it("fails when date is missing", () => {
+    it("accepts when date is missing (all fields optional)", () => {
       const data = {
         id: "cert-1",
         name: "Certification",
         issuer: "Issuer",
       };
       const result = certificationSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("date");
-      }
+      expect(result.success).toBe(true);
     });
 
-    it("fails when name is empty string", () => {
+    it("accepts when name is empty string (all fields optional)", () => {
       const data = {
         id: "cert-1",
         name: "",
@@ -119,10 +110,10 @@ describe("certificationSchema", () => {
         date: "2023-01",
       };
       const result = certificationSchema.safeParse(data);
-      expect(result.success).toBe(false);
+      expect(result.success).toBe(true);
     });
 
-    it("fails when issuer is empty string", () => {
+    it("accepts when issuer is empty string (all fields optional)", () => {
       const data = {
         id: "cert-1",
         name: "Certification",
@@ -130,10 +121,10 @@ describe("certificationSchema", () => {
         date: "2023-01",
       };
       const result = certificationSchema.safeParse(data);
-      expect(result.success).toBe(false);
+      expect(result.success).toBe(true);
     });
 
-    it("fails when date is empty string", () => {
+    it("accepts when date is empty string (all fields optional)", () => {
       const data = {
         id: "cert-1",
         name: "Certification",
@@ -141,9 +132,19 @@ describe("certificationSchema", () => {
         date: "",
       };
       const result = certificationSchema.safeParse(data);
-      expect(result.success).toBe(false);
+      expect(result.success).toBe(true);
     });
 
+    it("accepts completely empty certification entry (only id required)", () => {
+      const data = {
+        id: "cert-1",
+      };
+      const result = certificationSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe("Invalid Data", () => {
     it("fails when URL is invalid", () => {
       const data = {
         id: "cert-1",

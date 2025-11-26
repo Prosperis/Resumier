@@ -272,7 +272,7 @@ export function EducationInlineForm({
               name="gpa"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">GPA (optional)</FormLabel>
+                  <FormLabel className="text-[10px]">GPA</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="3.8"

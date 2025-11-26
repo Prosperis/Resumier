@@ -125,7 +125,7 @@ export function CertificationFormDialog({
                 name="expiryDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Expiry Date (optional)</FormLabel>
+                    <FormLabel>Expiry Date</FormLabel>
                     <FormControl>
                       <Input type="month" {...field} />
                     </FormControl>
@@ -141,7 +141,7 @@ export function CertificationFormDialog({
               name="credentialId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Credential ID (optional)</FormLabel>
+                  <FormLabel>Credential ID</FormLabel>
                   <FormControl>
                     <Input placeholder="ABC123XYZ" {...field} />
                   </FormControl>
@@ -158,7 +158,7 @@ export function CertificationFormDialog({
               name="url"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Credential URL (optional)</FormLabel>
+                  <FormLabel>Credential URL</FormLabel>
                   <FormControl>
                     <Input
                       type="url"

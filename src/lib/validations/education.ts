@@ -3,14 +3,15 @@ import { z } from "zod";
 /**
  * Education Validation Schema
  * Validates education entries
+ * All fields are optional - only non-empty fields are rendered in the resume
  */
 export const educationSchema = z.object({
   id: z.string(),
-  institution: z.string().min(1, "Institution name is required"),
-  degree: z.string().min(1, "Degree is required"),
-  field: z.string().min(1, "Field of study is required"),
-  startDate: z.string().min(1, "Start date is required"),
-  endDate: z.string(),
+  institution: z.string().optional().or(z.literal("")),
+  degree: z.string().optional().or(z.literal("")),
+  field: z.string().optional().or(z.literal("")),
+  startDate: z.string().optional().or(z.literal("")),
+  endDate: z.string().optional().or(z.literal("")),
   current: z.boolean().optional(),
   gpa: z
     .string()

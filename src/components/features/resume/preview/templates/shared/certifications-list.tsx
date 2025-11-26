@@ -25,23 +25,36 @@ export function CertificationsList({
 
   if (!certifications || certifications.length === 0) return null;
 
+  // Filter out certifications with no meaningful content
+  const validCertifications = certifications.filter(
+    (cert) => cert.name || cert.issuer || cert.date
+  );
+
+  if (validCertifications.length === 0) return null;
+
   // Default variant
   if (variant === "default") {
     return (
       <div className={`space-y-3 ${className}`}>
-        {certifications.map((cert) => (
+        {validCertifications.map((cert) => (
           <div key={cert.id}>
             <div className="flex items-start justify-between">
-              <h3 className="text-base font-bold" style={{ color: textColor }}>
-                {cert.name}
-              </h3>
-              <span className="text-sm" style={{ color: textLightColor }}>
-                {cert.date}
-              </span>
+              {cert.name && (
+                <h3 className="text-base font-bold" style={{ color: textColor }}>
+                  {cert.name}
+                </h3>
+              )}
+              {cert.date && (
+                <span className="text-sm" style={{ color: textLightColor }}>
+                  {cert.date}
+                </span>
+              )}
             </div>
-            <p className="text-sm" style={{ color: textLightColor }}>
-              {cert.issuer}
-            </p>
+            {cert.issuer && (
+              <p className="text-sm" style={{ color: textLightColor }}>
+                {cert.issuer}
+              </p>
+            )}
             {cert.credentialId && (
               <p className="text-xs" style={{ color: textLightColor }}>
                 ID: {cert.credentialId}
@@ -57,27 +70,32 @@ export function CertificationsList({
   if (variant === "compact") {
     return (
       <div className={`space-y-2 ${className}`}>
-        {certifications.map((cert) => (
+        {validCertifications.map((cert) => (
           <div key={cert.id} className="flex items-center gap-2">
             <Award
               className="h-4 w-4"
               style={{ color: colorScheme?.primary }}
             />
             <div className="flex-1">
-              <span
-                className="text-sm font-semibold"
-                style={{ color: textColor }}
-              >
-                {cert.name}
-              </span>
-              <span className="text-sm" style={{ color: textLightColor }}>
-                {" "}
-                - {cert.issuer}
-              </span>
+              {cert.name && (
+                <span
+                  className="text-sm font-semibold"
+                  style={{ color: textColor }}
+                >
+                  {cert.name}
+                </span>
+              )}
+              {cert.issuer && (
+                <span className="text-sm" style={{ color: textLightColor }}>
+                  {cert.name ? " - " : ""}{cert.issuer}
+                </span>
+              )}
             </div>
-            <span className="text-xs" style={{ color: textLightColor }}>
-              {cert.date}
-            </span>
+            {cert.date && (
+              <span className="text-xs" style={{ color: textLightColor }}>
+                {cert.date}
+              </span>
+            )}
           </div>
         ))}
       </div>
@@ -88,7 +106,7 @@ export function CertificationsList({
   if (variant === "detailed") {
     return (
       <div className={`space-y-4 ${className}`}>
-        {certifications.map((cert) => (
+        {validCertifications.map((cert) => (
           <div
             key={cert.id}
             className="rounded-lg border p-3"
@@ -96,22 +114,28 @@ export function CertificationsList({
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h3
-                  className="text-base font-bold"
-                  style={{ color: textColor }}
-                >
-                  {cert.name}
-                </h3>
-                <p
-                  className="text-sm font-semibold"
-                  style={{ color: colorScheme?.primary }}
-                >
-                  {cert.issuer}
-                </p>
-                <p className="mt-1 text-xs" style={{ color: textLightColor }}>
-                  Issued: {cert.date}
-                  {cert.expiryDate && ` • Expires: ${cert.expiryDate}`}
-                </p>
+                {cert.name && (
+                  <h3
+                    className="text-base font-bold"
+                    style={{ color: textColor }}
+                  >
+                    {cert.name}
+                  </h3>
+                )}
+                {cert.issuer && (
+                  <p
+                    className="text-sm font-semibold"
+                    style={{ color: colorScheme?.primary }}
+                  >
+                    {cert.issuer}
+                  </p>
+                )}
+                {(cert.date || cert.expiryDate) && (
+                  <p className="mt-1 text-xs" style={{ color: textLightColor }}>
+                    {cert.date && `Issued: ${cert.date}`}
+                    {cert.expiryDate && `${cert.date ? " • " : ""}Expires: ${cert.expiryDate}`}
+                  </p>
+                )}
                 {cert.credentialId && (
                   <p className="mt-1 text-xs" style={{ color: textLightColor }}>
                     Credential ID: {cert.credentialId}

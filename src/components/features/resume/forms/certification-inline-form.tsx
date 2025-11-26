@@ -195,7 +195,7 @@ export function CertificationInlineForm({
                 render={({ field }) => (
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">
-                      Expiry (optional)
+                      Expiry
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -216,7 +216,7 @@ export function CertificationInlineForm({
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">
-                    Credential ID (optional)
+                    Credential ID
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -235,7 +235,7 @@ export function CertificationInlineForm({
               name="url"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">URL (optional)</FormLabel>
+                  <FormLabel className="text-[10px]">URL</FormLabel>
                   <FormControl>
                     <Input
                       type="url"

@@ -107,33 +107,60 @@ describe("linkSchema", () => {
     });
   });
 
-  describe("Invalid Data", () => {
-    it("fails when label is missing", () => {
+  describe("Optional Fields", () => {
+    it("accepts when label is missing (all fields optional)", () => {
       const data = {
         id: "link-1",
         url: "https://example.com",
         type: "portfolio",
       };
       const result = linkSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("label");
-      }
+      expect(result.success).toBe(true);
     });
 
-    it("fails when URL is missing", () => {
+    it("accepts when URL is missing (all fields optional)", () => {
       const data = {
         id: "link-1",
         label: "My Link",
         type: "portfolio",
       };
       const result = linkSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("url");
-      }
+      expect(result.success).toBe(true);
     });
 
+    it("accepts when label is empty string (all fields optional)", () => {
+      const data = {
+        id: "link-1",
+        label: "",
+        url: "https://example.com",
+        type: "portfolio",
+      };
+      const result = linkSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
+
+    it("accepts when URL is empty string (all fields optional)", () => {
+      const data = {
+        id: "link-1",
+        label: "My Link",
+        url: "",
+        type: "portfolio",
+      };
+      const result = linkSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
+
+    it("accepts link entry with only type (only id and type required)", () => {
+      const data = {
+        id: "link-1",
+        type: "portfolio",
+      };
+      const result = linkSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe("Invalid Data", () => {
     it("fails when type is missing", () => {
       const data = {
         id: "link-1",
@@ -145,28 +172,6 @@ describe("linkSchema", () => {
       if (!result.success) {
         expect(result.error.issues[0].path).toContain("type");
       }
-    });
-
-    it("fails when label is empty string", () => {
-      const data = {
-        id: "link-1",
-        label: "",
-        url: "https://example.com",
-        type: "portfolio",
-      };
-      const result = linkSchema.safeParse(data);
-      expect(result.success).toBe(false);
-    });
-
-    it("fails when URL is empty string", () => {
-      const data = {
-        id: "link-1",
-        label: "My Link",
-        url: "",
-        type: "portfolio",
-      };
-      const result = linkSchema.safeParse(data);
-      expect(result.success).toBe(false);
     });
 
     it("fails when URL is invalid format", () => {

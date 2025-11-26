@@ -90,7 +90,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
           )}
 
           {/* Experience */}
-          {experience.length > 0 && (
+          {experience.filter((exp) => exp.position || exp.company || exp.description || (exp.highlights && exp.highlights.length > 0)).length > 0 && (
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
@@ -100,38 +100,46 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                 Experience
               </h2>
               <div className="space-y-4">
-                {experience.map((exp) => (
-                  <div key={exp.id}>
-                    <div className="mb-1 flex items-start justify-between">
-                      <h3 className="text-base font-bold">{exp.position}</h3>
-                      <span className="text-sm text-gray-600">
-                        {exp.startDate} -{" "}
-                        {exp.current ? "Present" : exp.endDate}
-                      </span>
+                {experience.filter((exp) => exp.position || exp.company || exp.description || (exp.highlights && exp.highlights.length > 0)).map((exp) => {
+                  const dateRange = exp.startDate || exp.endDate || exp.current
+                    ? `${exp.startDate || ""}${exp.startDate && (exp.endDate || exp.current) ? " - " : ""}${exp.current ? "Present" : exp.endDate || ""}`
+                    : null;
+                  return (
+                    <div key={exp.id}>
+                      <div className="mb-1 flex items-start justify-between">
+                        {exp.position && <h3 className="text-base font-bold">{exp.position}</h3>}
+                        {dateRange && (
+                          <span className="text-sm text-gray-600">
+                            {dateRange}
+                          </span>
+                        )}
+                      </div>
+                      {exp.company && (
+                        <p className="mb-2 text-sm font-semibold text-gray-700">
+                          {exp.company}
+                        </p>
+                      )}
+                      {exp.description && (
+                        <p className="mb-2 text-sm text-gray-700">
+                          {exp.description}
+                        </p>
+                      )}
+                      {exp.highlights && exp.highlights.length > 0 && (
+                        <ul className="list-inside list-disc space-y-1 text-sm text-gray-700">
+                          {exp.highlights.map((highlight, idx) => (
+                            <li key={idx}>{highlight}</li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
-                    <p className="mb-2 text-sm font-semibold text-gray-700">
-                      {exp.company}
-                    </p>
-                    {exp.description && (
-                      <p className="mb-2 text-sm text-gray-700">
-                        {exp.description}
-                      </p>
-                    )}
-                    {exp.highlights && exp.highlights.length > 0 && (
-                      <ul className="list-inside list-disc space-y-1 text-sm text-gray-700">
-                        {exp.highlights.map((highlight, idx) => (
-                          <li key={idx}>{highlight}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
           )}
 
           {/* Education */}
-          {education.length > 0 && (
+          {education.filter((edu) => edu.degree || edu.institution || edu.field).length > 0 && (
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
@@ -141,31 +149,39 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                 Education
               </h2>
               <div className="space-y-4">
-                {education.map((edu) => (
-                  <div key={edu.id}>
-                    <div className="mb-1 flex items-start justify-between">
-                      <h3 className="text-base font-bold">{edu.degree}</h3>
-                      <span className="text-sm text-gray-600">
-                        {edu.startDate} -{" "}
-                        {edu.current ? "Present" : edu.endDate}
-                      </span>
+                {education.filter((edu) => edu.degree || edu.institution || edu.field).map((edu) => {
+                  const dateRange = edu.startDate || edu.endDate || edu.current
+                    ? `${edu.startDate || ""}${edu.startDate && (edu.endDate || edu.current) ? " - " : ""}${edu.current ? "Present" : edu.endDate || ""}`
+                    : null;
+                  return (
+                    <div key={edu.id}>
+                      <div className="mb-1 flex items-start justify-between">
+                        {edu.degree && <h3 className="text-base font-bold">{edu.degree}</h3>}
+                        {dateRange && (
+                          <span className="text-sm text-gray-600">
+                            {dateRange}
+                          </span>
+                        )}
+                      </div>
+                      {edu.institution && (
+                        <p className="text-sm font-semibold text-gray-700">
+                          {edu.institution}
+                        </p>
+                      )}
+                      {edu.field && <p className="text-sm text-gray-600">{edu.field}</p>}
+                      {edu.gpa && (
+                        <p className="text-sm text-gray-600">GPA: {edu.gpa}</p>
+                      )}
+                      {edu.honors && edu.honors.length > 0 && (
+                        <ul className="mt-1 list-inside list-disc text-sm text-gray-700">
+                          {edu.honors.map((honor, idx) => (
+                            <li key={idx}>{honor}</li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
-                    <p className="text-sm font-semibold text-gray-700">
-                      {edu.institution}
-                    </p>
-                    <p className="text-sm text-gray-600">{edu.field}</p>
-                    {edu.gpa && (
-                      <p className="text-sm text-gray-600">GPA: {edu.gpa}</p>
-                    )}
-                    {edu.honors && edu.honors.length > 0 && (
-                      <ul className="mt-1 list-inside list-disc text-sm text-gray-700">
-                        {edu.honors.map((honor, idx) => (
-                          <li key={idx}>{honor}</li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
           )}
@@ -275,7 +291,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
           )}
 
           {/* Certifications */}
-          {certifications.length > 0 && (
+          {certifications.filter((cert) => cert.name || cert.issuer || cert.date).length > 0 && (
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
@@ -285,13 +301,15 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                 Certifications
               </h2>
               <div className="space-y-2">
-                {certifications.map((cert) => (
+                {certifications.filter((cert) => cert.name || cert.issuer || cert.date).map((cert) => (
                   <div key={cert.id}>
-                    <p className="text-sm font-semibold text-gray-800">
-                      {cert.name}
-                    </p>
-                    <p className="text-xs text-gray-600">{cert.issuer}</p>
-                    <p className="text-xs text-gray-500">{cert.date}</p>
+                    {cert.name && (
+                      <p className="text-sm font-semibold text-gray-800">
+                        {cert.name}
+                      </p>
+                    )}
+                    {cert.issuer && <p className="text-xs text-gray-600">{cert.issuer}</p>}
+                    {cert.date && <p className="text-xs text-gray-500">{cert.date}</p>}
                   </div>
                 ))}
               </div>
@@ -299,7 +317,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
           )}
 
           {/* Links */}
-          {links.length > 0 && (
+          {links.filter((link) => link.label || link.url).length > 0 && (
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
@@ -309,25 +327,29 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                 Links
               </h2>
               <div className="space-y-2">
-                {links.map((link) => (
+                {links.filter((link) => link.label || link.url).map((link) => (
                   <div key={link.id} className="flex items-start gap-2">
                     <LinkIcon
                       className="mt-0.5 h-3 w-3 flex-shrink-0"
                       style={{ color: "#8b5cf6" }}
                     />
                     <div>
-                      <p className="text-xs font-semibold text-gray-800">
-                        {link.label}
-                      </p>
-                      <a
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs break-all hover:underline"
-                        style={{ color: "#8b5cf6" }}
-                      >
-                        {link.url}
-                      </a>
+                      {link.label && (
+                        <p className="text-xs font-semibold text-gray-800">
+                          {link.label}
+                        </p>
+                      )}
+                      {link.url && (
+                        <a
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs break-all hover:underline"
+                          style={{ color: "#8b5cf6" }}
+                        >
+                          {link.url}
+                        </a>
+                      )}
                     </div>
                   </div>
                 ))}

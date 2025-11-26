@@ -74,8 +74,8 @@ describe("experienceSchema", () => {
     });
   });
 
-  describe("Invalid Data", () => {
-    it("fails when company is missing", () => {
+  describe("Optional Fields", () => {
+    it("accepts when company is missing (all fields optional)", () => {
       const data = {
         id: "exp-1",
         position: "Developer",
@@ -83,13 +83,10 @@ describe("experienceSchema", () => {
         endDate: "2021-01",
       };
       const result = experienceSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("company");
-      }
+      expect(result.success).toBe(true);
     });
 
-    it("fails when position is missing", () => {
+    it("accepts when position is missing (all fields optional)", () => {
       const data = {
         id: "exp-1",
         company: "Company",
@@ -97,13 +94,10 @@ describe("experienceSchema", () => {
         endDate: "2021-01",
       };
       const result = experienceSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("position");
-      }
+      expect(result.success).toBe(true);
     });
 
-    it("fails when start date is missing", () => {
+    it("accepts when start date is missing (all fields optional)", () => {
       const data = {
         id: "exp-1",
         company: "Company",
@@ -111,13 +105,10 @@ describe("experienceSchema", () => {
         endDate: "2021-01",
       };
       const result = experienceSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("startDate");
-      }
+      expect(result.success).toBe(true);
     });
 
-    it("fails when end date is missing for past position", () => {
+    it("accepts when end date is missing for past position (all fields optional)", () => {
       const data = {
         id: "exp-1",
         company: "Company",
@@ -126,14 +117,43 @@ describe("experienceSchema", () => {
         current: false,
       };
       const result = experienceSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].message).toBe(
-          "End date is required for past positions",
-        );
-      }
+      expect(result.success).toBe(true);
     });
 
+    it("accepts when company is empty string (all fields optional)", () => {
+      const data = {
+        id: "exp-1",
+        company: "",
+        position: "Developer",
+        startDate: "2020-01",
+        endDate: "2021-01",
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
+
+    it("accepts when position is empty string (all fields optional)", () => {
+      const data = {
+        id: "exp-1",
+        company: "Company",
+        position: "",
+        startDate: "2020-01",
+        endDate: "2021-01",
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
+
+    it("accepts completely empty experience entry (only id required)", () => {
+      const data = {
+        id: "exp-1",
+      };
+      const result = experienceSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe("Invalid Data", () => {
     it("fails when description exceeds 1000 characters", () => {
       const data = {
         id: "exp-1",
@@ -148,30 +168,6 @@ describe("experienceSchema", () => {
       if (!result.success) {
         expect(result.error.issues[0].path).toContain("description");
       }
-    });
-
-    it("fails when company is empty string", () => {
-      const data = {
-        id: "exp-1",
-        company: "",
-        position: "Developer",
-        startDate: "2020-01",
-        endDate: "2021-01",
-      };
-      const result = experienceSchema.safeParse(data);
-      expect(result.success).toBe(false);
-    });
-
-    it("fails when position is empty string", () => {
-      const data = {
-        id: "exp-1",
-        company: "Company",
-        position: "",
-        startDate: "2020-01",
-        endDate: "2021-01",
-      };
-      const result = experienceSchema.safeParse(data);
-      expect(result.success).toBe(false);
     });
   });
 

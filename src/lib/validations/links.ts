@@ -13,11 +13,12 @@ export const linkTypeSchema = z.enum([
 /**
  * Link Validation Schema
  * Validates social/portfolio links
+ * All fields are optional - only non-empty fields are rendered in the resume
  */
 export const linkSchema = z.object({
   id: z.string(),
-  label: z.string().min(1, "Label is required"),
-  url: z.string().url("Invalid URL").min(1, "URL is required"),
+  label: z.string().optional().or(z.literal("")),
+  url: z.string().url("Invalid URL").optional().or(z.literal("")),
   type: linkTypeSchema,
 });
 

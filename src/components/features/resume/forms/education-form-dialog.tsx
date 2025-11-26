@@ -205,7 +205,7 @@ export function EducationFormDialog({
               name="gpa"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>GPA (optional)</FormLabel>
+                  <FormLabel>GPA</FormLabel>
                   <FormControl>
                     <Input placeholder="3.8" {...field} />
                   </FormControl>
@@ -217,7 +217,7 @@ export function EducationFormDialog({
 
             {honors.length > 0 && (
               <div className="space-y-2">
-                <FormLabel>Honors & Awards (optional)</FormLabel>
+                <FormLabel>Honors & Awards</FormLabel>
                 <FormDescription>
                   Add any honors, awards, or achievements
                 </FormDescription>

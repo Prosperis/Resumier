@@ -74,7 +74,7 @@ describe("personalInfoSchema", () => {
   });
 
   describe("Name Validation", () => {
-    it("requires at least one name field", () => {
+    it("accepts both names empty (all fields optional)", () => {
       const data = {
         firstName: "",
         lastName: "",
@@ -83,12 +83,7 @@ describe("personalInfoSchema", () => {
         location: "Test City",
       };
       const result = personalInfoSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].message).toBe(
-          "At least one name field is required",
-        );
-      }
+      expect(result.success).toBe(true);
     });
 
     it("accepts only first name", () => {
@@ -233,7 +228,7 @@ describe("personalInfoSchema", () => {
   });
 
   describe("Email Validation", () => {
-    it("rejects empty email", () => {
+    it("accepts empty email (all fields optional)", () => {
       const data = {
         firstName: "Test",
         lastName: "User",
@@ -242,10 +237,7 @@ describe("personalInfoSchema", () => {
         location: "Test City",
       };
       const result = personalInfoSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].message).toBe("Email is required");
-      }
+      expect(result.success).toBe(true);
     });
 
     it("rejects invalid email format", () => {
@@ -295,7 +287,7 @@ describe("personalInfoSchema", () => {
   });
 
   describe("Phone Validation", () => {
-    it("rejects empty phone", () => {
+    it("accepts empty phone (all fields optional)", () => {
       const data = {
         firstName: "Test",
         lastName: "User",
@@ -304,10 +296,7 @@ describe("personalInfoSchema", () => {
         location: "Test City",
       };
       const result = personalInfoSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].message).toBe("Phone number is required");
-      }
+      expect(result.success).toBe(true);
     });
 
     it("accepts valid E.164 phone numbers", () => {
@@ -391,7 +380,7 @@ describe("personalInfoSchema", () => {
   });
 
   describe("Location Validation", () => {
-    it("rejects empty location", () => {
+    it("accepts empty location (all fields optional)", () => {
       const data = {
         firstName: "Test",
         lastName: "User",
@@ -400,10 +389,7 @@ describe("personalInfoSchema", () => {
         location: "",
       };
       const result = personalInfoSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].message).toBe("Location is required");
-      }
+      expect(result.success).toBe(true);
     });
 
     it("rejects location longer than 100 characters", () => {
@@ -517,10 +503,10 @@ describe("personalInfoSchema", () => {
   });
 
   describe("Edge Cases", () => {
-    it("rejects missing required fields", () => {
+    it("accepts completely empty data (all fields optional)", () => {
       const data = {};
       const result = personalInfoSchema.safeParse(data);
-      expect(result.success).toBe(false);
+      expect(result.success).toBe(true);
     });
 
     it("strips extra unexpected fields", () => {

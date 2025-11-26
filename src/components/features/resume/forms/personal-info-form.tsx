@@ -150,10 +150,7 @@ export function PersonalInfoForm({
             {/* Name Fields Row */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <FormLabel className="text-[11px]">
-                  Name{" "}
-                  <span className="text-muted-foreground">(at least one)</span>
-                </FormLabel>
+                <FormLabel className="text-[11px]">Name</FormLabel>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -247,7 +244,7 @@ export function PersonalInfoForm({
               name="email"
               render={({ field }) => (
                 <FormItem className="space-y-1">
-                  <FormLabel className="text-[11px]">Email *</FormLabel>
+                  <FormLabel className="text-[11px]">Email</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -269,7 +266,7 @@ export function PersonalInfoForm({
               render={({ field }) => (
                 <FormItem className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <FormLabel className="text-[11px]">Phone *</FormLabel>
+                    <FormLabel className="text-[11px]">Phone</FormLabel>
                     <FormField
                       control={form.control}
                       name="phoneFormat"
@@ -315,7 +312,7 @@ export function PersonalInfoForm({
               name="location"
               render={({ field }) => (
                 <FormItem className="space-y-1">
-                  <FormLabel className="text-[11px]">Location *</FormLabel>
+                  <FormLabel className="text-[11px]">Location</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -394,7 +391,7 @@ export function PersonalInfoForm({
                       />
                     </FormControl>
                     <FormDescription className="text-[10px]">
-                      A brief professional summary (optional)
+                      A brief professional summary
                     </FormDescription>
                     <FormMessage className="text-[10px]" />
                   </FormItem>

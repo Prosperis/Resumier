@@ -93,8 +93,8 @@ describe("educationSchema", () => {
     });
   });
 
-  describe("Invalid Data", () => {
-    it("fails when institution is missing", () => {
+  describe("Optional Fields", () => {
+    it("accepts when institution is missing (all fields optional)", () => {
       const data = {
         id: "edu-1",
         degree: "BS",
@@ -103,13 +103,10 @@ describe("educationSchema", () => {
         endDate: "2022-05",
       };
       const result = educationSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("institution");
-      }
+      expect(result.success).toBe(true);
     });
 
-    it("fails when degree is missing", () => {
+    it("accepts when degree is missing (all fields optional)", () => {
       const data = {
         id: "edu-1",
         institution: "MIT",
@@ -118,13 +115,10 @@ describe("educationSchema", () => {
         endDate: "2022-05",
       };
       const result = educationSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("degree");
-      }
+      expect(result.success).toBe(true);
     });
 
-    it("fails when field is missing", () => {
+    it("accepts when field is missing (all fields optional)", () => {
       const data = {
         id: "edu-1",
         institution: "MIT",
@@ -133,13 +127,10 @@ describe("educationSchema", () => {
         endDate: "2022-05",
       };
       const result = educationSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("field");
-      }
+      expect(result.success).toBe(true);
     });
 
-    it("fails when start date is missing", () => {
+    it("accepts when start date is missing (all fields optional)", () => {
       const data = {
         id: "edu-1",
         institution: "MIT",
@@ -148,13 +139,10 @@ describe("educationSchema", () => {
         endDate: "2022-05",
       };
       const result = educationSchema.safeParse(data);
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toContain("startDate");
-      }
+      expect(result.success).toBe(true);
     });
 
-    it("fails when institution is empty string", () => {
+    it("accepts when institution is empty string (all fields optional)", () => {
       const data = {
         id: "edu-1",
         institution: "",
@@ -164,10 +152,10 @@ describe("educationSchema", () => {
         endDate: "2022-05",
       };
       const result = educationSchema.safeParse(data);
-      expect(result.success).toBe(false);
+      expect(result.success).toBe(true);
     });
 
-    it("fails when degree is empty string", () => {
+    it("accepts when degree is empty string (all fields optional)", () => {
       const data = {
         id: "edu-1",
         institution: "MIT",
@@ -177,10 +165,10 @@ describe("educationSchema", () => {
         endDate: "2022-05",
       };
       const result = educationSchema.safeParse(data);
-      expect(result.success).toBe(false);
+      expect(result.success).toBe(true);
     });
 
-    it("fails when field is empty string", () => {
+    it("accepts when field is empty string (all fields optional)", () => {
       const data = {
         id: "edu-1",
         institution: "MIT",
@@ -190,9 +178,19 @@ describe("educationSchema", () => {
         endDate: "2022-05",
       };
       const result = educationSchema.safeParse(data);
-      expect(result.success).toBe(false);
+      expect(result.success).toBe(true);
     });
 
+    it("accepts completely empty education entry (only id required)", () => {
+      const data = {
+        id: "edu-1",
+      };
+      const result = educationSchema.safeParse(data);
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe("Invalid Data", () => {
     it("fails when GPA exceeds 10 characters", () => {
       const data = {
         id: "edu-1",

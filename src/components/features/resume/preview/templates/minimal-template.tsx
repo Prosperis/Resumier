@@ -51,78 +51,92 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
       )}
 
       {/* Experience */}
-      {experience.length > 0 && (
+      {experience.filter((exp) => exp.position || exp.company || exp.description || (exp.highlights && exp.highlights.length > 0)).length > 0 && (
         <section className="mb-12">
           <h2 className="mb-6 text-xs font-semibold tracking-wider text-gray-500 uppercase">
             Experience
           </h2>
           <div className="space-y-8">
-            {experience.map((exp) => (
-              <div key={exp.id}>
-                <div className="mb-2 flex items-baseline justify-between">
-                  <h3 className="text-lg font-medium">{exp.position}</h3>
-                  <span className="text-xs text-gray-500">
-                    {exp.startDate} — {exp.current ? "Present" : exp.endDate}
-                  </span>
+            {experience.filter((exp) => exp.position || exp.company || exp.description || (exp.highlights && exp.highlights.length > 0)).map((exp) => {
+              const dateRange = exp.startDate || exp.endDate || exp.current
+                ? `${exp.startDate || ""}${exp.startDate && (exp.endDate || exp.current) ? " — " : ""}${exp.current ? "Present" : exp.endDate || ""}`
+                : null;
+              return (
+                <div key={exp.id}>
+                  <div className="mb-2 flex items-baseline justify-between">
+                    {exp.position && <h3 className="text-lg font-medium">{exp.position}</h3>}
+                    {dateRange && (
+                      <span className="text-xs text-gray-500">
+                        {dateRange}
+                      </span>
+                    )}
+                  </div>
+                  {exp.company && <p className="mb-3 text-sm text-gray-600">{exp.company}</p>}
+                  {exp.description && (
+                    <p className="mb-2 text-sm leading-relaxed text-gray-700">
+                      {exp.description}
+                    </p>
+                  )}
+                  {exp.highlights && exp.highlights.length > 0 && (
+                    <ul className="space-y-1">
+                      {exp.highlights.map((highlight, idx) => (
+                        <li
+                          key={idx}
+                          className="relative pl-4 text-sm text-gray-700 before:absolute before:left-0 before:content-['—']"
+                        >
+                          {highlight}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <p className="mb-3 text-sm text-gray-600">{exp.company}</p>
-                {exp.description && (
-                  <p className="mb-2 text-sm leading-relaxed text-gray-700">
-                    {exp.description}
-                  </p>
-                )}
-                {exp.highlights && exp.highlights.length > 0 && (
-                  <ul className="space-y-1">
-                    {exp.highlights.map((highlight, idx) => (
-                      <li
-                        key={idx}
-                        className="relative pl-4 text-sm text-gray-700 before:absolute before:left-0 before:content-['—']"
-                      >
-                        {highlight}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
 
       {/* Education */}
-      {education.length > 0 && (
+      {education.filter((edu) => edu.degree || edu.institution || edu.field).length > 0 && (
         <section className="mb-12">
           <h2 className="mb-6 text-xs font-semibold tracking-wider text-gray-500 uppercase">
             Education
           </h2>
           <div className="space-y-6">
-            {education.map((edu) => (
-              <div key={edu.id}>
-                <div className="mb-2 flex items-baseline justify-between">
-                  <h3 className="text-lg font-medium">{edu.degree}</h3>
-                  <span className="text-xs text-gray-500">
-                    {edu.startDate} — {edu.current ? "Present" : edu.endDate}
-                  </span>
+            {education.filter((edu) => edu.degree || edu.institution || edu.field).map((edu) => {
+              const dateRange = edu.startDate || edu.endDate || edu.current
+                ? `${edu.startDate || ""}${edu.startDate && (edu.endDate || edu.current) ? " — " : ""}${edu.current ? "Present" : edu.endDate || ""}`
+                : null;
+              return (
+                <div key={edu.id}>
+                  <div className="mb-2 flex items-baseline justify-between">
+                    {edu.degree && <h3 className="text-lg font-medium">{edu.degree}</h3>}
+                    {dateRange && (
+                      <span className="text-xs text-gray-500">
+                        {dateRange}
+                      </span>
+                    )}
+                  </div>
+                  {edu.institution && <p className="text-sm text-gray-600">{edu.institution}</p>}
+                  {edu.field && <p className="text-sm text-gray-500">{edu.field}</p>}
+                  {edu.gpa && (
+                    <p className="mt-1 text-sm text-gray-500">GPA: {edu.gpa}</p>
+                  )}
+                  {edu.honors && edu.honors.length > 0 && (
+                    <ul className="mt-2 space-y-1">
+                      {edu.honors.map((honor, idx) => (
+                        <li
+                          key={idx}
+                          className="relative pl-4 text-sm text-gray-700 before:absolute before:left-0 before:content-['—']"
+                        >
+                          {honor}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <p className="text-sm text-gray-600">{edu.institution}</p>
-                <p className="text-sm text-gray-500">{edu.field}</p>
-                {edu.gpa && (
-                  <p className="mt-1 text-sm text-gray-500">GPA: {edu.gpa}</p>
-                )}
-                {edu.honors && edu.honors.length > 0 && (
-                  <ul className="mt-2 space-y-1">
-                    {edu.honors.map((honor, idx) => (
-                      <li
-                        key={idx}
-                        className="relative pl-4 text-sm text-gray-700 before:absolute before:left-0 before:content-['—']"
-                      >
-                        {honor}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
@@ -182,18 +196,20 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
       )}
 
       {/* Certifications */}
-      {certifications.length > 0 && (
+      {certifications.filter((cert) => cert.name || cert.issuer || cert.date).length > 0 && (
         <section className="mb-12">
           <h2 className="mb-6 text-xs font-semibold tracking-wider text-gray-500 uppercase">
             Certifications
           </h2>
           <div className="space-y-3">
-            {certifications.map((cert) => (
+            {certifications.filter((cert) => cert.name || cert.issuer || cert.date).map((cert) => (
               <div key={cert.id}>
-                <p className="text-sm font-medium text-gray-800">{cert.name}</p>
-                <p className="text-xs text-gray-600">
-                  {cert.issuer} • {cert.date}
-                </p>
+                {cert.name && <p className="text-sm font-medium text-gray-800">{cert.name}</p>}
+                {(cert.issuer || cert.date) && (
+                  <p className="text-xs text-gray-600">
+                    {[cert.issuer, cert.date].filter(Boolean).join(" • ")}
+                  </p>
+                )}
               </div>
             ))}
           </div>
@@ -201,25 +217,29 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
       )}
 
       {/* Links */}
-      {links.length > 0 && (
+      {links.filter((link) => link.label || link.url).length > 0 && (
         <section className="mb-12">
           <h2 className="mb-6 text-xs font-semibold tracking-wider text-gray-500 uppercase">
             Links
           </h2>
           <div className="space-y-2">
-            {links.map((link) => (
+            {links.filter((link) => link.label || link.url).map((link) => (
               <div key={link.id} className="flex items-baseline gap-3">
-                <span className="min-w-[100px] text-sm font-medium text-gray-700">
-                  {link.label}
-                </span>
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-gray-600 hover:text-gray-900"
-                >
-                  {link.url}
-                </a>
+                {link.label && (
+                  <span className="min-w-[100px] text-sm font-medium text-gray-700">
+                    {link.label}
+                  </span>
+                )}
+                {link.url && (
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-gray-600 hover:text-gray-900"
+                  >
+                    {link.url}
+                  </a>
+                )}
               </div>
             ))}
           </div>

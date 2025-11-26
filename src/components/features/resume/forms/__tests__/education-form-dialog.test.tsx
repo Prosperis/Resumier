@@ -181,7 +181,7 @@ describe("EducationFormDialog", () => {
       await user.click(addButton);
       await waitFor(() => {
         expect(
-          screen.getByText("Honors & Awards (optional)"),
+          screen.getByText("Honors & Awards"),
         ).toBeInTheDocument();
         expect(screen.getByPlaceholderText(/dean's list/i)).toBeInTheDocument();
       });

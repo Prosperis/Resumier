@@ -30,13 +30,13 @@ const e164PhoneRegex = /^\+[1-9]\d{6,14}$/;
 /**
  * Validates phone numbers in E.164 format
  * Also accepts partial numbers during typing (with + prefix)
+ * Phone is optional - only validates format when provided
  */
 const phoneValidation = z
   .string()
-  .min(1, "Phone number is required")
   .refine(
     (val) => {
-      // Allow empty string (handled by min check above)
+      // Allow empty string
       if (!val) return true;
       // Must start with + for international format
       if (!val.startsWith("+")) return false;
@@ -44,7 +44,9 @@ const phoneValidation = z
       return e164PhoneRegex.test(val);
     },
     { message: "Please enter a valid phone number" },
-  );
+  )
+  .optional()
+  .or(z.literal(""));
 
 /**
  * Name field validation - allows empty string but validates format when provided
@@ -63,33 +65,30 @@ const nameFieldValidation = (fieldName: string) =>
 /**
  * Personal Info Validation Schema
  * Validates basic personal information fields
- * Note: At least one name field (first or last) is required
+ * All fields are optional - only non-empty fields are rendered in the resume
  */
-export const personalInfoSchema = z
-  .object({
-    firstName: nameFieldValidation("First name"),
-    lastName: nameFieldValidation("Last name"),
-    nameOrder: nameOrderSchema.default("firstLast"),
-    email: z
-      .string()
-      .min(1, "Email is required")
-      .email("Please enter a valid email address"),
-    phone: phoneValidation,
-    phoneFormat: phoneFormatSchema.default("national"),
-    location: z
-      .string()
-      .min(1, "Location is required")
-      .max(100, "Location must be less than 100 characters"),
-    summary: z
-      .string()
-      .max(500, "Summary must be less than 500 characters")
-      .optional()
-      .or(z.literal("")),
-  })
-  .refine((data) => data.firstName?.trim() || data.lastName?.trim(), {
-    message: "At least one name field is required",
-    path: ["firstName"], // Show error on firstName field
-  });
+export const personalInfoSchema = z.object({
+  firstName: nameFieldValidation("First name"),
+  lastName: nameFieldValidation("Last name"),
+  nameOrder: nameOrderSchema.default("firstLast"),
+  email: z
+    .string()
+    .email("Please enter a valid email address")
+    .optional()
+    .or(z.literal("")),
+  phone: phoneValidation,
+  phoneFormat: phoneFormatSchema.default("national"),
+  location: z
+    .string()
+    .max(100, "Location must be less than 100 characters")
+    .optional()
+    .or(z.literal("")),
+  summary: z
+    .string()
+    .max(500, "Summary must be less than 500 characters")
+    .optional()
+    .or(z.literal("")),
+});
 
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
 

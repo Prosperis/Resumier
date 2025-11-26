@@ -42,27 +42,28 @@ describe("PersonalInfoForm", () => {
     });
     it("renders all form fields", () => {
       render(<PersonalInfoForm {...defaultProps} />);
-      expect(screen.getByLabelText(/full name/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/^email \*/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/phone/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/^location \*/i)).toBeInTheDocument();
+      // Name fields (first and last name inputs)
+      expect(screen.getByPlaceholderText("John")).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("Doe")).toBeInTheDocument();
+      // Other fields
+      expect(screen.getByLabelText(/^email$/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/^phone$/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/^location$/i)).toBeInTheDocument();
       expect(
         screen.getByLabelText(/professional summary/i),
       ).toBeInTheDocument();
     });
-    it("shows required field indicators", () => {
+    it("all fields are optional (no required indicators)", () => {
       render(<PersonalInfoForm {...defaultProps} />);
-      expect(screen.getByLabelText(/full name \*/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/email \*/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/phone \*/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/location \*/i)).toBeInTheDocument();
+      // No asterisks should be present - all fields are optional
+      expect(screen.queryByText(/\*/)).not.toBeInTheDocument();
     });
     it("shows field descriptions", () => {
       render(<PersonalInfoForm {...defaultProps} />);
       expect(screen.getByText(/city and state\/country/i)).toBeInTheDocument();
       expect(
         screen.getByText(
-          /a brief professional summary \(optional, max 500 characters\)/i,
+          /a brief professional summary/i,
         ),
       ).toBeInTheDocument();
     });
@@ -89,14 +90,14 @@ describe("PersonalInfoForm", () => {
     it("allows typing in name field", async () => {
       const user = userEvent.setup();
       render(<PersonalInfoForm {...defaultProps} />);
-      const nameInput = screen.getByLabelText(/full name/i);
+      const nameInput = screen.getByPlaceholderText("John");
       await user.type(nameInput, "John Doe");
       expect(nameInput).toHaveValue("John Doe");
     });
     it("triggers auto-save on blur with valid name", async () => {
       const user = userEvent.setup();
       render(<PersonalInfoForm {...defaultProps} />);
-      const nameInput = screen.getByLabelText(/full name/i);
+      const nameInput = screen.getByPlaceholderText("John");
       await user.type(nameInput, "John Doe");
       await user.tab(); // Blur the field
       await waitFor(() => {
@@ -224,7 +225,7 @@ describe("PersonalInfoForm", () => {
       render(<PersonalInfoForm {...defaultProps} />);
       expect(
         screen.getByText(
-          /a brief professional summary \(optional, max 500 characters\)/i,
+          /a brief professional summary/i,
         ),
       ).toBeInTheDocument();
     });
@@ -254,7 +255,7 @@ describe("PersonalInfoForm", () => {
     it("auto-saves all fields together", async () => {
       const user = userEvent.setup();
       render(<PersonalInfoForm {...defaultProps} />);
-      await user.type(screen.getByLabelText(/full name/i), "John Doe");
+      await user.type(screen.getByPlaceholderText("John"), "John Doe");
       await user.tab();
       await user.type(screen.getByLabelText(/^email/i), "john@test.com");
       await user.tab();
@@ -274,7 +275,7 @@ describe("PersonalInfoForm", () => {
       const user = userEvent.setup();
       render(<PersonalInfoForm {...defaultProps} />);
       // Fill all fields
-      await user.type(screen.getByLabelText(/full name/i), "Jane Smith");
+      await user.type(screen.getByPlaceholderText("John"), "Jane Smith");
       await user.type(screen.getByLabelText(/^email/i), "jane@example.com");
       await user.type(screen.getByLabelText(/phone/i), "+9876543210");
       await user.type(screen.getByLabelText(/^location/i), "Boston, MA");
@@ -299,7 +300,7 @@ describe("PersonalInfoForm", () => {
     it("handles empty summary in auto-save", async () => {
       const user = userEvent.setup();
       render(<PersonalInfoForm {...defaultProps} />);
-      await user.type(screen.getByLabelText(/full name/i), "Test User");
+      await user.type(screen.getByPlaceholderText("John"), "Test User");
       await user.tab();
       await waitFor(() => {
         expect(mockSave).toHaveBeenCalledWith(
@@ -371,7 +372,7 @@ describe("PersonalInfoForm", () => {
       render(
         <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
       );
-      expect(screen.getByLabelText(/full name/i)).toHaveValue("John Doe");
+      expect(screen.getByPlaceholderText("John")).toHaveValue("John Doe");
       expect(screen.getByLabelText(/^email/i)).toHaveValue("john@example.com");
       expect(screen.getByLabelText(/phone/i)).toHaveValue("+1234567890");
       expect(screen.getByLabelText(/^location/i)).toHaveValue(
@@ -389,7 +390,7 @@ describe("PersonalInfoForm", () => {
       render(
         <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
       );
-      expect(screen.getByLabelText(/full name/i)).toHaveValue("Jane Smith");
+      expect(screen.getByPlaceholderText("John")).toHaveValue("Jane Smith");
       expect(screen.getByLabelText(/^email/i)).toHaveValue("jane@example.com");
       expect(screen.getByLabelText(/phone/i)).toHaveValue("");
       expect(screen.getByLabelText(/^location/i)).toHaveValue("");
@@ -400,7 +401,7 @@ describe("PersonalInfoForm", () => {
       render(
         <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
       );
-      expect(screen.getByLabelText(/full name/i)).toHaveValue("");
+      expect(screen.getByPlaceholderText("John")).toHaveValue("");
       expect(screen.getByLabelText(/^email/i)).toHaveValue("");
       expect(screen.getByLabelText(/phone/i)).toHaveValue("");
       expect(screen.getByLabelText(/^location/i)).toHaveValue("");
@@ -414,7 +415,7 @@ describe("PersonalInfoForm", () => {
       render(
         <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
       );
-      const nameInput = screen.getByLabelText(/full name/i);
+      const nameInput = screen.getByPlaceholderText("John");
       expect(nameInput).toHaveValue("Original Name");
       await user.clear(nameInput);
       await user.type(nameInput, "Updated Name");
@@ -424,7 +425,7 @@ describe("PersonalInfoForm", () => {
   describe("Disabled State", () => {
     it("disables all fields when enabled is false", () => {
       render(<PersonalInfoForm {...defaultProps} enabled={false} />);
-      expect(screen.getByLabelText(/full name/i)).toBeDisabled();
+      expect(screen.getByPlaceholderText("John")).toBeDisabled();
       expect(screen.getByLabelText(/^email/i)).toBeDisabled();
       expect(screen.getByLabelText(/phone/i)).toBeDisabled();
       expect(screen.getByLabelText(/^location/i)).toBeDisabled();
@@ -432,7 +433,7 @@ describe("PersonalInfoForm", () => {
     });
     it("enables all fields by default", () => {
       render(<PersonalInfoForm {...defaultProps} />);
-      expect(screen.getByLabelText(/full name/i)).not.toBeDisabled();
+      expect(screen.getByPlaceholderText("John")).not.toBeDisabled();
       expect(screen.getByLabelText(/^email/i)).not.toBeDisabled();
       expect(screen.getByLabelText(/phone/i)).not.toBeDisabled();
       expect(screen.getByLabelText(/^location/i)).not.toBeDisabled();
@@ -440,7 +441,7 @@ describe("PersonalInfoForm", () => {
     });
     it("enables all fields when enabled is true", () => {
       render(<PersonalInfoForm {...defaultProps} enabled={true} />);
-      expect(screen.getByLabelText(/full name/i)).not.toBeDisabled();
+      expect(screen.getByPlaceholderText("John")).not.toBeDisabled();
       expect(screen.getByLabelText(/^email/i)).not.toBeDisabled();
       expect(screen.getByLabelText(/phone/i)).not.toBeDisabled();
       expect(screen.getByLabelText(/^location/i)).not.toBeDisabled();
@@ -449,7 +450,7 @@ describe("PersonalInfoForm", () => {
     it("does not trigger auto-save when disabled", async () => {
       const user = userEvent.setup();
       render(<PersonalInfoForm {...defaultProps} enabled={false} />);
-      const nameInput = screen.getByLabelText(/full name/i);
+      const nameInput = screen.getByPlaceholderText("John");
       // Try to type (won't work because disabled)
       await user.click(nameInput);
       await user.keyboard("Test");
@@ -483,26 +484,18 @@ describe("PersonalInfoForm", () => {
     });
   });
   describe("Form Labels", () => {
-    it("shows all correct labels", () => {
+    it("shows all correct labels (all fields optional)", () => {
       render(<PersonalInfoForm {...defaultProps} />);
-      expect(screen.getByText("Full Name *")).toBeInTheDocument();
-      expect(screen.getByText("Email *")).toBeInTheDocument();
-      expect(screen.getByText("Phone *")).toBeInTheDocument();
-      expect(screen.getByText("Location *")).toBeInTheDocument();
+      expect(screen.getByText("Name")).toBeInTheDocument();
+      expect(screen.getByText("Email")).toBeInTheDocument();
+      expect(screen.getByText("Phone")).toBeInTheDocument();
+      expect(screen.getByText("Location")).toBeInTheDocument();
       expect(screen.getByText("Professional Summary")).toBeInTheDocument();
     });
-    it("marks required fields with asterisks", () => {
+    it("does not mark any fields with asterisks (all fields optional)", () => {
       render(<PersonalInfoForm {...defaultProps} />);
-      // Check that required fields have asterisks in their labels
-      expect(screen.getByText(/full name \*/i)).toBeInTheDocument();
-      expect(screen.getByText(/email \*/i)).toBeInTheDocument();
-      expect(screen.getByText(/phone \*/i)).toBeInTheDocument();
-      expect(screen.getByText(/location \*/i)).toBeInTheDocument();
-    });
-    it("does not mark optional fields with asterisks", () => {
-      render(<PersonalInfoForm {...defaultProps} />);
-      const summaryLabel = screen.getByText("Professional Summary");
-      expect(summaryLabel.textContent).not.toContain("*");
+      // No asterisks should be present - all fields are optional
+      expect(screen.queryByText(/\*/)).not.toBeInTheDocument();
     });
   });
   describe("Edge Cases", () => {
@@ -519,7 +512,7 @@ describe("PersonalInfoForm", () => {
     it("handles special characters in name", async () => {
       const user = userEvent.setup();
       render(<PersonalInfoForm {...defaultProps} />);
-      const nameInput = screen.getByLabelText(/full name/i);
+      const nameInput = screen.getByPlaceholderText("John");
       // Use paste for special characters to avoid encoding issues
       await user.click(nameInput);
       await user.paste("José García-Martínez");
@@ -544,7 +537,7 @@ describe("PersonalInfoForm", () => {
     it("handles clearing field values", async () => {
       const user = userEvent.setup();
       render(<PersonalInfoForm {...defaultProps} />);
-      const nameInput = screen.getByLabelText(/full name/i);
+      const nameInput = screen.getByPlaceholderText("John");
       await user.type(nameInput, "TestName");
       expect(nameInput).toHaveValue("TestName");
       await user.clear(nameInput);
