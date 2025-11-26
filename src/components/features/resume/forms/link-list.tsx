@@ -28,15 +28,15 @@ interface LinkListProps {
 function getLinkIcon(type: LinkFormData["type"]) {
   switch (type) {
     case "linkedin":
-      return <Linkedin className="h-4 w-4" />;
+      return <Linkedin className="h-3 w-3" />;
     case "github":
-      return <Github className="h-4 w-4" />;
+      return <Github className="h-3 w-3" />;
     case "portfolio":
-      return <ExternalLink className="h-4 w-4" />;
+      return <ExternalLink className="h-3 w-3" />;
     case "other":
-      return <LinkIcon className="h-4 w-4" />;
+      return <LinkIcon className="h-3 w-3" />;
     default:
-      return <LinkIcon className="h-4 w-4" />;
+      return <LinkIcon className="h-3 w-3" />;
   }
 }
 
@@ -88,11 +88,11 @@ export function LinkList({
 
   if (links.length === 0) {
     return (
-      <Card className="border-dashed">
-        <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-          <LinkIcon className="text-muted-foreground mb-4 h-12 w-12" />
-          <p className="text-muted-foreground">No links added yet</p>
-          <p className="text-muted-foreground mt-1 text-sm">
+      <Card className="border-dashed gap-3 py-3">
+        <CardContent className="flex flex-col items-center justify-center py-6 text-center px-3">
+          <LinkIcon className="text-muted-foreground mb-2 h-8 w-8" />
+          <p className="text-muted-foreground text-xs">No links added yet</p>
+          <p className="text-muted-foreground mt-1 text-[10px]">
             Add your portfolio, LinkedIn, GitHub, or other professional links
           </p>
         </CardContent>
@@ -110,17 +110,17 @@ export function LinkList({
         items={links.map((link) => link.id)}
         strategy={verticalListSortingStrategy}
       >
-        <div className="space-y-4">
+        <div className="space-y-2">
           {links.map((link) => (
             <SortableItem key={link.id} id={link.id}>
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-center gap-2">
+              <Card className="gap-2 py-2">
+                <CardContent className="pt-0 px-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center gap-1.5">
                         {getLinkIcon(link.type)}
-                        <h3 className="font-semibold">{link.label}</h3>
-                        <span className="text-muted-foreground bg-muted rounded-full px-2 py-0.5 text-xs">
+                        <h3 className="text-xs font-semibold">{link.label}</h3>
+                        <span className="text-muted-foreground bg-muted rounded-full px-1.5 py-0.5 text-[10px]">
                           {getLinkTypeLabel(link.type)}
                         </span>
                       </div>
@@ -129,17 +129,18 @@ export function LinkList({
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-primary flex items-center gap-1 text-sm hover:underline"
+                        className="text-primary flex items-center gap-1 text-[11px] hover:underline"
                       >
                         {link.url}
-                        <ExternalLink className="h-3 w-3" />
+                        <ExternalLink className="h-2.5 w-2.5" />
                       </a>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-1">
                       <Button
                         variant="outline"
                         size="sm"
+                        className="h-6 text-[10px] px-2"
                         onClick={() => onEdit(link)}
                       >
                         Edit
@@ -147,6 +148,7 @@ export function LinkList({
                       <Button
                         variant="outline"
                         size="sm"
+                        className="h-6 text-[10px] px-2"
                         onClick={() => onDelete(link.id)}
                       >
                         Delete

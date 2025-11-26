@@ -74,24 +74,24 @@ function CollapsibleSection({
       onOpenChange={() => onToggle(id)}
       className="border-b border-border"
     >
-      <CollapsibleTrigger className="flex w-full items-center justify-between px-4 py-3 hover:bg-muted/50 transition-colors">
-        <div className="flex items-center gap-3">
+      <CollapsibleTrigger className="flex w-full items-center justify-between px-3 py-2.5 hover:bg-muted/50 transition-colors">
+        <div className="flex items-center gap-2">
           <ChevronDown
             className={cn(
-              "h-4 w-4 text-muted-foreground transition-transform duration-200",
+              "h-3.5 w-3.5 text-muted-foreground transition-transform duration-200",
               !isOpen && "-rotate-90",
             )}
           />
           <div className="text-left">
-            <h3 className="text-sm font-semibold">{title}</h3>
+            <h3 className="text-xs font-semibold">{title}</h3>
             {description && (
-              <p className="text-xs text-muted-foreground">{description}</p>
+              <p className="text-[10px] text-muted-foreground">{description}</p>
             )}
           </div>
         </div>
         {action && <div onClick={(e) => e.stopPropagation()}>{action}</div>}
       </CollapsibleTrigger>
-      <CollapsibleContent className="px-4 pb-4 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+      <CollapsibleContent className="px-3 pb-3 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
         {children}
       </CollapsibleContent>
     </Collapsible>
@@ -693,21 +693,21 @@ export function ResumeBuilder() {
     <div className="w-full">
       {/* Import Resume Section - Hidden in demo mode */}
       {!isDemo && (
-        <div className="border-b border-border bg-blue-50/50 dark:bg-blue-950/20 px-4 py-3">
+        <div className="border-b border-border bg-blue-50/50 dark:bg-blue-950/20 px-3 py-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Upload className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <div className="flex items-center gap-2">
+              <Upload className="h-3 w-3 text-blue-600 dark:text-blue-400" />
               <div>
-                <h3 className="text-sm font-semibold">Quick Start</h3>
-                <p className="text-xs text-muted-foreground">
+                <h3 className="text-xs font-semibold">Quick Start</h3>
+                <p className="text-[10px] text-muted-foreground">
                   Import from LinkedIn, JSON, or other sources
                 </p>
               </div>
             </div>
             <ImportDialog
               trigger={
-                <Button variant="default" size="sm">
-                  <Upload className="mr-2 h-3 w-3" />
+                <Button variant="default" size="sm" className="h-6 text-[10px] px-2">
+                  <Upload className="mr-1.5 h-2.5 w-2.5" />
                   Import
                 </Button>
               }
@@ -741,8 +741,8 @@ export function ResumeBuilder() {
         isOpen={openSection === "experience"}
         onToggle={handleToggleSection}
         action={
-          <Button size="sm" variant="ghost" onClick={handleAddExperience}>
-            <Plus className="h-4 w-4" />
+          <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={handleAddExperience}>
+            <Plus className="h-3 w-3" />
           </Button>
         }
       >
@@ -764,8 +764,8 @@ export function ResumeBuilder() {
         isOpen={openSection === "education"}
         onToggle={handleToggleSection}
         action={
-          <Button size="sm" variant="ghost" onClick={handleAddEducation}>
-            <Plus className="h-4 w-4" />
+          <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={handleAddEducation}>
+            <Plus className="h-3 w-3" />
           </Button>
         }
       >
@@ -800,8 +800,8 @@ export function ResumeBuilder() {
         isOpen={openSection === "certifications"}
         onToggle={handleToggleSection}
         action={
-          <Button size="sm" variant="ghost" onClick={handleAddCertification}>
-            <Plus className="h-4 w-4" />
+          <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={handleAddCertification}>
+            <Plus className="h-3 w-3" />
           </Button>
         }
       >
@@ -823,8 +823,8 @@ export function ResumeBuilder() {
         isOpen={openSection === "links"}
         onToggle={handleToggleSection}
         action={
-          <Button size="sm" variant="ghost" onClick={handleAddLink}>
-            <Plus className="h-4 w-4" />
+          <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={handleAddLink}>
+            <Plus className="h-3 w-3" />
           </Button>
         }
       >

@@ -55,17 +55,17 @@ function TagInput({ value = [], onChange, placeholder }: TagInputProps) {
   };
 
   return (
-    <div className="border-input bg-background ring-offset-background focus-within:ring-ring flex flex-wrap gap-2 rounded-md border px-3 py-2 text-sm focus-within:ring-2 focus-within:ring-offset-2">
+    <div className="border-input bg-background ring-offset-background focus-within:ring-ring flex flex-wrap gap-1.5 rounded-md border px-2 py-1.5 text-xs focus-within:ring-2 focus-within:ring-offset-2">
       {value.map((tag, index) => (
-        <Badge key={index} variant="secondary" className="gap-1">
+        <Badge key={index} variant="secondary" className="gap-0.5 text-[10px] px-1.5 py-0.5">
           {tag}
           <button
             type="button"
             onClick={() => removeTag(index)}
-            className="hover:bg-secondary-foreground/20 ml-1 rounded-full"
+            className="hover:bg-secondary-foreground/20 ml-0.5 rounded-full"
             aria-label={`Remove ${tag}`}
           >
-            <XIcon className="h-3 w-3" />
+            <XIcon className="h-2.5 w-2.5" />
           </button>
         </Badge>
       ))}
@@ -74,7 +74,7 @@ function TagInput({ value = [], onChange, placeholder }: TagInputProps) {
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="flex-1 border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="flex-1 border-0 p-0 h-5 text-xs focus-visible:ring-0 focus-visible:ring-offset-0"
       />
     </div>
   );
@@ -114,28 +114,28 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
   }, [watchedValues, form.formState.isDirty, save]);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Skills</CardTitle>
-        <CardDescription>
+    <Card className="gap-3 py-3">
+      <CardHeader className="px-3">
+        <CardTitle className="text-xs">Skills</CardTitle>
+        <CardDescription className="text-[10px]">
           Add your skills by category. Press Enter to add a skill, Backspace to
           remove the last one.
           {isSaving && (
-            <span className="text-muted-foreground ml-2 text-xs">
+            <span className="text-muted-foreground ml-2 text-[10px]">
               Saving...
             </span>
           )}
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-3">
         <Form {...form}>
-          <form className="space-y-6">
+          <form className="space-y-3">
             <FormField
               control={form.control}
               name="technical"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Technical Skills</FormLabel>
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[11px]">Technical Skills</FormLabel>
                   <FormControl>
                     <TagInput
                       value={field.value || []}
@@ -143,10 +143,10 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
                       placeholder="e.g., React, TypeScript, Node.js"
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription className="text-[10px]">
                     Programming languages, frameworks, and technologies
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage className="text-[10px]" />
                 </FormItem>
               )}
             />
@@ -155,8 +155,8 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
               control={form.control}
               name="languages"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Languages</FormLabel>
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[11px]">Languages</FormLabel>
                   <FormControl>
                     <TagInput
                       value={field.value || []}
@@ -164,10 +164,10 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
                       placeholder="e.g., English (Native), Spanish (Fluent)"
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription className="text-[10px]">
                     Spoken languages and proficiency levels
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage className="text-[10px]" />
                 </FormItem>
               )}
             />
@@ -176,8 +176,8 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
               control={form.control}
               name="tools"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Tools & Software</FormLabel>
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[11px]">Tools & Software</FormLabel>
                   <FormControl>
                     <TagInput
                       value={field.value || []}
@@ -185,10 +185,10 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
                       placeholder="e.g., Git, Docker, Figma"
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription className="text-[10px]">
                     Development tools, software, and platforms
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage className="text-[10px]" />
                 </FormItem>
               )}
             />
@@ -197,8 +197,8 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
               control={form.control}
               name="soft"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Soft Skills</FormLabel>
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[11px]">Soft Skills</FormLabel>
                   <FormControl>
                     <TagInput
                       value={field.value || []}
@@ -206,10 +206,10 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
                       placeholder="e.g., Leadership, Communication, Problem Solving"
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription className="text-[10px]">
                     Interpersonal and professional skills
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage className="text-[10px]" />
                 </FormItem>
               )}
             />

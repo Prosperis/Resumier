@@ -83,60 +83,61 @@ export function PersonalInfoForm({
   };
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="gap-3 py-3">
+      <CardHeader className="px-3">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Personal Information</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-xs">Personal Information</CardTitle>
+            <CardDescription className="text-[10px]">
               Your basic contact information and professional summary
             </CardDescription>
           </div>
-          <div className="text-muted-foreground flex items-center gap-2 text-sm">
+          <div className="text-muted-foreground flex items-center gap-1.5 text-[10px]">
             {isSaving && (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="h-3 w-3 animate-spin" />
                 <span>Saving...</span>
               </>
             )}
             {!isSaving && lastSaved && (
               <>
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <CheckCircle2 className="h-3 w-3 text-green-600" />
                 <span>{formatLastSaved(lastSaved)}</span>
               </>
             )}
             {error && (
               <>
-                <AlertCircle className="text-destructive h-4 w-4" />
+                <AlertCircle className="text-destructive h-3 w-3" />
                 <span>Failed to save</span>
               </>
             )}
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-3">
         <Form {...form}>
-          <form className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <form className="space-y-3">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               {/* Name */}
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name *</FormLabel>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-[11px]">Full Name *</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         placeholder="John Doe"
                         disabled={!enabled}
+                        className="h-8 text-xs"
                         onBlur={(e) => {
                           field.onBlur();
                           handleFieldChange("name", e.target.value);
                         }}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[10px]" />
                   </FormItem>
                 )}
               />
@@ -146,21 +147,22 @@ export function PersonalInfoForm({
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email *</FormLabel>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-[11px]">Email *</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         type="email"
                         placeholder="john@example.com"
                         disabled={!enabled}
+                        className="h-8 text-xs"
                         onBlur={(e) => {
                           field.onBlur();
                           handleFieldChange("email", e.target.value);
                         }}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[10px]" />
                   </FormItem>
                 )}
               />
@@ -170,21 +172,22 @@ export function PersonalInfoForm({
                 control={form.control}
                 name="phone"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone *</FormLabel>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-[11px]">Phone *</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         type="tel"
                         placeholder="+1 (555) 123-4567"
                         disabled={!enabled}
+                        className="h-8 text-xs"
                         onBlur={(e) => {
                           field.onBlur();
                           handleFieldChange("phone", e.target.value);
                         }}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-[10px]" />
                   </FormItem>
                 )}
               />
@@ -194,21 +197,22 @@ export function PersonalInfoForm({
                 control={form.control}
                 name="location"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Location *</FormLabel>
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-[11px]">Location *</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         placeholder="San Francisco, CA"
                         disabled={!enabled}
+                        className="h-8 text-xs"
                         onBlur={(e) => {
                           field.onBlur();
                           handleFieldChange("location", e.target.value);
                         }}
                       />
                     </FormControl>
-                    <FormDescription>City and state/country</FormDescription>
-                    <FormMessage />
+                    <FormDescription className="text-[10px]">City and state/country</FormDescription>
+                    <FormMessage className="text-[10px]" />
                   </FormItem>
                 )}
               />
@@ -219,24 +223,25 @@ export function PersonalInfoForm({
               control={form.control}
               name="summary"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Professional Summary</FormLabel>
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[11px]">Professional Summary</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
                       placeholder="Brief overview of your professional background and key skills..."
                       disabled={!enabled}
-                      rows={4}
+                      rows={3}
+                      className="text-xs"
                       onBlur={(e) => {
                         field.onBlur();
                         handleFieldChange("summary", e.target.value);
                       }}
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription className="text-[10px]">
                     A brief professional summary (optional, max 500 characters)
                   </FormDescription>
-                  <FormMessage />
+                  <FormMessage className="text-[10px]" />
                 </FormItem>
               )}
             />

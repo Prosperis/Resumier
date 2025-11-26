@@ -58,12 +58,12 @@ export function ExperienceList({
 
   if (experiences.length === 0) {
     return (
-      <Card className="border-dashed">
-        <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-          <p className="text-muted-foreground text-sm">
+      <Card className="border-dashed gap-3 py-3">
+        <CardContent className="flex flex-col items-center justify-center py-6 text-center px-3">
+          <p className="text-muted-foreground text-xs">
             No experience added yet.
           </p>
-          <p className="text-muted-foreground mt-1 text-xs">
+          <p className="text-muted-foreground mt-1 text-[10px]">
             Click "Add Experience" to get started.
           </p>
         </CardContent>
@@ -107,54 +107,56 @@ export function ExperienceList({
         items={experiences.map((exp) => exp.id)}
         strategy={verticalListSortingStrategy}
       >
-        <div className="space-y-4">
+        <div className="space-y-2">
           {experiences.map((exp) => (
             <SortableItem key={exp.id} id={exp.id}>
-              <Card>
-                <CardHeader>
-                  <div className="flex items-start justify-between gap-4">
+              <Card className="gap-2 py-2">
+                <CardHeader className="px-3">
+                  <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
-                      <h3 className="font-semibold">{exp.position}</h3>
-                      <p className="text-muted-foreground text-sm">
+                      <h3 className="text-xs font-semibold">{exp.position}</h3>
+                      <p className="text-muted-foreground text-[11px]">
                         {exp.company}
                       </p>
-                      <div className="text-muted-foreground mt-1 flex items-center gap-1 text-xs">
-                        <CalendarIcon className="h-3 w-3" />
+                      <div className="text-muted-foreground mt-0.5 flex items-center gap-1 text-[10px]">
+                        <CalendarIcon className="h-2.5 w-2.5" />
                         <span>{formatDateRange(exp)}</span>
                       </div>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1">
                       <Button
                         variant="ghost"
                         size="icon"
+                        className="h-6 w-6"
                         onClick={() => onEdit(exp)}
                         aria-label={`Edit ${exp.position} experience`}
                       >
-                        <EditIcon className="h-4 w-4" />
+                        <EditIcon className="h-3 w-3" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
+                        className="h-6 w-6"
                         onClick={() => onDelete(exp.id)}
                         aria-label={`Delete ${exp.position} experience`}
                       >
-                        <TrashIcon className="h-4 w-4" />
+                        <TrashIcon className="h-3 w-3" />
                       </Button>
                     </div>
                   </div>
                 </CardHeader>
                 {(exp.description ||
                   (exp.highlights && exp.highlights.length > 0)) && (
-                  <CardContent>
+                  <CardContent className="px-3">
                     {exp.description && (
-                      <p className="text-muted-foreground text-sm">
+                      <p className="text-muted-foreground text-[11px]">
                         {exp.description}
                       </p>
                     )}
                     {exp.highlights && exp.highlights.length > 0 && (
-                      <ul className="mt-2 space-y-1 text-sm">
+                      <ul className="mt-1 space-y-0.5 text-[11px]">
                         {exp.highlights.map((highlight, index) => (
-                          <li key={index} className="flex gap-2">
+                          <li key={index} className="flex gap-1.5">
                             <span className="text-muted-foreground">•</span>
                             <span>{highlight}</span>
                           </li>
