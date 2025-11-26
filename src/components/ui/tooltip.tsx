@@ -61,12 +61,11 @@ function TooltipContent({
           exit="exit"
           transition={transition}
           className={cn(
-            "bg-primary text-primary-foreground z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-xs text-balance",
+            "z-50 w-fit rounded-md border bg-popover px-3 py-1.5 text-xs text-popover-foreground shadow-md",
             className,
           )}
         >
           {children}
-          <TooltipPrimitive.Arrow className="bg-primary fill-primary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
         </motion.div>
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
