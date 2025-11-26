@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import {
   Card,
   CardContent,
@@ -45,42 +46,37 @@ export function PersonalInfoForm({
       location: defaultValues?.location ?? "",
       summary: defaultValues?.summary ?? "",
     },
-    mode: "onBlur", // Validate on blur to avoid too many validations
+    mode: "onChange", // Validate on change for live feedback
   });
 
   const { save, isSaving, error, lastSaved } = useAutoSave({
     resumeId,
     enabled,
+    debounceMs: 600,
   });
 
-  // Handle form changes with auto-save
-  const handleFieldChange = (
-    field: keyof PersonalInfoFormData,
-    value: string,
-  ) => {
-    form.setValue(field, value);
+  // Use useWatch to subscribe to form changes and trigger re-renders
+  const watchedValues = useWatch({ control: form.control });
 
-    // Only save if enabled and the field is valid
+  // Auto-save on form value changes
+  useEffect(() => {
     if (!enabled) return;
 
-    const isValid = form.formState.errors[field] === undefined;
-    if (isValid) {
-      // Get all current form values
-      const formValues = form.getValues();
+    // Only save if we have at least some data
+    if (!watchedValues.name && !watchedValues.email) return;
 
-      save({
-        content: {
-          personalInfo: {
-            name: formValues.name,
-            email: formValues.email,
-            phone: formValues.phone,
-            location: formValues.location,
-            summary: formValues.summary || "", // Provide default empty string
-          },
+    save({
+      content: {
+        personalInfo: {
+          name: watchedValues.name || "",
+          email: watchedValues.email || "",
+          phone: watchedValues.phone || "",
+          location: watchedValues.location || "",
+          summary: watchedValues.summary || "",
         },
-      });
-    }
-  };
+      },
+    });
+  }, [watchedValues, enabled, save]);
 
   return (
     <Card className="gap-3 py-3">
@@ -131,10 +127,6 @@ export function PersonalInfoForm({
                         placeholder="John Doe"
                         disabled={!enabled}
                         className="h-8 text-xs"
-                        onBlur={(e) => {
-                          field.onBlur();
-                          handleFieldChange("name", e.target.value);
-                        }}
                       />
                     </FormControl>
                     <FormMessage className="text-[10px]" />
@@ -156,10 +148,6 @@ export function PersonalInfoForm({
                         placeholder="john@example.com"
                         disabled={!enabled}
                         className="h-8 text-xs"
-                        onBlur={(e) => {
-                          field.onBlur();
-                          handleFieldChange("email", e.target.value);
-                        }}
                       />
                     </FormControl>
                     <FormMessage className="text-[10px]" />
@@ -181,10 +169,6 @@ export function PersonalInfoForm({
                         placeholder="+1 (555) 123-4567"
                         disabled={!enabled}
                         className="h-8 text-xs"
-                        onBlur={(e) => {
-                          field.onBlur();
-                          handleFieldChange("phone", e.target.value);
-                        }}
                       />
                     </FormControl>
                     <FormMessage className="text-[10px]" />
@@ -205,10 +189,6 @@ export function PersonalInfoForm({
                         placeholder="San Francisco, CA"
                         disabled={!enabled}
                         className="h-8 text-xs"
-                        onBlur={(e) => {
-                          field.onBlur();
-                          handleFieldChange("location", e.target.value);
-                        }}
                       />
                     </FormControl>
                     <FormDescription className="text-[10px]">
@@ -236,10 +216,6 @@ export function PersonalInfoForm({
                       disabled={!enabled}
                       rows={3}
                       className="text-xs"
-                      onBlur={(e) => {
-                        field.onBlur();
-                        handleFieldChange("summary", e.target.value);
-                      }}
                     />
                   </FormControl>
                   <FormDescription className="text-[10px]">

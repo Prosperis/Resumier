@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Loader2, PlusIcon, X, XIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -63,12 +63,13 @@ export function ExperienceInlineForm({
     debounceMs: 600,
   });
 
-  const isCurrent = form.watch("current");
+  // Use useWatch to properly subscribe to form changes
+  const watchedValues = useWatch({ control: form.control });
+  const isCurrent = watchedValues.current;
 
   const triggerSave = useCallback(() => {
-    const values = form.getValues();
     const filteredHighlights = highlights.filter((h) => h.trim() !== "");
-    const currentData = { ...values, highlights: filteredHighlights };
+    const currentData = { ...watchedValues, highlights: filteredHighlights };
 
     // Only save if we have required fields
     if (
@@ -103,13 +104,12 @@ export function ExperienceInlineForm({
     }
 
     save({ content: { experience: updatedExperiences } });
-  }, [form, highlights, editingId, isNew, existingExperiences, save]);
+  }, [watchedValues, highlights, editingId, isNew, existingExperiences, save]);
 
   // Auto-save on form value changes
-  const watchedValues = form.watch();
   useEffect(() => {
     triggerSave();
-  }, [watchedValues, highlights, triggerSave]);
+  }, [triggerSave]);
 
   const addHighlight = () => {
     setHighlights([...highlights, ""]);

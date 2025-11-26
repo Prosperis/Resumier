@@ -156,7 +156,7 @@ export function TemplateGallery({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-7xl h-[90vh] p-0">
+      <DialogContent className="max-w-5xl h-[85vh] p-0 flex flex-col">
         {/* Header */}
         <DialogHeader className="px-6 py-4 border-b dark:border-gray-700">
           <div>
@@ -229,7 +229,7 @@ export function TemplateGallery({
         {/* Main Content */}
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar - Categories */}
-          <div className="w-56 border-r dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 p-4">
+          <div className="w-56 border-r dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 py-4 px-6">
             <div className="space-y-1">
               <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                 Categories
@@ -251,8 +251,8 @@ export function TemplateGallery({
           </div>
 
           {/* Templates Grid/List */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="p-6">
+          <div className="flex-1 overflow-y-auto px-6">
+            <div className="py-6">
               {/* Results Count */}
               <div className="mb-4 flex items-center justify-between">
                 <p className="text-sm text-gray-600 dark:text-gray-400">

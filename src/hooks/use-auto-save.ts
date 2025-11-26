@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import type { UpdateResumeDto } from "@/lib/api/types";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { Resume, UpdateResumeDto } from "@/lib/api/types";
 import { useUpdateResume } from "./api";
+import { resumeQueryKey } from "./api/use-resume";
 
 interface UseAutoSaveOptions {
   resumeId: string;
@@ -16,31 +18,27 @@ interface UseAutoSaveReturn {
 }
 
 /**
- * Hook for auto-saving resume changes with debouncing
+ * Hook for auto-saving resume changes with debouncing and live preview
  *
- * @example
- * ```tsx
- * const { save, isSaving, error, lastSaved } = useAutoSave({
- *   resumeId: "123",
- *   debounceMs: 1000
- * })
- *
- * // In form onChange
- * const handleChange = (data) => {
- *   save(data)
- * }
- * ```
+ * Features:
+ * - Immediate optimistic cache updates for live preview
+ * - Debounced API calls to prevent excessive requests
+ * - Rollback on error
+ * - Deduplication to prevent infinite loops
  */
 export function useAutoSave({
   resumeId,
   debounceMs = 1000,
   enabled = true,
 }: UseAutoSaveOptions): UseAutoSaveReturn {
+  const queryClient = useQueryClient();
   const { mutate, isPending, error: mutationError } = useUpdateResume();
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingDataRef = useRef<UpdateResumeDto | null>(null);
+  const previousDataRef = useRef<Resume | undefined>(undefined);
+  const lastSavedDataRef = useRef<string>("");
 
   // Clear timeout on unmount
   useEffect(() => {
@@ -58,39 +56,81 @@ export function useAutoSave({
     }
   }, [mutationError]);
 
-  const save = (data: UpdateResumeDto) => {
-    if (!enabled) return;
+  const save = useCallback(
+    (data: UpdateResumeDto) => {
+      if (!enabled) return;
 
-    // Store the latest data
-    pendingDataRef.current = data;
+      // Serialize the data to compare with last saved
+      const serializedData = JSON.stringify(data);
 
-    // Clear existing timeout
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+      // Skip if data hasn't changed (prevents infinite loops)
+      if (serializedData === lastSavedDataRef.current) {
+        return;
+      }
 
-    // Set new timeout
-    timeoutRef.current = setTimeout(() => {
-      if (pendingDataRef.current) {
-        mutate(
-          {
-            id: resumeId,
-            data: pendingDataRef.current,
-          },
-          {
-            onSuccess: () => {
-              setLastSaved(new Date());
-              setError(null);
-              pendingDataRef.current = null;
-            },
-            onError: (err: Error) => {
-              setError(err);
-            },
-          },
+      // Store the latest data
+      pendingDataRef.current = data;
+      lastSavedDataRef.current = serializedData;
+
+      // Capture previous data for potential rollback (only on first save in batch)
+      if (!previousDataRef.current) {
+        previousDataRef.current = queryClient.getQueryData<Resume>(
+          resumeQueryKey(resumeId),
         );
       }
-    }, debounceMs);
-  };
+
+      // Immediately update the cache for live preview
+      queryClient.setQueryData<Resume>(resumeQueryKey(resumeId), (old) => {
+        if (!old) return undefined;
+        return {
+          ...old,
+          ...data,
+          content: data.content
+            ? { ...old.content, ...data.content }
+            : old.content,
+        };
+      });
+
+      // Clear existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      // Set new timeout for debounced save
+      timeoutRef.current = setTimeout(() => {
+        if (pendingDataRef.current) {
+          mutate(
+            {
+              id: resumeId,
+              data: pendingDataRef.current,
+            },
+            {
+              onSuccess: () => {
+                setLastSaved(new Date());
+                setError(null);
+                pendingDataRef.current = null;
+                previousDataRef.current = undefined;
+              },
+              onError: (err: Error) => {
+                setError(err);
+                // Rollback to previous data on error
+                if (previousDataRef.current) {
+                  queryClient.setQueryData(
+                    resumeQueryKey(resumeId),
+                    previousDataRef.current,
+                  );
+                  // Reset lastSavedData so user can retry
+                  lastSavedDataRef.current = "";
+                }
+                previousDataRef.current = undefined;
+              },
+            },
+          );
+        }
+      }, debounceMs);
+    },
+    [enabled, resumeId, queryClient, mutate, debounceMs],
+  );
 
   return {
     save,
@@ -102,13 +142,6 @@ export function useAutoSave({
 
 /**
  * Format the last saved time for display
- *
- * @example
- * ```tsx
- * const { lastSaved } = useAutoSave(...)
- * const savedText = formatLastSaved(lastSaved)
- * // "Saved just now" or "Saved 2 minutes ago"
- * ```
  */
 export function formatLastSaved(lastSaved: Date | null): string {
   if (!lastSaved) return "";

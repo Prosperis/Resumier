@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Loader2, PlusIcon, X, XIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -61,12 +61,13 @@ export function EducationInlineForm({
     debounceMs: 600,
   });
 
-  const isCurrent = form.watch("current");
+  // Use useWatch to properly subscribe to form changes
+  const watchedValues = useWatch({ control: form.control });
+  const isCurrent = watchedValues.current;
 
   const triggerSave = useCallback(() => {
-    const values = form.getValues();
     const filteredHonors = honors.filter((h) => h.trim() !== "");
-    const currentData = { ...values, honors: filteredHonors };
+    const currentData = { ...watchedValues, honors: filteredHonors };
 
     if (
       !currentData.institution ||
@@ -100,12 +101,11 @@ export function EducationInlineForm({
     }
 
     save({ content: { education: updatedEducation } });
-  }, [form, honors, editingId, isNew, existingEducation, save]);
+  }, [watchedValues, honors, editingId, isNew, existingEducation, save]);
 
-  const watchedValues = form.watch();
   useEffect(() => {
     triggerSave();
-  }, [watchedValues, honors, triggerSave]);
+  }, [triggerSave]);
 
   const addHonor = () => setHonors([...honors, ""]);
   const removeHonor = (index: number) =>

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, Loader2, X } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -61,8 +61,11 @@ export function LinkInlineForm({
     debounceMs: 600,
   });
 
+  // Use useWatch to properly subscribe to form changes
+  const watchedValues = useWatch({ control: form.control });
+
   const triggerSave = useCallback(() => {
-    const currentData = form.getValues();
+    const currentData = watchedValues;
 
     if (!currentData.label || !currentData.url) {
       return;
@@ -90,12 +93,11 @@ export function LinkInlineForm({
     }
 
     save({ content: { links: updatedLinks } });
-  }, [form, editingId, isNew, existingLinks, save]);
+  }, [watchedValues, editingId, isNew, existingLinks, save]);
 
-  const watchedValues = form.watch();
   useEffect(() => {
     triggerSave();
-  }, [watchedValues, triggerSave]);
+  }, [triggerSave]);
 
   return (
     <Card className="gap-2 py-2 border-primary/50 bg-primary/5">
