@@ -146,7 +146,8 @@ export function PersonalInfoForm({
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <FormLabel className="text-[11px]">
-                  Name <span className="text-muted-foreground">(at least one)</span>
+                  Name{" "}
+                  <span className="text-muted-foreground">(at least one)</span>
                 </FormLabel>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -328,7 +329,10 @@ export function PersonalInfoForm({
                                 }`}
                               />
                             </TooltipTrigger>
-                            <TooltipContent side="top" className="max-w-[220px]">
+                            <TooltipContent
+                              side="top"
+                              className="max-w-[220px]"
+                            >
                               <p className="text-xs">
                                 {isOverLimit
                                   ? "Summary exceeds 500 characters and will be truncated."

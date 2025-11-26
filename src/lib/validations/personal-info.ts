@@ -32,7 +32,7 @@ const phoneValidation = z
       // Full E.164 validation for complete numbers
       return e164PhoneRegex.test(val);
     },
-    { message: "Please enter a valid phone number" }
+    { message: "Please enter a valid phone number" },
   );
 
 /**
@@ -44,7 +44,7 @@ const nameFieldValidation = (fieldName: string) =>
     .max(50, `${fieldName} must be less than 50 characters`)
     .refine(
       (val) => !val || /^[\p{L}\p{M}\s'-]+$/u.test(val),
-      `${fieldName} contains invalid characters`
+      `${fieldName} contains invalid characters`,
     )
     .optional()
     .or(z.literal(""));
