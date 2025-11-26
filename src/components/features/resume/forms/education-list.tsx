@@ -16,28 +16,27 @@ import { CalendarIcon, EditIcon, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Education } from "@/lib/api/types";
-import type { CreateEducationFormData } from "@/lib/validations/education";
 import { SortableItem } from "../dnd/sortable-item";
 import { EducationInlineForm } from "./education-inline-form";
 
 interface EducationListProps {
+  resumeId: string;
   education: Education[];
   editingId: string | null;
   isAddingNew: boolean;
   onEdit: (id: string) => void;
-  onCancelEdit: () => void;
-  onSave: (data: CreateEducationFormData) => void;
+  onClose: () => void;
   onDelete: (id: string) => void;
   onReorder?: (education: Education[]) => void;
 }
 
 export function EducationList({
+  resumeId,
   education,
   editingId,
   isAddingNew,
   onEdit,
-  onCancelEdit,
-  onSave,
+  onClose,
   onDelete,
   onReorder,
 }: EducationListProps) {
@@ -50,10 +49,7 @@ export function EducationList({
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
-    if (!over || active.id === over.id) {
-      return;
-    }
+    if (!over || active.id === over.id) return;
 
     const oldIndex = education.findIndex((edu) => edu.id === active.id);
     const newIndex = education.findIndex((edu) => edu.id === over.id);
@@ -66,36 +62,15 @@ export function EducationList({
     }
   };
 
-  const formatDate = (date: string) => {
-    if (!date) return "";
-    const [year, month] = date.split("-");
-    const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    return `${monthNames[parseInt(month, 10) - 1]} ${year}`;
-  };
-
-  const formatDateRange = (edu: Education) => {
-    const start = formatDate(edu.startDate);
-    const end = edu.current ? "Present" : formatDate(edu.endDate);
-    return `${start} – ${end}`;
-  };
-
   if (isAddingNew) {
     return (
       <div className="space-y-2">
-        <EducationInlineForm onSubmit={onSave} onCancel={onCancelEdit} isNew />
+        <EducationInlineForm
+          resumeId={resumeId}
+          existingEducation={education}
+          onClose={onClose}
+          isNew
+        />
         {education.length > 0 && (
           <DndContext
             sensors={sensors}
@@ -153,9 +128,11 @@ export function EducationList({
             <SortableItem key={edu.id} id={edu.id}>
               {editingId === edu.id ? (
                 <EducationInlineForm
+                  resumeId={resumeId}
+                  editingId={editingId}
+                  existingEducation={education}
                   defaultValues={edu}
-                  onSubmit={onSave}
-                  onCancel={onCancelEdit}
+                  onClose={onClose}
                 />
               ) : (
                 <EducationPreviewCard

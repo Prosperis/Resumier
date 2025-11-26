@@ -22,17 +22,18 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import type { CreateLinkFormData, LinkFormData } from "@/lib/validations/links";
+import type { Link } from "@/lib/api/types";
+import type { LinkFormData } from "@/lib/validations/links";
 import { SortableItem } from "../dnd/sortable-item";
 import { LinkInlineForm } from "./link-inline-form";
 
 interface LinkListProps {
+  resumeId: string;
   links: LinkFormData[];
   editingId: string | null;
   isAddingNew: boolean;
   onEdit: (id: string) => void;
-  onCancelEdit: () => void;
-  onSave: (data: CreateLinkFormData) => void;
+  onClose: () => void;
   onDelete: (id: string) => void;
   onReorder?: (links: LinkFormData[]) => void;
 }
@@ -64,12 +65,12 @@ function getLinkTypeLabel(type: LinkFormData["type"]) {
 }
 
 export function LinkList({
+  resumeId,
   links,
   editingId,
   isAddingNew,
   onEdit,
-  onCancelEdit,
-  onSave,
+  onClose,
   onDelete,
   onReorder,
 }: LinkListProps) {
@@ -98,7 +99,12 @@ export function LinkList({
   if (isAddingNew) {
     return (
       <div className="space-y-2">
-        <LinkInlineForm onSubmit={onSave} onCancel={onCancelEdit} isNew />
+        <LinkInlineForm
+          resumeId={resumeId}
+          existingLinks={links as Link[]}
+          onClose={onClose}
+          isNew
+        />
         {links.length > 0 && (
           <DndContext
             sensors={sensors}
@@ -155,9 +161,11 @@ export function LinkList({
             <SortableItem key={link.id} id={link.id}>
               {editingId === link.id ? (
                 <LinkInlineForm
+                  resumeId={resumeId}
+                  editingId={editingId}
+                  existingLinks={links as Link[]}
                   defaultValues={link}
-                  onSubmit={onSave}
-                  onCancel={onCancelEdit}
+                  onClose={onClose}
                 />
               ) : (
                 <LinkPreviewCard

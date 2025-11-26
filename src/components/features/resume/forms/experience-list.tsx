@@ -16,28 +16,27 @@ import { CalendarIcon, EditIcon, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Experience } from "@/lib/api/types";
-import type { CreateExperienceFormData } from "@/lib/validations/experience";
 import { SortableItem } from "../dnd/sortable-item";
 import { ExperienceInlineForm } from "./experience-inline-form";
 
 interface ExperienceListProps {
+  resumeId: string;
   experiences: Experience[];
   editingId: string | null;
   isAddingNew: boolean;
   onEdit: (id: string) => void;
-  onCancelEdit: () => void;
-  onSave: (data: CreateExperienceFormData) => void;
+  onClose: () => void;
   onDelete: (id: string) => void;
   onReorder?: (experiences: Experience[]) => void;
 }
 
 export function ExperienceList({
+  resumeId,
   experiences,
   editingId,
   isAddingNew,
   onEdit,
-  onCancelEdit,
-  onSave,
+  onClose,
   onDelete,
   onReorder,
 }: ExperienceListProps) {
@@ -66,37 +65,16 @@ export function ExperienceList({
     }
   };
 
-  const formatDate = (date: string) => {
-    if (!date) return "";
-    const [year, month] = date.split("-");
-    const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    return `${monthNames[parseInt(month, 10) - 1]} ${year}`;
-  };
-
-  const formatDateRange = (exp: Experience) => {
-    const start = formatDate(exp.startDate);
-    const end = exp.current ? "Present" : formatDate(exp.endDate || "");
-    return `${start} – ${end}`;
-  };
-
   // Show new form at top when adding
   if (isAddingNew) {
     return (
       <div className="space-y-2">
-        <ExperienceInlineForm onSubmit={onSave} onCancel={onCancelEdit} isNew />
+        <ExperienceInlineForm
+          resumeId={resumeId}
+          existingExperiences={experiences}
+          onClose={onClose}
+          isNew
+        />
         {experiences.length > 0 && (
           <DndContext
             sensors={sensors}
@@ -154,9 +132,11 @@ export function ExperienceList({
             <SortableItem key={exp.id} id={exp.id}>
               {editingId === exp.id ? (
                 <ExperienceInlineForm
+                  resumeId={resumeId}
+                  editingId={editingId}
+                  existingExperiences={experiences}
                   defaultValues={exp}
-                  onSubmit={onSave}
-                  onCancel={onCancelEdit}
+                  onClose={onClose}
                 />
               ) : (
                 <ExperiencePreviewCard

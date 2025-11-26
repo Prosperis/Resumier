@@ -17,10 +17,7 @@ import type {
   Link,
   ResumeContent,
 } from "@/lib/api/types";
-import type { CreateCertificationFormData } from "@/lib/validations/certification";
-import type { CreateEducationFormData } from "@/lib/validations/education";
-import type { CreateExperienceFormData } from "@/lib/validations/experience";
-import type { CreateLinkFormData, LinkFormData } from "@/lib/validations/links";
+import type { LinkFormData } from "@/lib/validations/links";
 import { cn } from "@/lib/utils";
 import { ImportDialog } from "./import/import-dialog";
 import {
@@ -153,50 +150,6 @@ export function ResumeBuilder() {
     setExperienceAddingNew(false);
   };
 
-  const handleSaveExperience = (data: CreateExperienceFormData) => {
-    const experiences = content.experience || [];
-    let updatedExperiences: Experience[];
-
-    if (experienceEditingId) {
-      // Update existing
-      updatedExperiences = experiences.map((exp) =>
-        exp.id === experienceEditingId ? { ...exp, ...data } : exp,
-      );
-    } else {
-      // Add new
-      const newExperience: Experience = {
-        id: crypto.randomUUID(),
-        ...data,
-      } as Experience;
-      updatedExperiences = [...experiences, newExperience];
-    }
-
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { experience: updatedExperiences } },
-      },
-      {
-        onSuccess: () => {
-          toast({
-            title: "Success",
-            description: experienceEditingId
-              ? "Experience updated"
-              : "Experience added",
-          });
-          handleCancelExperienceEdit();
-        },
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to save: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
-  };
-
   const handleDeleteExperience = (id: string) => {
     const experiences = content.experience || [];
     const updatedExperiences = experiences.filter((exp) => exp.id !== id);
@@ -255,48 +208,6 @@ export function ResumeBuilder() {
     setEducationAddingNew(false);
   };
 
-  const handleSaveEducation = (data: CreateEducationFormData) => {
-    const educations = content.education || [];
-    let updatedEducations: Education[];
-
-    if (educationEditingId) {
-      updatedEducations = educations.map((edu) =>
-        edu.id === educationEditingId ? { ...edu, ...data } : edu,
-      );
-    } else {
-      const newEducation: Education = {
-        id: crypto.randomUUID(),
-        ...data,
-      } as Education;
-      updatedEducations = [...educations, newEducation];
-    }
-
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { education: updatedEducations } },
-      },
-      {
-        onSuccess: () => {
-          toast({
-            title: "Success",
-            description: educationEditingId
-              ? "Education updated"
-              : "Education added",
-          });
-          handleCancelEducationEdit();
-        },
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to save: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
-  };
-
   const handleDeleteEducation = (id: string) => {
     const educations = content.education || [];
     const updatedEducations = educations.filter((edu) => edu.id !== id);
@@ -353,48 +264,6 @@ export function ResumeBuilder() {
   const handleCancelCertificationEdit = () => {
     setCertificationEditingId(null);
     setCertificationAddingNew(false);
-  };
-
-  const handleSaveCertification = (data: CreateCertificationFormData) => {
-    const certifications = content.certifications || [];
-    let updatedCertifications: Certification[];
-
-    if (certificationEditingId) {
-      updatedCertifications = certifications.map((cert) =>
-        cert.id === certificationEditingId ? { ...cert, ...data } : cert,
-      );
-    } else {
-      const newCertification: Certification = {
-        id: crypto.randomUUID(),
-        ...data,
-      } as Certification;
-      updatedCertifications = [...certifications, newCertification];
-    }
-
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { certifications: updatedCertifications } },
-      },
-      {
-        onSuccess: () => {
-          toast({
-            title: "Success",
-            description: certificationEditingId
-              ? "Certification updated"
-              : "Certification added",
-          });
-          handleCancelCertificationEdit();
-        },
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to save: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
   };
 
   const handleDeleteCertification = (id: string) => {
@@ -457,46 +326,6 @@ export function ResumeBuilder() {
   const handleCancelLinkEdit = () => {
     setLinkEditingId(null);
     setLinkAddingNew(false);
-  };
-
-  const handleSaveLink = (data: CreateLinkFormData) => {
-    const links = content.links || [];
-    let updatedLinks: Link[];
-
-    if (linkEditingId) {
-      updatedLinks = links.map((link) =>
-        link.id === linkEditingId ? { ...link, ...data } : link,
-      );
-    } else {
-      const newLink: Link = {
-        id: crypto.randomUUID(),
-        ...data,
-      } as Link;
-      updatedLinks = [...links, newLink];
-    }
-
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { links: updatedLinks } },
-      },
-      {
-        onSuccess: () => {
-          toast({
-            title: "Success",
-            description: linkEditingId ? "Link updated" : "Link added",
-          });
-          handleCancelLinkEdit();
-        },
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to save: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
   };
 
   const handleDeleteLink = (id: string) => {
@@ -673,12 +502,12 @@ export function ResumeBuilder() {
       >
         <Suspense fallback={<ListSkeleton />}>
           <LazyExperienceList
+            resumeId={resumeId}
             experiences={content.experience || []}
             editingId={experienceEditingId}
             isAddingNew={experienceAddingNew}
             onEdit={handleEditExperience}
-            onCancelEdit={handleCancelExperienceEdit}
-            onSave={handleSaveExperience}
+            onClose={handleCancelExperienceEdit}
             onDelete={handleDeleteExperience}
             onReorder={handleReorderExperiences}
           />
@@ -706,12 +535,12 @@ export function ResumeBuilder() {
       >
         <Suspense fallback={<ListSkeleton />}>
           <LazyEducationList
+            resumeId={resumeId}
             education={content.education || []}
             editingId={educationEditingId}
             isAddingNew={educationAddingNew}
             onEdit={handleEditEducation}
-            onCancelEdit={handleCancelEducationEdit}
-            onSave={handleSaveEducation}
+            onClose={handleCancelEducationEdit}
             onDelete={handleDeleteEducation}
             onReorder={handleReorderEducation}
           />
@@ -752,12 +581,12 @@ export function ResumeBuilder() {
       >
         <Suspense fallback={<ListSkeleton />}>
           <LazyCertificationList
+            resumeId={resumeId}
             certifications={content.certifications || []}
             editingId={certificationEditingId}
             isAddingNew={certificationAddingNew}
             onEdit={handleEditCertification}
-            onCancelEdit={handleCancelCertificationEdit}
-            onSave={handleSaveCertification}
+            onClose={handleCancelCertificationEdit}
             onDelete={handleDeleteCertification}
             onReorder={handleReorderCertifications}
           />
@@ -785,12 +614,12 @@ export function ResumeBuilder() {
       >
         <Suspense fallback={<ListSkeleton />}>
           <LazyLinkList
+            resumeId={resumeId}
             links={content.links || []}
             editingId={linkEditingId}
             isAddingNew={linkAddingNew}
             onEdit={handleEditLink}
-            onCancelEdit={handleCancelLinkEdit}
-            onSave={handleSaveLink}
+            onClose={handleCancelLinkEdit}
             onDelete={handleDeleteLink}
             onReorder={handleReorderLinks}
           />

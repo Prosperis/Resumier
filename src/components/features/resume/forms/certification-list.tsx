@@ -21,28 +21,27 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Certification } from "@/lib/api/types";
-import type { CreateCertificationFormData } from "@/lib/validations/certification";
 import { SortableItem } from "../dnd/sortable-item";
 import { CertificationInlineForm } from "./certification-inline-form";
 
 interface CertificationListProps {
+  resumeId: string;
   certifications: Certification[];
   editingId: string | null;
   isAddingNew: boolean;
   onEdit: (id: string) => void;
-  onCancelEdit: () => void;
-  onSave: (data: CreateCertificationFormData) => void;
+  onClose: () => void;
   onDelete: (id: string) => void;
   onReorder?: (certifications: Certification[]) => void;
 }
 
 export function CertificationList({
+  resumeId,
   certifications,
   editingId,
   isAddingNew,
   onEdit,
-  onCancelEdit,
-  onSave,
+  onClose,
   onDelete,
   onReorder,
 }: CertificationListProps) {
@@ -72,8 +71,9 @@ export function CertificationList({
     return (
       <div className="space-y-2">
         <CertificationInlineForm
-          onSubmit={onSave}
-          onCancel={onCancelEdit}
+          resumeId={resumeId}
+          existingCertifications={certifications}
+          onClose={onClose}
           isNew
         />
         {certifications.length > 0 && (
@@ -133,9 +133,11 @@ export function CertificationList({
             <SortableItem key={cert.id} id={cert.id}>
               {editingId === cert.id ? (
                 <CertificationInlineForm
+                  resumeId={resumeId}
+                  editingId={editingId}
+                  existingCertifications={certifications}
                   defaultValues={cert}
-                  onSubmit={onSave}
-                  onCancel={onCancelEdit}
+                  onClose={onClose}
                 />
               ) : (
                 <CertificationPreviewCard

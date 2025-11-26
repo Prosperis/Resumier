@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, PlusIcon, X, XIcon } from "lucide-react";
-import { useState } from "react";
+import { CheckCircle2, Loader2, PlusIcon, X, XIcon } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,25 +14,32 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAutoSave } from "@/hooks/use-auto-save";
+import type { Education } from "@/lib/api/types";
 import {
   type CreateEducationFormData,
   createEducationSchema,
 } from "@/lib/validations/education";
 
 interface EducationInlineFormProps {
+  resumeId: string;
+  editingId?: string | null;
+  existingEducation: Education[];
   defaultValues?: Partial<CreateEducationFormData>;
-  onSubmit: (values: CreateEducationFormData) => void;
-  onCancel: () => void;
+  onClose: () => void;
   isNew?: boolean;
 }
 
 export function EducationInlineForm({
+  resumeId,
+  editingId,
+  existingEducation,
   defaultValues,
-  onSubmit,
-  onCancel,
+  onClose,
   isNew = false,
 }: EducationInlineFormProps) {
   const [honors, setHonors] = useState<string[]>(defaultValues?.honors || []);
+  const newIdRef = useRef<string>(crypto.randomUUID());
 
   const form = useForm<CreateEducationFormData>({
     resolver: zodResolver(createEducationSchema),
@@ -49,21 +56,53 @@ export function EducationInlineForm({
     },
   });
 
+  const { save, isSaving, lastSaved } = useAutoSave({
+    resumeId,
+    debounceMs: 600,
+  });
+
   const isCurrent = form.watch("current");
 
-  const handleSubmit = (values: CreateEducationFormData) => {
+  const triggerSave = useCallback(() => {
+    const values = form.getValues();
     const filteredHonors = honors.filter((h) => h.trim() !== "");
-    onSubmit({ ...values, honors: filteredHonors });
-  };
+    const currentData = { ...values, honors: filteredHonors };
 
-  const addHonor = () => {
-    setHonors([...honors, ""]);
-  };
+    if (!currentData.institution || !currentData.degree || !currentData.startDate) {
+      return;
+    }
 
-  const removeHonor = (index: number) => {
-    setHonors(honors.filter((_, i) => i !== index));
-  };
+    let updatedEducation: Education[];
+    if (editingId) {
+      updatedEducation = existingEducation.map((edu) =>
+        edu.id === editingId ? { ...edu, ...currentData } : edu,
+      );
+    } else if (isNew) {
+      const existingNew = existingEducation.find((e) => e.id === newIdRef.current);
+      if (existingNew) {
+        updatedEducation = existingEducation.map((edu) =>
+          edu.id === newIdRef.current ? { ...edu, ...currentData } : edu,
+        );
+      } else {
+        updatedEducation = [
+          ...existingEducation,
+          { id: newIdRef.current, ...currentData } as Education,
+        ];
+      }
+    } else {
+      return;
+    }
 
+    save({ content: { education: updatedEducation } });
+  }, [form, honors, editingId, isNew, existingEducation, save]);
+
+  const watchedValues = form.watch();
+  useEffect(() => {
+    triggerSave();
+  }, [watchedValues, honors, triggerSave]);
+
+  const addHonor = () => setHonors([...honors, ""]);
+  const removeHonor = (index: number) => setHonors(honors.filter((_, i) => i !== index));
   const updateHonor = (index: number, value: string) => {
     const newHonors = [...honors];
     newHonors[index] = value;
@@ -74,21 +113,26 @@ export function EducationInlineForm({
     <Card className="gap-2 py-2 border-primary/50 bg-primary/5">
       <CardContent className="px-3 pt-2">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-2"
-          >
+          <form className="space-y-2">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-medium text-primary">
-                {isNew ? "New Education" : "Edit Education"}
-              </span>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="h-5 w-5"
-                onClick={onCancel}
-              >
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-medium text-primary">
+                  {isNew ? "New Education" : "Edit Education"}
+                </span>
+                {isSaving && (
+                  <span className="flex items-center gap-1 text-[9px] text-muted-foreground">
+                    <Loader2 className="h-2.5 w-2.5 animate-spin" />
+                    Saving...
+                  </span>
+                )}
+                {!isSaving && lastSaved && (
+                  <span className="flex items-center gap-1 text-[9px] text-green-600">
+                    <CheckCircle2 className="h-2.5 w-2.5" />
+                    Saved
+                  </span>
+                )}
+              </div>
+              <Button type="button" variant="ghost" size="icon" className="h-5 w-5" onClick={onClose}>
                 <X className="h-3 w-3" />
               </Button>
             </div>
@@ -100,11 +144,7 @@ export function EducationInlineForm({
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">Institution</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="University of Example"
-                      className="h-7 text-[11px]"
-                      {...field}
-                    />
+                    <Input placeholder="University of Example" className="h-7 text-[11px]" {...field} />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -119,31 +159,20 @@ export function EducationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">Degree</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Bachelor of Science"
-                        className="h-7 text-[11px]"
-                        {...field}
-                      />
+                      <Input placeholder="Bachelor of Science" className="h-7 text-[11px]" {...field} />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="field"
                 render={({ field }) => (
                   <FormItem className="space-y-0.5">
-                    <FormLabel className="text-[10px]">
-                      Field of Study
-                    </FormLabel>
+                    <FormLabel className="text-[10px]">Field of Study</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Computer Science"
-                        className="h-7 text-[11px]"
-                        {...field}
-                      />
+                      <Input placeholder="Computer Science" className="h-7 text-[11px]" {...field} />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -159,17 +188,12 @@ export function EducationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">Start Date</FormLabel>
                     <FormControl>
-                      <Input
-                        type="month"
-                        className="h-7 text-[11px]"
-                        {...field}
-                      />
+                      <Input type="month" className="h-7 text-[11px]" {...field} />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="endDate"
@@ -177,12 +201,7 @@ export function EducationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">End Date</FormLabel>
                     <FormControl>
-                      <Input
-                        type="month"
-                        className="h-7 text-[11px]"
-                        {...field}
-                        disabled={isCurrent}
-                      />
+                      <Input type="month" className="h-7 text-[11px]" {...field} disabled={isCurrent} />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -200,16 +219,12 @@ export function EducationInlineForm({
                       checked={field.value}
                       onCheckedChange={(checked) => {
                         field.onChange(checked);
-                        if (checked) {
-                          form.setValue("endDate", "");
-                        }
+                        if (checked) form.setValue("endDate", "");
                       }}
                       className="h-3 w-3"
                     />
                   </FormControl>
-                  <FormLabel className="text-[10px] font-normal">
-                    I currently study here
-                  </FormLabel>
+                  <FormLabel className="text-[10px] font-normal">I currently study here</FormLabel>
                 </FormItem>
               )}
             />
@@ -221,11 +236,7 @@ export function EducationInlineForm({
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">GPA (optional)</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="3.8"
-                      className="h-7 text-[11px]"
-                      {...field}
-                    />
+                    <Input placeholder="3.8" className="h-7 text-[11px]" {...field} />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -257,35 +268,14 @@ export function EducationInlineForm({
               </div>
             )}
 
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={addHonor}
-              className="w-full h-6 text-[10px]"
-            >
+            <Button type="button" variant="ghost" size="sm" onClick={addHonor} className="w-full h-6 text-[10px]">
               <PlusIcon className="mr-1 h-3 w-3" />
               Add Honor/Award
             </Button>
 
-            <div className="flex justify-end gap-1 pt-1">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={onCancel}
-                className="h-6 text-[10px] px-2"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                size="sm"
-                className="h-6 text-[10px] px-2"
-                disabled={form.formState.isSubmitting}
-              >
-                <Check className="mr-1 h-3 w-3" />
-                {form.formState.isSubmitting ? "Saving..." : "Save"}
+            <div className="flex justify-end pt-1">
+              <Button type="button" variant="outline" size="sm" onClick={onClose} className="h-6 text-[10px] px-3">
+                Done
               </Button>
             </div>
           </form>

@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, X } from "lucide-react";
+import { CheckCircle2, Loader2, X } from "lucide-react";
+import { useCallback, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,24 +13,32 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAutoSave } from "@/hooks/use-auto-save";
+import type { Certification } from "@/lib/api/types";
 import {
   type CreateCertificationFormData,
   createCertificationSchema,
 } from "@/lib/validations/certification";
 
 interface CertificationInlineFormProps {
+  resumeId: string;
+  editingId?: string | null;
+  existingCertifications: Certification[];
   defaultValues?: Partial<CreateCertificationFormData>;
-  onSubmit: (values: CreateCertificationFormData) => void;
-  onCancel: () => void;
+  onClose: () => void;
   isNew?: boolean;
 }
 
 export function CertificationInlineForm({
+  resumeId,
+  editingId,
+  existingCertifications,
   defaultValues,
-  onSubmit,
-  onCancel,
+  onClose,
   isNew = false,
 }: CertificationInlineFormProps) {
+  const newIdRef = useRef<string>(crypto.randomUUID());
+
   const form = useForm<CreateCertificationFormData>({
     resolver: zodResolver(createCertificationSchema),
     defaultValues: {
@@ -43,29 +52,71 @@ export function CertificationInlineForm({
     },
   });
 
-  const handleSubmit = (values: CreateCertificationFormData) => {
-    onSubmit(values);
-  };
+  const { save, isSaving, lastSaved } = useAutoSave({
+    resumeId,
+    debounceMs: 600,
+  });
+
+  const triggerSave = useCallback(() => {
+    const currentData = form.getValues();
+
+    if (!currentData.name || !currentData.issuer || !currentData.date) {
+      return;
+    }
+
+    let updatedCertifications: Certification[];
+    if (editingId) {
+      updatedCertifications = existingCertifications.map((cert) =>
+        cert.id === editingId ? { ...cert, ...currentData } : cert,
+      );
+    } else if (isNew) {
+      const existingNew = existingCertifications.find((c) => c.id === newIdRef.current);
+      if (existingNew) {
+        updatedCertifications = existingCertifications.map((cert) =>
+          cert.id === newIdRef.current ? { ...cert, ...currentData } : cert,
+        );
+      } else {
+        updatedCertifications = [
+          ...existingCertifications,
+          { id: newIdRef.current, ...currentData } as Certification,
+        ];
+      }
+    } else {
+      return;
+    }
+
+    save({ content: { certifications: updatedCertifications } });
+  }, [form, editingId, isNew, existingCertifications, save]);
+
+  const watchedValues = form.watch();
+  useEffect(() => {
+    triggerSave();
+  }, [watchedValues, triggerSave]);
 
   return (
     <Card className="gap-2 py-2 border-primary/50 bg-primary/5">
       <CardContent className="px-3 pt-2">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-2"
-          >
+          <form className="space-y-2">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-medium text-primary">
-                {isNew ? "New Certification" : "Edit Certification"}
-              </span>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="h-5 w-5"
-                onClick={onCancel}
-              >
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-medium text-primary">
+                  {isNew ? "New Certification" : "Edit Certification"}
+                </span>
+                {isSaving && (
+                  <span className="flex items-center gap-1 text-[9px] text-muted-foreground">
+                    <Loader2 className="h-2.5 w-2.5 animate-spin" />
+                    Saving...
+                  </span>
+                )}
+                {!isSaving && lastSaved && (
+                  <span className="flex items-center gap-1 text-[9px] text-green-600">
+                    <CheckCircle2 className="h-2.5 w-2.5" />
+                    Saved
+                  </span>
+                )}
+              </div>
+              <Button type="button" variant="ghost" size="icon" className="h-5 w-5" onClick={onClose}>
                 <X className="h-3 w-3" />
               </Button>
             </div>
@@ -75,15 +126,9 @@ export function CertificationInlineForm({
               name="name"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">
-                    Certification Name
-                  </FormLabel>
+                  <FormLabel className="text-[10px]">Certification Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="AWS Solutions Architect"
-                      className="h-7 text-[11px]"
-                      {...field}
-                    />
+                    <Input placeholder="AWS Solutions Architect" className="h-7 text-[11px]" {...field} />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -95,15 +140,9 @@ export function CertificationInlineForm({
               name="issuer"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">
-                    Issuing Organization
-                  </FormLabel>
+                  <FormLabel className="text-[10px]">Issuing Organization</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Amazon Web Services"
-                      className="h-7 text-[11px]"
-                      {...field}
-                    />
+                    <Input placeholder="Amazon Web Services" className="h-7 text-[11px]" {...field} />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -118,31 +157,20 @@ export function CertificationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">Issue Date</FormLabel>
                     <FormControl>
-                      <Input
-                        type="month"
-                        className="h-7 text-[11px]"
-                        {...field}
-                      />
+                      <Input type="month" className="h-7 text-[11px]" {...field} />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="expiryDate"
                 render={({ field }) => (
                   <FormItem className="space-y-0.5">
-                    <FormLabel className="text-[10px]">
-                      Expiry (optional)
-                    </FormLabel>
+                    <FormLabel className="text-[10px]">Expiry (optional)</FormLabel>
                     <FormControl>
-                      <Input
-                        type="month"
-                        className="h-7 text-[11px]"
-                        {...field}
-                      />
+                      <Input type="month" className="h-7 text-[11px]" {...field} />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -155,15 +183,9 @@ export function CertificationInlineForm({
               name="credentialId"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">
-                    Credential ID (optional)
-                  </FormLabel>
+                  <FormLabel className="text-[10px]">Credential ID (optional)</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="ABC123XYZ"
-                      className="h-7 text-[11px]"
-                      {...field}
-                    />
+                    <Input placeholder="ABC123XYZ" className="h-7 text-[11px]" {...field} />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -177,36 +199,16 @@ export function CertificationInlineForm({
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">URL (optional)</FormLabel>
                   <FormControl>
-                    <Input
-                      type="url"
-                      placeholder="https://credly.com/badges/..."
-                      className="h-7 text-[11px]"
-                      {...field}
-                    />
+                    <Input type="url" placeholder="https://credly.com/badges/..." className="h-7 text-[11px]" {...field} />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
               )}
             />
 
-            <div className="flex justify-end gap-1 pt-1">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={onCancel}
-                className="h-6 text-[10px] px-2"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                size="sm"
-                className="h-6 text-[10px] px-2"
-                disabled={form.formState.isSubmitting}
-              >
-                <Check className="mr-1 h-3 w-3" />
-                {form.formState.isSubmitting ? "Saving..." : "Save"}
+            <div className="flex justify-end pt-1">
+              <Button type="button" variant="outline" size="sm" onClick={onClose} className="h-6 text-[10px] px-3">
+                Done
               </Button>
             </div>
           </form>
