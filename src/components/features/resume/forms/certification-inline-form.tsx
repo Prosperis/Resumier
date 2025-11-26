@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { useAutoSave } from "@/hooks/use-auto-save";
 import type { Certification } from "@/lib/api/types";
 import {
@@ -52,7 +53,7 @@ export function CertificationInlineForm({
     },
   });
 
-  const { save, isSaving, lastSaved } = useAutoSave({
+  const { save, isSaving, lastSaved, isFadingOut } = useAutoSave({
     resumeId,
     debounceMs: 600,
   });
@@ -114,7 +115,12 @@ export function CertificationInlineForm({
                   </span>
                 )}
                 {!isSaving && lastSaved && (
-                  <span className="flex items-center gap-1 text-[9px] text-green-600">
+                  <span
+                    className={cn(
+                      "flex items-center gap-1 text-[9px] text-green-600 transition-opacity duration-500",
+                      isFadingOut ? "opacity-0" : "opacity-100"
+                    )}
+                  >
                     <CheckCircle2 className="h-2.5 w-2.5" />
                     Saved
                   </span>

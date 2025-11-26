@@ -34,6 +34,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import { formatLastSaved, useAutoSave } from "@/hooks/use-auto-save";
 import {
   type PersonalInfoFormData,
@@ -69,7 +70,7 @@ export function PersonalInfoForm({
     mode: "onChange", // Validate on change for live feedback
   });
 
-  const { save, isSaving, error, lastSaved } = useAutoSave({
+  const { save, isSaving, error, lastSaved, isFadingOut } = useAutoSave({
     resumeId,
     enabled,
     debounceMs: 600,
@@ -222,10 +223,15 @@ export function PersonalInfoForm({
               </>
             )}
             {!isSaving && lastSaved && (
-              <>
+              <span
+                className={cn(
+                  "flex items-center gap-1.5 transition-opacity duration-500",
+                  isFadingOut ? "opacity-0" : "opacity-100"
+                )}
+              >
                 <CheckCircle2 className="h-3 w-3 text-green-600" />
                 <span>{formatLastSaved(lastSaved)}</span>
-              </>
+              </span>
             )}
             {error && (
               <>

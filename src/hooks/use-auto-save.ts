@@ -15,6 +15,7 @@ interface UseAutoSaveReturn {
   isSaving: boolean;
   error: Error | null;
   lastSaved: Date | null;
+  isFadingOut: boolean;
 }
 
 /**
@@ -34,17 +35,26 @@ export function useAutoSave({
   const queryClient = useQueryClient();
   const { mutate, isPending, error: mutationError } = useUpdateResume();
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [isFadingOut, setIsFadingOut] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const fadeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pendingDataRef = useRef<UpdateResumeDto | null>(null);
   const previousDataRef = useRef<Resume | undefined>(undefined);
   const lastSavedDataRef = useRef<string>("");
 
-  // Clear timeout on unmount
+  // Clear timeouts on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+      }
+      if (fadeTimeoutRef.current) {
+        clearTimeout(fadeTimeoutRef.current);
+      }
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
       }
     };
   }, []);
@@ -107,9 +117,28 @@ export function useAutoSave({
             {
               onSuccess: () => {
                 setLastSaved(new Date());
+                setIsFadingOut(false);
                 setError(null);
                 pendingDataRef.current = null;
                 previousDataRef.current = undefined;
+                
+                // Clear any existing timeouts
+                if (fadeTimeoutRef.current) {
+                  clearTimeout(fadeTimeoutRef.current);
+                }
+                if (hideTimeoutRef.current) {
+                  clearTimeout(hideTimeoutRef.current);
+                }
+                
+                // Start fade out after 2.5 seconds
+                fadeTimeoutRef.current = setTimeout(() => {
+                  setIsFadingOut(true);
+                  // Hide completely after fade animation (500ms)
+                  hideTimeoutRef.current = setTimeout(() => {
+                    setLastSaved(null);
+                    setIsFadingOut(false);
+                  }, 500);
+                }, 2500);
               },
               onError: (err: Error) => {
                 setError(err);
@@ -137,6 +166,7 @@ export function useAutoSave({
     isSaving: isPending,
     error,
     lastSaved,
+    isFadingOut,
   };
 }
 
