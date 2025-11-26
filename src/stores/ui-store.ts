@@ -174,4 +174,5 @@ export const selectNotificationActions = (state: UIStore) => ({
 
 // Current Resume selectors
 export const selectCurrentResume = (state: UIStore) => state.currentResume;
-export const selectSetCurrentResume = (state: UIStore) => state.setCurrentResume;
+export const selectSetCurrentResume = (state: UIStore) =>
+  state.setCurrentResume;

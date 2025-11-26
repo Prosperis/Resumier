@@ -70,7 +70,5 @@ function EditResumeComponent() {
     );
   }
 
-  return (
-    <ResumeEditor resume={resume} />
-  );
+  return <ResumeEditor resume={resume} />;
 }

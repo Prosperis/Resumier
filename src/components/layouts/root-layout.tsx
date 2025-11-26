@@ -41,7 +41,10 @@ export function RootLayout({ children }: RootLayoutProps) {
               aria-label="Resumier home"
             >
               <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary">
-                <FileText className="size-4 text-primary-foreground" aria-hidden="true" />
+                <FileText
+                  className="size-4 text-primary-foreground"
+                  aria-hidden="true"
+                />
               </div>
               <span className="text-lg font-bold tracking-tight text-foreground">
                 Resumier

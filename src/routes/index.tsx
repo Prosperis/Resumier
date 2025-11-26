@@ -1,11 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  Cloud,
-  Download,
-  FileText,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, Cloud, Download, FileText, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { AuthModal } from "@/components/features/auth/auth-modal";
 import { Button } from "@/components/ui/button";
@@ -29,11 +23,11 @@ function IndexComponent() {
           {/* Main heading */}
           <div className="space-y-6">
             <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-7xl">
-              Build Your Perfect{" "}
-              <span className="text-primary">Resume</span>
+              Build Your Perfect <span className="text-primary">Resume</span>
             </h1>
             <p className="mx-auto max-w-2xl text-xl text-muted-foreground leading-relaxed">
-              Professional resume builder with AI-powered features. Create, customize, and download in minutes.
+              Professional resume builder with AI-powered features. Create,
+              customize, and download in minutes.
             </p>
           </div>
 
@@ -52,15 +46,21 @@ function IndexComponent() {
           <div className="mx-auto mt-16 flex max-w-3xl items-center justify-center gap-12 divide-x divide-border rounded-xl border border-border bg-card p-8 shadow-sm">
             <div className="flex-1 px-4 text-center first:pl-0 last:pr-0 last:border-r-0">
               <div className="text-3xl font-bold text-foreground">10K+</div>
-              <div className="mt-1 text-sm font-medium text-muted-foreground">Resumes Created</div>
+              <div className="mt-1 text-sm font-medium text-muted-foreground">
+                Resumes Created
+              </div>
             </div>
             <div className="flex-1 px-4 text-center">
               <div className="text-3xl font-bold text-foreground">50+</div>
-              <div className="mt-1 text-sm font-medium text-muted-foreground">Templates</div>
+              <div className="mt-1 text-sm font-medium text-muted-foreground">
+                Templates
+              </div>
             </div>
             <div className="flex-1 px-4 text-center">
               <div className="text-3xl font-bold text-foreground">4.9★</div>
-              <div className="mt-1 text-sm font-medium text-muted-foreground">User Rating</div>
+              <div className="mt-1 text-sm font-medium text-muted-foreground">
+                User Rating
+              </div>
             </div>
           </div>
         </div>
@@ -78,7 +78,8 @@ function IndexComponent() {
               Professional Templates
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Choose from a variety of ATS-friendly templates tailored to different industries and experience levels.
+              Choose from a variety of ATS-friendly templates tailored to
+              different industries and experience levels.
             </p>
           </div>
 
@@ -91,7 +92,8 @@ function IndexComponent() {
               Real-time Preview
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Watch your resume transform instantly as you type. What you see is exactly what you'll get.
+              Watch your resume transform instantly as you type. What you see is
+              exactly what you'll get.
             </p>
           </div>
 
@@ -104,7 +106,8 @@ function IndexComponent() {
               Easy Export
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Download as high-quality PDF, share online, or print. Your resume is ready for any opportunity.
+              Download as high-quality PDF, share online, or print. Your resume
+              is ready for any opportunity.
             </p>
           </div>
 
@@ -117,7 +120,8 @@ function IndexComponent() {
               Cloud Sync
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Automatic cloud backup keeps your resumes safe and accessible from any device.
+              Automatic cloud backup keeps your resumes safe and accessible from
+              any device.
             </p>
           </div>
         </div>

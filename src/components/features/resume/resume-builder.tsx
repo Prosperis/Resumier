@@ -69,13 +69,17 @@ function CollapsibleSection({
   children,
 }: CollapsibleSectionProps) {
   return (
-    <Collapsible open={isOpen} onOpenChange={() => onToggle(id)} className="border-b border-border">
+    <Collapsible
+      open={isOpen}
+      onOpenChange={() => onToggle(id)}
+      className="border-b border-border"
+    >
       <CollapsibleTrigger className="flex w-full items-center justify-between px-4 py-3 hover:bg-muted/50 transition-colors">
         <div className="flex items-center gap-3">
           <ChevronDown
             className={cn(
               "h-4 w-4 text-muted-foreground transition-transform duration-200",
-              !isOpen && "-rotate-90"
+              !isOpen && "-rotate-90",
             )}
           />
           <div className="text-left">
@@ -85,11 +89,7 @@ function CollapsibleSection({
             )}
           </div>
         </div>
-        {action && (
-          <div onClick={(e) => e.stopPropagation()}>
-            {action}
-          </div>
-        )}
+        {action && <div onClick={(e) => e.stopPropagation()}>{action}</div>}
       </CollapsibleTrigger>
       <CollapsibleContent className="px-4 pb-4 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
         {children}
@@ -108,7 +108,7 @@ export function ResumeBuilder() {
 
   // Accordion state - only one section open at a time
   const [openSection, setOpenSection] = useState<string>("personal");
-  
+
   const handleToggleSection = (sectionId: string) => {
     setOpenSection((current) => (current === sectionId ? "" : sectionId));
   };
