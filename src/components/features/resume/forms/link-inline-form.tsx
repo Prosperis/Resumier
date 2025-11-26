@@ -120,7 +120,13 @@ export function LinkInlineForm({
                   </span>
                 )}
               </div>
-              <Button type="button" variant="ghost" size="icon" className="h-5 w-5" onClick={onClose}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-5 w-5"
+                onClick={onClose}
+              >
                 <X className="h-3 w-3" />
               </Button>
             </div>
@@ -131,17 +137,28 @@ export function LinkInlineForm({
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">Link Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger className="h-7 text-[11px]">
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="portfolio" className="text-[11px]">Portfolio</SelectItem>
-                      <SelectItem value="linkedin" className="text-[11px]">LinkedIn</SelectItem>
-                      <SelectItem value="github" className="text-[11px]">GitHub</SelectItem>
-                      <SelectItem value="other" className="text-[11px]">Other</SelectItem>
+                      <SelectItem value="portfolio" className="text-[11px]">
+                        Portfolio
+                      </SelectItem>
+                      <SelectItem value="linkedin" className="text-[11px]">
+                        LinkedIn
+                      </SelectItem>
+                      <SelectItem value="github" className="text-[11px]">
+                        GitHub
+                      </SelectItem>
+                      <SelectItem value="other" className="text-[11px]">
+                        Other
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage className="text-[9px]" />
@@ -156,7 +173,11 @@ export function LinkInlineForm({
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">Label</FormLabel>
                   <FormControl>
-                    <Input placeholder="My Portfolio" className="h-7 text-[11px]" {...field} />
+                    <Input
+                      placeholder="My Portfolio"
+                      className="h-7 text-[11px]"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -170,7 +191,12 @@ export function LinkInlineForm({
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">URL</FormLabel>
                   <FormControl>
-                    <Input type="url" placeholder="https://example.com" className="h-7 text-[11px]" {...field} />
+                    <Input
+                      type="url"
+                      placeholder="https://example.com"
+                      className="h-7 text-[11px]"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -178,7 +204,13 @@ export function LinkInlineForm({
             />
 
             <div className="flex justify-end pt-1">
-              <Button type="button" variant="outline" size="sm" onClick={onClose} className="h-6 text-[10px] px-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onClose}
+                className="h-6 text-[10px] px-3"
+              >
                 Done
               </Button>
             </div>

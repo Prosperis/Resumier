@@ -70,7 +70,9 @@ export function CertificationInlineForm({
         cert.id === editingId ? { ...cert, ...currentData } : cert,
       );
     } else if (isNew) {
-      const existingNew = existingCertifications.find((c) => c.id === newIdRef.current);
+      const existingNew = existingCertifications.find(
+        (c) => c.id === newIdRef.current,
+      );
       if (existingNew) {
         updatedCertifications = existingCertifications.map((cert) =>
           cert.id === newIdRef.current ? { ...cert, ...currentData } : cert,
@@ -116,7 +118,13 @@ export function CertificationInlineForm({
                   </span>
                 )}
               </div>
-              <Button type="button" variant="ghost" size="icon" className="h-5 w-5" onClick={onClose}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-5 w-5"
+                onClick={onClose}
+              >
                 <X className="h-3 w-3" />
               </Button>
             </div>
@@ -126,9 +134,15 @@ export function CertificationInlineForm({
               name="name"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">Certification Name</FormLabel>
+                  <FormLabel className="text-[10px]">
+                    Certification Name
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="AWS Solutions Architect" className="h-7 text-[11px]" {...field} />
+                    <Input
+                      placeholder="AWS Solutions Architect"
+                      className="h-7 text-[11px]"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -140,9 +154,15 @@ export function CertificationInlineForm({
               name="issuer"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">Issuing Organization</FormLabel>
+                  <FormLabel className="text-[10px]">
+                    Issuing Organization
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Amazon Web Services" className="h-7 text-[11px]" {...field} />
+                    <Input
+                      placeholder="Amazon Web Services"
+                      className="h-7 text-[11px]"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -157,7 +177,11 @@ export function CertificationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">Issue Date</FormLabel>
                     <FormControl>
-                      <Input type="month" className="h-7 text-[11px]" {...field} />
+                      <Input
+                        type="month"
+                        className="h-7 text-[11px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -168,9 +192,15 @@ export function CertificationInlineForm({
                 name="expiryDate"
                 render={({ field }) => (
                   <FormItem className="space-y-0.5">
-                    <FormLabel className="text-[10px]">Expiry (optional)</FormLabel>
+                    <FormLabel className="text-[10px]">
+                      Expiry (optional)
+                    </FormLabel>
                     <FormControl>
-                      <Input type="month" className="h-7 text-[11px]" {...field} />
+                      <Input
+                        type="month"
+                        className="h-7 text-[11px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -183,9 +213,15 @@ export function CertificationInlineForm({
               name="credentialId"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">Credential ID (optional)</FormLabel>
+                  <FormLabel className="text-[10px]">
+                    Credential ID (optional)
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="ABC123XYZ" className="h-7 text-[11px]" {...field} />
+                    <Input
+                      placeholder="ABC123XYZ"
+                      className="h-7 text-[11px]"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -199,7 +235,12 @@ export function CertificationInlineForm({
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">URL (optional)</FormLabel>
                   <FormControl>
-                    <Input type="url" placeholder="https://credly.com/badges/..." className="h-7 text-[11px]" {...field} />
+                    <Input
+                      type="url"
+                      placeholder="https://credly.com/badges/..."
+                      className="h-7 text-[11px]"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -207,7 +248,13 @@ export function CertificationInlineForm({
             />
 
             <div className="flex justify-end pt-1">
-              <Button type="button" variant="outline" size="sm" onClick={onClose} className="h-6 text-[10px] px-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onClose}
+                className="h-6 text-[10px] px-3"
+              >
                 Done
               </Button>
             </div>

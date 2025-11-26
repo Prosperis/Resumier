@@ -68,7 +68,11 @@ export function EducationInlineForm({
     const filteredHonors = honors.filter((h) => h.trim() !== "");
     const currentData = { ...values, honors: filteredHonors };
 
-    if (!currentData.institution || !currentData.degree || !currentData.startDate) {
+    if (
+      !currentData.institution ||
+      !currentData.degree ||
+      !currentData.startDate
+    ) {
       return;
     }
 
@@ -78,7 +82,9 @@ export function EducationInlineForm({
         edu.id === editingId ? { ...edu, ...currentData } : edu,
       );
     } else if (isNew) {
-      const existingNew = existingEducation.find((e) => e.id === newIdRef.current);
+      const existingNew = existingEducation.find(
+        (e) => e.id === newIdRef.current,
+      );
       if (existingNew) {
         updatedEducation = existingEducation.map((edu) =>
           edu.id === newIdRef.current ? { ...edu, ...currentData } : edu,
@@ -102,7 +108,8 @@ export function EducationInlineForm({
   }, [watchedValues, honors, triggerSave]);
 
   const addHonor = () => setHonors([...honors, ""]);
-  const removeHonor = (index: number) => setHonors(honors.filter((_, i) => i !== index));
+  const removeHonor = (index: number) =>
+    setHonors(honors.filter((_, i) => i !== index));
   const updateHonor = (index: number, value: string) => {
     const newHonors = [...honors];
     newHonors[index] = value;
@@ -132,7 +139,13 @@ export function EducationInlineForm({
                   </span>
                 )}
               </div>
-              <Button type="button" variant="ghost" size="icon" className="h-5 w-5" onClick={onClose}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-5 w-5"
+                onClick={onClose}
+              >
                 <X className="h-3 w-3" />
               </Button>
             </div>
@@ -144,7 +157,11 @@ export function EducationInlineForm({
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">Institution</FormLabel>
                   <FormControl>
-                    <Input placeholder="University of Example" className="h-7 text-[11px]" {...field} />
+                    <Input
+                      placeholder="University of Example"
+                      className="h-7 text-[11px]"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -159,7 +176,11 @@ export function EducationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">Degree</FormLabel>
                     <FormControl>
-                      <Input placeholder="Bachelor of Science" className="h-7 text-[11px]" {...field} />
+                      <Input
+                        placeholder="Bachelor of Science"
+                        className="h-7 text-[11px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -170,9 +191,15 @@ export function EducationInlineForm({
                 name="field"
                 render={({ field }) => (
                   <FormItem className="space-y-0.5">
-                    <FormLabel className="text-[10px]">Field of Study</FormLabel>
+                    <FormLabel className="text-[10px]">
+                      Field of Study
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="Computer Science" className="h-7 text-[11px]" {...field} />
+                      <Input
+                        placeholder="Computer Science"
+                        className="h-7 text-[11px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -188,7 +215,11 @@ export function EducationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">Start Date</FormLabel>
                     <FormControl>
-                      <Input type="month" className="h-7 text-[11px]" {...field} />
+                      <Input
+                        type="month"
+                        className="h-7 text-[11px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -201,7 +232,12 @@ export function EducationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">End Date</FormLabel>
                     <FormControl>
-                      <Input type="month" className="h-7 text-[11px]" {...field} disabled={isCurrent} />
+                      <Input
+                        type="month"
+                        className="h-7 text-[11px]"
+                        {...field}
+                        disabled={isCurrent}
+                      />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -224,7 +260,9 @@ export function EducationInlineForm({
                       className="h-3 w-3"
                     />
                   </FormControl>
-                  <FormLabel className="text-[10px] font-normal">I currently study here</FormLabel>
+                  <FormLabel className="text-[10px] font-normal">
+                    I currently study here
+                  </FormLabel>
                 </FormItem>
               )}
             />
@@ -236,7 +274,11 @@ export function EducationInlineForm({
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">GPA (optional)</FormLabel>
                   <FormControl>
-                    <Input placeholder="3.8" className="h-7 text-[11px]" {...field} />
+                    <Input
+                      placeholder="3.8"
+                      className="h-7 text-[11px]"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>
@@ -268,13 +310,25 @@ export function EducationInlineForm({
               </div>
             )}
 
-            <Button type="button" variant="ghost" size="sm" onClick={addHonor} className="w-full h-6 text-[10px]">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={addHonor}
+              className="w-full h-6 text-[10px]"
+            >
               <PlusIcon className="mr-1 h-3 w-3" />
               Add Honor/Award
             </Button>
 
             <div className="flex justify-end pt-1">
-              <Button type="button" variant="outline" size="sm" onClick={onClose} className="h-6 text-[10px] px-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onClose}
+                className="h-6 text-[10px] px-3"
+              >
                 Done
               </Button>
             </div>

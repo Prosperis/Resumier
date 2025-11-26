@@ -71,7 +71,11 @@ export function ExperienceInlineForm({
     const currentData = { ...values, highlights: filteredHighlights };
 
     // Only save if we have required fields
-    if (!currentData.company || !currentData.position || !currentData.startDate) {
+    if (
+      !currentData.company ||
+      !currentData.position ||
+      !currentData.startDate
+    ) {
       return;
     }
 
