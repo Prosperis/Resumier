@@ -211,7 +211,9 @@ export function PersonalInfoForm({
                         }}
                       />
                     </FormControl>
-                    <FormDescription className="text-[10px]">City and state/country</FormDescription>
+                    <FormDescription className="text-[10px]">
+                      City and state/country
+                    </FormDescription>
                     <FormMessage className="text-[10px]" />
                   </FormItem>
                 )}
@@ -224,7 +226,9 @@ export function PersonalInfoForm({
               name="summary"
               render={({ field }) => (
                 <FormItem className="space-y-1">
-                  <FormLabel className="text-[11px]">Professional Summary</FormLabel>
+                  <FormLabel className="text-[11px]">
+                    Professional Summary
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}

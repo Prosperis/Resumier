@@ -57,7 +57,11 @@ function TagInput({ value = [], onChange, placeholder }: TagInputProps) {
   return (
     <div className="border-input bg-background ring-offset-background focus-within:ring-ring flex flex-wrap gap-1.5 rounded-md border px-2 py-1.5 text-xs focus-within:ring-2 focus-within:ring-offset-2">
       {value.map((tag, index) => (
-        <Badge key={index} variant="secondary" className="gap-0.5 text-[10px] px-1.5 py-0.5">
+        <Badge
+          key={index}
+          variant="secondary"
+          className="gap-0.5 text-[10px] px-1.5 py-0.5"
+        >
           {tag}
           <button
             type="button"
@@ -135,7 +139,9 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
               name="technical"
               render={({ field }) => (
                 <FormItem className="space-y-1">
-                  <FormLabel className="text-[11px]">Technical Skills</FormLabel>
+                  <FormLabel className="text-[11px]">
+                    Technical Skills
+                  </FormLabel>
                   <FormControl>
                     <TagInput
                       value={field.value || []}
@@ -177,7 +183,9 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
               name="tools"
               render={({ field }) => (
                 <FormItem className="space-y-1">
-                  <FormLabel className="text-[11px]">Tools & Software</FormLabel>
+                  <FormLabel className="text-[11px]">
+                    Tools & Software
+                  </FormLabel>
                   <FormControl>
                     <TagInput
                       value={field.value || []}

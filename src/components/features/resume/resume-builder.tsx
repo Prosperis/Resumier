@@ -706,7 +706,11 @@ export function ResumeBuilder() {
             </div>
             <ImportDialog
               trigger={
-                <Button variant="default" size="sm" className="h-6 text-[10px] px-2">
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="h-6 text-[10px] px-2"
+                >
                   <Upload className="mr-1.5 h-2.5 w-2.5" />
                   Import
                 </Button>
@@ -741,7 +745,12 @@ export function ResumeBuilder() {
         isOpen={openSection === "experience"}
         onToggle={handleToggleSection}
         action={
-          <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={handleAddExperience}>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-6 w-6 p-0"
+            onClick={handleAddExperience}
+          >
             <Plus className="h-3 w-3" />
           </Button>
         }
@@ -764,7 +773,12 @@ export function ResumeBuilder() {
         isOpen={openSection === "education"}
         onToggle={handleToggleSection}
         action={
-          <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={handleAddEducation}>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-6 w-6 p-0"
+            onClick={handleAddEducation}
+          >
             <Plus className="h-3 w-3" />
           </Button>
         }
@@ -800,7 +814,12 @@ export function ResumeBuilder() {
         isOpen={openSection === "certifications"}
         onToggle={handleToggleSection}
         action={
-          <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={handleAddCertification}>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-6 w-6 p-0"
+            onClick={handleAddCertification}
+          >
             <Plus className="h-3 w-3" />
           </Button>
         }
@@ -823,7 +842,12 @@ export function ResumeBuilder() {
         isOpen={openSection === "links"}
         onToggle={handleToggleSection}
         action={
-          <Button size="sm" variant="ghost" className="h-6 w-6 p-0" onClick={handleAddLink}>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-6 w-6 p-0"
+            onClick={handleAddLink}
+          >
             <Plus className="h-3 w-3" />
           </Button>
         }

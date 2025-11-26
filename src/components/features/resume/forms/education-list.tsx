@@ -115,7 +115,9 @@ export function EducationList({
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
                       <h3 className="text-xs font-semibold">{edu.degree}</h3>
-                      <p className="text-[11px] font-medium">{edu.institution}</p>
+                      <p className="text-[11px] font-medium">
+                        {edu.institution}
+                      </p>
                       <p className="text-muted-foreground text-[11px]">
                         {edu.field}
                       </p>
@@ -156,7 +158,9 @@ export function EducationList({
                     )}
                     {edu.honors && edu.honors.length > 0 && (
                       <div className="mt-1">
-                        <p className="text-[11px] font-medium">Honors & Awards:</p>
+                        <p className="text-[11px] font-medium">
+                          Honors & Awards:
+                        </p>
                         <ul className="mt-0.5 space-y-0.5 text-[11px]">
                           {edu.honors.map((honor, index) => (
                             <li key={index} className="flex gap-1.5">
