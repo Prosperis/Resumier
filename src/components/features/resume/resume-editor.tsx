@@ -32,8 +32,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
         </div>
 
         {/* Right Panel: Live Preview - exactly 2/3 width */}
-        <div className="w-2/3 flex items-start justify-center bg-slate-200 dark:bg-slate-800 overflow-hidden p-8">
-          {/* Static document canvas - no scrolling */}
+        <div className="w-2/3 flex items-start justify-center bg-slate-200 dark:bg-slate-800 overflow-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] p-8">
           <ResumePreview resume={resume} template={template} />
         </div>
       </div>

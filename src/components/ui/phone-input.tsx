@@ -1,16 +1,23 @@
-import { ChevronDown } from "lucide-react";
-import { forwardRef, useCallback, useState } from "react";
+import { AlertCircle, CheckCircle2, ChevronDown } from "lucide-react";
+import { forwardRef, useCallback, useMemo, useState } from "react";
 import {
-  formatPhoneNumber,
-  formatPhoneNumberIntl,
   getCountries,
   getCountryCallingCode,
   type Country,
-  type E164Number,
 } from "react-phone-number-input";
-import en from "react-phone-number-input/locale/en";
-import { parsePhoneNumber, AsYouType } from "libphonenumber-js";
+import {
+  parsePhoneNumber,
+  AsYouType,
+  getExampleNumber,
+  type Examples,
+} from "libphonenumber-js";
+import examples from "libphonenumber-js/mobile/examples";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface PhoneInputProps {
   value?: string;
@@ -33,7 +40,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
       onChange,
       onBlur,
       disabled,
-      placeholder = "Enter phone number",
+      placeholder,
       className,
       defaultCountry = "US",
       name,
@@ -45,41 +52,94 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
   ) => {
     const [country, setCountry] = useState<Country>(defaultCountry);
 
-    // Format the input value as user types
-    const formatInput = useCallback(
-      (inputValue: string) => {
-        if (!inputValue) return "";
+    // Get expected digit count for the selected country
+    const expectedDigits = useMemo(() => {
+      try {
+        const example = getExampleNumber(country, examples as Examples);
+        if (example) {
+          return example.nationalNumber.length;
+        }
+      } catch {
+        // Fallback for countries without examples
+      }
+      return 10; // Default to 10 digits (US standard)
+    }, [country]);
 
-        // Use AsYouType formatter for real-time formatting
-        const formatter = new AsYouType(country);
-        return formatter.input(inputValue);
-      },
-      [country],
-    );
+    // Check if the current number is valid/complete
+    const validationState = useMemo(() => {
+      if (!value) return { isValid: false, isComplete: false, digitCount: 0 };
 
-    // Get the display value (formatted for the current country)
+      // Extract national number digits
+      const countryCode = getCountryCallingCode(country);
+      const countryCodePrefix = `+${countryCode}`;
+      let nationalDigits = value;
+      if (value.startsWith(countryCodePrefix)) {
+        nationalDigits = value.slice(countryCodePrefix.length);
+      } else if (value.startsWith("+")) {
+        nationalDigits = value.replace(/^\+\d{1,3}/, "");
+      }
+      const digitCount = nationalDigits.replace(/\D/g, "").length;
+
+      // Check strict validity using libphonenumber
+      let isStrictlyValid = false;
+      try {
+        const parsed = parsePhoneNumber(value);
+        if (parsed) {
+          isStrictlyValid = parsed.isValid();
+        }
+      } catch {
+        // Parse failed
+      }
+
+      // Consider "complete" if digit count matches expected OR if strictly valid
+      // This allows numbers like +15551234567 (fake area code) to show as complete
+      const isComplete = digitCount >= expectedDigits || isStrictlyValid;
+
+      return {
+        isValid: isStrictlyValid,
+        isComplete,
+        digitCount,
+      };
+    }, [value, country, expectedDigits]);
+
+    // Generate dynamic placeholder based on country
+    const dynamicPlaceholder = useMemo(() => {
+      if (placeholder) return placeholder;
+      try {
+        const example = getExampleNumber(country, examples as Examples);
+        if (example) {
+          return example.formatNational();
+        }
+      } catch {
+        // Fallback
+      }
+      return "(555) 123-4567";
+    }, [country, placeholder]);
+
+    // Get the display value - always format with AsYouType for consistent formatting
     const getDisplayValue = useCallback(() => {
       if (!value) return "";
 
-      try {
-        // Try to parse and format the stored value
-        const parsed = parsePhoneNumber(value);
-        if (parsed) {
-          // If the stored number's country matches selected, show national format
-          if (parsed.country === country) {
-            return parsed.formatNational();
-          }
-          // Otherwise show international
-          return parsed.formatInternational();
-        }
-      } catch {
-        // If parsing fails, just show the raw value
+      // Extract national number from stored E.164 value
+      const countryCode = getCountryCallingCode(country);
+      const countryCodePrefix = `+${countryCode}`;
+
+      let nationalPart = "";
+      if (value.startsWith(countryCodePrefix)) {
+        nationalPart = value.slice(countryCodePrefix.length);
+      } else if (value.startsWith("+")) {
+        // Different country code - extract digits after code
+        nationalPart = value.replace(/^\+\d{1,3}/, "");
+      } else {
+        nationalPart = value;
       }
 
-      return value.replace(/^\+\d+\s*/, ""); // Remove country code prefix if present
+      // Always use AsYouType for consistent formatting (works for partial numbers too)
+      const formatter = new AsYouType(country);
+      return formatter.input(nationalPart);
     }, [value, country]);
 
-    // Handle input change
+    // Handle input change - user is editing the national number only
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const inputValue = e.target.value;
 
@@ -91,7 +151,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
         return;
       }
 
-      // Format with country code for storage
+      // Format with country code for storage (E.164 format)
       const countryCode = getCountryCallingCode(country);
       const fullNumber = `+${countryCode}${digitsOnly}`;
 
@@ -130,6 +190,11 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
 
     const countries = getCountries();
 
+    // Determine if we should show validation indicator
+    const hasValue = value && value.length > 0;
+    const showValidation = hasValue && !disabled;
+    const isIncomplete = showValidation && !validationState.isComplete;
+
     return (
       <div className={cn("flex w-full items-stretch", className)}>
         {/* Country selector */}
@@ -142,6 +207,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
               "border-input bg-muted/50 dark:bg-input/30 h-8 w-[88px] cursor-pointer appearance-none rounded-l-md border border-r-0 py-1 pr-6 pl-2 text-xs shadow-xs outline-none transition-colors",
               "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
               "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+              isIncomplete && "border-amber-500",
             )}
             aria-label="Select country"
           >
@@ -154,26 +220,50 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
           <ChevronDown className="text-muted-foreground pointer-events-none absolute top-1/2 right-1.5 h-3 w-3 -translate-y-1/2" />
         </div>
 
-        {/* Phone number input */}
-        <input
-          ref={ref}
-          type="tel"
-          data-slot="input"
-          value={getDisplayValue()}
-          onChange={handleInputChange}
-          onBlur={onBlur}
-          disabled={disabled}
-          placeholder={placeholder}
-          name={name}
-          id={id}
-          aria-describedby={ariaDescribedBy}
-          aria-invalid={ariaInvalid}
-          className={cn(
-            "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-8 w-full min-w-0 flex-1 rounded-r-md border bg-transparent px-3 py-1 text-xs shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-            "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-            "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+        {/* Phone number input - shows national format only */}
+        <div className="relative flex-1">
+          <input
+            ref={ref}
+            type="tel"
+            data-slot="input"
+            value={getDisplayValue()}
+            onChange={handleInputChange}
+            onBlur={onBlur}
+            disabled={disabled}
+            placeholder={dynamicPlaceholder}
+            name={name}
+            id={id}
+            aria-describedby={ariaDescribedBy}
+            aria-invalid={ariaInvalid || isIncomplete}
+            className={cn(
+              "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-8 w-full min-w-0 rounded-r-md border bg-transparent py-1 pl-3 pr-8 text-xs shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+              "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+              "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+              isIncomplete &&
+                "border-amber-500 ring-amber-500/20 focus-visible:border-amber-500 focus-visible:ring-amber-500/30",
+            )}
+          />
+          {/* Validation indicator */}
+          {showValidation && (
+            <div className="absolute top-1/2 right-2 -translate-y-1/2">
+              {validationState.isComplete ? (
+                <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />
+              ) : (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-[200px]">
+                    <p className="text-xs">
+                      Phone number incomplete ({validationState.digitCount}/
+                      {expectedDigits} digits)
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+            </div>
           )}
-        />
+        </div>
       </div>
     );
   },

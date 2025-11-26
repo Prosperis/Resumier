@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AlertCircle,
+  AlertTriangle,
   ArrowRightLeft,
   CheckCircle2,
   Loader2,
@@ -82,16 +83,14 @@ export function PersonalInfoForm({
   };
 
   // Auto-save on form value changes
+  // Saves partial data as user types - validation errors display via FormMessage
   useEffect(() => {
     if (!enabled) return;
 
-    // Only save if we have at least some data
-    if (
-      !watchedValues.firstName &&
-      !watchedValues.lastName &&
-      !watchedValues.email
-    )
-      return;
+    // Only save if we have at least some identifying data (name or email)
+    const hasName = watchedValues.firstName || watchedValues.lastName;
+    const hasEmail = watchedValues.email;
+    if (!hasName && !hasEmail) return;
 
     save({
       content: {
@@ -146,7 +145,9 @@ export function PersonalInfoForm({
             {/* Name Fields Row */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <FormLabel className="text-[11px]">Name *</FormLabel>
+                <FormLabel className="text-[11px]">
+                  Name <span className="text-muted-foreground">(at least one)</span>
+                </FormLabel>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -304,26 +305,67 @@ export function PersonalInfoForm({
             <FormField
               control={form.control}
               name="summary"
-              render={({ field }) => (
-                <FormItem className="space-y-1">
-                  <FormLabel className="text-[11px]">
-                    Professional Summary
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      placeholder="Brief overview of your professional background and key skills..."
-                      disabled={!enabled}
-                      rows={3}
-                      className="text-xs"
-                    />
-                  </FormControl>
-                  <FormDescription className="text-[10px]">
-                    A brief professional summary (optional, max 500 characters)
-                  </FormDescription>
-                  <FormMessage className="text-[10px]" />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const charCount = field.value?.length || 0;
+                const isNearLimit = charCount >= 400 && charCount <= 500;
+                const isOverLimit = charCount > 500;
+
+                return (
+                  <FormItem className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <FormLabel className="text-[11px]">
+                        Professional Summary
+                      </FormLabel>
+                      <div className="flex items-center gap-1.5">
+                        {(isNearLimit || isOverLimit) && (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <AlertTriangle
+                                className={`h-3 w-3 ${
+                                  isOverLimit
+                                    ? "text-destructive"
+                                    : "text-amber-500"
+                                }`}
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="max-w-[220px]">
+                              <p className="text-xs">
+                                {isOverLimit
+                                  ? "Summary exceeds 500 characters and will be truncated."
+                                  : "Keep it concise! Recruiters typically spend only 6-7 seconds scanning a resume. A shorter summary is more impactful."}
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                        <span
+                          className={`text-[10px] tabular-nums ${
+                            isOverLimit
+                              ? "text-destructive font-medium"
+                              : isNearLimit
+                                ? "text-amber-500"
+                                : "text-muted-foreground"
+                          }`}
+                        >
+                          {charCount}/500
+                        </span>
+                      </div>
+                    </div>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        placeholder="Brief overview of your professional background and key skills..."
+                        disabled={!enabled}
+                        rows={3}
+                        className="text-xs"
+                      />
+                    </FormControl>
+                    <FormDescription className="text-[10px]">
+                      A brief professional summary (optional)
+                    </FormDescription>
+                    <FormMessage className="text-[10px]" />
+                  </FormItem>
+                );
+              }}
             />
           </form>
         </Form>
