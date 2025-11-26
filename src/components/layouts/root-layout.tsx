@@ -22,7 +22,7 @@ export function RootLayout({ children }: RootLayoutProps) {
   const setTemplate = useResumeStore((state) => state.setTemplate);
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-background">
+    <div className="relative flex h-screen flex-col overflow-hidden bg-background">
       {/* Skip link for keyboard navigation - visible on focus */}
       <a
         href="#main-content"
@@ -33,6 +33,16 @@ export function RootLayout({ children }: RootLayoutProps) {
 
       {/* Header - Compact Professional Design */}
       <header className="sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur-sm supports-[backdrop-filter]:bg-card/80">
+        {/* Demo Mode Banner - inside header so it's part of sticky area */}
+        {isDemo && (
+          <div className="border-b border-blue-200 bg-blue-50 px-4 py-1">
+            <div className="flex items-center justify-center gap-2 text-[10px] font-medium text-blue-700">
+              <span>🎭 Demo Mode</span>
+              <span className="hidden sm:inline">•</span>
+              <span className="hidden sm:inline">Exploring with sample data</span>
+            </div>
+          </div>
+        )}
         <div className="flex h-12 items-center justify-between px-4">
           <div className="flex items-center gap-4">
             <Link
@@ -83,22 +93,11 @@ export function RootLayout({ children }: RootLayoutProps) {
         </div>
       </header>
 
-      {/* Demo Mode Banner */}
-      {isDemo && (
-        <div className="border-b border-blue-200 bg-blue-50 px-4 py-1.5">
-          <div className="container mx-auto flex items-center justify-center gap-2 text-xs font-medium text-blue-700">
-            <span>🎭 Demo Mode</span>
-            <span className="hidden sm:inline">•</span>
-            <span className="hidden sm:inline">Exploring with sample data</span>
-          </div>
-        </div>
-      )}
-
       {/* Main content */}
       <main
         id="main-content"
         tabIndex={-1}
-        className="relative flex-1 focus:outline-none"
+        className="relative flex-1 overflow-hidden focus:outline-none"
       >
         {children}
       </main>

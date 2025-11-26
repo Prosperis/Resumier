@@ -20,9 +20,9 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
   }, [resume, setCurrentResume]);
 
   return (
-    <div className="flex h-[calc(100vh-3rem)] flex-col">
+    <div className="flex h-full flex-col">
       {/* Content Area - strict 1/3 + 2/3 split */}
-      <div className="flex flex-1 min-h-0">
+      <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* Left Panel: Edit Form - exactly 1/3 width */}
         <div className="w-1/3 flex flex-col border-r border-border bg-background">
           {/* Scrollable Edit Content - hidden scrollbar */}
@@ -32,14 +32,9 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
         </div>
 
         {/* Right Panel: Live Preview - exactly 2/3 width */}
-        <div className="w-2/3 flex flex-col bg-slate-200 dark:bg-slate-800 overflow-hidden">
-          {/* Scrollable preview container - padding scrolls with content */}
-          <div className="flex-1 overflow-y-auto overflow-x-hidden overscroll-contain scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]">
-            {/* Inner wrapper with padding that scrolls with the document */}
-            <div className="flex justify-center p-8">
-              <ResumePreview resume={resume} template={template} />
-            </div>
-          </div>
+        <div className="w-2/3 flex items-start justify-center bg-slate-200 dark:bg-slate-800 overflow-hidden p-8">
+          {/* Static document canvas - no scrolling */}
+          <ResumePreview resume={resume} template={template} />
         </div>
       </div>
     </div>
