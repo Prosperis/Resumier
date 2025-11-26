@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
@@ -233,72 +234,71 @@ export function PersonalInfoForm({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              {/* Email */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem className="space-y-1">
-                    <FormLabel className="text-[11px]">Email *</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="email"
-                        placeholder="john@example.com"
-                        disabled={!enabled}
-                        className="h-8 text-xs"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-[10px]" />
-                  </FormItem>
-                )}
-              />
+            {/* Email */}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[11px]">Email *</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="email"
+                      placeholder="john@example.com"
+                      disabled={!enabled}
+                      className="h-8 text-xs"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-[10px]" />
+                </FormItem>
+              )}
+            />
 
-              {/* Phone */}
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem className="space-y-1">
-                    <FormLabel className="text-[11px]">Phone *</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="tel"
-                        placeholder="+1 (555) 123-4567"
-                        disabled={!enabled}
-                        className="h-8 text-xs"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-[10px]" />
-                  </FormItem>
-                )}
-              />
+            {/* Phone - full width for country selector + number */}
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[11px]">Phone *</FormLabel>
+                  <FormControl>
+                    <PhoneInput
+                      value={field.value}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      disabled={!enabled}
+                      placeholder="(555) 123-4567"
+                      defaultCountry="US"
+                    />
+                  </FormControl>
+                  <FormMessage className="text-[10px]" />
+                </FormItem>
+              )}
+            />
 
-              {/* Location */}
-              <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem className="space-y-1">
-                    <FormLabel className="text-[11px]">Location *</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="San Francisco, CA"
-                        disabled={!enabled}
-                        className="h-8 text-xs"
-                      />
-                    </FormControl>
-                    <FormDescription className="text-[10px]">
-                      City and state/country
-                    </FormDescription>
-                    <FormMessage className="text-[10px]" />
-                  </FormItem>
-                )}
-              />
-            </div>
+            {/* Location */}
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
+                  <FormLabel className="text-[11px]">Location *</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="San Francisco, CA"
+                      disabled={!enabled}
+                      className="h-8 text-xs"
+                    />
+                  </FormControl>
+                  <FormDescription className="text-[10px]">
+                    City and state/country
+                  </FormDescription>
+                  <FormMessage className="text-[10px]" />
+                </FormItem>
+              )}
+            />
 
             {/* Summary */}
             <FormField
