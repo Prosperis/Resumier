@@ -1,7 +1,11 @@
 import { Mail, Phone, MapPin, Briefcase, GraduationCap } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
+import {
+  formatPhoneDisplay,
+  getFullName,
+  type PhoneFormat,
+} from "@/lib/validations";
 
 interface ThreeColumnTemplateProps {
   resume: Resume;
@@ -39,7 +43,10 @@ export function ThreeColumnTemplate({
           {personalInfo.phone && (
             <span className="flex items-center gap-1">
               <Phone className="h-3 w-3" />
-              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
+              {formatPhoneDisplay(
+                personalInfo.phone,
+                personalInfo.phoneFormat as PhoneFormat,
+              )}
             </span>
           )}
           {personalInfo.location && (

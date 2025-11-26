@@ -1,6 +1,10 @@
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
+import {
+  formatPhoneDisplay,
+  getFullName,
+  type PhoneFormat,
+} from "@/lib/validations";
 
 interface AcademicTemplateProps {
   resume: Resume;
@@ -27,7 +31,14 @@ export function AcademicTemplate({ resume, config }: AcademicTemplateProps) {
         </h1>
         <div className="flex justify-center flex-wrap gap-3 text-sm text-gray-700">
           {personalInfo.email && <span>{personalInfo.email}</span>}
-          {personalInfo.phone && <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>}
+          {personalInfo.phone && (
+            <span>
+              {formatPhoneDisplay(
+                personalInfo.phone,
+                personalInfo.phoneFormat as PhoneFormat,
+              )}
+            </span>
+          )}
           {personalInfo.location && <span>{personalInfo.location}</span>}
         </div>
       </div>

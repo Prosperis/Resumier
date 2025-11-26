@@ -616,7 +616,9 @@ describe("formatPhoneDisplay", () => {
   });
 
   it("formats UK phone number in national format", () => {
-    expect(formatPhoneDisplay("+442071234567", "national")).toBe("020 7123 4567");
+    expect(formatPhoneDisplay("+442071234567", "national")).toBe(
+      "020 7123 4567",
+    );
   });
 
   it("formats UK phone number in international format", () => {

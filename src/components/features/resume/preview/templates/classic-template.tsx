@@ -1,5 +1,9 @@
 import type { Resume } from "@/lib/api/types";
-import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
+import {
+  formatPhoneDisplay,
+  getFullName,
+  type PhoneFormat,
+} from "@/lib/validations";
 
 interface ClassicTemplateProps {
   resume: Resume;
@@ -28,7 +32,12 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
           {personalInfo.phone && (
             <>
               <span>•</span>
-              <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>
+              <span>
+                {formatPhoneDisplay(
+                  personalInfo.phone,
+                  personalInfo.phoneFormat as PhoneFormat,
+                )}
+              </span>
             </>
           )}
           {personalInfo.location && (

@@ -12,7 +12,11 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
-import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
+import {
+  formatPhoneDisplay,
+  getFullName,
+  type PhoneFormat,
+} from "@/lib/validations";
 
 interface TemplateProps {
   resume: Resume;
@@ -47,7 +51,11 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
           )}
           {personalInfo.phone && (
             <span className="flex items-center gap-1">
-              <Phone className="h-4 w-4" /> {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
+              <Phone className="h-4 w-4" />{" "}
+              {formatPhoneDisplay(
+                personalInfo.phone,
+                personalInfo.phoneFormat as PhoneFormat,
+              )}
             </span>
           )}
           {personalInfo.location && (
@@ -153,7 +161,14 @@ export function AcademicTemplate({ resume }: TemplateProps) {
         </p>
         <div className="flex justify-center flex-wrap gap-3 text-sm text-gray-700">
           {personalInfo.email && <span>{personalInfo.email}</span>}
-          {personalInfo.phone && <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>}
+          {personalInfo.phone && (
+            <span>
+              {formatPhoneDisplay(
+                personalInfo.phone,
+                personalInfo.phoneFormat as PhoneFormat,
+              )}
+            </span>
+          )}
           {personalInfo.location && <span>{personalInfo.location}</span>}
         </div>
       </div>
@@ -256,7 +271,14 @@ export function CorporateTemplate({ resume }: TemplateProps) {
         <div className="text-sm text-gray-700 space-x-3">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && <span>•</span>}
-          {personalInfo.phone && <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>}
+          {personalInfo.phone && (
+            <span>
+              {formatPhoneDisplay(
+                personalInfo.phone,
+                personalInfo.phoneFormat as PhoneFormat,
+              )}
+            </span>
+          )}
           {personalInfo.location && <span>•</span>}
           {personalInfo.location && <span>{personalInfo.location}</span>}
         </div>
@@ -374,7 +396,14 @@ export function TechModernTemplate({ resume }: TemplateProps) {
         <p className="text-xl mb-3">{personalInfo.title || "Developer"}</p>
         <div className="flex flex-wrap gap-4 text-sm">
           {personalInfo.email && <span>{personalInfo.email}</span>}
-          {personalInfo.phone && <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>}
+          {personalInfo.phone && (
+            <span>
+              {formatPhoneDisplay(
+                personalInfo.phone,
+                personalInfo.phoneFormat as PhoneFormat,
+              )}
+            </span>
+          )}
           {personalInfo.location && <span>{personalInfo.location}</span>}
         </div>
       </div>
@@ -490,7 +519,14 @@ export function CreativeProfessionalTemplate({ resume }: TemplateProps) {
         <div className="flex flex-wrap gap-4 text-sm opacity-90">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && <span>•</span>}
-          {personalInfo.phone && <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>}
+          {personalInfo.phone && (
+            <span>
+              {formatPhoneDisplay(
+                personalInfo.phone,
+                personalInfo.phoneFormat as PhoneFormat,
+              )}
+            </span>
+          )}
         </div>
       </div>
 

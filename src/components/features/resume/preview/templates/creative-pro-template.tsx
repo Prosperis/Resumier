@@ -1,6 +1,10 @@
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
+import {
+  formatPhoneDisplay,
+  getFullName,
+  type PhoneFormat,
+} from "@/lib/validations";
 
 interface CreativeProTemplateProps {
   resume: Resume;
@@ -34,7 +38,14 @@ export function CreativeProTemplate({
         <div className="flex flex-wrap gap-4 text-sm opacity-90">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && <span>•</span>}
-          {personalInfo.phone && <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>}
+          {personalInfo.phone && (
+            <span>
+              {formatPhoneDisplay(
+                personalInfo.phone,
+                personalInfo.phoneFormat as PhoneFormat,
+              )}
+            </span>
+          )}
           {personalInfo.location && <span>•</span>}
           {personalInfo.location && <span>{personalInfo.location}</span>}
         </div>

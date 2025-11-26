@@ -7,7 +7,11 @@
 import { Briefcase, GraduationCap, Mail, MapPin, Phone } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
+import {
+  formatPhoneDisplay,
+  getFullName,
+  type PhoneFormat,
+} from "@/lib/validations";
 
 interface SplitScreenTemplateProps {
   resume: Resume;
@@ -63,7 +67,12 @@ export function SplitScreenTemplate({
             {personalInfo.phone && (
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 flex-shrink-0" />
-                <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>
+                <span>
+                  {formatPhoneDisplay(
+                    personalInfo.phone,
+                    personalInfo.phoneFormat as PhoneFormat,
+                  )}
+                </span>
               </div>
             )}
             {personalInfo.location && (
