@@ -5,8 +5,9 @@ import {
   ArrowRightLeft,
   CheckCircle2,
   Loader2,
+  MapPin,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -85,6 +86,87 @@ export function PersonalInfoForm({
       currentOrder === "firstLast" ? "lastFirst" : "firstLast",
     );
   };
+
+  // State for geolocation
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
+
+  // Handler to get current location
+  const handleGetLocation = useCallback(async () => {
+    if (!navigator.geolocation) {
+      setLocationError("Geolocation is not supported by your browser");
+      return;
+    }
+
+    setIsGettingLocation(true);
+    setLocationError(null);
+
+    try {
+      const position = await new Promise<GeolocationPosition>(
+        (resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: false,
+            timeout: 10000,
+            maximumAge: 300000, // Cache for 5 minutes
+          });
+        }
+      );
+
+      const { latitude, longitude } = position.coords;
+
+      // Use OpenStreetMap's Nominatim API for reverse geocoding
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`,
+        {
+          headers: {
+            "Accept-Language": "en",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to get location name");
+      }
+
+      const data = await response.json();
+      const address = data.address;
+
+      // Build a readable location string (City, State/Region, Country)
+      const parts: string[] = [];
+      if (address.city || address.town || address.village || address.municipality) {
+        parts.push(address.city || address.town || address.village || address.municipality);
+      }
+      if (address.state || address.region || address.county) {
+        parts.push(address.state || address.region || address.county);
+      }
+      if (parts.length === 0 && address.country) {
+        parts.push(address.country);
+      }
+
+      const locationString = parts.join(", ") || "Unknown location";
+      form.setValue("location", locationString, { shouldValidate: true });
+    } catch (err) {
+      if (err instanceof GeolocationPositionError) {
+        switch (err.code) {
+          case err.PERMISSION_DENIED:
+            setLocationError("Location permission denied");
+            break;
+          case err.POSITION_UNAVAILABLE:
+            setLocationError("Location unavailable");
+            break;
+          case err.TIMEOUT:
+            setLocationError("Location request timed out");
+            break;
+          default:
+            setLocationError("Failed to get location");
+        }
+      } else {
+        setLocationError("Failed to get location");
+      }
+    } finally {
+      setIsGettingLocation(false);
+    }
+  }, [form]);
 
   // Auto-save on form value changes
   // Saves partial data as user types - validation errors display via FormMessage
@@ -312,7 +394,41 @@ export function PersonalInfoForm({
               name="location"
               render={({ field }) => (
                 <FormItem className="space-y-1">
-                  <FormLabel className="text-[11px]">Location</FormLabel>
+                  <div className="flex items-center justify-between">
+                    <FormLabel className="text-[11px]">Location</FormLabel>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleGetLocation}
+                          disabled={!enabled || isGettingLocation}
+                          className="h-6 gap-1 px-2 text-[10px]"
+                        >
+                          {isGettingLocation ? (
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                          ) : (
+                            <MapPin className="h-3 w-3" />
+                          )}
+                          <span className="hidden sm:inline">
+                            {isGettingLocation ? "Getting..." : "Use current"}
+                          </span>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        <p className="text-xs">
+                          Get your current location
+                          {locationError && (
+                            <>
+                              <br />
+                              <span className="text-destructive">{locationError}</span>
+                            </>
+                          )}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                   <FormControl>
                     <Input
                       {...field}

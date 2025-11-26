@@ -1,4 +1,4 @@
-import { AlertCircle, CheckCircle2, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { forwardRef, useCallback, useMemo, useState } from "react";
 import {
   getCountries,
@@ -13,11 +13,6 @@ import {
 } from "libphonenumber-js";
 import examples from "libphonenumber-js/mobile/examples";
 import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface PhoneInputProps {
   value?: string;
@@ -51,56 +46,6 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
     ref,
   ) => {
     const [country, setCountry] = useState<Country>(defaultCountry);
-
-    // Get expected digit count for the selected country
-    const expectedDigits = useMemo(() => {
-      try {
-        const example = getExampleNumber(country, examples as Examples);
-        if (example) {
-          return example.nationalNumber.length;
-        }
-      } catch {
-        // Fallback for countries without examples
-      }
-      return 10; // Default to 10 digits (US standard)
-    }, [country]);
-
-    // Check if the current number is valid/complete
-    const validationState = useMemo(() => {
-      if (!value) return { isValid: false, isComplete: false, digitCount: 0 };
-
-      // Extract national number digits
-      const countryCode = getCountryCallingCode(country);
-      const countryCodePrefix = `+${countryCode}`;
-      let nationalDigits = value;
-      if (value.startsWith(countryCodePrefix)) {
-        nationalDigits = value.slice(countryCodePrefix.length);
-      } else if (value.startsWith("+")) {
-        nationalDigits = value.replace(/^\+\d{1,3}/, "");
-      }
-      const digitCount = nationalDigits.replace(/\D/g, "").length;
-
-      // Check strict validity using libphonenumber
-      let isStrictlyValid = false;
-      try {
-        const parsed = parsePhoneNumber(value);
-        if (parsed) {
-          isStrictlyValid = parsed.isValid();
-        }
-      } catch {
-        // Parse failed
-      }
-
-      // Consider "complete" if digit count matches expected OR if strictly valid
-      // This allows numbers like +15551234567 (fake area code) to show as complete
-      const isComplete = digitCount >= expectedDigits || isStrictlyValid;
-
-      return {
-        isValid: isStrictlyValid,
-        isComplete,
-        digitCount,
-      };
-    }, [value, country, expectedDigits]);
 
     // Generate dynamic placeholder based on country
     const dynamicPlaceholder = useMemo(() => {
@@ -182,10 +127,6 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
 
     const countries = getCountries();
 
-    // Determine if we should show validation indicator
-    const hasValue = value && value.length > 0;
-    const showValidation = hasValue && !disabled;
-    const isIncomplete = showValidation && !validationState.isComplete;
 
     return (
       <div className={cn("flex w-full items-stretch", className)}>
@@ -199,7 +140,6 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
               "border-input bg-muted/50 dark:bg-input/30 h-8 w-[88px] cursor-pointer appearance-none rounded-l-md border border-r-0 py-1 pr-6 pl-2 text-xs shadow-xs outline-none transition-colors",
               "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
               "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-              isIncomplete && "border-amber-500",
             )}
             aria-label="Select country"
           >
@@ -226,35 +166,13 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
             name={name}
             id={id}
             aria-describedby={ariaDescribedBy}
-            aria-invalid={ariaInvalid || isIncomplete}
+            aria-invalid={ariaInvalid}
             className={cn(
-              "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-8 w-full min-w-0 rounded-r-md border bg-transparent py-1 pl-3 pr-8 text-xs shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+              "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-8 w-full min-w-0 rounded-r-md border bg-transparent py-1 pl-3 pr-3 text-xs shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
               "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
               "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-              isIncomplete &&
-                "border-amber-500 ring-amber-500/20 focus-visible:border-amber-500 focus-visible:ring-amber-500/30",
             )}
           />
-          {/* Validation indicator */}
-          {showValidation && (
-            <div className="absolute top-1/2 right-2 -translate-y-1/2">
-              {validationState.isComplete ? (
-                <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />
-              ) : (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
-                  </TooltipTrigger>
-                  <TooltipContent side="top" className="max-w-[200px]">
-                    <p className="text-xs">
-                      Phone number incomplete ({validationState.digitCount}/
-                      {expectedDigits} digits)
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
-            </div>
-          )}
         </div>
       </div>
     );
