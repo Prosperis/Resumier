@@ -32,10 +32,13 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
         </div>
 
         {/* Right Panel: Live Preview - exactly 2/3 width */}
-        <div className="w-2/3 flex flex-col bg-slate-200 dark:bg-slate-800">
-          {/* Preview Content - hidden scrollbar */}
-          <div className="flex-1 overflow-auto p-8 scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]">
-            <ResumePreview resume={resume} template={template} />
+        <div className="w-2/3 flex flex-col bg-slate-200 dark:bg-slate-800 overflow-hidden">
+          {/* Scrollable preview container - padding scrolls with content */}
+          <div className="flex-1 overflow-y-auto overflow-x-hidden overscroll-contain scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]">
+            {/* Inner wrapper with padding that scrolls with the document */}
+            <div className="flex justify-center p-8">
+              <ResumePreview resume={resume} template={template} />
+            </div>
           </div>
         </div>
       </div>
