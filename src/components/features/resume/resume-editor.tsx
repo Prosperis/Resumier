@@ -1,10 +1,8 @@
-import { Eye, FileEdit } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useEffect } from "react";
 import type { Resume } from "@/lib/api/types";
 import { useResumeStore } from "@/stores/resume-store";
-import { ExportMenu } from "./export/export-menu";
+import { useUIStore, selectSetCurrentResume } from "@/stores/ui-store";
 import { ResumePreview } from "./preview/resume-preview";
-import { TemplateSelector } from "./preview/template-selector";
 import { ResumeBuilder } from "./resume-builder";
 
 interface ResumeEditorProps {
@@ -13,37 +11,34 @@ interface ResumeEditorProps {
 
 export function ResumeEditor({ resume }: ResumeEditorProps) {
   const template = useResumeStore((state) => state.template);
-  const setTemplate = useResumeStore((state) => state.setTemplate);
+  const setCurrentResume = useUIStore(selectSetCurrentResume);
+
+  // Set/clear the current resume for navbar actions
+  useEffect(() => {
+    setCurrentResume(resume);
+    return () => setCurrentResume(null);
+  }, [resume, setCurrentResume]);
 
   return (
-    <Tabs defaultValue="preview" className="w-full">
-      <div className="mb-6 flex items-center justify-between gap-4">
-        <TabsList>
-          <TabsTrigger value="edit" className="gap-2">
-            <FileEdit className="h-4 w-4" />
-            Edit
-          </TabsTrigger>
-          <TabsTrigger value="preview" className="gap-2">
-            <Eye className="h-4 w-4" />
-            Preview
-          </TabsTrigger>
-        </TabsList>
+    <div className="flex h-[calc(100vh-3rem)] flex-col">
+      {/* Content Area - strict 1/3 + 2/3 split */}
+      <div className="flex flex-1 min-h-0">
+        {/* Left Panel: Edit Form - exactly 1/3 width */}
+        <div className="w-1/3 flex flex-col border-r border-border bg-background">
+          {/* Scrollable Edit Content - hidden scrollbar */}
+          <div className="flex-1 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]">
+            <ResumeBuilder />
+          </div>
+        </div>
 
-        <div className="flex items-center gap-2">
-          <TemplateSelector selected={template} onSelect={setTemplate} />
-          <ExportMenu resume={resume} />
+        {/* Right Panel: Live Preview - exactly 2/3 width */}
+        <div className="w-2/3 flex flex-col bg-slate-200 dark:bg-slate-800">
+          {/* Preview Content - hidden scrollbar */}
+          <div className="flex-1 overflow-auto p-8 scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]">
+            <ResumePreview resume={resume} template={template} />
+          </div>
         </div>
       </div>
-
-      <TabsContent value="edit" className="mt-0">
-        <ResumeBuilder />
-      </TabsContent>
-
-      <TabsContent value="preview" className="mt-0">
-        <div className="min-h-[600px] rounded-lg bg-gray-100 p-8">
-          <ResumePreview resume={resume} template={template} />
-        </div>
-      </TabsContent>
-    </Tabs>
+    </div>
   );
 }

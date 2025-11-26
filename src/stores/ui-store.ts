@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
+import type { Resume } from "@/lib/api/types";
 
 export interface Notification {
   id: string;
@@ -24,6 +25,9 @@ interface UIStore {
   // Loading State
   globalLoading: boolean;
 
+  // Current Resume (for navbar actions)
+  currentResume: Resume | null;
+
   // Sidebar Actions
   setSidebarOpen: (open: boolean) => void;
   toggleSidebar: () => void;
@@ -41,6 +45,9 @@ interface UIStore {
 
   // Loading Actions
   setGlobalLoading: (loading: boolean) => void;
+
+  // Current Resume Actions
+  setCurrentResume: (resume: Resume | null) => void;
 }
 
 const initialState = {
@@ -50,6 +57,7 @@ const initialState = {
   dialogData: {},
   notifications: [],
   globalLoading: false,
+  currentResume: null,
 };
 
 export const useUIStore = create<UIStore>()(
@@ -119,6 +127,9 @@ export const useUIStore = create<UIStore>()(
 
         // Loading Actions
         setGlobalLoading: (globalLoading) => set({ globalLoading }),
+
+        // Current Resume Actions
+        setCurrentResume: (currentResume) => set({ currentResume }),
       }),
       {
         name: "resumier-ui",
@@ -160,3 +171,7 @@ export const selectNotificationActions = (state: UIStore) => ({
   removeNotification: state.removeNotification,
   clearNotifications: state.clearNotifications,
 });
+
+// Current Resume selectors
+export const selectCurrentResume = (state: UIStore) => state.currentResume;
+export const selectSetCurrentResume = (state: UIStore) => state.setCurrentResume;

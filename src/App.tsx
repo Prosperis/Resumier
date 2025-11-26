@@ -29,7 +29,6 @@ export default function App() {
     >
       {page === "dashboard" ? (
         <>
-          <h1 className="p-4 text-2xl font-bold">Resumes</h1>
           <ResumeDashboard onResumeClick={() => setPage("builder")} />
         </>
       ) : (

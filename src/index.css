@@ -4,10 +4,13 @@
 @custom-variant light (&:is(.light *));
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --font-sans: "Inter", sans-serif;
+  
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
+  
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -42,48 +45,76 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  /* Base: 8px radius for a modern, clean feel */
+  --radius: 0.5rem;
+  
+  /* Light Mode: Professional Slate Palette */
+  /* Background: Very slightly off-white for less eye strain/more warmth */
+  --background: oklch(0.985 0.005 264.542); /* Slate-50-ish */
+  /* Foreground: Deep slate, not pure black */
+  --foreground: oklch(0.208 0.042 265.755); 
+
+  /* Cards: White to pop against the background */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.208 0.042 265.755);
+
+  /* Popovers */
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.208 0.042 265.755);
+
+  /* Primary: A professional, trustworthy deep blue/indigo */
+  --primary: oklch(0.296 0.107 265.755); /* Deep Royal Blue */
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+
+  /* Secondary: Subtle slate for secondary actions */
+  --secondary: oklch(0.961 0.006 264.542);
+  --secondary-foreground: oklch(0.208 0.042 265.755);
+
+  /* Muted: For less important text/backgrounds */
+  --muted: oklch(0.961 0.006 264.542);
+  --muted-foreground: oklch(0.551 0.027 264.364);
+
+  /* Accent: Used for hover states, slight highlights */
+  --accent: oklch(0.961 0.006 264.542);
+  --accent-foreground: oklch(0.208 0.042 265.755);
+
+  /* Destructive */
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --destructive-foreground: oklch(0.985 0 0);
+
+  /* Borders: Subtle and refined */
+  --border: oklch(0.894 0.012 264.542);
+  --input: oklch(0.894 0.012 264.542);
+  
+  /* Ring: Matching primary */
+  --ring: oklch(0.296 0.107 265.755);
+
+  /* Charts: Kept compatible but can be adjusted */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  
+  /* Sidebar */
+  --sidebar: oklch(0.985 0.005 264.542);
+  --sidebar-foreground: oklch(0.208 0.042 265.755);
+  --sidebar-primary: oklch(0.296 0.107 265.755);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-accent: oklch(0.961 0.006 264.542);
+  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
+  --sidebar-border: oklch(0.894 0.012 264.542);
+  --sidebar-ring: oklch(0.296 0.107 265.755);
 }
 
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: oklch(0.145 0 0);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
+  --popover: oklch(0.145 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
+  --primary: oklch(0.985 0 0);
   --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
@@ -91,10 +122,11 @@
   --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -106,321 +138,16 @@
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
-
-/* Force resume templates to always display in light mode */
-.resume-light-mode {
-  /* This creates a new light mode context that overrides parent dark mode */
-  color-scheme: light !important;
-}
-
-/* Override dark mode - ensure resume always displays in light mode regardless of site theme */
-.light .resume-light-mode,
-.dark .resume-light-mode {
-  color-scheme: light !important;
-}
-
-/* Ensure all resume content ignores dark mode */
-.resume-light-mode *,
-.light .resume-light-mode *,
-.dark .resume-light-mode * {
-  color-scheme: light !important;
-}
-
-/* Specifically override common dark mode backgrounds in resumes */
-.dark .resume-light-mode .bg-white,
-.dark .resume-light-mode [class*="bg-white"] {
-  background-color: white !important;
-}
-
-.dark .resume-light-mode .text-black,
-.dark .resume-light-mode [class*="text-black"],
-.dark .resume-light-mode .text-gray-900,
-.dark .resume-light-mode [class*="text-gray-900"] {
-  color: rgb(17 24 39) !important; /* gray-900 */
-}
-
-.dark .resume-light-mode .text-gray-800,
-.dark .resume-light-mode [class*="text-gray-800"] {
-  color: rgb(31 41 55) !important; /* gray-800 */
-}
-
-.dark .resume-light-mode .text-gray-700,
-.dark .resume-light-mode [class*="text-gray-700"] {
-  color: rgb(55 65 81) !important; /* gray-700 */
-}
-
-.dark .resume-light-mode .text-gray-600,
-.dark .resume-light-mode [class*="text-gray-600"] {
-  color: rgb(75 85 99) !important; /* gray-600 */
-}
-
-.dark .resume-light-mode .text-gray-500,
-.dark .resume-light-mode [class*="text-gray-500"] {
-  color: rgb(107 114 128) !important; /* gray-500 */
-}
-
-/* Print styles for perfect PDF export via browser print dialog */
-@media print {
-  /* Define page settings */
-  @page {
-    size: A4 portrait;
-    margin: 0;
-  }
-
-  /* Hide all page elements except resume content */
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-    background: white !important;
-  }
-
-  /* Hide everything first */
-  body * {
-    visibility: hidden;
-  }
-
-  /* Make only resume and its parents visible */
-  .resume-light-mode,
-  .resume-light-mode * {
-    visibility: visible !important;
-  }
-
-  /* Position resume absolutely to take full page */
-  .resume-light-mode {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    background: white !important;
-    box-shadow: none !important;
-  }
-
-  /* Preserve all colors and backgrounds exactly as rendered */
-  .resume-light-mode * {
-    print-color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-  }
-
-  /* Remove shadows from templates that have them */
-  .resume-light-mode > * {
-    box-shadow: none !important;
-  }
-
-  /* Ensure proper page breaks for long resumes */
-  .resume-light-mode section,
-  .resume-light-mode .experience-item,
-  .resume-light-mode .education-item {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  /* Hide page-level navigation and controls (but not resume content) */
-  button,
-  [role="button"],
-  [role="menubar"],
-  [role="navigation"],
-  body > nav,
-  body > aside,
-  body > header,
-  body > footer,
-  .no-print,
-  [data-no-print] {
-    display: none !important;
-    visibility: hidden !important;
-  }
-  
-  /* Explicitly show all semantic HTML elements within resume */
-  .resume-light-mode header,
-  .resume-light-mode footer,
-  .resume-light-mode section,
-  .resume-light-mode article,
-  .resume-light-mode main,
-  .resume-light-mode nav {
-    display: block !important;
-    visibility: visible !important;
-  }
-
-  /* Force light mode for consistent printing */
-  * {
-    color-scheme: light !important;
-  }
-
-  /* Ensure fonts render correctly */
-  body,
-  .resume-light-mode,
-  .resume-light-mode * {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Preserve SVG icons */
-  svg {
-    shape-rendering: geometricPrecision;
-    print-color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
-  }
-}
-
-/* Ensure native date pickers match the current theme */
-input[type="date"] {
-  color-scheme: light;
-}
-
-.dark input[type="date"] {
-  color-scheme: dark;
-}
-
-/* Global scrollbar styling with fade-in/out */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--muted-foreground) transparent;
-}
-
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: var(--muted-foreground);
-  border-radius: 4px;
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-*:hover::-webkit-scrollbar-thumb {
-  opacity: 1;
-}
-
-/* Print styles for resume export */
-@media print {
-  /* Hide UI elements */
-  nav,
-  header,
-  footer,
-  button,
-  .no-print,
-  [role="navigation"],
-  [role="banner"],
-  [role="contentinfo"] {
-    display: none;
-  }
-
-  /* Reset page styles */
-  body {
-    margin: 0;
-    padding: 0;
-    background: white;
-    color: black;
-  }
-
-  /* Ensure resume takes full width */
-  .container {
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  /* Page breaks */
-  .resume-section {
-    page-break-inside: avoid;
-  }
-
-  /* Remove shadows and borders that don't translate well to print */
-  * {
-    box-shadow: none;
-    text-shadow: none;
-  }
-
-  /* Ensure colors print correctly */
-  a,
-  a:visited {
-    color: inherit;
-    text-decoration: underline;
-  }
-
-  /* Set appropriate font sizes for print */
-  body {
-    font-size: 11pt;
-    line-height: 1.4;
-  }
-
-  h1 {
-    font-size: 18pt;
-  }
-
-  h2 {
-    font-size: 14pt;
-  }
-
-  h3 {
-    font-size: 12pt;
-  }
-}
-
-@keyframes gradient {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient 3s ease infinite;
-}
-
-/* React Query Devtools - Hide by default and show on hover */
-
-/* Target the main devtools container */
-.react-query-devtools-button-container,
-[role="button"][title*="TanStack"],
-.ReactQueryDevtoolsButton {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 0.3s ease, pointer-events 0.3s ease !important;
-}
-
-/* Show on hover - multiple selectors for different element types */
-.react-query-devtools-button-container:hover,
-.react-query-devtools-button-container:focus-within,
-[role="button"][title*="TanStack"]:hover,
-.ReactQueryDevtoolsButton:hover {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-/* Also show if hovering near the bottom-right corner where devtools appears */
-body:has(.react-query-devtools-button-container:hover) .react-query-devtools-button-container,
-body:has([role="button"][title*="TanStack"]:hover) [role="button"][title*="TanStack"],
-body:has(.ReactQueryDevtoolsButton:hover) .ReactQueryDevtoolsButton {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-

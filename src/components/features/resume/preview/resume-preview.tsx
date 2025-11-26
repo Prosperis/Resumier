@@ -53,10 +53,7 @@ export function ResumePreview({ resume, template }: ResumePreviewProps) {
   };
 
   return (
-    <div
-      className="h-full w-full overflow-auto p-8"
-      style={{ backgroundColor: "#f3f4f6" }}
-    >
+    <div className="mx-auto w-full max-w-[21cm] bg-white shadow-xl">
       {/* Remove dark mode context for resume display */}
       <div className="resume-light-mode light print:bg-white print:p-0">
         <Suspense fallback={<TemplateLoadingSkeleton />}>

@@ -40,9 +40,5 @@ function EditResumeComponent() {
     );
   }
 
-  return (
-    <div className="container mx-auto p-8">
-      <ResumeEditor resume={resume} />
-    </div>
-  );
+  return <ResumeEditor resume={resume} />;
 }

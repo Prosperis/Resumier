@@ -1,15 +1,12 @@
 import { useParams } from "@tanstack/react-router";
-import { Plus, Upload } from "lucide-react";
+import { ChevronDown, Plus, Upload } from "lucide-react";
 import { Suspense, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { useResume, useUpdateResume } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
 import { useAuthStore, selectIsDemo } from "@/stores/auth-store";
@@ -33,6 +30,7 @@ import type {
   ExperienceFormData,
 } from "@/lib/validations/experience";
 import type { CreateLinkFormData, LinkFormData } from "@/lib/validations/links";
+import { cn } from "@/lib/utils";
 import { ImportDialog } from "./import/import-dialog";
 import {
   FormDialogSkeleton,
@@ -50,6 +48,56 @@ import {
   ListSkeleton,
 } from "./lazy";
 
+// Collapsible Section Component
+interface CollapsibleSectionProps {
+  id: string;
+  title: string;
+  description?: string;
+  isOpen: boolean;
+  onToggle: (id: string) => void;
+  action?: React.ReactNode;
+  children: React.ReactNode;
+}
+
+function CollapsibleSection({
+  id,
+  title,
+  description,
+  isOpen,
+  onToggle,
+  action,
+  children,
+}: CollapsibleSectionProps) {
+  return (
+    <Collapsible open={isOpen} onOpenChange={() => onToggle(id)} className="border-b border-border">
+      <CollapsibleTrigger className="flex w-full items-center justify-between px-4 py-3 hover:bg-muted/50 transition-colors">
+        <div className="flex items-center gap-3">
+          <ChevronDown
+            className={cn(
+              "h-4 w-4 text-muted-foreground transition-transform duration-200",
+              !isOpen && "-rotate-90"
+            )}
+          />
+          <div className="text-left">
+            <h3 className="text-sm font-semibold">{title}</h3>
+            {description && (
+              <p className="text-xs text-muted-foreground">{description}</p>
+            )}
+          </div>
+        </div>
+        {action && (
+          <div onClick={(e) => e.stopPropagation()}>
+            {action}
+          </div>
+        )}
+      </CollapsibleTrigger>
+      <CollapsibleContent className="px-4 pb-4 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+        {children}
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
 export function ResumeBuilder() {
   const { id } = useParams({ strict: false });
   const resumeId = id || "";
@@ -57,6 +105,13 @@ export function ResumeBuilder() {
   const { mutate: updateResume } = useUpdateResume();
   const { toast } = useToast();
   const isDemo = useAuthStore(selectIsDemo);
+
+  // Accordion state - only one section open at a time
+  const [openSection, setOpenSection] = useState<string>("personal");
+  
+  const handleToggleSection = (sectionId: string) => {
+    setOpenSection((current) => (current === sectionId ? "" : sectionId));
+  };
 
   // Dialog states
   const [experienceDialogOpen, setExperienceDialogOpen] = useState(false);
@@ -635,196 +690,153 @@ export function ResumeBuilder() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl space-y-8">
+    <div className="w-full">
       {/* Import Resume Section - Hidden in demo mode */}
       {!isDemo && (
-        <>
-          <Card className="border-blue-200 bg-blue-50/50 dark:border-blue-900 dark:bg-blue-950/20">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="flex items-center gap-2">
-                    <Upload className="h-5 w-5" />
-                    Quick Start
-                  </CardTitle>
-                  <CardDescription>
-                    Import your resume from LinkedIn, JSON, or other sources to
-                    get started quickly
-                  </CardDescription>
-                </div>
-                <ImportDialog
-                  trigger={
-                    <Button variant="default">
-                      <Upload className="mr-2 h-4 w-4" />
-                      Import Resume
-                    </Button>
-                  }
-                  onImportSuccess={handleImportSuccess}
-                />
+        <div className="border-b border-border bg-blue-50/50 dark:bg-blue-950/20 px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Upload className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <div>
+                <h3 className="text-sm font-semibold">Quick Start</h3>
+                <p className="text-xs text-muted-foreground">
+                  Import from LinkedIn, JSON, or other sources
+                </p>
               </div>
-            </CardHeader>
-          </Card>
-
-          <Separator />
-        </>
+            </div>
+            <ImportDialog
+              trigger={
+                <Button variant="default" size="sm">
+                  <Upload className="mr-2 h-3 w-3" />
+                  Import
+                </Button>
+              }
+              onImportSuccess={handleImportSuccess}
+            />
+          </div>
+        </div>
       )}
 
       {/* Personal Information Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Personal Information</CardTitle>
-          <CardDescription>
-            Basic information about yourself. Changes are saved automatically.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Suspense fallback={<FormSkeleton />}>
-            <LazyPersonalInfoForm
-              resumeId={resumeId}
-              defaultValues={content.personalInfo}
-            />
-          </Suspense>
-        </CardContent>
-      </Card>
-
-      <Separator />
+      <CollapsibleSection
+        id="personal"
+        title="Personal Information"
+        description="Basic contact info and summary"
+        isOpen={openSection === "personal"}
+        onToggle={handleToggleSection}
+      >
+        <Suspense fallback={<FormSkeleton />}>
+          <LazyPersonalInfoForm
+            resumeId={resumeId}
+            defaultValues={content.personalInfo}
+          />
+        </Suspense>
+      </CollapsibleSection>
 
       {/* Experience Section */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Work Experience</CardTitle>
-              <CardDescription>
-                Add your professional experience and accomplishments
-              </CardDescription>
-            </div>
-            <Button onClick={handleAddExperience}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Experience
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Suspense fallback={<ListSkeleton />}>
-            <LazyExperienceList
-              experiences={content.experience || []}
-              onEdit={handleEditExperience}
-              onDelete={handleDeleteExperience}
-              onReorder={handleReorderExperiences}
-            />
-          </Suspense>
-        </CardContent>
-      </Card>
-
-      <Separator />
+      <CollapsibleSection
+        id="experience"
+        title="Work Experience"
+        description="Professional experience and accomplishments"
+        isOpen={openSection === "experience"}
+        onToggle={handleToggleSection}
+        action={
+          <Button size="sm" variant="ghost" onClick={handleAddExperience}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        }
+      >
+        <Suspense fallback={<ListSkeleton />}>
+          <LazyExperienceList
+            experiences={content.experience || []}
+            onEdit={handleEditExperience}
+            onDelete={handleDeleteExperience}
+            onReorder={handleReorderExperiences}
+          />
+        </Suspense>
+      </CollapsibleSection>
 
       {/* Education Section */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Education</CardTitle>
-              <CardDescription>
-                Add your educational background and achievements
-              </CardDescription>
-            </div>
-            <Button onClick={handleAddEducation}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Education
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Suspense fallback={<ListSkeleton />}>
-            <LazyEducationList
-              education={content.education || []}
-              onEdit={handleEditEducation}
-              onDelete={handleDeleteEducation}
-              onReorder={handleReorderEducation}
-            />
-          </Suspense>
-        </CardContent>
-      </Card>
-
-      <Separator />
+      <CollapsibleSection
+        id="education"
+        title="Education"
+        description="Educational background and achievements"
+        isOpen={openSection === "education"}
+        onToggle={handleToggleSection}
+        action={
+          <Button size="sm" variant="ghost" onClick={handleAddEducation}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        }
+      >
+        <Suspense fallback={<ListSkeleton />}>
+          <LazyEducationList
+            education={content.education || []}
+            onEdit={handleEditEducation}
+            onDelete={handleDeleteEducation}
+            onReorder={handleReorderEducation}
+          />
+        </Suspense>
+      </CollapsibleSection>
 
       {/* Skills Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Skills</CardTitle>
-          <CardDescription>
-            List your technical skills, languages, tools, and soft skills.
-            Changes are saved automatically.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Suspense fallback={<FormSkeleton />}>
-            <LazySkillsForm resumeId={resumeId} skills={content.skills} />
-          </Suspense>
-        </CardContent>
-      </Card>
-
-      <Separator />
+      <CollapsibleSection
+        id="skills"
+        title="Skills"
+        description="Technical skills, languages, tools, and soft skills"
+        isOpen={openSection === "skills"}
+        onToggle={handleToggleSection}
+      >
+        <Suspense fallback={<FormSkeleton />}>
+          <LazySkillsForm resumeId={resumeId} skills={content.skills} />
+        </Suspense>
+      </CollapsibleSection>
 
       {/* Certifications Section */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Certifications</CardTitle>
-              <CardDescription>
-                Add professional certifications and credentials
-              </CardDescription>
-            </div>
-            <Button onClick={handleAddCertification}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Certification
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Suspense fallback={<ListSkeleton />}>
-            <LazyCertificationList
-              certifications={content.certifications || []}
-              onEdit={handleEditCertification}
-              onDelete={handleDeleteCertification}
-              onReorder={handleReorderCertifications}
-            />
-          </Suspense>
-        </CardContent>
-      </Card>
-
-      <Separator />
+      <CollapsibleSection
+        id="certifications"
+        title="Certifications"
+        description="Professional certifications and credentials"
+        isOpen={openSection === "certifications"}
+        onToggle={handleToggleSection}
+        action={
+          <Button size="sm" variant="ghost" onClick={handleAddCertification}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        }
+      >
+        <Suspense fallback={<ListSkeleton />}>
+          <LazyCertificationList
+            certifications={content.certifications || []}
+            onEdit={handleEditCertification}
+            onDelete={handleDeleteCertification}
+            onReorder={handleReorderCertifications}
+          />
+        </Suspense>
+      </CollapsibleSection>
 
       {/* Links Section */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Links</CardTitle>
-              <CardDescription>
-                Add your portfolio, LinkedIn, GitHub, and other professional
-                links
-              </CardDescription>
-            </div>
-            <Button onClick={handleAddLink}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add Link
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Suspense fallback={<ListSkeleton />}>
-            <LazyLinkList
-              links={content.links || []}
-              onEdit={handleEditLink}
-              onDelete={handleDeleteLink}
-              onReorder={handleReorderLinks}
-            />
-          </Suspense>
-        </CardContent>
-      </Card>
+      <CollapsibleSection
+        id="links"
+        title="Links"
+        description="Portfolio, LinkedIn, GitHub, and other links"
+        isOpen={openSection === "links"}
+        onToggle={handleToggleSection}
+        action={
+          <Button size="sm" variant="ghost" onClick={handleAddLink}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        }
+      >
+        <Suspense fallback={<ListSkeleton />}>
+          <LazyLinkList
+            links={content.links || []}
+            onEdit={handleEditLink}
+            onDelete={handleDeleteLink}
+            onReorder={handleReorderLinks}
+          />
+        </Suspense>
+      </CollapsibleSection>
 
       {/* Dialogs */}
       <Suspense fallback={<FormDialogSkeleton />}>
