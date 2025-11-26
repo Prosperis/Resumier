@@ -51,7 +51,10 @@ export function CertificationInlineForm({
     <Card className="gap-2 py-2 border-primary/50 bg-primary/5">
       <CardContent className="px-3 pt-2">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-2"
+          >
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-medium text-primary">
                 {isNew ? "New Certification" : "Edit Certification"}
@@ -72,7 +75,9 @@ export function CertificationInlineForm({
               name="name"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">Certification Name</FormLabel>
+                  <FormLabel className="text-[10px]">
+                    Certification Name
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="AWS Solutions Architect"
@@ -90,7 +95,9 @@ export function CertificationInlineForm({
               name="issuer"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">Issuing Organization</FormLabel>
+                  <FormLabel className="text-[10px]">
+                    Issuing Organization
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Amazon Web Services"
@@ -111,7 +118,11 @@ export function CertificationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">Issue Date</FormLabel>
                     <FormControl>
-                      <Input type="month" className="h-7 text-[11px]" {...field} />
+                      <Input
+                        type="month"
+                        className="h-7 text-[11px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -123,9 +134,15 @@ export function CertificationInlineForm({
                 name="expiryDate"
                 render={({ field }) => (
                   <FormItem className="space-y-0.5">
-                    <FormLabel className="text-[10px]">Expiry (optional)</FormLabel>
+                    <FormLabel className="text-[10px]">
+                      Expiry (optional)
+                    </FormLabel>
                     <FormControl>
-                      <Input type="month" className="h-7 text-[11px]" {...field} />
+                      <Input
+                        type="month"
+                        className="h-7 text-[11px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -138,7 +155,9 @@ export function CertificationInlineForm({
               name="credentialId"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">Credential ID (optional)</FormLabel>
+                  <FormLabel className="text-[10px]">
+                    Credential ID (optional)
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="ABC123XYZ"
@@ -196,4 +215,3 @@ export function CertificationInlineForm({
     </Card>
   );
 }
-

@@ -96,11 +96,7 @@ export function ExperienceList({
   if (isAddingNew) {
     return (
       <div className="space-y-2">
-        <ExperienceInlineForm
-          onSubmit={onSave}
-          onCancel={onCancelEdit}
-          isNew
-        />
+        <ExperienceInlineForm onSubmit={onSave} onCancel={onCancelEdit} isNew />
         {experiences.length > 0 && (
           <DndContext
             sensors={sensors}
@@ -255,7 +251,9 @@ function ExperiencePreviewCard({
       {(exp.description || (exp.highlights && exp.highlights.length > 0)) && (
         <CardContent className="px-3">
           {exp.description && (
-            <p className="text-muted-foreground text-[11px]">{exp.description}</p>
+            <p className="text-muted-foreground text-[11px]">
+              {exp.description}
+            </p>
           )}
           {exp.highlights && exp.highlights.length > 0 && (
             <ul className="mt-1 space-y-0.5 text-[11px]">

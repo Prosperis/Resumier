@@ -12,7 +12,14 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { ExternalLink, Github, Linkedin, Link as LinkIcon, EditIcon, TrashIcon } from "lucide-react";
+import {
+  ExternalLink,
+  Github,
+  Linkedin,
+  Link as LinkIcon,
+  EditIcon,
+  TrashIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { CreateLinkFormData, LinkFormData } from "@/lib/validations/links";
@@ -32,19 +39,27 @@ interface LinkListProps {
 
 function getLinkIcon(type: LinkFormData["type"]) {
   switch (type) {
-    case "linkedin": return <Linkedin className="h-3 w-3" />;
-    case "github": return <Github className="h-3 w-3" />;
-    case "portfolio": return <ExternalLink className="h-3 w-3" />;
-    default: return <LinkIcon className="h-3 w-3" />;
+    case "linkedin":
+      return <Linkedin className="h-3 w-3" />;
+    case "github":
+      return <Github className="h-3 w-3" />;
+    case "portfolio":
+      return <ExternalLink className="h-3 w-3" />;
+    default:
+      return <LinkIcon className="h-3 w-3" />;
   }
 }
 
 function getLinkTypeLabel(type: LinkFormData["type"]) {
   switch (type) {
-    case "linkedin": return "LinkedIn";
-    case "github": return "GitHub";
-    case "portfolio": return "Portfolio";
-    default: return "Other";
+    case "linkedin":
+      return "LinkedIn";
+    case "github":
+      return "GitHub";
+    case "portfolio":
+      return "Portfolio";
+    default:
+      return "Other";
   }
 }
 
@@ -85,11 +100,23 @@ export function LinkList({
       <div className="space-y-2">
         <LinkInlineForm onSubmit={onSave} onCancel={onCancelEdit} isNew />
         {links.length > 0 && (
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={links.map((l) => l.id)} strategy={verticalListSortingStrategy}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={links.map((l) => l.id)}
+              strategy={verticalListSortingStrategy}
+            >
               {links.map((link) => (
                 <SortableItem key={link.id} id={link.id}>
-                  <LinkPreviewCard link={link} onEdit={() => {}} onDelete={() => {}} disabled />
+                  <LinkPreviewCard
+                    link={link}
+                    onEdit={() => {}}
+                    onDelete={() => {}}
+                    disabled
+                  />
                 </SortableItem>
               ))}
             </SortableContext>
@@ -114,13 +141,24 @@ export function LinkList({
   }
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <SortableContext items={links.map((l) => l.id)} strategy={verticalListSortingStrategy}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={links.map((l) => l.id)}
+        strategy={verticalListSortingStrategy}
+      >
         <div className="space-y-2">
           {links.map((link) => (
             <SortableItem key={link.id} id={link.id}>
               {editingId === link.id ? (
-                <LinkInlineForm defaultValues={link} onSubmit={onSave} onCancel={onCancelEdit} />
+                <LinkInlineForm
+                  defaultValues={link}
+                  onSubmit={onSave}
+                  onCancel={onCancelEdit}
+                />
               ) : (
                 <LinkPreviewCard
                   link={link}
@@ -172,10 +210,20 @@ function LinkPreviewCard({
           </div>
           {!disabled && (
             <div className="flex gap-1">
-              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onEdit}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={onEdit}
+              >
                 <EditIcon className="h-3 w-3" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onDelete}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={onDelete}
+              >
                 <TrashIcon className="h-3 w-3" />
               </Button>
             </div>

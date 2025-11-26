@@ -100,13 +100,19 @@ export function ResumeBuilder() {
   };
 
   // Inline editing states - track which item is being edited or if adding new
-  const [experienceEditingId, setExperienceEditingId] = useState<string | null>(null);
+  const [experienceEditingId, setExperienceEditingId] = useState<string | null>(
+    null,
+  );
   const [experienceAddingNew, setExperienceAddingNew] = useState(false);
 
-  const [educationEditingId, setEducationEditingId] = useState<string | null>(null);
+  const [educationEditingId, setEducationEditingId] = useState<string | null>(
+    null,
+  );
   const [educationAddingNew, setEducationAddingNew] = useState(false);
 
-  const [certificationEditingId, setCertificationEditingId] = useState<string | null>(null);
+  const [certificationEditingId, setCertificationEditingId] = useState<
+    string | null
+  >(null);
   const [certificationAddingNew, setCertificationAddingNew] = useState(false);
 
   const [linkEditingId, setLinkEditingId] = useState<string | null>(null);
@@ -274,7 +280,9 @@ export function ResumeBuilder() {
         onSuccess: () => {
           toast({
             title: "Success",
-            description: educationEditingId ? "Education updated" : "Education added",
+            description: educationEditingId
+              ? "Education updated"
+              : "Education added",
           });
           handleCancelEducationEdit();
         },
@@ -391,7 +399,9 @@ export function ResumeBuilder() {
 
   const handleDeleteCertification = (id: string) => {
     const certifications = content.certifications || [];
-    const updatedCertifications = certifications.filter((cert) => cert.id !== id);
+    const updatedCertifications = certifications.filter(
+      (cert) => cert.id !== id,
+    );
 
     updateResume(
       {
@@ -413,7 +423,9 @@ export function ResumeBuilder() {
     );
   };
 
-  const handleReorderCertifications = (reorderedCertifications: Certification[]) => {
+  const handleReorderCertifications = (
+    reorderedCertifications: Certification[],
+  ) => {
     updateResume(
       {
         id: resumeId,
@@ -609,7 +621,11 @@ export function ResumeBuilder() {
             </div>
             <ImportDialog
               trigger={
-                <Button variant="default" size="sm" className="h-6 text-[10px] px-2">
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="h-6 text-[10px] px-2"
+                >
                   <Upload className="mr-1.5 h-2.5 w-2.5" />
                   Import
                 </Button>

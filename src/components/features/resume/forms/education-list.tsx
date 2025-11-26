@@ -70,8 +70,18 @@ export function EducationList({
     if (!date) return "";
     const [year, month] = date.split("-");
     const monthNames = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
     return `${monthNames[parseInt(month, 10) - 1]} ${year}`;
   };
@@ -87,11 +97,23 @@ export function EducationList({
       <div className="space-y-2">
         <EducationInlineForm onSubmit={onSave} onCancel={onCancelEdit} isNew />
         {education.length > 0 && (
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={education.map((edu) => edu.id)} strategy={verticalListSortingStrategy}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={education.map((edu) => edu.id)}
+              strategy={verticalListSortingStrategy}
+            >
               {education.map((edu) => (
                 <SortableItem key={edu.id} id={edu.id}>
-                  <EducationPreviewCard education={edu} onEdit={() => {}} onDelete={() => {}} disabled />
+                  <EducationPreviewCard
+                    education={edu}
+                    onEdit={() => {}}
+                    onDelete={() => {}}
+                    disabled
+                  />
                 </SortableItem>
               ))}
             </SortableContext>
@@ -105,21 +127,36 @@ export function EducationList({
     return (
       <Card className="border-dashed gap-3 py-3">
         <CardContent className="flex flex-col items-center justify-center py-6 text-center px-3">
-          <p className="text-muted-foreground text-xs">No education added yet.</p>
-          <p className="text-muted-foreground mt-1 text-[10px]">Click the + button to add your education.</p>
+          <p className="text-muted-foreground text-xs">
+            No education added yet.
+          </p>
+          <p className="text-muted-foreground mt-1 text-[10px]">
+            Click the + button to add your education.
+          </p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <SortableContext items={education.map((edu) => edu.id)} strategy={verticalListSortingStrategy}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={education.map((edu) => edu.id)}
+        strategy={verticalListSortingStrategy}
+      >
         <div className="space-y-2">
           {education.map((edu) => (
             <SortableItem key={edu.id} id={edu.id}>
               {editingId === edu.id ? (
-                <EducationInlineForm defaultValues={edu} onSubmit={onSave} onCancel={onCancelEdit} />
+                <EducationInlineForm
+                  defaultValues={edu}
+                  onSubmit={onSave}
+                  onCancel={onCancelEdit}
+                />
               ) : (
                 <EducationPreviewCard
                   education={edu}
@@ -150,7 +187,20 @@ function EducationPreviewCard({
   const formatDate = (date: string) => {
     if (!date) return "";
     const [year, month] = date.split("-");
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     return `${monthNames[parseInt(month, 10) - 1]} ${year}`;
   };
 
@@ -175,17 +225,28 @@ function EducationPreviewCard({
           </div>
           {!disabled && (
             <div className="flex gap-1">
-              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onEdit}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={onEdit}
+              >
                 <EditIcon className="h-3 w-3" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onDelete}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={onDelete}
+              >
                 <TrashIcon className="h-3 w-3" />
               </Button>
             </div>
           )}
         </div>
       </CardHeader>
-      {((edu.gpa && edu.gpa.trim() !== "") || (edu.honors && edu.honors.length > 0)) && (
+      {((edu.gpa && edu.gpa.trim() !== "") ||
+        (edu.honors && edu.honors.length > 0)) && (
         <CardContent className="px-3">
           {edu.gpa && edu.gpa.trim() !== "" && (
             <p className="text-[11px]">

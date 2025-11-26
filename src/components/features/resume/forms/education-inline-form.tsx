@@ -74,7 +74,10 @@ export function EducationInlineForm({
     <Card className="gap-2 py-2 border-primary/50 bg-primary/5">
       <CardContent className="px-3 pt-2">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-2"
+          >
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-medium text-primary">
                 {isNew ? "New Education" : "Edit Education"}
@@ -132,7 +135,9 @@ export function EducationInlineForm({
                 name="field"
                 render={({ field }) => (
                   <FormItem className="space-y-0.5">
-                    <FormLabel className="text-[10px]">Field of Study</FormLabel>
+                    <FormLabel className="text-[10px]">
+                      Field of Study
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Computer Science"
@@ -154,7 +159,11 @@ export function EducationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">Start Date</FormLabel>
                     <FormControl>
-                      <Input type="month" className="h-7 text-[11px]" {...field} />
+                      <Input
+                        type="month"
+                        className="h-7 text-[11px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -285,4 +294,3 @@ export function EducationInlineForm({
     </Card>
   );
 }
-

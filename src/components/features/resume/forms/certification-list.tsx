@@ -12,7 +12,12 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { CalendarIcon, EditIcon, ExternalLinkIcon, TrashIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  EditIcon,
+  ExternalLinkIcon,
+  TrashIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Certification } from "@/lib/api/types";
@@ -66,13 +71,29 @@ export function CertificationList({
   if (isAddingNew) {
     return (
       <div className="space-y-2">
-        <CertificationInlineForm onSubmit={onSave} onCancel={onCancelEdit} isNew />
+        <CertificationInlineForm
+          onSubmit={onSave}
+          onCancel={onCancelEdit}
+          isNew
+        />
         {certifications.length > 0 && (
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={certifications.map((c) => c.id)} strategy={verticalListSortingStrategy}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={certifications.map((c) => c.id)}
+              strategy={verticalListSortingStrategy}
+            >
               {certifications.map((cert) => (
                 <SortableItem key={cert.id} id={cert.id}>
-                  <CertificationPreviewCard certification={cert} onEdit={() => {}} onDelete={() => {}} disabled />
+                  <CertificationPreviewCard
+                    certification={cert}
+                    onEdit={() => {}}
+                    onDelete={() => {}}
+                    disabled
+                  />
                 </SortableItem>
               ))}
             </SortableContext>
@@ -86,21 +107,36 @@ export function CertificationList({
     return (
       <Card className="border-dashed gap-3 py-3">
         <CardContent className="flex flex-col items-center justify-center py-6 text-center px-3">
-          <p className="text-muted-foreground text-xs">No certifications added yet.</p>
-          <p className="text-muted-foreground mt-1 text-[10px]">Click the + button to add a certification.</p>
+          <p className="text-muted-foreground text-xs">
+            No certifications added yet.
+          </p>
+          <p className="text-muted-foreground mt-1 text-[10px]">
+            Click the + button to add a certification.
+          </p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <SortableContext items={certifications.map((c) => c.id)} strategy={verticalListSortingStrategy}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={certifications.map((c) => c.id)}
+        strategy={verticalListSortingStrategy}
+      >
         <div className="space-y-2">
           {certifications.map((cert) => (
             <SortableItem key={cert.id} id={cert.id}>
               {editingId === cert.id ? (
-                <CertificationInlineForm defaultValues={cert} onSubmit={onSave} onCancel={onCancelEdit} />
+                <CertificationInlineForm
+                  defaultValues={cert}
+                  onSubmit={onSave}
+                  onCancel={onCancelEdit}
+                />
               ) : (
                 <CertificationPreviewCard
                   certification={cert}
@@ -131,7 +167,20 @@ function CertificationPreviewCard({
   const formatDate = (date: string) => {
     if (!date) return "";
     const [year, month] = date.split("-");
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     return `${monthNames[parseInt(month, 10) - 1]} ${year}`;
   };
 
@@ -143,7 +192,12 @@ function CertificationPreviewCard({
             <div className="flex items-center gap-1.5">
               <h3 className="text-xs font-semibold">{cert.name}</h3>
               {cert.url && (
-                <a href={cert.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                <a
+                  href={cert.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
                   <ExternalLinkIcon className="h-3 w-3" />
                 </a>
               )}
@@ -152,18 +206,32 @@ function CertificationPreviewCard({
             <div className="text-muted-foreground mt-0.5 flex items-center gap-1 text-[10px]">
               <CalendarIcon className="h-2.5 w-2.5" />
               <span>Issued {formatDate(cert.date)}</span>
-              {cert.expiryDate && <span> · Expires {formatDate(cert.expiryDate)}</span>}
+              {cert.expiryDate && (
+                <span> · Expires {formatDate(cert.expiryDate)}</span>
+              )}
             </div>
             {cert.credentialId && (
-              <p className="text-muted-foreground mt-0.5 text-[10px]">ID: {cert.credentialId}</p>
+              <p className="text-muted-foreground mt-0.5 text-[10px]">
+                ID: {cert.credentialId}
+              </p>
             )}
           </div>
           {!disabled && (
             <div className="flex gap-1">
-              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onEdit}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={onEdit}
+              >
                 <EditIcon className="h-3 w-3" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onDelete}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={onDelete}
+              >
                 <TrashIcon className="h-3 w-3" />
               </Button>
             </div>

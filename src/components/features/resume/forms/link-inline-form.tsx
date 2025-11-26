@@ -55,7 +55,10 @@ export function LinkInlineForm({
     <Card className="gap-2 py-2 border-primary/50 bg-primary/5">
       <CardContent className="px-3 pt-2">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-2"
+          >
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-medium text-primary">
                 {isNew ? "New Link" : "Edit Link"}
@@ -77,17 +80,28 @@ export function LinkInlineForm({
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">Link Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger className="h-7 text-[11px]">
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="portfolio" className="text-[11px]">Portfolio</SelectItem>
-                      <SelectItem value="linkedin" className="text-[11px]">LinkedIn</SelectItem>
-                      <SelectItem value="github" className="text-[11px]">GitHub</SelectItem>
-                      <SelectItem value="other" className="text-[11px]">Other</SelectItem>
+                      <SelectItem value="portfolio" className="text-[11px]">
+                        Portfolio
+                      </SelectItem>
+                      <SelectItem value="linkedin" className="text-[11px]">
+                        LinkedIn
+                      </SelectItem>
+                      <SelectItem value="github" className="text-[11px]">
+                        GitHub
+                      </SelectItem>
+                      <SelectItem value="other" className="text-[11px]">
+                        Other
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage className="text-[9px]" />
@@ -158,4 +172,3 @@ export function LinkInlineForm({
     </Card>
   );
 }
-
