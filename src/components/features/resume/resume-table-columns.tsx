@@ -86,7 +86,7 @@ function getCompletionStatus(resume: Resume): {
   try {
     const { content } = resume;
     const hasPersonalInfo =
-      content.personalInfo.name && content.personalInfo.email;
+      (content.personalInfo.firstName || content.personalInfo.lastName) && content.personalInfo.email;
     const hasExperience = content.experience.length > 0;
     const hasEducation = content.education.length > 0;
     const hasSkills =

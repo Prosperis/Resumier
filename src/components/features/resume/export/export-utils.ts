@@ -11,6 +11,7 @@ import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import type { Resume } from "@/lib/api/types";
+import { getFullName } from "@/lib/validations";
 import { useSettingsStore } from "@/stores/settings-store";
 
 /**
@@ -229,7 +230,7 @@ export function downloadLaTeX(resume: Resume): void {
 
 % Header
 \\begin{center}
-    {\\Huge\\bfseries ${escapeLaTeX(personalInfo.name || "")}}\\\\[0.5cm]
+    {\\Huge\\bfseries ${escapeLaTeX(getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder))}}\\\\[0.5cm]
     \\small
     ${personalInfo.email ? escapeLaTeX(personalInfo.email) : ""}${personalInfo.email && personalInfo.phone ? " \\quad $|$ \\quad " : ""}${personalInfo.phone ? escapeLaTeX(personalInfo.phone) : ""}${(personalInfo.email || personalInfo.phone) && personalInfo.location ? " \\quad $|$ \\quad " : ""}${personalInfo.location ? escapeLaTeX(personalInfo.location) : ""}\\\\[0.3cm]
 \\end{center}
@@ -519,7 +520,7 @@ function generateLaTeXCode(resume: Resume): string {
 
 % Header
 \\begin{center}
-    {\\Huge\\bfseries ${escapeLaTeX(personalInfo.name || "")}}\\\\[0.5cm]
+    {\\Huge\\bfseries ${escapeLaTeX(getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder))}}\\\\[0.5cm]
     \\small
     ${personalInfo.email ? escapeLaTeX(personalInfo.email) : ""}${personalInfo.email && personalInfo.phone ? " \\quad $|$ \\quad " : ""}${personalInfo.phone ? escapeLaTeX(personalInfo.phone) : ""}${(personalInfo.email || personalInfo.phone) && personalInfo.location ? " \\quad $|$ \\quad " : ""}${personalInfo.location ? escapeLaTeX(personalInfo.location) : ""}\\\\[0.3cm]
 \\end{center}
@@ -866,10 +867,11 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
   const sections: Paragraph[] = [];
 
   // Name (Title)
-  if (personalInfo.name) {
+  const fullName = getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder);
+  if (fullName) {
     sections.push(
       new Paragraph({
-        text: personalInfo.name,
+        text: fullName,
         heading: HeadingLevel.HEADING_1,
         alignment: AlignmentType.CENTER,
         spacing: { after: 200 },
@@ -1108,8 +1110,9 @@ export function downloadMarkdown(resume: Resume): void {
   let markdown = "";
 
   // Name
-  if (personalInfo.name) {
-    markdown += `# ${personalInfo.name}\n\n`;
+  const markdownName = getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder);
+  if (markdownName) {
+    markdown += `# ${markdownName}\n\n`;
   }
 
   // Contact Info
@@ -1211,9 +1214,10 @@ export function downloadPlainText(resume: Resume): void {
   let text = "";
 
   // Name
-  if (personalInfo.name) {
-    text += `${personalInfo.name}\n`;
-    text += `${"=".repeat(personalInfo.name.length)}\n\n`;
+  const textName = getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder);
+  if (textName) {
+    text += `${textName}\n`;
+    text += `${"=".repeat(textName.length)}\n\n`;
   }
 
   // Contact Info
@@ -1343,19 +1347,16 @@ export function generateDefaultFilename(
   const dateStr = today.toISOString().split("T")[0]; // YYYY-MM-DD
 
   // Try to use personal name first
-  const personalName = resume.content.personalInfo?.name;
-  if (personalName) {
-    const nameParts = personalName.trim().split(/\s+/);
-    if (nameParts.length >= 2) {
-      // Use first and last name
-      const firstName = nameParts[0];
-      const lastName = nameParts[nameParts.length - 1];
+  const firstName = resume.content.personalInfo?.firstName?.trim();
+  const lastName = resume.content.personalInfo?.lastName?.trim();
+  if (firstName || lastName) {
+    if (firstName && lastName) {
       return sanitizeFilename(
         `${firstName}_${lastName}_Resume_${dateStr}.${extension}`,
       );
-    } else if (nameParts.length === 1) {
-      // Use single name
-      return sanitizeFilename(`${nameParts[0]}_Resume_${dateStr}.${extension}`);
+    } else {
+      // Use whichever name is available
+      return sanitizeFilename(`${firstName || lastName}_Resume_${dateStr}.${extension}`);
     }
   }
 

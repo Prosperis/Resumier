@@ -7,6 +7,7 @@
 import { Briefcase, GraduationCap, Mail, MapPin, Phone } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface SplitScreenTemplateProps {
   resume: Resume;
@@ -34,7 +35,7 @@ export function SplitScreenTemplate({
         {/* Name */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 leading-tight">
-            {personalInfo.name || "Your Name"}
+            {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
           </h1>
           {personalInfo.summary && (
             <p className="text-sm leading-relaxed text-white/90 mt-4">

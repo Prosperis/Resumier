@@ -7,6 +7,7 @@
 import { Briefcase, GraduationCap, Mail, MapPin, Phone } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface TimelineTemplateProps {
   resume: Resume;
@@ -25,7 +26,7 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
       {/* Header */}
       <div className="mb-8">
         <h1 className="mb-2 text-4xl font-bold">
-          {personalInfo.name || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
         </h1>
         <div
           className="flex flex-wrap gap-4 text-sm text-gray-600"

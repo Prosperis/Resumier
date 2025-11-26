@@ -1,6 +1,7 @@
 import { Briefcase, GraduationCap, Award } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface ElegantTemplateProps {
   resume: Resume;
@@ -19,7 +20,7 @@ export function ElegantTemplate({ resume, config }: ElegantTemplateProps) {
           className="text-5xl font-light tracking-wider mb-4"
           style={{ color: primaryColor }}
         >
-          {personalInfo.name || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
         </h1>
         <div
           className="w-32 h-px mx-auto mb-4"

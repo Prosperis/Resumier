@@ -6,6 +6,7 @@
 
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface CompactTemplateProps {
   resume: Resume;
@@ -25,7 +26,7 @@ export function CompactTemplate({ resume, config }: CompactTemplateProps) {
       {/* Compact Header */}
       <div className="mb-4 pb-2 border-b border-gray-300">
         <h1 className="text-2xl font-bold mb-1">
-          {personalInfo.name || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
         </h1>
         <div className="flex flex-wrap gap-3 text-xs text-gray-600">
           {personalInfo.email && <span>{personalInfo.email}</span>}

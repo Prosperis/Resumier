@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface TwoColumnTemplateProps {
   resume: Resume;
@@ -43,7 +44,7 @@ export function TwoColumnTemplate({ resume, config }: TwoColumnTemplateProps) {
         <div className="mb-8">
           <div className="mb-4 h-32 w-32 rounded-full bg-white/20 mx-auto" />
           <h1 className="mb-2 text-2xl font-bold text-center">
-            {personalInfo.name || "Your Name"}
+            {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
           </h1>
         </div>
 

@@ -7,6 +7,7 @@
 import { Award, Mail, MapPin, Phone } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface ExecutiveTemplateProps {
   resume: Resume;
@@ -33,7 +34,7 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
       {/* Header - Centered */}
       <div className="border-b-4 border-gray-900 px-12 py-8 text-center">
         <h1 className="mb-4 text-5xl font-bold tracking-tight">
-          {personalInfo.name || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
         </h1>
 
         {/* Contact Info - Horizontal */}

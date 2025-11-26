@@ -1,5 +1,6 @@
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface AcademicTemplateProps {
   resume: Resume;
@@ -18,7 +19,7 @@ export function AcademicTemplate({ resume, config }: AcademicTemplateProps) {
         style={{ borderColor: primaryColor }}
       >
         <h1 className="text-4xl font-bold mb-2">
-          {personalInfo.name || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
         </h1>
         <div className="flex justify-center flex-wrap gap-3 text-sm text-gray-700">
           {personalInfo.email && <span>{personalInfo.email}</span>}

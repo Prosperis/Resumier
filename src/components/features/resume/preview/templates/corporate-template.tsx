@@ -1,5 +1,6 @@
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface CorporateTemplateProps {
   resume: Resume;
@@ -21,7 +22,7 @@ export function CorporateTemplate({ resume, config }: CorporateTemplateProps) {
           className="text-3xl font-bold tracking-wide uppercase mb-2"
           style={{ color: primaryColor }}
         >
-          {personalInfo.name || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
         </h1>
         <div className="text-sm text-gray-700 space-x-3">
           {personalInfo.email && <span>{personalInfo.email}</span>}

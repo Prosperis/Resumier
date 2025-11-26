@@ -1,6 +1,7 @@
 import { Circle, Square, Triangle } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface GeometricTemplateProps {
   resume: Resume;
@@ -31,7 +32,7 @@ export function GeometricTemplate({ resume, config }: GeometricTemplateProps) {
           </div>
           <div>
             <h1 className="text-4xl font-bold" style={{ color: primaryColor }}>
-              {personalInfo.name || "Your Name"}
+              {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
             </h1>
             <div className="text-sm text-gray-600">
               {personalInfo.email && <span>{personalInfo.email}</span>}

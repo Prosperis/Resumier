@@ -1,6 +1,7 @@
 import { Briefcase, GraduationCap } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface MagazineStyleTemplateProps {
   resume: Resume;
@@ -22,10 +23,14 @@ export function MagazineStyleTemplate({
             className="text-6xl font-black leading-none"
             style={{ color: primaryColor }}
           >
-            {personalInfo.name?.split(" ")[0] || "First"}
+            {personalInfo.nameOrder === "lastFirst" 
+              ? (personalInfo.lastName || "Last")
+              : (personalInfo.firstName || "First")}
           </h1>
           <h2 className="text-4xl font-light pb-2">
-            {personalInfo.name?.split(" ").slice(1).join(" ") || "Last"}
+            {personalInfo.nameOrder === "lastFirst"
+              ? (personalInfo.firstName || "First")
+              : (personalInfo.lastName || "Last")}
           </h2>
         </div>
         <div className="flex gap-4 text-sm text-gray-600">

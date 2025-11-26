@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface ModernTemplateProps {
   resume: Resume;
@@ -33,7 +34,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
         style={{ backgroundColor: primaryColor, color: "white" }}
       >
         <h1 className="mb-2 text-4xl font-bold">
-          {personalInfo.name || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
         </h1>
         <div className="flex flex-wrap gap-4 text-sm">
           {personalInfo.email && (

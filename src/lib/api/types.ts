@@ -29,10 +29,19 @@ export interface ResumeContent {
 }
 
 /**
+ * Name display order
+ * - "firstLast": First name followed by last name (e.g., "John Doe")
+ * - "lastFirst": Last name followed by first name (e.g., "Doe John" or "田中 太郎")
+ */
+export type NameOrder = "firstLast" | "lastFirst";
+
+/**
  * Personal Information
  */
 export interface PersonalInfo {
-  name: string;
+  firstName: string;
+  lastName: string;
+  nameOrder: NameOrder;
   email: string;
   phone: string;
   location: string;

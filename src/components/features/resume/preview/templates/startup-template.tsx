@@ -1,6 +1,7 @@
 import { Zap, Briefcase, GraduationCap } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface StartupTemplateProps {
   resume: Resume;
@@ -19,7 +20,7 @@ export function StartupTemplate({ resume, config }: StartupTemplateProps) {
             className="text-3xl font-bold mb-1"
             style={{ color: primaryColor }}
           >
-            {personalInfo.name || "Your Name"}
+            {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
           </h1>
           <div className="flex flex-wrap gap-3 text-sm text-gray-600">
             {personalInfo.email && <span>{personalInfo.email}</span>}

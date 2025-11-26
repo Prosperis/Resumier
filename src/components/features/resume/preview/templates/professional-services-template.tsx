@@ -1,6 +1,7 @@
 import { Briefcase, GraduationCap, Target, TrendingUp } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface ProfessionalServicesTemplateProps {
   resume: Resume;
@@ -25,7 +26,7 @@ export function ProfessionalServicesTemplate({
             className="text-3xl font-bold mb-1"
             style={{ color: primaryColor }}
           >
-            {personalInfo.name || "Your Name"}
+            {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
           </h1>
           <div className="text-sm text-gray-600">
             {personalInfo.email && <span>{personalInfo.email}</span>}

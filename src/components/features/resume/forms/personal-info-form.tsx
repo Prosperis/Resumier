@@ -1,7 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
+import { AlertCircle, ArrowRightLeft, CheckCircle2, Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -20,6 +21,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { formatLastSaved, useAutoSave } from "@/hooks/use-auto-save";
 import {
   type PersonalInfoFormData,
@@ -40,7 +46,9 @@ export function PersonalInfoForm({
   const form = useForm<PersonalInfoFormData>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
-      name: defaultValues?.name ?? "",
+      firstName: defaultValues?.firstName ?? "",
+      lastName: defaultValues?.lastName ?? "",
+      nameOrder: defaultValues?.nameOrder ?? "firstLast",
       email: defaultValues?.email ?? "",
       phone: defaultValues?.phone ?? "",
       location: defaultValues?.location ?? "",
@@ -58,17 +66,25 @@ export function PersonalInfoForm({
   // Use useWatch to subscribe to form changes and trigger re-renders
   const watchedValues = useWatch({ control: form.control });
 
+  // Handler to flip name order
+  const handleFlipNameOrder = () => {
+    const currentOrder = form.getValues("nameOrder");
+    form.setValue("nameOrder", currentOrder === "firstLast" ? "lastFirst" : "firstLast");
+  };
+
   // Auto-save on form value changes
   useEffect(() => {
     if (!enabled) return;
 
     // Only save if we have at least some data
-    if (!watchedValues.name && !watchedValues.email) return;
+    if (!watchedValues.firstName && !watchedValues.lastName && !watchedValues.email) return;
 
     save({
       content: {
         personalInfo: {
-          name: watchedValues.name || "",
+          firstName: watchedValues.firstName || "",
+          lastName: watchedValues.lastName || "",
+          nameOrder: watchedValues.nameOrder || "firstLast",
           email: watchedValues.email || "",
           phone: watchedValues.phone || "",
           location: watchedValues.location || "",
@@ -113,27 +129,84 @@ export function PersonalInfoForm({
       <CardContent className="px-3">
         <Form {...form}>
           <form className="space-y-3">
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              {/* Name */}
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem className="space-y-1">
-                    <FormLabel className="text-[11px]">Full Name *</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="John Doe"
-                        disabled={!enabled}
-                        className="h-8 text-xs"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-[10px]" />
-                  </FormItem>
-                )}
-              />
+            {/* Name Fields Row */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <FormLabel className="text-[11px]">Name *</FormLabel>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleFlipNameOrder}
+                      disabled={!enabled}
+                      className="h-6 gap-1 px-2 text-[10px]"
+                    >
+                      <ArrowRightLeft className="h-3 w-3" />
+                      <span className="hidden sm:inline">
+                        {watchedValues.nameOrder === "lastFirst" ? "Last First" : "First Last"}
+                      </span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p className="text-xs">
+                      Switch name order for different languages
+                      <br />
+                      <span className="text-muted-foreground">
+                        e.g., "John Doe" ↔ "Doe, John"
+                      </span>
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {/* First Name */}
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem className="space-y-1">
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder={watchedValues.nameOrder === "lastFirst" ? "太郎" : "John"}
+                          disabled={!enabled}
+                          className="h-8 text-xs"
+                        />
+                      </FormControl>
+                      <FormDescription className="text-[10px]">
+                        {watchedValues.nameOrder === "lastFirst" ? "Given name" : "First name"}
+                      </FormDescription>
+                      <FormMessage className="text-[10px]" />
+                    </FormItem>
+                  )}
+                />
+                {/* Last Name */}
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem className="space-y-1">
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder={watchedValues.nameOrder === "lastFirst" ? "田中" : "Doe"}
+                          disabled={!enabled}
+                          className="h-8 text-xs"
+                        />
+                      </FormControl>
+                      <FormDescription className="text-[10px]">
+                        {watchedValues.nameOrder === "lastFirst" ? "Family name" : "Last name"}
+                      </FormDescription>
+                      <FormMessage className="text-[10px]" />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               {/* Email */}
               <FormField
                 control={form.control}

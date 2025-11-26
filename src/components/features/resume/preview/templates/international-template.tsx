@@ -1,6 +1,7 @@
 import { Mail, Phone, MapPin, Briefcase, GraduationCap } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface InternationalTemplateProps {
   resume: Resume;
@@ -26,17 +27,13 @@ export function InternationalTemplate({
             className="w-32 h-32 mx-auto mb-4 rounded-full flex items-center justify-center text-4xl font-bold text-white"
             style={{ backgroundColor: primaryColor }}
           >
-            {personalInfo.name
-              ?.split(" ")
-              .map((n) => n[0])
-              .join("")
-              .substring(0, 2) || "UN"}
+            {((personalInfo.firstName?.[0] || "") + (personalInfo.lastName?.[0] || "")).toUpperCase() || "UN"}
           </div>
           <h1
             className="text-center text-xl font-bold mb-4"
             style={{ color: primaryColor }}
           >
-            {personalInfo.name || "Your Name"}
+            {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
           </h1>
 
           <div className="space-y-3 text-sm">

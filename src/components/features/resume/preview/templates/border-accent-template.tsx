@@ -1,6 +1,7 @@
 import { Briefcase, GraduationCap, Award } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
+import { getFullName } from "@/lib/validations";
 
 interface BorderAccentTemplateProps {
   resume: Resume;
@@ -28,7 +29,7 @@ export function BorderAccentTemplate({
           className="text-4xl font-bold text-center mb-2"
           style={{ color: primaryColor }}
         >
-          {personalInfo.name || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) || "Your Name"}
         </h1>
         <p className="text-center text-gray-600">
           {personalInfo.email && <span>{personalInfo.email}</span>}

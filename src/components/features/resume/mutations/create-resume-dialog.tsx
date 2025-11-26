@@ -56,7 +56,9 @@ export function CreateResumeDialog({
         title: title.trim(),
         content: {
           personalInfo: {
-            name: "",
+            firstName: "",
+            lastName: "",
+            nameOrder: "firstLast",
             email: "",
             phone: "",
             location: "",
