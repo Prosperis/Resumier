@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import { getFullName } from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface ContemporaryTemplateProps {
   resume: Resume;
@@ -43,7 +43,7 @@ export function ContemporaryTemplate({
           {personalInfo.phone && (
             <span className="flex items-center gap-1">
               <Phone className="h-4 w-4" />
-              {personalInfo.phone}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && (

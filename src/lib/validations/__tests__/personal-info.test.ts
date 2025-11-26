@@ -3,6 +3,7 @@ import {
   type PersonalInfoFormData,
   personalInfoSchema,
   getFullName,
+  formatPhoneDisplay,
 } from "../personal-info";
 
 describe("personalInfoSchema", () => {
@@ -590,5 +591,49 @@ describe("getFullName", () => {
 
   it("defaults to firstLast order", () => {
     expect(getFullName("John", "Doe")).toBe("John Doe");
+  });
+});
+
+describe("formatPhoneDisplay", () => {
+  it("formats US phone number in national format (default)", () => {
+    expect(formatPhoneDisplay("+15551234567")).toBe("(555) 123-4567");
+  });
+
+  it("formats US phone number in national format", () => {
+    expect(formatPhoneDisplay("+15551234567", "national")).toBe(
+      "(555) 123-4567",
+    );
+  });
+
+  it("formats US phone number in international format", () => {
+    expect(formatPhoneDisplay("+15551234567", "international")).toBe(
+      "+1 555 123 4567",
+    );
+  });
+
+  it("formats US phone number in E.164 format", () => {
+    expect(formatPhoneDisplay("+15551234567", "e164")).toBe("+15551234567");
+  });
+
+  it("formats UK phone number in national format", () => {
+    expect(formatPhoneDisplay("+442071234567", "national")).toBe("020 7123 4567");
+  });
+
+  it("formats UK phone number in international format", () => {
+    expect(formatPhoneDisplay("+442071234567", "international")).toBe(
+      "+44 20 7123 4567",
+    );
+  });
+
+  it("returns empty string for undefined", () => {
+    expect(formatPhoneDisplay(undefined)).toBe("");
+  });
+
+  it("returns empty string for empty string", () => {
+    expect(formatPhoneDisplay("")).toBe("");
+  });
+
+  it("returns original value if parsing fails", () => {
+    expect(formatPhoneDisplay("invalid")).toBe("invalid");
   });
 });

@@ -36,7 +36,10 @@ import {
 import { formatLastSaved, useAutoSave } from "@/hooks/use-auto-save";
 import {
   type PersonalInfoFormData,
+  type PhoneFormat,
   personalInfoSchema,
+  phoneFormatLabels,
+  phoneFormatExamples,
 } from "@/lib/validations";
 
 interface PersonalInfoFormProps {
@@ -58,6 +61,7 @@ export function PersonalInfoForm({
       nameOrder: defaultValues?.nameOrder ?? "firstLast",
       email: defaultValues?.email ?? "",
       phone: defaultValues?.phone ?? "",
+      phoneFormat: defaultValues?.phoneFormat ?? "national",
       location: defaultValues?.location ?? "",
       summary: defaultValues?.summary ?? "",
     },
@@ -100,6 +104,7 @@ export function PersonalInfoForm({
           nameOrder: watchedValues.nameOrder || "firstLast",
           email: watchedValues.email || "",
           phone: watchedValues.phone || "",
+          phoneFormat: watchedValues.phoneFormat || "national",
           location: watchedValues.location || "",
           summary: watchedValues.summary || "",
         },
@@ -263,7 +268,32 @@ export function PersonalInfoForm({
               name="phone"
               render={({ field }) => (
                 <FormItem className="space-y-1">
-                  <FormLabel className="text-[11px]">Phone *</FormLabel>
+                  <div className="flex items-center justify-between">
+                    <FormLabel className="text-[11px]">Phone *</FormLabel>
+                    <FormField
+                      control={form.control}
+                      name="phoneFormat"
+                      render={({ field: formatField }) => (
+                        <select
+                          value={formatField.value}
+                          onChange={(e) =>
+                            formatField.onChange(e.target.value as PhoneFormat)
+                          }
+                          disabled={!enabled}
+                          className="border-input bg-muted/50 dark:bg-input/30 h-6 cursor-pointer rounded-md border px-2 text-[10px] outline-none transition-colors focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {(
+                            Object.keys(phoneFormatLabels) as PhoneFormat[]
+                          ).map((format) => (
+                            <option key={format} value={format}>
+                              {phoneFormatLabels[format]} -{" "}
+                              {phoneFormatExamples[format]}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    />
+                  </div>
                   <FormControl>
                     <PhoneInput
                       value={field.value}

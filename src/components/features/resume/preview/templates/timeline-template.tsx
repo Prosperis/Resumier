@@ -7,7 +7,7 @@
 import { Briefcase, GraduationCap, Mail, MapPin, Phone } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import { getFullName } from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface TimelineTemplateProps {
   resume: Resume;
@@ -104,7 +104,7 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
                   verticalAlign: "middle",
                 }}
               >
-                {personalInfo.phone}
+                {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
               </span>
             </div>
           )}

@@ -172,19 +172,11 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
     const handleCountryChange = (newCountry: Country) => {
       setCountry(newCountry);
 
-      // If there's an existing value, reformat it with the new country code
+      // If there's an existing value, clear it - national numbers have different
+      // meanings across countries and cannot be safely reused.
+      // e.g., UK +442071234567 → US +12071234567 would be a different person's number
       if (value) {
-        try {
-          const parsed = parsePhoneNumber(value);
-          if (parsed) {
-            const nationalNumber = parsed.nationalNumber;
-            const newCountryCode = getCountryCallingCode(newCountry);
-            const newFullNumber = `+${newCountryCode}${nationalNumber}`;
-            onChange?.(newFullNumber);
-          }
-        } catch {
-          // Keep existing value if parsing fails
-        }
+        onChange?.("");
       }
     };
 

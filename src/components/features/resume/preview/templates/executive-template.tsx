@@ -7,7 +7,7 @@
 import { Award, Mail, MapPin, Phone } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import { getFullName } from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface ExecutiveTemplateProps {
   resume: Resume;
@@ -52,7 +52,7 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
           {personalInfo.phone && (
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4" />
-              <span>{personalInfo.phone}</span>
+              <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>
             </div>
           )}
           {personalInfo.location && (

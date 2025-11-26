@@ -1,7 +1,7 @@
 import { Briefcase, GraduationCap } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import { getFullName } from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface ColorBlockTemplateProps {
   resume: Resume;
@@ -31,7 +31,7 @@ export function ColorBlockTemplate({
           </h1>
           <div className="space-y-2 text-sm opacity-90">
             {personalInfo.email && <p>{personalInfo.email}</p>}
-            {personalInfo.phone && <p>{personalInfo.phone}</p>}
+            {personalInfo.phone && <p>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</p>}
             {personalInfo.location && <p>{personalInfo.location}</p>}
           </div>
         </div>

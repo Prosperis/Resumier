@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import { getFullName } from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface ModernTemplateProps {
   resume: Resume;
@@ -50,7 +50,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
           {personalInfo.phone && (
             <div className="flex items-center gap-1">
               <Phone className="h-4 w-4" />
-              <span>{personalInfo.phone}</span>
+              <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>
             </div>
           )}
           {personalInfo.location && (

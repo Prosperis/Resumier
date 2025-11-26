@@ -1,5 +1,5 @@
 import type { Resume } from "@/lib/api/types";
-import { getFullName } from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface MinimalTemplateProps {
   resume: Resume;
@@ -25,7 +25,7 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
         </h1>
         <div className="space-x-4 text-sm text-gray-600">
           {personalInfo.email && <span>{personalInfo.email}</span>}
-          {personalInfo.phone && <span>{personalInfo.phone}</span>}
+          {personalInfo.phone && <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>}
           {personalInfo.location && <span>{personalInfo.location}</span>}
         </div>
       </header>

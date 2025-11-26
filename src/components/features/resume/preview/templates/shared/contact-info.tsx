@@ -6,6 +6,7 @@
 import { Mail, Phone, MapPin, Globe, Linkedin, Github } from "lucide-react";
 import type { PersonalInfo, Link } from "@/lib/api/types";
 import type { HeaderStyle, ColorScheme } from "@/lib/types/templates";
+import { formatPhoneDisplay, type PhoneFormat } from "@/lib/validations";
 
 interface ContactInfoProps {
   personalInfo: PersonalInfo;
@@ -45,7 +46,7 @@ export function ContactInfo({
               <span>•</span>
               <div className="flex items-center gap-1">
                 {showIcons && <Phone className="h-4 w-4" />}
-                <span>{personalInfo.phone}</span>
+                <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>
               </div>
             </>
           )}
@@ -94,7 +95,7 @@ export function ContactInfo({
           {personalInfo.phone && (
             <div className="flex items-center gap-2">
               {showIcons && <Phone className="h-4 w-4" />}
-              <span>{personalInfo.phone}</span>
+              <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>
             </div>
           )}
           {personalInfo.location && (
@@ -135,7 +136,7 @@ export function ContactInfo({
           {personalInfo.phone && (
             <div className="flex items-center gap-1">
               {showIcons && <Phone className="h-4 w-4" />}
-              <span>{personalInfo.phone}</span>
+              <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>
             </div>
           )}
           {personalInfo.location && (
@@ -172,13 +173,11 @@ export function ContactInfo({
       <div className={`text-sm ${className}`} style={{ color: textColor }}>
         {[
           personalInfo.email,
-          personalInfo.phone,
+          formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat),
           personalInfo.location,
           ...links.map((l) => l.url),
         ]
-
           .filter(Boolean)
-
           .join(" • ")}
       </div>
     );
@@ -191,7 +190,7 @@ export function ContactInfo({
       style={{ color: textColor }}
     >
       {personalInfo.email && <div>{personalInfo.email}</div>}
-      {personalInfo.phone && <div>{personalInfo.phone}</div>}
+      {personalInfo.phone && <div>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</div>}
       {personalInfo.location && <div>{personalInfo.location}</div>}
     </div>
   );

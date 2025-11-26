@@ -1,6 +1,6 @@
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import { getFullName } from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface CorporateTemplateProps {
   resume: Resume;
@@ -31,7 +31,7 @@ export function CorporateTemplate({ resume, config }: CorporateTemplateProps) {
         <div className="text-sm text-gray-700 space-x-3">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && <span>•</span>}
-          {personalInfo.phone && <span>{personalInfo.phone}</span>}
+          {personalInfo.phone && <span>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>}
           {personalInfo.location && <span>•</span>}
           {personalInfo.location && <span>{personalInfo.location}</span>}
         </div>

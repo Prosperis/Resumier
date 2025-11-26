@@ -1,7 +1,7 @@
 import { Briefcase, GraduationCap, Target, TrendingUp } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import { getFullName } from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface ProfessionalServicesTemplateProps {
   resume: Resume;
@@ -34,7 +34,7 @@ export function ProfessionalServicesTemplate({
           </h1>
           <div className="text-sm text-gray-600">
             {personalInfo.email && <span>{personalInfo.email}</span>}
-            {personalInfo.phone && <span> | {personalInfo.phone}</span>}
+            {personalInfo.phone && <span> | {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</span>}
           </div>
         </div>
         <div className="text-right">

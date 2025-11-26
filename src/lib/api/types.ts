@@ -36,6 +36,14 @@ export interface ResumeContent {
 export type NameOrder = "firstLast" | "lastFirst";
 
 /**
+ * Phone number display format
+ * - "national": (555) 123-4567
+ * - "international": +1 555 123 4567
+ * - "e164": +15551234567
+ */
+export type PhoneFormat = "national" | "international" | "e164";
+
+/**
  * Personal Information
  */
 export interface PersonalInfo {
@@ -44,6 +52,7 @@ export interface PersonalInfo {
   nameOrder: NameOrder;
   email: string;
   phone: string;
+  phoneFormat?: PhoneFormat;
   location: string;
   summary: string;
 }

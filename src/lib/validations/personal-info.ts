@@ -1,3 +1,4 @@
+import { parsePhoneNumber } from "libphonenumber-js";
 import { z } from "zod";
 
 /**
@@ -5,6 +6,16 @@ import { z } from "zod";
  */
 export const nameOrderSchema = z.enum(["firstLast", "lastFirst"]);
 export type NameOrder = z.infer<typeof nameOrderSchema>;
+
+/**
+ * Phone display format options
+ */
+export const phoneFormatSchema = z.enum([
+  "national", // (555) 123-4567
+  "international", // +1 555 123 4567
+  "e164", // +15551234567
+]);
+export type PhoneFormat = z.infer<typeof phoneFormatSchema>;
 
 /**
  * E.164 phone number format regex
@@ -64,6 +75,7 @@ export const personalInfoSchema = z
       .min(1, "Email is required")
       .email("Please enter a valid email address"),
     phone: phoneValidation,
+    phoneFormat: phoneFormatSchema.default("national"),
     location: z
       .string()
       .min(1, "Location is required")
@@ -102,3 +114,57 @@ export function getFullName(
 
   return nameOrder === "lastFirst" ? `${last}, ${first}` : `${first} ${last}`;
 }
+
+/**
+ * Formats a phone number for display
+ * @param phone - Phone number in E.164 format (e.g., +15551234567)
+ * @param format - Display format: 'national', 'international', or 'e164'
+ * @returns Formatted phone number or original if parsing fails
+ */
+export function formatPhoneDisplay(
+  phone: string | undefined,
+  format: PhoneFormat = "national",
+): string {
+  if (!phone) return "";
+
+  try {
+    const parsed = parsePhoneNumber(phone);
+    if (parsed) {
+      switch (format) {
+        case "national":
+          // (555) 123-4567
+          return parsed.formatNational();
+        case "international":
+          // +1 555 123 4567
+          return parsed.formatInternational();
+        case "e164":
+          // +15551234567
+          return parsed.format("E.164");
+        default:
+          return parsed.formatNational();
+      }
+    }
+  } catch {
+    // If parsing fails, return the original
+  }
+
+  return phone;
+}
+
+/**
+ * Phone format display labels for UI
+ */
+export const phoneFormatLabels: Record<PhoneFormat, string> = {
+  national: "National",
+  international: "International",
+  e164: "Compact",
+};
+
+/**
+ * Phone format examples for UI
+ */
+export const phoneFormatExamples: Record<PhoneFormat, string> = {
+  national: "(555) 123-4567",
+  international: "+1 555 123 4567",
+  e164: "+15551234567",
+};
