@@ -109,7 +109,7 @@ export function PersonalInfoForm({
             timeout: 10000,
             maximumAge: 300000, // Cache for 5 minutes
           });
-        }
+        },
       );
 
       const { latitude, longitude } = position.coords;
@@ -121,7 +121,7 @@ export function PersonalInfoForm({
           headers: {
             "Accept-Language": "en",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -133,8 +133,18 @@ export function PersonalInfoForm({
 
       // Build a readable location string (City, State/Region, Country)
       const parts: string[] = [];
-      if (address.city || address.town || address.village || address.municipality) {
-        parts.push(address.city || address.town || address.village || address.municipality);
+      if (
+        address.city ||
+        address.town ||
+        address.village ||
+        address.municipality
+      ) {
+        parts.push(
+          address.city ||
+            address.town ||
+            address.village ||
+            address.municipality,
+        );
       }
       if (address.state || address.region || address.county) {
         parts.push(address.state || address.region || address.county);
@@ -422,7 +432,9 @@ export function PersonalInfoForm({
                           {locationError && (
                             <>
                               <br />
-                              <span className="text-destructive">{locationError}</span>
+                              <span className="text-destructive">
+                                {locationError}
+                              </span>
                             </>
                           )}
                         </p>

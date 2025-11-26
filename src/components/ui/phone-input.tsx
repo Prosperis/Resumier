@@ -127,7 +127,6 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
 
     const countries = getCountries();
 
-
     return (
       <div className={cn("flex w-full items-stretch", className)}>
         {/* Country selector */}

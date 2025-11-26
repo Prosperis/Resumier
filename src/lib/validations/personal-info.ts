@@ -73,10 +73,9 @@ export const personalInfoSchema = z.object({
   nameOrder: nameOrderSchema.default("firstLast"),
   email: z
     .string()
-    .refine(
-      (val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
-      { message: "Please enter a valid email address" }
-    )
+    .refine((val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
+      message: "Please enter a valid email address",
+    })
     .optional()
     .or(z.literal("")),
   phone: phoneValidation,
@@ -84,10 +83,9 @@ export const personalInfoSchema = z.object({
   location: z
     .string()
     .max(100, "Location must be less than 100 characters")
-    .refine(
-      (val) => !val || val.trim().length >= 2,
-      { message: "Location must be at least 2 characters" }
-    )
+    .refine((val) => !val || val.trim().length >= 2, {
+      message: "Location must be at least 2 characters",
+    })
     .optional()
     .or(z.literal("")),
   summary: z
