@@ -87,10 +87,7 @@ export function LinkFormDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Link Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select type" />

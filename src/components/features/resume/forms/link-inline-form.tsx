@@ -148,10 +148,7 @@ export function LinkInlineForm({
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">Link Type</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="h-7 text-[11px]">
                         <SelectValue placeholder="Select type" />
