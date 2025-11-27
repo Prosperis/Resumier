@@ -255,11 +255,43 @@ export const COLOR_SCHEMES: Record<string, ColorScheme> = {
     background: "#ffffff",
     border: "#e5e7eb",
   },
+  blue: {
+    primary: "#2563eb",
+    secondary: "#3b82f6",
+    text: "#111827",
+    textLight: "#6b7280",
+    background: "#ffffff",
+    border: "#e5e7eb",
+  },
+  slate: {
+    primary: "#475569",
+    secondary: "#64748b",
+    text: "#111827",
+    textLight: "#6b7280",
+    background: "#ffffff",
+    border: "#e5e7eb",
+  },
+  indigo: {
+    primary: "#4f46e5",
+    secondary: "#6366f1",
+    text: "#111827",
+    textLight: "#6b7280",
+    background: "#ffffff",
+    border: "#e5e7eb",
+  },
 
   // Modern colors
   purple: {
     primary: "#8b5cf6",
     secondary: "#a78bfa",
+    text: "#111827",
+    textLight: "#6b7280",
+    background: "#ffffff",
+    border: "#e5e7eb",
+  },
+  violet: {
+    primary: "#7c3aed",
+    secondary: "#8b5cf6",
     text: "#111827",
     textLight: "#6b7280",
     background: "#ffffff",
@@ -273,11 +305,27 @@ export const COLOR_SCHEMES: Record<string, ColorScheme> = {
     background: "#ffffff",
     border: "#e5e7eb",
   },
+  emerald: {
+    primary: "#10b981",
+    secondary: "#34d399",
+    text: "#111827",
+    textLight: "#6b7280",
+    background: "#ffffff",
+    border: "#e5e7eb",
+  },
 
   // Creative colors
   coral: {
     primary: "#f97316",
     secondary: "#fb923c",
+    text: "#111827",
+    textLight: "#6b7280",
+    background: "#ffffff",
+    border: "#e5e7eb",
+  },
+  orange: {
+    primary: "#ea580c",
+    secondary: "#f97316",
     text: "#111827",
     textLight: "#6b7280",
     background: "#ffffff",

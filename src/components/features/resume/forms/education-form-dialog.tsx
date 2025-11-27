@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon, XIcon } from "lucide-react";
+import { CheckIcon, PlusIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { MonthPicker } from "@/components/ui/month-picker";
 import {
   type CreateEducationFormData,
   createEducationSchema,
@@ -45,6 +46,7 @@ export function EducationFormDialog({
   description = "Add your education details.",
 }: EducationFormDialogProps) {
   const [honors, setHonors] = useState<string[]>(defaultValues?.honors || []);
+  const [previousEndDate, setPreviousEndDate] = useState<string>("");
 
   const form = useForm<CreateEducationFormData>({
     resolver: zodResolver(createEducationSchema),
@@ -151,7 +153,11 @@ export function EducationFormDialog({
                   <FormItem>
                     <FormLabel>Start Date</FormLabel>
                     <FormControl>
-                      <Input type="month" {...field} />
+                      <MonthPicker
+                        value={field.value}
+                        onChange={field.onChange}
+                        ref={field.ref}
+                      />
                     </FormControl>
                     <FormDescription>Format: YYYY-MM</FormDescription>
                     <FormMessage />
@@ -159,46 +165,57 @@ export function EducationFormDialog({
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="endDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>End Date</FormLabel>
-                    <FormControl>
-                      <Input type="month" {...field} disabled={isCurrent} />
-                    </FormControl>
-                    <FormDescription>
-                      {isCurrent ? "Currently studying" : "Format: YYYY-MM"}
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="endDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>End Date</FormLabel>
+                      <FormControl>
+                        <MonthPicker
+                          value={field.value}
+                          onChange={field.onChange}
+                          disabled={isCurrent}
+                          ref={field.ref}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        {isCurrent ? "Currently studying" : "Format: YYYY-MM"}
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="current"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-y-0 space-x-2 ml-1">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            if (checked) {
+                              setPreviousEndDate(form.getValues("endDate"));
+                              form.setValue("endDate", "");
+                            } else {
+                              form.setValue("endDate", previousEndDate);
+                            }
+                          }}
+                          className="h-3.5 w-3.5 rounded-sm"
+                          icon={<CheckIcon className="h-2.5 w-2.5" />}
+                        />
+                      </FormControl>
+                      <FormLabel className="text-xs font-normal">
+                        I currently study here
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
-
-            <FormField
-              control={form.control}
-              name="current"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-y-0 space-x-3">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={(checked) => {
-                        field.onChange(checked);
-                        if (checked) {
-                          form.setValue("endDate", "");
-                        }
-                      }}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>I currently study here</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
 
             <FormField
               control={form.control}

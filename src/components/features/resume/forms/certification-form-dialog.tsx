@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { MonthPicker } from "@/components/ui/month-picker";
 import {
   type CreateCertificationFormData,
   createCertificationSchema,
@@ -112,7 +113,11 @@ export function CertificationFormDialog({
                   <FormItem>
                     <FormLabel>Issue Date</FormLabel>
                     <FormControl>
-                      <Input type="month" {...field} />
+                      <MonthPicker
+                        value={field.value}
+                        onChange={field.onChange}
+                        ref={field.ref}
+                      />
                     </FormControl>
                     <FormDescription>Format: YYYY-MM</FormDescription>
                     <FormMessage />
@@ -127,7 +132,11 @@ export function CertificationFormDialog({
                   <FormItem>
                     <FormLabel>Expiry Date</FormLabel>
                     <FormControl>
-                      <Input type="month" {...field} />
+                      <MonthPicker
+                        value={field.value}
+                        onChange={field.onChange}
+                        ref={field.ref}
+                      />
                     </FormControl>
                     <FormDescription>Leave blank if no expiry</FormDescription>
                     <FormMessage />

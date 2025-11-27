@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { MonthPicker } from "@/components/ui/month-picker";
 import { cn } from "@/lib/utils";
 import { useAutoSave } from "@/hooks/use-auto-save";
 import type { Certification } from "@/lib/api/types";
@@ -185,10 +186,11 @@ export function CertificationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">Issue Date</FormLabel>
                     <FormControl>
-                      <Input
-                        type="month"
+                      <MonthPicker
                         className="h-7 text-[11px]"
-                        {...field}
+                        value={field.value}
+                        onChange={field.onChange}
+                        ref={field.ref}
                       />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
@@ -202,10 +204,11 @@ export function CertificationInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">Expiry</FormLabel>
                     <FormControl>
-                      <Input
-                        type="month"
+                      <MonthPicker
                         className="h-7 text-[11px]"
-                        {...field}
+                        value={field.value}
+                        onChange={field.onChange}
+                        ref={field.ref}
                       />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
