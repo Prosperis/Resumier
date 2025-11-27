@@ -1,5 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, CheckIcon, Loader2, PlusIcon, X, XIcon } from "lucide-react";
+import {
+  CheckCircle2,
+  CheckIcon,
+  Loader2,
+  PlusIcon,
+  X,
+  XIcon,
+} from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -228,52 +235,52 @@ export function ExperienceInlineForm({
               />
 
               <div className="space-y-1">
-              <FormField
-                control={form.control}
-                name="endDate"
-                render={({ field }) => (
-                  <FormItem className="space-y-0.5">
-                    <FormLabel className="text-[10px]">End Date</FormLabel>
-                    <FormControl>
+                <FormField
+                  control={form.control}
+                  name="endDate"
+                  render={({ field }) => (
+                    <FormItem className="space-y-0.5">
+                      <FormLabel className="text-[10px]">End Date</FormLabel>
+                      <FormControl>
                         <MonthPicker
-                        className="h-7 text-[11px]"
+                          className="h-7 text-[11px]"
                           value={field.value}
                           onChange={field.onChange}
-                        disabled={isCurrent}
+                          disabled={isCurrent}
                           ref={field.ref}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-[9px]" />
-                  </FormItem>
-                )}
-              />
-            <FormField
-              control={form.control}
-              name="current"
-              render={({ field }) => (
+                        />
+                      </FormControl>
+                      <FormMessage className="text-[9px]" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="current"
+                  render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-y-0 space-x-2 ml-1">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={(checked) => {
-                        field.onChange(checked);
-                        if (checked) {
-                          setPreviousEndDate(form.getValues("endDate"));
-                          form.setValue("endDate", "");
-                        } else {
-                          form.setValue("endDate", previousEndDate);
-                        }
-                      }}
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked);
+                            if (checked) {
+                              setPreviousEndDate(form.getValues("endDate"));
+                              form.setValue("endDate", "");
+                            } else {
+                              form.setValue("endDate", previousEndDate);
+                            }
+                          }}
                           className="h-3 w-3 rounded-sm"
                           icon={<CheckIcon className="h-2 w-2" />}
-                    />
-                  </FormControl>
-                  <FormLabel className="text-[10px] font-normal">
-                    I currently work here
-                  </FormLabel>
-                </FormItem>
-              )}
-            />
+                        />
+                      </FormControl>
+                      <FormLabel className="text-[10px] font-normal">
+                        I currently work here
+                      </FormLabel>
+                    </FormItem>
+                  )}
+                />
               </div>
             </div>
 
