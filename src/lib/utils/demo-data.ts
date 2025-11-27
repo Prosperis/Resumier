@@ -162,7 +162,7 @@ export const demoResumeContent: ResumeContent = {
       id: "link-1",
       label: "Portfolio",
       url: "https://johndoe.dev",
-      type: "portfolio",
+      type: "website",
     },
     {
       id: "link-2",
@@ -180,7 +180,7 @@ export const demoResumeContent: ResumeContent = {
       id: "link-4",
       label: "Blog",
       url: "https://blog.johndoe.dev",
-      type: "other",
+      type: "website",
     },
   ],
 };

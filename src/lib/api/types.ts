@@ -117,13 +117,33 @@ export interface Certification {
 }
 
 /**
+ * Link type for social/professional links
+ * Only includes types with distinct icons
+ */
+export type LinkType =
+  | "website" // Globe icon - for portfolio, blog, personal site, etc.
+  | "linkedin"
+  | "github"
+  | "twitter"
+  | "facebook"
+  | "instagram"
+  | "youtube"
+  | "dribbble"
+  | "codepen"
+  | "figma"
+  | "twitch"
+  | "slack"
+  | "email"
+  | "other"; // Generic link icon
+
+/**
  * Link (Portfolio, LinkedIn, etc.)
  */
 export interface Link {
   id: string;
   label: string;
   url: string;
-  type: "portfolio" | "linkedin" | "github" | "other";
+  type: LinkType;
 }
 
 /**

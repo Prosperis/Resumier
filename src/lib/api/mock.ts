@@ -380,7 +380,7 @@ export const mockApi = {
             id: generateId("link-portfolio"),
             label: "Portfolio",
             url: "https://johndoe.dev",
-            type: "portfolio" as const,
+            type: "website" as const,
           },
         ],
       };

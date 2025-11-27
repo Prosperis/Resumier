@@ -14,6 +14,7 @@ import {
   getFullName,
   type PhoneFormat,
 } from "@/lib/validations";
+import { getLinkIcon } from "./shared/contact-info";
 
 interface ModernTemplateProps {
   resume: Resume;
@@ -370,10 +371,12 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                   .filter((link) => link.label || link.url)
                   .map((link) => (
                     <div key={link.id} className="flex items-start gap-2">
-                      <LinkIcon
-                        className="mt-0.5 h-3 w-3 flex-shrink-0"
-                        style={{ color: "#8b5cf6" }}
-                      />
+                      <span
+                        className="mt-0.5 flex-shrink-0"
+                        style={{ color: primaryColor }}
+                      >
+                        {getLinkIcon(link.type, true, "h-3 w-3")}
+                      </span>
                       <div>
                         {link.label && (
                           <p className="text-xs font-semibold text-gray-800">
@@ -386,7 +389,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-xs break-all hover:underline"
-                            style={{ color: "#8b5cf6" }}
+                            style={{ color: primaryColor }}
                           >
                             {link.url}
                           </a>

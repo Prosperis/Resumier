@@ -94,7 +94,7 @@ class MockDatabase {
             id: "link-1",
             label: "Portfolio",
             url: "https://johndoe.dev",
-            type: "portfolio",
+            type: "website",
           },
           {
             id: "link-2",

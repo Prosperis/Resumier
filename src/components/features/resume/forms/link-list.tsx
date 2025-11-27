@@ -14,8 +14,6 @@ import {
 } from "@dnd-kit/sortable";
 import {
   ExternalLink,
-  Github,
-  Linkedin,
   Link as LinkIcon,
   EditIcon,
   TrashIcon,
@@ -38,30 +36,17 @@ interface LinkListProps {
   onReorder?: (links: LinkFormData[]) => void;
 }
 
+// Use the shared getLinkIcon and linkTypeLabels from the centralized location
+import { getLinkIcon as getIcon } from "@/components/features/resume/preview/templates/shared/contact-info";
+import { linkTypeLabels } from "@/lib/validations/links";
+import type { LinkType } from "@/lib/api/types";
+
 function getLinkIcon(type: LinkFormData["type"]) {
-  switch (type) {
-    case "linkedin":
-      return <Linkedin className="h-3 w-3" />;
-    case "github":
-      return <Github className="h-3 w-3" />;
-    case "portfolio":
-      return <ExternalLink className="h-3 w-3" />;
-    default:
-      return <LinkIcon className="h-3 w-3" />;
-  }
+  return getIcon(type as LinkType, true, "h-3 w-3");
 }
 
 function getLinkTypeLabel(type: LinkFormData["type"]) {
-  switch (type) {
-    case "linkedin":
-      return "LinkedIn";
-    case "github":
-      return "GitHub";
-    case "portfolio":
-      return "Portfolio";
-    default:
-      return "Other";
-  }
+  return linkTypeLabels[type as keyof typeof linkTypeLabels] || "Other";
 }
 
 export function LinkList({

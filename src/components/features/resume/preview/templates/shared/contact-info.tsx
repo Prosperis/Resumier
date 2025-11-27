@@ -3,8 +3,25 @@
  * Reusable contact information displays for templates
  */
 
-import { Mail, Phone, MapPin, Globe, Linkedin, Github } from "lucide-react";
-import type { PersonalInfo, Link } from "@/lib/api/types";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Globe,
+  Linkedin,
+  Github,
+  Twitter,
+  Facebook,
+  Instagram,
+  Youtube,
+  Dribbble,
+  Codepen,
+  Figma,
+  Twitch,
+  Slack,
+  Link as LinkIcon,
+} from "lucide-react";
+import type { PersonalInfo, Link, LinkType } from "@/lib/api/types";
 import type { HeaderStyle, ColorScheme } from "@/lib/types/templates";
 import { formatPhoneDisplay, type PhoneFormat } from "@/lib/validations";
 
@@ -221,17 +238,48 @@ export function ContactInfo({
   );
 }
 
-function getLinkIcon(type: Link["type"], showIcons: boolean) {
+/**
+ * Get the appropriate icon for a link type
+ * Each type has a distinct icon
+ */
+export function getLinkIcon(
+  type: LinkType,
+  showIcons: boolean,
+  className = "h-4 w-4",
+) {
   if (!showIcons) return null;
 
+  const iconProps = { className };
+
   switch (type) {
+    case "website":
+      return <Globe {...iconProps} />;
     case "linkedin":
-      return <Linkedin className="h-4 w-4" />;
+      return <Linkedin {...iconProps} />;
     case "github":
-      return <Github className="h-4 w-4" />;
-    case "portfolio":
-      return <Globe className="h-4 w-4" />;
+      return <Github {...iconProps} />;
+    case "twitter":
+      return <Twitter {...iconProps} />;
+    case "facebook":
+      return <Facebook {...iconProps} />;
+    case "instagram":
+      return <Instagram {...iconProps} />;
+    case "youtube":
+      return <Youtube {...iconProps} />;
+    case "dribbble":
+      return <Dribbble {...iconProps} />;
+    case "codepen":
+      return <Codepen {...iconProps} />;
+    case "figma":
+      return <Figma {...iconProps} />;
+    case "twitch":
+      return <Twitch {...iconProps} />;
+    case "slack":
+      return <Slack {...iconProps} />;
+    case "email":
+      return <Mail {...iconProps} />;
+    case "other":
     default:
-      return <Globe className="h-4 w-4" />;
+      return <LinkIcon {...iconProps} />;
   }
 }

@@ -1,14 +1,44 @@
 import { z } from "zod";
 
 /**
- * Link Type
+ * Link Type - only includes types with distinct icons
  */
 export const linkTypeSchema = z.enum([
-  "portfolio",
+  "website",
   "linkedin",
   "github",
+  "twitter",
+  "facebook",
+  "instagram",
+  "youtube",
+  "dribbble",
+  "codepen",
+  "figma",
+  "twitch",
+  "slack",
+  "email",
   "other",
 ]);
+
+/**
+ * Link type labels for display in forms
+ */
+export const linkTypeLabels: Record<z.infer<typeof linkTypeSchema>, string> = {
+  website: "Website",
+  linkedin: "LinkedIn",
+  github: "GitHub",
+  twitter: "Twitter / X",
+  facebook: "Facebook",
+  instagram: "Instagram",
+  youtube: "YouTube",
+  dribbble: "Dribbble",
+  codepen: "CodePen",
+  figma: "Figma",
+  twitch: "Twitch",
+  slack: "Slack",
+  email: "Email",
+  other: "Other",
+};
 
 /**
  * Link Validation Schema

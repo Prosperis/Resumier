@@ -8,8 +8,8 @@ import {
 } from "../links";
 
 describe("linkTypeSchema", () => {
-  it("validates portfolio type", () => {
-    const result = linkTypeSchema.safeParse("portfolio");
+  it("validates website type", () => {
+    const result = linkTypeSchema.safeParse("website");
     expect(result.success).toBe(true);
   });
 
@@ -26,6 +26,29 @@ describe("linkTypeSchema", () => {
   it("validates other type", () => {
     const result = linkTypeSchema.safeParse("other");
     expect(result.success).toBe(true);
+  });
+
+  it("validates all link types with distinct icons", () => {
+    const types = [
+      "website",
+      "linkedin",
+      "github",
+      "twitter",
+      "facebook",
+      "instagram",
+      "youtube",
+      "dribbble",
+      "codepen",
+      "figma",
+      "twitch",
+      "slack",
+      "email",
+      "other",
+    ];
+    for (const type of types) {
+      const result = linkTypeSchema.safeParse(type);
+      expect(result.success).toBe(true);
+    }
   });
 
   it("fails for invalid type", () => {
@@ -46,7 +69,7 @@ describe("linkSchema", () => {
         id: "link-1",
         label: "My Portfolio",
         url: "https://johndoe.com",
-        type: "portfolio",
+        type: "website",
       };
       const result = linkSchema.safeParse(validData);
       expect(result.success).toBe(true);
@@ -112,7 +135,7 @@ describe("linkSchema", () => {
       const data = {
         id: "link-1",
         url: "https://example.com",
-        type: "portfolio",
+        type: "website",
       };
       const result = linkSchema.safeParse(data);
       expect(result.success).toBe(true);
@@ -122,7 +145,7 @@ describe("linkSchema", () => {
       const data = {
         id: "link-1",
         label: "My Link",
-        type: "portfolio",
+        type: "website",
       };
       const result = linkSchema.safeParse(data);
       expect(result.success).toBe(true);
@@ -133,7 +156,7 @@ describe("linkSchema", () => {
         id: "link-1",
         label: "",
         url: "https://example.com",
-        type: "portfolio",
+        type: "website",
       };
       const result = linkSchema.safeParse(data);
       expect(result.success).toBe(true);
@@ -144,7 +167,7 @@ describe("linkSchema", () => {
         id: "link-1",
         label: "My Link",
         url: "",
-        type: "portfolio",
+        type: "website",
       };
       const result = linkSchema.safeParse(data);
       expect(result.success).toBe(true);
@@ -153,7 +176,7 @@ describe("linkSchema", () => {
     it("accepts link entry with only type (only id and type required)", () => {
       const data = {
         id: "link-1",
-        type: "portfolio",
+        type: "website",
       };
       const result = linkSchema.safeParse(data);
       expect(result.success).toBe(true);
@@ -179,7 +202,7 @@ describe("linkSchema", () => {
         id: "link-1",
         label: "My Link",
         url: "not-a-valid-url",
-        type: "portfolio",
+        type: "website",
       };
       const result = linkSchema.safeParse(data);
       expect(result.success).toBe(false);
@@ -228,7 +251,7 @@ describe("linkSchema", () => {
         id: "link-1",
         label: "My Professional Portfolio Website with Projects and Blog",
         url: "https://example.com",
-        type: "portfolio",
+        type: "website",
       };
       const result = linkSchema.safeParse(data);
       expect(result.success).toBe(true);
@@ -239,14 +262,29 @@ describe("linkSchema", () => {
         id: "link-1",
         label: "Portfolio",
         url: "https://subdomain.example.com/path/to/page?query=value&other=param#section",
-        type: "portfolio",
+        type: "website",
       };
       const result = linkSchema.safeParse(data);
       expect(result.success).toBe(true);
     });
 
     it("validates all link types", () => {
-      const types = ["portfolio", "linkedin", "github", "other"] as const;
+      const types = [
+        "website",
+        "linkedin",
+        "github",
+        "twitter",
+        "facebook",
+        "instagram",
+        "youtube",
+        "dribbble",
+        "codepen",
+        "figma",
+        "twitch",
+        "slack",
+        "email",
+        "other",
+      ] as const;
 
       for (const type of types) {
         const data = {
@@ -265,7 +303,7 @@ describe("linkSchema", () => {
         id: "link-1",
         label: "My Portfolio & Projects (2024)",
         url: "https://example.com",
-        type: "portfolio",
+        type: "website",
       };
       const result = linkSchema.safeParse(data);
       expect(result.success).toBe(true);
@@ -278,7 +316,7 @@ describe("createLinkSchema", () => {
     const validData: CreateLinkFormData = {
       label: "New Link",
       url: "https://newsite.com",
-      type: "portfolio",
+      type: "website",
     };
     const result = createLinkSchema.safeParse(validData);
     expect(result.success).toBe(true);
@@ -289,7 +327,7 @@ describe("createLinkSchema", () => {
       id: "should-be-ignored",
       label: "Portfolio",
       url: "https://example.com",
-      type: "portfolio",
+      type: "website",
     };
     const result = createLinkSchema.safeParse(data);
     expect(result.success).toBe(true);
@@ -300,7 +338,22 @@ describe("createLinkSchema", () => {
   });
 
   it("validates all link types without ID", () => {
-    const types = ["portfolio", "linkedin", "github", "other"] as const;
+    const types = [
+      "website",
+      "linkedin",
+      "github",
+      "twitter",
+      "facebook",
+      "instagram",
+      "youtube",
+      "dribbble",
+      "codepen",
+      "figma",
+      "twitch",
+      "slack",
+      "email",
+      "other",
+    ] as const;
 
     for (const type of types) {
       const data = {

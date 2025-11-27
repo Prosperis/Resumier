@@ -22,11 +22,14 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useAutoSave } from "@/hooks/use-auto-save";
-import type { Link } from "@/lib/api/types";
+import type { Link, LinkType } from "@/lib/api/types";
 import {
   type CreateLinkFormData,
   createLinkSchema,
+  linkTypeLabels,
+  linkTypeSchema,
 } from "@/lib/validations/links";
+import { getLinkIcon } from "@/components/features/resume/preview/templates/shared/contact-info";
 
 interface LinkInlineFormProps {
   resumeId: string;
@@ -52,7 +55,7 @@ export function LinkInlineForm({
     defaultValues: {
       label: "",
       url: "",
-      type: "other",
+      type: "website",
       ...defaultValues,
     },
   });
@@ -154,19 +157,19 @@ export function LinkInlineForm({
                         <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="portfolio" className="text-[11px]">
-                        Portfolio
-                      </SelectItem>
-                      <SelectItem value="linkedin" className="text-[11px]">
-                        LinkedIn
-                      </SelectItem>
-                      <SelectItem value="github" className="text-[11px]">
-                        GitHub
-                      </SelectItem>
-                      <SelectItem value="other" className="text-[11px]">
-                        Other
-                      </SelectItem>
+                    <SelectContent className="max-h-60">
+                      {linkTypeSchema.options.map((type) => (
+                        <SelectItem
+                          key={type}
+                          value={type}
+                          className="text-[11px]"
+                        >
+                          <span className="flex items-center gap-2">
+                            {getLinkIcon(type as LinkType, true, "h-3.5 w-3.5")}
+                            {linkTypeLabels[type]}
+                          </span>
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage className="text-[9px]" />

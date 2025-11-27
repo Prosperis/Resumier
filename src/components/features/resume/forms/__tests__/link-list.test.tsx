@@ -60,7 +60,7 @@ describe("LinkList", () => {
       id: "1",
       label: "My Portfolio",
       url: "https://johndoe.com",
-      type: "portfolio",
+      type: "website",
     },
     {
       id: "2",
@@ -306,7 +306,7 @@ describe("LinkList", () => {
           id: "1",
           label: "My Portfolio Site",
           url: "https://example.com",
-          type: "portfolio",
+          type: "website",
         },
       ];
 
@@ -468,7 +468,7 @@ describe("LinkList", () => {
           label:
             "My Very Long Professional Portfolio Website Showcasing All My Projects and Achievements",
           url: "https://example.com",
-          type: "portfolio",
+          type: "website",
         },
       ];
 
@@ -494,7 +494,7 @@ describe("LinkList", () => {
           id: "1",
           label: "Portfolio",
           url: "https://example.com/very/long/path/to/my/portfolio/page/with/many/segments/and/parameters?param1=value1&param2=value2",
-          type: "portfolio",
+          type: "website",
         },
       ];
 
@@ -522,7 +522,7 @@ describe("LinkList", () => {
           id: "1",
           label: "Portfolio",
           url: "https://example.com/portfolio?name=John%20Doe&year=2023&category=design",
-          type: "portfolio",
+          type: "website",
         },
       ];
 
@@ -550,7 +550,7 @@ describe("LinkList", () => {
           id: "1",
           label: "My Portfolio",
           url: "https://example.com",
-          type: "portfolio",
+          type: "website",
         },
       ];
 
@@ -680,7 +680,7 @@ describe("LinkList", () => {
           id: "1",
           label: "My Portfolio Website",
           url: "https://example.com",
-          type: "portfolio",
+          type: "website",
         },
       ];
 

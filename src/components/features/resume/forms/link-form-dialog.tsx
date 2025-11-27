@@ -23,7 +23,17 @@ import { Select } from "@/components/ui/select";
 import {
   type CreateLinkFormData,
   createLinkSchema,
+  linkTypeLabels,
+  linkTypeSchema,
 } from "@/lib/validations/links";
+import { getLinkIcon } from "@/components/features/resume/preview/templates/shared/contact-info";
+import type { LinkType } from "@/lib/api/types";
+import {
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface LinkFormDialogProps {
   open: boolean;
@@ -47,7 +57,7 @@ export function LinkFormDialog({
     defaultValues: {
       label: "",
       url: "",
-      type: "other",
+      type: "website",
       ...defaultValues,
     },
   });
@@ -77,14 +87,26 @@ export function LinkFormDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Link Type</FormLabel>
-                  <FormControl>
-                    <Select {...field}>
-                      <option value="portfolio">Portfolio</option>
-                      <option value="linkedin">LinkedIn</option>
-                      <option value="github">GitHub</option>
-                      <option value="other">Other</option>
-                    </Select>
-                  </FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="max-h-60">
+                      {linkTypeSchema.options.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          <span className="flex items-center gap-2">
+                            {getLinkIcon(type as LinkType, true, "h-4 w-4")}
+                            {linkTypeLabels[type]}
+                          </span>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormDescription>
                     Choose the type of link you're adding
                   </FormDescription>
