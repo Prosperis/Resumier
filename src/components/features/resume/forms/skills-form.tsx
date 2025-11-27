@@ -61,7 +61,7 @@ function TagInput({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    
+
     if (enforceLengthLimit) {
       // If we are over the limit
       if (newValue.length > maxLength) {
