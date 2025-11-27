@@ -112,7 +112,10 @@ interface ResumeStore {
   setColorTheme: (theme: string) => void;
   setColorOverride: (key: keyof ColorScheme, value: string) => void;
   setFontTheme: (theme: string) => void;
-  setFontOverride: (key: keyof Typography, value: Typography[keyof Typography]) => void;
+  setFontOverride: (
+    key: keyof Typography,
+    value: Typography[keyof Typography],
+  ) => void;
   addCustomFont: (font: CustomFont) => void;
   removeCustomFont: (fontName: string) => void;
   resetStyleCustomization: () => void;
@@ -223,7 +226,7 @@ export const useResumeStore = create<ResumeStore>()(
               ...state.styleCustomization,
               customFonts: [
                 ...state.styleCustomization.customFonts.filter(
-                  (f) => f.name !== font.name
+                  (f) => f.name !== font.name,
                 ),
                 font,
               ],
@@ -234,7 +237,7 @@ export const useResumeStore = create<ResumeStore>()(
             styleCustomization: {
               ...state.styleCustomization,
               customFonts: state.styleCustomization.customFonts.filter(
-                (f) => f.name !== fontName
+                (f) => f.name !== fontName,
               ),
             },
           })),

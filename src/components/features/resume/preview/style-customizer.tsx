@@ -115,7 +115,11 @@ const FONT_OPTIONS = [
   },
   { value: "Merriweather, serif", label: "Merriweather", category: "Serif" },
   { value: "Playfair Display, serif", label: "Playfair", category: "Serif" },
-  { value: "Libre Baskerville, serif", label: "Baskerville", category: "Serif" },
+  {
+    value: "Libre Baskerville, serif",
+    label: "Baskerville",
+    category: "Serif",
+  },
 ];
 
 interface ColorSwatchProps {
@@ -134,7 +138,7 @@ function ColorSwatch({ color, isSelected, onClick, label }: ColorSwatchProps) {
         "h-8 w-8 rounded-full border-2 transition-all hover:scale-110",
         isSelected
           ? "border-foreground ring-2 ring-primary ring-offset-2"
-          : "border-transparent"
+          : "border-transparent",
       )}
       style={{ backgroundColor: color }}
       title={label}
@@ -149,7 +153,11 @@ interface CustomColorSwatchProps {
   onChange: (color: string) => void;
 }
 
-function CustomColorSwatch({ color, isSelected, onChange }: CustomColorSwatchProps) {
+function CustomColorSwatch({
+  color,
+  isSelected,
+  onChange,
+}: CustomColorSwatchProps) {
   return (
     <div className="relative">
       <input
@@ -160,7 +168,7 @@ function CustomColorSwatch({ color, isSelected, onChange }: CustomColorSwatchPro
           "h-8 w-8 rounded-full border-2 cursor-pointer transition-all hover:scale-110 appearance-none bg-transparent",
           isSelected
             ? "border-foreground ring-2 ring-primary ring-offset-2"
-            : "border-dashed border-muted-foreground"
+            : "border-dashed border-muted-foreground",
         )}
         style={{ backgroundColor: color }}
         title="Custom color"
@@ -171,7 +179,8 @@ function CustomColorSwatch({ color, isSelected, onChange }: CustomColorSwatchPro
         <div
           className="absolute inset-0 rounded-full pointer-events-none"
           style={{
-            background: "conic-gradient(red, yellow, lime, aqua, blue, magenta, red)",
+            background:
+              "conic-gradient(red, yellow, lime, aqua, blue, magenta, red)",
             opacity: 0.7,
           }}
         />
@@ -247,7 +256,8 @@ export function StyleCustomizer() {
 
   // Get current effective typography (theme + overrides)
   const currentThemeFonts =
-    TYPOGRAPHY_PRESETS[styleCustomization.fontTheme] || TYPOGRAPHY_PRESETS.modern;
+    TYPOGRAPHY_PRESETS[styleCustomization.fontTheme] ||
+    TYPOGRAPHY_PRESETS.modern;
 
   // Combine built-in fonts with custom fonts
   const allFontOptions = [
@@ -308,10 +318,12 @@ export function StyleCustomizer() {
       "application/font-woff",
       "application/font-woff2",
     ];
-    
+
     const extension = file.name.split(".").pop()?.toLowerCase();
-    const isValidExtension = ["ttf", "otf", "woff", "woff2"].includes(extension || "");
-    
+    const isValidExtension = ["ttf", "otf", "woff", "woff2"].includes(
+      extension || "",
+    );
+
     if (!validTypes.includes(file.type) && !isValidExtension) {
       alert("Please upload a valid font file (.ttf, .otf, .woff, .woff2)");
       return;
@@ -329,7 +341,9 @@ export function StyleCustomizer() {
       });
 
       // Generate font family name from filename
-      const fontName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9]/g, "");
+      const fontName = file.name
+        .replace(/\.[^/.]+$/, "")
+        .replace(/[^a-zA-Z0-9]/g, "");
       const fontFamily = `Custom-${fontName}-${Date.now()}`;
 
       const customFont: CustomFont = {
@@ -408,7 +422,9 @@ export function StyleCustomizer() {
                     <ColorSwatch
                       key={option.value}
                       color={COLOR_SCHEMES[option.value]?.primary || "#8b5cf6"}
-                      isSelected={styleCustomization.colorTheme === option.value}
+                      isSelected={
+                        styleCustomization.colorTheme === option.value
+                      }
                       onClick={() => handleColorThemeChange(option.value)}
                       label={option.label}
                     />
@@ -495,7 +511,8 @@ export function StyleCustomizer() {
                     <Select
                       value={
                         (styleCustomization.fontOverrides
-                          .headingFont as string) || currentThemeFonts.headingFont
+                          .headingFont as string) ||
+                        currentThemeFonts.headingFont
                       }
                       onValueChange={(value) =>
                         styleActions.setFontOverride("headingFont", value)
@@ -554,7 +571,9 @@ export function StyleCustomizer() {
 
               {/* Upload Custom Font */}
               <div className="space-y-3 border-t pt-3">
-                <Label className="text-xs font-medium">Upload Custom Font</Label>
+                <Label className="text-xs font-medium">
+                  Upload Custom Font
+                </Label>
                 <div className="space-y-2">
                   <Input
                     ref={fileInputRef}
@@ -583,7 +602,9 @@ export function StyleCustomizer() {
                         >
                           <span
                             className="text-xs truncate"
-                            style={{ fontFamily: `"${font.fontFamily}", sans-serif` }}
+                            style={{
+                              fontFamily: `"${font.fontFamily}", sans-serif`,
+                            }}
                           >
                             {font.name}
                           </span>
@@ -608,4 +629,3 @@ export function StyleCustomizer() {
     </Popover>
   );
 }
-
