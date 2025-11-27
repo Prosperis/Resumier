@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckIcon, PlusIcon, XIcon } from "lucide-react";
+import { AlignLeft, CheckIcon, List, PlusIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { MonthPicker } from "@/components/ui/month-picker";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import type { ExperienceFormat } from "@/lib/api/types";
 import {
   type CreateExperienceFormData,
   createExperienceSchema,
@@ -50,6 +56,9 @@ export function ExperienceFormDialog({
     defaultValues?.highlights || [""],
   );
   const [previousEndDate, setPreviousEndDate] = useState<string>("");
+  const [format, setFormat] = useState<ExperienceFormat>(
+    defaultValues?.format || "structured"
+  );
 
   const form = useForm<CreateExperienceFormData>({
     resolver: zodResolver(createExperienceSchema),
@@ -61,6 +70,7 @@ export function ExperienceFormDialog({
       current: false,
       description: "",
       highlights: [],
+      format: "structured",
       ...defaultValues,
     },
   });
@@ -70,10 +80,11 @@ export function ExperienceFormDialog({
   const handleSubmit = (values: CreateExperienceFormData) => {
     // Filter out empty highlights
     const filteredHighlights = highlights.filter((h) => h.trim() !== "");
-    onSubmit({ ...values, highlights: filteredHighlights });
+    onSubmit({ ...values, highlights: filteredHighlights, format });
     onOpenChange(false);
     form.reset();
     setHighlights([""]);
+    setFormat("structured");
   };
 
   const addHighlight = () => {
@@ -203,58 +214,187 @@ export function ExperienceFormDialog({
               </div>
             </div>
 
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Brief overview of your role and responsibilities..."
-                      className="min-h-[100px]"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+            {/* Format Selector */}
             <div className="space-y-2">
-              <FormLabel>Key Highlights</FormLabel>
-              <FormDescription>
-                Add bullet points for your achievements and responsibilities
-              </FormDescription>
-              {highlights.map((highlight, index) => (
-                <div key={index} className="flex gap-2">
-                  <Input
-                    placeholder="Led a team of 5 engineers..."
-                    value={highlight}
-                    onChange={(e) => updateHighlight(index, e.target.value)}
-                  />
+              <FormLabel>Content Format</FormLabel>
+              <div className="flex gap-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant={format === "structured" ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 gap-1.5"
+                      onClick={() => setFormat("structured")}
+                    >
+                      <AlignLeft className="h-4 w-4" />
+                      <List className="h-4 w-4" />
+                      <span className="hidden sm:inline">Structured</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p className="font-medium">Structured</p>
+                    <p className="text-muted-foreground text-xs">Description paragraph + bullet highlights</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant={format === "bullets" ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 gap-1.5"
+                      onClick={() => setFormat("bullets")}
+                    >
+                      <List className="h-4 w-4" />
+                      <span className="hidden sm:inline">Bullets</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p className="font-medium">Bullets Only</p>
+                    <p className="text-muted-foreground text-xs">Just bullet points, no paragraph</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant={format === "freeform" ? "default" : "outline"}
+                      size="sm"
+                      className="flex-1 gap-1.5"
+                      onClick={() => setFormat("freeform")}
+                    >
+                      <AlignLeft className="h-4 w-4" />
+                      <span className="hidden sm:inline">Freeform</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p className="font-medium">Freeform</p>
+                    <p className="text-muted-foreground text-xs">Single text block, write freely</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </div>
+
+            {/* Structured Format: Description + Highlights */}
+            {format === "structured" && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Brief overview of your role and responsibilities..."
+                          className="min-h-[100px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="space-y-2">
+                  <FormLabel>Key Highlights</FormLabel>
+                  <FormDescription>
+                    Add bullet points for your achievements and responsibilities
+                  </FormDescription>
+                  {highlights.map((highlight, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        placeholder="Led a team of 5 engineers..."
+                        value={highlight}
+                        onChange={(e) => updateHighlight(index, e.target.value)}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeHighlight(index)}
+                        disabled={highlights.length === 1}
+                      >
+                        <XIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
                   <Button
                     type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeHighlight(index)}
-                    disabled={highlights.length === 1}
+                    variant="outline"
+                    size="sm"
+                    onClick={addHighlight}
+                    className="w-full"
                   >
-                    <XIcon className="h-4 w-4" />
+                    <PlusIcon className="mr-2 h-4 w-4" />
+                    Add Highlight
                   </Button>
                 </div>
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addHighlight}
-                className="w-full"
-              >
-                <PlusIcon className="mr-2 h-4 w-4" />
-                Add Highlight
-              </Button>
-            </div>
+              </>
+            )}
+
+            {/* Bullets Only Format */}
+            {format === "bullets" && (
+              <div className="space-y-2">
+                <FormLabel>Bullet Points</FormLabel>
+                <FormDescription>
+                  Add your achievements, responsibilities, and key contributions
+                </FormDescription>
+                {highlights.map((highlight, index) => (
+                  <div key={index} className="flex gap-2">
+                    <Input
+                      placeholder="Achievement, responsibility, or key point..."
+                      value={highlight}
+                      onChange={(e) => updateHighlight(index, e.target.value)}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeHighlight(index)}
+                      disabled={highlights.length === 1}
+                    >
+                      <XIcon className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addHighlight}
+                  className="w-full"
+                >
+                  <PlusIcon className="mr-2 h-4 w-4" />
+                  Add Point
+                </Button>
+              </div>
+            )}
+
+            {/* Freeform Format */}
+            {format === "freeform" && (
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Content</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe your role, responsibilities, and achievements in your own style..."
+                        className="min-h-[180px]"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Write freely - paragraphs, sentences, or any format you prefer
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <DialogFooter>
               <Button

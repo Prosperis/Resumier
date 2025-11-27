@@ -1,6 +1,14 @@
 import { z } from "zod";
 
 /**
+ * Experience Format
+ * - "structured": Separate description paragraph + bullet highlights (default)
+ * - "freeform": Single text block for free-flowing content
+ * - "bullets": Only bullet points, no description paragraph
+ */
+export const experienceFormatSchema = z.enum(["structured", "freeform", "bullets"]);
+
+/**
  * Experience Validation Schema
  * Validates work experience entries
  * All fields are optional - only non-empty fields are rendered in the resume
@@ -14,10 +22,11 @@ export const experienceSchema = z.object({
   current: z.boolean().optional(),
   description: z
     .string()
-    .max(1000, "Description must be less than 1000 characters")
+    .max(2000, "Description must be less than 2000 characters")
     .optional()
     .or(z.literal("")),
   highlights: z.array(z.string()).optional(),
+  format: experienceFormatSchema.optional(),
 });
 
 export type ExperienceFormData = z.infer<typeof experienceSchema>;

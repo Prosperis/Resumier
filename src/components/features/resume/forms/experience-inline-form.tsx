@@ -1,7 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  AlignLeft,
   CheckCircle2,
   CheckIcon,
+  List,
   Loader2,
   PlusIcon,
   X,
@@ -24,9 +26,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { MonthPicker } from "@/components/ui/month-picker";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useAutoSave } from "@/hooks/use-auto-save";
-import type { Experience } from "@/lib/api/types";
+import type { Experience, ExperienceFormat } from "@/lib/api/types";
 import {
   type CreateExperienceFormData,
   createExperienceSchema,
@@ -53,6 +60,9 @@ export function ExperienceInlineForm({
     defaultValues?.highlights?.length ? defaultValues.highlights : [""],
   );
   const [previousEndDate, setPreviousEndDate] = useState<string>("");
+  const [format, setFormat] = useState<ExperienceFormat>(
+    defaultValues?.format || "structured"
+  );
   const newIdRef = useRef<string>(crypto.randomUUID());
 
   const form = useForm<CreateExperienceFormData>({
@@ -65,6 +75,7 @@ export function ExperienceInlineForm({
       current: false,
       description: "",
       highlights: [],
+      format: "structured",
       ...defaultValues,
     },
   });
@@ -80,7 +91,7 @@ export function ExperienceInlineForm({
 
   const triggerSave = useCallback(() => {
     const filteredHighlights = highlights.filter((h) => h.trim() !== "");
-    const currentData = { ...watchedValues, highlights: filteredHighlights };
+    const currentData = { ...watchedValues, highlights: filteredHighlights, format };
 
     // Only save if we have required fields
     if (
@@ -121,6 +132,11 @@ export function ExperienceInlineForm({
   useEffect(() => {
     triggerSave();
   }, [triggerSave]);
+
+  // Also trigger save when format changes
+  useEffect(() => {
+    triggerSave();
+  }, [format, triggerSave]);
 
   const addHighlight = () => {
     setHighlights([...highlights, ""]);
@@ -284,57 +300,182 @@ export function ExperienceInlineForm({
               </div>
             </div>
 
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Brief overview of your role..."
-                      className="min-h-[50px] text-[11px] resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="text-[9px]" />
-                </FormItem>
-              )}
-            />
-
+            {/* Format Selector */}
             <div className="space-y-1">
-              <FormLabel className="text-[10px]">Key Highlights</FormLabel>
-              {highlights.map((highlight, index) => (
-                <div key={index} className="flex gap-1">
-                  <Input
-                    placeholder="Achievement or responsibility..."
-                    value={highlight}
-                    onChange={(e) => updateHighlight(index, e.target.value)}
-                    className="h-7 text-[11px]"
-                  />
+              <FormLabel className="text-[10px]">Content Format</FormLabel>
+              <div className="flex gap-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant={format === "structured" ? "default" : "outline"}
+                      size="sm"
+                      className="h-7 flex-1 text-[10px] gap-1"
+                      onClick={() => setFormat("structured")}
+                    >
+                      <AlignLeft className="h-3 w-3" />
+                      <List className="h-3 w-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="text-xs">
+                    <p className="font-medium">Structured</p>
+                    <p className="text-muted-foreground">Description paragraph + bullet highlights</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant={format === "bullets" ? "default" : "outline"}
+                      size="sm"
+                      className="h-7 flex-1 text-[10px] gap-1"
+                      onClick={() => setFormat("bullets")}
+                    >
+                      <List className="h-3 w-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="text-xs">
+                    <p className="font-medium">Bullets Only</p>
+                    <p className="text-muted-foreground">Just bullet points, no paragraph</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant={format === "freeform" ? "default" : "outline"}
+                      size="sm"
+                      className="h-7 flex-1 text-[10px] gap-1"
+                      onClick={() => setFormat("freeform")}
+                    >
+                      <AlignLeft className="h-3 w-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="text-xs">
+                    <p className="font-medium">Freeform</p>
+                    <p className="text-muted-foreground">Single text block, write freely</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </div>
+
+            {/* Structured Format: Description + Highlights */}
+            {format === "structured" && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="space-y-0.5">
+                      <FormLabel className="text-[10px]">Description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Brief overview of your role..."
+                          className="min-h-[50px] text-[11px] resize-none"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="text-[9px]" />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="space-y-1">
+                  <FormLabel className="text-[10px]">Key Highlights</FormLabel>
+                  {highlights.map((highlight, index) => (
+                    <div key={index} className="flex gap-1">
+                      <Input
+                        placeholder="Achievement or responsibility..."
+                        value={highlight}
+                        onChange={(e) => updateHighlight(index, e.target.value)}
+                        className="h-7 text-[11px]"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 shrink-0"
+                        onClick={() => removeHighlight(index)}
+                        disabled={highlights.length === 1}
+                      >
+                        <XIcon className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
                   <Button
                     type="button"
                     variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 shrink-0"
-                    onClick={() => removeHighlight(index)}
-                    disabled={highlights.length === 1}
+                    size="sm"
+                    onClick={addHighlight}
+                    className="w-full h-6 text-[10px]"
                   >
-                    <XIcon className="h-3 w-3" />
+                    <PlusIcon className="mr-1 h-3 w-3" />
+                    Add Highlight
                   </Button>
                 </div>
-              ))}
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={addHighlight}
-                className="w-full h-6 text-[10px]"
-              >
-                <PlusIcon className="mr-1 h-3 w-3" />
-                Add Highlight
-              </Button>
-            </div>
+              </>
+            )}
+
+            {/* Bullets Only Format */}
+            {format === "bullets" && (
+              <div className="space-y-1">
+                <FormLabel className="text-[10px]">Bullet Points</FormLabel>
+                {highlights.map((highlight, index) => (
+                  <div key={index} className="flex gap-1">
+                    <Input
+                      placeholder="Achievement, responsibility, or key point..."
+                      value={highlight}
+                      onChange={(e) => updateHighlight(index, e.target.value)}
+                      className="h-7 text-[11px]"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7 shrink-0"
+                      onClick={() => removeHighlight(index)}
+                      disabled={highlights.length === 1}
+                    >
+                      <XIcon className="h-3 w-3" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={addHighlight}
+                  className="w-full h-6 text-[10px]"
+                >
+                  <PlusIcon className="mr-1 h-3 w-3" />
+                  Add Point
+                </Button>
+              </div>
+            )}
+
+            {/* Freeform Format */}
+            {format === "freeform" && (
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="space-y-0.5">
+                    <FormLabel className="text-[10px]">Content</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe your role, responsibilities, and achievements in your own style..."
+                        className="min-h-[120px] text-[11px] resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="text-[9px]">
+                      Write freely - paragraphs, sentences, or any format you prefer
+                    </FormDescription>
+                    <FormMessage className="text-[9px]" />
+                  </FormItem>
+                )}
+              />
+            )}
 
             <div className="flex justify-end pt-1">
               <Button

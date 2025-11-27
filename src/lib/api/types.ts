@@ -58,6 +58,14 @@ export interface PersonalInfo {
 }
 
 /**
+ * Experience description format
+ * - "structured": Separate description paragraph + bullet highlights (default)
+ * - "freeform": Single text block for free-flowing content
+ * - "bullets": Only bullet points, no description paragraph
+ */
+export type ExperienceFormat = "structured" | "freeform" | "bullets";
+
+/**
  * Work Experience
  */
 export interface Experience {
@@ -69,6 +77,7 @@ export interface Experience {
   current?: boolean;
   description: string;
   highlights: string[];
+  format?: ExperienceFormat;
 } /**
  * Education
  */

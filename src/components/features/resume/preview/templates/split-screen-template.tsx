@@ -12,6 +12,7 @@ import {
   getFullName,
   type PhoneFormat,
 } from "@/lib/validations";
+import { ExperienceContentRenderer } from "./shared/experience-content";
 
 interface SplitScreenTemplateProps {
   resume: Resume;
@@ -157,21 +158,12 @@ export function SplitScreenTemplate({
                       </p>
                     </div>
                   </div>
-                  {exp.description && (
-                    <p className="mb-3 text-gray-700 text-sm leading-relaxed">
-                      {exp.description}
-                    </p>
-                  )}
-                  {exp.highlights && exp.highlights.length > 0 && (
-                    <ul className="space-y-1.5 text-sm">
-                      {exp.highlights.map((highlight, i) => (
-                        <li key={i} className="flex gap-2 text-gray-700">
-                          <span style={{ color: primaryColor }}>▸</span>
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <ExperienceContentRenderer
+                    experience={exp}
+                    textColor="text-gray-700"
+                    bulletColor={primaryColor}
+                    bulletStyle="arrow"
+                  />
                 </div>
               ))}
             </div>

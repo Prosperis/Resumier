@@ -3,7 +3,7 @@
  * Type definitions for resume templates with comprehensive metadata
  */
 
-import type { Resume } from "@/lib/api/types";
+import type { ExperienceFormat, Resume } from "@/lib/api/types";
 
 /**
  * Template Categories
@@ -175,6 +175,9 @@ export interface TemplateConfig {
   spacing?: SpacingSize;
   showPhoto?: boolean;
   showIcons?: boolean;
+
+  // Content format preferences
+  experienceFormat?: ExperienceFormat;
 
   // Section visibility
   sections?: {

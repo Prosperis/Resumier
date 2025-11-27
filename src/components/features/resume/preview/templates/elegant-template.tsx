@@ -6,6 +6,7 @@ import {
   getFullName,
   type PhoneFormat,
 } from "@/lib/validations";
+import { ExperienceContentRenderer } from "./shared/experience-content";
 
 interface ElegantTemplateProps {
   resume: Resume;
@@ -86,23 +87,11 @@ export function ElegantTemplate({ resume, config }: ElegantTemplateProps) {
                 </span>
               </div>
               <p className="text-gray-600 italic mb-3">{exp.company}</p>
-              {exp.description && (
-                <p className="text-gray-700 leading-relaxed mb-2">
-                  {exp.description}
-                </p>
-              )}
-              {exp.highlights && exp.highlights.length > 0 && (
-                <ul className="space-y-2 text-gray-700">
-                  {exp.highlights.map((highlight, i) => (
-                    <li
-                      key={i}
-                      className="pl-4 relative before:content-['—'] before:absolute before:left-0"
-                    >
-                      {highlight}
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <ExperienceContentRenderer
+                experience={exp}
+                textColor="text-gray-700"
+                bulletStyle="dash"
+              />
             </div>
           ))}
         </div>

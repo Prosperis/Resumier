@@ -3,7 +3,7 @@
  * Reusable work experience entries for templates
  */
 
-import type { Experience } from "@/lib/api/types";
+import type { Experience, ExperienceFormat } from "@/lib/api/types";
 import type { ColorScheme } from "@/lib/types/templates";
 
 interface ExperienceEntryProps {
@@ -11,6 +11,84 @@ interface ExperienceEntryProps {
   colorScheme?: ColorScheme;
   variant?: "default" | "compact" | "detailed" | "timeline";
   className?: string;
+}
+
+/**
+ * Renders experience content based on the format
+ * - structured: description paragraph + bullet highlights
+ * - freeform: just the description (can contain anything)
+ * - bullets: just the highlights as bullets
+ */
+function ExperienceContent({
+  experience,
+  textColor,
+  textLightColor,
+  showKeyAchievements = false,
+}: {
+  experience: Experience;
+  textColor: string;
+  textLightColor: string;
+  showKeyAchievements?: boolean;
+}) {
+  const format = experience.format || "structured";
+  const hasDescription = experience.description && experience.description.trim();
+  const hasHighlights = experience.highlights && experience.highlights.length > 0 && experience.highlights.some(h => h.trim());
+
+  // Freeform: only show description (could be anything the user wrote)
+  if (format === "freeform") {
+    if (!hasDescription) return null;
+    return (
+      <p className="text-sm whitespace-pre-wrap" style={{ color: textLightColor }}>
+        {experience.description}
+      </p>
+    );
+  }
+
+  // Bullets only: only show highlights
+  if (format === "bullets") {
+    if (!hasHighlights) return null;
+    return (
+      <ul
+        className="list-inside list-disc space-y-1 text-sm"
+        style={{ color: textLightColor }}
+      >
+        {experience.highlights!.filter(h => h.trim()).map((highlight, idx) => (
+          <li key={idx}>{highlight}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  // Structured (default): description + highlights
+  return (
+    <>
+      {hasDescription && (
+        <p className="mb-2 text-sm" style={{ color: textLightColor }}>
+          {experience.description}
+        </p>
+      )}
+      {hasHighlights && (
+        <div>
+          {showKeyAchievements && (
+            <p
+              className="mb-1 text-xs font-semibold uppercase"
+              style={{ color: textLightColor }}
+            >
+              Key Achievements
+            </p>
+          )}
+          <ul
+            className="list-inside list-disc space-y-1 text-sm"
+            style={{ color: textLightColor }}
+          >
+            {experience.highlights!.filter(h => h.trim()).map((highlight, idx) => (
+              <li key={idx}>{highlight}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </>
+  );
 }
 
 export function ExperienceEntry({
@@ -58,27 +136,20 @@ export function ExperienceEntry({
             {experience.company}
           </p>
         )}
-        {experience.description && (
-          <p className="mb-2 text-sm" style={{ color: textLightColor }}>
-            {experience.description}
-          </p>
-        )}
-        {experience.highlights && experience.highlights.length > 0 && (
-          <ul
-            className="list-inside list-disc space-y-1 text-sm"
-            style={{ color: textLightColor }}
-          >
-            {experience.highlights.map((highlight, idx) => (
-              <li key={idx}>{highlight}</li>
-            ))}
-          </ul>
-        )}
+        <ExperienceContent
+          experience={experience}
+          textColor={textColor}
+          textLightColor={textLightColor}
+        />
       </div>
     );
   }
 
   // Compact variant - less spacing
   if (variant === "compact") {
+    const format = experience.format || "structured";
+    const hasHighlights = experience.highlights && experience.highlights.length > 0 && experience.highlights.some(h => h.trim());
+    
     return (
       <div className={className}>
         <div className="flex items-baseline justify-between">
@@ -98,12 +169,18 @@ export function ExperienceEntry({
             {experience.company}
           </p>
         )}
-        {experience.highlights && experience.highlights.length > 0 && (
+        {/* For compact, show limited content */}
+        {format === "freeform" && experience.description && (
+          <p className="mt-1 text-sm line-clamp-2" style={{ color: textLightColor }}>
+            {experience.description}
+          </p>
+        )}
+        {(format === "structured" || format === "bullets") && hasHighlights && (
           <ul
             className="mt-1 list-inside list-disc text-sm"
             style={{ color: textLightColor }}
           >
-            {experience.highlights.slice(0, 3).map((highlight, idx) => (
+            {experience.highlights!.filter(h => h.trim()).slice(0, 3).map((highlight, idx) => (
               <li key={idx}>{highlight}</li>
             ))}
           </ul>
@@ -152,29 +229,12 @@ export function ExperienceEntry({
             </div>
           )}
         </div>
-        {experience.description && (
-          <p className="mb-3 text-sm" style={{ color: textColor }}>
-            {experience.description}
-          </p>
-        )}
-        {experience.highlights && experience.highlights.length > 0 && (
-          <div>
-            <p
-              className="mb-1 text-xs font-semibold uppercase"
-              style={{ color: textLightColor }}
-            >
-              Key Achievements
-            </p>
-            <ul
-              className="list-inside list-disc space-y-1 text-sm"
-              style={{ color: textLightColor }}
-            >
-              {experience.highlights.map((highlight, idx) => (
-                <li key={idx}>{highlight}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <ExperienceContent
+          experience={experience}
+          textColor={textColor}
+          textLightColor={textLightColor}
+          showKeyAchievements={experience.format !== "freeform"}
+        />
       </div>
     );
   }
@@ -217,21 +277,11 @@ export function ExperienceEntry({
             {experience.company}
           </p>
         )}
-        {experience.description && (
-          <p className="mb-2 text-sm" style={{ color: textLightColor }}>
-            {experience.description}
-          </p>
-        )}
-        {experience.highlights && experience.highlights.length > 0 && (
-          <ul
-            className="list-inside list-disc space-y-1 text-sm"
-            style={{ color: textLightColor }}
-          >
-            {experience.highlights.map((highlight, idx) => (
-              <li key={idx}>{highlight}</li>
-            ))}
-          </ul>
-        )}
+        <ExperienceContent
+          experience={experience}
+          textColor={textColor}
+          textLightColor={textLightColor}
+        />
       </div>
     );
   }
