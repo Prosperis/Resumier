@@ -1,7 +1,32 @@
 import { del, get, set } from "idb-keyval";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import type { TemplateType } from "@/lib/types/templates";
+import type {
+  ColorScheme,
+  TemplateType,
+  Typography,
+} from "@/lib/types/templates";
+
+// Custom Font Type
+export interface CustomFont {
+  name: string;
+  fontFamily: string; // CSS font-family value
+  dataUrl: string; // Base64 data URL for the font file
+}
+
+// Style Customization Types
+export interface StyleCustomization {
+  // Color theme preset name (e.g., "navy", "purple", "coral")
+  colorTheme: string;
+  // Individual color overrides
+  colorOverrides: Partial<ColorScheme>;
+  // Font theme preset name (e.g., "modern", "classic", "creative")
+  fontTheme: string;
+  // Individual font overrides
+  fontOverrides: Partial<Typography>;
+  // Custom uploaded fonts
+  customFonts: CustomFont[];
+}
 
 // Types
 export interface WorkExperience {
@@ -82,6 +107,16 @@ interface ResumeStore {
   template: TemplateType;
   setTemplate: (template: TemplateType) => void;
 
+  // Style Customization
+  styleCustomization: StyleCustomization;
+  setColorTheme: (theme: string) => void;
+  setColorOverride: (key: keyof ColorScheme, value: string) => void;
+  setFontTheme: (theme: string) => void;
+  setFontOverride: (key: keyof Typography, value: Typography[keyof Typography]) => void;
+  addCustomFont: (font: CustomFont) => void;
+  removeCustomFont: (fontName: string) => void;
+  resetStyleCustomization: () => void;
+
   // User Info
   userInfo: UserInfo;
   setUserInfo: (info: UserInfo) => void;
@@ -118,8 +153,17 @@ interface ResumeStore {
   reset: () => void;
 }
 
+const initialStyleCustomization: StyleCustomization = {
+  colorTheme: "purple", // Default theme matching modern template
+  colorOverrides: {},
+  fontTheme: "modern", // Default font theme
+  fontOverrides: {},
+  customFonts: [],
+};
+
 const initialState = {
   template: "modern" as TemplateType,
+  styleCustomization: initialStyleCustomization,
   userInfo: {},
   jobInfo: {},
   jobs: [],
@@ -135,6 +179,67 @@ export const useResumeStore = create<ResumeStore>()(
 
         // Template Actions
         setTemplate: (template) => set({ template }),
+
+        // Style Customization Actions
+        setColorTheme: (theme) =>
+          set((state) => ({
+            styleCustomization: {
+              ...state.styleCustomization,
+              colorTheme: theme,
+              colorOverrides: {}, // Reset overrides when theme changes
+            },
+          })),
+        setColorOverride: (key, value) =>
+          set((state) => ({
+            styleCustomization: {
+              ...state.styleCustomization,
+              colorOverrides: {
+                ...state.styleCustomization.colorOverrides,
+                [key]: value,
+              },
+            },
+          })),
+        setFontTheme: (theme) =>
+          set((state) => ({
+            styleCustomization: {
+              ...state.styleCustomization,
+              fontTheme: theme,
+              fontOverrides: {}, // Reset overrides when theme changes
+            },
+          })),
+        setFontOverride: (key, value) =>
+          set((state) => ({
+            styleCustomization: {
+              ...state.styleCustomization,
+              fontOverrides: {
+                ...state.styleCustomization.fontOverrides,
+                [key]: value,
+              },
+            },
+          })),
+        addCustomFont: (font) =>
+          set((state) => ({
+            styleCustomization: {
+              ...state.styleCustomization,
+              customFonts: [
+                ...state.styleCustomization.customFonts.filter(
+                  (f) => f.name !== font.name
+                ),
+                font,
+              ],
+            },
+          })),
+        removeCustomFont: (fontName) =>
+          set((state) => ({
+            styleCustomization: {
+              ...state.styleCustomization,
+              customFonts: state.styleCustomization.customFonts.filter(
+                (f) => f.name !== fontName
+              ),
+            },
+          })),
+        resetStyleCustomization: () =>
+          set({ styleCustomization: initialStyleCustomization }),
 
         // User Info Actions
         setUserInfo: (info) => set({ userInfo: { ...info } }),
@@ -226,6 +331,8 @@ export const selectJobInfo = (state: ResumeStore) => state.jobInfo;
 export const selectJobs = (state: ResumeStore) => state.jobs;
 export const selectDocuments = (state: ResumeStore) => state.documents;
 export const selectContent = (state: ResumeStore) => state.content;
+export const selectStyleCustomization = (state: ResumeStore) =>
+  state.styleCustomization;
 
 // Action selectors
 export const selectUserInfoActions = (state: ResumeStore) => ({
@@ -258,4 +365,14 @@ export const selectContentActions = (state: ResumeStore) => ({
   setContent: state.setContent,
   updateContent: state.updateContent,
   resetContent: state.resetContent,
+});
+
+export const selectStyleActions = (state: ResumeStore) => ({
+  setColorTheme: state.setColorTheme,
+  setColorOverride: state.setColorOverride,
+  setFontTheme: state.setFontTheme,
+  setFontOverride: state.setFontOverride,
+  addCustomFont: state.addCustomFont,
+  removeCustomFont: state.removeCustomFont,
+  resetStyleCustomization: state.resetStyleCustomization,
 });

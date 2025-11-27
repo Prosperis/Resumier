@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { FileText, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ExportMenu } from "@/components/features/resume/export/export-menu";
+import { StyleCustomizer } from "@/components/features/resume/preview/style-customizer";
 import { TemplateSelector } from "@/components/features/resume/preview/template-selector";
 import { useAuthStore, selectIsDemo } from "@/stores/auth-store";
 import { useResumeStore } from "@/stores/resume-store";
@@ -76,6 +77,7 @@ export function RootLayout({ children }: RootLayoutProps) {
             {currentResume && (
               <>
                 <TemplateSelector selected={template} onSelect={setTemplate} />
+                <StyleCustomizer />
                 <ExportMenu resume={currentResume} />
               </>
             )}

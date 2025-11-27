@@ -26,19 +26,47 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
     resume.content;
 
   // Get colors from config or use defaults
-  const primaryColor = config?.colorScheme?.primary || "#8b5cf6";
+  const colors = {
+    primary: config?.colorScheme?.primary || "#8b5cf6",
+    secondary: config?.colorScheme?.secondary || "#a78bfa",
+    text: config?.colorScheme?.text || "#111827",
+    textLight: config?.colorScheme?.textLight || "#6b7280",
+    background: config?.colorScheme?.background || "#ffffff",
+    border: config?.colorScheme?.border || "#e5e7eb",
+  };
+
+  // Get typography from config or use defaults
+  const typography = {
+    headingFont: config?.typography?.headingFont || "Inter, sans-serif",
+    bodyFont: config?.typography?.bodyFont || "Inter, sans-serif",
+  };
+
+  // Helper to create rgba from hex for backgrounds
+  const hexToRgba = (hex: string, alpha: number) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
 
   return (
     <div
-      className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg"
-      style={{ colorScheme: "light" }}
+      className="mx-auto max-w-[21cm] bg-white shadow-lg"
+      style={{
+        colorScheme: "light",
+        color: colors.text,
+        fontFamily: typography.bodyFont,
+      }}
     >
       {/* Header Section */}
       <div
         className="p-8"
-        style={{ backgroundColor: primaryColor, color: "white" }}
+        style={{ backgroundColor: colors.primary, color: "white" }}
       >
-        <h1 className="mb-2 text-4xl font-bold">
+        <h1
+          className="mb-2 text-4xl font-bold"
+          style={{ fontFamily: typography.headingFont }}
+        >
           {getFullName(
             personalInfo.firstName,
             personalInfo.lastName,
@@ -80,11 +108,18 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 border-b-2 pb-1 text-xl font-bold"
-                style={{ color: primaryColor, borderColor: primaryColor }}
+                style={{
+                  color: colors.primary,
+                  borderColor: colors.primary,
+                  fontFamily: typography.headingFont,
+                }}
               >
                 Professional Summary
               </h2>
-              <p className="text-sm leading-relaxed text-gray-700">
+              <p
+                className="text-sm leading-relaxed"
+                style={{ color: colors.textLight }}
+              >
                 {personalInfo.summary}
               </p>
             </section>
@@ -101,7 +136,11 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
-                style={{ color: primaryColor, borderColor: primaryColor }}
+                style={{
+                  color: colors.primary,
+                  borderColor: colors.primary,
+                  fontFamily: typography.headingFont,
+                }}
               >
                 <Briefcase className="h-5 w-5" />
                 Experience
@@ -124,28 +163,43 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                       <div key={exp.id}>
                         <div className="mb-1 flex items-start justify-between">
                           {exp.position && (
-                            <h3 className="text-base font-bold">
+                            <h3
+                              className="text-base font-bold"
+                              style={{ color: colors.text }}
+                            >
                               {exp.position}
                             </h3>
                           )}
                           {dateRange && (
-                            <span className="text-sm text-gray-600">
+                            <span
+                              className="text-sm"
+                              style={{ color: colors.textLight }}
+                            >
                               {dateRange}
                             </span>
                           )}
                         </div>
                         {exp.company && (
-                          <p className="mb-2 text-sm font-semibold text-gray-700">
+                          <p
+                            className="mb-2 text-sm font-semibold"
+                            style={{ color: colors.textLight }}
+                          >
                             {exp.company}
                           </p>
                         )}
                         {exp.description && (
-                          <p className="mb-2 text-sm text-gray-700">
+                          <p
+                            className="mb-2 text-sm"
+                            style={{ color: colors.textLight }}
+                          >
                             {exp.description}
                           </p>
                         )}
                         {exp.highlights && exp.highlights.length > 0 && (
-                          <ul className="list-inside list-disc space-y-1 text-sm text-gray-700">
+                          <ul
+                            className="list-inside list-disc space-y-1 text-sm"
+                            style={{ color: colors.textLight }}
+                          >
                             {exp.highlights.map((highlight, idx) => (
                               <li key={idx}>{highlight}</li>
                             ))}
@@ -164,7 +218,11 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
-                style={{ color: "#8b5cf6", borderColor: "#8b5cf6" }}
+                style={{
+                  color: colors.primary,
+                  borderColor: colors.primary,
+                  fontFamily: typography.headingFont,
+                }}
               >
                 <GraduationCap className="h-5 w-5" />
                 Education
@@ -181,31 +239,51 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                       <div key={edu.id}>
                         <div className="mb-1 flex items-start justify-between">
                           {edu.degree && (
-                            <h3 className="text-base font-bold">
+                            <h3
+                              className="text-base font-bold"
+                              style={{ color: colors.text }}
+                            >
                               {edu.degree}
                             </h3>
                           )}
                           {dateRange && (
-                            <span className="text-sm text-gray-600">
+                            <span
+                              className="text-sm"
+                              style={{ color: colors.textLight }}
+                            >
                               {dateRange}
                             </span>
                           )}
                         </div>
                         {edu.institution && (
-                          <p className="text-sm font-semibold text-gray-700">
+                          <p
+                            className="text-sm font-semibold"
+                            style={{ color: colors.textLight }}
+                          >
                             {edu.institution}
                           </p>
                         )}
                         {edu.field && (
-                          <p className="text-sm text-gray-600">{edu.field}</p>
+                          <p
+                            className="text-sm"
+                            style={{ color: colors.textLight }}
+                          >
+                            {edu.field}
+                          </p>
                         )}
                         {edu.gpa && (
-                          <p className="text-sm text-gray-600">
+                          <p
+                            className="text-sm"
+                            style={{ color: colors.textLight }}
+                          >
                             GPA: {edu.gpa}
                           </p>
                         )}
                         {edu.honors && edu.honors.length > 0 && (
-                          <ul className="mt-1 list-inside list-disc text-sm text-gray-700">
+                          <ul
+                            className="mt-1 list-inside list-disc text-sm"
+                            style={{ color: colors.textLight }}
+                          >
                             {edu.honors.map((honor, idx) => (
                               <li key={idx}>{honor}</li>
                             ))}
@@ -229,14 +307,21 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 border-b-2 pb-1 text-lg font-bold"
-                style={{ color: "#8b5cf6", borderColor: "#8b5cf6" }}
+                style={{
+                  color: colors.primary,
+                  borderColor: colors.primary,
+                  fontFamily: typography.headingFont,
+                }}
               >
                 Skills
               </h2>
               <div className="space-y-3">
                 {skills.technical && skills.technical.length > 0 && (
                   <div>
-                    <h3 className="mb-1 text-sm font-semibold text-gray-800">
+                    <h3
+                      className="mb-1 text-sm font-semibold"
+                      style={{ color: colors.text }}
+                    >
                       Technical
                     </h3>
                     <div className="flex flex-wrap gap-1">
@@ -245,8 +330,8 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                           key={idx}
                           className="rounded px-2 py-1 text-xs"
                           style={{
-                            backgroundColor: "rgba(139, 92, 246, 0.1)",
-                            color: "#8b5cf6",
+                            backgroundColor: hexToRgba(colors.primary, 0.1),
+                            color: colors.primary,
                           }}
                         >
                           {skill}
@@ -257,7 +342,10 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                 )}
                 {skills.languages && skills.languages.length > 0 && (
                   <div>
-                    <h3 className="mb-1 text-sm font-semibold text-gray-800">
+                    <h3
+                      className="mb-1 text-sm font-semibold"
+                      style={{ color: colors.text }}
+                    >
                       Languages
                     </h3>
                     <div className="flex flex-wrap gap-1">
@@ -266,8 +354,8 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                           key={idx}
                           className="rounded px-2 py-1 text-xs"
                           style={{
-                            backgroundColor: "rgba(139, 92, 246, 0.1)",
-                            color: "#8b5cf6",
+                            backgroundColor: hexToRgba(colors.primary, 0.1),
+                            color: colors.primary,
                           }}
                         >
                           {lang}
@@ -278,7 +366,10 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                 )}
                 {skills.tools && skills.tools.length > 0 && (
                   <div>
-                    <h3 className="mb-1 text-sm font-semibold text-gray-800">
+                    <h3
+                      className="mb-1 text-sm font-semibold"
+                      style={{ color: colors.text }}
+                    >
                       Tools
                     </h3>
                     <div className="flex flex-wrap gap-1">
@@ -287,8 +378,8 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                           key={idx}
                           className="rounded px-2 py-1 text-xs"
                           style={{
-                            backgroundColor: "rgba(139, 92, 246, 0.1)",
-                            color: "#8b5cf6",
+                            backgroundColor: hexToRgba(colors.primary, 0.1),
+                            color: colors.primary,
                           }}
                         >
                           {tool}
@@ -299,7 +390,10 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                 )}
                 {skills.soft && skills.soft.length > 0 && (
                   <div>
-                    <h3 className="mb-1 text-sm font-semibold text-gray-800">
+                    <h3
+                      className="mb-1 text-sm font-semibold"
+                      style={{ color: colors.text }}
+                    >
                       Soft Skills
                     </h3>
                     <div className="flex flex-wrap gap-1">
@@ -308,8 +402,8 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                           key={idx}
                           className="rounded px-2 py-1 text-xs"
                           style={{
-                            backgroundColor: "rgba(139, 92, 246, 0.1)",
-                            color: "#8b5cf6",
+                            backgroundColor: hexToRgba(colors.primary, 0.1),
+                            color: colors.primary,
                           }}
                         >
                           {skill}
@@ -329,7 +423,11 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
-                style={{ color: "#8b5cf6", borderColor: "#8b5cf6" }}
+                style={{
+                  color: colors.primary,
+                  borderColor: colors.primary,
+                  fontFamily: typography.headingFont,
+                }}
               >
                 <Award className="h-4 w-4" />
                 Certifications
@@ -340,15 +438,28 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                   .map((cert) => (
                     <div key={cert.id}>
                       {cert.name && (
-                        <p className="text-sm font-semibold text-gray-800">
+                        <p
+                          className="text-sm font-semibold"
+                          style={{ color: colors.text }}
+                        >
                           {cert.name}
                         </p>
                       )}
                       {cert.issuer && (
-                        <p className="text-xs text-gray-600">{cert.issuer}</p>
+                        <p
+                          className="text-xs"
+                          style={{ color: colors.textLight }}
+                        >
+                          {cert.issuer}
+                        </p>
                       )}
                       {cert.date && (
-                        <p className="text-xs text-gray-500">{cert.date}</p>
+                        <p
+                          className="text-xs"
+                          style={{ color: colors.textLight }}
+                        >
+                          {cert.date}
+                        </p>
                       )}
                     </div>
                   ))}
@@ -361,7 +472,11 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
-                style={{ color: "#8b5cf6", borderColor: "#8b5cf6" }}
+                style={{
+                  color: colors.primary,
+                  borderColor: colors.primary,
+                  fontFamily: typography.headingFont,
+                }}
               >
                 <LinkIcon className="h-4 w-4" />
                 Links
@@ -373,13 +488,16 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                     <div key={link.id} className="flex items-start gap-2">
                       <span
                         className="mt-0.5 flex-shrink-0"
-                        style={{ color: primaryColor }}
+                        style={{ color: colors.primary }}
                       >
                         {getLinkIcon(link.type, true, "h-3 w-3")}
                       </span>
                       <div>
                         {link.label && (
-                          <p className="text-xs font-semibold text-gray-800">
+                          <p
+                            className="text-xs font-semibold"
+                            style={{ color: colors.text }}
+                          >
                             {link.label}
                           </p>
                         )}
@@ -389,7 +507,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-xs break-all hover:underline"
-                            style={{ color: primaryColor }}
+                            style={{ color: colors.primary }}
                           >
                             {link.url}
                           </a>

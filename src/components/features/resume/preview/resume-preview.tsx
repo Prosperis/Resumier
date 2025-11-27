@@ -1,11 +1,35 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Resume } from "@/lib/api/types";
-import type { TemplateType } from "@/lib/types/templates";
+import {
+  COLOR_SCHEMES,
+  TYPOGRAPHY_PRESETS,
+  type TemplateType,
+} from "@/lib/types/templates";
+import {
+  useResumeStore,
+  selectStyleCustomization,
+  type CustomFont,
+} from "@/stores/resume-store";
 import {
   getTemplateComponent,
   getTemplateInfo,
 } from "./templates/template-registry";
+
+// Load custom font into document
+async function loadCustomFont(font: CustomFont): Promise<void> {
+  try {
+    // Check if font is already loaded
+    if (document.fonts.check(`12px "${font.fontFamily}"`)) {
+      return;
+    }
+    const fontFace = new FontFace(font.fontFamily, `url(${font.dataUrl})`);
+    await fontFace.load();
+    document.fonts.add(fontFace);
+  } catch (error) {
+    console.error(`Failed to load font ${font.name}:`, error);
+  }
+}
 
 interface ResumePreviewProps {
   resume: Resume;
@@ -45,10 +69,40 @@ export function ResumePreview({ resume, template }: ResumePreviewProps) {
   const TemplateComponent = getTemplateComponent(template);
   const templateInfo = getTemplateInfo(template);
 
-  // Create config from template info
+  // Get style customization from store
+  const styleCustomization = useResumeStore(selectStyleCustomization);
+
+  // Load custom fonts when they change (with fallback for persisted state migration)
+  const customFonts = styleCustomization.customFonts || [];
+  useEffect(() => {
+    customFonts.forEach(loadCustomFont);
+  }, [customFonts]);
+
+  // Get base colors from selected theme (with fallback to template default)
+  // For "custom" theme, use neutral as base and let overrides define the colors
+  const baseColorScheme =
+    styleCustomization.colorTheme === "custom"
+      ? COLOR_SCHEMES.neutral
+      : COLOR_SCHEMES[styleCustomization.colorTheme] ||
+        templateInfo?.colorScheme ||
+        COLOR_SCHEMES.purple;
+
+  // Get base typography from selected theme (with fallback to template default)
+  const baseTypography =
+    TYPOGRAPHY_PRESETS[styleCustomization.fontTheme] ||
+    templateInfo?.typography ||
+    TYPOGRAPHY_PRESETS.modern;
+
+  // Create config by merging: template defaults < theme presets < user overrides
   const config = {
-    colorScheme: templateInfo?.colorScheme,
-    typography: templateInfo?.typography,
+    colorScheme: {
+      ...baseColorScheme,
+      ...styleCustomization.colorOverrides,
+    },
+    typography: {
+      ...baseTypography,
+      ...styleCustomization.fontOverrides,
+    },
     spacing: templateInfo?.spacing,
   };
 
