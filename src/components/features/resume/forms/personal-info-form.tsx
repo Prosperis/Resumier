@@ -11,13 +11,6 @@ import { useEffect, useState, useCallback } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Form,
   FormControl,
   FormDescription,
@@ -206,59 +199,48 @@ export function PersonalInfoForm({
   }, [watchedValues, enabled, save]);
 
   return (
-    <Card className="gap-3 py-3">
-      <CardHeader className="px-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-xs">Personal Information</CardTitle>
-            <CardDescription className="text-[10px]">
-              Your basic contact information and professional summary
-            </CardDescription>
-          </div>
-          <div className="text-muted-foreground flex items-center gap-1.5 text-[10px]">
-            {isSaving && (
-              <>
-                <Loader2 className="h-3 w-3 animate-spin" />
-                <span>Saving...</span>
-              </>
+    <div className="px-3 py-2 space-y-3">
+      <div className="text-muted-foreground flex items-center justify-end gap-1.5 text-[10px]">
+        {isSaving && (
+          <>
+            <Loader2 className="h-3 w-3 animate-spin" />
+            <span>Saving...</span>
+          </>
+        )}
+        {!isSaving && lastSaved && (
+          <span
+            className={cn(
+              "flex items-center gap-1.5 transition-opacity duration-500",
+              isFadingOut ? "opacity-0" : "opacity-100",
             )}
-            {!isSaving && lastSaved && (
-              <span
-                className={cn(
-                  "flex items-center gap-1.5 transition-opacity duration-500",
-                  isFadingOut ? "opacity-0" : "opacity-100",
-                )}
-              >
-                <CheckCircle2 className="h-3 w-3 text-green-600" />
-                <span>{formatLastSaved(lastSaved)}</span>
-              </span>
-            )}
-            {error && (
-              <>
-                <AlertCircle className="text-destructive h-3 w-3" />
-                <span>Failed to save</span>
-              </>
-            )}
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="px-3">
-        <Form {...form}>
-          <form className="space-y-3">
-            {/* Name Fields Row */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <FormLabel className="text-[11px]">Name</FormLabel>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleFlipNameOrder}
-                      disabled={!enabled}
-                      className="h-6 gap-1 px-2 text-[10px]"
-                    >
+          >
+            <CheckCircle2 className="h-3 w-3 text-green-600" />
+            <span>{formatLastSaved(lastSaved)}</span>
+          </span>
+        )}
+        {error && (
+          <>
+            <AlertCircle className="text-destructive h-3 w-3" />
+            <span>Failed to save</span>
+          </>
+        )}
+      </div>
+      <Form {...form}>
+        <form className="space-y-3">
+          {/* Name Fields Row */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <FormLabel className="text-[11px]">Name</FormLabel>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleFlipNameOrder}
+                    disabled={!enabled}
+                    className="h-6 gap-1 px-2 text-[10px]"
+                  >
                       <ArrowRightLeft className="h-3 w-3" />
                       <span className="hidden sm:inline">
                         {watchedValues.nameOrder === "lastFirst"
@@ -524,17 +506,16 @@ export function PersonalInfoForm({
                         className="text-xs"
                       />
                     </FormControl>
-                    <FormDescription className="text-[10px]">
-                      A brief professional summary
-                    </FormDescription>
-                    <FormMessage className="text-[10px]" />
-                  </FormItem>
-                );
-              }}
-            />
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+                <FormDescription className="text-[10px]">
+                  A brief professional summary
+                </FormDescription>
+                <FormMessage className="text-[10px]" />
+              </FormItem>
+            );
+          }}
+        />
+        </form>
+      </Form>
+    </div>
   );
 }
