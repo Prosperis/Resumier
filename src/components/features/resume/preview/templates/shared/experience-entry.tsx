@@ -31,14 +31,21 @@ function ExperienceContent({
   showKeyAchievements?: boolean;
 }) {
   const format = experience.format || "structured";
-  const hasDescription = experience.description && experience.description.trim();
-  const hasHighlights = experience.highlights && experience.highlights.length > 0 && experience.highlights.some(h => h.trim());
+  const hasDescription =
+    experience.description && experience.description.trim();
+  const hasHighlights =
+    experience.highlights &&
+    experience.highlights.length > 0 &&
+    experience.highlights.some((h) => h.trim());
 
   // Freeform: only show description (could be anything the user wrote)
   if (format === "freeform") {
     if (!hasDescription) return null;
     return (
-      <p className="text-sm whitespace-pre-wrap" style={{ color: textLightColor }}>
+      <p
+        className="text-sm whitespace-pre-wrap"
+        style={{ color: textLightColor }}
+      >
         {experience.description}
       </p>
     );
@@ -52,9 +59,11 @@ function ExperienceContent({
         className="list-inside list-disc space-y-1 text-sm"
         style={{ color: textLightColor }}
       >
-        {experience.highlights!.filter(h => h.trim()).map((highlight, idx) => (
-          <li key={idx}>{highlight}</li>
-        ))}
+        {experience
+          .highlights!.filter((h) => h.trim())
+          .map((highlight, idx) => (
+            <li key={idx}>{highlight}</li>
+          ))}
       </ul>
     );
   }
@@ -81,9 +90,11 @@ function ExperienceContent({
             className="list-inside list-disc space-y-1 text-sm"
             style={{ color: textLightColor }}
           >
-            {experience.highlights!.filter(h => h.trim()).map((highlight, idx) => (
-              <li key={idx}>{highlight}</li>
-            ))}
+            {experience
+              .highlights!.filter((h) => h.trim())
+              .map((highlight, idx) => (
+                <li key={idx}>{highlight}</li>
+              ))}
           </ul>
         </div>
       )}
@@ -148,8 +159,11 @@ export function ExperienceEntry({
   // Compact variant - less spacing
   if (variant === "compact") {
     const format = experience.format || "structured";
-    const hasHighlights = experience.highlights && experience.highlights.length > 0 && experience.highlights.some(h => h.trim());
-    
+    const hasHighlights =
+      experience.highlights &&
+      experience.highlights.length > 0 &&
+      experience.highlights.some((h) => h.trim());
+
     return (
       <div className={className}>
         <div className="flex items-baseline justify-between">
@@ -171,7 +185,10 @@ export function ExperienceEntry({
         )}
         {/* For compact, show limited content */}
         {format === "freeform" && experience.description && (
-          <p className="mt-1 text-sm line-clamp-2" style={{ color: textLightColor }}>
+          <p
+            className="mt-1 text-sm line-clamp-2"
+            style={{ color: textLightColor }}
+          >
             {experience.description}
           </p>
         )}
@@ -180,9 +197,12 @@ export function ExperienceEntry({
             className="mt-1 list-inside list-disc text-sm"
             style={{ color: textLightColor }}
           >
-            {experience.highlights!.filter(h => h.trim()).slice(0, 3).map((highlight, idx) => (
-              <li key={idx}>{highlight}</li>
-            ))}
+            {experience
+              .highlights!.filter((h) => h.trim())
+              .slice(0, 3)
+              .map((highlight, idx) => (
+                <li key={idx}>{highlight}</li>
+              ))}
           </ul>
         )}
       </div>

@@ -6,7 +6,11 @@ import { z } from "zod";
  * - "freeform": Single text block for free-flowing content
  * - "bullets": Only bullet points, no description paragraph
  */
-export const experienceFormatSchema = z.enum(["structured", "freeform", "bullets"]);
+export const experienceFormatSchema = z.enum([
+  "structured",
+  "freeform",
+  "bullets",
+]);
 
 /**
  * Experience Validation Schema

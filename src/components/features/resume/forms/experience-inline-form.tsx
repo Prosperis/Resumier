@@ -61,7 +61,7 @@ export function ExperienceInlineForm({
   );
   const [previousEndDate, setPreviousEndDate] = useState<string>("");
   const [format, setFormat] = useState<ExperienceFormat>(
-    defaultValues?.format || "structured"
+    defaultValues?.format || "structured",
   );
   const newIdRef = useRef<string>(crypto.randomUUID());
 
@@ -91,7 +91,11 @@ export function ExperienceInlineForm({
 
   const triggerSave = useCallback(() => {
     const filteredHighlights = highlights.filter((h) => h.trim() !== "");
-    const currentData = { ...watchedValues, highlights: filteredHighlights, format };
+    const currentData = {
+      ...watchedValues,
+      highlights: filteredHighlights,
+      format,
+    };
 
     // Only save if we have required fields
     if (
@@ -319,7 +323,9 @@ export function ExperienceInlineForm({
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="text-xs">
                     <p className="font-medium">Structured</p>
-                    <p className="text-muted-foreground">Description paragraph + bullet highlights</p>
+                    <p className="text-muted-foreground">
+                      Description paragraph + bullet highlights
+                    </p>
                   </TooltipContent>
                 </Tooltip>
                 <Tooltip>
@@ -336,7 +342,9 @@ export function ExperienceInlineForm({
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="text-xs">
                     <p className="font-medium">Bullets Only</p>
-                    <p className="text-muted-foreground">Just bullet points, no paragraph</p>
+                    <p className="text-muted-foreground">
+                      Just bullet points, no paragraph
+                    </p>
                   </TooltipContent>
                 </Tooltip>
                 <Tooltip>
@@ -353,7 +361,9 @@ export function ExperienceInlineForm({
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="text-xs">
                     <p className="font-medium">Freeform</p>
-                    <p className="text-muted-foreground">Single text block, write freely</p>
+                    <p className="text-muted-foreground">
+                      Single text block, write freely
+                    </p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -469,7 +479,8 @@ export function ExperienceInlineForm({
                       />
                     </FormControl>
                     <FormDescription className="text-[9px]">
-                      Write freely - paragraphs, sentences, or any format you prefer
+                      Write freely - paragraphs, sentences, or any format you
+                      prefer
                     </FormDescription>
                     <FormMessage className="text-[9px]" />
                   </FormItem>

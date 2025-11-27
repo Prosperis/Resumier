@@ -57,7 +57,7 @@ export function ExperienceFormDialog({
   );
   const [previousEndDate, setPreviousEndDate] = useState<string>("");
   const [format, setFormat] = useState<ExperienceFormat>(
-    defaultValues?.format || "structured"
+    defaultValues?.format || "structured",
   );
 
   const form = useForm<CreateExperienceFormData>({
@@ -234,7 +234,9 @@ export function ExperienceFormDialog({
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p className="font-medium">Structured</p>
-                    <p className="text-muted-foreground text-xs">Description paragraph + bullet highlights</p>
+                    <p className="text-muted-foreground text-xs">
+                      Description paragraph + bullet highlights
+                    </p>
                   </TooltipContent>
                 </Tooltip>
                 <Tooltip>
@@ -252,7 +254,9 @@ export function ExperienceFormDialog({
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p className="font-medium">Bullets Only</p>
-                    <p className="text-muted-foreground text-xs">Just bullet points, no paragraph</p>
+                    <p className="text-muted-foreground text-xs">
+                      Just bullet points, no paragraph
+                    </p>
                   </TooltipContent>
                 </Tooltip>
                 <Tooltip>
@@ -270,7 +274,9 @@ export function ExperienceFormDialog({
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p className="font-medium">Freeform</p>
-                    <p className="text-muted-foreground text-xs">Single text block, write freely</p>
+                    <p className="text-muted-foreground text-xs">
+                      Single text block, write freely
+                    </p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -388,7 +394,8 @@ export function ExperienceFormDialog({
                       />
                     </FormControl>
                     <FormDescription>
-                      Write freely - paragraphs, sentences, or any format you prefer
+                      Write freely - paragraphs, sentences, or any format you
+                      prefer
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

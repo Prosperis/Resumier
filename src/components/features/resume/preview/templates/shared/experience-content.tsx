@@ -28,7 +28,8 @@ export function ExperienceContentRenderer({
   className = "",
 }: ExperienceContentProps) {
   const format = experience.format || "structured";
-  const hasDescription = experience.description && experience.description.trim();
+  const hasDescription =
+    experience.description && experience.description.trim();
   const hasHighlights =
     experience.highlights &&
     experience.highlights.length > 0 &&
@@ -93,7 +94,9 @@ export function ExperienceContentRenderer({
   if (format === "freeform") {
     if (!hasDescription) return null;
     return (
-      <p className={`text-sm whitespace-pre-wrap leading-relaxed ${textColor} ${className}`}>
+      <p
+        className={`text-sm whitespace-pre-wrap leading-relaxed ${textColor} ${className}`}
+      >
         {experience.description}
       </p>
     );
@@ -123,7 +126,8 @@ export function ExperienceContentRenderer({
  */
 export function hasExperienceContent(experience: Experience): boolean {
   const format = experience.format || "structured";
-  const hasDescription = experience.description && experience.description.trim();
+  const hasDescription =
+    experience.description && experience.description.trim();
   const hasHighlights =
     experience.highlights &&
     experience.highlights.length > 0 &&
@@ -133,4 +137,3 @@ export function hasExperienceContent(experience: Experience): boolean {
   if (format === "bullets") return !!hasHighlights;
   return !!hasDescription || !!hasHighlights;
 }
-
