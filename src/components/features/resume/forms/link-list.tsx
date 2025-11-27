@@ -36,17 +36,12 @@ interface LinkListProps {
   onReorder?: (links: LinkFormData[]) => void;
 }
 
-// Use the shared getLinkIcon and linkTypeLabels from the centralized location
+// Use the shared getLinkIcon from the centralized location
 import { getLinkIcon as getIcon } from "@/components/features/resume/preview/templates/shared/contact-info";
-import { linkTypeLabels } from "@/lib/validations/links";
 import type { LinkType } from "@/lib/api/types";
 
 function getLinkIcon(type: LinkFormData["type"]) {
   return getIcon(type as LinkType, true, "h-3 w-3");
-}
-
-function getLinkTypeLabel(type: LinkFormData["type"]) {
-  return linkTypeLabels[type as keyof typeof linkTypeLabels] || "Other";
 }
 
 export function LinkList({
@@ -187,9 +182,6 @@ function LinkPreviewCard({
             <div className="flex items-center gap-1.5">
               {getLinkIcon(link.type)}
               <h3 className="text-xs font-semibold">{link.label}</h3>
-              <span className="text-muted-foreground bg-muted rounded-full px-1.5 py-0.5 text-[10px]">
-                {getLinkTypeLabel(link.type)}
-              </span>
             </div>
             <a
               href={link.url}

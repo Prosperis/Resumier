@@ -89,7 +89,7 @@ export function LinkFormDialog({
                   <FormLabel>Link Type</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>

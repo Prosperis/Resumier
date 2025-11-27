@@ -150,7 +150,7 @@ export function LinkInlineForm({
                   <FormLabel className="text-[10px]">Link Type</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value}
                   >
                     <FormControl>
                       <SelectTrigger className="h-7 text-[11px]">
