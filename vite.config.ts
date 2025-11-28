@@ -7,9 +7,10 @@ import { ViteImageOptimizer } from "vite-plugin-image-optimizer"
 import { VitePWA } from "vite-plugin-pwa"
 import viteCompression from "vite-plugin-compression"
 
-export default defineConfig(({ mode }) => {
-  // Use "/" for local development, "/Resumier/" for GitHub Pages deployment
-  const base = mode === "production" ? "/Resumier/" : "/"
+export default defineConfig(() => {
+  // Use "/" for Vercel deployment, "/Resumier/" only for GitHub Pages
+  // Set VITE_BASE_PATH=/Resumier/ environment variable for GitHub Pages deployment
+  const base = process.env.VITE_BASE_PATH || "/"
   
   return {
     base,
