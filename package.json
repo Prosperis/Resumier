@@ -110,6 +110,7 @@
     "oxlint": "^1.25.0",
     "rollup-plugin-visualizer": "^6.0.5",
     "sharp": "^0.34.4",
+    "svgo": "^4.0.0",
     "taze": "^19.8.1",
     "typescript": "~5.8.3",
     "vite": "^6.4.1",
