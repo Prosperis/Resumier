@@ -44,7 +44,7 @@ export default defineConfig(() => {
       avif: {
         quality: 70,
       },
-      // SVG optimization
+      // SVG optimization - SVGO format
       svg: {
         multipass: true,
         plugins: [
@@ -52,12 +52,14 @@ export default defineConfig(() => {
             name: "preset-default",
             params: {
               overrides: {
+                // Disable removeViewBox to keep viewBox for proper scaling
+                removeViewBox: false,
                 cleanupNumericValues: false,
-                removeViewBox: false, // Keep viewBox for proper scaling
               },
             },
           },
-          "sortAttrs",
+          // Additional plugins after preset-default
+          { name: "sortAttrs" },
           {
             name: "addAttributesToSVGElement",
             params: {
@@ -192,8 +194,9 @@ export default defineConfig(() => {
     target: "esnext",
     // CSS code splitting
     cssCodeSplit: true,
-    // Chunk size warnings
-    chunkSizeWarningLimit: 500,
+    // Chunk size warnings - increased since gzip/brotli compression reduces actual transfer size significantly
+    // vendor chunk is ~700KB minified but only ~180KB with brotli compression
+    chunkSizeWarningLimit: 750,
     // Don't report compressed size (faster builds, compression plugin shows it)
     reportCompressedSize: false,
     // Terser options for better minification (fallback if needed)
@@ -270,6 +273,31 @@ export default defineConfig(() => {
           // DnD Kit
           if (id.includes("@dnd-kit")) {
             return "dnd-kit"
+          }
+
+          // PDF generation libraries (large, lazy-loaded)
+          if (id.includes("jspdf") || id.includes("html2canvas")) {
+            return "pdf-generator"
+          }
+
+          // DOCX generation (Word document export)
+          if (id.includes("docx") || id.includes("file-saver")) {
+            return "docx-generator"
+          }
+
+          // Auth library
+          if (id.includes("better-auth")) {
+            return "auth"
+          }
+
+          // Animation libraries
+          if (id.includes("animejs")) {
+            return "motion"
+          }
+
+          // Sentry monitoring (only needed for error tracking)
+          if (id.includes("@sentry/")) {
+            return "sentry"
           }
 
           // Date utilities (if any)
