@@ -4,13 +4,7 @@
  */
 
 import type { Resume, Skills } from "@/lib/api/types";
-import {
-  Briefcase,
-  GraduationCap,
-  Mail,
-  Phone,
-  MapPin,
-} from "lucide-react";
+import { Briefcase, GraduationCap, Mail, Phone, MapPin } from "lucide-react";
 import {
   formatPhoneDisplay,
   getFullName,
@@ -44,8 +38,7 @@ function hasSkills(skills: Skills): boolean {
  * Executive Template - Senior leadership focused
  */
 export function ExecutiveTemplate({ resume }: TemplateProps) {
-  const { personalInfo, experience, education, skills } =
-    resume.content;
+  const { personalInfo, experience, education, skills } = resume.content;
 
   return (
     <div className="mx-auto max-w-[21cm] bg-white p-12 text-gray-900 shadow-lg font-serif">
@@ -133,9 +126,7 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
             <div key={idx} className="mb-3">
               <h3 className="font-bold text-lg">{edu.degree}</h3>
               <p className="text-gray-700">{edu.institution}</p>
-              {edu.endDate && (
-                <p className="text-gray-600">{edu.endDate}</p>
-              )}
+              {edu.endDate && <p className="text-gray-600">{edu.endDate}</p>}
             </div>
           ))}
         </div>
@@ -147,9 +138,7 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
           <h2 className="text-2xl font-bold mb-4 text-gray-900">
             Core Competencies
           </h2>
-          <p className="text-gray-700">
-            {getAllSkills(skills).join(" • ")}
-          </p>
+          <p className="text-gray-700">{getAllSkills(skills).join(" • ")}</p>
         </div>
       )}
     </div>
@@ -211,9 +200,7 @@ export function AcademicTemplate({ resume }: TemplateProps) {
             <div key={idx} className="mb-4">
               <h3 className="font-bold">{edu.degree}</h3>
               <p>{edu.institution}</p>
-              {edu.endDate && (
-                <p className="text-gray-600">{edu.endDate}</p>
-              )}
+              {edu.endDate && <p className="text-gray-600">{edu.endDate}</p>}
             </div>
           ))}
         </div>
@@ -488,9 +475,7 @@ export function TechModernTemplate({ resume }: TemplateProps) {
                   <h3 className="font-bold text-sm">{edu.degree}</h3>
                   <p className="text-sm">{edu.institution}</p>
                   {edu.endDate && (
-                    <p className="text-xs text-gray-600">
-                      {edu.endDate}
-                    </p>
+                    <p className="text-xs text-gray-600">{edu.endDate}</p>
                   )}
                 </div>
               ))}
@@ -611,9 +596,7 @@ export function CreativeProfessionalTemplate({ resume }: TemplateProps) {
                   <h3 className="font-bold">{edu.degree}</h3>
                   <p className="text-sm">{edu.institution}</p>
                   {edu.endDate && (
-                    <p className="text-sm text-gray-600">
-                      {edu.endDate}
-                    </p>
+                    <p className="text-sm text-gray-600">{edu.endDate}</p>
                   )}
                 </div>
               ))}

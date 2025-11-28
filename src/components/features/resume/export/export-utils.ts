@@ -382,7 +382,9 @@ ${escapeLaTeX(personalInfo.summary)}
  * This preserves the exact visual appearance of the rendered template
  * @internal Reserved for future use
  */
-export async function generatePDFFromRenderedTemplate(resume: Resume): Promise<void> {
+export async function generatePDFFromRenderedTemplate(
+  resume: Resume,
+): Promise<void> {
   // Wait a bit for DOM to be ready
   await new Promise((resolve) => setTimeout(resolve, 100));
 

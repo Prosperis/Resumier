@@ -50,7 +50,9 @@ export function useReducedMotion(): boolean {
       mediaQuery.addEventListener("change", handleChange);
     } else {
       // Fallback for older browsers - using type assertion
-      (mediaQuery as MediaQueryList & { addListener: typeof handleChange }).addListener(handleChange);
+      (
+        mediaQuery as MediaQueryList & { addListener: typeof handleChange }
+      ).addListener(handleChange);
     }
 
     // Cleanup
@@ -59,7 +61,9 @@ export function useReducedMotion(): boolean {
         mediaQuery.removeEventListener("change", handleChange);
       } else {
         // Fallback for older browsers - using type assertion
-        (mediaQuery as MediaQueryList & { removeListener: typeof handleChange }).removeListener(handleChange);
+        (
+          mediaQuery as MediaQueryList & { removeListener: typeof handleChange }
+        ).removeListener(handleChange);
       }
     };
   }, []);

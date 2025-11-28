@@ -1,10 +1,7 @@
 import { Briefcase, GraduationCap } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, type PhoneFormat } from "@/lib/validations";
 
 interface MagazineStyleTemplateProps {
   resume: Resume;
