@@ -208,9 +208,14 @@ export default defineConfig(() => {
       output: {
         // Manual chunking for better caching and code splitting
         manualChunks: (id) => {
-          // Core React AND lucide-react must be together
-          // lucide-react has internal state that requires React to be loaded first
-          if (id.includes("node_modules/react/") || id.includes("node_modules/react-dom/") || id.includes("lucide-react")) {
+          // Core React - must load first
+          if (id.includes("node_modules/react/") || id.includes("node_modules/react-dom/")) {
+            return "react"
+          }
+          
+          // Lucide icons - bundle with React to ensure proper initialization order
+          // lucide-react's createLucideIcon uses React.forwardRef which must be available
+          if (id.includes("lucide-react") || id.includes("node_modules/lucide")) {
             return "react"
           }
 
@@ -261,10 +266,6 @@ export default defineConfig(() => {
             // Other UI components
             return "ui-primitives"
           }
-
-          // Lucide icons - DO NOT separate into own chunk!
-          // lucide-react uses internal state that breaks when chunked separately
-          // Let it be part of the vendor chunk
 
           // DnD Kit
           if (id.includes("@dnd-kit")) {
