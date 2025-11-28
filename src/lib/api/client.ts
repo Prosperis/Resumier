@@ -51,9 +51,9 @@ export class ApiClient {
     const url = `${this.baseUrl}${endpoint}`;
 
     // Build headers
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       "Content-Type": "application/json",
-      ...options.headers,
+      ...(options.headers as Record<string, string>),
     };
 
     // Add auth token if available
@@ -66,12 +66,8 @@ export class ApiClient {
     const init: RequestInit = {
       ...options,
       headers,
+      body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
     };
-
-    // Stringify body if present
-    if (options.body !== undefined) {
-      init.body = JSON.stringify(options.body);
-    }
 
     try {
       // Make request

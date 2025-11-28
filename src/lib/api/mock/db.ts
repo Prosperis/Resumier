@@ -78,7 +78,9 @@ function generateSampleResumes(): Resume[] {
 
   const defaultContent: ResumeContent = {
     personalInfo: {
-      name: "",
+      firstName: "",
+      lastName: "",
+      nameOrder: "firstLast",
       email: "",
       phone: "",
       location: "",
@@ -103,7 +105,9 @@ function generateSampleResumes(): Resume[] {
       content: {
         ...defaultContent,
         personalInfo: {
-          name: "John Doe",
+          firstName: "John",
+          lastName: "Doe",
+          nameOrder: "firstLast",
           email: "john.doe@example.com",
           phone: "+1 (555) 123-4567",
           location: "San Francisco, CA",
@@ -143,7 +147,9 @@ function generateSampleResumes(): Resume[] {
       content: {
         ...defaultContent,
         personalInfo: {
-          name: "Jane Smith",
+          firstName: "Jane",
+          lastName: "Smith",
+          nameOrder: "firstLast",
           email: "jane.smith@example.com",
           phone: "+1 (555) 987-6543",
           location: "New York, NY",
@@ -215,7 +221,9 @@ class MockDatabase {
 
     const defaultContent: ResumeContent = {
       personalInfo: {
-        name: "",
+        firstName: "",
+        lastName: "",
+        nameOrder: "firstLast",
         email: "",
         phone: "",
         location: "",

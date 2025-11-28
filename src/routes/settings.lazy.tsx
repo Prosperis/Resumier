@@ -11,7 +11,13 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
 
@@ -85,18 +91,21 @@ function SettingsComponent() {
                 </p>
               </div>
               <Select
-                id="theme"
-                className="w-[180px]"
                 value={settings.theme}
-                onChange={(e) =>
+                onValueChange={(value) =>
                   updateSettings({
-                    theme: e.target.value as "light" | "dark" | "system",
+                    theme: value as "light" | "dark" | "system",
                   })
                 }
               >
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-                <option value="system">System</option>
+                <SelectTrigger id="theme" className="w-[180px]">
+                  <SelectValue placeholder="Select theme" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="light">Light</SelectItem>
+                  <SelectItem value="dark">Dark</SelectItem>
+                  <SelectItem value="system">System</SelectItem>
+                </SelectContent>
               </Select>
             </div>
             <div className="flex items-center justify-between">

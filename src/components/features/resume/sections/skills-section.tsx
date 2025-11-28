@@ -2,7 +2,13 @@ import { Plus, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { Skill } from "@/stores";
 
 interface SkillsProps {
@@ -44,21 +50,25 @@ export function SkillsSection({
             <Label>Proficiency</Label>
             <Select
               value={skill.proficiency ?? ""}
-              onChange={(e) => updateSkill(i, "proficiency", e.target.value)}
+              onValueChange={(value) => updateSkill(i, "proficiency", value)}
             >
-              <option value="">Select</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="professional">Professional</option>
-              <option value="expert">Expert</option>
-              {[...Array(10)].map((_, idx) => {
-                const val = (idx + 1).toString();
-                return (
-                  <option key={val} value={val}>
-                    {val}
-                  </option>
-                );
-              })}
+              <SelectTrigger>
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="beginner">Beginner</SelectItem>
+                <SelectItem value="intermediate">Intermediate</SelectItem>
+                <SelectItem value="professional">Professional</SelectItem>
+                <SelectItem value="expert">Expert</SelectItem>
+                {[...Array(10)].map((_, idx) => {
+                  const val = (idx + 1).toString();
+                  return (
+                    <SelectItem key={val} value={val}>
+                      {val}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
             </Select>
           </div>
           <Button

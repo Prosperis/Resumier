@@ -90,7 +90,9 @@ export const mockApi = {
 
         const defaultContent = {
           personalInfo: {
-            name: "",
+            firstName: "",
+            lastName: "",
+            nameOrder: "firstLast" as const,
             email: "",
             phone: "",
             location: "",
@@ -288,7 +290,9 @@ export const mockApi = {
       // Return mock public LinkedIn profile data
       return {
         personalInfo: {
-          name: "John Doe",
+          firstName: "John",
+          lastName: "Doe",
+          nameOrder: "firstLast" as const,
           email: "john.doe@linkedin.com",
           phone: "+1 (555) 123-4567",
           location: "San Francisco, CA",

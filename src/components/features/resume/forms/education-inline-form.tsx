@@ -15,7 +15,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -273,7 +272,7 @@ export function EducationInlineForm({
                           onCheckedChange={(checked) => {
                             field.onChange(checked);
                             if (checked) {
-                              setPreviousEndDate(form.getValues("endDate"));
+                              setPreviousEndDate(form.getValues("endDate") ?? "");
                               form.setValue("endDate", "");
                             } else {
                               form.setValue("endDate", previousEndDate);

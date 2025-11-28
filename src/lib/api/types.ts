@@ -50,6 +50,7 @@ export interface PersonalInfo {
   firstName: string;
   lastName: string;
   nameOrder: NameOrder;
+  title?: string; // Professional title (e.g., "Software Engineer", "Product Manager")
   email: string;
   phone: string;
   phoneFormat?: PhoneFormat;

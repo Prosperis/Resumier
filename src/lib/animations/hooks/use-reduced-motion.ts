@@ -49,8 +49,8 @@ export function useReducedMotion(): boolean {
     if (mediaQuery.addEventListener) {
       mediaQuery.addEventListener("change", handleChange);
     } else {
-      // @ts-expect-error - fallback for older browsers
-      mediaQuery.addListener(handleChange);
+      // Fallback for older browsers - using type assertion
+      (mediaQuery as MediaQueryList & { addListener: typeof handleChange }).addListener(handleChange);
     }
 
     // Cleanup
@@ -58,8 +58,8 @@ export function useReducedMotion(): boolean {
       if (mediaQuery.removeEventListener) {
         mediaQuery.removeEventListener("change", handleChange);
       } else {
-        // @ts-expect-error - fallback for older browsers
-        mediaQuery.removeListener(handleChange);
+        // Fallback for older browsers - using type assertion
+        (mediaQuery as MediaQueryList & { removeListener: typeof handleChange }).removeListener(handleChange);
       }
     };
   }, []);

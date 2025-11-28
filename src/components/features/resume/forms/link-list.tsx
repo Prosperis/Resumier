@@ -27,13 +27,13 @@ import { LinkInlineForm } from "./link-inline-form";
 
 interface LinkListProps {
   resumeId: string;
-  links: LinkFormData[];
+  links: Link[];
   editingId: string | null;
   isAddingNew: boolean;
   onEdit: (id: string) => void;
   onClose: () => void;
   onDelete: (id: string) => void;
-  onReorder?: (links: LinkFormData[]) => void;
+  onReorder?: (links: Link[]) => void;
 }
 
 // Use the shared getLinkIcon from the centralized location

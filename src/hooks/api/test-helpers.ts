@@ -5,7 +5,9 @@ import type { Resume, ResumeContent } from "../../lib/api/types";
  */
 export const createMockResumeContent = (): ResumeContent => ({
   personalInfo: {
-    name: "John Doe",
+    firstName: "John",
+    lastName: "Doe",
+    nameOrder: "firstLast",
     email: "john@example.com",
     phone: "555-0100",
     location: "San Francisco, CA",

@@ -3,7 +3,7 @@
  * Reusable work experience entries for templates
  */
 
-import type { Experience, ExperienceFormat } from "@/lib/api/types";
+import type { Experience } from "@/lib/api/types";
 import type { ColorScheme } from "@/lib/types/templates";
 
 interface ExperienceEntryProps {
@@ -21,7 +21,6 @@ interface ExperienceEntryProps {
  */
 function ExperienceContent({
   experience,
-  textColor,
   textLightColor,
   showKeyAchievements = false,
 }: {

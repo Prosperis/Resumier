@@ -380,8 +380,9 @@ ${escapeLaTeX(personalInfo.summary)}
 /**
  * Generate PDF from rendered template using html2canvas and jsPDF
  * This preserves the exact visual appearance of the rendered template
+ * @internal Reserved for future use
  */
-async function generatePDFFromRenderedTemplate(resume: Resume): Promise<void> {
+export async function generatePDFFromRenderedTemplate(resume: Resume): Promise<void> {
   // Wait a bit for DOM to be ready
   await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -475,8 +476,9 @@ async function generatePDFFromRenderedTemplate(resume: Resume): Promise<void> {
 /**
  * Generate LaTeX code from resume data
  * This creates LaTeX that matches the resume structure
+ * @internal Reserved for future use
  */
-function generateLaTeXCode(resume: Resume): string {
+export function generateLaTeXCode(resume: Resume): string {
   const { personalInfo, experience, education, skills, certifications, links } =
     resume.content;
 
@@ -661,8 +663,9 @@ ${escapeLaTeX(personalInfo.summary)}
 /**
  * Compile LaTeX code to PDF using LaTeX.Online API
  * Note: This may fail due to CORS restrictions. Falls back to html2canvas method.
+ * @internal Reserved for future use
  */
-async function compileLaTeXToPDF(latexCode: string): Promise<Blob> {
+export async function compileLaTeXToPDF(latexCode: string): Promise<Blob> {
   // Try LaTeX.Online API with CORS proxy or direct call
   try {
     const response = await fetch("https://latexonline.cc/compile", {
@@ -675,7 +678,7 @@ async function compileLaTeXToPDF(latexCode: string): Promise<Blob> {
     });
 
     if (!response.ok) {
-      const errorText = await response.text().catch(() => "Unknown error");
+      await response.text().catch(() => "Unknown error");
       throw new Error(
         `LaTeX compilation failed: ${response.status} ${response.statusText}`,
       );
@@ -683,7 +686,7 @@ async function compileLaTeXToPDF(latexCode: string): Promise<Blob> {
 
     const contentType = response.headers.get("content-type") || "";
     if (!contentType.includes("application/pdf")) {
-      const errorText = await response.text().catch(() => "");
+      await response.text().catch(() => "");
       throw new Error(`Expected PDF but got ${contentType}`);
     }
 

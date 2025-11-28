@@ -9,7 +9,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Sidebar,
   SidebarContent,
@@ -151,22 +157,21 @@ export function JobInfoDialog({
                 <div className="grid gap-2">
                   <Label htmlFor="workType">Type of Work</Label>
                   <Select
-                    id="workType"
                     value={workType}
-                    onChange={(e) =>
+                    onValueChange={(value) =>
                       setWorkType(
-                        e.target.value as
-                          | "onsite"
-                          | "remote"
-                          | "hybrid"
-                          | undefined,
+                        value as "onsite" | "remote" | "hybrid" | undefined,
                       )
                     }
                   >
-                    <option value="">Select</option>
-                    <option value="onsite">Onsite</option>
-                    <option value="remote">Remote</option>
-                    <option value="hybrid">Hybrid</option>
+                    <SelectTrigger id="workType">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="onsite">Onsite</SelectItem>
+                      <SelectItem value="remote">Remote</SelectItem>
+                      <SelectItem value="hybrid">Hybrid</SelectItem>
+                    </SelectContent>
                   </Select>
                 </div>
                 <div className="grid gap-2">

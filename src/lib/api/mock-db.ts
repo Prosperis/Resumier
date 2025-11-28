@@ -23,7 +23,9 @@ class MockDatabase {
       title: "Software Engineer Resume",
       content: {
         personalInfo: {
-          name: "John Doe",
+          firstName: "John",
+          lastName: "Doe",
+          nameOrder: "firstLast",
           email: "john.doe@example.com",
           phone: "+1 (555) 123-4567",
           location: "San Francisco, CA",

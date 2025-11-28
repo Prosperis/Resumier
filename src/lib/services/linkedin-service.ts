@@ -394,7 +394,9 @@ export function parseLinkedInProfile(
 
   return {
     personalInfo: {
-      name: `${profile.localizedFirstName} ${profile.localizedLastName}`,
+      firstName: profile.localizedFirstName,
+      lastName: profile.localizedLastName,
+      nameOrder: "firstLast",
       email,
       phone: "", // LinkedIn API doesn't provide phone in public profile
       location: "", // Would need additional API call

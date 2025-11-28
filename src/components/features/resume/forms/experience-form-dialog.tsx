@@ -195,7 +195,7 @@ export function ExperienceFormDialog({
                           onCheckedChange={(checked) => {
                             field.onChange(checked);
                             if (checked) {
-                              setPreviousEndDate(form.getValues("endDate"));
+                              setPreviousEndDate(form.getValues("endDate") ?? "");
                               form.setValue("endDate", "");
                             } else {
                               form.setValue("endDate", previousEndDate);

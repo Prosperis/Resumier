@@ -7,7 +7,9 @@ import type { Resume, ResumeContent } from "@/lib/api/types";
 
 export const demoResumeContent: ResumeContent = {
   personalInfo: {
-    name: "John Doe",
+    firstName: "John",
+    lastName: "Doe",
+    nameOrder: "firstLast",
     email: "john.doe@example.com",
     phone: "+1 (555) 123-4567",
     location: "San Francisco, CA",

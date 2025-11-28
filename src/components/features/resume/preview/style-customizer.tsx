@@ -1,4 +1,4 @@
-import { Palette, RotateCcw, Type, Upload, X } from "lucide-react";
+import { Palette, RotateCcw, Type, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

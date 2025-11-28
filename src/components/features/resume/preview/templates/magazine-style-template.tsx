@@ -3,7 +3,6 @@ import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
 import {
   formatPhoneDisplay,
-  getFullName,
   type PhoneFormat,
 } from "@/lib/validations";
 

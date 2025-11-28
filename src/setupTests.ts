@@ -45,5 +45,5 @@ class MockResizeObserver {
 
 // biome-ignore lint/suspicious/noExplicitAny: test environment requires global mock
 global.ResizeObserver = MockResizeObserver as any;
-// @ts-expect-error - global mock
-window.ResizeObserver = MockResizeObserver;
+// biome-ignore lint/suspicious/noExplicitAny: test environment requires global mock
+(window as any).ResizeObserver = MockResizeObserver;

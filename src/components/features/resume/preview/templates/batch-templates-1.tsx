@@ -3,11 +3,10 @@
  * Creates multiple template variants efficiently
  */
 
-import type { Resume } from "@/lib/api/types";
+import type { Resume, Skills } from "@/lib/api/types";
 import {
   Briefcase,
   GraduationCap,
-  Award,
   Mail,
   Phone,
   MapPin,
@@ -23,10 +22,29 @@ interface TemplateProps {
 }
 
 /**
+ * Helper function to get all skills as a flat array of strings
+ */
+function getAllSkills(skills: Skills): string[] {
+  return [
+    ...(skills.technical || []),
+    ...(skills.languages || []),
+    ...(skills.tools || []),
+    ...(skills.soft || []),
+  ];
+}
+
+/**
+ * Helper function to check if skills has any content
+ */
+function hasSkills(skills: Skills): boolean {
+  return getAllSkills(skills).length > 0;
+}
+
+/**
  * Executive Template - Senior leadership focused
  */
 export function ExecutiveTemplate({ resume }: TemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } =
+  const { personalInfo, experience, education, skills } =
     resume.content;
 
   return (
@@ -115,8 +133,8 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
             <div key={idx} className="mb-3">
               <h3 className="font-bold text-lg">{edu.degree}</h3>
               <p className="text-gray-700">{edu.institution}</p>
-              {edu.graduationDate && (
-                <p className="text-gray-600">{edu.graduationDate}</p>
+              {edu.endDate && (
+                <p className="text-gray-600">{edu.endDate}</p>
               )}
             </div>
           ))}
@@ -124,13 +142,13 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
       )}
 
       {/* Core Competencies */}
-      {skills && skills.length > 0 && (
+      {skills && hasSkills(skills) && (
         <div>
           <h2 className="text-2xl font-bold mb-4 text-gray-900">
             Core Competencies
           </h2>
           <p className="text-gray-700">
-            {skills.map((s) => s.name).join(" • ")}
+            {getAllSkills(skills).join(" • ")}
           </p>
         </div>
       )}
@@ -142,7 +160,7 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
  * Academic Template - CV-style for researchers and professors
  */
 export function AcademicTemplate({ resume }: TemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } =
+  const { personalInfo, experience, education, certifications } =
     resume.content;
 
   return (
@@ -193,8 +211,8 @@ export function AcademicTemplate({ resume }: TemplateProps) {
             <div key={idx} className="mb-4">
               <h3 className="font-bold">{edu.degree}</h3>
               <p>{edu.institution}</p>
-              {edu.graduationDate && (
-                <p className="text-gray-600">{edu.graduationDate}</p>
+              {edu.endDate && (
+                <p className="text-gray-600">{edu.endDate}</p>
               )}
             </div>
           ))}
@@ -329,8 +347,8 @@ export function CorporateTemplate({ resume }: TemplateProps) {
             <div key={idx} className="mb-3">
               <h3 className="font-bold">{edu.degree}</h3>
               <p>{edu.institution}</p>
-              {edu.graduationDate && (
-                <p className="text-gray-600 text-sm">{edu.graduationDate}</p>
+              {edu.endDate && (
+                <p className="text-gray-600 text-sm">{edu.endDate}</p>
               )}
             </div>
           ))}
@@ -338,15 +356,15 @@ export function CorporateTemplate({ resume }: TemplateProps) {
       )}
 
       {/* Skills */}
-      {skills && skills.length > 0 && (
+      {skills && hasSkills(skills) && (
         <div className="mb-6">
           <h2 className="text-sm font-bold uppercase tracking-wide mb-2 border-b border-gray-300 pb-1">
             Professional Skills
           </h2>
           <div className="grid grid-cols-2 gap-2">
-            {skills.map((skill, idx) => (
+            {getAllSkills(skills).map((skill, idx) => (
               <span key={idx} className="text-sm">
-                • {skill.name}
+                • {skill}
               </span>
             ))}
           </div>
@@ -446,19 +464,13 @@ export function TechModernTemplate({ resume }: TemplateProps) {
         {/* Sidebar */}
         <div className="flex-1 bg-gray-50 p-6 -mr-8 -mb-8">
           {/* Skills */}
-          {skills && skills.length > 0 && (
+          {skills && hasSkills(skills) && (
             <div className="mb-6">
               <h2 className="text-lg font-bold mb-3 text-blue-600">Skills</h2>
               <div className="space-y-2">
-                {skills.map((skill, idx) => (
+                {getAllSkills(skills).map((skill, idx) => (
                   <div key={idx}>
-                    <span className="text-sm font-semibold">{skill.name}</span>
-                    <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                      <div
-                        className="bg-blue-600 h-2 rounded-full"
-                        style={{ width: `${skill.level || 70}%` }}
-                      />
-                    </div>
+                    <span className="text-sm font-semibold">{skill}</span>
                   </div>
                 ))}
               </div>
@@ -475,9 +487,9 @@ export function TechModernTemplate({ resume }: TemplateProps) {
                 <div key={idx} className="mb-3">
                   <h3 className="font-bold text-sm">{edu.degree}</h3>
                   <p className="text-sm">{edu.institution}</p>
-                  {edu.graduationDate && (
+                  {edu.endDate && (
                     <p className="text-xs text-gray-600">
-                      {edu.graduationDate}
+                      {edu.endDate}
                     </p>
                   )}
                 </div>
@@ -570,18 +582,18 @@ export function CreativeProfessionalTemplate({ resume }: TemplateProps) {
         {/* Skills & Education Grid */}
         <div className="grid grid-cols-2 gap-6">
           {/* Skills */}
-          {skills && skills.length > 0 && (
+          {skills && hasSkills(skills) && (
             <div>
               <h2 className="text-2xl font-bold mb-4 text-purple-700">
                 Skills
               </h2>
               <div className="flex flex-wrap gap-2">
-                {skills.map((skill, idx) => (
+                {getAllSkills(skills).map((skill, idx) => (
                   <span
                     key={idx}
                     className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium"
                   >
-                    {skill.name}
+                    {skill}
                   </span>
                 ))}
               </div>
@@ -598,9 +610,9 @@ export function CreativeProfessionalTemplate({ resume }: TemplateProps) {
                 <div key={idx} className="mb-3">
                   <h3 className="font-bold">{edu.degree}</h3>
                   <p className="text-sm">{edu.institution}</p>
-                  {edu.graduationDate && (
+                  {edu.endDate && (
                     <p className="text-sm text-gray-600">
-                      {edu.graduationDate}
+                      {edu.endDate}
                     </p>
                   )}
                 </div>

@@ -17,7 +17,6 @@ import type {
   Link,
   ResumeContent,
 } from "@/lib/api/types";
-import type { LinkFormData } from "@/lib/validations/links";
 import { cn } from "@/lib/utils";
 import { ImportDialog } from "./import/import-dialog";
 import {
