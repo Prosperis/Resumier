@@ -96,7 +96,12 @@ export default defineConfig(() => {
       },
       workbox: {
         // Cache strategies
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,webp}"],
+        // Use more specific patterns to avoid duplicate cache entries
+        // (manifest icons and includeAssets are added separately)
+        globPatterns: ["**/*.{js,css,html,ico,svg}"],
+        // Exclude PWA icons and logos - they're added via manifest and includeAssets
+        globIgnores: ["**/logo_*.webp", "**/pwa-*.png"],
+        // Include additional assets explicitly via additionalManifestEntries if needed
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -256,10 +261,9 @@ export default defineConfig(() => {
             return "ui-primitives"
           }
 
-          // Lucide icons
-          if (id.includes("lucide-react")) {
-            return "icons"
-          }
+          // Lucide icons - DO NOT separate into own chunk!
+          // lucide-react uses internal state that breaks when chunked separately
+          // Let it be part of the vendor chunk
 
           // DnD Kit
           if (id.includes("@dnd-kit")) {

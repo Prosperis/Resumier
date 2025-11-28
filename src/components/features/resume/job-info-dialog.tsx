@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -108,6 +109,9 @@ export function JobInfoDialog({
       <DialogContent className="overflow-hidden p-0 md:max-h-[750px] md:max-w-[960px]">
         <DialogHeader>
           <DialogTitle>Job Information</DialogTitle>
+          <DialogDescription>
+            Add job details to tailor your resume for specific positions.
+          </DialogDescription>
         </DialogHeader>
         <SidebarProvider className="items-start">
           <Sidebar collapsible="none" className="hidden md:flex">
