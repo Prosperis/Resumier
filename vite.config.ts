@@ -210,26 +210,27 @@ export default defineConfig(() => {
     rollupOptions: {
       output: {
         // Manual chunking for better caching and code splitting
+        // NOTE: Chunk names are important - Rollup puts shared code in first chunk alphabetically
+        // Using numeric prefixes to control load order
         manualChunks: (id) => {
-          // Core React - must load first
+          // Core React - must load first (prefix with 0)
           if (id.includes("node_modules/react/") || id.includes("node_modules/react-dom/")) {
-            return "react"
+            return "0-react"
           }
           
           // Lucide icons - bundle with React to ensure proper initialization order
-          // lucide-react's createLucideIcon uses React.forwardRef which must be available
           if (id.includes("lucide-react") || id.includes("node_modules/lucide")) {
-            return "react"
+            return "0-react"
           }
 
-          // TanStack Query (separate from other TanStack)
-          if (id.includes("@tanstack/react-query")) {
-            return "tanstack-query"
-          }
-
-          // TanStack Router (separate for better caching)
+          // TanStack Router (core routing)
           if (id.includes("@tanstack/react-router")) {
-            return "tanstack-router"
+            return "1-tanstack-router"
+          }
+
+          // TanStack Query
+          if (id.includes("@tanstack/react-query")) {
+            return "1-tanstack-query"
           }
 
           // TanStack Table (only loaded on dashboard)
@@ -243,7 +244,7 @@ export default defineConfig(() => {
           }
 
           // Framer Motion (large animation library)
-          if (id.includes("framer-motion")) {
+          if (id.includes("framer-motion") || id.includes("animejs")) {
             return "motion"
           }
 
@@ -275,14 +276,19 @@ export default defineConfig(() => {
             return "dnd-kit"
           }
 
-          // PDF generation libraries (large, lazy-loaded)
-          if (id.includes("jspdf") || id.includes("html2canvas")) {
-            return "pdf-generator"
+          // Sentry monitoring (only needed for error tracking)
+          if (id.includes("@sentry/")) {
+            return "sentry"
           }
 
-          // DOCX generation (Word document export)
-          if (id.includes("docx") || id.includes("file-saver")) {
-            return "docx-generator"
+          // PDF generation libraries (large, lazy-loaded) - use z prefix to load last
+          if (id.includes("jspdf") || id.includes("html2canvas")) {
+            return "z-pdf-generator"
+          }
+
+          // DOCX generation (Word document export) - use z prefix to load last
+          if (id.includes("node_modules/docx") || id.includes("file-saver")) {
+            return "z-docx-generator"
           }
 
           // Auth library
@@ -290,22 +296,12 @@ export default defineConfig(() => {
             return "auth"
           }
 
-          // Animation libraries
-          if (id.includes("animejs")) {
-            return "motion"
-          }
-
-          // Sentry monitoring (only needed for error tracking)
-          if (id.includes("@sentry/")) {
-            return "sentry"
-          }
-
           // Date utilities (if any)
           if (id.includes("date-fns") || id.includes("dayjs")) {
             return "date-utils"
           }
 
-          // Remaining node_modules
+          // Remaining node_modules go to vendor
           if (id.includes("node_modules")) {
             return "vendor"
           }
