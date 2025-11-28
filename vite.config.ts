@@ -208,8 +208,9 @@ export default defineConfig(() => {
       output: {
         // Manual chunking for better caching and code splitting
         manualChunks: (id) => {
-          // Core React
-          if (id.includes("node_modules/react/") || id.includes("node_modules/react-dom/")) {
+          // Core React AND lucide-react must be together
+          // lucide-react has internal state that requires React to be loaded first
+          if (id.includes("node_modules/react/") || id.includes("node_modules/react-dom/") || id.includes("lucide-react")) {
             return "react"
           }
 
