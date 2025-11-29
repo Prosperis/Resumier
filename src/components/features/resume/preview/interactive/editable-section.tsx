@@ -4,7 +4,16 @@
  */
 
 import { forwardRef, type ReactNode, type MouseEvent } from "react";
-import { Pencil, Plus, Trash2, GripVertical } from "lucide-react";
+import {
+  Pencil,
+  Plus,
+  Trash2,
+  GripVertical,
+  ChevronUp,
+  ChevronDown,
+  Eye,
+  EyeOff,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   useOptionalInteractiveResume,
@@ -249,6 +258,172 @@ export function EditableSectionHeader({
           <Plus className="h-3 w-3" />
         </button>
       )}
+    </div>
+  );
+}
+
+/**
+ * SectionWrapper - Wraps an entire section with management controls (hide/show, reorder)
+ * This appears on the left side of sections for section-level management
+ */
+interface SectionWrapperProps {
+  children: ReactNode;
+  sectionType: EditableSectionType;
+  sectionLabel: string;
+  className?: string;
+  /** Whether this section is required and cannot be hidden */
+  required?: boolean;
+}
+
+export function SectionWrapper({
+  children,
+  sectionType,
+  sectionLabel,
+  className,
+  required = false,
+}: SectionWrapperProps) {
+  const context = useOptionalInteractiveResume();
+
+  // If not in interactive context or interactive mode is off, render normally
+  if (!context || !context.isInteractive) {
+    return <div className={className}>{children}</div>;
+  }
+
+  const {
+    toggleSectionVisibility,
+    moveSectionUp,
+    moveSectionDown,
+    getSectionIndex,
+    sectionOrder,
+  } = context;
+
+  const currentIndex = getSectionIndex(sectionType);
+  const isFirst = currentIndex === 0;
+  const isLast = currentIndex === sectionOrder.length - 1;
+
+  return (
+    <div className={cn("relative group/section", className)}>
+      {/* Section management controls - appear on the left on hover */}
+      <div
+        className={cn(
+          "absolute -left-10 top-0 bottom-0 flex flex-col items-center justify-start pt-1 gap-0.5",
+          "opacity-0 group-hover/section:opacity-100 transition-opacity",
+          "pointer-events-none group-hover/section:pointer-events-auto",
+        )}
+      >
+        {/* Move up */}
+        <button
+          type="button"
+          className={cn(
+            "p-1 rounded bg-slate-600 hover:bg-slate-700 text-white shadow-sm",
+            isFirst && "opacity-30 cursor-not-allowed",
+          )}
+          title={`Move ${sectionLabel} up`}
+          disabled={isFirst}
+          onClick={(e) => {
+            e.stopPropagation();
+            moveSectionUp(sectionType);
+          }}
+        >
+          <ChevronUp className="h-3 w-3" />
+        </button>
+
+        {/* Move down */}
+        <button
+          type="button"
+          className={cn(
+            "p-1 rounded bg-slate-600 hover:bg-slate-700 text-white shadow-sm",
+            isLast && "opacity-30 cursor-not-allowed",
+          )}
+          title={`Move ${sectionLabel} down`}
+          disabled={isLast}
+          onClick={(e) => {
+            e.stopPropagation();
+            moveSectionDown(sectionType);
+          }}
+        >
+          <ChevronDown className="h-3 w-3" />
+        </button>
+
+        {/* Hide/Show toggle */}
+        {!required && (
+          <button
+            type="button"
+            className="p-1 rounded bg-amber-500 hover:bg-amber-600 text-white shadow-sm mt-1"
+            title={`Hide ${sectionLabel}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleSectionVisibility(sectionType);
+            }}
+          >
+            <EyeOff className="h-3 w-3" />
+          </button>
+        )}
+      </div>
+
+      {children}
+    </div>
+  );
+}
+
+/**
+ * HiddenSectionPlaceholder - Shows a placeholder for hidden sections that can be restored
+ */
+interface HiddenSectionPlaceholderProps {
+  sectionType: EditableSectionType;
+  sectionLabel: string;
+}
+
+export function HiddenSectionPlaceholder({
+  sectionType,
+  sectionLabel,
+}: HiddenSectionPlaceholderProps) {
+  const context = useOptionalInteractiveResume();
+
+  // Only show in interactive mode
+  if (!context || !context.isInteractive) {
+    return null;
+  }
+
+  const { toggleSectionVisibility, isSectionVisible } = context;
+
+  // Only show if section is hidden
+  if (isSectionVisible(sectionType)) {
+    return null;
+  }
+
+  return (
+    <div
+      className={cn(
+        "relative group/hidden flex items-center justify-center",
+        "py-2 px-4 my-2 mx-0",
+        "border-2 border-dashed border-slate-300 rounded-md",
+        "bg-slate-50/50 hover:bg-slate-100/50 transition-colors cursor-pointer",
+      )}
+      onClick={() => toggleSectionVisibility(sectionType)}
+    >
+      <div className="flex items-center gap-2 text-slate-500">
+        <EyeOff className="h-4 w-4" />
+        <span className="text-sm font-medium">{sectionLabel}</span>
+        <span className="text-xs">(hidden)</span>
+      </div>
+      
+      {/* Show button on hover */}
+      <button
+        type="button"
+        className={cn(
+          "absolute right-2 p-1.5 rounded",
+          "bg-green-500 hover:bg-green-600 text-white shadow-sm",
+          "opacity-0 group-hover/hidden:opacity-100 transition-opacity",
+        )}
+        title={`Show ${sectionLabel}`}
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleSectionVisibility(sectionType);
+        }}
+      >
+        <Eye className="h-3.5 w-3.5" />
+      </button>
     </div>
   );
 }

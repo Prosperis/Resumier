@@ -7,14 +7,19 @@ export {
   InteractiveResumeProvider,
   useInteractiveResume,
   useOptionalInteractiveResume,
+  DEFAULT_SECTION_ORDER,
   type EditableSectionType,
+  type EditableSectionType as SectionType, // Alias for convenience
   type SelectedSection,
+  type SectionSettings,
 } from "./interactive-context";
 
 export {
   EditableSection,
   EditableSectionHeader,
   EditableText,
+  SectionWrapper,
+  HiddenSectionPlaceholder,
 } from "./editable-section";
 
 export {

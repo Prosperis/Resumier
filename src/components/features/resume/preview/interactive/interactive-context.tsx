@@ -42,6 +42,24 @@ export interface SelectedSection {
 }
 
 /**
+ * Section settings stored in resume content
+ */
+export interface SectionSettings {
+  hiddenSections: EditableSectionType[];
+  sectionOrder: EditableSectionType[];
+}
+
+export const DEFAULT_SECTION_ORDER: EditableSectionType[] = [
+  "personalInfo",
+  "summary",
+  "experience",
+  "education",
+  "skills",
+  "certifications",
+  "links",
+];
+
+/**
  * Interactive resume context value
  */
 interface InteractiveResumeContextValue {
@@ -52,12 +70,23 @@ interface InteractiveResumeContextValue {
 
   // Resume data
   resume: Resume;
+  
+  // Section settings
+  hiddenSections: EditableSectionType[];
+  sectionOrder: EditableSectionType[];
 
   // Actions
   setInteractive: (interactive: boolean) => void;
   selectSection: (section: SelectedSection | null) => void;
   hoverSection: (section: SelectedSection | null) => void;
   clearSelection: () => void;
+
+  // Section management
+  toggleSectionVisibility: (sectionType: EditableSectionType) => void;
+  moveSectionUp: (sectionType: EditableSectionType) => void;
+  moveSectionDown: (sectionType: EditableSectionType) => void;
+  isSectionVisible: (sectionType: EditableSectionType) => boolean;
+  getSectionIndex: (sectionType: EditableSectionType) => number;
 
   // Data update handlers
   onUpdatePersonalInfo: (data: Partial<PersonalInfo>) => void;
@@ -87,6 +116,11 @@ interface InteractiveResumeProviderProps {
   children: ReactNode;
   resume: Resume;
   isInteractive?: boolean;
+  hiddenSections: EditableSectionType[];
+  sectionOrder: EditableSectionType[];
+  onToggleSectionVisibility: (sectionType: EditableSectionType) => void;
+  onMoveSectionUp: (sectionType: EditableSectionType) => void;
+  onMoveSectionDown: (sectionType: EditableSectionType) => void;
   onUpdatePersonalInfo: (data: Partial<PersonalInfo>) => void;
   onUpdateExperience: (id: string, data: Partial<Experience>) => void;
   onAddExperience: () => void;
@@ -111,6 +145,11 @@ export function InteractiveResumeProvider({
   children,
   resume,
   isInteractive: initialInteractive = true,
+  hiddenSections,
+  sectionOrder,
+  onToggleSectionVisibility,
+  onMoveSectionUp,
+  onMoveSectionDown,
   onUpdatePersonalInfo,
   onUpdateExperience,
   onAddExperience,
@@ -150,15 +189,36 @@ export function InteractiveResumeProvider({
     setHoveredSection(null);
   }, []);
 
+  const isSectionVisible = useCallback(
+    (sectionType: EditableSectionType) => {
+      return !hiddenSections.includes(sectionType);
+    },
+    [hiddenSections],
+  );
+
+  const getSectionIndex = useCallback(
+    (sectionType: EditableSectionType) => {
+      return sectionOrder.indexOf(sectionType);
+    },
+    [sectionOrder],
+  );
+
   const value: InteractiveResumeContextValue = {
     isInteractive,
     selectedSection,
     hoveredSection,
     resume,
+    hiddenSections,
+    sectionOrder,
     setInteractive,
     selectSection,
     hoverSection,
     clearSelection,
+    toggleSectionVisibility: onToggleSectionVisibility,
+    moveSectionUp: onMoveSectionUp,
+    moveSectionDown: onMoveSectionDown,
+    isSectionVisible,
+    getSectionIndex,
     onUpdatePersonalInfo,
     onUpdateExperience,
     onAddExperience,

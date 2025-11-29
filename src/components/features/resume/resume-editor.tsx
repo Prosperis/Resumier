@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react";
-import { MousePointerClick, FormInput } from "lucide-react";
+import {
+  User,
+  Briefcase,
+  GraduationCap,
+  Wrench,
+  Award,
+  Link as LinkIcon,
+  ChevronRight,
+  ChevronLeft,
+} from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import { useResumeStore } from "@/stores/resume-store";
-import { useUIStore, selectSetCurrentResume } from "@/stores/ui-store";
-import { Button } from "@/components/ui/button";
+import { useUIStore, selectSetCurrentResume, selectToggleResumeBuilderSection } from "@/stores/ui-store";
 import {
   Tooltip,
   TooltipContent,
@@ -13,6 +21,16 @@ import { cn } from "@/lib/utils";
 import { InteractiveResumePreview } from "./preview/interactive-resume-preview";
 import { ResumeBuilder } from "./resume-builder";
 
+// Sidebar section icons mapping
+const sidebarSections = [
+  { id: "personal", label: "Personal Info", icon: User },
+  { id: "experience", label: "Experience", icon: Briefcase },
+  { id: "education", label: "Education", icon: GraduationCap },
+  { id: "skills", label: "Skills", icon: Wrench },
+  { id: "certifications", label: "Certifications", icon: Award },
+  { id: "links", label: "Links", icon: LinkIcon },
+] as const;
+
 interface ResumeEditorProps {
   resume: Resume;
 }
@@ -20,8 +38,10 @@ interface ResumeEditorProps {
 export function ResumeEditor({ resume }: ResumeEditorProps) {
   const template = useResumeStore((state) => state.template);
   const setCurrentResume = useUIStore(selectSetCurrentResume);
-  const [isInteractive, setIsInteractive] = useState(true);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const toggleSection = useUIStore(selectToggleResumeBuilderSection);
+
+  // Sidebar state
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
 
   // Set/clear the current resume for navbar actions
   useEffect(() => {
@@ -29,91 +49,110 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
     return () => setCurrentResume(null);
   }, [resume, setCurrentResume]);
 
+  // Handle clicking a section icon - opens that section and expands sidebar
+  const handleSectionClick = (sectionId: string) => {
+    toggleSection(sectionId as Parameters<typeof toggleSection>[0]);
+    if (!isSidebarExpanded) {
+      setIsSidebarExpanded(true);
+    }
+  };
+
+  // Toggle sidebar expanded state
+  const handleToggleSidebar = () => {
+    setIsSidebarExpanded(!isSidebarExpanded);
+  };
+
   return (
-    <div className="flex h-full flex-col">
-      {/* Mode Toggle Bar */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">Edit mode:</span>
-          <div className="flex items-center gap-1 bg-muted rounded-md p-0.5">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={cn(
-                    "h-7 px-2 text-xs gap-1.5",
-                    isInteractive && "bg-background shadow-sm",
-                  )}
-                  onClick={() => setIsInteractive(true)}
-                >
-                  <MousePointerClick className="h-3.5 w-3.5" />
-                  Interactive
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Click directly on the resume to edit sections</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={cn(
-                    "h-7 px-2 text-xs gap-1.5",
-                    !isInteractive && "bg-background shadow-sm",
-                  )}
-                  onClick={() => setIsInteractive(false)}
-                >
-                  <FormInput className="h-3.5 w-3.5" />
-                  Form
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Use the sidebar form to edit sections</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        </div>
-
-        {/* Toggle sidebar visibility */}
-        {!isInteractive && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-7 text-xs"
-            onClick={() => setShowSidebar(!showSidebar)}
-          >
-            {showSidebar ? "Hide Form" : "Show Form"}
-          </Button>
+    <div className="flex h-full">
+      {/* Collapsible Sidebar */}
+      <div
+        className={cn(
+          "group/sidebar relative flex flex-col border-r border-border bg-background transition-all duration-300 ease-in-out",
+          isSidebarExpanded ? "w-80 min-w-80" : "w-12"
         )}
-      </div>
-
-      {/* Content Area */}
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-        {/* Left Panel: Edit Form - visible based on mode */}
-        {(!isInteractive || showSidebar) && !isInteractive && (
-          <div className="w-1/3 flex flex-col border-r border-border bg-background">
-            <div className="flex-1 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]">
-              <ResumeBuilder />
-            </div>
-          </div>
-        )}
-
-        {/* Right Panel: Live Preview */}
-        <div
+      >
+        {/* Expand/Collapse Arrow - appears on hover at the right edge */}
+        <button
+          type="button"
+          onClick={handleToggleSidebar}
           className={cn(
-            "flex items-start justify-center bg-slate-200 dark:bg-slate-800 overflow-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] p-8",
-            isInteractive ? "flex-1" : showSidebar ? "w-2/3" : "flex-1",
+            "absolute top-1/2 -translate-y-1/2 -right-3 z-20",
+            "flex items-center justify-center w-6 h-6 rounded-full",
+            "bg-background border border-border",
+            "text-muted-foreground hover:text-foreground hover:bg-muted",
+            "opacity-0 group-hover/sidebar:opacity-100 transition-all duration-200",
+            "shadow-sm hover:shadow"
           )}
         >
-          <InteractiveResumePreview
-            resume={resume}
-            template={template}
-            isInteractive={isInteractive}
-          />
+          {isSidebarExpanded ? (
+            <ChevronLeft className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronRight className="h-3.5 w-3.5" />
+          )}
+        </button>
+
+        {/* Mini sidebar - visible when collapsed */}
+        <div
+          className={cn(
+            "flex flex-col h-full",
+            isSidebarExpanded ? "hidden" : "flex"
+          )}
+        >
+          {/* Section Icons - centered vertically */}
+          <div className="flex-1 flex flex-col items-center justify-center gap-1">
+            {sidebarSections.map((section) => (
+              <Tooltip key={section.id} delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    onClick={() => handleSectionClick(section.id)}
+                    className={cn(
+                      "flex items-center justify-center w-8 h-8 rounded-md",
+                      "text-muted-foreground hover:text-foreground hover:bg-muted",
+                      "transition-colors"
+                    )}
+                  >
+                    <section.icon className="h-4 w-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="right" sideOffset={8}>
+                  <p>{section.label}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </div>
         </div>
+
+        {/* Expanded sidebar content */}
+        <div
+          className={cn(
+            "flex flex-col h-full",
+            isSidebarExpanded ? "flex" : "hidden"
+          )}
+        >
+          {/* Sidebar header */}
+          <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/30">
+            <span className="text-xs font-medium text-muted-foreground">Edit Resume</span>
+          </div>
+
+          {/* Resume Builder Form */}
+          <div className="flex-1 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none]">
+            <ResumeBuilder />
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content: Live Preview - Always interactive */}
+      <div
+        className={cn(
+          "flex-1 flex items-start justify-center bg-slate-200 dark:bg-slate-800 overflow-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] p-8",
+        )}
+      >
+        <InteractiveResumePreview
+          resume={resume}
+          template={template}
+          isInteractive={true}
+        />
       </div>
     </div>
   );

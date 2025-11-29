@@ -4,13 +4,15 @@
  */
 
 import { useCallback } from "react";
-import type { Resume } from "@/lib/api/types";
+import type { Resume, ResumeContent } from "@/lib/api/types";
 import type { TemplateType } from "@/lib/types/templates";
 import { useUpdateResume } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
 import {
   InteractiveResumeProvider,
   SectionEditorController,
+  DEFAULT_SECTION_ORDER,
+  type EditableSectionType,
 } from "./interactive";
 import { InteractiveModernTemplate } from "./templates/interactive-modern-template";
 import { ResumePreview } from "./resume-preview";
@@ -37,6 +39,21 @@ export function InteractiveResumePreview({
   const { mutate: updateResume } = useUpdateResume();
   const { toast } = useToast();
 
+  // Get section settings from resume content
+  const contentWithSettings = resume.content as ResumeContent & {
+    hiddenSections?: EditableSectionType[];
+    sectionOrder?: EditableSectionType[];
+  };
+  
+  const hiddenSections = contentWithSettings.hiddenSections || [];
+  const sectionOrder = contentWithSettings.sectionOrder || DEFAULT_SECTION_ORDER;
+  
+  // Ensure all sections are in the order array
+  const normalizedOrder = [
+    ...sectionOrder,
+    ...DEFAULT_SECTION_ORDER.filter((s) => !sectionOrder.includes(s)),
+  ];
+
   // Helper to save resume content
   const saveContent = useCallback(
     (updates: Partial<typeof resume.content>) => {
@@ -62,6 +79,56 @@ export function InteractiveResumePreview({
       );
     },
     [resume.id, resume.content, updateResume, toast],
+  );
+
+  // Section visibility toggle
+  const handleToggleSectionVisibility = useCallback(
+    (sectionType: EditableSectionType) => {
+      // Don't allow hiding personalInfo
+      if (sectionType === "personalInfo") return;
+      
+      const isHidden = hiddenSections.includes(sectionType);
+      const newHiddenSections = isHidden
+        ? hiddenSections.filter((s) => s !== sectionType)
+        : [...hiddenSections, sectionType];
+      
+      saveContent({ hiddenSections: newHiddenSections } as Partial<typeof resume.content>);
+    },
+    [hiddenSections, saveContent],
+  );
+
+  // Move section up
+  const handleMoveSectionUp = useCallback(
+    (sectionType: EditableSectionType) => {
+      const currentIndex = normalizedOrder.indexOf(sectionType);
+      if (currentIndex <= 0) return; // Can't move up if first or not found
+      
+      const newOrder = [...normalizedOrder];
+      [newOrder[currentIndex - 1], newOrder[currentIndex]] = [
+        newOrder[currentIndex],
+        newOrder[currentIndex - 1],
+      ];
+      
+      saveContent({ sectionOrder: newOrder } as Partial<typeof resume.content>);
+    },
+    [normalizedOrder, saveContent],
+  );
+
+  // Move section down
+  const handleMoveSectionDown = useCallback(
+    (sectionType: EditableSectionType) => {
+      const currentIndex = normalizedOrder.indexOf(sectionType);
+      if (currentIndex === -1 || currentIndex >= normalizedOrder.length - 1) return;
+      
+      const newOrder = [...normalizedOrder];
+      [newOrder[currentIndex], newOrder[currentIndex + 1]] = [
+        newOrder[currentIndex + 1],
+        newOrder[currentIndex],
+      ];
+      
+      saveContent({ sectionOrder: newOrder } as Partial<typeof resume.content>);
+    },
+    [normalizedOrder, saveContent],
   );
 
   // Update handlers for each section type
@@ -283,6 +350,11 @@ export function InteractiveResumePreview({
     <InteractiveResumeProvider
       resume={resume}
       isInteractive={isInteractive}
+      hiddenSections={hiddenSections}
+      sectionOrder={normalizedOrder}
+      onToggleSectionVisibility={handleToggleSectionVisibility}
+      onMoveSectionUp={handleMoveSectionUp}
+      onMoveSectionDown={handleMoveSectionDown}
       onUpdatePersonalInfo={handleUpdatePersonalInfo}
       onUpdateExperience={handleUpdateExperience}
       onAddExperience={handleAddExperience}

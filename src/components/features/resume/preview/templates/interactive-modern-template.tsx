@@ -12,7 +12,7 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
-import type { Resume, SkillWithLevel } from "@/lib/api/types";
+import type { Resume, ResumeContent, SkillWithLevel } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
 import {
   formatPhoneDisplay,
@@ -24,6 +24,10 @@ import {
   EditableSection,
   EditableSectionHeader,
   useOptionalInteractiveResume,
+  SectionWrapper,
+  HiddenSectionPlaceholder,
+  DEFAULT_SECTION_ORDER,
+  type SectionType,
 } from "../interactive";
 
 // Helper to get skill name from string or SkillWithLevel
@@ -44,6 +48,22 @@ export function InteractiveModernTemplate({
     resume.content;
 
   const context = useOptionalInteractiveResume();
+
+  // Get hidden sections and order from context (which syncs with resume content)
+  const hiddenSections = context?.hiddenSections || 
+    (resume.content as ResumeContent & { hiddenSections?: SectionType[] }).hiddenSections || 
+    [];
+  const sectionOrder = context?.sectionOrder ||
+    (resume.content as ResumeContent & { sectionOrder?: SectionType[] }).sectionOrder || 
+    DEFAULT_SECTION_ORDER;
+
+  // Helper to check visibility using context
+  const isSectionVisible = (sectionType: SectionType) => {
+    if (context?.isSectionVisible) {
+      return context.isSectionVisible(sectionType);
+    }
+    return !hiddenSections.includes(sectionType);
+  };
 
   // Get colors from config or use defaults
   const colors = {
@@ -78,7 +98,7 @@ export function InteractiveModernTemplate({
         fontFamily: typography.bodyFont,
       }}
     >
-      {/* Header Section - Personal Info */}
+      {/* Header Section - Personal Info (always visible as it's required) */}
       <EditableSection
         sectionType="personalInfo"
         editLabel="Edit personal information"
@@ -128,483 +148,511 @@ export function InteractiveModernTemplate({
       <div className="grid grid-cols-3 gap-8 p-8">
         {/* Main Content - 2 columns */}
         <div className="col-span-2 space-y-6">
+          {/* Hidden Section Placeholders for main column sections */}
+          <HiddenSectionPlaceholder sectionType="summary" sectionLabel="Professional Summary" />
+          <HiddenSectionPlaceholder sectionType="experience" sectionLabel="Experience" />
+          <HiddenSectionPlaceholder sectionType="education" sectionLabel="Education" />
+
           {/* Summary */}
-          {personalInfo.summary && (
-            <EditableSection sectionType="summary" editLabel="Edit summary">
-              <section>
-                <h2
-                  className="mb-3 border-b-2 pb-1 text-xl font-bold"
-                  style={{
-                    color: colors.primary,
-                    borderColor: colors.primary,
-                    fontFamily: typography.headingFont,
-                  }}
-                >
-                  Professional Summary
-                </h2>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: colors.textLight }}
-                >
-                  {personalInfo.summary}
-                </p>
-              </section>
-            </EditableSection>
+          {isSectionVisible("summary") && personalInfo.summary && (
+            <SectionWrapper sectionType="summary" sectionLabel="Summary">
+              <EditableSection sectionType="summary" editLabel="Edit summary">
+                <section>
+                  <h2
+                    className="mb-3 border-b-2 pb-1 text-xl font-bold"
+                    style={{
+                      color: colors.primary,
+                      borderColor: colors.primary,
+                      fontFamily: typography.headingFont,
+                    }}
+                  >
+                    Professional Summary
+                  </h2>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: colors.textLight }}
+                  >
+                    {personalInfo.summary}
+                  </p>
+                </section>
+              </EditableSection>
+            </SectionWrapper>
           )}
 
           {/* Experience */}
-          {experience.filter(
-            (exp) =>
-              exp.position ||
-              exp.company ||
-              exp.description ||
-              (exp.highlights && exp.highlights.length > 0),
-          ).length > 0 && (
-            <section>
-              <EditableSectionHeader
-                sectionType="experience"
-                onAdd={context?.onAddExperience}
-              >
-                <h2
-                  className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
-                  style={{
-                    color: colors.primary,
-                    borderColor: colors.primary,
-                    fontFamily: typography.headingFont,
-                  }}
+          {isSectionVisible("experience") &&
+            experience.filter(
+              (exp) =>
+                exp.position ||
+                exp.company ||
+                exp.description ||
+                (exp.highlights && exp.highlights.length > 0),
+            ).length > 0 && (
+            <SectionWrapper sectionType="experience" sectionLabel="Experience">
+              <section>
+                <EditableSectionHeader
+                  sectionType="experience"
+                  onAdd={context?.onAddExperience}
                 >
-                  <Briefcase className="h-5 w-5" />
-                  Experience
-                </h2>
-              </EditableSectionHeader>
-              <div className="space-y-4">
-                {experience
-                  .filter(
-                    (exp) =>
-                      exp.position ||
-                      exp.company ||
-                      exp.description ||
-                      (exp.highlights && exp.highlights.length > 0),
-                  )
-                  .map((exp) => {
-                    const dateRange =
-                      exp.startDate || exp.endDate || exp.current
-                        ? `${exp.startDate || ""}${exp.startDate && (exp.endDate || exp.current) ? " - " : ""}${exp.current ? "Present" : exp.endDate || ""}`
-                        : null;
-                    return (
-                      <EditableSection
-                        key={exp.id}
-                        sectionType="experience"
-                        itemId={exp.id}
-                        editLabel={`Edit ${exp.position || "experience"}`}
-                        canDelete
-                        canReorder={experience.length > 1}
-                        onDelete={() => context?.onDeleteExperience(exp.id)}
-                      >
-                        <div>
-                          <div className="mb-1 flex items-start justify-between">
-                            {exp.position && (
-                              <h3
-                                className="text-base font-bold"
-                                style={{ color: colors.text }}
-                              >
-                                {exp.position}
-                              </h3>
-                            )}
-                            {dateRange && (
-                              <span
-                                className="text-sm"
+                  <h2
+                    className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
+                    style={{
+                      color: colors.primary,
+                      borderColor: colors.primary,
+                      fontFamily: typography.headingFont,
+                    }}
+                  >
+                    <Briefcase className="h-5 w-5" />
+                    Experience
+                  </h2>
+                </EditableSectionHeader>
+                <div className="space-y-4">
+                  {experience
+                    .filter(
+                      (exp) =>
+                        exp.position ||
+                        exp.company ||
+                        exp.description ||
+                        (exp.highlights && exp.highlights.length > 0),
+                    )
+                    .map((exp) => {
+                      const dateRange =
+                        exp.startDate || exp.endDate || exp.current
+                          ? `${exp.startDate || ""}${exp.startDate && (exp.endDate || exp.current) ? " - " : ""}${exp.current ? "Present" : exp.endDate || ""}`
+                          : null;
+                      return (
+                        <EditableSection
+                          key={exp.id}
+                          sectionType="experience"
+                          itemId={exp.id}
+                          editLabel={`Edit ${exp.position || "experience"}`}
+                          canDelete
+                          canReorder={experience.length > 1}
+                          onDelete={() => context?.onDeleteExperience(exp.id)}
+                        >
+                          <div>
+                            <div className="mb-1 flex items-start justify-between">
+                              {exp.position && (
+                                <h3
+                                  className="text-base font-bold"
+                                  style={{ color: colors.text }}
+                                >
+                                  {exp.position}
+                                </h3>
+                              )}
+                              {dateRange && (
+                                <span
+                                  className="text-sm"
+                                  style={{ color: colors.textLight }}
+                                >
+                                  {dateRange}
+                                </span>
+                              )}
+                            </div>
+                            {exp.company && (
+                              <p
+                                className="mb-2 text-sm font-semibold"
                                 style={{ color: colors.textLight }}
                               >
-                                {dateRange}
-                              </span>
+                                {exp.company}
+                              </p>
+                            )}
+                            {exp.description && (
+                              <p
+                                className="mb-2 text-sm"
+                                style={{ color: colors.textLight }}
+                              >
+                                {exp.description}
+                              </p>
+                            )}
+                            {exp.highlights && exp.highlights.length > 0 && (
+                              <ul
+                                className="list-inside list-disc space-y-1 text-sm"
+                                style={{ color: colors.textLight }}
+                              >
+                                {exp.highlights.map((highlight, idx) => (
+                                  <li key={idx}>{highlight}</li>
+                                ))}
+                              </ul>
                             )}
                           </div>
-                          {exp.company && (
-                            <p
-                              className="mb-2 text-sm font-semibold"
-                              style={{ color: colors.textLight }}
-                            >
-                              {exp.company}
-                            </p>
-                          )}
-                          {exp.description && (
-                            <p
-                              className="mb-2 text-sm"
-                              style={{ color: colors.textLight }}
-                            >
-                              {exp.description}
-                            </p>
-                          )}
-                          {exp.highlights && exp.highlights.length > 0 && (
-                            <ul
-                              className="list-inside list-disc space-y-1 text-sm"
-                              style={{ color: colors.textLight }}
-                            >
-                              {exp.highlights.map((highlight, idx) => (
-                                <li key={idx}>{highlight}</li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      </EditableSection>
-                    );
-                  })}
-              </div>
-            </section>
+                        </EditableSection>
+                      );
+                    })}
+                </div>
+              </section>
+            </SectionWrapper>
           )}
 
           {/* Education */}
-          {education.filter((edu) => edu.degree || edu.institution || edu.field)
-            .length > 0 && (
-            <section>
-              <EditableSectionHeader
-                sectionType="education"
-                onAdd={context?.onAddEducation}
-              >
-                <h2
-                  className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
-                  style={{
-                    color: colors.primary,
-                    borderColor: colors.primary,
-                    fontFamily: typography.headingFont,
-                  }}
+          {isSectionVisible("education") &&
+            education.filter(
+              (edu) => edu.degree || edu.institution || edu.field,
+            ).length > 0 && (
+            <SectionWrapper sectionType="education" sectionLabel="Education">
+              <section>
+                <EditableSectionHeader
+                  sectionType="education"
+                  onAdd={context?.onAddEducation}
                 >
-                  <GraduationCap className="h-5 w-5" />
-                  Education
-                </h2>
-              </EditableSectionHeader>
-              <div className="space-y-4">
-                {education
-                  .filter((edu) => edu.degree || edu.institution || edu.field)
-                  .map((edu) => {
-                    const dateRange =
-                      edu.startDate || edu.endDate || edu.current
-                        ? `${edu.startDate || ""}${edu.startDate && (edu.endDate || edu.current) ? " - " : ""}${edu.current ? "Present" : edu.endDate || ""}`
-                        : null;
-                    return (
-                      <EditableSection
-                        key={edu.id}
-                        sectionType="education"
-                        itemId={edu.id}
-                        editLabel={`Edit ${edu.degree || "education"}`}
-                        canDelete
-                        canReorder={education.length > 1}
-                        onDelete={() => context?.onDeleteEducation(edu.id)}
-                      >
-                        <div>
-                          <div className="mb-1 flex items-start justify-between">
-                            {edu.degree && (
-                              <h3
-                                className="text-base font-bold"
-                                style={{ color: colors.text }}
+                  <h2
+                    className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
+                    style={{
+                      color: colors.primary,
+                      borderColor: colors.primary,
+                      fontFamily: typography.headingFont,
+                    }}
+                  >
+                    <GraduationCap className="h-5 w-5" />
+                    Education
+                  </h2>
+                </EditableSectionHeader>
+                <div className="space-y-4">
+                  {education
+                    .filter((edu) => edu.degree || edu.institution || edu.field)
+                    .map((edu) => {
+                      const dateRange =
+                        edu.startDate || edu.endDate || edu.current
+                          ? `${edu.startDate || ""}${edu.startDate && (edu.endDate || edu.current) ? " - " : ""}${edu.current ? "Present" : edu.endDate || ""}`
+                          : null;
+                      return (
+                        <EditableSection
+                          key={edu.id}
+                          sectionType="education"
+                          itemId={edu.id}
+                          editLabel={`Edit ${edu.degree || "education"}`}
+                          canDelete
+                          canReorder={education.length > 1}
+                          onDelete={() => context?.onDeleteEducation(edu.id)}
+                        >
+                          <div>
+                            <div className="mb-1 flex items-start justify-between">
+                              {edu.degree && (
+                                <h3
+                                  className="text-base font-bold"
+                                  style={{ color: colors.text }}
+                                >
+                                  {edu.degree}
+                                </h3>
+                              )}
+                              {dateRange && (
+                                <span
+                                  className="text-sm"
+                                  style={{ color: colors.textLight }}
+                                >
+                                  {dateRange}
+                                </span>
+                              )}
+                            </div>
+                            {edu.institution && (
+                              <p
+                                className="text-sm font-semibold"
+                                style={{ color: colors.textLight }}
                               >
-                                {edu.degree}
-                              </h3>
+                                {edu.institution}
+                              </p>
                             )}
-                            {dateRange && (
-                              <span
+                            {edu.field && (
+                              <p
                                 className="text-sm"
                                 style={{ color: colors.textLight }}
                               >
-                                {dateRange}
-                              </span>
+                                {edu.field}
+                              </p>
+                            )}
+                            {edu.gpa && (
+                              <p
+                                className="text-sm"
+                                style={{ color: colors.textLight }}
+                              >
+                                GPA: {edu.gpa}
+                              </p>
+                            )}
+                            {edu.honors && edu.honors.length > 0 && (
+                              <ul
+                                className="mt-1 list-inside list-disc text-sm"
+                                style={{ color: colors.textLight }}
+                              >
+                                {edu.honors.map((honor, idx) => (
+                                  <li key={idx}>{honor}</li>
+                                ))}
+                              </ul>
                             )}
                           </div>
-                          {edu.institution && (
-                            <p
-                              className="text-sm font-semibold"
-                              style={{ color: colors.textLight }}
-                            >
-                              {edu.institution}
-                            </p>
-                          )}
-                          {edu.field && (
-                            <p
-                              className="text-sm"
-                              style={{ color: colors.textLight }}
-                            >
-                              {edu.field}
-                            </p>
-                          )}
-                          {edu.gpa && (
-                            <p
-                              className="text-sm"
-                              style={{ color: colors.textLight }}
-                            >
-                              GPA: {edu.gpa}
-                            </p>
-                          )}
-                          {edu.honors && edu.honors.length > 0 && (
-                            <ul
-                              className="mt-1 list-inside list-disc text-sm"
-                              style={{ color: colors.textLight }}
-                            >
-                              {edu.honors.map((honor, idx) => (
-                                <li key={idx}>{honor}</li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      </EditableSection>
-                    );
-                  })}
-              </div>
-            </section>
+                        </EditableSection>
+                      );
+                    })}
+                </div>
+              </section>
+            </SectionWrapper>
           )}
         </div>
 
         {/* Sidebar - 1 column */}
         <div className="space-y-6">
+          {/* Hidden Section Placeholders for sidebar sections */}
+          <HiddenSectionPlaceholder sectionType="skills" sectionLabel="Skills" />
+          <HiddenSectionPlaceholder sectionType="certifications" sectionLabel="Certifications" />
+          <HiddenSectionPlaceholder sectionType="links" sectionLabel="Links" />
+
           {/* Skills */}
-          {(skills.technical?.length > 0 ||
-            skills.languages?.length > 0 ||
-            skills.tools?.length > 0 ||
-            skills.soft?.length > 0) && (
-            <EditableSection sectionType="skills" editLabel="Edit skills">
-              <section>
-                <h2
-                  className="mb-3 border-b-2 pb-1 text-lg font-bold"
-                  style={{
-                    color: colors.primary,
-                    borderColor: colors.primary,
-                    fontFamily: typography.headingFont,
-                  }}
-                >
-                  Skills
-                </h2>
-                <div className="space-y-3">
-                  {skills.technical && skills.technical.length > 0 && (
-                    <div>
-                      <h3
-                        className="mb-1 text-sm font-semibold"
-                        style={{ color: colors.text }}
-                      >
-                        Technical
-                      </h3>
-                      <div className="flex flex-wrap gap-1">
-                        {skills.technical.map((skill, idx) => (
-                          <span
-                            key={idx}
-                            className="rounded px-2 py-1 text-xs"
-                            style={{
-                              backgroundColor: hexToRgba(colors.primary, 0.1),
-                              color: colors.primary,
-                            }}
-                          >
-                            {getSkillName(skill)}
-                          </span>
-                        ))}
+          {isSectionVisible("skills") &&
+            (skills.technical?.length > 0 ||
+              skills.languages?.length > 0 ||
+              skills.tools?.length > 0 ||
+              skills.soft?.length > 0) && (
+            <SectionWrapper sectionType="skills" sectionLabel="Skills">
+              <EditableSection sectionType="skills" editLabel="Edit skills">
+                <section>
+                  <h2
+                    className="mb-3 border-b-2 pb-1 text-lg font-bold"
+                    style={{
+                      color: colors.primary,
+                      borderColor: colors.primary,
+                      fontFamily: typography.headingFont,
+                    }}
+                  >
+                    Skills
+                  </h2>
+                  <div className="space-y-3">
+                    {skills.technical && skills.technical.length > 0 && (
+                      <div>
+                        <h3
+                          className="mb-1 text-sm font-semibold"
+                          style={{ color: colors.text }}
+                        >
+                          Technical
+                        </h3>
+                        <div className="flex flex-wrap gap-1">
+                          {skills.technical.map((skill, idx) => (
+                            <span
+                              key={idx}
+                              className="rounded px-2 py-1 text-xs"
+                              style={{
+                                backgroundColor: hexToRgba(colors.primary, 0.1),
+                                color: colors.primary,
+                              }}
+                            >
+                              {getSkillName(skill)}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {skills.languages && skills.languages.length > 0 && (
-                    <div>
-                      <h3
-                        className="mb-1 text-sm font-semibold"
-                        style={{ color: colors.text }}
-                      >
-                        Languages
-                      </h3>
-                      <div className="flex flex-wrap gap-1">
-                        {skills.languages.map((lang, idx) => (
-                          <span
-                            key={idx}
-                            className="rounded px-2 py-1 text-xs"
-                            style={{
-                              backgroundColor: hexToRgba(colors.primary, 0.1),
-                              color: colors.primary,
-                            }}
-                          >
-                            {getSkillName(lang)}
-                          </span>
-                        ))}
+                    )}
+                    {skills.languages && skills.languages.length > 0 && (
+                      <div>
+                        <h3
+                          className="mb-1 text-sm font-semibold"
+                          style={{ color: colors.text }}
+                        >
+                          Languages
+                        </h3>
+                        <div className="flex flex-wrap gap-1">
+                          {skills.languages.map((lang, idx) => (
+                            <span
+                              key={idx}
+                              className="rounded px-2 py-1 text-xs"
+                              style={{
+                                backgroundColor: hexToRgba(colors.primary, 0.1),
+                                color: colors.primary,
+                              }}
+                            >
+                              {getSkillName(lang)}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {skills.tools && skills.tools.length > 0 && (
-                    <div>
-                      <h3
-                        className="mb-1 text-sm font-semibold"
-                        style={{ color: colors.text }}
-                      >
-                        Tools
-                      </h3>
-                      <div className="flex flex-wrap gap-1">
-                        {skills.tools.map((tool, idx) => (
-                          <span
-                            key={idx}
-                            className="rounded px-2 py-1 text-xs"
-                            style={{
-                              backgroundColor: hexToRgba(colors.primary, 0.1),
-                              color: colors.primary,
-                            }}
-                          >
-                            {getSkillName(tool)}
-                          </span>
-                        ))}
+                    )}
+                    {skills.tools && skills.tools.length > 0 && (
+                      <div>
+                        <h3
+                          className="mb-1 text-sm font-semibold"
+                          style={{ color: colors.text }}
+                        >
+                          Tools
+                        </h3>
+                        <div className="flex flex-wrap gap-1">
+                          {skills.tools.map((tool, idx) => (
+                            <span
+                              key={idx}
+                              className="rounded px-2 py-1 text-xs"
+                              style={{
+                                backgroundColor: hexToRgba(colors.primary, 0.1),
+                                color: colors.primary,
+                              }}
+                            >
+                              {getSkillName(tool)}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {skills.soft && skills.soft.length > 0 && (
-                    <div>
-                      <h3
-                        className="mb-1 text-sm font-semibold"
-                        style={{ color: colors.text }}
-                      >
-                        Soft Skills
-                      </h3>
-                      <div className="flex flex-wrap gap-1">
-                        {skills.soft.map((skill, idx) => (
-                          <span
-                            key={idx}
-                            className="rounded px-2 py-1 text-xs"
-                            style={{
-                              backgroundColor: hexToRgba(colors.primary, 0.1),
-                              color: colors.primary,
-                            }}
-                          >
-                            {getSkillName(skill)}
-                          </span>
-                        ))}
+                    )}
+                    {skills.soft && skills.soft.length > 0 && (
+                      <div>
+                        <h3
+                          className="mb-1 text-sm font-semibold"
+                          style={{ color: colors.text }}
+                        >
+                          Soft Skills
+                        </h3>
+                        <div className="flex flex-wrap gap-1">
+                          {skills.soft.map((skill, idx) => (
+                            <span
+                              key={idx}
+                              className="rounded px-2 py-1 text-xs"
+                              style={{
+                                backgroundColor: hexToRgba(colors.primary, 0.1),
+                                color: colors.primary,
+                              }}
+                            >
+                              {getSkillName(skill)}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </section>
-            </EditableSection>
+                    )}
+                  </div>
+                </section>
+              </EditableSection>
+            </SectionWrapper>
           )}
 
           {/* Certifications */}
-          {certifications.filter(
-            (cert) => cert.name || cert.issuer || cert.date,
-          ).length > 0 && (
-            <section>
-              <EditableSectionHeader
-                sectionType="certifications"
-                onAdd={context?.onAddCertification}
-              >
-                <h2
-                  className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
-                  style={{
-                    color: colors.primary,
-                    borderColor: colors.primary,
-                    fontFamily: typography.headingFont,
-                  }}
+          {isSectionVisible("certifications") &&
+            certifications.filter(
+              (cert) => cert.name || cert.issuer || cert.date,
+            ).length > 0 && (
+            <SectionWrapper sectionType="certifications" sectionLabel="Certifications">
+              <section>
+                <EditableSectionHeader
+                  sectionType="certifications"
+                  onAdd={context?.onAddCertification}
                 >
-                  <Award className="h-4 w-4" />
-                  Certifications
-                </h2>
-              </EditableSectionHeader>
-              <div className="space-y-2">
-                {certifications
-                  .filter((cert) => cert.name || cert.issuer || cert.date)
-                  .map((cert) => (
-                    <EditableSection
-                      key={cert.id}
-                      sectionType="certifications"
-                      itemId={cert.id}
-                      editLabel={`Edit ${cert.name || "certification"}`}
-                      canDelete
-                      onDelete={() => context?.onDeleteCertification(cert.id)}
-                    >
-                      <div>
-                        {cert.name && (
-                          <p
-                            className="text-sm font-semibold"
-                            style={{ color: colors.text }}
-                          >
-                            {cert.name}
-                          </p>
-                        )}
-                        {cert.issuer && (
-                          <p
-                            className="text-xs"
-                            style={{ color: colors.textLight }}
-                          >
-                            {cert.issuer}
-                          </p>
-                        )}
-                        {cert.date && (
-                          <p
-                            className="text-xs"
-                            style={{ color: colors.textLight }}
-                          >
-                            {cert.date}
-                          </p>
-                        )}
-                      </div>
-                    </EditableSection>
-                  ))}
-              </div>
-            </section>
+                  <h2
+                    className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
+                    style={{
+                      color: colors.primary,
+                      borderColor: colors.primary,
+                      fontFamily: typography.headingFont,
+                    }}
+                  >
+                    <Award className="h-4 w-4" />
+                    Certifications
+                  </h2>
+                </EditableSectionHeader>
+                <div className="space-y-2">
+                  {certifications
+                    .filter((cert) => cert.name || cert.issuer || cert.date)
+                    .map((cert) => (
+                      <EditableSection
+                        key={cert.id}
+                        sectionType="certifications"
+                        itemId={cert.id}
+                        editLabel={`Edit ${cert.name || "certification"}`}
+                        canDelete
+                        onDelete={() => context?.onDeleteCertification(cert.id)}
+                      >
+                        <div>
+                          {cert.name && (
+                            <p
+                              className="text-sm font-semibold"
+                              style={{ color: colors.text }}
+                            >
+                              {cert.name}
+                            </p>
+                          )}
+                          {cert.issuer && (
+                            <p
+                              className="text-xs"
+                              style={{ color: colors.textLight }}
+                            >
+                              {cert.issuer}
+                            </p>
+                          )}
+                          {cert.date && (
+                            <p
+                              className="text-xs"
+                              style={{ color: colors.textLight }}
+                            >
+                              {cert.date}
+                            </p>
+                          )}
+                        </div>
+                      </EditableSection>
+                    ))}
+                </div>
+              </section>
+            </SectionWrapper>
           )}
 
           {/* Links */}
-          {links.filter((link) => link.label || link.url).length > 0 && (
-            <section>
-              <EditableSectionHeader
-                sectionType="links"
-                onAdd={context?.onAddLink}
-              >
-                <h2
-                  className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
-                  style={{
-                    color: colors.primary,
-                    borderColor: colors.primary,
-                    fontFamily: typography.headingFont,
-                  }}
+          {isSectionVisible("links") &&
+            links.filter((link) => link.label || link.url).length > 0 && (
+            <SectionWrapper sectionType="links" sectionLabel="Links">
+              <section>
+                <EditableSectionHeader
+                  sectionType="links"
+                  onAdd={context?.onAddLink}
                 >
-                  <LinkIcon className="h-4 w-4" />
-                  Links
-                </h2>
-              </EditableSectionHeader>
-              <div className="space-y-2">
-                {links
-                  .filter((link) => link.label || link.url)
-                  .map((link) => (
-                    <EditableSection
-                      key={link.id}
-                      sectionType="links"
-                      itemId={link.id}
-                      editLabel={`Edit ${link.label || "link"}`}
-                      canDelete
-                      onDelete={() => context?.onDeleteLink(link.id)}
-                    >
-                      <div className="flex items-start gap-2">
-                        <span
-                          className="mt-0.5 flex-shrink-0"
-                          style={{ color: colors.primary }}
-                        >
-                          {getLinkIcon(link.type, true, "h-3 w-3")}
-                        </span>
-                        <div>
-                          {link.label && (
-                            <p
-                              className="text-xs font-semibold"
-                              style={{ color: colors.text }}
-                            >
-                              {link.label}
-                            </p>
-                          )}
-                          {link.url && (
-                            <a
-                              href={link.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-xs break-all hover:underline"
-                              style={{ color: colors.primary }}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              {link.url}
-                            </a>
-                          )}
+                  <h2
+                    className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
+                    style={{
+                      color: colors.primary,
+                      borderColor: colors.primary,
+                      fontFamily: typography.headingFont,
+                    }}
+                  >
+                    <LinkIcon className="h-4 w-4" />
+                    Links
+                  </h2>
+                </EditableSectionHeader>
+                <div className="space-y-2">
+                  {links
+                    .filter((link) => link.label || link.url)
+                    .map((link) => (
+                      <EditableSection
+                        key={link.id}
+                        sectionType="links"
+                        itemId={link.id}
+                        editLabel={`Edit ${link.label || "link"}`}
+                        canDelete
+                        onDelete={() => context?.onDeleteLink(link.id)}
+                      >
+                        <div className="flex items-start gap-2">
+                          <span
+                            className="mt-0.5 flex-shrink-0"
+                            style={{ color: colors.primary }}
+                          >
+                            {getLinkIcon(link.type, true, "h-3 w-3")}
+                          </span>
+                          <div>
+                            {link.label && (
+                              <p
+                                className="text-xs font-semibold"
+                                style={{ color: colors.text }}
+                              >
+                                {link.label}
+                              </p>
+                            )}
+                            {link.url && (
+                              <a
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs break-all hover:underline"
+                                style={{ color: colors.primary }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                {link.url}
+                              </a>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </EditableSection>
-                  ))}
-              </div>
-            </section>
+                      </EditableSection>
+                    ))}
+                </div>
+              </section>
+            </SectionWrapper>
           )}
         </div>
       </div>
