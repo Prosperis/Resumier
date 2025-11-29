@@ -4,7 +4,9 @@ import type { Resume } from "../../lib/api/types";
 import { resumeQueryKey } from "./use-resume";
 import { resumesQueryKey } from "./use-resumes";
 import { useAuthStore, selectIsGuest } from "../../stores/auth-store";
-import { del, get, set } from "idb-keyval";
+import { get, set } from "idb-keyval";
+
+const IDB_STORE_KEY = "resumier-web-store";
 
 /**
  * Delete resume mutation
@@ -20,16 +22,25 @@ export function useDeleteResume() {
       // In guest mode, delete from IndexedDB
       if (isGuest) {
         try {
-          // Delete individual resume
-          await del(`resume-${id}`);
+          // Get existing resumes from the store
+          const idbData = await get(IDB_STORE_KEY);
+          const resumes = (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
 
-          // Remove from resumes list
-          const resumes = (await get("resumier-documents")) as
-            | Resume[]
-            | undefined;
-          if (Array.isArray(resumes)) {
-            const updatedResumes = resumes.filter((r) => r.id !== id);
-            await set("resumier-documents", updatedResumes);
+          // Filter out the deleted resume
+          const updatedResumes = resumes.filter((r) => r.id !== id);
+          await set(IDB_STORE_KEY, { resumes: updatedResumes });
+
+          // Also update the documents list
+          const documents = (await get("resumier-documents")) as Array<{
+            id: string;
+            title: string;
+            createdAt: string;
+            updatedAt: string;
+          }> | undefined;
+
+          if (documents) {
+            const updatedDocuments = documents.filter((doc) => doc.id !== id);
+            await set("resumier-documents", updatedDocuments);
           }
         } catch (error) {
           console.error("Failed to delete resume from local storage:", error);

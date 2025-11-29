@@ -4,6 +4,8 @@ import type { Resume } from "../../lib/api/types";
 import { useAuthStore, selectIsGuest } from "../../stores/auth-store";
 import { get } from "idb-keyval";
 
+const IDB_STORE_KEY = "resumier-web-store";
+
 /**
  * Query key for resumes list
  */
@@ -23,9 +25,12 @@ export function useResumes() {
       // In guest mode, fetch from IndexedDB
       if (isGuest) {
         try {
-          const resumes = await get("resumier-documents");
-          if (Array.isArray(resumes)) {
-            return resumes as Resume[];
+          const idbData = await get(IDB_STORE_KEY);
+          if (idbData && typeof idbData === "object" && "resumes" in idbData) {
+            const resumes = (idbData as { resumes: Resume[] }).resumes;
+            if (resumes && resumes.length > 0) {
+              return resumes;
+            }
           }
           return [] as Resume[];
         } catch (error) {

@@ -4,6 +4,8 @@ import type { Resume } from "../../lib/api/types";
 import { useAuthStore, selectIsGuest } from "../../stores/auth-store";
 import { get } from "idb-keyval";
 
+const IDB_STORE_KEY = "resumier-web-store";
+
 /**
  * Query key factory for single resume
  */
@@ -23,9 +25,14 @@ export function useResume(id: string) {
       // In guest mode, fetch from IndexedDB
       if (isGuest) {
         try {
-          const resume = await get(`resume-${id}`);
-          if (resume) {
-            return resume as Resume;
+          // Check the main resumier-web-store for the resumes array
+          const idbData = await get(IDB_STORE_KEY);
+          if (idbData && typeof idbData === "object" && "resumes" in idbData) {
+            const resumes = (idbData as { resumes: Resume[] }).resumes;
+            const resume = resumes.find((r) => r.id === id);
+            if (resume) {
+              return resume;
+            }
           }
           throw new Error("Resume not found in local storage");
         } catch (error) {

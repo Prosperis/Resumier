@@ -4,7 +4,9 @@ import type { Resume, UpdateResumeDto } from "../../lib/api/types";
 import { resumeQueryKey } from "./use-resume";
 import { resumesQueryKey } from "./use-resumes";
 import { useAuthStore, selectIsGuest } from "../../stores/auth-store";
-import { set } from "idb-keyval";
+import { set, get } from "idb-keyval";
+
+const IDB_STORE_KEY = "resumier-web-store";
 
 /**
  * Update resume variables
@@ -28,46 +30,50 @@ export function useUpdateResume() {
       // In guest mode, save to IndexedDB instead of API
       if (isGuest) {
         try {
-          // Get existing resume from cache or fetch it
-          let resume = queryClient.getQueryData<Resume>(resumeQueryKey(id));
-
-          if (!resume) {
-            // If not in cache, try to get from IndexedDB
-            const stored = await import("idb-keyval").then((m) =>
-              m.get(`resume-${id}`),
-            );
-            if (stored) {
-              resume = stored as Resume;
-            }
-          }
-
-          if (!resume) {
+          // Get existing resumes from the store
+          const idbData = await get(IDB_STORE_KEY);
+          const resumes = (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
+          
+          // Find the resume to update
+          const resumeIndex = resumes.findIndex((r) => r.id === id);
+          if (resumeIndex === -1) {
             throw new Error("Resume not found");
           }
 
+          const existingResume = resumes[resumeIndex];
+
           // Merge the update with existing resume
           const updatedResume: Resume = {
-            ...resume,
+            ...existingResume,
             ...data,
             content: data.content
-              ? { ...resume.content, ...data.content }
-              : resume.content,
+              ? { ...existingResume.content, ...data.content }
+              : existingResume.content,
             updatedAt: new Date().toISOString(),
           };
 
-          // Save to IndexedDB
-          await set(`resume-${id}`, updatedResume);
+          // Update the resume in the array
+          const updatedResumes = [...resumes];
+          updatedResumes[resumeIndex] = updatedResume;
 
-          // Also update the resume list in IndexedDB
-          const resumes = (await import("idb-keyval").then((m) =>
-            m.get("resumier-documents"),
-          )) as Resume[] | undefined;
+          // Save back to IndexedDB
+          await set(IDB_STORE_KEY, { resumes: updatedResumes });
 
-          if (resumes) {
-            const updatedResumes = resumes.map((r) =>
-              r.id === id ? updatedResume : r,
+          // Also update the documents list
+          const documents = (await get("resumier-documents")) as Array<{
+            id: string;
+            title: string;
+            createdAt: string;
+            updatedAt: string;
+          }> | undefined;
+
+          if (documents) {
+            const updatedDocuments = documents.map((doc) =>
+              doc.id === id
+                ? { ...doc, title: updatedResume.title, updatedAt: updatedResume.updatedAt }
+                : doc
             );
-            await set("resumier-documents", updatedResumes);
+            await set("resumier-documents", updatedDocuments);
           }
 
           return updatedResume;

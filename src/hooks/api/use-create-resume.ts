@@ -5,6 +5,8 @@ import { resumesQueryKey } from "./use-resumes";
 import { useAuthStore, selectIsGuest } from "../../stores/auth-store";
 import { set, get } from "idb-keyval";
 
+const IDB_STORE_KEY = "resumier-web-store";
+
 /**
  * Create resume mutation
  * Returns a React Query mutation hook for creating a new resume
@@ -27,18 +29,21 @@ export function useCreateResume() {
             updatedAt: new Date().toISOString(),
           };
 
-          // Save individual resume
-          await set(`resume-${newResume.id}`, newResume);
+          // Get existing resumes from the store
+          const idbData = await get(IDB_STORE_KEY);
+          const existingResumes = (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
 
-          // Add to resumes list
-          const resumes = (await get("resumier-documents")) as
-            | Resume[]
-            | undefined;
-          if (Array.isArray(resumes)) {
-            await set("resumier-documents", [...resumes, newResume]);
-          } else {
-            await set("resumier-documents", [newResume]);
-          }
+          // Add new resume to the list and save
+          await set(IDB_STORE_KEY, { resumes: [...existingResumes, newResume] });
+
+          // Also update the documents list
+          const documents = (await get("resumier-documents")) || [];
+          await set("resumier-documents", [...documents, {
+            id: newResume.id,
+            title: newResume.title,
+            createdAt: newResume.createdAt,
+            updatedAt: newResume.updatedAt,
+          }]);
 
           return newResume;
         } catch (error) {

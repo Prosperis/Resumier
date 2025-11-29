@@ -198,10 +198,11 @@ export class ApiClient {
 
 /**
  * Default API client instance
- * Uses environment variable or defaults to /api
+ * Uses environment variable or defaults to empty string
+ * Note: Endpoints already include the /api prefix (e.g., /api/resumes)
  */
 export const apiClient = new ApiClient({
-  baseUrl: import.meta.env.VITE_API_URL || "/api",
+  baseUrl: import.meta.env.VITE_API_URL || "",
   getAuthToken: () => {
     // Get token from localStorage (where auth store persists it)
     try {
