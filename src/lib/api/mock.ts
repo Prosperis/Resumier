@@ -1,14 +1,39 @@
+import { get, set } from "idb-keyval";
 import { mockDb } from "./mock-db";
 import type { CreateResumeDto, Resume, UpdateResumeDto } from "./types";
 
+const IDB_STORE_KEY = "resumier-web-store";
+
 /**
  * Check if we should use mock API
+ * Returns true in development, when VITE_USE_MOCK_API is set,
+ * or when in guest/demo mode (since there's no real backend)
  */
 export function useMockApi(): boolean {
-  return (
-    import.meta.env.MODE === "development" ||
-    import.meta.env.VITE_USE_MOCK_API === "true"
-  );
+  // Always use mock API in development
+  if (import.meta.env.MODE === "development") {
+    return true;
+  }
+
+  // Use mock API if explicitly enabled
+  if (import.meta.env.VITE_USE_MOCK_API === "true") {
+    return true;
+  }
+
+  // Use mock API in guest/demo mode (check localStorage for auth state)
+  try {
+    const authData = localStorage.getItem("resumier-auth");
+    if (authData) {
+      const auth = JSON.parse(authData);
+      if (auth?.state?.isGuest || auth?.state?.isDemo) {
+        return true;
+      }
+    }
+  } catch {
+    // Ignore errors
+  }
+
+  return false;
 }
 
 /**
@@ -55,16 +80,53 @@ export const mockApi = {
 
   /**
    * Handle /api/resumes requests
+   * Checks IndexedDB first for guest/demo mode data, falls back to in-memory mockDb
    */
   async handleResumes(
     method: string,
     id?: string,
     body?: unknown,
   ): Promise<Resume | Resume[] | { success: boolean }> {
+    // Helper to get resumes from IndexedDB
+    const getResumesFromIDB = async (): Promise<Resume[] | null> => {
+      try {
+        const idbData = await get(IDB_STORE_KEY);
+        if (idbData && typeof idbData === "object" && "resumes" in idbData) {
+          const resumes = (idbData as { resumes: Resume[] }).resumes;
+          if (resumes && resumes.length > 0) {
+            return resumes;
+          }
+        }
+      } catch (error) {
+        console.warn("Failed to read from IndexedDB:", error);
+      }
+      return null;
+    };
+
+    // Helper to save resumes to IndexedDB
+    const saveResumesToIDB = async (resumes: Resume[]): Promise<void> => {
+      try {
+        await set(IDB_STORE_KEY, { resumes });
+      } catch (error) {
+        console.warn("Failed to save to IndexedDB:", error);
+      }
+    };
+
     switch (method) {
       case "GET": {
+        // Try IndexedDB first
+        const idbResumes = await getResumesFromIDB();
+        
         if (id) {
           // GET /api/resumes/:id
+          if (idbResumes) {
+            const resume = idbResumes.find((r) => r.id === id);
+            if (resume) {
+              return resume;
+            }
+          }
+          
+          // Fall back to mockDb
           const resume = mockDb.getResume(id);
           if (!resume) {
             throw {
@@ -74,7 +136,11 @@ export const mockApi = {
           }
           return resume;
         }
+        
         // GET /api/resumes
+        if (idbResumes) {
+          return idbResumes;
+        }
         return mockDb.getResumes();
       }
 
@@ -110,13 +176,32 @@ export const mockApi = {
           links: [],
         };
 
-        const newResume = mockDb.createResume({
-          userId: "user-1", // Mock user ID
+        const now = new Date().toISOString();
+        const newResume: Resume = {
+          id: crypto.randomUUID(),
+          userId: "user-1",
           title: createData.title,
           content: createData.content
             ? { ...defaultContent, ...createData.content }
             : defaultContent,
-        });
+          createdAt: now,
+          updatedAt: now,
+        };
+
+        // Try to save to IndexedDB first
+        const existingResumes = await getResumesFromIDB();
+        if (existingResumes !== null) {
+          await saveResumesToIDB([...existingResumes, newResume]);
+        } else {
+          // Fall back to mockDb
+          mockDb.createResume({
+            userId: "user-1",
+            title: createData.title,
+            content: createData.content
+              ? { ...defaultContent, ...createData.content }
+              : defaultContent,
+          });
+        }
 
         return newResume;
       }
@@ -132,7 +217,29 @@ export const mockApi = {
         }
 
         const updateData = body as UpdateResumeDto;
-        // Cast to appropriate type for mockDb
+        
+        // Try IndexedDB first
+        const idbResumes = await getResumesFromIDB();
+        if (idbResumes) {
+          const resumeIndex = idbResumes.findIndex((r) => r.id === id);
+          if (resumeIndex !== -1) {
+            const existingResume = idbResumes[resumeIndex];
+            const updated: Resume = {
+              ...existingResume,
+              ...updateData,
+              content: updateData.content
+                ? { ...existingResume.content, ...updateData.content }
+                : existingResume.content,
+              updatedAt: new Date().toISOString(),
+            };
+            const updatedResumes = [...idbResumes];
+            updatedResumes[resumeIndex] = updated;
+            await saveResumesToIDB(updatedResumes);
+            return updated;
+          }
+        }
+
+        // Fall back to mockDb
         const updated = mockDb.updateResume(
           id,
           updateData as Partial<Omit<Resume, "id" | "createdAt">>,
@@ -157,6 +264,17 @@ export const mockApi = {
           };
         }
 
+        // Try IndexedDB first
+        const idbResumes = await getResumesFromIDB();
+        if (idbResumes) {
+          const filtered = idbResumes.filter((r) => r.id !== id);
+          if (filtered.length < idbResumes.length) {
+            await saveResumesToIDB(filtered);
+            return { success: true };
+          }
+        }
+
+        // Fall back to mockDb
         const deleted = mockDb.deleteResume(id);
         if (!deleted) {
           throw {
