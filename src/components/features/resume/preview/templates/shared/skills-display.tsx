@@ -3,7 +3,7 @@
  * Reusable skills display for templates
  */
 
-import type { Skills } from "@/lib/api/types";
+import type { Skills, SkillWithLevel } from "@/lib/api/types";
 import type { ColorScheme } from "@/lib/types/templates";
 
 interface SkillsDisplayProps {
@@ -11,6 +11,17 @@ interface SkillsDisplayProps {
   colorScheme?: ColorScheme;
   variant?: "inline" | "tags" | "columns" | "bars" | "grid";
   className?: string;
+}
+
+// Helper to get skill name from string or SkillWithLevel
+function getSkillName(skill: string | SkillWithLevel): string {
+  return typeof skill === "string" ? skill : skill.name;
+}
+
+// Helper to get skill level (default to 8 if not specified, scale 1-10)
+function getSkillLevel(skill: string | SkillWithLevel): number {
+  if (typeof skill === "string") return 8; // Default level for string skills
+  return skill.level;
 }
 
 export function SkillsDisplay({
@@ -44,7 +55,7 @@ export function SkillsDisplay({
               Technical:{" "}
             </span>
             <span className="text-sm" style={{ color: textLightColor }}>
-              {skills.technical.join(", ")}
+              {skills.technical.map(getSkillName).join(", ")}
             </span>
           </div>
         )}
@@ -57,7 +68,7 @@ export function SkillsDisplay({
               Languages:{" "}
             </span>
             <span className="text-sm" style={{ color: textLightColor }}>
-              {skills.languages.join(", ")}
+              {skills.languages.map(getSkillName).join(", ")}
             </span>
           </div>
         )}
@@ -70,7 +81,7 @@ export function SkillsDisplay({
               Tools:{" "}
             </span>
             <span className="text-sm" style={{ color: textLightColor }}>
-              {skills.tools.join(", ")}
+              {skills.tools.map(getSkillName).join(", ")}
             </span>
           </div>
         )}
@@ -83,7 +94,7 @@ export function SkillsDisplay({
               Soft Skills:{" "}
             </span>
             <span className="text-sm" style={{ color: textLightColor }}>
-              {skills.soft.join(", ")}
+              {skills.soft.map(getSkillName).join(", ")}
             </span>
           </div>
         )}
@@ -113,7 +124,7 @@ export function SkillsDisplay({
                     color: primaryColor,
                   }}
                 >
-                  {skill}
+                  {getSkillName(skill)}
                 </span>
               ))}
             </div>
@@ -137,7 +148,7 @@ export function SkillsDisplay({
                     color: primaryColor,
                   }}
                 >
-                  {skill}
+                  {getSkillName(skill)}
                 </span>
               ))}
             </div>
@@ -161,7 +172,7 @@ export function SkillsDisplay({
                     color: primaryColor,
                   }}
                 >
-                  {skill}
+                  {getSkillName(skill)}
                 </span>
               ))}
             </div>
@@ -185,7 +196,7 @@ export function SkillsDisplay({
                     color: primaryColor,
                   }}
                 >
-                  {skill}
+                  {getSkillName(skill)}
                 </span>
               ))}
             </div>
@@ -209,7 +220,7 @@ export function SkillsDisplay({
             </p>
             <ul className="space-y-1 text-sm" style={{ color: textLightColor }}>
               {skills.technical.map((skill, idx) => (
-                <li key={idx}>• {skill}</li>
+                <li key={idx}>• {getSkillName(skill)}</li>
               ))}
             </ul>
           </div>
@@ -224,7 +235,7 @@ export function SkillsDisplay({
             </p>
             <ul className="space-y-1 text-sm" style={{ color: textLightColor }}>
               {skills.tools.map((skill, idx) => (
-                <li key={idx}>• {skill}</li>
+                <li key={idx}>• {getSkillName(skill)}</li>
               ))}
             </ul>
           </div>
@@ -239,7 +250,7 @@ export function SkillsDisplay({
             </p>
             <ul className="space-y-1 text-sm" style={{ color: textLightColor }}>
               {skills.languages.map((skill, idx) => (
-                <li key={idx}>• {skill}</li>
+                <li key={idx}>• {getSkillName(skill)}</li>
               ))}
             </ul>
           </div>
@@ -254,7 +265,7 @@ export function SkillsDisplay({
             </p>
             <ul className="space-y-1 text-sm" style={{ color: textLightColor }}>
               {skills.soft.map((skill, idx) => (
-                <li key={idx}>• {skill}</li>
+                <li key={idx}>• {getSkillName(skill)}</li>
               ))}
             </ul>
           </div>
@@ -263,7 +274,7 @@ export function SkillsDisplay({
     );
   }
 
-  // Bars variant - with visual bars (simplified for print)
+  // Bars variant - with visual bars showing proficiency level
   if (variant === "bars") {
     const allSkills = [
       ...(skills.technical || []),
@@ -273,28 +284,33 @@ export function SkillsDisplay({
 
     return (
       <div className={`space-y-2 ${className}`}>
-        {allSkills.map((skill, idx) => (
-          <div key={idx} className="flex items-center gap-3">
-            <span
-              className="w-32 text-sm font-medium"
-              style={{ color: textColor }}
-            >
-              {skill}
-            </span>
-            <div
-              className="h-2 flex-1 rounded-full"
-              style={{ backgroundColor: `${primaryColor}30` }}
-            >
+        {allSkills.map((skill, idx) => {
+          const level = getSkillLevel(skill);
+          const percentage = (level / 10) * 100;
+          
+          return (
+            <div key={idx} className="flex items-center gap-3">
+              <span
+                className="w-32 text-sm font-medium"
+                style={{ color: textColor }}
+              >
+                {getSkillName(skill)}
+              </span>
               <div
-                className="h-full rounded-full"
-                style={{
-                  backgroundColor: primaryColor,
-                  width: "85%", // You could make this dynamic based on skill level
-                }}
-              />
+                className="h-2 flex-1 rounded-full"
+                style={{ backgroundColor: `${primaryColor}30` }}
+              >
+                <div
+                  className="h-full rounded-full transition-all"
+                  style={{
+                    backgroundColor: primaryColor,
+                    width: `${percentage}%`,
+                  }}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     );
   }
@@ -319,7 +335,7 @@ export function SkillsDisplay({
               color: textColor,
             }}
           >
-            {skill}
+            {getSkillName(skill)}
           </div>
         ))}
       </div>

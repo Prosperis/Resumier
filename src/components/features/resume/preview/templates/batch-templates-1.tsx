@@ -3,7 +3,7 @@
  * Creates multiple template variants efficiently
  */
 
-import type { Resume, Skills } from "@/lib/api/types";
+import type { Resume, Skills, SkillWithLevel } from "@/lib/api/types";
 import { Briefcase, GraduationCap, Mail, Phone, MapPin } from "lucide-react";
 import {
   formatPhoneDisplay,
@@ -15,15 +15,20 @@ interface TemplateProps {
   resume: Resume;
 }
 
+// Helper to get skill name from string or SkillWithLevel
+function getSkillName(skill: string | SkillWithLevel): string {
+  return typeof skill === "string" ? skill : skill.name;
+}
+
 /**
  * Helper function to get all skills as a flat array of strings
  */
 function getAllSkills(skills: Skills): string[] {
   return [
-    ...(skills.technical || []),
-    ...(skills.languages || []),
-    ...(skills.tools || []),
-    ...(skills.soft || []),
+    ...(skills.technical || []).map(getSkillName),
+    ...(skills.languages || []).map(getSkillName),
+    ...(skills.tools || []).map(getSkillName),
+    ...(skills.soft || []).map(getSkillName),
   ];
 }
 

@@ -7,7 +7,7 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
-import type { Resume } from "@/lib/api/types";
+import type { Resume, SkillWithLevel } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
 import {
   formatPhoneDisplay,
@@ -15,6 +15,11 @@ import {
   type PhoneFormat,
 } from "@/lib/validations";
 import { getLinkIcon } from "./shared/contact-info";
+
+// Helper to get skill name from string or SkillWithLevel
+function getSkillName(skill: string | SkillWithLevel): string {
+  return typeof skill === "string" ? skill : skill.name;
+}
 
 interface ModernTemplateProps {
   resume: Resume;
@@ -334,7 +339,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                             color: colors.primary,
                           }}
                         >
-                          {skill}
+                          {getSkillName(skill)}
                         </span>
                       ))}
                     </div>
@@ -358,7 +363,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                             color: colors.primary,
                           }}
                         >
-                          {lang}
+                          {getSkillName(lang)}
                         </span>
                       ))}
                     </div>
@@ -382,7 +387,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                             color: colors.primary,
                           }}
                         >
-                          {tool}
+                          {getSkillName(tool)}
                         </span>
                       ))}
                     </div>
@@ -406,7 +411,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                             color: colors.primary,
                           }}
                         >
-                          {skill}
+                          {getSkillName(skill)}
                         </span>
                       ))}
                     </div>

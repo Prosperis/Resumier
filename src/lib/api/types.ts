@@ -95,13 +95,22 @@ export interface Education {
 }
 
 /**
+ * Skill with proficiency level
+ */
+export interface SkillWithLevel {
+  name: string;
+  level: number; // 1-10 or 1-5 scale
+}
+
+/**
  * Skills
+ * Can be simple strings or skills with proficiency levels
  */
 export interface Skills {
-  technical: string[];
-  languages: string[];
-  tools: string[];
-  soft: string[];
+  technical: (string | SkillWithLevel)[];
+  languages: (string | SkillWithLevel)[];
+  tools: (string | SkillWithLevel)[];
+  soft: (string | SkillWithLevel)[];
 }
 
 /**

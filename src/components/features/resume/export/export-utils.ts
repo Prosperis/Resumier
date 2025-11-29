@@ -10,9 +10,14 @@ import {
 import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
-import type { Resume } from "@/lib/api/types";
+import type { Resume, SkillWithLevel } from "@/lib/api/types";
 import { getFullName } from "@/lib/validations";
 import { useSettingsStore } from "@/stores/settings-store";
+
+// Helper to get skill name from string or SkillWithLevel
+function getSkillName(skill: string | SkillWithLevel): string {
+  return typeof skill === "string" ? skill : skill.name;
+}
 
 /**
  * Helper function to prepare a cloned resume element for export
@@ -303,10 +308,10 @@ ${escapeLaTeX(personalInfo.summary)}
 
     // Skills
     const skillCategories = [
-      { name: "Technical Skills", items: skills.technical },
-      { name: "Languages", items: skills.languages },
-      { name: "Tools", items: skills.tools },
-      { name: "Soft Skills", items: skills.soft },
+      { name: "Technical Skills", items: skills.technical.map(getSkillName) },
+      { name: "Languages", items: skills.languages.map(getSkillName) },
+      { name: "Tools", items: skills.tools.map(getSkillName) },
+      { name: "Soft Skills", items: skills.soft.map(getSkillName) },
     ].filter((cat) => cat.items.length > 0);
 
     if (skillCategories.length > 0) {
@@ -597,10 +602,10 @@ ${escapeLaTeX(personalInfo.summary)}
 
   // Skills
   const skillCategories = [
-    { name: "Technical Skills", items: skills.technical },
-    { name: "Languages", items: skills.languages },
-    { name: "Tools", items: skills.tools },
-    { name: "Soft Skills", items: skills.soft },
+    { name: "Technical Skills", items: skills.technical.map(getSkillName) },
+    { name: "Languages", items: skills.languages.map(getSkillName) },
+    { name: "Tools", items: skills.tools.map(getSkillName) },
+    { name: "Soft Skills", items: skills.soft.map(getSkillName) },
   ].filter((cat) => cat.items.length > 0);
 
   if (skillCategories.length > 0) {
@@ -1018,10 +1023,10 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
 
   // Skills
   const skillCategories = [
-    { name: "Technical", items: skills.technical },
-    { name: "Languages", items: skills.languages },
-    { name: "Tools", items: skills.tools },
-    { name: "Soft Skills", items: skills.soft },
+    { name: "Technical", items: skills.technical.map(getSkillName) },
+    { name: "Languages", items: skills.languages.map(getSkillName) },
+    { name: "Tools", items: skills.tools.map(getSkillName) },
+    { name: "Soft Skills", items: skills.soft.map(getSkillName) },
   ].filter((cat) => cat.items.length > 0);
 
   if (skillCategories.length > 0) {
@@ -1178,10 +1183,10 @@ export function downloadMarkdown(resume: Resume): void {
 
   // Skills
   const skillCategories = [
-    { name: "Technical", items: skills.technical },
-    { name: "Languages", items: skills.languages },
-    { name: "Tools", items: skills.tools },
-    { name: "Soft Skills", items: skills.soft },
+    { name: "Technical", items: skills.technical.map(getSkillName) },
+    { name: "Languages", items: skills.languages.map(getSkillName) },
+    { name: "Tools", items: skills.tools.map(getSkillName) },
+    { name: "Soft Skills", items: skills.soft.map(getSkillName) },
   ].filter((cat) => cat.items.length > 0);
 
   if (skillCategories.length > 0) {
@@ -1288,10 +1293,10 @@ export function downloadPlainText(resume: Resume): void {
 
   // Skills
   const skillCategories = [
-    { name: "Technical", items: skills.technical },
-    { name: "Languages", items: skills.languages },
-    { name: "Tools", items: skills.tools },
-    { name: "Soft Skills", items: skills.soft },
+    { name: "Technical", items: skills.technical.map(getSkillName) },
+    { name: "Languages", items: skills.languages.map(getSkillName) },
+    { name: "Tools", items: skills.tools.map(getSkillName) },
+    { name: "Soft Skills", items: skills.soft.map(getSkillName) },
   ].filter((cat) => cat.items.length > 0);
 
   if (skillCategories.length > 0) {
