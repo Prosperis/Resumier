@@ -205,7 +205,8 @@ export const useUIStore = create<UIStore>()(
             return {
               ...state,
               resumeBuilderSection:
-                state.resumeBuilderSection ?? ("personal" as ResumeBuilderSection),
+                state.resumeBuilderSection ??
+                ("personal" as ResumeBuilderSection),
             };
           }
           return state as UIStore;
