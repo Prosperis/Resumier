@@ -99,12 +99,7 @@ describe("useUIStore", () => {
     it("remembers personal info section through multiple changes", () => {
       const { result } = renderHook(() => useUIStore());
 
-      const sections = [
-        "skills",
-        "certifications",
-        "links",
-        "basic",
-      ] as const;
+      const sections = ["skills", "certifications", "links", "basic"] as const;
 
       for (const section of sections) {
         act(() => {
