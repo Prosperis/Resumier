@@ -152,12 +152,34 @@ export const useUIStore = create<UIStore>()(
       }),
       {
         name: "resumier-ui",
+        version: 1,
         storage: createJSONStorage(() => localStorage),
         // Only persist sidebar state and personal info section, not dialogs/notifications/loading
         partialize: (state) => ({
           sidebarOpen: state.sidebarOpen,
           sidebarCollapsed: state.sidebarCollapsed,
           personalInfoSection: state.personalInfoSection,
+        }),
+        // Migrate from version 0 (no personalInfoSection) to version 1
+        migrate: (persistedState: unknown, version: number) => {
+          const state = persistedState as Partial<UIStore>;
+          if (version === 0) {
+            // Add default personalInfoSection if missing
+            return {
+              ...state,
+              personalInfoSection: state.personalInfoSection ?? "basic",
+            };
+          }
+          return state as UIStore;
+        },
+        // Ensure proper merging with defaults for any missing fields
+        merge: (persistedState, currentState) => ({
+          ...currentState,
+          ...(persistedState as Partial<UIStore>),
+          // Ensure personalInfoSection has a valid default
+          personalInfoSection:
+            (persistedState as Partial<UIStore>)?.personalInfoSection ??
+            currentState.personalInfoSection,
         }),
       },
     ),
