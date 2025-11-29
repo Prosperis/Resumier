@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "dark" | "light";
+type Theme = "dark" | "light" | "system";
+type ResolvedTheme = "dark" | "light";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -9,24 +10,37 @@ type ThemeProviderProps = {
 
 type ThemeProviderState = {
   theme: Theme;
+  resolvedTheme: ResolvedTheme;
   setTheme: (theme: Theme) => void;
 };
 
-const getInitialTheme = (storageKey: string): Theme => {
-  // Check if user has a saved preference
-  const stored = localStorage.getItem(storageKey) as Theme | null;
-  if (stored === "light" || stored === "dark") {
-    return stored;
-  }
-
-  // Otherwise, use system preference
+const getSystemTheme = (): ResolvedTheme => {
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
 };
 
+const getInitialTheme = (storageKey: string): Theme => {
+  // Check if user has a saved preference
+  const stored = localStorage.getItem(storageKey) as Theme | null;
+  if (stored === "light" || stored === "dark" || stored === "system") {
+    return stored;
+  }
+
+  // Default to system
+  return "system";
+};
+
+const resolveTheme = (theme: Theme): ResolvedTheme => {
+  if (theme === "system") {
+    return getSystemTheme();
+  }
+  return theme;
+};
+
 const initialState: ThemeProviderState = {
-  theme: "light",
+  theme: "system",
+  resolvedTheme: "light",
   setTheme: () => null,
 };
 
@@ -37,20 +51,39 @@ export function ThemeProvider({
   storageKey = "resumier-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => getInitialTheme(storageKey));
+  const [theme, setThemeState] = useState<Theme>(() => getInitialTheme(storageKey));
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => resolveTheme(theme));
 
+  // Listen for system theme changes when using "system" theme
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    
+    const handleChange = () => {
+      if (theme === "system") {
+        setResolvedTheme(getSystemTheme());
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [theme]);
+
+  // Apply the resolved theme to the DOM
   useEffect(() => {
     const root = window.document.documentElement;
-
+    const resolved = resolveTheme(theme);
+    
+    setResolvedTheme(resolved);
     root.classList.remove("light", "dark");
-    root.classList.add(theme);
+    root.classList.add(resolved);
   }, [theme]);
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
+    resolvedTheme,
+    setTheme: (newTheme: Theme) => {
+      localStorage.setItem(storageKey, newTheme);
+      setThemeState(newTheme);
     },
   };
 

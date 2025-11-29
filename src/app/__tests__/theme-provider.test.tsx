@@ -84,7 +84,7 @@ describe("ThemeProvider", () => {
   });
 
   describe("Default Theme", () => {
-    it("should default to light theme when no preference is stored and system prefers light", () => {
+    it("should default to system theme and resolve to light when system prefers light", () => {
       window.matchMedia = vi.fn().mockImplementation((query) => ({
         matches: false, // System prefers light
         media: query,
@@ -100,10 +100,11 @@ describe("ThemeProvider", () => {
         wrapper: ({ children }) => <ThemeProvider>{children}</ThemeProvider>,
       });
 
-      expect(result.current.theme).toBe("light");
+      expect(result.current.theme).toBe("system");
+      expect(result.current.resolvedTheme).toBe("light");
     });
 
-    it("should default to dark theme when system prefers dark", () => {
+    it("should default to system theme and resolve to dark when system prefers dark", () => {
       window.matchMedia = vi.fn().mockImplementation((query) => ({
         matches: query === "(prefers-color-scheme: dark)",
         media: query,
@@ -119,7 +120,8 @@ describe("ThemeProvider", () => {
         wrapper: ({ children }) => <ThemeProvider>{children}</ThemeProvider>,
       });
 
-      expect(result.current.theme).toBe("dark");
+      expect(result.current.theme).toBe("system");
+      expect(result.current.resolvedTheme).toBe("dark");
     });
 
     it("should load theme from localStorage if available", () => {

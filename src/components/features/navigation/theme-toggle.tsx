@@ -3,13 +3,14 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/app/theme-provider";
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    // Toggle between light and dark (not system - that's for settings)
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
-  const isDark = theme === "dark";
+  const isDark = resolvedTheme === "dark";
   const ariaLabel = `Switch to ${isDark ? "light" : "dark"} theme`;
 
   return (

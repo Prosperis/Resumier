@@ -1,6 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useSettingsStore } from "@/stores";
 import { useAuthStore } from "@/stores/auth-store";
+import { useTheme } from "@/app/theme-provider";
 import { DemoModeInfo } from "@/components/features/demo";
 import {
   Card,
@@ -28,12 +29,21 @@ export const Route = createLazyFileRoute("/settings")({
 function SettingsComponent() {
   const { settings, updateSettings, resetSettings } = useSettingsStore();
   const { user, isGuest, isDemo } = useAuthStore();
+  const { theme, setTheme } = useTheme();
+
+  const handleThemeChange = (value: "light" | "dark" | "system") => {
+    // Update both the theme provider and settings store
+    setTheme(value);
+    updateSettings({ theme: value });
+  };
 
   const handleResetSettings = () => {
     if (
       window.confirm("Reset all settings to defaults? This cannot be undone.")
     ) {
       resetSettings();
+      // Also reset theme to system default
+      setTheme("system");
     }
   };
 
@@ -91,12 +101,8 @@ function SettingsComponent() {
                 </p>
               </div>
               <Select
-                value={settings.theme}
-                onValueChange={(value) =>
-                  updateSettings({
-                    theme: value as "light" | "dark" | "system",
-                  })
-                }
+                value={theme}
+                onValueChange={handleThemeChange}
               >
                 <SelectTrigger id="theme" className="w-[180px]">
                   <SelectValue placeholder="Select theme" />
