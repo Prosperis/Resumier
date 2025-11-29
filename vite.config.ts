@@ -189,7 +189,7 @@ export default defineConfig(() => {
     // No sourcemaps for production (smaller files)
     sourcemap: false,
     // Minify with esbuild for faster builds and smaller output
-    minify: "esbuild",
+    minify: "esbuild" as const,
     // Target modern browsers for better optimization
     target: "esnext",
     // CSS code splitting
@@ -209,103 +209,8 @@ export default defineConfig(() => {
     },
     rollupOptions: {
       output: {
-        // Manual chunking for better caching and code splitting
-        // NOTE: Chunk names are important - Rollup puts shared code in first chunk alphabetically
-        // Using numeric prefixes to control load order
-        manualChunks: (id) => {
-          // Core React - must load first (prefix with 0)
-          if (id.includes("node_modules/react/") || id.includes("node_modules/react-dom/")) {
-            return "0-react"
-          }
-          
-          // Lucide icons - bundle with React to ensure proper initialization order
-          if (id.includes("lucide-react") || id.includes("node_modules/lucide")) {
-            return "0-react"
-          }
-
-          // TanStack Router (core routing)
-          if (id.includes("@tanstack/react-router")) {
-            return "1-tanstack-router"
-          }
-
-          // TanStack Query
-          if (id.includes("@tanstack/react-query")) {
-            return "1-tanstack-query"
-          }
-
-          // TanStack Table (only loaded on dashboard)
-          if (id.includes("@tanstack/react-table")) {
-            return "tanstack-table"
-          }
-
-          // TanStack Form & Virtual (smaller libs)
-          if (id.includes("@tanstack/react-form") || id.includes("@tanstack/react-virtual")) {
-            return "tanstack-utils"
-          }
-
-          // Framer Motion (large animation library)
-          if (id.includes("framer-motion") || id.includes("animejs")) {
-            return "motion"
-          }
-
-          // Form libraries (react-hook-form, zod)
-          if (id.includes("react-hook-form") || id.includes("@hookform/resolvers") || id.includes("zod")) {
-            return "form"
-          }
-
-          // Radix UI primitives - split into logical groups
-          if (id.includes("@radix-ui/")) {
-            // Dialog-related components
-            if (id.includes("dialog") || id.includes("alert-dialog")) {
-              return "ui-dialogs"
-            }
-            // Dropdown & Menu components
-            if (id.includes("dropdown") || id.includes("select") || id.includes("navigation-menu")) {
-              return "ui-menus"
-            }
-            // Form-related UI
-            if (id.includes("checkbox") || id.includes("radio") || id.includes("switch") || id.includes("slider")) {
-              return "ui-forms"
-            }
-            // Other UI components
-            return "ui-primitives"
-          }
-
-          // DnD Kit
-          if (id.includes("@dnd-kit")) {
-            return "dnd-kit"
-          }
-
-          // Sentry monitoring (only needed for error tracking)
-          if (id.includes("@sentry/")) {
-            return "sentry"
-          }
-
-          // PDF generation libraries (large, lazy-loaded) - use z prefix to load last
-          if (id.includes("jspdf") || id.includes("html2canvas")) {
-            return "z-pdf-generator"
-          }
-
-          // DOCX generation (Word document export) - use z prefix to load last
-          if (id.includes("node_modules/docx") || id.includes("file-saver")) {
-            return "z-docx-generator"
-          }
-
-          // Auth library
-          if (id.includes("better-auth")) {
-            return "auth"
-          }
-
-          // Date utilities (if any)
-          if (id.includes("date-fns") || id.includes("dayjs")) {
-            return "date-utils"
-          }
-
-          // Remaining node_modules go to vendor
-          if (id.includes("node_modules")) {
-            return "vendor"
-          }
-        },
+        // Let Vite handle chunking automatically - manual chunking was causing
+        // circular dependency issues with lucide-react icons
         // Better chunk naming for cache busting
         chunkFileNames: "assets/[name]-[hash].js",
         entryFileNames: "assets/[name]-[hash].js",
