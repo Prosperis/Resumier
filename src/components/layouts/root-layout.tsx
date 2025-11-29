@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { FileText, Settings } from "lucide-react";
+import { ArrowLeft, FileText, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ExportMenu } from "@/components/features/resume/export/export-menu";
 import { StyleCustomizer } from "@/components/features/resume/preview/style-customizer";
@@ -48,6 +48,21 @@ export function RootLayout({ children }: RootLayoutProps) {
         )}
         <div className="flex h-12 items-center justify-between px-4">
           <div className="flex items-center gap-4">
+            {/* Back button when editing a resume */}
+            {currentResume && (
+              <Button
+                variant="ghost"
+                size="icon"
+                asChild
+                aria-label="Back to resumes"
+                className="h-8 w-8"
+              >
+                <Link to="/dashboard">
+                  <ArrowLeft className="size-4" />
+                </Link>
+              </Button>
+            )}
+
             <Link
               to="/"
               className="flex items-center gap-2 transition-opacity hover:opacity-80"
