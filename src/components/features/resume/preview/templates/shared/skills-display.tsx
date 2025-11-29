@@ -287,7 +287,7 @@ export function SkillsDisplay({
         {allSkills.map((skill, idx) => {
           const level = getSkillLevel(skill);
           const percentage = (level / 10) * 100;
-          
+
           return (
             <div key={idx} className="flex items-center gap-3">
               <span

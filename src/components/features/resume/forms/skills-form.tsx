@@ -118,7 +118,7 @@ function TagInput({
         {value.map((skill, index) => {
           const skillName = getSkillName(skill);
           const skillLevel = getSkillLevel(skill);
-          
+
           return (
             <Popover key={index}>
               <PopoverTrigger asChild>
@@ -156,7 +156,9 @@ function TagInput({
                     </div>
                     <Slider
                       value={[skillLevel]}
-                      onValueChange={(values: number[]) => updateSkillLevel(index, values[0])}
+                      onValueChange={(values: number[]) =>
+                        updateSkillLevel(index, values[0])
+                      }
                       min={1}
                       max={10}
                       step={1}
