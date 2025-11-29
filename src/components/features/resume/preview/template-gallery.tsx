@@ -3,7 +3,14 @@
  * Full-screen template selection portal with previews, filtering, and search
  */
 
-import { useState, useMemo, useCallback, memo, useEffect } from "react";
+import {
+  useState,
+  useMemo,
+  useCallback,
+  memo,
+  useEffect,
+  useRef,
+} from "react";
 import {
   Search,
   Sparkles,
@@ -99,6 +106,29 @@ export function TemplateGallery({
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const { toggleFavorite, isFavorite, favorites } = useFavoriteTemplates();
+
+  // Defer rendering of templates until after modal animation to avoid forced reflow
+  const [isReady, setIsReady] = useState(false);
+  const readyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (open) {
+      // Defer template rendering until after the dialog animation
+      readyTimeoutRef.current = setTimeout(() => {
+        setIsReady(true);
+      }, 50);
+    } else {
+      setIsReady(false);
+      if (readyTimeoutRef.current) {
+        clearTimeout(readyTimeoutRef.current);
+      }
+    }
+    return () => {
+      if (readyTimeoutRef.current) {
+        clearTimeout(readyTimeoutRef.current);
+      }
+    };
+  }, [open]);
 
   // Cache templates to prevent re-fetching
   const allTemplates = useMemo(() => getAllTemplates(), []);
@@ -262,7 +292,7 @@ export function TemplateGallery({
               </div>
 
               {/* Empty State */}
-              {filteredTemplates.length === 0 && (
+              {filteredTemplates.length === 0 && isReady && (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <Filter className="h-12 w-12 text-gray-300 dark:text-gray-600 mb-4" />
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -285,11 +315,23 @@ export function TemplateGallery({
                 </div>
               )}
 
+              {/* Loading State - shown briefly while deferring render */}
+              {!isReady && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {[...Array(8)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="aspect-[4/3] rounded-lg bg-gray-100 dark:bg-gray-800 animate-pulse"
+                    />
+                  ))}
+                </div>
+              )}
+
               {/* Grid View */}
-              {viewMode === "grid" && filteredTemplates.length > 0 && (
+              {isReady && viewMode === "grid" && filteredTemplates.length > 0 && (
                 <div
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-                  style={{ willChange: "contents" }}
+                  style={{ contentVisibility: "auto" }}
                 >
                   {filteredTemplates.map((template: TemplateInfo) => (
                     <MemoTemplateCard
@@ -305,8 +347,8 @@ export function TemplateGallery({
               )}
 
               {/* List View */}
-              {viewMode === "list" && filteredTemplates.length > 0 && (
-                <div className="space-y-3" style={{ willChange: "contents" }}>
+              {isReady && viewMode === "list" && filteredTemplates.length > 0 && (
+                <div className="space-y-3" style={{ contentVisibility: "auto" }}>
                   {filteredTemplates.map((template: TemplateInfo) => (
                     <MemoTemplateListItem
                       key={template.id}
@@ -1563,14 +1605,14 @@ const TemplateListItem = memo(function TemplateListItem({
               opacity: 0.3,
             }}
           />
-          {[...Array(6)].map((_, i) => (
+          {[70, 85, 90, 75, 80, 95].map((width, i) => (
             <div
               key={i}
               className="h-1 rounded"
               style={{
                 backgroundColor: template.colorScheme.text,
                 opacity: 0.15,
-                width: `${Math.random() * 30 + 70}%`,
+                width: `${width}%`,
               }}
             />
           ))}

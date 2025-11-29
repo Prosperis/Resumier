@@ -16,16 +16,21 @@ import {
   getTemplateInfo,
 } from "./templates/template-registry";
 
-// Load custom font into document
+// Track loaded fonts to avoid duplicate loading
+const loadedFonts = new Set<string>();
+
+// Load custom font into document (optimized to avoid reflow)
 async function loadCustomFont(font: CustomFont): Promise<void> {
+  // Skip if already loaded (using our own cache to avoid document.fonts.check which triggers reflow)
+  if (loadedFonts.has(font.fontFamily)) {
+    return;
+  }
+
   try {
-    // Check if font is already loaded
-    if (document.fonts.check(`12px "${font.fontFamily}"`)) {
-      return;
-    }
     const fontFace = new FontFace(font.fontFamily, `url(${font.dataUrl})`);
     await fontFace.load();
     document.fonts.add(fontFace);
+    loadedFonts.add(font.fontFamily);
   } catch (error) {
     console.error(`Failed to load font ${font.name}:`, error);
   }
