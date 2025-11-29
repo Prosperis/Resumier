@@ -116,7 +116,7 @@ export const mockApi = {
       case "GET": {
         // Try IndexedDB first
         const idbResumes = await getResumesFromIDB();
-        
+
         if (id) {
           // GET /api/resumes/:id
           if (idbResumes) {
@@ -125,7 +125,7 @@ export const mockApi = {
               return resume;
             }
           }
-          
+
           // Fall back to mockDb
           const resume = mockDb.getResume(id);
           if (!resume) {
@@ -136,7 +136,7 @@ export const mockApi = {
           }
           return resume;
         }
-        
+
         // GET /api/resumes
         if (idbResumes) {
           return idbResumes;
@@ -217,7 +217,7 @@ export const mockApi = {
         }
 
         const updateData = body as UpdateResumeDto;
-        
+
         // Try IndexedDB first
         const idbResumes = await getResumesFromIDB();
         if (idbResumes) {
