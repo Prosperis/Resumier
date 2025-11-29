@@ -183,8 +183,7 @@ export function SectionManager({ resume }: SectionManagerProps) {
       const currentIndex = normalizedOrder.indexOf(sectionId);
       if (currentIndex === -1) return;
 
-      const newIndex =
-        direction === "up" ? currentIndex - 1 : currentIndex + 1;
+      const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
       if (newIndex < 0 || newIndex >= normalizedOrder.length) return;
 
       const newOrder = [...normalizedOrder];

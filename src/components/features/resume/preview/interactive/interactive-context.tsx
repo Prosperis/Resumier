@@ -70,7 +70,7 @@ interface InteractiveResumeContextValue {
 
   // Resume data
   resume: Resume;
-  
+
   // Section settings
   hiddenSections: EditableSectionType[];
   sectionOrder: EditableSectionType[];

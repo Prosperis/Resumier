@@ -11,7 +11,11 @@ import {
 } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import { useResumeStore } from "@/stores/resume-store";
-import { useUIStore, selectSetCurrentResume, selectToggleResumeBuilderSection } from "@/stores/ui-store";
+import {
+  useUIStore,
+  selectSetCurrentResume,
+  selectToggleResumeBuilderSection,
+} from "@/stores/ui-store";
 import {
   Tooltip,
   TooltipContent,
@@ -68,7 +72,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
       <div
         className={cn(
           "group/sidebar relative flex flex-col border-r border-border bg-background transition-all duration-300 ease-in-out",
-          isSidebarExpanded ? "w-80 min-w-80" : "w-12"
+          isSidebarExpanded ? "w-80 min-w-80" : "w-12",
         )}
       >
         {/* Expand/Collapse Arrow - appears on hover at the right edge */}
@@ -81,7 +85,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
             "bg-background border border-border",
             "text-muted-foreground hover:text-foreground hover:bg-muted",
             "opacity-0 group-hover/sidebar:opacity-100 transition-all duration-200",
-            "shadow-sm hover:shadow"
+            "shadow-sm hover:shadow",
           )}
         >
           {isSidebarExpanded ? (
@@ -95,7 +99,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
         <div
           className={cn(
             "flex flex-col h-full",
-            isSidebarExpanded ? "hidden" : "flex"
+            isSidebarExpanded ? "hidden" : "flex",
           )}
         >
           {/* Section Icons - centered vertically */}
@@ -109,7 +113,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
                     className={cn(
                       "flex items-center justify-center w-8 h-8 rounded-md",
                       "text-muted-foreground hover:text-foreground hover:bg-muted",
-                      "transition-colors"
+                      "transition-colors",
                     )}
                   >
                     <section.icon className="h-4 w-4" />
@@ -127,12 +131,14 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
         <div
           className={cn(
             "flex flex-col h-full",
-            isSidebarExpanded ? "flex" : "hidden"
+            isSidebarExpanded ? "flex" : "hidden",
           )}
         >
           {/* Sidebar header */}
           <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/30">
-            <span className="text-xs font-medium text-muted-foreground">Edit Resume</span>
+            <span className="text-xs font-medium text-muted-foreground">
+              Edit Resume
+            </span>
           </div>
 
           {/* Resume Builder Form */}

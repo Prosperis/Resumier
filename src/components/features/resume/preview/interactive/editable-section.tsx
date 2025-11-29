@@ -407,7 +407,7 @@ export function HiddenSectionPlaceholder({
         <span className="text-sm font-medium">{sectionLabel}</span>
         <span className="text-xs">(hidden)</span>
       </div>
-      
+
       {/* Show button on hover */}
       <button
         type="button"
