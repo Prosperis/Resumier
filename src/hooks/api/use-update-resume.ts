@@ -32,8 +32,9 @@ export function useUpdateResume() {
         try {
           // Get existing resumes from the store
           const idbData = await get(IDB_STORE_KEY);
-          const resumes = (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
-          
+          const resumes =
+            (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
+
           // Find the resume to update
           const resumeIndex = resumes.findIndex((r) => r.id === id);
           if (resumeIndex === -1) {
@@ -60,18 +61,24 @@ export function useUpdateResume() {
           await set(IDB_STORE_KEY, { resumes: updatedResumes });
 
           // Also update the documents list
-          const documents = (await get("resumier-documents")) as Array<{
-            id: string;
-            title: string;
-            createdAt: string;
-            updatedAt: string;
-          }> | undefined;
+          const documents = (await get("resumier-documents")) as
+            | Array<{
+                id: string;
+                title: string;
+                createdAt: string;
+                updatedAt: string;
+              }>
+            | undefined;
 
           if (documents) {
             const updatedDocuments = documents.map((doc) =>
               doc.id === id
-                ? { ...doc, title: updatedResume.title, updatedAt: updatedResume.updatedAt }
-                : doc
+                ? {
+                    ...doc,
+                    title: updatedResume.title,
+                    updatedAt: updatedResume.updatedAt,
+                  }
+                : doc,
             );
             await set("resumier-documents", updatedDocuments);
           }

@@ -24,19 +24,22 @@ export function useDeleteResume() {
         try {
           // Get existing resumes from the store
           const idbData = await get(IDB_STORE_KEY);
-          const resumes = (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
+          const resumes =
+            (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
 
           // Filter out the deleted resume
           const updatedResumes = resumes.filter((r) => r.id !== id);
           await set(IDB_STORE_KEY, { resumes: updatedResumes });
 
           // Also update the documents list
-          const documents = (await get("resumier-documents")) as Array<{
-            id: string;
-            title: string;
-            createdAt: string;
-            updatedAt: string;
-          }> | undefined;
+          const documents = (await get("resumier-documents")) as
+            | Array<{
+                id: string;
+                title: string;
+                createdAt: string;
+                updatedAt: string;
+              }>
+            | undefined;
 
           if (documents) {
             const updatedDocuments = documents.filter((doc) => doc.id !== id);

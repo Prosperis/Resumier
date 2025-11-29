@@ -31,19 +31,25 @@ export function useCreateResume() {
 
           // Get existing resumes from the store
           const idbData = await get(IDB_STORE_KEY);
-          const existingResumes = (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
+          const existingResumes =
+            (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
 
           // Add new resume to the list and save
-          await set(IDB_STORE_KEY, { resumes: [...existingResumes, newResume] });
+          await set(IDB_STORE_KEY, {
+            resumes: [...existingResumes, newResume],
+          });
 
           // Also update the documents list
           const documents = (await get("resumier-documents")) || [];
-          await set("resumier-documents", [...documents, {
-            id: newResume.id,
-            title: newResume.title,
-            createdAt: newResume.createdAt,
-            updatedAt: newResume.updatedAt,
-          }]);
+          await set("resumier-documents", [
+            ...documents,
+            {
+              id: newResume.id,
+              title: newResume.title,
+              createdAt: newResume.createdAt,
+              updatedAt: newResume.updatedAt,
+            },
+          ]);
 
           return newResume;
         } catch (error) {
