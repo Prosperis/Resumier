@@ -100,10 +100,7 @@ function SettingsComponent() {
                   Select your color theme
                 </p>
               </div>
-              <Select
-                value={theme}
-                onValueChange={handleThemeChange}
-              >
+              <Select value={theme} onValueChange={handleThemeChange}>
                 <SelectTrigger id="theme" className="w-[180px]">
                   <SelectValue placeholder="Select theme" />
                 </SelectTrigger>

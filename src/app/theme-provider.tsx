@@ -51,13 +51,17 @@ export function ThemeProvider({
   storageKey = "resumier-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<Theme>(() => getInitialTheme(storageKey));
-  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => resolveTheme(theme));
+  const [theme, setThemeState] = useState<Theme>(() =>
+    getInitialTheme(storageKey),
+  );
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() =>
+    resolveTheme(theme),
+  );
 
   // Listen for system theme changes when using "system" theme
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    
+
     const handleChange = () => {
       if (theme === "system") {
         setResolvedTheme(getSystemTheme());
@@ -72,7 +76,7 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.documentElement;
     const resolved = resolveTheme(theme);
-    
+
     setResolvedTheme(resolved);
     root.classList.remove("light", "dark");
     root.classList.add(resolved);
