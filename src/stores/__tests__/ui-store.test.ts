@@ -10,6 +10,7 @@ describe("useUIStore", () => {
       sidebarOpen: true,
       sidebarCollapsed: false,
       personalInfoSection: "basic",
+      resumeBuilderSection: "personal",
       activeDialog: null,
       dialogData: {},
       notifications: [],
@@ -28,6 +29,7 @@ describe("useUIStore", () => {
       expect(result.current.sidebarOpen).toBe(true);
       expect(result.current.sidebarCollapsed).toBe(false);
       expect(result.current.personalInfoSection).toBe("basic");
+      expect(result.current.resumeBuilderSection).toBe("personal");
       expect(result.current.activeDialog).toBeNull();
       expect(result.current.dialogData).toEqual({});
       expect(result.current.notifications).toEqual([]);
@@ -106,6 +108,71 @@ describe("useUIStore", () => {
           result.current.setPersonalInfoSection(section);
         });
         expect(result.current.personalInfoSection).toBe(section);
+      }
+    });
+  });
+
+  describe("Resume Builder Section Actions", () => {
+    it("sets resume builder section", () => {
+      const { result } = renderHook(() => useUIStore());
+
+      act(() => {
+        result.current.setResumeBuilderSection("skills");
+      });
+      expect(result.current.resumeBuilderSection).toBe("skills");
+
+      act(() => {
+        result.current.setResumeBuilderSection("experience");
+      });
+      expect(result.current.resumeBuilderSection).toBe("experience");
+    });
+
+    it("toggles resume builder section - opens when different", () => {
+      const { result } = renderHook(() => useUIStore());
+
+      // Start with personal
+      expect(result.current.resumeBuilderSection).toBe("personal");
+
+      // Toggle to skills - should open skills
+      act(() => {
+        result.current.toggleResumeBuilderSection("skills");
+      });
+      expect(result.current.resumeBuilderSection).toBe("skills");
+    });
+
+    it("toggles resume builder section - closes when same", () => {
+      const { result } = renderHook(() => useUIStore());
+
+      // Set to skills first
+      act(() => {
+        result.current.setResumeBuilderSection("skills");
+      });
+      expect(result.current.resumeBuilderSection).toBe("skills");
+
+      // Toggle skills again - should close (set to empty)
+      act(() => {
+        result.current.toggleResumeBuilderSection("skills");
+      });
+      expect(result.current.resumeBuilderSection).toBe("");
+    });
+
+    it("remembers resume builder section through multiple changes", () => {
+      const { result } = renderHook(() => useUIStore());
+
+      const sections = [
+        "experience",
+        "education",
+        "skills",
+        "certifications",
+        "links",
+        "personal",
+      ] as const;
+
+      for (const section of sections) {
+        act(() => {
+          result.current.setResumeBuilderSection(section);
+        });
+        expect(result.current.resumeBuilderSection).toBe(section);
       }
     });
   });
@@ -252,6 +319,7 @@ describe("useUIStore", () => {
         result.current.setSidebarOpen(false);
         result.current.setSidebarCollapsed(true);
         result.current.setPersonalInfoSection("experience");
+        result.current.setResumeBuilderSection("skills");
       });
       const stored = localStorage.getItem("resumier-ui");
       expect(stored).toBeTruthy();
@@ -260,6 +328,7 @@ describe("useUIStore", () => {
         expect(parsed.state.sidebarOpen).toBe(false);
         expect(parsed.state.sidebarCollapsed).toBe(true);
         expect(parsed.state.personalInfoSection).toBe("experience");
+        expect(parsed.state.resumeBuilderSection).toBe("skills");
       }
     });
     it("does not persist dialog, notification, or loading state", () => {

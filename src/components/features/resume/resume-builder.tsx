@@ -10,6 +10,11 @@ import {
 import { useResume, useUpdateResume } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
 import { useAuthStore, selectIsDemo } from "@/stores/auth-store";
+import {
+  useUIStore,
+  selectResumeBuilderSection,
+  selectToggleResumeBuilderSection,
+} from "@/stores/ui-store";
 import type {
   Certification,
   Education,
@@ -88,11 +93,12 @@ export function ResumeBuilder() {
   const { toast } = useToast();
   const isDemo = useAuthStore(selectIsDemo);
 
-  // Accordion state - only one section open at a time
-  const [openSection, setOpenSection] = useState<string>("personal");
+  // Accordion state - persisted in store so it survives page refresh
+  const openSection = useUIStore(selectResumeBuilderSection);
+  const toggleSection = useUIStore(selectToggleResumeBuilderSection);
 
   const handleToggleSection = (sectionId: string) => {
-    setOpenSection((current) => (current === sectionId ? "" : sectionId));
+    toggleSection(sectionId as Parameters<typeof toggleSection>[0]);
   };
 
   // Inline editing states - track which item is being edited or if adding new

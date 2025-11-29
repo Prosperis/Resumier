@@ -18,6 +18,16 @@ export type PersonalInfoSection =
   | "certifications"
   | "links";
 
+// Resume builder section - tracks which collapsible section is open
+export type ResumeBuilderSection =
+  | "personal"
+  | "experience"
+  | "education"
+  | "skills"
+  | "certifications"
+  | "links"
+  | ""; // empty string means all collapsed
+
 interface UIStore {
   // Sidebar State
   sidebarOpen: boolean;
@@ -25,6 +35,9 @@ interface UIStore {
 
   // Personal Info Dialog Section State
   personalInfoSection: PersonalInfoSection;
+
+  // Resume Builder Section State (which collapsible is open)
+  resumeBuilderSection: ResumeBuilderSection;
 
   // Dialog State
   activeDialog: string | null;
@@ -48,6 +61,10 @@ interface UIStore {
   // Personal Info Section Actions
   setPersonalInfoSection: (section: PersonalInfoSection) => void;
 
+  // Resume Builder Section Actions
+  setResumeBuilderSection: (section: ResumeBuilderSection) => void;
+  toggleResumeBuilderSection: (section: ResumeBuilderSection) => void;
+
   // Dialog Actions
   openDialog: (name: string, data?: Record<string, unknown>) => void;
   closeDialog: () => void;
@@ -68,6 +85,7 @@ const initialState = {
   sidebarOpen: true,
   sidebarCollapsed: false,
   personalInfoSection: "basic" as PersonalInfoSection,
+  resumeBuilderSection: "personal" as ResumeBuilderSection,
   activeDialog: null,
   dialogData: {},
   notifications: [],
@@ -99,6 +117,16 @@ export const useUIStore = create<UIStore>()(
         // Personal Info Section Actions
         setPersonalInfoSection: (personalInfoSection) =>
           set({ personalInfoSection }),
+
+        // Resume Builder Section Actions
+        setResumeBuilderSection: (resumeBuilderSection) =>
+          set({ resumeBuilderSection }),
+
+        toggleResumeBuilderSection: (section) =>
+          set((state) => ({
+            resumeBuilderSection:
+              state.resumeBuilderSection === section ? "" : section,
+          })),
 
         // Dialog Actions
         openDialog: (activeDialog, dialogData = {}) =>
@@ -152,15 +180,16 @@ export const useUIStore = create<UIStore>()(
       }),
       {
         name: "resumier-ui",
-        version: 1,
+        version: 2,
         storage: createJSONStorage(() => localStorage),
-        // Only persist sidebar state and personal info section, not dialogs/notifications/loading
+        // Only persist sidebar state and section states, not dialogs/notifications/loading
         partialize: (state) => ({
           sidebarOpen: state.sidebarOpen,
           sidebarCollapsed: state.sidebarCollapsed,
           personalInfoSection: state.personalInfoSection,
+          resumeBuilderSection: state.resumeBuilderSection,
         }),
-        // Migrate from version 0 (no personalInfoSection) to version 1
+        // Migrate from older versions
         migrate: (persistedState: unknown, version: number) => {
           const state = persistedState as Partial<UIStore>;
           if (version === 0) {
@@ -168,6 +197,15 @@ export const useUIStore = create<UIStore>()(
             return {
               ...state,
               personalInfoSection: state.personalInfoSection ?? "basic",
+              resumeBuilderSection: "personal" as ResumeBuilderSection,
+            };
+          }
+          if (version === 1) {
+            // Add resumeBuilderSection
+            return {
+              ...state,
+              resumeBuilderSection:
+                state.resumeBuilderSection ?? ("personal" as ResumeBuilderSection),
             };
           }
           return state as UIStore;
@@ -176,10 +214,13 @@ export const useUIStore = create<UIStore>()(
         merge: (persistedState, currentState) => ({
           ...currentState,
           ...(persistedState as Partial<UIStore>),
-          // Ensure personalInfoSection has a valid default
+          // Ensure section states have valid defaults
           personalInfoSection:
             (persistedState as Partial<UIStore>)?.personalInfoSection ??
             currentState.personalInfoSection,
+          resumeBuilderSection:
+            (persistedState as Partial<UIStore>)?.resumeBuilderSection ??
+            currentState.resumeBuilderSection,
         }),
       },
     ),
@@ -195,6 +236,12 @@ export const selectPersonalInfoSection = (state: UIStore) =>
   state.personalInfoSection;
 export const selectSetPersonalInfoSection = (state: UIStore) =>
   state.setPersonalInfoSection;
+export const selectResumeBuilderSection = (state: UIStore) =>
+  state.resumeBuilderSection;
+export const selectSetResumeBuilderSection = (state: UIStore) =>
+  state.setResumeBuilderSection;
+export const selectToggleResumeBuilderSection = (state: UIStore) =>
+  state.toggleResumeBuilderSection;
 export const selectActiveDialog = (state: UIStore) => state.activeDialog;
 export const selectDialogData = (state: UIStore) => state.dialogData;
 export const selectNotifications = (state: UIStore) => state.notifications;
