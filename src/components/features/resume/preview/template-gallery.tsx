@@ -3,14 +3,7 @@
  * Full-screen template selection portal with previews, filtering, and search
  */
 
-import {
-  useState,
-  useMemo,
-  useCallback,
-  memo,
-  useEffect,
-  useRef,
-} from "react";
+import { useState, useMemo, useCallback, memo, useEffect, useRef } from "react";
 import {
   Search,
   Sparkles,
@@ -328,37 +321,44 @@ export function TemplateGallery({
               )}
 
               {/* Grid View */}
-              {isReady && viewMode === "grid" && filteredTemplates.length > 0 && (
-                <div
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-                  style={{ contentVisibility: "auto" }}
-                >
-                  {filteredTemplates.map((template: TemplateInfo) => (
-                    <MemoTemplateCard
-                      key={template.id}
-                      template={template}
-                      selected={selected === template.id}
-                      onSelect={() => handleSelectTemplate(template.id)}
-                      isFavorite={isFavorite(template.id)}
-                      onToggleFavorite={() => toggleFavorite(template.id)}
-                    />
-                  ))}
-                </div>
-              )}
+              {isReady &&
+                viewMode === "grid" &&
+                filteredTemplates.length > 0 && (
+                  <div
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                    style={{ contentVisibility: "auto" }}
+                  >
+                    {filteredTemplates.map((template: TemplateInfo) => (
+                      <MemoTemplateCard
+                        key={template.id}
+                        template={template}
+                        selected={selected === template.id}
+                        onSelect={() => handleSelectTemplate(template.id)}
+                        isFavorite={isFavorite(template.id)}
+                        onToggleFavorite={() => toggleFavorite(template.id)}
+                      />
+                    ))}
+                  </div>
+                )}
 
               {/* List View */}
-              {isReady && viewMode === "list" && filteredTemplates.length > 0 && (
-                <div className="space-y-3" style={{ contentVisibility: "auto" }}>
-                  {filteredTemplates.map((template: TemplateInfo) => (
-                    <MemoTemplateListItem
-                      key={template.id}
-                      template={template}
-                      selected={selected === template.id}
-                      onSelect={() => handleSelectTemplate(template.id)}
-                    />
-                  ))}
-                </div>
-              )}
+              {isReady &&
+                viewMode === "list" &&
+                filteredTemplates.length > 0 && (
+                  <div
+                    className="space-y-3"
+                    style={{ contentVisibility: "auto" }}
+                  >
+                    {filteredTemplates.map((template: TemplateInfo) => (
+                      <MemoTemplateListItem
+                        key={template.id}
+                        template={template}
+                        selected={selected === template.id}
+                        onSelect={() => handleSelectTemplate(template.id)}
+                      />
+                    ))}
+                  </div>
+                )}
             </div>
           </div>
         </div>
