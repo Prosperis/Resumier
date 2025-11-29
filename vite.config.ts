@@ -11,19 +11,22 @@ export default defineConfig(() => {
   // Use "/" for Vercel deployment, "/Resumier/" only for GitHub Pages
   // Set VITE_BASE_PATH=/Resumier/ environment variable for GitHub Pages deployment
   const base = process.env.VITE_BASE_PATH || "/"
+  // Only run bundle analyzer when ANALYZE=true is set
+  const shouldAnalyze = process.env.ANALYZE === "true"
   
   return {
     base,
     plugins: [
       react(),
       tailwindcss(),
-    visualizer({
+    // Bundle visualizer - only included when ANALYZE=true
+    ...(shouldAnalyze ? [visualizer({
       filename: "./dist/stats.html",
       open: true,
       gzipSize: true,
       brotliSize: true,
       template: "treemap", // 'sunburst', 'treemap', 'network'
-    }),
+    })] : []),
     ViteImageOptimizer({
       // PNG optimization
       png: {

@@ -177,6 +177,7 @@ jobs:
         run: bun run build
         env:
           NODE_ENV: production
+          ANALYZE: true
           
       - name: Check bundle size
         run: |
