@@ -212,8 +212,7 @@ export function useSectionEditor(sectionType: EditableSectionType) {
   const { selectedSection, selectSection, clearSelection, resume } =
     useInteractiveResume();
 
-  const isOpen =
-    selectedSection?.type === sectionType;
+  const isOpen = selectedSection?.type === sectionType;
   const selectedItemId = isOpen ? selectedSection?.itemId : undefined;
 
   const open = (itemId?: string) => {

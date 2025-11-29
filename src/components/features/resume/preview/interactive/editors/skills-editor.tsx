@@ -55,11 +55,7 @@ function SkillInput({ skills, onChange, placeholder }: SkillInputProps) {
     <div className="space-y-2">
       <div className="flex flex-wrap gap-1">
         {skills.map((skill, index) => (
-          <Badge
-            key={index}
-            variant="secondary"
-            className="text-xs gap-1 pr-1"
-          >
+          <Badge key={index} variant="secondary" className="text-xs gap-1 pr-1">
             {getSkillName(skill)}
             <button
               type="button"

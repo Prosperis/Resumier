@@ -76,8 +76,7 @@ export const EditableSection = forwardRef<HTMLDivElement, EditableSectionProps>(
       selectedSection?.type === sectionType &&
       selectedSection?.itemId === itemId;
     const isHovered =
-      hoveredSection?.type === sectionType &&
-      hoveredSection?.itemId === itemId;
+      hoveredSection?.type === sectionType && hoveredSection?.itemId === itemId;
 
     const handleClick = (e: MouseEvent<HTMLDivElement>) => {
       e.stopPropagation();
@@ -159,7 +158,8 @@ export const EditableSection = forwardRef<HTMLDivElement, EditableSectionProps>(
             title={editLabel || "Edit"}
             onClick={(e) => {
               e.stopPropagation();
-              const rect = e.currentTarget.parentElement?.parentElement?.getBoundingClientRect();
+              const rect =
+                e.currentTarget.parentElement?.parentElement?.getBoundingClientRect();
               if (rect) {
                 selectSection({ type: sectionType, itemId, rect });
               }
@@ -278,9 +278,7 @@ export function EditableText({
 
   // Non-interactive mode - just render the text
   if (!context || !context.isInteractive) {
-    return (
-      <Component className={className}>{value || placeholder}</Component>
-    );
+    return <Component className={className}>{value || placeholder}</Component>;
   }
 
   // Interactive mode - contenteditable
