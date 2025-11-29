@@ -50,7 +50,7 @@ export {
   selectTheme as selectSettingsTheme,
   useSettingsStore,
 } from "./settings-store";
-export type { Notification } from "./ui-store";
+export type { Notification, PersonalInfoSection } from "./ui-store";
 export {
   selectActiveDialog,
   selectDialogActions,
@@ -58,6 +58,8 @@ export {
   selectGlobalLoading,
   selectNotificationActions,
   selectNotifications,
+  selectPersonalInfoSection,
+  selectSetPersonalInfoSection,
   selectSidebarActions,
   selectSidebarCollapsed,
   selectSidebarOpen,

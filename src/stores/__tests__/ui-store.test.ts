@@ -9,6 +9,7 @@ describe("useUIStore", () => {
     useUIStore.setState({
       sidebarOpen: true,
       sidebarCollapsed: false,
+      personalInfoSection: "basic",
       activeDialog: null,
       dialogData: {},
       notifications: [],
@@ -26,6 +27,7 @@ describe("useUIStore", () => {
       const { result } = renderHook(() => useUIStore());
       expect(result.current.sidebarOpen).toBe(true);
       expect(result.current.sidebarCollapsed).toBe(false);
+      expect(result.current.personalInfoSection).toBe("basic");
       expect(result.current.activeDialog).toBeNull();
       expect(result.current.dialogData).toEqual({});
       expect(result.current.notifications).toEqual([]);
@@ -78,6 +80,41 @@ describe("useUIStore", () => {
       expect(result.current.sidebarCollapsed).toBe(false);
     });
   });
+
+  describe("Personal Info Section Actions", () => {
+    it("sets personal info section", () => {
+      const { result } = renderHook(() => useUIStore());
+
+      act(() => {
+        result.current.setPersonalInfoSection("experience");
+      });
+      expect(result.current.personalInfoSection).toBe("experience");
+
+      act(() => {
+        result.current.setPersonalInfoSection("education");
+      });
+      expect(result.current.personalInfoSection).toBe("education");
+    });
+
+    it("remembers personal info section through multiple changes", () => {
+      const { result } = renderHook(() => useUIStore());
+
+      const sections = [
+        "skills",
+        "certifications",
+        "links",
+        "basic",
+      ] as const;
+
+      for (const section of sections) {
+        act(() => {
+          result.current.setPersonalInfoSection(section);
+        });
+        expect(result.current.personalInfoSection).toBe(section);
+      }
+    });
+  });
+
   describe("Dialog Actions", () => {
     it("opens dialog with name only", () => {
       const { result } = renderHook(() => useUIStore());
@@ -219,6 +256,7 @@ describe("useUIStore", () => {
       act(() => {
         result.current.setSidebarOpen(false);
         result.current.setSidebarCollapsed(true);
+        result.current.setPersonalInfoSection("experience");
       });
       const stored = localStorage.getItem("resumier-ui");
       expect(stored).toBeTruthy();
@@ -226,6 +264,7 @@ describe("useUIStore", () => {
         const parsed = JSON.parse(stored);
         expect(parsed.state.sidebarOpen).toBe(false);
         expect(parsed.state.sidebarCollapsed).toBe(true);
+        expect(parsed.state.personalInfoSection).toBe("experience");
       }
     });
     it("does not persist dialog, notification, or loading state", () => {

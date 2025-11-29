@@ -10,10 +10,21 @@ export interface Notification {
   duration?: number;
 }
 
+export type PersonalInfoSection =
+  | "basic"
+  | "experience"
+  | "education"
+  | "skills"
+  | "certifications"
+  | "links";
+
 interface UIStore {
   // Sidebar State
   sidebarOpen: boolean;
   sidebarCollapsed: boolean;
+
+  // Personal Info Dialog Section State
+  personalInfoSection: PersonalInfoSection;
 
   // Dialog State
   activeDialog: string | null;
@@ -34,6 +45,9 @@ interface UIStore {
   setSidebarCollapsed: (collapsed: boolean) => void;
   toggleSidebarCollapsed: () => void;
 
+  // Personal Info Section Actions
+  setPersonalInfoSection: (section: PersonalInfoSection) => void;
+
   // Dialog Actions
   openDialog: (name: string, data?: Record<string, unknown>) => void;
   closeDialog: () => void;
@@ -53,6 +67,7 @@ interface UIStore {
 const initialState = {
   sidebarOpen: true,
   sidebarCollapsed: false,
+  personalInfoSection: "basic" as PersonalInfoSection,
   activeDialog: null,
   dialogData: {},
   notifications: [],
@@ -80,6 +95,10 @@ export const useUIStore = create<UIStore>()(
           set((state) => ({
             sidebarCollapsed: !state.sidebarCollapsed,
           })),
+
+        // Personal Info Section Actions
+        setPersonalInfoSection: (personalInfoSection) =>
+          set({ personalInfoSection }),
 
         // Dialog Actions
         openDialog: (activeDialog, dialogData = {}) =>
@@ -134,10 +153,11 @@ export const useUIStore = create<UIStore>()(
       {
         name: "resumier-ui",
         storage: createJSONStorage(() => localStorage),
-        // Only persist sidebar state, not dialogs/notifications/loading
+        // Only persist sidebar state and personal info section, not dialogs/notifications/loading
         partialize: (state) => ({
           sidebarOpen: state.sidebarOpen,
           sidebarCollapsed: state.sidebarCollapsed,
+          personalInfoSection: state.personalInfoSection,
         }),
       },
     ),
@@ -149,6 +169,10 @@ export const useUIStore = create<UIStore>()(
 export const selectSidebarOpen = (state: UIStore) => state.sidebarOpen;
 export const selectSidebarCollapsed = (state: UIStore) =>
   state.sidebarCollapsed;
+export const selectPersonalInfoSection = (state: UIStore) =>
+  state.personalInfoSection;
+export const selectSetPersonalInfoSection = (state: UIStore) =>
+  state.setPersonalInfoSection;
 export const selectActiveDialog = (state: UIStore) => state.activeDialog;
 export const selectDialogData = (state: UIStore) => state.dialogData;
 export const selectNotifications = (state: UIStore) => state.notifications;

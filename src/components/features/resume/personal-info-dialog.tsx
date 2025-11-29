@@ -35,14 +35,12 @@ import type {
   WorkExperience,
 } from "@/stores";
 import { useResumeStore } from "@/stores";
-
-type Section =
-  | "basic"
-  | "experience"
-  | "education"
-  | "skills"
-  | "certifications"
-  | "links";
+import {
+  type PersonalInfoSection,
+  selectPersonalInfoSection,
+  selectSetPersonalInfoSection,
+  useUIStore,
+} from "@/stores/ui-store";
 
 export function PersonalInfoDialog({
   open,
@@ -52,8 +50,9 @@ export function PersonalInfoDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const { userInfo, setUserInfo } = useResumeStore();
+  const section = useUIStore(selectPersonalInfoSection);
+  const setSection = useUIStore(selectSetPersonalInfoSection);
 
-  const [section, setSection] = useState<Section>("basic");
   const [linkedInUrl, setLinkedInUrl] = useState("");
   const [name, setName] = useState(userInfo.name ?? "");
   const [email, setEmail] = useState(userInfo.email ?? "");
@@ -276,7 +275,9 @@ export function PersonalInfoDialog({
                       <SidebarMenuItem key={item.value}>
                         <SidebarMenuButton
                           isActive={section === item.value}
-                          onClick={() => setSection(item.value as Section)}
+                          onClick={() =>
+                            setSection(item.value as PersonalInfoSection)
+                          }
                         >
                           <span>{item.label}</span>
                         </SidebarMenuButton>
