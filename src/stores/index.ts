@@ -53,6 +53,14 @@ export {
   selectToggleTheme,
   useThemeStore,
 } from "./theme-store";
+export {
+  defaultProfileContent,
+  selectActiveProfile,
+  selectActiveProfileId,
+  selectProfileActions,
+  selectProfiles,
+  useProfileStore,
+} from "./profile-store";
 export type { UserSettings } from "./settings-store";
 export {
   selectAutoSave,

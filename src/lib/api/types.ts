@@ -3,6 +3,8 @@
  * Type definitions for API requests and responses
  */
 
+import type { ProfileLink } from "./profile-types";
+
 /**
  * Resume Document (from store types)
  */
@@ -11,6 +13,8 @@ export interface Resume {
   userId?: string; // Optional - for multi-user support in future
   title: string;
   content: ResumeContent;
+  // Optional profile link - when present, content can be derived from profile
+  profileLink?: ProfileLink;
   createdAt: string;
   updatedAt: string;
   version?: number; // Optional - for versioning in future

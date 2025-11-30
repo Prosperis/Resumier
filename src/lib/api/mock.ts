@@ -1,8 +1,10 @@
 import { get, set } from "idb-keyval";
-import { mockDb } from "./mock-db";
+import { demoProfile, mockDb } from "./mock-db";
+import type { CreateProfileDto, Profile, UpdateProfileDto } from "./profile-types";
 import type { CreateResumeDto, Resume, UpdateResumeDto } from "./types";
 
 const IDB_STORE_KEY = "resumier-web-store";
+const IDB_PROFILES_KEY = "resumier-profiles-store";
 
 /**
  * Check if we should use mock API
@@ -65,6 +67,10 @@ export const mockApi = {
 
     if (resource === "resumes") {
       return this.handleResumes(method, id, body);
+    }
+
+    if (resource === "profiles") {
+      return this.handleProfiles(method, id, body);
     }
 
     if (resource === "auth") {
@@ -283,6 +289,192 @@ export const mockApi = {
           };
         }
 
+        return { success: true };
+      }
+
+      default:
+        throw {
+          status: 405,
+          message: "Method not allowed",
+        };
+    }
+  },
+
+  /**
+   * Handle /api/profiles requests
+   * Manages profile CRUD operations
+   */
+  async handleProfiles(
+    method: string,
+    id?: string,
+    body?: unknown,
+  ): Promise<Profile | Profile[] | { success: boolean }> {
+    // Helper to get profiles from IndexedDB, seeding demo profile if empty
+    const getProfilesFromIDB = async (): Promise<Profile[]> => {
+      try {
+        const idbData = await get(IDB_PROFILES_KEY);
+        if (idbData && typeof idbData === "object" && "state" in idbData) {
+          const state = idbData as { state: { profiles: Profile[] } };
+          if (state.state?.profiles && state.state.profiles.length > 0) {
+            return state.state.profiles;
+          }
+        }
+      } catch (error) {
+        console.warn("Failed to read profiles from IndexedDB:", error);
+      }
+      
+      // If no profiles in IDB, seed with demo profile from mockDb
+      const mockProfiles = mockDb.getProfiles();
+      if (mockProfiles.length > 0) {
+        await saveProfilesToIDB(mockProfiles);
+        return mockProfiles;
+      }
+      
+      // Fallback: seed with just the demo profile
+      await saveProfilesToIDB([demoProfile]);
+      return [demoProfile];
+    };
+
+    // Helper to save profiles to IndexedDB
+    const saveProfilesToIDB = async (profiles: Profile[]): Promise<void> => {
+      try {
+        await set(IDB_PROFILES_KEY, {
+          state: { profiles, activeProfileId: null },
+          version: 0,
+        });
+      } catch (error) {
+        console.warn("Failed to save profiles to IndexedDB:", error);
+      }
+    };
+
+    const defaultProfileContent = {
+      personalInfo: {
+        firstName: "",
+        lastName: "",
+        nameOrder: "firstLast" as const,
+        email: "",
+        phone: "",
+        location: "",
+        summary: "",
+      },
+      experience: [],
+      education: [],
+      skills: {
+        technical: [],
+        languages: [],
+        tools: [],
+        soft: [],
+      },
+      certifications: [],
+      links: [],
+    };
+
+    switch (method) {
+      case "GET": {
+        const profiles = await getProfilesFromIDB();
+
+        if (id) {
+          // GET /api/profiles/:id
+          const profile = profiles.find((p) => p.id === id);
+          if (!profile) {
+            throw {
+              status: 404,
+              message: "Profile not found",
+            };
+          }
+          return profile;
+        }
+
+        // GET /api/profiles
+        return profiles;
+      }
+
+      case "POST": {
+        // POST /api/profiles
+        const createData = body as CreateProfileDto;
+        if (!createData || !createData.name) {
+          throw {
+            status: 400,
+            message: "Profile name is required",
+          };
+        }
+
+        const now = new Date().toISOString();
+        const newProfile: Profile = {
+          id: crypto.randomUUID(),
+          userId: "user-1",
+          name: createData.name,
+          description: createData.description,
+          content: createData.content
+            ? { ...defaultProfileContent, ...createData.content }
+            : defaultProfileContent,
+          createdAt: now,
+          updatedAt: now,
+        };
+
+        const existingProfiles = await getProfilesFromIDB();
+        await saveProfilesToIDB([...existingProfiles, newProfile]);
+
+        return newProfile;
+      }
+
+      case "PUT":
+      case "PATCH": {
+        // PUT/PATCH /api/profiles/:id
+        if (!id) {
+          throw {
+            status: 400,
+            message: "Profile ID is required",
+          };
+        }
+
+        const updateData = body as UpdateProfileDto;
+        const profiles = await getProfilesFromIDB();
+        const profileIndex = profiles.findIndex((p) => p.id === id);
+
+        if (profileIndex === -1) {
+          throw {
+            status: 404,
+            message: "Profile not found",
+          };
+        }
+
+        const existingProfile = profiles[profileIndex];
+        const updatedProfile: Profile = {
+          ...existingProfile,
+          ...updateData,
+          content: updateData.content
+            ? { ...existingProfile.content, ...updateData.content }
+            : existingProfile.content,
+          updatedAt: new Date().toISOString(),
+        };
+
+        profiles[profileIndex] = updatedProfile;
+        await saveProfilesToIDB(profiles);
+
+        return updatedProfile;
+      }
+
+      case "DELETE": {
+        // DELETE /api/profiles/:id
+        if (!id) {
+          throw {
+            status: 400,
+            message: "Profile ID is required",
+          };
+        }
+
+        const profiles = await getProfilesFromIDB();
+        const filteredProfiles = profiles.filter((p) => p.id !== id);
+
+        if (filteredProfiles.length === profiles.length) {
+          throw {
+            status: 404,
+            message: "Profile not found",
+          };
+        }
+
+        await saveProfilesToIDB(filteredProfiles);
         return { success: true };
       }
 

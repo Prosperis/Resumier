@@ -16,9 +16,16 @@ function DashboardComponent() {
     navigate({ to: "/resume/$id", params: { id } });
   };
 
+  const handleEditProfile = (profileId: string) => {
+    navigate({ to: "/profile/$id", params: { id: profileId } });
+  };
+
   return (
     <div className="container mx-auto p-8">
-      <ResumeDashboard onResumeClick={handleResumeClick} />
+      <ResumeDashboard
+        onResumeClick={handleResumeClick}
+        onEditProfile={handleEditProfile}
+      />
     </div>
   );
 }
