@@ -75,25 +75,58 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
           isSidebarExpanded ? "w-80 min-w-80" : "w-12",
         )}
       >
-        {/* Expand/Collapse Arrow - appears on hover at the right edge */}
-        <button
-          type="button"
-          onClick={handleToggleSidebar}
+        {/* Expand/Collapse Arrow - Fluid Design */}
+        <div
           className={cn(
-            "absolute top-1/2 -translate-y-1/2 -right-3 z-20",
-            "flex items-center justify-center w-6 h-6 rounded-full",
-            "bg-background border border-border",
-            "text-muted-foreground hover:text-foreground hover:bg-muted",
-            "opacity-0 group-hover/sidebar:opacity-100 transition-all duration-200",
-            "shadow-sm hover:shadow",
+            "absolute top-1/2 -translate-y-1/2 left-full z-20",
+            "flex items-center justify-center",
+            "opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300",
+            "h-14 w-6",
           )}
         >
-          {isSidebarExpanded ? (
-            <ChevronLeft className="h-3.5 w-3.5" />
-          ) : (
-            <ChevronRight className="h-3.5 w-3.5" />
-          )}
-        </button>
+          <button
+            type="button"
+            onClick={handleToggleSidebar}
+            className="relative w-full h-full flex items-center justify-center focus:outline-none group/toggle"
+          >
+            {/* Fluid Shape SVG */}
+            <svg
+              viewBox="0 0 24 56"
+              className={cn(
+                "absolute inset-0 w-full h-full",
+                "fill-background stroke-border",
+                "transition-colors duration-300",
+              )}
+              style={{ filter: "drop-shadow(1px 0 1px rgba(0,0,0,0.05))" }}
+            >
+              {/* 
+                Path creates a smooth, rounded bulge - less pointy, more organic.
+                Uses quadratic curves for a softer, more liquid-like appearance.
+              */}
+              <path
+                d="
+                    M 0 0
+                    C 0 6,   4 10,  8 14
+                    C 14 20, 18 24, 20 28
+                    C 18 32, 14 36, 8 42
+                    C 4 46,  0 50,  0 56
+                "
+                strokeWidth="1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+
+            {/* Icon */}
+            <div className="relative z-10 text-muted-foreground group-hover/toggle:text-foreground transition-colors">
+              {isSidebarExpanded ? (
+                <ChevronLeft className="h-4 w-4" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
+            </div>
+          </button>
+        </div>
 
         {/* Mini sidebar - visible when collapsed */}
         <div
