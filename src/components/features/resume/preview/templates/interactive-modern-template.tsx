@@ -26,7 +26,6 @@ import {
   useOptionalInteractiveResume,
   SectionWrapper,
   HiddenSectionPlaceholder,
-  DEFAULT_SECTION_ORDER,
   type SectionType,
 } from "../interactive";
 
@@ -55,11 +54,12 @@ export function InteractiveModernTemplate({
     (resume.content as ResumeContent & { hiddenSections?: SectionType[] })
       .hiddenSections ||
     [];
-  const sectionOrder =
-    context?.sectionOrder ||
-    (resume.content as ResumeContent & { sectionOrder?: SectionType[] })
-      .sectionOrder ||
-    DEFAULT_SECTION_ORDER;
+  // TODO: Use sectionOrder for dynamic section reordering in future implementation
+  // const sectionOrder =
+  //   context?.sectionOrder ||
+  //   (resume.content as ResumeContent & { sectionOrder?: SectionType[] })
+  //     .sectionOrder ||
+  //   DEFAULT_SECTION_ORDER;
 
   // Helper to check visibility using context
   const isSectionVisible = (sectionType: SectionType) => {

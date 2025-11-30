@@ -30,7 +30,7 @@ export function useResumeHistory() {
     (
       oldState: UserInfo,
       newState: UserInfo,
-      section: string = "personal",
+      _section: string = "personal",
     ): HistoryChange[] => {
       const changes: HistoryChange[] = [];
 

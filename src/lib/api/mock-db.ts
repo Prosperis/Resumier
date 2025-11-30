@@ -137,14 +137,19 @@ class MockDatabase {
       content: demoContent, // Uses same content from profile
       profileLink: {
         profileId: DEMO_PROFILE_ID,
-        syncEnabled: true,
-        selectedSections: {
-          personalInfo: true,
-          experience: true,
-          education: true,
-          skills: true,
-          certifications: true,
-          links: true,
+        selection: {
+          includePersonalInfo: true,
+          includeSummary: true,
+          experienceIds: [],
+          educationIds: [],
+          certificationIds: [],
+          linkIds: [],
+          skills: {
+            technical: [],
+            languages: [],
+            tools: [],
+            soft: [],
+          },
         },
       },
       createdAt: "2024-01-15T10:00:00Z",

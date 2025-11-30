@@ -17,7 +17,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCreateResume, useProfile } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
 import { ProfileSelector } from "@/components/features/profile/profile-selector";
-import type { ProfileLink } from "@/lib/api/profile-types";
 
 interface CreateResumeDialogProps {
   trigger?: React.ReactNode;
@@ -91,32 +90,14 @@ export function CreateResumeDialog({
 
     // If creating from profile, use profile content and set up the link
     let content = defaultContent;
-    let profileLink: ProfileLink | undefined;
 
     if (activeTab === "from-profile" && selectedProfileId && selectedProfile) {
       // Copy profile content to resume
       content = {
         ...selectedProfile.content,
-      };
-      // Set up the profile link
-      profileLink = {
-        profileId: selectedProfileId,
-        selection: {
-          includePersonalInfo: true,
-          includeSummary: true,
-          // Include all items by default (empty arrays = all)
-          experienceIds: [],
-          educationIds: [],
-          certificationIds: [],
-          linkIds: [],
-          skills: {
-            technical: [],
-            languages: [],
-            tools: [],
-            soft: [],
-          },
-        },
-      };
+      } as typeof defaultContent;
+      // Note: Profile link configuration could be added here in the future
+      // when the API supports linking resumes to profiles
     }
 
     mutate(

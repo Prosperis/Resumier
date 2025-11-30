@@ -163,7 +163,7 @@ export function HistoryPanel() {
 
   const { undoChange, redoChange } = useResumeHistory();
 
-  const handleSelectEntry = (entry: HistoryEntry, index: number) => {
+  const handleSelectEntry = (_entry: HistoryEntry, index: number) => {
     // Navigate to this point in history
     const stepsToUndo = currentIndex === -1 ? index + 1 : index - currentIndex;
 

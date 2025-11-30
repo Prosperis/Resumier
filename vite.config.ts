@@ -106,6 +106,9 @@ export default defineConfig(() => {
         globPatterns: ["**/*.{js,css,html,ico,svg}"],
         // Exclude PWA icons and logos - they're added via manifest and includeAssets
         globIgnores: ["**/logo_*.webp", "**/pwa-*.png"],
+        // Increase max file size to cache (default is 2MB)
+        // The main bundle is larger due to dependencies like pdfjs
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024, // 3MB
         // Include additional assets explicitly via additionalManifestEntries if needed
         runtimeCaching: [
           {

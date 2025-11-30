@@ -151,7 +151,7 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
 
   const { undoChange, redoChange } = useResumeHistory();
 
-  const handleSelectEntry = (entry: HistoryEntry, index: number) => {
+  const handleSelectEntry = (_entry: HistoryEntry, index: number) => {
     const stepsToUndo = currentIndex === -1 ? index + 1 : index - currentIndex;
 
     if (stepsToUndo > 0) {

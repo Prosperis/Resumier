@@ -1,8 +1,8 @@
-import { createFileRoute, redirect, useParams } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { queryClient } from "@/app/query-client";
 import { RouteError } from "@/components/ui/route-error";
 import { ResumeEditorLoading } from "@/components/ui/route-loading";
-import { profileQueryKey, useProfile } from "@/hooks/api/use-profile";
+import { profileQueryKey } from "@/hooks/api/use-profile";
 import { apiClient } from "@/lib/api/client";
 import type { Profile } from "@/lib/api/profile-types";
 import { useAuthStore } from "@/stores";
