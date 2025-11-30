@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   User,
   Briefcase,
@@ -24,6 +24,8 @@ import {
 import { cn } from "@/lib/utils";
 import { InteractiveResumePreview } from "./preview/interactive-resume-preview";
 import { ResumeBuilder } from "./resume-builder";
+import { ToolSidebar } from "./tool-sidebar";
+import { useResumeHistory } from "@/hooks/use-resume-history";
 
 // Sidebar section icons mapping
 const sidebarSections = [
@@ -46,6 +48,50 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
 
   // Sidebar state
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+  const [isToolSidebarExpanded, setIsToolSidebarExpanded] = useState(false);
+
+  // History actions for keyboard shortcuts
+  const { undoChange, redoChange } = useResumeHistory();
+
+  // Keyboard shortcuts for undo/redo
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      // Check if user is typing in an input field
+      const target = e.target as HTMLElement;
+      const isInputField =
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable;
+
+      // Only handle shortcuts when not in an input field
+      if (isInputField) return;
+
+      // Ctrl+Z or Cmd+Z for undo
+      if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.shiftKey) {
+        e.preventDefault();
+        undoChange();
+      }
+
+      // Ctrl+Shift+Z or Cmd+Shift+Z for redo
+      if ((e.ctrlKey || e.metaKey) && e.key === "z" && e.shiftKey) {
+        e.preventDefault();
+        redoChange();
+      }
+
+      // Ctrl+Y or Cmd+Y for redo (alternative)
+      if ((e.ctrlKey || e.metaKey) && e.key === "y") {
+        e.preventDefault();
+        redoChange();
+      }
+    },
+    [undoChange, redoChange],
+  );
+
+  // Register keyboard shortcuts
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
 
   // Set/clear the current resume for navbar actions
   useEffect(() => {
@@ -64,6 +110,11 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
   // Toggle sidebar expanded state
   const handleToggleSidebar = () => {
     setIsSidebarExpanded(!isSidebarExpanded);
+  };
+
+  // Toggle tool sidebar
+  const handleToggleToolSidebar = () => {
+    setIsToolSidebarExpanded(!isToolSidebarExpanded);
   };
 
   return (
@@ -187,6 +238,12 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
           isInteractive={true}
         />
       </div>
+
+      {/* Right Sidebar: Tools */}
+      <ToolSidebar
+        isExpanded={isToolSidebarExpanded}
+        onToggle={handleToggleToolSidebar}
+      />
     </div>
   );
 }

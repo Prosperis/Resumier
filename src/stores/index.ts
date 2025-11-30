@@ -34,6 +34,18 @@ export {
   selectUserInfoActions,
   useResumeStore,
 } from "./resume-store";
+export type { HistoryChange, HistoryEntry } from "./history-store";
+export {
+  getFieldLabel,
+  selectCanRedo,
+  selectCanUndo,
+  selectCurrentIndex,
+  selectHistoryActions,
+  selectHistoryEntries,
+  selectIsPreviewingHistory,
+  selectPreviewEntry,
+  useHistoryStore,
+} from "./history-store";
 export type { Theme } from "./theme-store";
 export {
   selectSetTheme,
