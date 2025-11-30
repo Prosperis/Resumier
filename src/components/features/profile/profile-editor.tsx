@@ -57,7 +57,7 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -66,12 +66,7 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur sticky top-0 z-10">
         <div className="container flex h-14 items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onBack}
-            className="gap-2"
-          >
+          <Button variant="ghost" size="sm" onClick={onBack} className="gap-2">
             <ArrowLeft className="h-4 w-4" />
             Back to Dashboard
           </Button>
@@ -157,9 +152,9 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Note: Profile content editing uses the same interface as resume
-                  editing. Changes are saved to the profile and will be available
-                  for all resumes created from this profile.
+                  Note: Profile content editing uses the same interface as
+                  resume editing. Changes are saved to the profile and will be
+                  available for all resumes created from this profile.
                 </p>
                 <div className="border rounded-lg p-4 bg-muted/30">
                   <p className="text-center text-muted-foreground">

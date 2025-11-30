@@ -86,7 +86,7 @@ export const useProfileStore = create<ProfileStore>()(
                     ...updates,
                     updatedAt: new Date().toISOString(),
                   }
-                : p
+                : p,
             ),
           })),
 
@@ -112,7 +112,7 @@ export const useProfileStore = create<ProfileStore>()(
                     content: { ...p.content, ...content },
                     updatedAt: new Date().toISOString(),
                   }
-                : p
+                : p,
             ),
           })),
 
@@ -133,10 +133,10 @@ export const useProfileStore = create<ProfileStore>()(
             await del(name);
           },
         })),
-      }
+      },
     ),
-    { name: "ProfileStore" }
-  )
+    { name: "ProfileStore" },
+  ),
 );
 
 // Selectors for optimized access

@@ -1,6 +1,10 @@
 import { get, set } from "idb-keyval";
 import { demoProfile, mockDb } from "./mock-db";
-import type { CreateProfileDto, Profile, UpdateProfileDto } from "./profile-types";
+import type {
+  CreateProfileDto,
+  Profile,
+  UpdateProfileDto,
+} from "./profile-types";
 import type { CreateResumeDto, Resume, UpdateResumeDto } from "./types";
 
 const IDB_STORE_KEY = "resumier-web-store";
@@ -322,14 +326,14 @@ export const mockApi = {
       } catch (error) {
         console.warn("Failed to read profiles from IndexedDB:", error);
       }
-      
+
       // If no profiles in IDB, seed with demo profile from mockDb
       const mockProfiles = mockDb.getProfiles();
       if (mockProfiles.length > 0) {
         await saveProfilesToIDB(mockProfiles);
         return mockProfiles;
       }
-      
+
       // Fallback: seed with just the demo profile
       await saveProfilesToIDB([demoProfile]);
       return [demoProfile];

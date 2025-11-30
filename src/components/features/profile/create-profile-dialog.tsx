@@ -80,7 +80,7 @@ export function CreateProfileDialog({
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 

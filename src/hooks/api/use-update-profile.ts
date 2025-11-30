@@ -81,7 +81,7 @@ export function useUpdateProfile() {
       queryClient.setQueryData<Profile[]>(profilesQueryKey, (old) => {
         if (!old) return [updatedProfile];
         return old.map((p) =>
-          p.id === updatedProfile.id ? updatedProfile : p
+          p.id === updatedProfile.id ? updatedProfile : p,
         );
       });
     },

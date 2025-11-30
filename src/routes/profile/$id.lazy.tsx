@@ -1,4 +1,8 @@
-import { createLazyFileRoute, useNavigate, useParams } from "@tanstack/react-router";
+import {
+  createLazyFileRoute,
+  useNavigate,
+  useParams,
+} from "@tanstack/react-router";
 import { ProfileEditor } from "@/components/features/profile/profile-editor";
 import { RouteError } from "@/components/ui/route-error";
 import { ResumeEditorLoading } from "@/components/ui/route-loading";

@@ -8,7 +8,10 @@ import { useDuplicateResume, useResumes } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
 import type { Resume } from "@/lib/api/types";
 import type { Profile } from "@/lib/api/profile-types";
-import { ProfileManager, CreateProfileDialog } from "@/components/features/profile";
+import {
+  ProfileManager,
+  CreateProfileDialog,
+} from "@/components/features/profile";
 import { CreateResumeDialog } from "./mutations";
 import { ResumeTable } from "./resume-table";
 
@@ -26,8 +29,11 @@ export function ResumeDashboard({
   const { data: resumes, isLoading, error } = useResumes();
   const { mutate: duplicateResume } = useDuplicateResume();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState<"resumes" | "profiles">(defaultTab);
-  const [createResumeFromProfile, setCreateResumeFromProfile] = useState<Profile | null>(null);
+  const [activeTab, setActiveTab] = useState<"resumes" | "profiles">(
+    defaultTab,
+  );
+  const [createResumeFromProfile, setCreateResumeFromProfile] =
+    useState<Profile | null>(null);
 
   // Handle duplicate action
   const handleDuplicate = (resume: Resume) => {

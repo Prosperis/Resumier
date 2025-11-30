@@ -62,8 +62,8 @@ export function DeleteProfileDialog({
           <AlertDialogTitle>Delete Profile</AlertDialogTitle>
           <AlertDialogDescription className="space-y-2">
             <span>
-              Are you sure you want to delete{" "}
-              <strong>"{profile?.name}"</strong>?
+              Are you sure you want to delete <strong>"{profile?.name}"</strong>
+              ?
             </span>
             {linkedResumesCount > 0 && (
               <span className="block text-destructive">

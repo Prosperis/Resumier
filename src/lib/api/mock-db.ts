@@ -176,7 +176,9 @@ class MockDatabase {
   /**
    * Create new profile
    */
-  createProfile(data: Omit<Profile, "id" | "createdAt" | "updatedAt">): Profile {
+  createProfile(
+    data: Omit<Profile, "id" | "createdAt" | "updatedAt">,
+  ): Profile {
     const now = new Date().toISOString();
     const profile: Profile = {
       ...data,
@@ -210,7 +212,10 @@ class MockDatabase {
             ...existing.content,
             ...updates.content,
             personalInfo: updates.content.personalInfo
-              ? { ...existing.content.personalInfo, ...updates.content.personalInfo }
+              ? {
+                  ...existing.content.personalInfo,
+                  ...updates.content.personalInfo,
+                }
               : existing.content.personalInfo,
             skills: updates.content.skills
               ? { ...existing.content.skills, ...updates.content.skills }

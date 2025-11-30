@@ -102,9 +102,9 @@ export function ProfileManager({
         </div>
         <h3 className="mb-2 text-lg font-semibold">No profiles yet</h3>
         <p className="text-muted-foreground mb-4 max-w-md mx-auto text-sm">
-          Create a master profile with your experience, education, and
-          skills. Then create multiple tailored resumes from this single
-          source of truth.
+          Create a master profile with your experience, education, and skills.
+          Then create multiple tailored resumes from this single source of
+          truth.
         </p>
         <CreateProfileDialog
           trigger={
@@ -140,9 +140,7 @@ export function ProfileManager({
         open={!!profileToDelete}
         onOpenChange={(open) => !open && setProfileToDelete(null)}
         linkedResumesCount={
-          profileToDelete
-            ? getLinkedResumesCount(profileToDelete.id)
-            : 0
+          profileToDelete ? getLinkedResumesCount(profileToDelete.id) : 0
         }
       />
     </>

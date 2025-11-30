@@ -29,7 +29,7 @@ import type {
  */
 export function mergeProfileWithOverrides(
   profile: Profile,
-  profileLink: ProfileLink
+  profileLink: ProfileLink,
 ): ResumeContent {
   const { selection, overrides } = profileLink;
   const profileContent = profile.content;
@@ -53,7 +53,7 @@ export function mergeProfileWithOverrides(
 function getPersonalInfo(
   profileContent: ProfileContent,
   selection: SectionSelection,
-  overrides?: ResumeOverrides
+  overrides?: ResumeOverrides,
 ): PersonalInfo {
   // If personal info is excluded, return empty
   if (selection.includePersonalInfo === false) {
@@ -64,7 +64,10 @@ function getPersonalInfo(
       email: "",
       phone: "",
       location: "",
-      summary: selection.includeSummary === false ? "" : profileContent.personalInfo.summary,
+      summary:
+        selection.includeSummary === false
+          ? ""
+          : profileContent.personalInfo.summary,
     };
   }
 
@@ -90,7 +93,7 @@ function getPersonalInfo(
 function getExperience(
   profileContent: ProfileContent,
   selection: SectionSelection,
-  overrides?: ResumeOverrides
+  overrides?: ResumeOverrides,
 ): Experience[] {
   // If section is excluded
   if (selection.experienceIds === null) {
@@ -100,14 +103,11 @@ function getExperience(
 
   // Get selected experiences (empty array = all)
   let experiences: Experience[];
-  if (
-    !selection.experienceIds ||
-    selection.experienceIds.length === 0
-  ) {
+  if (!selection.experienceIds || selection.experienceIds.length === 0) {
     experiences = [...profileContent.experience];
   } else {
     experiences = profileContent.experience.filter((exp) =>
-      selection.experienceIds!.includes(exp.id)
+      selection.experienceIds!.includes(exp.id),
     );
   }
 
@@ -133,7 +133,7 @@ function getExperience(
 function getEducation(
   profileContent: ProfileContent,
   selection: SectionSelection,
-  overrides?: ResumeOverrides
+  overrides?: ResumeOverrides,
 ): Education[] {
   // If section is excluded
   if (selection.educationIds === null) {
@@ -146,7 +146,7 @@ function getEducation(
     education = [...profileContent.education];
   } else {
     education = profileContent.education.filter((edu) =>
-      selection.educationIds!.includes(edu.id)
+      selection.educationIds!.includes(edu.id),
     );
   }
 
@@ -172,7 +172,7 @@ function getEducation(
 function getSkills(
   profileContent: ProfileContent,
   selection: SectionSelection,
-  overrides?: ResumeOverrides
+  overrides?: ResumeOverrides,
 ): Skills {
   // If section is excluded
   if (selection.skills === null) {
@@ -201,7 +201,7 @@ function getSkills(
   // Helper to filter skills by name
   const filterSkills = (
     skills: (string | { name: string; level: number })[],
-    selectedNames?: string[] | null
+    selectedNames?: string[] | null,
   ) => {
     if (selectedNames === null) return []; // Excluded
     if (!selectedNames || selectedNames.length === 0) return skills; // All
@@ -214,28 +214,34 @@ function getSkills(
   // Apply selection
   result.technical = filterSkills(
     profileContent.skills.technical,
-    selection.skills?.technical
+    selection.skills?.technical,
   );
   result.languages = filterSkills(
     profileContent.skills.languages,
-    selection.skills?.languages
+    selection.skills?.languages,
   );
   result.tools = filterSkills(
     profileContent.skills.tools,
-    selection.skills?.tools
+    selection.skills?.tools,
   );
   result.soft = filterSkills(
     profileContent.skills.soft,
-    selection.skills?.soft
+    selection.skills?.soft,
   );
 
   // Add additional skills from overrides
   if (overrides?.additionalSkills) {
     if (overrides.additionalSkills.technical) {
-      result.technical = [...result.technical, ...overrides.additionalSkills.technical];
+      result.technical = [
+        ...result.technical,
+        ...overrides.additionalSkills.technical,
+      ];
     }
     if (overrides.additionalSkills.languages) {
-      result.languages = [...result.languages, ...overrides.additionalSkills.languages];
+      result.languages = [
+        ...result.languages,
+        ...overrides.additionalSkills.languages,
+      ];
     }
     if (overrides.additionalSkills.tools) {
       result.tools = [...result.tools, ...overrides.additionalSkills.tools];
@@ -254,7 +260,7 @@ function getSkills(
 function getCertifications(
   profileContent: ProfileContent,
   selection: SectionSelection,
-  overrides?: ResumeOverrides
+  overrides?: ResumeOverrides,
 ): Certification[] {
   // If section is excluded
   if (selection.certificationIds === null) {
@@ -263,14 +269,11 @@ function getCertifications(
 
   // Get selected certifications (empty array = all)
   let certifications: Certification[];
-  if (
-    !selection.certificationIds ||
-    selection.certificationIds.length === 0
-  ) {
+  if (!selection.certificationIds || selection.certificationIds.length === 0) {
     certifications = [...profileContent.certifications];
   } else {
     certifications = profileContent.certifications.filter((cert) =>
-      selection.certificationIds!.includes(cert.id)
+      selection.certificationIds!.includes(cert.id),
     );
   }
 
@@ -288,7 +291,7 @@ function getCertifications(
 function getLinks(
   profileContent: ProfileContent,
   selection: SectionSelection,
-  overrides?: ResumeOverrides
+  overrides?: ResumeOverrides,
 ): Link[] {
   // If section is excluded
   if (selection.linkIds === null) {
@@ -301,7 +304,7 @@ function getLinks(
     links = [...profileContent.links];
   } else {
     links = profileContent.links.filter((link) =>
-      selection.linkIds!.includes(link.id)
+      selection.linkIds!.includes(link.id),
     );
   }
 
@@ -317,7 +320,7 @@ function getLinks(
  * Check if a resume is linked to a profile
  */
 export function isLinkedToProfile(
-  resume: { profileLink?: ProfileLink } | undefined
+  resume: { profileLink?: ProfileLink } | undefined,
 ): boolean {
   return !!resume?.profileLink?.profileId;
 }
@@ -326,7 +329,7 @@ export function isLinkedToProfile(
  * Get the profile ID a resume is linked to
  */
 export function getLinkedProfileId(
-  resume: { profileLink?: ProfileLink } | undefined
+  resume: { profileLink?: ProfileLink } | undefined,
 ): string | null {
   return resume?.profileLink?.profileId || null;
 }

@@ -35,10 +35,10 @@ export function CreateResumeDialog({
   const [title, setTitle] = useState("");
   const [validationError, setValidationError] = useState("");
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
-    defaultProfileId || null
+    defaultProfileId || null,
   );
   const [activeTab, setActiveTab] = useState<"standalone" | "from-profile">(
-    defaultProfileId ? "from-profile" : "standalone"
+    defaultProfileId ? "from-profile" : "standalone",
   );
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -153,7 +153,7 @@ export function CreateResumeDialog({
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 

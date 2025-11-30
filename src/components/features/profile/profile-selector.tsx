@@ -68,14 +68,20 @@ export function ProfileSelector({
             ) : (
               <>
                 <User className="h-4 w-4 text-muted-foreground" />
-                <SelectValue placeholder={isLoading ? "Loading profiles..." : "Select a profile..."} />
+                <SelectValue
+                  placeholder={
+                    isLoading ? "Loading profiles..." : "Select a profile..."
+                  }
+                />
               </>
             )}
           </div>
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="none">
-            <span className="text-muted-foreground">No profile (standalone)</span>
+            <span className="text-muted-foreground">
+              No profile (standalone)
+            </span>
           </SelectItem>
           {profiles?.map((profile) => (
             <SelectItem key={profile.id} value={profile.id}>
@@ -103,7 +109,9 @@ export function ProfileSelector({
               <User className="h-4 w-4 text-primary" />
             </div>
             <div className="text-sm">
-              <div className="font-medium">Linked to {selectedProfile.name}</div>
+              <div className="font-medium">
+                Linked to {selectedProfile.name}
+              </div>
               <div className="text-xs text-muted-foreground">
                 Content will be pulled from this profile
               </div>
