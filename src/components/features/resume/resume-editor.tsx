@@ -104,13 +104,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
                 Uses quadratic curves for a softer, more liquid-like appearance.
               */}
               <path
-                d="
-                    M 0 0
-                    C 0 6,   4 10,  8 14
-                    C 14 20, 18 24, 20 28
-                    C 18 32, 14 36, 8 42
-                    C 4 46,  0 50,  0 56
-                "
+                d="M 0 0 C 0 12, 18 16, 18 28 S 0 44, 0 56"
                 strokeWidth="1"
                 strokeLinecap="round"
                 strokeLinejoin="round"
