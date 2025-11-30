@@ -3,7 +3,11 @@ import { get, set } from "idb-keyval";
 import { apiClient } from "../../lib/api/client";
 import { getDemoResumes } from "../../lib/api/demo-data";
 import type { Resume } from "../../lib/api/types";
-import { selectIsDemo, selectIsGuest, useAuthStore } from "../../stores/auth-store";
+import {
+  selectIsDemo,
+  selectIsGuest,
+  useAuthStore,
+} from "../../stores/auth-store";
 
 const IDB_STORE_KEY = "resumier-web-store";
 
@@ -42,14 +46,14 @@ export function useResumes() {
               return resumes;
             }
           }
-          
+
           // If in demo mode and no resumes exist, seed with demo data
           if (isDemo) {
             const demoResumes = getDemoResumes();
             await saveResumesToIDB(demoResumes);
             return demoResumes;
           }
-          
+
           return [] as Resume[];
         } catch (error) {
           console.error("Failed to fetch resumes from local storage:", error);

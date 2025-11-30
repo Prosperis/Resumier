@@ -77,7 +77,14 @@ export const demoContent: ProfileContent = {
     },
   ],
   skills: {
-    technical: ["React", "TypeScript", "Node.js", "Python", "GraphQL", "REST APIs"],
+    technical: [
+      "React",
+      "TypeScript",
+      "Node.js",
+      "Python",
+      "GraphQL",
+      "REST APIs",
+    ],
     languages: ["JavaScript", "TypeScript", "Python", "SQL", "HTML/CSS"],
     tools: ["Git", "Docker", "AWS", "VS Code", "Figma", "Jira"],
     soft: ["Leadership", "Communication", "Problem Solving", "Mentoring"],

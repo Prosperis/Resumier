@@ -3,7 +3,11 @@ import { get, set } from "idb-keyval";
 import { apiClient } from "../../lib/api/client";
 import { getDemoProfiles } from "../../lib/api/demo-data";
 import type { Profile } from "../../lib/api/profile-types";
-import { selectIsDemo, selectIsGuest, useAuthStore } from "../../stores/auth-store";
+import {
+  selectIsDemo,
+  selectIsGuest,
+  useAuthStore,
+} from "../../stores/auth-store";
 
 const IDB_PROFILES_KEY = "resumier-profiles-store";
 
@@ -45,14 +49,14 @@ export function useProfiles() {
               return state.state.profiles;
             }
           }
-          
+
           // If in demo mode and no profiles exist, seed with demo data
           if (isDemo) {
             const demoProfiles = getDemoProfiles();
             await saveProfilesToIDB(demoProfiles);
             return demoProfiles;
           }
-          
+
           return [] as Profile[];
         } catch (error) {
           console.error("Failed to fetch profiles from local storage:", error);

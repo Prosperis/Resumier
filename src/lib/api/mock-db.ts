@@ -1,8 +1,4 @@
-import {
-  demoProfile,
-  demoResumes,
-  DEMO_PROFILE_ID,
-} from "./demo-data";
+import { demoProfile, demoResumes, DEMO_PROFILE_ID } from "./demo-data";
 import type { Profile } from "./profile-types";
 import type { Resume } from "./types";
 
