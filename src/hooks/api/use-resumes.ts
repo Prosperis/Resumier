@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
+import { get, set } from "idb-keyval";
 import { apiClient } from "../../lib/api/client";
+import { getDemoResumes } from "../../lib/api/demo-data";
 import type { Resume } from "../../lib/api/types";
-import { useAuthStore, selectIsGuest } from "../../stores/auth-store";
-import { get } from "idb-keyval";
+import { selectIsDemo, selectIsGuest, useAuthStore } from "../../stores/auth-store";
 
 const IDB_STORE_KEY = "resumier-web-store";
 
@@ -12,12 +13,21 @@ const IDB_STORE_KEY = "resumier-web-store";
 export const resumesQueryKey = ["resumes"] as const;
 
 /**
+ * Save resumes to IndexedDB
+ */
+async function saveResumesToIDB(resumes: Resume[]): Promise<void> {
+  await set(IDB_STORE_KEY, { resumes });
+}
+
+/**
  * Fetch all resumes
  * Returns a React Query hook for fetching the list of resumes
  * In guest mode, fetches from IndexedDB instead of API
+ * In demo mode, seeds demo data if not present
  */
 export function useResumes() {
   const isGuest = useAuthStore(selectIsGuest);
+  const isDemo = useAuthStore(selectIsDemo);
 
   return useQuery({
     queryKey: resumesQueryKey,
@@ -32,6 +42,14 @@ export function useResumes() {
               return resumes;
             }
           }
+          
+          // If in demo mode and no resumes exist, seed with demo data
+          if (isDemo) {
+            const demoResumes = getDemoResumes();
+            await saveResumesToIDB(demoResumes);
+            return demoResumes;
+          }
+          
           return [] as Resume[];
         } catch (error) {
           console.error("Failed to fetch resumes from local storage:", error);

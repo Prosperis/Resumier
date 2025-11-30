@@ -14,6 +14,7 @@ export async function clearGuestData(): Promise<void> {
   try {
     await del("resumier-web-store");
     await del("resumier-documents");
+    await del("resumier-profiles-store");
   } catch (error) {
     console.error("Failed to clear guest data:", error);
     throw error;
@@ -27,13 +28,18 @@ export async function clearGuestData(): Promise<void> {
 export async function exportGuestData(): Promise<{
   resumeStore: unknown;
   documents: unknown;
+  profiles: unknown;
 }> {
   try {
     const allEntries = await entries();
     const data: Record<string, unknown> = {};
 
     for (const [key, value] of allEntries) {
-      if (key === "resumier-web-store" || key === "resumier-documents") {
+      if (
+        key === "resumier-web-store" ||
+        key === "resumier-documents" ||
+        key === "resumier-profiles-store"
+      ) {
         data[key] = value;
       }
     }
@@ -41,6 +47,7 @@ export async function exportGuestData(): Promise<{
     return {
       resumeStore: data["resumier-web-store"] || null,
       documents: data["resumier-documents"] || null,
+      profiles: data["resumier-profiles-store"] || null,
     };
   } catch (error) {
     console.error("Failed to export guest data:", error);
@@ -55,6 +62,7 @@ export async function exportGuestData(): Promise<{
 export async function importGuestData(data: {
   resumeStore?: unknown;
   documents?: unknown;
+  profiles?: unknown;
 }): Promise<void> {
   try {
     if (data.resumeStore) {
@@ -62,6 +70,9 @@ export async function importGuestData(data: {
     }
     if (data.documents) {
       await set("resumier-documents", data.documents);
+    }
+    if (data.profiles) {
+      await set("resumier-profiles-store", data.profiles);
     }
   } catch (error) {
     console.error("Failed to import guest data:", error);
@@ -77,7 +88,11 @@ export async function hasGuestData(): Promise<boolean> {
     // Check IndexedDB for resume data
     const allEntries = await entries();
     for (const [key] of allEntries) {
-      if (key === "resumier-web-store" || key === "resumier-documents") {
+      if (
+        key === "resumier-web-store" ||
+        key === "resumier-documents" ||
+        key === "resumier-profiles-store"
+      ) {
         return true;
       }
     }

@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { get } from "idb-keyval";
+import { get, set } from "idb-keyval";
 import { apiClient } from "../../lib/api/client";
+import { getDemoProfiles } from "../../lib/api/demo-data";
 import type { Profile } from "../../lib/api/profile-types";
-import { selectIsGuest, useAuthStore } from "../../stores/auth-store";
+import { selectIsDemo, selectIsGuest, useAuthStore } from "../../stores/auth-store";
 
 const IDB_PROFILES_KEY = "resumier-profiles-store";
 
@@ -12,12 +13,24 @@ const IDB_PROFILES_KEY = "resumier-profiles-store";
 export const profilesQueryKey = ["profiles"] as const;
 
 /**
+ * Save profiles to IndexedDB
+ */
+async function saveProfilesToIDB(profiles: Profile[]): Promise<void> {
+  await set(IDB_PROFILES_KEY, {
+    state: { profiles, activeProfileId: null },
+    version: 0,
+  });
+}
+
+/**
  * Fetch all profiles
  * Returns a React Query hook for fetching the list of profiles
  * In guest mode, fetches from IndexedDB instead of API
+ * In demo mode, seeds demo data if not present
  */
 export function useProfiles() {
   const isGuest = useAuthStore(selectIsGuest);
+  const isDemo = useAuthStore(selectIsDemo);
 
   return useQuery({
     queryKey: profilesQueryKey,
@@ -32,6 +45,14 @@ export function useProfiles() {
               return state.state.profiles;
             }
           }
+          
+          // If in demo mode and no profiles exist, seed with demo data
+          if (isDemo) {
+            const demoProfiles = getDemoProfiles();
+            await saveProfilesToIDB(demoProfiles);
+            return demoProfiles;
+          }
+          
           return [] as Profile[];
         } catch (error) {
           console.error("Failed to fetch profiles from local storage:", error);

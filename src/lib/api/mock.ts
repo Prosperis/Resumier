@@ -1,5 +1,6 @@
 import { get, set } from "idb-keyval";
-import { demoProfile, mockDb } from "./mock-db";
+import { getDemoProfiles } from "./demo-data";
+import { mockDb } from "./mock-db";
 import type {
   CreateProfileDto,
   Profile,
@@ -327,16 +328,17 @@ export const mockApi = {
         console.warn("Failed to read profiles from IndexedDB:", error);
       }
 
-      // If no profiles in IDB, seed with demo profile from mockDb
+      // If no profiles in IDB, seed with demo profiles from mockDb
       const mockProfiles = mockDb.getProfiles();
       if (mockProfiles.length > 0) {
         await saveProfilesToIDB(mockProfiles);
         return mockProfiles;
       }
 
-      // Fallback: seed with just the demo profile
-      await saveProfilesToIDB([demoProfile]);
-      return [demoProfile];
+      // Fallback: seed with demo profiles
+      const demoProfiles = getDemoProfiles();
+      await saveProfilesToIDB(demoProfiles);
+      return demoProfiles;
     };
 
     // Helper to save profiles to IndexedDB
