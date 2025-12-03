@@ -37,7 +37,11 @@ function getSkillName(skill: string | SkillWithLevel): string {
 }
 
 // Define which sections belong to which column
-const MAIN_COLUMN_SECTIONS: SectionType[] = ["summary", "experience", "education"];
+const MAIN_COLUMN_SECTIONS: SectionType[] = [
+  "summary",
+  "experience",
+  "education",
+];
 const SIDEBAR_SECTIONS: SectionType[] = ["skills", "certifications", "links"];
 
 interface InteractiveModernTemplateProps {
@@ -82,13 +86,20 @@ export function InteractiveModernTemplate({
       case "summary":
         return !!personalInfo.summary;
       case "experience":
-        return experience.filter(
-          (exp) => exp.position || exp.company || exp.description || (exp.highlights && exp.highlights.length > 0)
-        ).length > 0;
+        return (
+          experience.filter(
+            (exp) =>
+              exp.position ||
+              exp.company ||
+              exp.description ||
+              (exp.highlights && exp.highlights.length > 0),
+          ).length > 0
+        );
       case "education":
-        return education.filter(
-          (edu) => edu.degree || edu.institution || edu.field
-        ).length > 0;
+        return (
+          education.filter((edu) => edu.degree || edu.institution || edu.field)
+            .length > 0
+        );
       case "skills":
         return skills.length > 0;
       case "certifications":
@@ -107,12 +118,12 @@ export function InteractiveModernTemplate({
 
   // Get sections for main column sorted by sectionOrder
   const mainColumnSections = MAIN_COLUMN_SECTIONS.slice().sort(
-    (a, b) => sectionOrder.indexOf(a) - sectionOrder.indexOf(b)
+    (a, b) => sectionOrder.indexOf(a) - sectionOrder.indexOf(b),
   );
 
   // Get sections for sidebar sorted by sectionOrder
   const sidebarSections = SIDEBAR_SECTIONS.slice().sort(
-    (a, b) => sectionOrder.indexOf(a) - sectionOrder.indexOf(b)
+    (a, b) => sectionOrder.indexOf(a) - sectionOrder.indexOf(b),
   );
 
   // Get only the sections that are actually rendered (visible AND have data) for drag and drop
@@ -201,8 +212,8 @@ export function InteractiveModernTemplate({
 
       <div className="grid grid-cols-3 gap-8 p-8">
         {/* Main Content - 2 columns */}
-        <SortableSectionColumn 
-          sectionIds={renderableMainSections} 
+        <SortableSectionColumn
+          sectionIds={renderableMainSections}
           className="col-span-2 space-y-6"
         >
           {/* Hidden Section Placeholders for main column sections */}
@@ -223,8 +234,16 @@ export function InteractiveModernTemplate({
             switch (sectionType) {
               case "summary":
                 return isSectionVisible("summary") && personalInfo.summary ? (
-                  <SectionWrapper key="summary" sectionType="summary" sectionLabel="Summary" isDraggable>
-                    <EditableSection sectionType="summary" editLabel="Edit summary">
+                  <SectionWrapper
+                    key="summary"
+                    sectionType="summary"
+                    sectionLabel="Summary"
+                    isDraggable
+                  >
+                    <EditableSection
+                      sectionType="summary"
+                      editLabel="Edit summary"
+                    >
                       <section>
                         <h2
                           className="mb-3 border-b-2 pb-1 text-xl font-bold"
@@ -301,7 +320,9 @@ export function InteractiveModernTemplate({
                                 editLabel={`Edit ${exp.position || "experience"}`}
                                 canDelete
                                 canReorder={experience.length > 1}
-                                onDelete={() => context?.onDeleteExperience(exp.id)}
+                                onDelete={() =>
+                                  context?.onDeleteExperience(exp.id)
+                                }
                               >
                                 <div>
                                   <div className="mb-1 flex items-start justify-between">
@@ -338,16 +359,19 @@ export function InteractiveModernTemplate({
                                       {exp.description}
                                     </p>
                                   )}
-                                  {exp.highlights && exp.highlights.length > 0 && (
-                                    <ul
-                                      className="list-inside list-disc space-y-1 text-sm"
-                                      style={{ color: colors.textLight }}
-                                    >
-                                      {exp.highlights.map((highlight, idx) => (
-                                        <li key={idx}>{highlight}</li>
-                                      ))}
-                                    </ul>
-                                  )}
+                                  {exp.highlights &&
+                                    exp.highlights.length > 0 && (
+                                      <ul
+                                        className="list-inside list-disc space-y-1 text-sm"
+                                        style={{ color: colors.textLight }}
+                                      >
+                                        {exp.highlights.map(
+                                          (highlight, idx) => (
+                                            <li key={idx}>{highlight}</li>
+                                          ),
+                                        )}
+                                      </ul>
+                                    )}
                                 </div>
                               </EditableSection>
                             );
@@ -362,7 +386,12 @@ export function InteractiveModernTemplate({
                   education.filter(
                     (edu) => edu.degree || edu.institution || edu.field,
                   ).length > 0 ? (
-                  <SectionWrapper key="education" sectionType="education" sectionLabel="Education" isDraggable>
+                  <SectionWrapper
+                    key="education"
+                    sectionType="education"
+                    sectionLabel="Education"
+                    isDraggable
+                  >
                     <section>
                       <EditableSectionHeader
                         sectionType="education"
@@ -398,7 +427,9 @@ export function InteractiveModernTemplate({
                                 editLabel={`Edit ${edu.degree || "education"}`}
                                 canDelete
                                 canReorder={education.length > 1}
-                                onDelete={() => context?.onDeleteEducation(edu.id)}
+                                onDelete={() =>
+                                  context?.onDeleteEducation(edu.id)
+                                }
                               >
                                 <div>
                                   <div className="mb-1 flex items-start justify-between">
@@ -469,13 +500,18 @@ export function InteractiveModernTemplate({
         </SortableSectionColumn>
 
         {/* Sidebar - 1 column */}
-        <SortableSectionColumn sectionIds={renderableSidebarSections} className="space-y-6">
+        <SortableSectionColumn
+          sectionIds={renderableSidebarSections}
+          className="space-y-6"
+        >
           {/* Hidden Section Placeholders for sidebar sections */}
           {sidebarSections.map((sectionType) => (
             <HiddenSectionPlaceholder
               key={`hidden-${sectionType}`}
               sectionType={sectionType}
-              sectionLabel={sectionType.charAt(0).toUpperCase() + sectionType.slice(1)}
+              sectionLabel={
+                sectionType.charAt(0).toUpperCase() + sectionType.slice(1)
+              }
             />
           ))}
 
@@ -488,8 +524,16 @@ export function InteractiveModernTemplate({
                     skills.languages?.length > 0 ||
                     skills.tools?.length > 0 ||
                     skills.soft?.length > 0) ? (
-                  <SectionWrapper key="skills" sectionType="skills" sectionLabel="Skills" isDraggable>
-                    <EditableSection sectionType="skills" editLabel="Edit skills">
+                  <SectionWrapper
+                    key="skills"
+                    sectionType="skills"
+                    sectionLabel="Skills"
+                    isDraggable
+                  >
+                    <EditableSection
+                      sectionType="skills"
+                      editLabel="Edit skills"
+                    >
                       <section>
                         <h2
                           className="mb-3 border-b-2 pb-1 text-lg font-bold"
@@ -646,7 +690,9 @@ export function InteractiveModernTemplate({
                       </EditableSectionHeader>
                       <div className="space-y-2">
                         {certifications
-                          .filter((cert) => cert.name || cert.issuer || cert.date)
+                          .filter(
+                            (cert) => cert.name || cert.issuer || cert.date,
+                          )
                           .map((cert) => (
                             <EditableSection
                               key={cert.id}
@@ -694,7 +740,12 @@ export function InteractiveModernTemplate({
               case "links":
                 return isSectionVisible("links") &&
                   links.filter((link) => link.label || link.url).length > 0 ? (
-                  <SectionWrapper key="links" sectionType="links" sectionLabel="Links" isDraggable>
+                  <SectionWrapper
+                    key="links"
+                    sectionType="links"
+                    sectionLabel="Links"
+                    isDraggable
+                  >
                     <section>
                       <EditableSectionHeader
                         sectionType="links"

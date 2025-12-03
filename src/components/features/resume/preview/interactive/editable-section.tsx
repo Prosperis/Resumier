@@ -3,7 +3,13 @@
  * Wraps resume sections to make them interactive with hover/click states
  */
 
-import { forwardRef, type ReactNode, type MouseEvent, useCallback, useState } from "react";
+import {
+  forwardRef,
+  type ReactNode,
+  type MouseEvent,
+  useCallback,
+  useState,
+} from "react";
 import {
   Pencil,
   Plus,
@@ -341,7 +347,7 @@ export function SectionWrapper({
     transform,
     transition,
     isDragging,
-  } = useSortable({ 
+  } = useSortable({
     id: sectionType,
     disabled: !isDraggable,
   });
@@ -349,22 +355,27 @@ export function SectionWrapper({
   // Determine if we should show a drop indicator based on drag state from context
   // Use the column-specific sectionIds for calculating positions
   const columnSectionIds = dragState.sectionIds;
-  const isBeingDraggedOver = dragState.overId === sectionType && dragState.activeId !== sectionType;
-  const activeIndex = dragState.activeId ? columnSectionIds.indexOf(dragState.activeId) : -1;
+  const isBeingDraggedOver =
+    dragState.overId === sectionType && dragState.activeId !== sectionType;
+  const activeIndex = dragState.activeId
+    ? columnSectionIds.indexOf(dragState.activeId)
+    : -1;
   const thisIndex = columnSectionIds.indexOf(sectionType);
-  
+
   // Show drop indicator above if dragging from below
   const showDropIndicatorAbove = isBeingDraggedOver && activeIndex > thisIndex;
   // Show drop indicator below if dragging from above
   const showDropIndicatorBelow = isBeingDraggedOver && activeIndex < thisIndex;
 
-  const style = isDraggable ? {
-    transform: CSS.Transform.toString(transform),
-    transition: transition || 'transform 200ms ease',
-  } : undefined;
+  const style = isDraggable
+    ? {
+        transform: CSS.Transform.toString(transform),
+        transition: transition || "transform 200ms ease",
+      }
+    : undefined;
 
   return (
-    <div 
+    <div
       ref={isDraggable ? setNodeRef : undefined}
       style={style}
       className={cn(
@@ -377,7 +388,7 @@ export function SectionWrapper({
       {showDropIndicatorAbove && (
         <div className="absolute -top-2 left-0 right-0 h-1 bg-blue-500 rounded-full z-40 shadow-lg shadow-blue-500/50" />
       )}
-      
+
       {/* Invisible hover bridge - extends hover area to include the controls */}
       <div className="absolute -left-12 top-0 bottom-0 w-12 pointer-events-auto" />
       {/* Section management controls - appear on the left on hover */}
@@ -456,7 +467,7 @@ export function SectionWrapper({
       </div>
 
       {children}
-      
+
       {/* Drop indicator below */}
       {showDropIndicatorBelow && (
         <div className="absolute -bottom-2 left-0 right-0 h-1 bg-blue-500 rounded-full z-40 shadow-lg shadow-blue-500/50" />
@@ -613,7 +624,11 @@ interface DragStateContextValue {
   sectionIds: EditableSectionType[];
 }
 
-const DragStateContext = createContext<DragStateContextValue>({ activeId: null, overId: null, sectionIds: [] });
+const DragStateContext = createContext<DragStateContextValue>({
+  activeId: null,
+  overId: null,
+  sectionIds: [],
+});
 
 export function useDragState() {
   return useContext(DragStateContext);
@@ -636,7 +651,7 @@ export function SortableSectionColumn({
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
@@ -667,19 +682,21 @@ export function SortableSectionColumn({
 
       // Create new local order for this column
       const newColumnOrder = arrayMove(sectionIds, oldIndex, newIndex);
-      
+
       // Update the full section order by replacing the sections in this column
       // Simple approach: just update the sections within this column at their current positions
       const newOrder = [...context.sectionOrder];
-      const columnPositions = sectionIds.map(s => newOrder.indexOf(s)).sort((a, b) => a - b);
-      
+      const columnPositions = sectionIds
+        .map((s) => newOrder.indexOf(s))
+        .sort((a, b) => a - b);
+
       newColumnOrder.forEach((sectionType, idx) => {
         newOrder[columnPositions[idx]] = sectionType;
       });
 
       context.reorderSections(newOrder);
     },
-    [context, sectionIds]
+    [context, sectionIds],
   );
 
   const handleDragCancel = useCallback(() => {
@@ -701,7 +718,10 @@ export function SortableSectionColumn({
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
+      <SortableContext
+        items={sectionIds}
+        strategy={verticalListSortingStrategy}
+      >
         <DragStateContext.Provider value={{ activeId, overId, sectionIds }}>
           <div className={className}>{children}</div>
         </DragStateContext.Provider>
