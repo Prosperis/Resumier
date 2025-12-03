@@ -135,6 +135,14 @@ export function InteractiveResumePreview({
     [normalizedOrder, saveContent],
   );
 
+  // Reorder sections (for drag and drop)
+  const handleReorderSections = useCallback(
+    (newOrder: EditableSectionType[]) => {
+      saveContent({ sectionOrder: newOrder } as Partial<typeof resume.content>);
+    },
+    [saveContent],
+  );
+
   // Update handlers for each section type
   const handleUpdatePersonalInfo = useCallback(
     (data: Partial<PersonalInfo>) => {
@@ -359,6 +367,7 @@ export function InteractiveResumePreview({
       onToggleSectionVisibility={handleToggleSectionVisibility}
       onMoveSectionUp={handleMoveSectionUp}
       onMoveSectionDown={handleMoveSectionDown}
+      onReorderSections={handleReorderSections}
       onUpdatePersonalInfo={handleUpdatePersonalInfo}
       onUpdateExperience={handleUpdateExperience}
       onAddExperience={handleAddExperience}

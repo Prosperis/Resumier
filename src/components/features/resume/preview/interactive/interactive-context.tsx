@@ -85,6 +85,7 @@ interface InteractiveResumeContextValue {
   toggleSectionVisibility: (sectionType: EditableSectionType) => void;
   moveSectionUp: (sectionType: EditableSectionType) => void;
   moveSectionDown: (sectionType: EditableSectionType) => void;
+  reorderSections: (newOrder: EditableSectionType[]) => void;
   isSectionVisible: (sectionType: EditableSectionType) => boolean;
   getSectionIndex: (sectionType: EditableSectionType) => number;
 
@@ -121,6 +122,7 @@ interface InteractiveResumeProviderProps {
   onToggleSectionVisibility: (sectionType: EditableSectionType) => void;
   onMoveSectionUp: (sectionType: EditableSectionType) => void;
   onMoveSectionDown: (sectionType: EditableSectionType) => void;
+  onReorderSections: (newOrder: EditableSectionType[]) => void;
   onUpdatePersonalInfo: (data: Partial<PersonalInfo>) => void;
   onUpdateExperience: (id: string, data: Partial<Experience>) => void;
   onAddExperience: () => void;
@@ -150,6 +152,7 @@ export function InteractiveResumeProvider({
   onToggleSectionVisibility,
   onMoveSectionUp,
   onMoveSectionDown,
+  onReorderSections,
   onUpdatePersonalInfo,
   onUpdateExperience,
   onAddExperience,
@@ -217,6 +220,7 @@ export function InteractiveResumeProvider({
     toggleSectionVisibility: onToggleSectionVisibility,
     moveSectionUp: onMoveSectionUp,
     moveSectionDown: onMoveSectionDown,
+    reorderSections: onReorderSections,
     isSectionVisible,
     getSectionIndex,
     onUpdatePersonalInfo,

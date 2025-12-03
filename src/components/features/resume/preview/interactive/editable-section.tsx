@@ -3,7 +3,7 @@
  * Wraps resume sections to make them interactive with hover/click states
  */
 
-import { forwardRef, type ReactNode, type MouseEvent } from "react";
+import { forwardRef, type ReactNode, type MouseEvent, useCallback, useState } from "react";
 import {
   Pencil,
   Plus,
@@ -14,6 +14,26 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay,
+  type DragEndEvent,
+  type DragStartEvent,
+  type DragOverEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 import {
   useOptionalInteractiveResume,
@@ -140,12 +160,14 @@ export const EditableSection = forwardRef<HTMLDivElement, EditableSectionProps>(
         data-editable-section={sectionType}
         data-item-id={itemId}
       >
+        {/* Invisible hover bridge - extends hover area to include action buttons */}
+        <div className="absolute -top-4 -right-4 w-8 h-8 pointer-events-auto" />
         {/* Action buttons - visible on hover */}
         <div
           className={cn(
             "absolute -top-2 -right-2 z-10 flex items-center gap-0.5",
             "opacity-0 group-hover/editable:opacity-100 transition-opacity",
-            "pointer-events-none group-hover/editable:pointer-events-auto",
+            "pointer-events-auto",
           )}
         >
           {/* Drag handle for reorderable items */}
@@ -242,21 +264,26 @@ export function EditableSectionHeader({
 
       {/* Add button on hover */}
       {onAdd && (
-        <button
-          type="button"
-          className={cn(
-            "absolute -right-2 top-1/2 -translate-y-1/2 z-10",
-            "p-1 rounded bg-green-500 hover:bg-green-600 text-white shadow-sm",
-            "opacity-0 group-hover/header:opacity-100 transition-opacity",
-          )}
-          title="Add new item"
-          onClick={(e) => {
-            e.stopPropagation();
-            onAdd();
-          }}
-        >
-          <Plus className="h-3 w-3" />
-        </button>
+        <>
+          {/* Invisible hover bridge - extends hover area to include add button */}
+          <div className="absolute -right-4 top-0 bottom-0 w-6 pointer-events-auto" />
+          <button
+            type="button"
+            className={cn(
+              "absolute -right-2 top-1/2 -translate-y-1/2 z-10",
+              "p-1 rounded bg-green-500 hover:bg-green-600 text-white shadow-sm",
+              "opacity-0 group-hover/header:opacity-100 transition-opacity",
+              "pointer-events-auto",
+            )}
+            title="Add new item"
+            onClick={(e) => {
+              e.stopPropagation();
+              onAdd();
+            }}
+          >
+            <Plus className="h-3 w-3" />
+          </button>
+        </>
       )}
     </div>
   );
@@ -265,6 +292,7 @@ export function EditableSectionHeader({
 /**
  * SectionWrapper - Wraps an entire section with management controls (hide/show, reorder)
  * This appears on the left side of sections for section-level management
+ * Now also supports drag and drop reordering
  */
 interface SectionWrapperProps {
   children: ReactNode;
@@ -273,6 +301,8 @@ interface SectionWrapperProps {
   className?: string;
   /** Whether this section is required and cannot be hidden */
   required?: boolean;
+  /** Whether drag and drop is enabled (used within SortableSectionColumn) */
+  isDraggable?: boolean;
 }
 
 export function SectionWrapper({
@@ -281,8 +311,10 @@ export function SectionWrapper({
   sectionLabel,
   className,
   required = false,
+  isDraggable = false,
 }: SectionWrapperProps) {
   const context = useOptionalInteractiveResume();
+  const dragState = useDragState();
 
   // If not in interactive context or interactive mode is off, render normally
   if (!context || !context.isInteractive) {
@@ -301,16 +333,78 @@ export function SectionWrapper({
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === sectionOrder.length - 1;
 
+  // Use sortable hook for drag and drop
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ 
+    id: sectionType,
+    disabled: !isDraggable,
+  });
+
+  // Determine if we should show a drop indicator based on drag state from context
+  // Use the column-specific sectionIds for calculating positions
+  const columnSectionIds = dragState.sectionIds;
+  const isBeingDraggedOver = dragState.overId === sectionType && dragState.activeId !== sectionType;
+  const activeIndex = dragState.activeId ? columnSectionIds.indexOf(dragState.activeId) : -1;
+  const thisIndex = columnSectionIds.indexOf(sectionType);
+  
+  // Show drop indicator above if dragging from below
+  const showDropIndicatorAbove = isBeingDraggedOver && activeIndex > thisIndex;
+  // Show drop indicator below if dragging from above
+  const showDropIndicatorBelow = isBeingDraggedOver && activeIndex < thisIndex;
+
+  const style = isDraggable ? {
+    transform: CSS.Transform.toString(transform),
+    transition: transition || 'transform 200ms ease',
+  } : undefined;
+
   return (
-    <div className={cn("relative group/section", className)}>
+    <div 
+      ref={isDraggable ? setNodeRef : undefined}
+      style={style}
+      className={cn(
+        "relative group/section",
+        isDragging && "opacity-50 z-50",
+        className,
+      )}
+    >
+      {/* Drop indicator above */}
+      {showDropIndicatorAbove && (
+        <div className="absolute -top-2 left-0 right-0 h-1 bg-blue-500 rounded-full z-40 shadow-lg shadow-blue-500/50" />
+      )}
+      
+      {/* Invisible hover bridge - extends hover area to include the controls */}
+      <div className="absolute -left-12 top-0 bottom-0 w-12 pointer-events-auto" />
       {/* Section management controls - appear on the left on hover */}
       <div
         className={cn(
           "absolute -left-10 top-0 bottom-0 flex flex-col items-center justify-start pt-1 gap-0.5",
           "opacity-0 group-hover/section:opacity-100 transition-opacity",
-          "pointer-events-none group-hover/section:pointer-events-auto",
+          "pointer-events-auto",
+          isDragging && "opacity-100",
         )}
       >
+        {/* Drag handle */}
+        {isDraggable && (
+          <button
+            type="button"
+            className={cn(
+              "p-1 rounded bg-blue-500 hover:bg-blue-600 text-white shadow-sm cursor-grab active:cursor-grabbing mb-1",
+              isDragging && "cursor-grabbing",
+            )}
+            title={`Drag to reorder ${sectionLabel}`}
+            {...attributes}
+            {...listeners}
+          >
+            <GripVertical className="h-3 w-3" />
+          </button>
+        )}
+
         {/* Move up */}
         <button
           type="button"
@@ -362,6 +456,11 @@ export function SectionWrapper({
       </div>
 
       {children}
+      
+      {/* Drop indicator below */}
+      {showDropIndicatorBelow && (
+        <div className="absolute -bottom-2 left-0 right-0 h-1 bg-blue-500 rounded-full z-40 shadow-lg shadow-blue-500/50" />
+      )}
     </div>
   );
 }
@@ -492,5 +591,121 @@ export function EditableText({
     >
       {value || placeholder}
     </Component>
+  );
+}
+
+/**
+ * SortableSectionColumn - Wrapper component that provides drag and drop context
+ * for a column of sections (main content or sidebar)
+ */
+interface SortableSectionColumnProps {
+  children: ReactNode;
+  sectionIds: EditableSectionType[];
+  className?: string;
+}
+
+// Context for sharing drag state with child components
+import { createContext, useContext } from "react";
+
+interface DragStateContextValue {
+  activeId: EditableSectionType | null;
+  overId: EditableSectionType | null;
+  sectionIds: EditableSectionType[];
+}
+
+const DragStateContext = createContext<DragStateContextValue>({ activeId: null, overId: null, sectionIds: [] });
+
+export function useDragState() {
+  return useContext(DragStateContext);
+}
+
+export function SortableSectionColumn({
+  children,
+  sectionIds,
+  className,
+}: SortableSectionColumnProps) {
+  const context = useOptionalInteractiveResume();
+  const [activeId, setActiveId] = useState<EditableSectionType | null>(null);
+  const [overId, setOverId] = useState<EditableSectionType | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // Require 8px of movement before starting drag
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setActiveId(event.active.id as EditableSectionType);
+  }, []);
+
+  const handleDragOver = useCallback((event: DragOverEvent) => {
+    setOverId(event.over?.id as EditableSectionType | null);
+  }, []);
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+
+      setActiveId(null);
+      setOverId(null);
+
+      if (!over || active.id === over.id || !context) {
+        return;
+      }
+
+      const oldIndex = sectionIds.indexOf(active.id as EditableSectionType);
+      const newIndex = sectionIds.indexOf(over.id as EditableSectionType);
+
+      if (oldIndex === -1 || newIndex === -1) {
+        return;
+      }
+
+      // Create new local order for this column
+      const newColumnOrder = arrayMove(sectionIds, oldIndex, newIndex);
+      
+      // Update the full section order by replacing the sections in this column
+      // Simple approach: just update the sections within this column at their current positions
+      const newOrder = [...context.sectionOrder];
+      const columnPositions = sectionIds.map(s => newOrder.indexOf(s)).sort((a, b) => a - b);
+      
+      newColumnOrder.forEach((sectionType, idx) => {
+        newOrder[columnPositions[idx]] = sectionType;
+      });
+
+      context.reorderSections(newOrder);
+    },
+    [context, sectionIds]
+  );
+
+  const handleDragCancel = useCallback(() => {
+    setActiveId(null);
+    setOverId(null);
+  }, []);
+
+  // If not in interactive context, just render children normally
+  if (!context || !context.isInteractive) {
+    return <div className={className}>{children}</div>;
+  }
+
+  return (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+      onDragCancel={handleDragCancel}
+    >
+      <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
+        <DragStateContext.Provider value={{ activeId, overId, sectionIds }}>
+          <div className={className}>{children}</div>
+        </DragStateContext.Provider>
+      </SortableContext>
+    </DndContext>
   );
 }

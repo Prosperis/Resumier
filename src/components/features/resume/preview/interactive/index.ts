@@ -20,6 +20,8 @@ export {
   EditableText,
   SectionWrapper,
   HiddenSectionPlaceholder,
+  SortableSectionColumn,
+  useDragState,
 } from "./editable-section";
 
 export {
