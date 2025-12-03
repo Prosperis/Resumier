@@ -27,7 +27,6 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragOverlay,
   type DragEndEvent,
   type DragStartEvent,
   type DragOverEvent,
