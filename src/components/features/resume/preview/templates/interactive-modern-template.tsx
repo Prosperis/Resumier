@@ -101,10 +101,12 @@ export function InteractiveModernTemplate({
             .length > 0
         );
       case "skills":
-        return (skills.technical?.length || 0) > 0 ||
+        return (
+          (skills.technical?.length || 0) > 0 ||
           (skills.languages?.length || 0) > 0 ||
           (skills.tools?.length || 0) > 0 ||
-          (skills.soft?.length || 0) > 0;
+          (skills.soft?.length || 0) > 0
+        );
       case "certifications":
         return (certifications?.length || 0) > 0;
       case "links":
