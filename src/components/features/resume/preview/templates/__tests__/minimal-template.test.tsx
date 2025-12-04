@@ -137,7 +137,7 @@ describe("MinimalTemplate", () => {
     });
 
     it("applies minimal design header styles", () => {
-      const { container } = render(<MinimalTemplate resume={mockResumeFull} />);
+      render(<MinimalTemplate resume={mockResumeFull} />);
       const heading = screen.getByText("Jane Smith");
       expect(heading).toHaveClass(
         "text-5xl",
@@ -215,7 +215,7 @@ describe("MinimalTemplate", () => {
     });
 
     it("does not render highlights section when empty", () => {
-      const { container } = render(<MinimalTemplate resume={mockResumeFull} />);
+      render(<MinimalTemplate resume={mockResumeFull} />);
       // UX Designer has no highlights
       const allHighlights = screen.getAllByText(/Created|Improved/);
       expect(allHighlights.length).toBe(2); // Only from Lead Designer

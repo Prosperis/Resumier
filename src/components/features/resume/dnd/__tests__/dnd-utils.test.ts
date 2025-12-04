@@ -106,7 +106,7 @@ describe("dnd-utils", () => {
     });
 
     it("should return true for array with many items", () => {
-      expect(canReorder(new Array(100).fill(0))).toBe(true);
+      expect(canReorder(Array.from({ length: 100 }, () => 0))).toBe(true);
     });
 
     it("should return false for array with 1 item", () => {

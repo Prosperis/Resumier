@@ -50,7 +50,7 @@ describe("DropdownMenu Components", () => {
     });
 
     it("applies inset prop", () => {
-      const { container } = render(
+      render(
         <DropdownMenuLabel inset>Inset Label</DropdownMenuLabel>,
       );
       const label = screen.getByText("Inset Label");

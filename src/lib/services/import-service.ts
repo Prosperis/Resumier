@@ -114,7 +114,7 @@ export async function importFromLinkedIn(
           success: true,
           data: importedData,
         };
-      } catch (parseError) {
+      } catch {
         return {
           success: false,
           error: "Failed to parse LinkedIn import data",

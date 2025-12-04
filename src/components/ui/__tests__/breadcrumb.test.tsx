@@ -155,7 +155,7 @@ describe("Breadcrumb Components", () => {
     });
 
     it("applies font styling", () => {
-      const { container } = render(<BreadcrumbPage>Page</BreadcrumbPage>);
+      render(<BreadcrumbPage>Page</BreadcrumbPage>);
       const page = screen.getByText("Page");
       expect(page.className).toContain("font-normal");
     });

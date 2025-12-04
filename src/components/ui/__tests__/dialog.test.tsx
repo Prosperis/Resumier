@@ -610,7 +610,7 @@ describe("Dialog accessibility", () => {
   });
 
   it("traps focus within dialog", async () => {
-    const user = userEvent.setup();
+    const _user = userEvent.setup();
     render(
       <Dialog defaultOpen={true}>
         <DialogTrigger>Open</DialogTrigger>

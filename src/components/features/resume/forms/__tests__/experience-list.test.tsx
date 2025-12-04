@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 import type { Experience } from "@/lib/api/types";
@@ -52,7 +52,7 @@ import { ExperienceList } from "../experience-list";
 describe("ExperienceList", () => {
   const mockOnEdit = vi.fn();
   const mockOnDelete = vi.fn();
-  const mockOnReorder = vi.fn();
+  const _mockOnReorder = vi.fn();
   const mockOnClose = vi.fn();
 
   const defaultProps = {

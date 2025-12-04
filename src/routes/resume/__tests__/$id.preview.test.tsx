@@ -63,7 +63,7 @@ const { useNavigate } = await import("@tanstack/react-router");
 
 describe("Resume Preview Route (/resume/$id/preview)", () => {
   const mockNavigate = vi.fn();
-  const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+  const _consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
   beforeEach(() => {
     // Mock reset handled by vitest config (clearMocks: true)

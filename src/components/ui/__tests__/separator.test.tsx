@@ -55,7 +55,7 @@ describe("Separator", () => {
   });
 
   it("forwards additional props", () => {
-    const { container } = render(<Separator data-testid="custom-separator" />);
+    render(<Separator data-testid="custom-separator" />);
     const separator = screen.getByTestId("custom-separator");
     expect(separator).toBeInTheDocument();
   });

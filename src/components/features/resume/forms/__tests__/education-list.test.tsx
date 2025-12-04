@@ -52,7 +52,7 @@ import { EducationList } from "../education-list";
 describe("EducationList", () => {
   const mockOnEdit = vi.fn();
   const mockOnDelete = vi.fn();
-  const mockOnReorder = vi.fn();
+  const _mockOnReorder = vi.fn();
   const mockOnClose = vi.fn();
 
   const defaultProps = {

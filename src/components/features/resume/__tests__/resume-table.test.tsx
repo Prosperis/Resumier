@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import type { Resume } from "@/lib/api/types";
 import { ResumeTable } from "../resume-table";

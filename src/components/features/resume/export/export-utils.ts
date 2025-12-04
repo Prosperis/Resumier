@@ -144,11 +144,11 @@ function collectStyleSheets(): string {
         rules.forEach((rule) => {
           allStyles += rule.cssText + "\n";
         });
-      } catch (e) {
+      } catch {
         // Cross-origin stylesheets - skip them
       }
     });
-  } catch (e) {
+  } catch {
     // Error collecting styles
   }
 

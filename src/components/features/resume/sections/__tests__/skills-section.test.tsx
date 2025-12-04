@@ -306,7 +306,7 @@ describe("SkillsSection", () => {
     });
 
     it("renders add button with Plus icon", () => {
-      const { container } = render(
+      render(
         <SkillsSection
           skills={mockSkills}
           addSkill={mockAddSkill}
@@ -385,7 +385,7 @@ describe("SkillsSection", () => {
     });
 
     it("renders remove button with Trash icon", () => {
-      const { container } = render(
+      render(
         <SkillsSection
           skills={mockSkills}
           addSkill={mockAddSkill}

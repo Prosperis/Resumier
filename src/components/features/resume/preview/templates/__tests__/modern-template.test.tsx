@@ -369,7 +369,7 @@ describe("ModernTemplate", () => {
     });
 
     it("uses primary color theme consistently with inline styles", () => {
-      const { container } = render(<ModernTemplate resume={mockResumeFull} />);
+      render(<ModernTemplate resume={mockResumeFull} />);
       // Check that section headings have primary color via inline styles
       const experienceHeading = screen.getByText("Experience");
       expect(experienceHeading).toHaveStyle({ color: "rgb(139, 92, 246)" });
