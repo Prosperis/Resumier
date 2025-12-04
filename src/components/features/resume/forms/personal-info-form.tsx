@@ -49,7 +49,7 @@ export function PersonalInfoForm({
   enabled = true,
 }: PersonalInfoFormProps) {
   const form = useForm<PersonalInfoFormData>({
-    resolver: zodResolver(personalInfoSchema),
+    resolver: zodResolver(personalInfoSchema) as never,
     defaultValues: {
       firstName: defaultValues?.firstName ?? "",
       lastName: defaultValues?.lastName ?? "",

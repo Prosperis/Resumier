@@ -70,7 +70,7 @@ const nameFieldValidation = (fieldName: string) =>
 export const personalInfoSchema = z.object({
   firstName: nameFieldValidation("First name"),
   lastName: nameFieldValidation("Last name"),
-  nameOrder: nameOrderSchema.optional().default("firstLast"),
+  nameOrder: nameOrderSchema.default("firstLast"),
   title: z
     .string()
     .max(100, "Title must be less than 100 characters")
@@ -84,7 +84,7 @@ export const personalInfoSchema = z.object({
     .optional()
     .or(z.literal("")),
   phone: phoneValidation,
-  phoneFormat: phoneFormatSchema.optional().default("national"),
+  phoneFormat: phoneFormatSchema.default("national"),
   location: z
     .string()
     .max(100, "Location must be less than 100 characters")
@@ -100,7 +100,11 @@ export const personalInfoSchema = z.object({
     .or(z.literal("")),
 });
 
-export type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
+// Use z.output to get the type after defaults are applied (nameOrder and phoneFormat are required)
+export type PersonalInfoFormData = z.output<typeof personalInfoSchema>;
+
+// Input type for when accepting partial/incomplete data
+export type PersonalInfoInput = z.input<typeof personalInfoSchema>;
 
 /**
  * Composes a full name from first and last name based on the specified order

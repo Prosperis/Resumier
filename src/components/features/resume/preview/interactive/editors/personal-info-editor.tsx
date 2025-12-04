@@ -32,7 +32,7 @@ export function PersonalInfoEditor({
   onChange,
 }: PersonalInfoEditorProps) {
   const form = useForm<PersonalInfoFormData>({
-    resolver: zodResolver(personalInfoSchema),
+    resolver: zodResolver(personalInfoSchema) as never,
     defaultValues: {
       firstName: data.firstName || "",
       lastName: data.lastName || "",
