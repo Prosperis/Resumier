@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import type { Resume } from "@/lib/api/types";
 import { ResumeDashboard } from "../resume-dashboard";
 
@@ -121,7 +121,7 @@ describe("ResumeDashboard", () => {
       render(<ResumeDashboard />);
 
       expect(screen.getByTestId("loading")).toBeInTheDocument();
-      expect(screen.getByText("Loading your resumes...")).toBeInTheDocument();
+      expect(screen.getByText("Loading your dashboard...")).toBeInTheDocument();
     });
 
     it("does not show content while loading", () => {
@@ -149,7 +149,7 @@ describe("ResumeDashboard", () => {
 
       render(<ResumeDashboard />);
 
-      expect(screen.getByText("Failed to load resumes")).toBeInTheDocument();
+      expect(screen.getByText("Failed to load dashboard")).toBeInTheDocument();
       expect(screen.getByText("Network error")).toBeInTheDocument();
     });
 
@@ -176,7 +176,7 @@ describe("ResumeDashboard", () => {
 
       render(<ResumeDashboard />);
 
-      expect(screen.getByText("Failed to load resumes")).toBeInTheDocument();
+      expect(screen.getByText("Failed to load dashboard")).toBeInTheDocument();
       expect(screen.getByText("Unknown error")).toBeInTheDocument();
     });
   });
@@ -193,7 +193,7 @@ describe("ResumeDashboard", () => {
 
       expect(screen.getByText("No resumes yet")).toBeInTheDocument();
       expect(
-        screen.getByText("Create your first resume to get started"),
+        screen.getByText(/Create your first resume to get started/),
       ).toBeInTheDocument();
     });
 
@@ -253,11 +253,11 @@ describe("ResumeDashboard", () => {
       expect(screen.getByText("Resumes")).toBeInTheDocument();
     });
 
-    it("renders header with resume count", () => {
+    it("renders header with subtitle", () => {
       render(<ResumeDashboard />);
 
       expect(
-        screen.getByText(/Manage your resume documents \(2\)/i),
+        screen.getByText("Manage your profiles and resumes"),
       ).toBeInTheDocument();
     });
 
@@ -430,14 +430,14 @@ describe("ResumeDashboard", () => {
     it("applies proper spacing", () => {
       const { container } = render(<ResumeDashboard />);
 
-      const mainDiv = container.querySelector(".space-y-4");
+      const mainDiv = container.querySelector(".space-y-6");
       expect(mainDiv).toBeInTheDocument();
     });
 
     it("applies padding", () => {
       const { container } = render(<ResumeDashboard />);
 
-      const paddedDiv = container.querySelector(".p-4");
+      const paddedDiv = container.querySelector(".px-4");
       expect(paddedDiv).toBeInTheDocument();
     });
 

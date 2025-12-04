@@ -1,5 +1,4 @@
 import { Router } from "@tanstack/react-router";
-import { describe, expect, it } from "vitest";
 import { router } from "../router";
 
 describe("router", () => {

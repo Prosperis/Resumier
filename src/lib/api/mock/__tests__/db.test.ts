@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { delay, mockDb } from "@/lib/api/mock/db";
 import type { CreateResumeDto, UpdateResumeDto } from "@/lib/api/types";
 

@@ -1,5 +1,5 @@
 import { render, screen, within } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/stores";
 import { AppSidebar } from "../app-sidebar";

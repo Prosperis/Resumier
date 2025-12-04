@@ -5,7 +5,7 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { ThemeProvider, useTheme } from "../theme-provider";
 
 // Ensure localStorage is available in test environment

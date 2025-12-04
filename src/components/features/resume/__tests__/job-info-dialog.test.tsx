@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { useResumeStore } from "@/stores";
 import { JobInfoDialog } from "../job-info-dialog";
 
@@ -23,6 +23,9 @@ vi.mock("@/components/ui/dialog", () => ({
   ),
   DialogTitle: ({ children }: any) => (
     <h2 data-testid="dialog-title">{children}</h2>
+  ),
+  DialogDescription: ({ children }: any) => (
+    <p data-testid="dialog-description">{children}</p>
   ),
 }));
 
@@ -93,16 +96,27 @@ vi.mock("@/components/ui/textarea", () => ({
 }));
 
 vi.mock("@/components/ui/select", () => ({
-  Select: ({ value, onChange, children, id }: any) => (
+  Select: ({ value, onValueChange }: any) => (
     <select
-      id={id}
-      value={value}
-      onChange={onChange}
-      data-testid={`select-${id}`}
+      value={value || ""}
+      onChange={(e: any) => onValueChange?.(e.target.value)}
+      data-testid="select-workType"
     >
-      {children}
+      <option value="">Select</option>
+      <option value="onsite">Onsite</option>
+      <option value="remote">Remote</option>
+      <option value="hybrid">Hybrid</option>
     </select>
   ),
+  SelectTrigger: () => null,
+  SelectValue: () => null,
+  SelectContent: () => null,
+  SelectItem: () => null,
+  SelectGroup: () => null,
+  SelectLabel: () => null,
+  SelectSeparator: () => null,
+  SelectScrollUpButton: () => null,
+  SelectScrollDownButton: () => null,
 }));
 
 vi.mock("@/components/ui/button", () => ({

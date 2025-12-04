@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { NotificationBadge, PulseBadge, StatusBadge } from "../animated-badge";
 
 // Mock Badge component

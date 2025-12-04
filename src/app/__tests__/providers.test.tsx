@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { vi } from "vitest";
 import { Providers } from "../providers";
 
 // Mock React Query devtools
@@ -44,17 +44,36 @@ describe("Providers", () => {
   });
 
   describe("Development Tools", () => {
-    it("should render React Query devtools in development mode", () => {
-      // In test/development mode, devtools should be present
+    it("should render React Query devtools on hover in development mode", () => {
+      // In test/development mode, devtools should be present but hidden by default
       render(
         <Providers>
           <div>Test Content</div>
         </Providers>,
       );
 
-      // The mock will render if import.meta.env.DEV is true
+      // The devtools are hidden by default (showDevtools state is false)
       if (import.meta.env.DEV) {
+        // Devtools should NOT be visible initially
+        expect(
+          screen.queryByTestId("react-query-devtools"),
+        ).not.toBeInTheDocument();
+
+        // Find the hover trigger div and simulate mouse enter
+        const hoverTrigger = document.querySelector(
+          'div[style*="position: fixed"]',
+        );
+        expect(hoverTrigger).toBeInTheDocument();
+
+        // Hover over the trigger to show devtools
+        fireEvent.mouseEnter(hoverTrigger!);
         expect(screen.getByTestId("react-query-devtools")).toBeInTheDocument();
+
+        // Mouse leave should hide devtools
+        fireEvent.mouseLeave(hoverTrigger!);
+        expect(
+          screen.queryByTestId("react-query-devtools"),
+        ).not.toBeInTheDocument();
       }
     });
 

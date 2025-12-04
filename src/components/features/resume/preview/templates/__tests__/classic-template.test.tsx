@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
 import type { Resume } from "@/lib/api/types";
 import { ClassicTemplate } from "../classic-template";
 
@@ -9,9 +8,12 @@ const mockResumeMinimal: Resume = {
   title: "Test Resume",
   content: {
     personalInfo: {
-      name: "",
+      firstName: "",
+      lastName: "",
+      nameOrder: "firstLast",
       email: "",
       phone: "",
+      phoneFormat: "national",
       location: "",
       summary: "",
     },
@@ -36,9 +38,12 @@ const mockResumeFull: Resume = {
   title: "Full Resume",
   content: {
     personalInfo: {
-      name: "John Doe",
+      firstName: "John",
+      lastName: "Doe",
+      nameOrder: "firstLast",
       email: "john@example.com",
-      phone: "555-1234",
+      phone: "+15551234567",
+      phoneFormat: "national",
       location: "New York, NY",
       summary: "Experienced software engineer with 10+ years",
     },
@@ -127,7 +132,7 @@ const mockResumeFull: Resume = {
 
 describe("ClassicTemplate", () => {
   describe("Header Section", () => {
-    it("renders default name when personalInfo.name is empty", () => {
+    it("renders default name when personalInfo names are empty", () => {
       render(<ClassicTemplate resume={mockResumeMinimal} />);
       expect(screen.getByText("Your Name")).toBeInTheDocument();
     });
@@ -142,9 +147,10 @@ describe("ClassicTemplate", () => {
       expect(screen.getByText("john@example.com")).toBeInTheDocument();
     });
 
-    it("renders phone when provided", () => {
+    it("renders phone formatted", () => {
       render(<ClassicTemplate resume={mockResumeFull} />);
-      expect(screen.getByText("555-1234")).toBeInTheDocument();
+      // Phone is formatted as national format
+      expect(screen.getByText("(555) 123-4567")).toBeInTheDocument();
     });
 
     it("renders location when provided", () => {

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { mockApi, useMockApi } from "../mock";
 import { mockDb } from "../mock-db";
 
@@ -104,14 +104,21 @@ describe("mockApi", () => {
 
     describe("POST", () => {
       it("creates new resume", async () => {
-        const mockResume = { id: "3", title: "New Resume" };
-        vi.mocked(mockDb.createResume).mockReturnValue(mockResume as any);
+        vi.mocked(mockDb.createResume).mockReturnValue({} as any);
 
         const result = await mockApi.handleResumes("POST", undefined, {
           title: "New Resume",
         });
 
-        expect(result).toEqual(mockResume);
+        // The implementation creates a new resume object directly
+        expect(result).toMatchObject({
+          title: "New Resume",
+          userId: "user-1",
+          content: expect.any(Object),
+        });
+        expect(result).toHaveProperty("id");
+        expect(result).toHaveProperty("createdAt");
+        expect(result).toHaveProperty("updatedAt");
         expect(mockDb.createResume).toHaveBeenCalledWith(
           expect.objectContaining({
             userId: "user-1",
@@ -356,7 +363,8 @@ describe("mockApi", () => {
         expect(result).toHaveProperty("experience");
         expect(result).toHaveProperty("education");
         expect(result).toHaveProperty("skills");
-        expect(result.personalInfo.name).toBe("John Doe");
+        expect(result.personalInfo.firstName).toBe("John");
+        expect(result.personalInfo.lastName).toBe("Doe");
       });
 
       it("throws 400 when no profile URL provided", async () => {
@@ -401,7 +409,8 @@ describe("mockApi", () => {
       })) as any;
 
       expect(result).toHaveProperty("personalInfo");
-      expect(result.personalInfo.name).toBe("John Doe");
+      expect(result.personalInfo.firstName).toBe("John");
+      expect(result.personalInfo.lastName).toBe("Doe");
     });
   });
 });

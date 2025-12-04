@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 function setupWindowWidth(width: number) {

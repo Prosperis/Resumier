@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { createMockResume } from "@/hooks/api/test-helpers";
 import { useAuthStore } from "@/stores";
 
@@ -168,32 +168,31 @@ describe("Resume Edit Route (/resume/$id)", () => {
       expect(screen.getByText("My Test Resume")).toBeInTheDocument();
     });
 
-    it("renders within a container", async () => {
+    it("renders resume editor directly without wrapper", async () => {
       const mockResume = createMockResume({
         id: "test-resume-id",
         title: "My Resume",
       });
       (apiClient.get as any).mockResolvedValueOnce(mockResume);
 
-      const { container } = renderResumeRoute();
+      renderResumeRoute();
 
       await waitFor(() => {
-        expect(container.querySelector(".container")).toBeInTheDocument();
+        expect(screen.getByTestId("resume-editor")).toBeInTheDocument();
       });
     });
 
-    it("applies proper styling to container", async () => {
+    it("passes resume data to ResumeEditor component", async () => {
       const mockResume = createMockResume({
         id: "test-resume-id",
-        title: "My Resume",
+        title: "Custom Resume Title",
       });
       (apiClient.get as any).mockResolvedValueOnce(mockResume);
 
-      const { container } = renderResumeRoute();
+      renderResumeRoute();
 
       await waitFor(() => {
-        const mainContainer = container.querySelector(".container.mx-auto.p-8");
-        expect(mainContainer).toBeInTheDocument();
+        expect(screen.getByText("Custom Resume Title")).toBeInTheDocument();
       });
     });
   });

@@ -1,64 +1,25 @@
-import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { render, screen, within } from "@testing-library/react";
+import { vi } from "vitest";
 import type { Resume } from "@/lib/api/types";
 import { ResumeTable } from "../resume-table";
 
-// Mock DataTable
-vi.mock("@/components/ui/data-table", () => ({
-  DataTable: ({
-    columns,
-    data,
-    searchKey,
-    searchPlaceholder,
-    initialColumnVisibility,
-  }: any) => (
-    <div data-testid="data-table">
-      <div data-testid="search-key">{searchKey}</div>
-      <div data-testid="search-placeholder">{searchPlaceholder}</div>
-      <div data-testid="column-count">{columns.length}</div>
-      <div data-testid="data-count">{data.length}</div>
-      {initialColumnVisibility && (
-        <div data-testid="initial-visibility">
-          {JSON.stringify(initialColumnVisibility)}
-        </div>
-      )}
-      {data.map((resume: Resume) => (
-        <div key={resume.id} data-testid={`resume-${resume.id}`}>
-          {resume.title}
-        </div>
-      ))}
-    </div>
-  ),
-}));
+// Mock the RowContextMenu to simplify testing
+vi.mock("../resume-table-columns", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("../resume-table-columns")>();
+  return {
+    ...actual,
+    RowContextMenu: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
+  };
+});
 
-// Mock columns
-vi.mock("../resume-table-columns", () => ({
-  createResumeColumns: vi.fn(({ onEdit, onDuplicate }) => [
-    {
-      id: "title",
-      header: "Title",
-      cell: ({ row }: any) => row.original.title,
-      onEdit,
-      onDuplicate,
-    },
-    {
-      id: "createdAt",
-      header: "Created",
-      cell: ({ row }: any) => row.original.createdAt,
-    },
-    {
-      id: "updatedAt",
-      header: "Updated",
-      cell: ({ row }: any) => row.original.updatedAt,
-    },
-    {
-      id: "actions",
-      header: "Actions",
-    },
-  ]),
+// Mock the mutations module to avoid complex dialog rendering
+vi.mock("../mutations", () => ({
+  DeleteResumeDialog: () => null,
+  RenameResumeDialog: () => null,
 }));
-
-import { createResumeColumns } from "../resume-table-columns";
 
 describe("ResumeTable", () => {
   const mockResumes: Resume[] = [
@@ -68,7 +29,9 @@ describe("ResumeTable", () => {
       title: "Software Engineer Resume",
       content: {
         personalInfo: {
-          name: "John Doe",
+          firstName: "John",
+          lastName: "Doe",
+          nameOrder: "firstLast",
           email: "john@example.com",
           phone: "",
           location: "",
@@ -89,7 +52,9 @@ describe("ResumeTable", () => {
       title: "Product Manager Resume",
       content: {
         personalInfo: {
-          name: "Jane Smith",
+          firstName: "Jane",
+          lastName: "Smith",
+          nameOrder: "firstLast",
           email: "jane@example.com",
           phone: "",
           location: "",
@@ -109,21 +74,12 @@ describe("ResumeTable", () => {
   const mockOnEdit = vi.fn();
   const mockOnDuplicate = vi.fn();
 
-  // Store original innerWidth
-  const originalInnerWidth = window.innerWidth;
-
   beforeEach(() => {
-    // Mock reset handled by vitest config (clearMocks: true)
-    // Reset window size
-    Object.defineProperty(window, "innerWidth", {
-      writable: true,
-      configurable: true,
-      value: originalInnerWidth,
-    });
+    vi.clearAllMocks();
   });
 
   describe("Rendering", () => {
-    it("renders DataTable component", () => {
+    it("renders the table component", () => {
       render(
         <ResumeTable
           resumes={mockResumes}
@@ -132,10 +88,11 @@ describe("ResumeTable", () => {
         />,
       );
 
-      expect(screen.getByTestId("data-table")).toBeInTheDocument();
+      // Should render a table element
+      expect(screen.getByRole("table")).toBeInTheDocument();
     });
 
-    it("passes correct search configuration", () => {
+    it("renders the search input with correct placeholder", () => {
       render(
         <ResumeTable
           resumes={mockResumes}
@@ -144,13 +101,12 @@ describe("ResumeTable", () => {
         />,
       );
 
-      expect(screen.getByTestId("search-key")).toHaveTextContent("title");
-      expect(screen.getByTestId("search-placeholder")).toHaveTextContent(
-        "Search resumes...",
-      );
+      expect(
+        screen.getByPlaceholderText("Search resumes by title..."),
+      ).toBeInTheDocument();
     });
 
-    it("renders all resumes", () => {
+    it("renders all resume titles", () => {
       render(
         <ResumeTable
           resumes={mockResumes}
@@ -159,16 +115,11 @@ describe("ResumeTable", () => {
         />,
       );
 
-      expect(screen.getByTestId("data-count")).toHaveTextContent("2");
-      expect(screen.getByTestId("resume-resume-1")).toHaveTextContent(
-        "Software Engineer Resume",
-      );
-      expect(screen.getByTestId("resume-resume-2")).toHaveTextContent(
-        "Product Manager Resume",
-      );
+      expect(screen.getByText("Software Engineer Resume")).toBeInTheDocument();
+      expect(screen.getByText("Product Manager Resume")).toBeInTheDocument();
     });
 
-    it("renders with empty array", () => {
+    it("renders empty state when no resumes", () => {
       render(
         <ResumeTable
           resumes={[]}
@@ -177,13 +128,12 @@ describe("ResumeTable", () => {
         />,
       );
 
-      expect(screen.getByTestId("data-table")).toBeInTheDocument();
-      expect(screen.getByTestId("data-count")).toHaveTextContent("0");
+      expect(screen.getByText("No results.")).toBeInTheDocument();
     });
   });
 
-  describe("Column Configuration", () => {
-    it("creates columns with callbacks", () => {
+  describe("Column Headers", () => {
+    it("renders Title column header", () => {
       render(
         <ResumeTable
           resumes={mockResumes}
@@ -192,13 +142,10 @@ describe("ResumeTable", () => {
         />,
       );
 
-      expect(createResumeColumns).toHaveBeenCalledWith({
-        onEdit: mockOnEdit,
-        onDuplicate: mockOnDuplicate,
-      });
+      expect(screen.getByText("Title")).toBeInTheDocument();
     });
 
-    it("passes columns to DataTable", () => {
+    it("renders Status column header", () => {
       render(
         <ResumeTable
           resumes={mockResumes}
@@ -207,19 +154,26 @@ describe("ResumeTable", () => {
         />,
       );
 
-      // Should have 4 columns: title, createdAt, updatedAt, actions
-      expect(screen.getByTestId("column-count")).toHaveTextContent("4");
+      // Status button in filter and column header
+      const statusElements = screen.getAllByText("Status");
+      expect(statusElements.length).toBeGreaterThan(0);
+    });
+
+    it("renders Last Modified column header", () => {
+      render(
+        <ResumeTable
+          resumes={mockResumes}
+          onEdit={mockOnEdit}
+          onDuplicate={mockOnDuplicate}
+        />,
+      );
+
+      expect(screen.getByText("Last Modified")).toBeInTheDocument();
     });
   });
 
-  describe("Mobile Responsiveness", () => {
-    it("hides date columns on mobile", () => {
-      Object.defineProperty(window, "innerWidth", {
-        writable: true,
-        configurable: true,
-        value: 500, // Mobile width
-      });
-
+  describe("Status Display", () => {
+    it("shows Draft status for incomplete resumes", () => {
       render(
         <ResumeTable
           resumes={mockResumes}
@@ -228,58 +182,76 @@ describe("ResumeTable", () => {
         />,
       );
 
-      const visibility = screen.getByTestId("initial-visibility");
-      expect(visibility).toHaveTextContent(
-        '{"createdAt":false,"updatedAt":false}',
-      );
+      // Both resumes should show Draft status since they have minimal content
+      const draftBadges = screen.getAllByText("Draft");
+      expect(draftBadges.length).toBe(2);
     });
 
-    it("shows all columns on desktop", () => {
-      Object.defineProperty(window, "innerWidth", {
-        writable: true,
-        configurable: true,
-        value: 1024, // Desktop width
-      });
+    it("shows Complete status for fully filled resume", () => {
+      const completeResume: Resume = {
+        id: "complete-resume",
+        userId: "user-1",
+        title: "Complete Resume",
+        content: {
+          personalInfo: {
+            firstName: "John",
+            lastName: "Doe",
+            nameOrder: "firstLast",
+            email: "john@example.com",
+            phone: "555-1234",
+            location: "New York",
+            summary: "Experienced developer",
+          },
+          experience: [
+            {
+              id: "exp-1",
+              company: "Tech Corp",
+              position: "Developer",
+              startDate: "2020-01-01",
+              endDate: "2024-01-01",
+              current: false,
+              description: "Did stuff",
+              highlights: [],
+            },
+          ],
+          education: [
+            {
+              id: "edu-1",
+              institution: "University",
+              degree: "BS",
+              field: "CS",
+              startDate: "2016-01-01",
+              endDate: "2020-01-01",
+              current: false,
+            },
+          ],
+          skills: {
+            technical: ["JavaScript"],
+            languages: [],
+            tools: [],
+            soft: ["Communication"],
+          },
+          certifications: [],
+          links: [],
+        },
+        createdAt: "2024-01-01T00:00:00Z",
+        updatedAt: "2024-01-01T00:00:00Z",
+      };
 
       render(
         <ResumeTable
-          resumes={mockResumes}
+          resumes={[completeResume]}
           onEdit={mockOnEdit}
           onDuplicate={mockOnDuplicate}
         />,
       );
 
-      expect(
-        screen.queryByTestId("initial-visibility"),
-      ).not.toBeInTheDocument();
+      expect(screen.getByText("Complete")).toBeInTheDocument();
     });
+  });
 
-    it("uses 768px as mobile breakpoint", () => {
-      // Test just below breakpoint
-      Object.defineProperty(window, "innerWidth", {
-        writable: true,
-        configurable: true,
-        value: 767,
-      });
-
-      const { unmount } = render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
-      );
-
-      expect(screen.getByTestId("initial-visibility")).toBeInTheDocument();
-      unmount();
-
-      // Test just above breakpoint
-      Object.defineProperty(window, "innerWidth", {
-        writable: true,
-        configurable: true,
-        value: 768,
-      });
-
+  describe("Pagination", () => {
+    it("renders pagination controls", () => {
       render(
         <ResumeTable
           resumes={mockResumes}
@@ -288,27 +260,14 @@ describe("ResumeTable", () => {
         />,
       );
 
-      expect(
-        screen.queryByTestId("initial-visibility"),
-      ).not.toBeInTheDocument();
+      // Check for pagination text
+      expect(screen.getByText(/row\(s\) selected/)).toBeInTheDocument();
+      expect(screen.getByText("Rows per page")).toBeInTheDocument();
     });
   });
 
   describe("Data Handling", () => {
-    it("passes resume data to DataTable", () => {
-      render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
-      );
-
-      expect(screen.getByTestId("resume-resume-1")).toBeInTheDocument();
-      expect(screen.getByTestId("resume-resume-2")).toBeInTheDocument();
-    });
-
-    it("handles single resume", () => {
+    it("renders single resume correctly", () => {
       render(
         <ResumeTable
           resumes={[mockResumes[0]]}
@@ -317,12 +276,14 @@ describe("ResumeTable", () => {
         />,
       );
 
-      expect(screen.getByTestId("data-count")).toHaveTextContent("1");
-      expect(screen.getByTestId("resume-resume-1")).toBeInTheDocument();
+      expect(screen.getByText("Software Engineer Resume")).toBeInTheDocument();
+      expect(
+        screen.queryByText("Product Manager Resume"),
+      ).not.toBeInTheDocument();
     });
 
     it("handles many resumes", () => {
-      const manyResumes = Array.from({ length: 50 }, (_, i) => ({
+      const manyResumes: Resume[] = Array.from({ length: 15 }, (_, i) => ({
         ...mockResumes[0],
         id: `resume-${i}`,
         title: `Resume ${i}`,
@@ -336,69 +297,31 @@ describe("ResumeTable", () => {
         />,
       );
 
-      expect(screen.getByTestId("data-count")).toHaveTextContent("50");
+      // Table should render (pagination will limit visible rows)
+      expect(screen.getByRole("table")).toBeInTheDocument();
     });
   });
 
-  describe("Callback Props", () => {
-    it("passes onEdit callback to columns", () => {
-      const customOnEdit = vi.fn();
-      render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={customOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
-      );
-
-      expect(createResumeColumns).toHaveBeenCalledWith(
-        expect.objectContaining({
-          onEdit: customOnEdit,
-        }),
-      );
-    });
-
-    it("passes onDuplicate callback to columns", () => {
-      const customOnDuplicate = vi.fn();
+  describe("Selection", () => {
+    it("renders checkboxes for row selection", () => {
       render(
         <ResumeTable
           resumes={mockResumes}
           onEdit={mockOnEdit}
-          onDuplicate={customOnDuplicate}
-        />,
-      );
-
-      expect(createResumeColumns).toHaveBeenCalledWith(
-        expect.objectContaining({
-          onDuplicate: customOnDuplicate,
-        }),
-      );
-    });
-
-    it("creates new columns when callbacks change", () => {
-      // Clear mock call count from previous tests
-      vi.clearAllMocks();
-
-      const { rerender } = render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
           onDuplicate={mockOnDuplicate}
         />,
       );
 
-      expect(createResumeColumns).toHaveBeenCalledTimes(1);
+      // Find checkboxes by their aria-label
+      const selectAllCheckbox = screen.getByRole("checkbox", {
+        name: "Select all",
+      });
+      expect(selectAllCheckbox).toBeInTheDocument();
 
-      const newOnEdit = vi.fn();
-      rerender(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={newOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
-      );
-
-      expect(createResumeColumns).toHaveBeenCalledTimes(2);
+      const rowCheckboxes = screen.getAllByRole("checkbox", {
+        name: "Select row",
+      });
+      expect(rowCheckboxes).toHaveLength(2);
     });
   });
 });

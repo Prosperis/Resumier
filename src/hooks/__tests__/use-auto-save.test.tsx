@@ -1,5 +1,7 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act, renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { ReactNode } from "react";
+import { vi } from "vitest";
 import { formatLastSaved, useAutoSave } from "../use-auto-save";
 
 // Mock the useUpdateResume hook
@@ -16,6 +18,24 @@ const createTestData = (name: string) =>
 describe("useAutoSave", () => {
   let mockMutate: ReturnType<typeof vi.fn>;
   let mockUseUpdateResume: ReturnType<typeof vi.fn>;
+  let queryClient: QueryClient;
+
+  const createWrapper = () => {
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: {
+          retry: false,
+        },
+        mutations: {
+          retry: false,
+        },
+      },
+    });
+
+    return ({ children }: { children: ReactNode }) => (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
+  };
 
   beforeEach(async () => {
     vi.useFakeTimers();
@@ -35,14 +55,19 @@ describe("useAutoSave", () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.useRealTimers();
+    if (queryClient) {
+      queryClient.clear();
+    }
   });
 
   describe("Initialization", () => {
     it("initializes with default values", () => {
-      const { result } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-        }),
+      const { result } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+          }),
+        { wrapper: createWrapper() },
       );
 
       expect(result.current.isSaving).toBe(false);
@@ -52,10 +77,12 @@ describe("useAutoSave", () => {
     });
 
     it("uses default debounce time of 1000ms", () => {
-      const { result } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-        }),
+      const { result } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+          }),
+        { wrapper: createWrapper() },
       );
 
       act(() => {
@@ -74,11 +101,13 @@ describe("useAutoSave", () => {
     });
 
     it("uses custom debounce time", () => {
-      const { result } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-          debounceMs: 500,
-        }),
+      const { result } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+            debounceMs: 500,
+          }),
+        { wrapper: createWrapper() },
       );
 
       act(() => {
@@ -99,11 +128,13 @@ describe("useAutoSave", () => {
 
   describe("Save Functionality", () => {
     it("saves data after debounce period", () => {
-      const { result } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-          debounceMs: 1000,
-        }),
+      const { result } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+            debounceMs: 1000,
+          }),
+        { wrapper: createWrapper() },
       );
 
       const testData = createTestData("John Doe");
@@ -129,11 +160,13 @@ describe("useAutoSave", () => {
     });
 
     it("debounces multiple rapid saves", () => {
-      const { result } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-          debounceMs: 1000,
-        }),
+      const { result } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+            debounceMs: 1000,
+          }),
+        { wrapper: createWrapper() },
       );
 
       act(() => {
@@ -163,12 +196,14 @@ describe("useAutoSave", () => {
     });
 
     it("does not save when enabled is false", () => {
-      const { result } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-          debounceMs: 1000,
-          enabled: false,
-        }),
+      const { result } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+            debounceMs: 1000,
+            enabled: false,
+          }),
+        { wrapper: createWrapper() },
       );
 
       act(() => {
@@ -184,11 +219,13 @@ describe("useAutoSave", () => {
         callbacks.onSuccess();
       });
 
-      const { result } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-          debounceMs: 100,
-        }),
+      const { result } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+            debounceMs: 100,
+          }),
+        { wrapper: createWrapper() },
       );
 
       expect(result.current.lastSaved).toBe(null);
@@ -207,11 +244,13 @@ describe("useAutoSave", () => {
         callbacks.onError(new Error("Save failed"));
       });
 
-      const { result } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-          debounceMs: 100,
-        }),
+      const { result } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+            debounceMs: 100,
+          }),
+        { wrapper: createWrapper() },
       );
 
       act(() => {
@@ -241,11 +280,13 @@ describe("useAutoSave", () => {
         callbacks.onError(new Error("Network error"));
       });
 
-      const { result } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-          debounceMs: 100,
-        }),
+      const { result } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+            debounceMs: 100,
+          }),
+        { wrapper: createWrapper() },
       );
 
       act(() => {
@@ -265,10 +306,12 @@ describe("useAutoSave", () => {
         error: mutationError,
       });
 
-      const { result, rerender } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-        }),
+      const { result, rerender } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+          }),
+        { wrapper: createWrapper() },
       );
 
       rerender();
@@ -285,10 +328,12 @@ describe("useAutoSave", () => {
         error: null,
       });
 
-      const { result } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-        }),
+      const { result } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+          }),
+        { wrapper: createWrapper() },
       );
 
       expect(result.current.isSaving).toBe(true);
@@ -301,10 +346,12 @@ describe("useAutoSave", () => {
         error: null,
       });
 
-      const { result, rerender } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-        }),
+      const { result, rerender } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+          }),
+        { wrapper: createWrapper() },
       );
 
       expect(result.current.isSaving).toBe(false);
@@ -324,11 +371,13 @@ describe("useAutoSave", () => {
 
   describe("Cleanup", () => {
     it("clears timeout on unmount", () => {
-      const { result, unmount } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-          debounceMs: 1000,
-        }),
+      const { result, unmount } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+            debounceMs: 1000,
+          }),
+        { wrapper: createWrapper() },
       );
 
       act(() => {
@@ -352,11 +401,13 @@ describe("useAutoSave", () => {
         callbacks.onSuccess();
       });
 
-      const { result } = renderHook(() =>
-        useAutoSave({
-          resumeId: "resume-123",
-          debounceMs: 100,
-        }),
+      const { result } = renderHook(
+        () =>
+          useAutoSave({
+            resumeId: "resume-123",
+            debounceMs: 100,
+          }),
+        { wrapper: createWrapper() },
       );
 
       // First save

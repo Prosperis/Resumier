@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { ApiClient } from "../client";
 import {
   ApiError,

@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
 import type { Resume } from "@/lib/api/types";
 import { MinimalTemplate } from "../minimal-template";
 
@@ -9,9 +8,12 @@ const mockResumeMinimal: Resume = {
   title: "Test Resume",
   content: {
     personalInfo: {
-      name: "",
+      firstName: "",
+      lastName: "",
+      nameOrder: "firstLast",
       email: "",
       phone: "",
+      phoneFormat: "national",
       location: "",
       summary: "",
     },
@@ -36,9 +38,12 @@ const mockResumeFull: Resume = {
   title: "Full Resume",
   content: {
     personalInfo: {
-      name: "Jane Smith",
+      firstName: "Jane",
+      lastName: "Smith",
+      nameOrder: "firstLast",
       email: "jane@example.com",
-      phone: "555-5678",
+      phone: "+15555678000",
+      phoneFormat: "national",
       location: "San Francisco, CA",
       summary: "Creative designer with passion for user experience",
     },
@@ -105,7 +110,7 @@ const mockResumeFull: Resume = {
 
 describe("MinimalTemplate", () => {
   describe("Header Section", () => {
-    it("renders default name when personalInfo.name is empty", () => {
+    it("renders default name when personalInfo names are empty", () => {
       render(<MinimalTemplate resume={mockResumeMinimal} />);
       expect(screen.getByText("Your Name")).toBeInTheDocument();
     });
@@ -120,9 +125,10 @@ describe("MinimalTemplate", () => {
       expect(screen.getByText("jane@example.com")).toBeInTheDocument();
     });
 
-    it("renders phone when provided", () => {
+    it("renders phone formatted", () => {
       render(<MinimalTemplate resume={mockResumeFull} />);
-      expect(screen.getByText("555-5678")).toBeInTheDocument();
+      // Phone is formatted as national format
+      expect(screen.getByText("(555) 567-8000")).toBeInTheDocument();
     });
 
     it("renders location when provided", () => {
@@ -385,7 +391,8 @@ describe("MinimalTemplate", () => {
           ...mockResumeMinimal.content,
           personalInfo: {
             ...mockResumeMinimal.content.personalInfo,
-            name: "Test User",
+            firstName: "Test",
+            lastName: "User",
             summary: "A brief summary",
           },
           skills: {

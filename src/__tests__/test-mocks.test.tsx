@@ -1,5 +1,3 @@
-import { describe, expect, it } from "vitest";
-
 describe("Mock verification", () => {
   it("window.matchMedia exists", () => {
     expect(window.matchMedia).toBeDefined();

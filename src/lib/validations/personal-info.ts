@@ -70,7 +70,7 @@ const nameFieldValidation = (fieldName: string) =>
 export const personalInfoSchema = z.object({
   firstName: nameFieldValidation("First name"),
   lastName: nameFieldValidation("Last name"),
-  nameOrder: nameOrderSchema,
+  nameOrder: nameOrderSchema.optional().default("firstLast"),
   title: z
     .string()
     .max(100, "Title must be less than 100 characters")
@@ -84,7 +84,7 @@ export const personalInfoSchema = z.object({
     .optional()
     .or(z.literal("")),
   phone: phoneValidation,
-  phoneFormat: phoneFormatSchema,
+  phoneFormat: phoneFormatSchema.optional().default("national"),
   location: z
     .string()
     .max(100, "Location must be less than 100 characters")

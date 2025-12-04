@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import type { SidebarContextProps } from "@/components/ui/use-sidebar";
 import { SidebarContext, useSidebar } from "@/components/ui/use-sidebar";
 

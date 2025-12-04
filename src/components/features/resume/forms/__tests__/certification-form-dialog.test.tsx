@@ -50,8 +50,9 @@ describe("CertificationFormDialog", () => {
       expect(
         screen.getByLabelText(/issuing organization/i),
       ).toBeInTheDocument();
-      expect(screen.getByLabelText(/^issue date$/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/expiry date/i)).toBeInTheDocument();
+      // Date pickers are buttons, not inputs, so check for labels
+      expect(screen.getByText("Issue Date")).toBeInTheDocument();
+      expect(screen.getByText("Expiry Date")).toBeInTheDocument();
       expect(screen.getByLabelText(/credential id/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/credential url/i)).toBeInTheDocument();
     });
@@ -93,17 +94,55 @@ describe("CertificationFormDialog", () => {
     });
     it("allows filling in issue date", async () => {
       const user = userEvent.setup();
-      render(<CertificationFormDialog {...defaultProps} />);
-      const dateInput = screen.getByLabelText(/^issue date$/i);
-      await user.type(dateInput, "2023-06");
-      expect(dateInput).toHaveValue("2023-06");
+      const onSubmit = vi.fn();
+      render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
+      // MonthPicker uses buttons, not inputs
+      const dateButtons = screen.getAllByRole("button", {
+        name: /pick a month/i,
+      });
+      await user.click(dateButtons[0]); // Issue date button
+      await waitFor(() => {
+        expect(
+          screen.getByRole("button", { name: /jun/i }),
+        ).toBeInTheDocument();
+      });
+      await user.click(screen.getByRole("button", { name: /jun/i }));
+      // Verify by submitting
+      const submitButton = screen.getByRole("button", { name: /^save$/i });
+      await user.click(submitButton);
+      await waitFor(() => {
+        expect(onSubmit).toHaveBeenCalledWith(
+          expect.objectContaining({
+            date: expect.stringMatching(/\d{4}-06/),
+          }),
+        );
+      });
     });
     it("allows filling in expiry date", async () => {
       const user = userEvent.setup();
-      render(<CertificationFormDialog {...defaultProps} />);
-      const expiryInput = screen.getByLabelText(/expiry date/i);
-      await user.type(expiryInput, "2026-06");
-      expect(expiryInput).toHaveValue("2026-06");
+      const onSubmit = vi.fn();
+      render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
+      // MonthPicker uses buttons - find the second button (expiry date)
+      const dateButtons = screen.getAllByRole("button", {
+        name: /pick a month/i,
+      });
+      await user.click(dateButtons[1]); // Expiry date button
+      await waitFor(() => {
+        expect(
+          screen.getByRole("button", { name: /jun/i }),
+        ).toBeInTheDocument();
+      });
+      await user.click(screen.getByRole("button", { name: /jun/i }));
+      // Verify by submitting
+      const submitButton = screen.getByRole("button", { name: /^save$/i });
+      await user.click(submitButton);
+      await waitFor(() => {
+        expect(onSubmit).toHaveBeenCalledWith(
+          expect.objectContaining({
+            expiryDate: expect.stringMatching(/\d{4}-06/),
+          }),
+        );
+      });
     });
     it("allows filling in credential ID", async () => {
       const user = userEvent.setup();
@@ -124,13 +163,18 @@ describe("CertificationFormDialog", () => {
     it("submits form with all required fields", async () => {
       const user = userEvent.setup();
       const onSubmit = vi.fn();
-      render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          onSubmit={onSubmit}
+          defaultValues={{ date: "2023-06" }}
+        />,
+      );
       await user.type(
         screen.getByLabelText(/certification name/i),
         "AWS Solutions Architect",
       );
       await user.type(screen.getByLabelText(/issuing organization/i), "AWS");
-      await user.type(screen.getByLabelText(/^issue date$/i), "2023-06");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
@@ -146,14 +190,18 @@ describe("CertificationFormDialog", () => {
     it("submits form with all fields including optional ones", async () => {
       const user = userEvent.setup();
       const onSubmit = vi.fn();
-      render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          onSubmit={onSubmit}
+          defaultValues={{ date: "2023-06", expiryDate: "2026-06" }}
+        />,
+      );
       await user.type(
         screen.getByLabelText(/certification name/i),
         "AWS Solutions Architect",
       );
       await user.type(screen.getByLabelText(/issuing organization/i), "AWS");
-      await user.type(screen.getByLabelText(/^issue date$/i), "2023-06");
-      await user.type(screen.getByLabelText(/expiry date/i), "2026-06");
       await user.type(screen.getByLabelText(/credential id/i), "ABC123");
       await user.type(
         screen.getByLabelText(/credential url/i),
@@ -175,10 +223,15 @@ describe("CertificationFormDialog", () => {
     it("submits form without optional expiry date", async () => {
       const user = userEvent.setup();
       const onSubmit = vi.fn();
-      render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          onSubmit={onSubmit}
+          defaultValues={{ date: "2022-01" }}
+        />,
+      );
       await user.type(screen.getByLabelText(/certification name/i), "PMP");
       await user.type(screen.getByLabelText(/issuing organization/i), "PMI");
-      await user.type(screen.getByLabelText(/^issue date$/i), "2022-01");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
@@ -195,10 +248,15 @@ describe("CertificationFormDialog", () => {
     it("submits form without optional credential ID", async () => {
       const user = userEvent.setup();
       const onSubmit = vi.fn();
-      render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          onSubmit={onSubmit}
+          defaultValues={{ date: "2021-03" }}
+        />,
+      );
       await user.type(screen.getByLabelText(/certification name/i), "CISSP");
       await user.type(screen.getByLabelText(/issuing organization/i), "ISC2");
-      await user.type(screen.getByLabelText(/^issue date$/i), "2021-03");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
@@ -215,10 +273,15 @@ describe("CertificationFormDialog", () => {
     it("submits form without optional URL", async () => {
       const user = userEvent.setup();
       const onSubmit = vi.fn();
-      render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          onSubmit={onSubmit}
+          defaultValues={{ date: "2023-09" }}
+        />,
+      );
       await user.type(screen.getByLabelText(/certification name/i), "CKA");
       await user.type(screen.getByLabelText(/issuing organization/i), "CNCF");
-      await user.type(screen.getByLabelText(/^issue date$/i), "2023-09");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
@@ -239,6 +302,7 @@ describe("CertificationFormDialog", () => {
         <CertificationFormDialog
           {...defaultProps}
           onOpenChange={onOpenChange}
+          defaultValues={{ date: "2023-01" }}
         />,
       );
       await user.type(
@@ -249,7 +313,6 @@ describe("CertificationFormDialog", () => {
         screen.getByLabelText(/issuing organization/i),
         "Test Org",
       );
-      await user.type(screen.getByLabelText(/^issue date$/i), "2023-01");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
@@ -258,14 +321,18 @@ describe("CertificationFormDialog", () => {
     });
     it("resets form after submission", async () => {
       const user = userEvent.setup();
-      render(<CertificationFormDialog {...defaultProps} />);
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          defaultValues={{ date: "2023-01" }}
+        />,
+      );
       const nameInput = screen.getByLabelText(/certification name/i);
       await user.type(nameInput, "Test Certification");
       await user.type(
         screen.getByLabelText(/issuing organization/i),
         "Test Org",
       );
-      await user.type(screen.getByLabelText(/^issue date$/i), "2023-01");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
@@ -319,8 +386,9 @@ describe("CertificationFormDialog", () => {
       expect(screen.getByLabelText(/issuing organization/i)).toHaveValue(
         "Default Org",
       );
-      expect(screen.getByLabelText(/^issue date$/i)).toHaveValue("2022-06");
-      expect(screen.getByLabelText(/expiry date/i)).toHaveValue("2025-06");
+      // Date pickers show formatted dates
+      expect(screen.getByText(/june 2022/i)).toBeInTheDocument();
+      expect(screen.getByText(/june 2025/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/credential id/i)).toHaveValue("DEF456");
       expect(screen.getByLabelText(/credential url/i)).toHaveValue(
         "https://default.com/cert",
@@ -344,62 +412,48 @@ describe("CertificationFormDialog", () => {
       expect(screen.getByLabelText(/issuing organization/i)).toHaveValue(
         "Partial Org",
       );
-      expect(screen.getByLabelText(/^issue date$/i)).toHaveValue("2021-01");
-      expect(screen.getByLabelText(/expiry date/i)).toHaveValue("");
+      // Issue date shows formatted, expiry shows placeholder
+      expect(screen.getByText(/january 2021/i)).toBeInTheDocument();
+      expect(screen.getByText(/pick a month/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/credential id/i)).toHaveValue("");
       expect(screen.getByLabelText(/credential url/i)).toHaveValue("");
     });
   });
   describe("Form Validation", () => {
-    it("requires certification name", async () => {
+    it("all fields are optional and form can submit with minimal data", async () => {
       const user = userEvent.setup();
-      render(<CertificationFormDialog {...defaultProps} />);
-      // Fill in other required fields but leave name empty
-      await user.type(
-        screen.getByLabelText(/issuing organization/i),
-        "Test Org",
-      );
-      await user.type(screen.getByLabelText(/^issue date$/i), "2023-01");
+      const onSubmit = vi.fn();
+      render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
+      // Just click submit without filling anything
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
-        // Form should not submit without name
-        expect(defaultProps.onSubmit).not.toHaveBeenCalled();
+        // Form should submit with empty values since all fields are optional
+        expect(onSubmit).toHaveBeenCalledWith(
+          expect.objectContaining({
+            name: "",
+            issuer: "",
+            date: "",
+            expiryDate: "",
+            credentialId: "",
+            url: "",
+          }),
+        );
       });
     });
-    it("requires issuing organization", async () => {
+    it("allows empty URL field", async () => {
       const user = userEvent.setup();
-      render(<CertificationFormDialog {...defaultProps} />);
-      // Fill in other required fields but leave issuer empty
-      await user.type(
-        screen.getByLabelText(/certification name/i),
-        "Test Cert",
-      );
-      await user.type(screen.getByLabelText(/^issue date$/i), "2023-01");
+      const onSubmit = vi.fn();
+      render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
+      // Submit without URL - should work since URL is optional
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
-        // Form should not submit without issuer
-        expect(defaultProps.onSubmit).not.toHaveBeenCalled();
-      });
-    });
-    it("requires issue date", async () => {
-      const user = userEvent.setup();
-      render(<CertificationFormDialog {...defaultProps} />);
-      // Fill in other required fields but leave date empty
-      await user.type(
-        screen.getByLabelText(/certification name/i),
-        "Test Cert",
-      );
-      await user.type(
-        screen.getByLabelText(/issuing organization/i),
-        "Test Org",
-      );
-      const submitButton = screen.getByRole("button", { name: /^save$/i });
-      await user.click(submitButton);
-      await waitFor(() => {
-        // Form should not submit without date
-        expect(defaultProps.onSubmit).not.toHaveBeenCalled();
+        expect(onSubmit).toHaveBeenCalledWith(
+          expect.objectContaining({
+            url: "",
+          }),
+        );
       });
     });
   });
@@ -407,10 +461,15 @@ describe("CertificationFormDialog", () => {
     it("accepts valid URL format", async () => {
       const user = userEvent.setup();
       const onSubmit = vi.fn();
-      render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          onSubmit={onSubmit}
+          defaultValues={{ date: "2023-01" }}
+        />,
+      );
       await user.type(screen.getByLabelText(/certification name/i), "Test");
       await user.type(screen.getByLabelText(/issuing organization/i), "Org");
-      await user.type(screen.getByLabelText(/^issue date$/i), "2023-01");
       await user.type(
         screen.getByLabelText(/credential url/i),
         "https://www.credly.com/badges/12345",
@@ -432,24 +491,36 @@ describe("CertificationFormDialog", () => {
     });
   });
   describe("Date Fields", () => {
-    it("has month input type for issue date", () => {
+    it("renders date pickers as buttons with MonthPicker", () => {
       render(<CertificationFormDialog {...defaultProps} />);
-      const dateInput = screen.getByLabelText(/^issue date$/i);
-      expect(dateInput).toHaveAttribute("type", "month");
+      // Date pickers are buttons, not month inputs
+      const dateButtons = screen.getAllByRole("button", {
+        name: /pick a month/i,
+      });
+      expect(dateButtons).toHaveLength(2); // Issue date and expiry date
     });
-    it("has month input type for expiry date", () => {
-      render(<CertificationFormDialog {...defaultProps} />);
-      const expiryInput = screen.getByLabelText(/expiry date/i);
-      expect(expiryInput).toHaveAttribute("type", "month");
+    it("shows formatted dates when values are set", () => {
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          defaultValues={{ date: "2023-01", expiryDate: "2026-01" }}
+        />,
+      );
+      expect(screen.getByText(/january 2023/i)).toBeInTheDocument();
+      expect(screen.getByText(/january 2026/i)).toBeInTheDocument();
     });
     it("allows expiry date to be after issue date", async () => {
       const user = userEvent.setup();
       const onSubmit = vi.fn();
-      render(<CertificationFormDialog {...defaultProps} onSubmit={onSubmit} />);
+      render(
+        <CertificationFormDialog
+          {...defaultProps}
+          onSubmit={onSubmit}
+          defaultValues={{ date: "2023-01", expiryDate: "2026-01" }}
+        />,
+      );
       await user.type(screen.getByLabelText(/certification name/i), "Cert");
       await user.type(screen.getByLabelText(/issuing organization/i), "Org");
-      await user.type(screen.getByLabelText(/^issue date$/i), "2023-01");
-      await user.type(screen.getByLabelText(/expiry date/i), "2026-01");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {

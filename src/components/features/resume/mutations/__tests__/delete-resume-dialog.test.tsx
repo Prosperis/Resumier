@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { useDeleteResume } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
 import { DeleteResumeDialog } from "../delete-resume-dialog";

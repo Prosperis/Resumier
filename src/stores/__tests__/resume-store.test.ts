@@ -1,5 +1,4 @@
 import { act, renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { JobInfo, ResumeDocument, UserInfo } from "../resume-store";
 import { useResumeStore } from "../resume-store";
 

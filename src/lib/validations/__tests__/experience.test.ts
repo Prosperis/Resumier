@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import {
   type CreateExperienceFormData,
   createExperienceSchema,
@@ -154,14 +153,14 @@ describe("experienceSchema", () => {
   });
 
   describe("Invalid Data", () => {
-    it("fails when description exceeds 1000 characters", () => {
+    it("fails when description exceeds 2000 characters", () => {
       const data = {
         id: "exp-1",
         company: "Company",
         position: "Developer",
         startDate: "2020-01",
         endDate: "2021-01",
-        description: "a".repeat(1001),
+        description: "a".repeat(2001),
       };
       const result = experienceSchema.safeParse(data);
       expect(result.success).toBe(false);
@@ -172,14 +171,14 @@ describe("experienceSchema", () => {
   });
 
   describe("Edge Cases", () => {
-    it("accepts description at exactly 1000 characters", () => {
+    it("accepts description at exactly 2000 characters", () => {
       const data = {
         id: "exp-1",
         company: "Company",
         position: "Developer",
         startDate: "2020-01",
         endDate: "2021-01",
-        description: "a".repeat(1000),
+        description: "a".repeat(2000),
       };
       const result = experienceSchema.safeParse(data);
       expect(result.success).toBe(true);

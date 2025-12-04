@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import type { Education } from "@/stores";
 import { EducationSection } from "../education-section";
 

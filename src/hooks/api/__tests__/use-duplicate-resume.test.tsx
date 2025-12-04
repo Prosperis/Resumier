@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { apiClient } from "@/lib/api/client";
 import { createMockResume, createMockResumeContent } from "../test-helpers";
 import { useDuplicateResume } from "../use-duplicate-resume";

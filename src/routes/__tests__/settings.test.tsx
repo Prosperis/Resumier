@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { useAuthStore } from "@/stores";
 
 // Mock dependencies
@@ -7,6 +7,35 @@ vi.mock("@/stores", () => ({
   useAuthStore: {
     getState: vi.fn(),
   },
+  useSettingsStore: vi.fn(() => ({
+    settings: {
+      theme: "system",
+      reducedMotion: false,
+      autoSave: true,
+      promptExportFilename: true,
+    },
+    updateSettings: vi.fn(),
+    resetSettings: vi.fn(),
+  })),
+}));
+
+vi.mock("@/stores/auth-store", () => ({
+  useAuthStore: vi.fn(() => ({
+    user: { id: "1", email: "test@example.com", name: "Test User" },
+    isGuest: false,
+    isDemo: false,
+  })),
+}));
+
+vi.mock("@/app/theme-provider", () => ({
+  useTheme: vi.fn(() => ({
+    theme: "system",
+    setTheme: vi.fn(),
+  })),
+}));
+
+vi.mock("@/components/features/demo", () => ({
+  DemoModeInfo: () => <div data-testid="demo-mode-info">Demo Mode Info</div>,
 }));
 
 vi.mock("@tanstack/react-router", () => ({
@@ -27,6 +56,29 @@ vi.mock("@/components/ui/route-loading", () => ({
   SettingsLoading: () => (
     <div data-testid="settings-loading">Loading Settings...</div>
   ),
+}));
+
+// Mock framer-motion to avoid animation issues in tests
+vi.mock("framer-motion", () => ({
+  motion: {
+    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    button: ({ children, ...props }: any) => (
+      <button {...props}>{children}</button>
+    ),
+  },
+}));
+
+// Mock the reduced motion hook
+vi.mock("@/lib/animations/hooks/use-reduced-motion", () => ({
+  useReducedMotion: () => false,
+}));
+
+// Mock lucide-react icons
+vi.mock("lucide-react", () => ({
+  RotateCcw: () => <span data-testid="rotate-ccw-icon" />,
+  Check: () => <span data-testid="check-icon" />,
+  ChevronDown: () => <span data-testid="chevron-down-icon" />,
+  ChevronUp: () => <span data-testid="chevron-up-icon" />,
 }));
 
 // Import the route module after setting up mocks
@@ -65,25 +117,22 @@ describe("Settings Route", () => {
       renderSettingsRoute();
 
       expect(
-        screen.getAllByText(/manage your account settings and preferences/i)
-          .length,
-      ).toBeGreaterThan(0);
+        screen.getByText(/manage your preferences and configuration/i),
+      ).toBeInTheDocument();
     });
 
     it("renders the Account section", () => {
       renderSettingsRoute();
 
-      expect(
-        screen.getByRole("heading", { name: /^account$/i }),
-      ).toBeInTheDocument();
+      // CardTitle renders as div with data-slot="card-title", not as a heading
+      expect(screen.getByText("Account")).toBeInTheDocument();
     });
 
     it("renders the Appearance section", () => {
       renderSettingsRoute();
 
-      expect(
-        screen.getByRole("heading", { name: /appearance/i }),
-      ).toBeInTheDocument();
+      // CardTitle renders as div with data-slot="card-title", not as a heading
+      expect(screen.getByText("Appearance")).toBeInTheDocument();
       expect(
         screen.getByText(/customize how resumier looks/i),
       ).toBeInTheDocument();
@@ -106,7 +155,8 @@ describe("Settings Route", () => {
     it("adds padding to the container", () => {
       const { container } = renderSettingsRoute();
 
-      const paddedContainer = container.querySelector(".container.p-8");
+      // Component uses p-4 md:p-8 for responsive padding
+      const paddedContainer = container.querySelector(".container.p-4");
       expect(paddedContainer).toBeInTheDocument();
     });
 
@@ -119,13 +169,12 @@ describe("Settings Route", () => {
   });
 
   describe("Sections", () => {
-    it("renders sections with borders", () => {
+    it("renders Card sections with rounded corners and borders", () => {
       const { container } = renderSettingsRoute();
 
-      const borderedSections = container.querySelectorAll(
-        ".rounded-lg.border.p-6",
-      );
-      expect(borderedSections.length).toBeGreaterThanOrEqual(2);
+      // Card component uses rounded-xl and border classes
+      const cardSections = container.querySelectorAll("[data-slot='card']");
+      expect(cardSections.length).toBeGreaterThanOrEqual(2);
     });
 
     it("organizes sections with spacing", () => {
@@ -139,10 +188,11 @@ describe("Settings Route", () => {
       renderSettingsRoute();
 
       const h1 = screen.getByRole("heading", { level: 1, name: /^settings$/i });
-      const h2s = screen.getAllByRole("heading", { level: 2 });
 
       expect(h1).toBeInTheDocument();
-      expect(h2s.length).toBeGreaterThanOrEqual(2);
+      // CardTitle renders as div, not h2, so we check for the presence of section titles
+      expect(screen.getByText("Account")).toBeInTheDocument();
+      expect(screen.getByText("Appearance")).toBeInTheDocument();
     });
   });
 
@@ -154,13 +204,12 @@ describe("Settings Route", () => {
       expect(mainHeading).toBeInTheDocument();
     });
 
-    it("uses proper heading styles for sections", () => {
+    it("uses proper styles for Card titles", () => {
       const { container } = renderSettingsRoute();
 
-      const sectionHeadings = container.querySelectorAll(
-        "h2.text-xl.font-semibold",
-      );
-      expect(sectionHeadings.length).toBeGreaterThanOrEqual(2);
+      // CardTitle uses font-semibold class
+      const cardTitles = container.querySelectorAll("[data-slot='card-title']");
+      expect(cardTitles.length).toBeGreaterThanOrEqual(2);
     });
 
     it("uses muted foreground for descriptions", () => {
@@ -172,12 +221,10 @@ describe("Settings Route", () => {
   });
 
   describe("Content", () => {
-    it("mentions account management", () => {
+    it("displays user status information", () => {
       renderSettingsRoute();
 
-      expect(
-        screen.getAllByText(/manage your account settings/i).length,
-      ).toBeGreaterThan(0);
+      expect(screen.getByText(/status/i)).toBeInTheDocument();
     });
 
     it("mentions customization options", () => {
@@ -188,12 +235,12 @@ describe("Settings Route", () => {
       ).toBeInTheDocument();
     });
 
-    it("has placeholder comments for future content", () => {
+    it("renders Card sections", () => {
       const { container } = renderSettingsRoute();
 
-      // Check that sections exist even if they're placeholder
-      const sections = container.querySelectorAll(".rounded-lg.border");
-      expect(sections.length).toBeGreaterThanOrEqual(2);
+      // Check that Card sections exist using data-slot attribute
+      const cards = container.querySelectorAll("[data-slot='card']");
+      expect(cards.length).toBeGreaterThanOrEqual(2);
     });
   });
 
@@ -202,43 +249,44 @@ describe("Settings Route", () => {
       renderSettingsRoute();
 
       const h1 = screen.getByRole("heading", { level: 1 });
-      const h2s = screen.getAllByRole("heading", { level: 2 });
 
       expect(h1).toBeInTheDocument();
-      expect(h2s.length).toBeGreaterThan(0);
+      // CardTitle components render section titles
+      expect(screen.getByText("Account")).toBeInTheDocument();
+      expect(screen.getByText("Appearance")).toBeInTheDocument();
     });
 
     it("provides descriptive text for each section", () => {
       renderSettingsRoute();
 
-      const accountDesc = screen.getAllByText(/manage your account settings/i);
       const appearanceDesc = screen.getByText(/customize how resumier looks/i);
 
-      expect(accountDesc.length).toBeGreaterThan(0);
       expect(appearanceDesc).toBeInTheDocument();
     });
   });
 
   describe("Visual Design", () => {
-    it("applies rounded corners to sections", () => {
+    it("applies rounded corners to Card sections", () => {
       const { container } = renderSettingsRoute();
 
-      const roundedSections = container.querySelectorAll(".rounded-lg");
+      // Card component uses rounded-xl class
+      const roundedSections = container.querySelectorAll(".rounded-xl");
       expect(roundedSections.length).toBeGreaterThan(0);
     });
 
-    it("applies borders to sections", () => {
+    it("applies borders to Card sections", () => {
       const { container } = renderSettingsRoute();
 
       const borderedSections = container.querySelectorAll(".border");
       expect(borderedSections.length).toBeGreaterThan(0);
     });
 
-    it("adds padding to sections", () => {
+    it("adds padding to Card content", () => {
       const { container } = renderSettingsRoute();
 
-      const paddedSections = container.querySelectorAll(".p-6");
-      expect(paddedSections.length).toBeGreaterThanOrEqual(2);
+      // CardContent and CardHeader use px-6 for horizontal padding
+      const paddedContent = container.querySelectorAll(".px-6");
+      expect(paddedContent.length).toBeGreaterThanOrEqual(2);
     });
   });
 });

@@ -5,7 +5,6 @@
 
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
 import { CreateResumeDialog } from "@/components/features/resume/mutations/create-resume-dialog";
 import { DeleteResumeDialog } from "@/components/features/resume/mutations/delete-resume-dialog";
 import { RenameResumeDialog } from "@/components/features/resume/mutations/rename-resume-dialog";

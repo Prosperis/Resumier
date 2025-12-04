@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import {
   copyToClipboard,
   downloadHTML,
@@ -30,7 +30,8 @@ describe("export-utils", () => {
     title: "My Resume",
     content: {
       personalInfo: {
-        name: "John Doe",
+        firstName: "John",
+        lastName: "Doe",
         email: "john@example.com",
         phone: "123-456-7890",
         location: "New York, NY",
@@ -129,7 +130,8 @@ describe("export-utils", () => {
         title: "My Resume",
         content: {
           personalInfo: {
-            name: "John Doe",
+            firstName: "John",
+            lastName: "Doe",
             email: "john@example.com",
             phone: "123-456-7890",
             location: "New York, NY",
@@ -159,7 +161,8 @@ describe("export-utils", () => {
         title: "Software Engineer Resume",
         content: {
           personalInfo: {
-            name: "Jane Smith",
+            firstName: "Jane",
+            lastName: "Smith",
             email: "jane@example.com",
             phone: "",
             location: "",
@@ -179,9 +182,10 @@ describe("export-utils", () => {
 
       expect(saveAsMock).toHaveBeenCalled();
       const filename = saveAsMock.mock.calls[0][1];
-      // Filename should now include date and use personal name
+      // Filename should include personal name, date, and extension
+      // sanitizeFilename replaces dots, so extension appears as _html
       expect(filename).toContain("Jane_Smith_Resume_");
-      expect(filename).toContain(".html");
+      expect(filename).toMatch(/_html$/);
     });
 
     it("should trigger download using saveAs", () => {
@@ -190,7 +194,8 @@ describe("export-utils", () => {
         title: "Test",
         content: {
           personalInfo: {
-            name: "Test User",
+            firstName: "Test",
+            lastName: "User",
             email: "test@example.com",
             phone: "",
             location: "",
@@ -217,7 +222,8 @@ describe("export-utils", () => {
         title: "Test",
         content: {
           personalInfo: {
-            name: "Test User",
+            firstName: "Test",
+            lastName: "User",
             email: "test@example.com",
             phone: "",
             location: "",

@@ -1,14 +1,11 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import type { Experience } from "@/lib/api/types";
-import { ExperienceList } from "../experience-list";
 
 // Mock the dnd-kit modules
 vi.mock("@dnd-kit/core", () => ({
-  DndContext: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
+  DndContext: ({ children }: any) => children,
   closestCenter: vi.fn(),
   useSensor: vi.fn(),
   useSensors: vi.fn(() => []),
@@ -17,9 +14,7 @@ vi.mock("@dnd-kit/core", () => ({
 }));
 
 vi.mock("@dnd-kit/sortable", () => ({
-  SortableContext: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
+  SortableContext: ({ children }: any) => children,
   verticalListSortingStrategy: vi.fn(),
   sortableKeyboardCoordinates: vi.fn(),
   useSortable: vi.fn(() => ({
@@ -41,19 +36,31 @@ vi.mock("@dnd-kit/utilities", () => ({
 }));
 
 vi.mock("../dnd/sortable-item", () => ({
-  SortableItem: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
+  SortableItem: ({ children }: any) => children,
 }));
 
 vi.mock("../dnd/drag-handle", () => ({
-  DragHandle: () => <div>Drag Handle</div>,
+  DragHandle: () => null,
 }));
+
+vi.mock("../experience-inline-form", () => ({
+  ExperienceInlineForm: () => null,
+}));
+
+import { ExperienceList } from "../experience-list";
 
 describe("ExperienceList", () => {
   const mockOnEdit = vi.fn();
   const mockOnDelete = vi.fn();
   const mockOnReorder = vi.fn();
+  const mockOnClose = vi.fn();
+
+  const defaultProps = {
+    resumeId: "test-resume-id",
+    editingId: null,
+    isAddingNew: false,
+    onClose: mockOnClose,
+  };
 
   const sampleExperiences: Experience[] = [
     {
@@ -99,6 +106,7 @@ describe("ExperienceList", () => {
     it("renders empty state when no experiences", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -107,13 +115,14 @@ describe("ExperienceList", () => {
 
       expect(screen.getByText("No experience added yet.")).toBeInTheDocument();
       expect(
-        screen.getByText('Click "Add Experience" to get started.'),
+        screen.getByText("Click the + button to add your first experience."),
       ).toBeInTheDocument();
     });
 
     it("renders empty state with dashed border card", () => {
       const { container } = render(
         <ExperienceList
+          {...defaultProps}
           experiences={[]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -129,6 +138,7 @@ describe("ExperienceList", () => {
     it("renders all experiences", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -143,6 +153,7 @@ describe("ExperienceList", () => {
     it("displays company names", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -157,6 +168,7 @@ describe("ExperienceList", () => {
     it("formats date range correctly for past experience", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -169,6 +181,7 @@ describe("ExperienceList", () => {
     it("formats date range with Present for current position", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[sampleExperiences[2]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -181,6 +194,7 @@ describe("ExperienceList", () => {
     it("displays description when provided", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -195,6 +209,7 @@ describe("ExperienceList", () => {
     it("displays highlights as bullet list", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -218,6 +233,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[expWithoutContent]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -239,6 +255,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[expWithDescription]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -258,6 +275,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[expWithHighlights]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -275,6 +293,7 @@ describe("ExperienceList", () => {
       const user = userEvent.setup();
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -285,12 +304,13 @@ describe("ExperienceList", () => {
       await user.click(editButtons[0]);
 
       expect(mockOnEdit).toHaveBeenCalledTimes(1);
-      expect(mockOnEdit).toHaveBeenCalledWith(sampleExperiences[0]);
+      expect(mockOnEdit).toHaveBeenCalledWith(sampleExperiences[0].id);
     });
 
     it("renders edit button with correct aria-label", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -306,6 +326,7 @@ describe("ExperienceList", () => {
       const user = userEvent.setup();
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -315,10 +336,10 @@ describe("ExperienceList", () => {
       const editButtons = screen.getAllByLabelText(/edit.*experience/i);
 
       await user.click(editButtons[1]);
-      expect(mockOnEdit).toHaveBeenCalledWith(sampleExperiences[1]);
+      expect(mockOnEdit).toHaveBeenCalledWith(sampleExperiences[1].id);
 
       await user.click(editButtons[2]);
-      expect(mockOnEdit).toHaveBeenCalledWith(sampleExperiences[2]);
+      expect(mockOnEdit).toHaveBeenCalledWith(sampleExperiences[2].id);
     });
   });
 
@@ -327,6 +348,7 @@ describe("ExperienceList", () => {
       const user = userEvent.setup();
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -343,6 +365,7 @@ describe("ExperienceList", () => {
     it("renders delete button with correct aria-label", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -358,6 +381,7 @@ describe("ExperienceList", () => {
       const user = userEvent.setup();
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -384,6 +408,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[exp]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -402,6 +427,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[exp]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -420,6 +446,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[exp]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -435,6 +462,7 @@ describe("ExperienceList", () => {
     it("renders multiple experiences in order", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -451,6 +479,7 @@ describe("ExperienceList", () => {
     it("renders edit and delete buttons for each experience", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -469,6 +498,7 @@ describe("ExperienceList", () => {
     it("renders calendar icon for each experience", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={sampleExperiences}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -490,6 +520,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[exp]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -508,6 +539,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[exp]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -520,6 +552,7 @@ describe("ExperienceList", () => {
     it("renders single experience correctly", () => {
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[sampleExperiences[0]]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -539,6 +572,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[exp]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -557,6 +591,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[exp]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -580,6 +615,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[exp]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}
@@ -599,6 +635,7 @@ describe("ExperienceList", () => {
 
       render(
         <ExperienceList
+          {...defaultProps}
           experiences={[exp]}
           onEdit={mockOnEdit}
           onDelete={mockOnDelete}

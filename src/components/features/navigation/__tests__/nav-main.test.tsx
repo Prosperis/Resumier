@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { FileText, LayoutDashboard, Settings2 } from "lucide-react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { NavMain } from "../nav-main";
 
 // Mock dependencies

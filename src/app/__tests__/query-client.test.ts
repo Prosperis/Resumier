@@ -1,5 +1,4 @@
 import { QueryClient } from "@tanstack/react-query";
-import { beforeEach, describe, expect, it } from "vitest";
 import { queryClient } from "../query-client";
 
 describe("queryClient", () => {

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 
 // Mock idb-keyval before importing the store
 vi.mock("idb-keyval", () => ({

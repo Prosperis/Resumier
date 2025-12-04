@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { ConflictError, NotFoundError } from "@/lib/api/errors";
 import { mockResumeApi } from "@/lib/api/mock/resumes";
 import type { CreateResumeDto, UpdateResumeDto } from "@/lib/api/types";

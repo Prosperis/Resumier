@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
 import type { Resume } from "@/lib/api/types";
 import { ModernTemplate } from "../modern-template";
 
@@ -9,9 +8,12 @@ const mockResumeMinimal: Resume = {
   title: "Test Resume",
   content: {
     personalInfo: {
-      name: "",
+      firstName: "",
+      lastName: "",
+      nameOrder: "firstLast",
       email: "",
       phone: "",
+      phoneFormat: "national",
       location: "",
       summary: "",
     },
@@ -36,9 +38,12 @@ const mockResumeFull: Resume = {
   title: "Full Resume",
   content: {
     personalInfo: {
-      name: "Alex Johnson",
+      firstName: "Alex",
+      lastName: "Johnson",
+      nameOrder: "firstLast",
       email: "alex@example.com",
-      phone: "555-9999",
+      phone: "+15559999999",
+      phoneFormat: "national",
       location: "Seattle, WA",
       summary: "Full-stack developer passionate about clean code",
     },
@@ -98,7 +103,7 @@ const mockResumeFull: Resume = {
 
 describe("ModernTemplate", () => {
   describe("Header Section", () => {
-    it("renders default name when personalInfo.name is empty", () => {
+    it("renders default name when personalInfo names are empty", () => {
       render(<ModernTemplate resume={mockResumeMinimal} />);
       expect(screen.getByText("Your Name")).toBeInTheDocument();
     });
@@ -108,11 +113,11 @@ describe("ModernTemplate", () => {
       expect(screen.getByText("Alex Johnson")).toBeInTheDocument();
     });
 
-    it("applies colored header background", () => {
+    it("applies colored header background with inline styles", () => {
       const { container } = render(<ModernTemplate resume={mockResumeFull} />);
-      const header = container.querySelector(".bg-primary");
+      const header = container.querySelector(".p-8");
       expect(header).toBeInTheDocument();
-      expect(header).toHaveClass("text-primary-foreground", "p-8");
+      expect(header).toHaveStyle({ backgroundColor: "rgb(139, 92, 246)" });
     });
 
     it("renders email with Mail icon", () => {
@@ -120,9 +125,10 @@ describe("ModernTemplate", () => {
       expect(screen.getByText("alex@example.com")).toBeInTheDocument();
     });
 
-    it("renders phone with Phone icon", () => {
+    it("renders phone formatted", () => {
       render(<ModernTemplate resume={mockResumeFull} />);
-      expect(screen.getByText("555-9999")).toBeInTheDocument();
+      // Phone is formatted as national format
+      expect(screen.getByText("(555) 999-9999")).toBeInTheDocument();
     });
 
     it("renders location with MapPin icon", () => {
@@ -168,10 +174,10 @@ describe("ModernTemplate", () => {
       ).not.toBeInTheDocument();
     });
 
-    it("applies primary color to summary heading", () => {
-      const { container } = render(<ModernTemplate resume={mockResumeFull} />);
+    it("applies primary color to summary heading with inline styles", () => {
+      render(<ModernTemplate resume={mockResumeFull} />);
       const summaryHeading = screen.getByText("Professional Summary");
-      expect(summaryHeading).toHaveClass("text-primary", "border-primary");
+      expect(summaryHeading).toHaveStyle({ color: "rgb(139, 92, 246)" });
     });
   });
 
@@ -263,9 +269,10 @@ describe("ModernTemplate", () => {
       expect(screen.getByText("Rust")).toBeInTheDocument();
     });
 
-    it("applies badge styling to skill items", () => {
+    it("applies badge styling to skill items with inline styles", () => {
       const { container } = render(<ModernTemplate resume={mockResumeFull} />);
-      const badges = container.querySelectorAll(".bg-primary\\/10");
+      // Skills use inline styles for background color
+      const badges = container.querySelectorAll(".rounded.px-2.py-1.text-xs");
       expect(badges.length).toBeGreaterThan(0);
     });
 
@@ -355,24 +362,22 @@ describe("ModernTemplate", () => {
       const mainDiv = container.firstChild;
       expect(mainDiv).toHaveClass(
         "bg-white",
-        "text-gray-900",
         "shadow-lg",
         "max-w-[21cm]",
         "mx-auto",
       );
     });
 
-    it("uses primary color theme consistently", () => {
+    it("uses primary color theme consistently with inline styles", () => {
       const { container } = render(<ModernTemplate resume={mockResumeFull} />);
-      const primaryElements = container.querySelectorAll(".text-primary");
-      expect(primaryElements.length).toBeGreaterThan(0);
+      // Check that section headings have primary color via inline styles
+      const experienceHeading = screen.getByText("Experience");
+      expect(experienceHeading).toHaveStyle({ color: "rgb(139, 92, 246)" });
     });
 
-    it("applies border with primary color to section headings", () => {
+    it("applies border to section headings", () => {
       const { container } = render(<ModernTemplate resume={mockResumeFull} />);
-      const headingsWithBorder = container.querySelectorAll(
-        ".border-b-2.border-primary",
-      );
+      const headingsWithBorder = container.querySelectorAll(".border-b-2");
       expect(headingsWithBorder.length).toBeGreaterThan(0);
     });
   });
@@ -385,7 +390,8 @@ describe("ModernTemplate", () => {
           ...mockResumeMinimal.content,
           personalInfo: {
             ...mockResumeMinimal.content.personalInfo,
-            name: "Minimal User",
+            firstName: "Minimal",
+            lastName: "User",
             email: "minimal@test.com",
           },
           experience: [
@@ -426,7 +432,8 @@ describe("ModernTemplate", () => {
           ...mockResumeMinimal.content,
           personalInfo: {
             ...mockResumeMinimal.content.personalInfo,
-            name: "Test",
+            firstName: "Test",
+            lastName: "",
           },
           experience: [
             {
@@ -453,7 +460,8 @@ describe("ModernTemplate", () => {
           ...mockResumeMinimal.content,
           personalInfo: {
             ...mockResumeMinimal.content.personalInfo,
-            name: "Test",
+            firstName: "Test",
+            lastName: "",
           },
           education: [
             {

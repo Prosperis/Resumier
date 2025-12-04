@@ -5,7 +5,6 @@
  * Run with: bun test --environment jsdom
  */
 
-import { describe, expect, it } from "vitest";
 import { IMPORT_SOURCES } from "@/lib/services/import-service";
 
 describe("ImportDialog", () => {

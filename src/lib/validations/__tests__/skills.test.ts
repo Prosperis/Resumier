@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import { type SkillsFormData, skillsSchema } from "../skills";
 
 describe("skillsSchema", () => {

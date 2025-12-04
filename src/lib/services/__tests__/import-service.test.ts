@@ -1,37 +1,94 @@
-import { describe, expect, it } from "vitest";
-import {
-  importFromJSON,
-  importFromLinkedIn,
-} from "../../services/import-service";
+import { vi } from "vitest";
+import { importFromJSON, importFromLinkedIn } from "../import-service";
+
+// Mock the API client
+vi.mock("@/lib/api/client", () => ({
+  apiClient: {
+    post: vi.fn(),
+  },
+}));
+
+// Helper to create a mock File with text() method
+function createMockFile(content: string, name: string): File {
+  const file = {
+    name,
+    text: () => Promise.resolve(content),
+  } as unknown as File;
+  return file;
+}
 
 describe("Import Service", () => {
+  beforeEach(() => {
+    // Clear sessionStorage before each test
+    sessionStorage.clear();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe("importFromLinkedIn", () => {
     it("validates LinkedIn URL", async () => {
       const result = await importFromLinkedIn("https://example.com");
       expect(result.success).toBe(false);
-      expect(result.error).toBe("Invalid LinkedIn URL");
+      expect(result.error).toBe("Please enter a valid LinkedIn profile URL");
     });
 
-    it("accepts valid LinkedIn URL", async () => {
-      const result = await importFromLinkedIn(
-        "https://www.linkedin.com/in/username",
+    it("returns error when no data or URL provided", async () => {
+      const result = await importFromLinkedIn();
+      expect(result.success).toBe(false);
+      expect(result.error).toBe(
+        "No LinkedIn data found. Please use the OAuth flow or provide a profile URL.",
       );
+    });
+
+    it("retrieves data from sessionStorage when OAuth completed", async () => {
+      const mockData = {
+        personalInfo: {
+          name: "Test User",
+          email: "test@example.com",
+        },
+        experience: [{ company: "Test Co" }],
+        education: [],
+        skills: { technical: ["JavaScript"] },
+      };
+
+      sessionStorage.setItem("linkedin_import_data", JSON.stringify(mockData));
+      sessionStorage.setItem("linkedin_import_state", "completed");
+
+      const result = await importFromLinkedIn();
+
       expect(result.success).toBe(true);
       expect(result.data).toBeDefined();
-      expect(result.data?.personalInfo).toBeDefined();
+      expect(result.data?.personalInfo?.name).toBe("Test User");
+
+      // Verify sessionStorage was cleared
+      expect(sessionStorage.getItem("linkedin_import_data")).toBeNull();
+      expect(sessionStorage.getItem("linkedin_import_state")).toBeNull();
     });
 
-    it("returns mock data structure", async () => {
-      const result = await importFromLinkedIn(
-        "https://www.linkedin.com/in/username",
-      );
+    it("returns error when OAuth data is empty", async () => {
+      const emptyData = {};
 
-      if (result.success && result.data) {
-        expect(result.data.personalInfo?.name).toBeDefined();
-        expect(result.data.experience).toBeDefined();
-        expect(result.data.education).toBeDefined();
-        expect(result.data.skills).toBeDefined();
-      }
+      sessionStorage.setItem("linkedin_import_data", JSON.stringify(emptyData));
+      sessionStorage.setItem("linkedin_import_state", "completed");
+
+      const result = await importFromLinkedIn();
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBe(
+        "LinkedIn data appears to be empty. Please try again.",
+      );
+    });
+
+    it("returns error when sessionStorage data is invalid JSON", async () => {
+      sessionStorage.setItem("linkedin_import_data", "not valid json");
+      sessionStorage.setItem("linkedin_import_state", "completed");
+
+      const result = await importFromLinkedIn();
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBe("Failed to parse LinkedIn import data");
     });
   });
 
@@ -57,12 +114,7 @@ describe("Import Service", () => {
         links: [],
       };
 
-      const blob = new Blob([JSON.stringify(validData)], {
-        type: "application/json",
-      });
-      const file = new File([blob], "resume.json", {
-        type: "application/json",
-      });
+      const file = createMockFile(JSON.stringify(validData), "resume.json");
 
       const result = await importFromJSON(file);
       expect(result.success).toBe(true);
@@ -83,12 +135,7 @@ describe("Import Service", () => {
         },
       };
 
-      const blob = new Blob([JSON.stringify(validData)], {
-        type: "application/json",
-      });
-      const file = new File([blob], "resume.json", {
-        type: "application/json",
-      });
+      const file = createMockFile(JSON.stringify(validData), "resume.json");
 
       const result = await importFromJSON(file);
       expect(result.success).toBe(true);
@@ -100,12 +147,7 @@ describe("Import Service", () => {
         notAResume: true,
       };
 
-      const blob = new Blob([JSON.stringify(invalidData)], {
-        type: "application/json",
-      });
-      const file = new File([blob], "invalid.json", {
-        type: "application/json",
-      });
+      const file = createMockFile(JSON.stringify(invalidData), "invalid.json");
 
       const result = await importFromJSON(file);
       expect(result.success).toBe(false);
@@ -113,12 +155,7 @@ describe("Import Service", () => {
     });
 
     it("handles malformed JSON", async () => {
-      const blob = new Blob(["{ invalid json }"], {
-        type: "application/json",
-      });
-      const file = new File([blob], "malformed.json", {
-        type: "application/json",
-      });
+      const file = createMockFile("{ invalid json }", "malformed.json");
 
       const result = await importFromJSON(file);
       expect(result.success).toBe(false);

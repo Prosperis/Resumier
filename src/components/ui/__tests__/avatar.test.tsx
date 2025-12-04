@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 describe("Avatar", () => {

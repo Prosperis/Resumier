@@ -8,7 +8,6 @@
  * - Main route components pass accessibility checks in isolation
  */
 
-import { describe, expect, it } from "vitest";
 import { routeTree } from "@/app/routeTree.gen";
 
 describe("Route Tree Accessibility", () => {

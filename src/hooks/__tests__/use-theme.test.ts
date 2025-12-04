@@ -1,20 +1,14 @@
 import { act, renderHook } from "@testing-library/react";
-import {
-  afterAll,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
+import { vi } from "vitest";
 import { useTheme } from "@/hooks/use-theme";
 
-let originalMatchMedia: typeof window.matchMedia;
+// Store the original matchMedia if it exists
+const originalMatchMedia =
+  typeof window !== "undefined" ? window.matchMedia : undefined;
+
 beforeAll(() => {
-  originalMatchMedia = window.matchMedia;
   // Mock matchMedia for theme detection
-  const mockMatchMedia = vi.fn((query) => ({
+  const mockMatchMedia = vi.fn((query: string) => ({
     matches: false, // Default to light mode
     media: query,
     addEventListener: vi.fn(),
@@ -22,6 +16,7 @@ beforeAll(() => {
     addListener: vi.fn(),
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(),
+    onchange: null,
   }));
   Object.defineProperty(window, "matchMedia", {
     writable: true,
@@ -29,8 +24,15 @@ beforeAll(() => {
     value: mockMatchMedia,
   });
 });
+
 afterAll(() => {
-  window.matchMedia = originalMatchMedia;
+  if (originalMatchMedia) {
+    Object.defineProperty(window, "matchMedia", {
+      writable: true,
+      configurable: true,
+      value: originalMatchMedia,
+    });
+  }
 });
 describe("useTheme", () => {
   beforeEach(() => {

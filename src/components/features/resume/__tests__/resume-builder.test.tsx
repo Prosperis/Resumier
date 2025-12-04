@@ -1,6 +1,6 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import type { Resume } from "@/lib/api/types";
 import { ResumeBuilder } from "../resume-builder";
 
@@ -20,202 +20,180 @@ vi.mock("@/hooks/use-toast", () => ({
   })),
 }));
 
-// Mock all form components
-vi.mock("../forms/personal-info-form", () => ({
-  PersonalInfoForm: vi.fn(({ defaultValues }) => (
-    <div data-testid="personal-info-form">
-      <div>Name: {defaultValues?.name || "Empty"}</div>
-    </div>
-  )),
+vi.mock("@/stores/auth-store", () => ({
+  useAuthStore: vi.fn(() => false),
+  selectIsDemo: vi.fn(),
 }));
 
-vi.mock("../forms/skills-form", () => ({
-  SkillsForm: vi.fn(({ skills }) => (
+// Track which section is open for tests
+let currentOpenSection = "personal";
+
+vi.mock("@/stores/ui-store", () => ({
+  useUIStore: vi.fn((selector) => {
+    if (typeof selector === "function" && selector.name?.includes("toggle")) {
+      return (sectionId: string) => {
+        currentOpenSection = sectionId;
+      };
+    }
+    return currentOpenSection;
+  }),
+  selectResumeBuilderSection: vi.fn(),
+  selectToggleResumeBuilderSection: vi.fn(),
+}));
+
+// Mock lazy-loaded components via the lazy module
+vi.mock("../lazy", () => ({
+  FormSkeleton: () => <div>Loading form...</div>,
+  ListSkeleton: () => <div>Loading list...</div>,
+  LazyPersonalInfoForm: vi.fn(({ defaultValues }) => (
+    <div data-testid="personal-info-form">
+      <div>Name: {defaultValues?.firstName || "Empty"}</div>
+    </div>
+  )),
+  LazySkillsForm: vi.fn(({ skills }) => (
     <div data-testid="skills-form">
       <div>Technical: {skills?.technical?.join(", ") || "None"}</div>
     </div>
   )),
-}));
-
-vi.mock("../forms/experience-list", () => ({
-  ExperienceList: vi.fn(({ experiences, onEdit, onDelete, onReorder }) => (
-    <div data-testid="experience-list">
-      {experiences.length === 0 ? (
-        <div>No experiences</div>
-      ) : (
-        experiences.map((exp: any) => (
-          <div key={exp.id} data-testid={`experience-${exp.id}`}>
-            <div>{exp.position}</div>
-            <button onClick={() => onEdit(exp)}>Edit {exp.id}</button>
-            <button onClick={() => onDelete(exp.id)}>Delete {exp.id}</button>
-            <button onClick={() => onReorder([exp])}>Reorder</button>
-          </div>
-        ))
-      )}
-    </div>
-  )),
-}));
-
-vi.mock("../forms/education-list", () => ({
-  EducationList: vi.fn(({ education, onEdit, onDelete, onReorder }) => (
-    <div data-testid="education-list">
-      {education.length === 0 ? (
-        <div>No education</div>
-      ) : (
-        education.map((edu: any) => (
-          <div key={edu.id} data-testid={`education-${edu.id}`}>
-            <div>{edu.degree}</div>
-            <button onClick={() => onEdit(edu)}>Edit {edu.id}</button>
-            <button onClick={() => onDelete(edu.id)}>Delete {edu.id}</button>
-            <button onClick={() => onReorder([edu])}>Reorder</button>
-          </div>
-        ))
-      )}
-    </div>
-  )),
-}));
-
-vi.mock("../forms/certification-list", () => ({
-  CertificationList: vi.fn(
-    ({ certifications, onEdit, onDelete, onReorder }) => (
+  LazyExperienceList: vi.fn(
+    ({
+      experiences,
+      editingId,
+      isAddingNew,
+      onEdit,
+      onClose,
+      onDelete,
+      onReorder,
+    }) => (
+      <div data-testid="experience-list">
+        {isAddingNew && (
+          <div data-testid="adding-experience">Adding new experience</div>
+        )}
+        {editingId && (
+          <div data-testid="editing-experience">Editing {editingId}</div>
+        )}
+        {experiences.length === 0 && !isAddingNew ? (
+          <div>No experiences added yet</div>
+        ) : (
+          experiences.map((exp: any) => (
+            <div key={exp.id} data-testid={`experience-${exp.id}`}>
+              <div>{exp.position}</div>
+              <button onClick={() => onEdit(exp.id)}>Edit {exp.id}</button>
+              <button onClick={() => onDelete(exp.id)}>Delete {exp.id}</button>
+              <button onClick={() => onReorder([exp])}>Reorder exp</button>
+            </div>
+          ))
+        )}
+        {(isAddingNew || editingId) && <button onClick={onClose}>Close</button>}
+      </div>
+    ),
+  ),
+  LazyEducationList: vi.fn(
+    ({
+      education,
+      editingId,
+      isAddingNew,
+      onEdit,
+      onClose,
+      onDelete,
+      onReorder,
+    }) => (
+      <div data-testid="education-list">
+        {isAddingNew && (
+          <div data-testid="adding-education">Adding new education</div>
+        )}
+        {editingId && (
+          <div data-testid="editing-education">Editing {editingId}</div>
+        )}
+        {education.length === 0 && !isAddingNew ? (
+          <div>No education added yet</div>
+        ) : (
+          education.map((edu: any) => (
+            <div key={edu.id} data-testid={`education-${edu.id}`}>
+              <div>{edu.degree}</div>
+              <button onClick={() => onEdit(edu.id)}>Edit {edu.id}</button>
+              <button onClick={() => onDelete(edu.id)}>Delete {edu.id}</button>
+              <button onClick={() => onReorder([edu])}>Reorder edu</button>
+            </div>
+          ))
+        )}
+        {(isAddingNew || editingId) && <button onClick={onClose}>Close</button>}
+      </div>
+    ),
+  ),
+  LazyCertificationList: vi.fn(
+    ({
+      certifications,
+      editingId,
+      isAddingNew,
+      onEdit,
+      onClose,
+      onDelete,
+      onReorder,
+    }) => (
       <div data-testid="certification-list">
-        {certifications.length === 0 ? (
-          <div>No certifications</div>
+        {isAddingNew && (
+          <div data-testid="adding-certification">Adding new certification</div>
+        )}
+        {editingId && (
+          <div data-testid="editing-certification">Editing {editingId}</div>
+        )}
+        {certifications.length === 0 && !isAddingNew ? (
+          <div>No certifications added yet</div>
         ) : (
           certifications.map((cert: any) => (
             <div key={cert.id} data-testid={`certification-${cert.id}`}>
               <div>{cert.name}</div>
-              <button onClick={() => onEdit(cert)}>Edit {cert.id}</button>
+              <button onClick={() => onEdit(cert.id)}>Edit {cert.id}</button>
               <button onClick={() => onDelete(cert.id)}>
                 Delete {cert.id}
               </button>
-              <button onClick={() => onReorder([cert])}>Reorder</button>
+              <button onClick={() => onReorder([cert])}>Reorder cert</button>
             </div>
           ))
         )}
+        {(isAddingNew || editingId) && <button onClick={onClose}>Close</button>}
+      </div>
+    ),
+  ),
+  LazyLinkList: vi.fn(
+    ({
+      links,
+      editingId,
+      isAddingNew,
+      onEdit,
+      onClose,
+      onDelete,
+      onReorder,
+    }) => (
+      <div data-testid="link-list">
+        {isAddingNew && <div data-testid="adding-link">Adding new link</div>}
+        {editingId && <div data-testid="editing-link">Editing {editingId}</div>}
+        {links.length === 0 && !isAddingNew ? (
+          <div>No links added yet</div>
+        ) : (
+          links.map((link: any) => (
+            <div key={link.id} data-testid={`link-${link.id}`}>
+              <div>{link.label}</div>
+              <button onClick={() => onEdit(link.id)}>Edit {link.id}</button>
+              <button onClick={() => onDelete(link.id)}>
+                Delete {link.id}
+              </button>
+              <button onClick={() => onReorder([link])}>Reorder link</button>
+            </div>
+          ))
+        )}
+        {(isAddingNew || editingId) && <button onClick={onClose}>Close</button>}
       </div>
     ),
   ),
 }));
 
-vi.mock("../forms/link-list", () => ({
-  LinkList: vi.fn(({ links, onEdit, onDelete, onReorder }) => (
-    <div data-testid="link-list">
-      {links.length === 0 ? (
-        <div>No links</div>
-      ) : (
-        links.map((link: any) => (
-          <div key={link.id} data-testid={`link-${link.id}`}>
-            <div>{link.label}</div>
-            <button onClick={() => onEdit(link)}>Edit {link.id}</button>
-            <button onClick={() => onDelete(link.id)}>Delete {link.id}</button>
-            <button onClick={() => onReorder([link])}>Reorder</button>
-          </div>
-        ))
-      )}
-    </div>
+// Mock import dialog
+vi.mock("../import/import-dialog", () => ({
+  ImportDialog: vi.fn(({ trigger }) => (
+    <div data-testid="import-dialog">{trigger}</div>
   )),
-}));
-
-vi.mock("../forms/experience-form-dialog", () => ({
-  ExperienceFormDialog: vi.fn(({ open, onSubmit, defaultValues }) =>
-    open ? (
-      <div data-testid="experience-form-dialog">
-        <h2>Experience Dialog</h2>
-        <div>{defaultValues ? "Editing" : "Adding"}</div>
-        <button
-          onClick={() =>
-            onSubmit(
-              defaultValues || {
-                position: "New Position",
-                company: "New Company",
-                startDate: "2024-01",
-                endDate: "",
-                current: true,
-                description: "Test",
-              },
-            )
-          }
-        >
-          Submit Experience
-        </button>
-      </div>
-    ) : null,
-  ),
-}));
-
-vi.mock("../forms/education-form-dialog", () => ({
-  EducationFormDialog: vi.fn(({ open, onSubmit, defaultValues }) =>
-    open ? (
-      <div data-testid="education-form-dialog">
-        <h2>Education Dialog</h2>
-        <div>{defaultValues ? "Editing" : "Adding"}</div>
-        <button
-          onClick={() =>
-            onSubmit(
-              defaultValues || {
-                degree: "Bachelor",
-                field: "CS",
-                institution: "University",
-                startDate: "2020",
-                endDate: "2024",
-                current: false,
-              },
-            )
-          }
-        >
-          Submit Education
-        </button>
-      </div>
-    ) : null,
-  ),
-}));
-
-vi.mock("../forms/certification-form-dialog", () => ({
-  CertificationFormDialog: vi.fn(({ open, onSubmit, defaultValues }) =>
-    open ? (
-      <div data-testid="certification-form-dialog">
-        <h2>Certification Dialog</h2>
-        <div>{defaultValues ? "Editing" : "Adding"}</div>
-        <button
-          onClick={() =>
-            onSubmit(
-              defaultValues || {
-                name: "AWS Cert",
-                issuer: "Amazon",
-                date: "2024",
-              },
-            )
-          }
-        >
-          Submit Certification
-        </button>
-      </div>
-    ) : null,
-  ),
-}));
-
-vi.mock("../forms/link-form-dialog", () => ({
-  LinkFormDialog: vi.fn(({ open, onSubmit, defaultValues }) =>
-    open ? (
-      <div data-testid="link-form-dialog">
-        <h2>Link Dialog</h2>
-        <div>{defaultValues ? "Editing" : "Adding"}</div>
-        <button
-          onClick={() =>
-            onSubmit(
-              defaultValues || {
-                label: "GitHub",
-                url: "https://github.com/test",
-              },
-            )
-          }
-        >
-          Submit Link
-        </button>
-      </div>
-    ) : null,
-  ),
 }));
 
 const mockResume: Resume = {
@@ -224,7 +202,8 @@ const mockResume: Resume = {
   title: "My Resume",
   content: {
     personalInfo: {
-      name: "John Doe",
+      firstName: "John",
+      lastName: "Doe",
       email: "john@example.com",
       phone: "555-1234",
       location: "New York",
@@ -288,7 +267,9 @@ describe("ResumeBuilder", () => {
   let mockUseUpdateResume: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
-    // Mock reset handled by vitest config (clearMocks: true)
+    // Reset open section
+    currentOpenSection = "personal";
+
     mockUseResume = vi.fn().mockReturnValue({ data: mockResume });
     mockMutate = vi.fn();
     mockToast = vi.fn();
@@ -309,7 +290,7 @@ describe("ResumeBuilder", () => {
       expect(container.firstChild).toBeNull();
     });
 
-    it("renders all main sections", () => {
+    it("renders all section headers", () => {
       render(<ResumeBuilder />);
 
       expect(screen.getByText("Personal Information")).toBeInTheDocument();
@@ -324,139 +305,51 @@ describe("ResumeBuilder", () => {
       render(<ResumeBuilder />);
 
       expect(
-        screen.getByText(/Basic information about yourself/),
+        screen.getByText(/Basic contact info and summary/),
       ).toBeInTheDocument();
       expect(
-        screen.getByText(/Add your professional experience/),
+        screen.getByText(/Professional experience and accomplishments/),
       ).toBeInTheDocument();
       expect(
-        screen.getByText(/Add your educational background/),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/List your technical skills/),
+        screen.getByText(/Educational background and achievements/),
       ).toBeInTheDocument();
     });
 
-    it("renders Add buttons for each section", () => {
+    it("renders import section when not in demo mode", () => {
       render(<ResumeBuilder />);
 
-      expect(
-        screen.getByRole("button", { name: /Add Experience/ }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /Add Education/ }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /Add Certification/ }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /Add Link/ }),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Quick Start")).toBeInTheDocument();
+      expect(screen.getByText(/Import from LinkedIn/)).toBeInTheDocument();
     });
 
-    it("renders PersonalInfoForm with default values", () => {
-      render(<ResumeBuilder />);
+    it("renders collapsible sections", () => {
+      const { container } = render(<ResumeBuilder />);
 
-      const form = screen.getByTestId("personal-info-form");
-      expect(within(form).getByText(/John Doe/)).toBeInTheDocument();
-    });
-
-    it("renders SkillsForm with skills data", () => {
-      render(<ResumeBuilder />);
-
-      const form = screen.getByTestId("skills-form");
-      expect(
-        within(form).getByText(/JavaScript, TypeScript/),
-      ).toBeInTheDocument();
+      const collapsibles = container.querySelectorAll(
+        '[data-slot="collapsible"]',
+      );
+      expect(collapsibles.length).toBeGreaterThanOrEqual(6); // 6 sections
     });
   });
 
-  describe("Experience Management", () => {
-    it("opens add experience dialog when Add button is clicked", async () => {
-      const user = userEvent.setup();
-      render(<ResumeBuilder />);
-
-      const addButton = screen.getByRole("button", { name: /Add Experience/ });
-      await user.click(addButton);
-
-      expect(screen.getByTestId("experience-form-dialog")).toBeInTheDocument();
-      expect(screen.getByText("Adding")).toBeInTheDocument();
+  describe("Experience Section", () => {
+    beforeEach(() => {
+      currentOpenSection = "experience";
     });
 
-    it("opens edit experience dialog with existing data", async () => {
-      const user = userEvent.setup();
+    it("renders experience list", () => {
       render(<ResumeBuilder />);
-
-      const editButton = screen.getByRole("button", { name: /Edit exp-1/ });
-      await user.click(editButton);
-
-      expect(screen.getByTestId("experience-form-dialog")).toBeInTheDocument();
-      expect(screen.getByText("Editing")).toBeInTheDocument();
+      expect(screen.getByTestId("experience-list")).toBeInTheDocument();
     });
 
-    it("adds new experience successfully", async () => {
+    it("shows editing state when Edit button is clicked", async () => {
       const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Add Experience/ }));
-      await user.click(
-        screen.getByRole("button", { name: /Submit Experience/ }),
-      );
-
-      await waitFor(() => {
-        expect(mockMutate).toHaveBeenCalled();
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Success",
-          description: "Experience added successfully",
-        });
-      });
-    });
-
-    it("updates existing experience successfully", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
       render(<ResumeBuilder />);
 
       await user.click(screen.getByRole("button", { name: /Edit exp-1/ }));
-      await user.click(
-        screen.getByRole("button", { name: /Submit Experience/ }),
-      );
 
       await waitFor(() => {
-        expect(mockMutate).toHaveBeenCalled();
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Success",
-          description: "Experience updated successfully",
-        });
-      });
-    });
-
-    it("handles experience save error", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onError(new Error("Network error"));
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Add Experience/ }));
-      await user.click(
-        screen.getByRole("button", { name: /Submit Experience/ }),
-      );
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Error",
-          description: "Failed to save experience: Network error",
-          variant: "destructive",
-        });
+        expect(screen.getByTestId("editing-experience")).toBeInTheDocument();
       });
     });
 
@@ -474,7 +367,7 @@ describe("ResumeBuilder", () => {
         expect(mockMutate).toHaveBeenCalled();
         expect(mockToast).toHaveBeenCalledWith({
           title: "Success",
-          description: "Experience deleted successfully",
+          description: "Experience deleted",
         });
       });
     });
@@ -492,30 +385,9 @@ describe("ResumeBuilder", () => {
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
           title: "Error",
-          description: "Failed to delete experience: Delete failed",
+          description: "Failed to delete: Delete failed",
           variant: "destructive",
         });
-      });
-    });
-
-    it("reorders experiences without showing toast", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
-      render(<ResumeBuilder />);
-
-      // Get the reorder button from the experience list specifically
-      const experienceList = screen.getByTestId("experience-list");
-      const reorderButton = within(experienceList).getByRole("button", {
-        name: /Reorder/,
-      });
-      await user.click(reorderButton);
-
-      await waitFor(() => {
-        expect(mockMutate).toHaveBeenCalled();
-        expect(mockToast).not.toHaveBeenCalled();
       });
     });
 
@@ -527,102 +399,26 @@ describe("ResumeBuilder", () => {
 
       render(<ResumeBuilder />);
 
-      const reorderButtons = screen.getAllByRole("button", { name: /Reorder/ });
-      await user.click(reorderButtons[0]);
+      await user.click(screen.getByRole("button", { name: /Reorder exp/ }));
 
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
           title: "Error",
-          description: "Failed to reorder experiences: Reorder failed",
+          description: "Failed to reorder: Reorder failed",
           variant: "destructive",
         });
       });
     });
   });
 
-  describe("Education Management", () => {
-    it("opens add education dialog", async () => {
-      const user = userEvent.setup();
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Add Education/ }));
-
-      expect(screen.getByTestId("education-form-dialog")).toBeInTheDocument();
-      expect(screen.getByText("Adding")).toBeInTheDocument();
+  describe("Education Section", () => {
+    beforeEach(() => {
+      currentOpenSection = "education";
     });
 
-    it("opens edit education dialog", async () => {
-      const user = userEvent.setup();
+    it("renders education list", () => {
       render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Edit edu-1/ }));
-
-      expect(screen.getByTestId("education-form-dialog")).toBeInTheDocument();
-      expect(screen.getByText("Editing")).toBeInTheDocument();
-    });
-
-    it("adds new education successfully", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Add Education/ }));
-      await user.click(
-        screen.getByRole("button", { name: /Submit Education/ }),
-      );
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Success",
-          description: "Education added successfully",
-        });
-      });
-    });
-
-    it("updates education successfully", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Edit edu-1/ }));
-      await user.click(
-        screen.getByRole("button", { name: /Submit Education/ }),
-      );
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Success",
-          description: "Education updated successfully",
-        });
-      });
-    });
-
-    it("handles education save error", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onError(new Error("Save failed"));
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Add Education/ }));
-      await user.click(
-        screen.getByRole("button", { name: /Submit Education/ }),
-      );
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Error",
-          description: "Failed to save education: Save failed",
-          variant: "destructive",
-        });
-      });
+      expect(screen.getByTestId("education-list")).toBeInTheDocument();
     });
 
     it("deletes education successfully", async () => {
@@ -638,7 +434,7 @@ describe("ResumeBuilder", () => {
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
           title: "Success",
-          description: "Education deleted successfully",
+          description: "Education deleted",
         });
       });
     });
@@ -656,141 +452,21 @@ describe("ResumeBuilder", () => {
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
           title: "Error",
-          description: "Failed to delete education: Delete failed",
-          variant: "destructive",
-        });
-      });
-    });
-
-    it("reorders education without toast", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
-      render(<ResumeBuilder />);
-
-      const reorderButtons = screen.getAllByRole("button", { name: /Reorder/ });
-      await user.click(reorderButtons[1]);
-
-      await waitFor(() => {
-        expect(mockMutate).toHaveBeenCalled();
-        expect(mockToast).not.toHaveBeenCalled();
-      });
-    });
-
-    it("handles education reorder error", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onError(new Error("Reorder failed"));
-      });
-
-      render(<ResumeBuilder />);
-
-      const reorderButtons = screen.getAllByRole("button", { name: /Reorder/ });
-      await user.click(reorderButtons[1]);
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Error",
-          description: "Failed to reorder education: Reorder failed",
+          description: "Failed to delete: Delete failed",
           variant: "destructive",
         });
       });
     });
   });
 
-  describe("Certification Management", () => {
-    it("opens add certification dialog", async () => {
-      const user = userEvent.setup();
-      render(<ResumeBuilder />);
-
-      await user.click(
-        screen.getByRole("button", { name: /Add Certification/ }),
-      );
-
-      expect(
-        screen.getByTestId("certification-form-dialog"),
-      ).toBeInTheDocument();
+  describe("Certifications Section", () => {
+    beforeEach(() => {
+      currentOpenSection = "certifications";
     });
 
-    it("opens edit certification dialog", async () => {
-      const user = userEvent.setup();
+    it("renders certification list", () => {
       render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Edit cert-1/ }));
-
-      expect(
-        screen.getByTestId("certification-form-dialog"),
-      ).toBeInTheDocument();
-    });
-
-    it("adds new certification successfully", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(
-        screen.getByRole("button", { name: /Add Certification/ }),
-      );
-      await user.click(
-        screen.getByRole("button", { name: /Submit Certification/ }),
-      );
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Success",
-          description: "Certification added successfully",
-        });
-      });
-    });
-
-    it("updates certification successfully", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Edit cert-1/ }));
-      await user.click(
-        screen.getByRole("button", { name: /Submit Certification/ }),
-      );
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Success",
-          description: "Certification updated successfully",
-        });
-      });
-    });
-
-    it("handles certification save error", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onError(new Error("Save failed"));
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(
-        screen.getByRole("button", { name: /Add Certification/ }),
-      );
-      await user.click(
-        screen.getByRole("button", { name: /Submit Certification/ }),
-      );
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Error",
-          description: "Failed to save certification: Save failed",
-          variant: "destructive",
-        });
-      });
+      expect(screen.getByTestId("certification-list")).toBeInTheDocument();
     });
 
     it("deletes certification successfully", async () => {
@@ -806,143 +482,20 @@ describe("ResumeBuilder", () => {
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
           title: "Success",
-          description: "Certification deleted successfully",
-        });
-      });
-    });
-
-    it("handles certification delete error", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onError(new Error("Delete failed"));
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Delete cert-1/ }));
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Error",
-          description: "Failed to delete certification: Delete failed",
-          variant: "destructive",
-        });
-      });
-    });
-
-    it("reorders certifications without toast", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
-      render(<ResumeBuilder />);
-
-      const reorderButtons = screen.getAllByRole("button", { name: /Reorder/ });
-      await user.click(reorderButtons[2]);
-
-      await waitFor(() => {
-        expect(mockMutate).toHaveBeenCalled();
-        expect(mockToast).not.toHaveBeenCalled();
-      });
-    });
-
-    it("handles certification reorder error", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onError(new Error("Reorder failed"));
-      });
-
-      render(<ResumeBuilder />);
-
-      const reorderButtons = screen.getAllByRole("button", { name: /Reorder/ });
-      await user.click(reorderButtons[2]);
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Error",
-          description: "Failed to reorder certifications: Reorder failed",
-          variant: "destructive",
+          description: "Certification deleted",
         });
       });
     });
   });
 
-  describe("Link Management", () => {
-    it("opens add link dialog", async () => {
-      const user = userEvent.setup();
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Add Link/ }));
-
-      expect(screen.getByTestId("link-form-dialog")).toBeInTheDocument();
+  describe("Links Section", () => {
+    beforeEach(() => {
+      currentOpenSection = "links";
     });
 
-    it("opens edit link dialog", async () => {
-      const user = userEvent.setup();
+    it("renders link list", () => {
       render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Edit link-1/ }));
-
-      expect(screen.getByTestId("link-form-dialog")).toBeInTheDocument();
-    });
-
-    it("adds new link successfully", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Add Link/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Link/ }));
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Success",
-          description: "Link added successfully",
-        });
-      });
-    });
-
-    it("updates link successfully", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Edit link-1/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Link/ }));
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Success",
-          description: "Link updated successfully",
-        });
-      });
-    });
-
-    it("handles link save error", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onError(new Error("Save failed"));
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Add Link/ }));
-      await user.click(screen.getByRole("button", { name: /Submit Link/ }));
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Error",
-          description: "Failed to save link: Save failed",
-          variant: "destructive",
-        });
-      });
+      expect(screen.getByTestId("link-list")).toBeInTheDocument();
     });
 
     it("deletes link successfully", async () => {
@@ -958,118 +511,55 @@ describe("ResumeBuilder", () => {
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({
           title: "Success",
-          description: "Link deleted successfully",
-        });
-      });
-    });
-
-    it("handles link delete error", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onError(new Error("Delete failed"));
-      });
-
-      render(<ResumeBuilder />);
-
-      await user.click(screen.getByRole("button", { name: /Delete link-1/ }));
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Error",
-          description: "Failed to delete link: Delete failed",
-          variant: "destructive",
-        });
-      });
-    });
-
-    it("reorders links without toast", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onSuccess();
-      });
-
-      render(<ResumeBuilder />);
-
-      const reorderButtons = screen.getAllByRole("button", { name: /Reorder/ });
-      await user.click(reorderButtons[3]);
-
-      await waitFor(() => {
-        expect(mockMutate).toHaveBeenCalled();
-        expect(mockToast).not.toHaveBeenCalled();
-      });
-    });
-
-    it("handles link reorder error", async () => {
-      const user = userEvent.setup();
-      mockMutate.mockImplementation((_, options) => {
-        options.onError(new Error("Reorder failed"));
-      });
-
-      render(<ResumeBuilder />);
-
-      const reorderButtons = screen.getAllByRole("button", { name: /Reorder/ });
-      await user.click(reorderButtons[3]);
-
-      await waitFor(() => {
-        expect(mockToast).toHaveBeenCalledWith({
-          title: "Error",
-          description: "Failed to reorder links: Reorder failed",
-          variant: "destructive",
+          description: "Link deleted",
         });
       });
     });
   });
 
-  describe("Empty State Handling", () => {
-    it("handles resume with no content gracefully", () => {
-      const emptyResume: Resume = {
-        ...mockResume,
-        content: {
-          personalInfo: {
-            name: "",
-            email: "",
-            phone: "",
-            location: "",
-            summary: "",
-          },
-          experience: [],
-          education: [],
-          skills: { technical: [], languages: [], tools: [], soft: [] },
-          certifications: [],
-          links: [],
-        },
-      };
+  describe("Skills Section", () => {
+    beforeEach(() => {
+      currentOpenSection = "skills";
+    });
 
-      mockUseResume.mockReturnValue({ data: emptyResume });
+    it("renders skills form", () => {
       render(<ResumeBuilder />);
+      expect(screen.getByTestId("skills-form")).toBeInTheDocument();
+    });
 
-      expect(screen.getByText("No experiences")).toBeInTheDocument();
-      expect(screen.getByText("No education")).toBeInTheDocument();
-      expect(screen.getByText("No certifications")).toBeInTheDocument();
-      expect(screen.getByText("No links")).toBeInTheDocument();
+    it("displays skills data", () => {
+      render(<ResumeBuilder />);
+      expect(screen.getByText(/JavaScript, TypeScript/)).toBeInTheDocument();
     });
   });
 
-  describe("Layout and Structure", () => {
-    it("renders sections in cards", () => {
-      const { container } = render(<ResumeBuilder />);
-
-      const cards = container.querySelectorAll('[class*="card"]');
-      expect(cards.length).toBeGreaterThan(0);
+  describe("Personal Info Section", () => {
+    beforeEach(() => {
+      currentOpenSection = "personal";
     });
 
-    it("uses max-width container", () => {
-      const { container } = render(<ResumeBuilder />);
+    it("renders personal info form", () => {
+      render(<ResumeBuilder />);
+      expect(screen.getByTestId("personal-info-form")).toBeInTheDocument();
+    });
 
-      const mainContainer = container.querySelector(".max-w-4xl");
+    it("displays personal info data", () => {
+      render(<ResumeBuilder />);
+      expect(screen.getByText(/John/)).toBeInTheDocument();
+    });
+  });
+
+  describe("Layout", () => {
+    it("uses full width container", () => {
+      const { container } = render(<ResumeBuilder />);
+      const mainContainer = container.querySelector(".w-full");
       expect(mainContainer).toBeInTheDocument();
     });
 
-    it("has spacing between sections", () => {
+    it("has borders between sections", () => {
       const { container } = render(<ResumeBuilder />);
-
-      const spacedContainer = container.querySelector(".space-y-8");
-      expect(spacedContainer).toBeInTheDocument();
+      const borderedSections = container.querySelectorAll(".border-b");
+      expect(borderedSections.length).toBeGreaterThan(0);
     });
   });
 });

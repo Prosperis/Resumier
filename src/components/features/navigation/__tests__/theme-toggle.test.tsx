@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { ThemeProvider } from "@/app/theme-provider";
 import { ThemeToggle } from "../theme-toggle";
 

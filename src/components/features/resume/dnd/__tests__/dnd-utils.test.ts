@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { canReorder, getDragId, reorderArray } from "../dnd-utils";
 
 describe("dnd-utils", () => {

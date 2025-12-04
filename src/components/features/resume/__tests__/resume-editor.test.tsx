@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import type { Resume } from "@/lib/api/types";
 
 // Mock child components - must be before imports that use them

@@ -1,5 +1,5 @@
-import { act, cleanup, renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { act, cleanup, renderHook, waitFor } from "@testing-library/react";
+import { get } from "idb-keyval";
 import {
   type ResumeDocument,
   useResumeDocuments,
@@ -129,7 +129,7 @@ describe("useResumeDocuments", () => {
   });
 
   describe("Persistence", () => {
-    it("should persist documents to localStorage", () => {
+    it("should persist documents to IndexedDB", async () => {
       const { result } = renderHook(() => useResumeDocuments());
 
       const doc: ResumeDocument = { id: "doc-1", name: "Test Doc" };
@@ -138,11 +138,13 @@ describe("useResumeDocuments", () => {
         result.current.addDocument(doc);
       });
 
-      const stored = localStorage.getItem("resumier-documents");
-      expect(stored).toBeTruthy();
-
-      const parsed = JSON.parse(stored!);
-      expect(parsed.state.documents).toEqual([doc]);
+      // Wait for async IndexedDB persistence
+      await waitFor(async () => {
+        const stored = await get("resumier-documents");
+        expect(stored).toBeTruthy();
+        const parsed = typeof stored === "string" ? JSON.parse(stored) : stored;
+        expect(parsed.state.documents).toEqual([doc]);
+      });
     });
 
     it("should maintain state across hook instances", () => {
@@ -161,7 +163,7 @@ describe("useResumeDocuments", () => {
       expect(result2.current.documents).toEqual([doc]);
     });
 
-    it("should persist multiple documents", () => {
+    it("should persist multiple documents", async () => {
       const { result } = renderHook(() => useResumeDocuments());
 
       const docs: ResumeDocument[] = [
@@ -176,10 +178,13 @@ describe("useResumeDocuments", () => {
         }
       });
 
-      const stored = localStorage.getItem("resumier-documents");
-      const parsed = JSON.parse(stored!);
-      expect(parsed.state.documents).toHaveLength(3);
-      expect(parsed.state.documents).toEqual(docs);
+      // Wait for async IndexedDB persistence
+      await waitFor(async () => {
+        const stored = await get("resumier-documents");
+        const parsed = typeof stored === "string" ? JSON.parse(stored) : stored;
+        expect(parsed.state.documents).toHaveLength(3);
+        expect(parsed.state.documents).toEqual(docs);
+      });
     });
   });
 

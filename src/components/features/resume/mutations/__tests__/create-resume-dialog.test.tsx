@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { useCreateResume } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
 import { CreateResumeDialog } from "../create-resume-dialog";
@@ -9,6 +9,16 @@ import { CreateResumeDialog } from "../create-resume-dialog";
 // Mock dependencies
 vi.mock("@/hooks/api", () => ({
   useCreateResume: vi.fn(),
+  useProfile: vi.fn(() => ({
+    data: null,
+    isLoading: false,
+    error: null,
+  })),
+  useProfiles: vi.fn(() => ({
+    data: [],
+    isLoading: false,
+    error: null,
+  })),
 }));
 
 vi.mock("@/hooks/use-toast", () => ({

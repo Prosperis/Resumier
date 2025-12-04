@@ -85,7 +85,8 @@ describe("LinkFormDialog", () => {
     it("defaults to 'website' type", () => {
       render(<LinkFormDialog {...defaultProps} />);
       // The default value should show Website in the trigger
-      expect(screen.getByText("Website")).toBeInTheDocument();
+      // Use getAllByText since it appears in both trigger and hidden select
+      expect(screen.getAllByText("Website").length).toBeGreaterThan(0);
     });
 
     it("shows description for link type", () => {
@@ -190,7 +191,8 @@ describe("LinkFormDialog", () => {
       render(
         <LinkFormDialog {...defaultProps} defaultValues={defaultValues} />,
       );
-      expect(screen.getByText("GitHub")).toBeInTheDocument();
+      // Use getAllByText since type text may appear multiple times
+      expect(screen.getAllByText("GitHub").length).toBeGreaterThan(0);
       expect(screen.getByLabelText(/^label$/i)).toHaveValue("Default GitHub");
       expect(screen.getByLabelText(/^url$/i)).toHaveValue(
         "https://github.com/default",
@@ -217,7 +219,8 @@ describe("LinkFormDialog", () => {
       render(
         <LinkFormDialog {...defaultProps} defaultValues={defaultValues} />,
       );
-      expect(screen.getByText("Website")).toBeInTheDocument();
+      // Use getAllByText since type text may appear multiple times
+      expect(screen.getAllByText("Website").length).toBeGreaterThan(0);
       expect(screen.getByLabelText(/^label$/i)).toHaveValue("My Portfolio");
       expect(screen.getByLabelText(/^url$/i)).toHaveValue(
         "https://portfolio.com",
@@ -233,7 +236,8 @@ describe("LinkFormDialog", () => {
       render(
         <LinkFormDialog {...defaultProps} defaultValues={defaultValues} />,
       );
-      expect(screen.getByText("LinkedIn")).toBeInTheDocument();
+      // Use getAllByText since type text may appear multiple times
+      expect(screen.getAllByText("LinkedIn").length).toBeGreaterThan(0);
       expect(screen.getByLabelText(/^label$/i)).toHaveValue("LinkedIn Profile");
       expect(screen.getByLabelText(/^url$/i)).toHaveValue(
         "https://linkedin.com/in/user",

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { LifeBuoy, Send } from "lucide-react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { NavSecondary } from "../nav-secondary";
 
 // Mock sidebar components

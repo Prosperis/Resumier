@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { useAuthStore, useResumeStore } from "@/stores";
 
 // Mock dependencies
@@ -89,7 +89,7 @@ describe("New Resume Route (/resume/new)", () => {
     it("renders the page description", () => {
       renderNewResumeRoute();
       expect(
-        screen.getByText("Enter a title for your resume to get started"),
+        screen.getByText("Give your resume a title to get started"),
       ).toBeInTheDocument();
     });
 
@@ -107,15 +107,13 @@ describe("New Resume Route (/resume/new)", () => {
 
     it("renders a Card component", () => {
       const { container } = renderNewResumeRoute();
-      const card = container.querySelector(
-        "[class*='rounded-lg'][class*='border']",
-      );
+      const card = container.querySelector("[data-slot='card']");
       expect(card).toBeInTheDocument();
     });
 
     it("has a form element", () => {
-      renderNewResumeRoute();
-      const form = screen.getByRole("form", { hidden: true });
+      const { container } = renderNewResumeRoute();
+      const form = container.querySelector("form");
       expect(form).toBeInTheDocument();
     });
   });
@@ -124,7 +122,7 @@ describe("New Resume Route (/resume/new)", () => {
     it("uses proper heading styles", () => {
       const { container } = renderNewResumeRoute();
       const heading = container.querySelector(
-        "[class*='text-2xl'][class*='font-semibold']",
+        "[data-slot='card-title'][class*='font-semibold']",
       );
       expect(heading).toBeInTheDocument();
     });
@@ -157,19 +155,17 @@ describe("New Resume Route (/resume/new)", () => {
   });
 
   describe("Heading Text", () => {
-    it("displays 'Create New Resume' as h1", () => {
-      renderNewResumeRoute();
-      const heading = screen.getByRole("heading", {
-        level: 1,
-        name: /create new resume/i,
-      });
+    it("displays 'Create New Resume' as card title", () => {
+      const { container } = renderNewResumeRoute();
+      const heading = container.querySelector("[data-slot='card-title']");
       expect(heading).toBeInTheDocument();
+      expect(heading).toHaveTextContent(/create new resume/i);
     });
 
     it("displays instructions for creating resume", () => {
       renderNewResumeRoute();
       const instructions = screen.getByText(
-        /enter a title for your resume to get started/i,
+        /give your resume a title to get started/i,
       );
       expect(instructions).toBeInTheDocument();
     });

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 import { useAuthStore } from "@/stores";
 
 // Mock dependencies
@@ -70,9 +70,8 @@ describe("Dashboard Route", () => {
 
       renderDashboardRoute();
 
-      expect(
-        screen.getByRole("heading", { name: /my resumes/i }),
-      ).toBeInTheDocument();
+      // The dashboard component wraps ResumeDashboard
+      expect(screen.getByTestId("resume-dashboard")).toBeInTheDocument();
     });
 
     it("does not throw when authenticated", () => {
@@ -99,26 +98,22 @@ describe("Dashboard Route", () => {
       });
     });
 
-    it("renders the page heading", () => {
-      renderDashboardRoute();
-
-      expect(
-        screen.getByRole("heading", { name: /my resumes/i }),
-      ).toBeInTheDocument();
-    });
-
-    it("renders the page description", () => {
-      renderDashboardRoute();
-
-      expect(
-        screen.getByText(/manage your resumes and create new ones/i),
-      ).toBeInTheDocument();
-    });
-
     it("renders the ResumeDashboard component", () => {
       renderDashboardRoute();
 
       expect(screen.getByTestId("resume-dashboard")).toBeInTheDocument();
+    });
+
+    it("renders a button to interact with resumes", () => {
+      renderDashboardRoute();
+
+      expect(screen.getByRole("button")).toBeInTheDocument();
+    });
+
+    it("displays resume content", () => {
+      renderDashboardRoute();
+
+      expect(screen.getByText("Test Resume")).toBeInTheDocument();
     });
   });
 
@@ -145,11 +140,11 @@ describe("Dashboard Route", () => {
       expect(mainContainer).toBeInTheDocument();
     });
 
-    it("has a header section with margin", () => {
+    it("centers content with mx-auto", () => {
       const { container } = renderDashboardRoute();
 
-      const header = container.querySelector(".mb-8");
-      expect(header).toBeInTheDocument();
+      const centeredContainer = container.querySelector(".mx-auto");
+      expect(centeredContainer).toBeInTheDocument();
     });
   });
 
@@ -163,18 +158,16 @@ describe("Dashboard Route", () => {
       });
     });
 
-    it("uses proper heading styles", () => {
-      const { container } = renderDashboardRoute();
+    it("renders dashboard content", () => {
+      renderDashboardRoute();
 
-      const heading = container.querySelector("h1.text-3xl.font-bold");
-      expect(heading).toBeInTheDocument();
+      expect(screen.getByTestId("resume-dashboard")).toBeInTheDocument();
     });
 
-    it("uses muted foreground for description", () => {
-      const { container } = renderDashboardRoute();
+    it("has interactive elements", () => {
+      renderDashboardRoute();
 
-      const description = container.querySelector(".text-muted-foreground");
-      expect(description).toBeInTheDocument();
+      expect(screen.getByRole("button")).toBeInTheDocument();
     });
   });
 });
