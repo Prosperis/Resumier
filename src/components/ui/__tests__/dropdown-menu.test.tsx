@@ -50,9 +50,7 @@ describe("DropdownMenu Components", () => {
     });
 
     it("applies inset prop", () => {
-      render(
-        <DropdownMenuLabel inset>Inset Label</DropdownMenuLabel>,
-      );
+      render(<DropdownMenuLabel inset>Inset Label</DropdownMenuLabel>);
       const label = screen.getByText("Inset Label");
       expect(label.className).toContain("pl-8");
     });
