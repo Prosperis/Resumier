@@ -281,7 +281,6 @@ function getRenderedTemplateHTML(): string | null {
   return clonedElement.innerHTML;
 }
 
-
 /**
  * Escape LaTeX special characters
  */
