@@ -26,6 +26,7 @@ import {
   downloadHTML,
   downloadJSON,
   downloadMarkdown,
+  downloadPDFDirect,
   downloadPDFWithTemplate,
   downloadPlainText,
   printResume,
@@ -57,11 +58,30 @@ export function ExportMenu({ resume }: ExportMenuProps) {
 
   const handleDownloadPDF = async () => {
     try {
+      await downloadPDFDirect(resume);
+      toast({
+        title: "PDF Generated",
+        description: "Your resume has been exported as a PDF file.",
+      });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      toast({
+        title: "PDF Export Failed",
+        description: `Failed to generate PDF: ${errorMessage}. Try using Print to PDF instead.`,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handlePrintToPDF = async () => {
+    try {
       await downloadPDFWithTemplate(resume);
       toast({
         title: "Print Dialog Opened",
         description:
-          'Select "Save as PDF" in the print dialog to save your resume with perfect formatting.',
+          'Select "Save as PDF" in the print dialog for best quality.',
       });
     } catch (error) {
       console.error("Error opening print dialog:", error);
@@ -101,10 +121,17 @@ export function ExportMenu({ resume }: ExportMenuProps) {
   const exportFormats: ExportFormat[] = [
     {
       id: "pdf",
-      label: "PDF",
-      description: "Print to PDF - perfect style preservation",
+      label: "PDF (Direct Download)",
+      description: "Quick export with template styles",
       icon: FileText,
       handler: handleDownloadPDF,
+    },
+    {
+      id: "pdf-print",
+      label: "PDF (Print Dialog)",
+      description: "Best quality via browser print",
+      icon: Printer,
+      handler: handlePrintToPDF,
     },
     {
       id: "docx",
@@ -116,7 +143,7 @@ export function ExportMenu({ resume }: ExportMenuProps) {
     {
       id: "html",
       label: "HTML",
-      description: "Web page with styles",
+      description: "Web page with embedded styles",
       icon: FileCode,
       handler: () => downloadHTML(resume),
     },
@@ -173,7 +200,15 @@ export function ExportMenu({ resume }: ExportMenuProps) {
                       variant="outline"
                       className="text-xs px-1.5 py-0 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20"
                     >
-                      Recommended
+                      Quick
+                    </Badge>
+                  )}
+                  {format.id === "pdf-print" && (
+                    <Badge
+                      variant="outline"
+                      className="text-xs px-1.5 py-0 bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20"
+                    >
+                      Best Quality
                     </Badge>
                   )}
                 </div>

@@ -1,7 +1,6 @@
 import {
   AlignmentType,
   Document,
-  HeadingLevel,
   Packer,
   Paragraph,
   TextRun,
@@ -42,6 +41,126 @@ function prepareResumeElementForExport(): HTMLElement | null {
 }
 
 /**
+ * Comprehensive list of CSS properties to inline for export
+ * This ensures all visual styles are preserved
+ */
+const INLINE_STYLE_PROPERTIES = [
+  // Colors and backgrounds
+  "color",
+  "backgroundColor",
+  "background",
+  "backgroundImage",
+  "backgroundPosition",
+  "backgroundSize",
+  "backgroundRepeat",
+  "opacity",
+  // Typography
+  "fontSize",
+  "fontFamily",
+  "fontWeight",
+  "fontStyle",
+  "fontVariant",
+  "textAlign",
+  "textDecoration",
+  "textTransform",
+  "letterSpacing",
+  "lineHeight",
+  "wordSpacing",
+  "whiteSpace",
+  "textIndent",
+  // Box model
+  "padding",
+  "paddingTop",
+  "paddingRight",
+  "paddingBottom",
+  "paddingLeft",
+  "margin",
+  "marginTop",
+  "marginRight",
+  "marginBottom",
+  "marginLeft",
+  // Borders
+  "border",
+  "borderTop",
+  "borderRight",
+  "borderBottom",
+  "borderLeft",
+  "borderWidth",
+  "borderStyle",
+  "borderColor",
+  "borderRadius",
+  "borderTopLeftRadius",
+  "borderTopRightRadius",
+  "borderBottomLeftRadius",
+  "borderBottomRightRadius",
+  // Layout
+  "display",
+  "position",
+  "top",
+  "right",
+  "bottom",
+  "left",
+  "float",
+  "clear",
+  "width",
+  "height",
+  "minWidth",
+  "maxWidth",
+  "minHeight",
+  "maxHeight",
+  "overflow",
+  "overflowX",
+  "overflowY",
+  // Flexbox
+  "flexDirection",
+  "flexWrap",
+  "justifyContent",
+  "alignItems",
+  "alignContent",
+  "alignSelf",
+  "flex",
+  "flexGrow",
+  "flexShrink",
+  "flexBasis",
+  "gap",
+  "rowGap",
+  "columnGap",
+  // Grid
+  "gridTemplateColumns",
+  "gridTemplateRows",
+  "gridColumn",
+  "gridRow",
+  "gridGap",
+  // Visual
+  "boxShadow",
+  "textShadow",
+  "verticalAlign",
+  "visibility",
+  "zIndex",
+  // List styles
+  "listStyle",
+  "listStyleType",
+  "listStylePosition",
+];
+
+/**
+ * Convert an RGB/RGBA color string to hex
+ */
+function rgbToHex(rgb: string): string {
+  if (!rgb || rgb === "transparent" || rgb === "none") return rgb;
+  if (rgb.startsWith("#")) return rgb;
+
+  const match = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (match) {
+    const r = parseInt(match[1]).toString(16).padStart(2, "0");
+    const g = parseInt(match[2]).toString(16).padStart(2, "0");
+    const b = parseInt(match[3]).toString(16).padStart(2, "0");
+    return `#${r}${g}${b}`;
+  }
+  return rgb;
+}
+
+/**
  * Helper function to get rendered template HTML from the DOM
  * This captures the actual template with all its styling and formatting
  */
@@ -56,104 +175,112 @@ function getRenderedTemplateHTML(): string | null {
     clonedElement,
     ...Array.from(clonedElement.querySelectorAll("*")),
   ];
+
   allElements.forEach((el) => {
     const htmlEl = el as HTMLElement;
     if (!htmlEl || !htmlEl.style) return;
 
     const computed = window.getComputedStyle(htmlEl);
 
-    // Apply key computed styles as inline styles
-    const importantProps = [
-      "color",
-      "backgroundColor",
-      "fontSize",
-      "fontFamily",
-      "fontWeight",
-      "fontStyle",
-      "textAlign",
-      "lineHeight",
-      "padding",
-      "margin",
-      "border",
-      "borderRadius",
-      "display",
-      "width",
-      "height",
-      "maxWidth",
-      "minWidth",
-      "minHeight",
-      "gap",
-      "flexShrink",
-      "verticalAlign",
-      "alignItems",
-    ];
+    // Apply all important computed styles as inline styles
+    INLINE_STYLE_PROPERTIES.forEach((prop) => {
+      try {
+        const camelProp = prop as keyof CSSStyleDeclaration;
+        let value = computed[camelProp] as string;
 
-    importantProps.forEach((prop) => {
-      const camelProp = prop as keyof CSSStyleDeclaration;
-      const value = computed[camelProp] as string;
-      if (value && value !== "none" && value !== "normal" && value !== "auto") {
-        htmlEl.style[camelProp as any] = value;
+        if (
+          value &&
+          value !== "none" &&
+          value !== "normal" &&
+          value !== "auto" &&
+          value !== "0px" &&
+          value !== "0" &&
+          value !== "transparent"
+        ) {
+          // Convert RGB colors to hex for better compatibility
+          if (
+            prop.toLowerCase().includes("color") ||
+            prop.toLowerCase().includes("background")
+          ) {
+            value = rgbToHex(value);
+          }
+          (htmlEl.style as any)[camelProp] = value;
+        }
+      } catch {
+        // Some properties may not be settable, skip them
       }
     });
 
     // Special handling for SVG elements (Lucide icons)
-    if (htmlEl.tagName === "svg" || htmlEl.closest("svg")) {
-      // Ensure SVG size attributes are preserved
+    if (htmlEl.tagName === "svg" || htmlEl.tagName.toLowerCase() === "svg") {
       const width = computed.width;
       const height = computed.height;
-      if (width && width !== "auto") {
+      if (width && width !== "auto" && width !== "0px") {
         htmlEl.style.width = width;
         htmlEl.setAttribute("width", width);
       }
-      if (height && height !== "auto") {
+      if (height && height !== "auto" && height !== "0px") {
         htmlEl.style.height = height;
         htmlEl.setAttribute("height", height);
       }
 
-      // Preserve viewBox if it exists
+      // Preserve viewBox
       if (htmlEl.hasAttribute("viewBox")) {
         const viewBox = htmlEl.getAttribute("viewBox");
         if (viewBox) htmlEl.setAttribute("viewBox", viewBox);
       }
 
-      // Ensure stroke and fill are preserved
+      // Ensure stroke and fill are preserved with actual color values
       const stroke = computed.stroke;
       const fill = computed.fill;
       const strokeWidth = computed.strokeWidth;
 
-      if (stroke && stroke !== "none") htmlEl.style.stroke = stroke;
-      if (fill && fill !== "none") htmlEl.style.fill = fill;
-      if (strokeWidth) htmlEl.style.strokeWidth = strokeWidth;
+      if (stroke && stroke !== "none") {
+        const strokeColor = rgbToHex(stroke);
+        htmlEl.style.stroke = strokeColor;
+        htmlEl.setAttribute("stroke", strokeColor);
+      }
+      if (fill && fill !== "none") {
+        const fillColor = rgbToHex(fill);
+        htmlEl.style.fill = fillColor;
+        htmlEl.setAttribute("fill", fillColor);
+      }
+      if (strokeWidth && strokeWidth !== "0") {
+        htmlEl.style.strokeWidth = strokeWidth;
+        htmlEl.setAttribute("stroke-width", strokeWidth);
+      }
+      if (computed.strokeLinecap) {
+        htmlEl.setAttribute("stroke-linecap", computed.strokeLinecap);
+      }
+      if (computed.strokeLinejoin) {
+        htmlEl.setAttribute("stroke-linejoin", computed.strokeLinejoin);
+      }
+    }
+
+    // Handle path and line elements inside SVGs
+    if (
+      htmlEl.tagName === "path" ||
+      htmlEl.tagName === "line" ||
+      htmlEl.tagName === "circle" ||
+      htmlEl.tagName === "rect" ||
+      htmlEl.tagName === "polyline" ||
+      htmlEl.tagName === "polygon"
+    ) {
+      const stroke = computed.stroke;
+      const fill = computed.fill;
+
+      if (stroke && stroke !== "none") {
+        htmlEl.setAttribute("stroke", rgbToHex(stroke));
+      }
+      if (fill && fill !== "none") {
+        htmlEl.setAttribute("fill", rgbToHex(fill));
+      }
     }
   });
 
   return clonedElement.innerHTML;
 }
 
-/**
- * Helper function to collect all CSS rules from stylesheets
- */
-function collectStyleSheets(): string {
-  const styleSheets = Array.from(document.styleSheets);
-  let allStyles = "";
-
-  try {
-    styleSheets.forEach((sheet) => {
-      try {
-        const rules = Array.from(sheet.cssRules || []);
-        rules.forEach((rule) => {
-          allStyles += rule.cssText + "\n";
-        });
-      } catch {
-        // Cross-origin stylesheets - skip them
-      }
-    });
-  } catch {
-    // Error collecting styles
-  }
-
-  return allStyles;
-}
 
 /**
  * Escape LaTeX special characters
@@ -385,7 +512,7 @@ ${escapeLaTeX(personalInfo.summary)}
 /**
  * Generate PDF from rendered template using html2canvas and jsPDF
  * This preserves the exact visual appearance of the rendered template
- * @internal Reserved for future use
+ * Provides direct PDF download without needing print dialog
  */
 export async function generatePDFFromRenderedTemplate(
   resume: Resume,
@@ -393,12 +520,17 @@ export async function generatePDFFromRenderedTemplate(
   // Wait a bit for DOM to be ready
   await new Promise((resolve) => setTimeout(resolve, 100));
 
-  const resumeElement = document.querySelector(".resume-light-mode");
+  const resumeElement = document.querySelector(
+    ".resume-light-mode",
+  ) as HTMLElement;
   if (!resumeElement) {
     throw new Error(
       "Resume preview not found. Please ensure you're viewing the resume preview before exporting.",
     );
   }
+
+  // A4 dimensions in pixels at 96 DPI
+  const A4_WIDTH_PX = 794; // 210mm at 96 DPI
 
   // Prepare element for export
   const clonedElement = prepareResumeElementForExport();
@@ -411,23 +543,42 @@ export async function generatePDFFromRenderedTemplate(
   container.style.position = "fixed";
   container.style.left = "-9999px";
   container.style.top = "0";
-  container.style.width = `${resumeElement.clientWidth}px`;
+  container.style.width = `${A4_WIDTH_PX}px`;
   container.style.backgroundColor = "#ffffff";
+  container.style.overflow = "visible";
+
+  // Style the cloned element for proper rendering
+  clonedElement.style.width = `${A4_WIDTH_PX}px`;
+  clonedElement.style.maxWidth = `${A4_WIDTH_PX}px`;
+  clonedElement.style.backgroundColor = "#ffffff";
+  clonedElement.style.overflow = "visible";
+
   container.appendChild(clonedElement);
   document.body.appendChild(container);
 
-  // Wait for element to render
-  await new Promise((resolve) => setTimeout(resolve, 200));
+  // Wait for fonts and images to load
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   try {
-    // Convert to canvas
+    // Convert to canvas with high quality settings
     const canvas = await html2canvas(clonedElement, {
-      scale: 2, // Higher quality
+      scale: 2, // 2x for better quality (effective 192 DPI)
       useCORS: true,
+      allowTaint: true,
       logging: false,
       backgroundColor: "#ffffff",
-      width: clonedElement.scrollWidth,
-      height: clonedElement.scrollHeight,
+      width: A4_WIDTH_PX,
+      windowWidth: A4_WIDTH_PX,
+      onclone: (clonedDoc) => {
+        // Ensure all styles are applied in the cloned document
+        const clonedResume = clonedDoc.querySelector(
+          ".resume-light-mode",
+        ) as HTMLElement;
+        if (clonedResume) {
+          clonedResume.style.width = `${A4_WIDTH_PX}px`;
+          clonedResume.style.backgroundColor = "#ffffff";
+        }
+      },
     });
 
     if (!canvas || canvas.width === 0 || canvas.height === 0) {
@@ -439,9 +590,11 @@ export async function generatePDFFromRenderedTemplate(
       orientation: "portrait",
       unit: "mm",
       format: "a4",
+      compress: true,
     });
 
-    const imgData = canvas.toDataURL("image/png", 1.0);
+    // Get high quality image data
+    const imgData = canvas.toDataURL("image/jpeg", 0.95);
     if (!imgData || imgData === "data:,") {
       throw new Error("Failed to convert canvas to image.");
     }
@@ -449,19 +602,35 @@ export async function generatePDFFromRenderedTemplate(
     const imgWidth = 210; // A4 width in mm
     const pageHeight = 297; // A4 height in mm
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    // Handle multi-page PDFs properly
     let heightLeft = imgHeight;
-    let position = 0;
+    let pageNum = 0;
 
-    // Add first page
-    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-
-    // Add additional pages if needed
     while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      if (pageNum > 0) {
+        pdf.addPage();
+      }
+
+      // Calculate the portion of the image to show on this page
+      const yOffset = pageNum * pageHeight;
+
+      pdf.addImage(
+        imgData,
+        "JPEG",
+        0,
+        -yOffset,
+        imgWidth,
+        imgHeight,
+        undefined,
+        "FAST",
+      );
+
       heightLeft -= pageHeight;
+      pageNum++;
+
+      // Safety limit - prevent infinite loops
+      if (pageNum > 10) break;
     }
 
     // Save PDF with filename prompt
@@ -478,6 +647,14 @@ export async function generatePDFFromRenderedTemplate(
       document.body.removeChild(container);
     }
   }
+}
+
+/**
+ * Download PDF directly using html2canvas (no print dialog required)
+ * This is the preferred method for direct PDF download
+ */
+export async function downloadPDFDirect(resume: Resume): Promise<void> {
+  return generatePDFFromRenderedTemplate(resume);
 }
 
 /**
@@ -813,48 +990,92 @@ export function downloadHTML(resume: Resume) {
     );
   }
 
-  // Get all stylesheets content
-  const allStyles = collectStyleSheets();
-
   // Build complete HTML document with embedded styles
+  // Using inline styles from getRenderedTemplateHTML(), we don't need the full stylesheet
   const fullHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${resume.title}</title>
+  <title>${escapeHtml(resume.title)}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@400;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     /* Reset and base styles */
-    * {
+    *, *::before, *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    html {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       background: #f3f4f6;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
       padding: 2rem;
     }
 
+    .resume-container {
+      width: 210mm;
+      min-height: 297mm;
+      background: white;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
     /* Print styles */
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
     @media print {
       body {
-        background: white;
-        padding: 0;
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .resume-container {
+        width: 100% !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
     }
 
-    /* Embedded app styles */
-    ${allStyles}
+    /* Utility classes for flex/grid layouts */
+    .flex { display: flex !important; }
+    .grid { display: grid !important; }
+    .inline-flex { display: inline-flex !important; }
+    .block { display: block !important; }
+    .inline-block { display: inline-block !important; }
+    .inline { display: inline !important; }
+
+    /* SVG icons */
+    svg {
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
-  <div class="resume-light-mode light">
+  <div class="resume-container">
     ${renderedHTML}
   </div>
 </body>
@@ -868,7 +1089,17 @@ export function downloadHTML(resume: Resume) {
 }
 
 /**
+ * Helper to escape HTML special characters
+ */
+function escapeHtml(text: string): string {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+/**
  * Download resume as DOCX (Microsoft Word) file
+ * Creates a professionally formatted Word document with proper styling
  */
 export async function downloadDOCX(resume: Resume): Promise<void> {
   const { personalInfo, experience, education, skills, certifications, links } =
@@ -876,7 +1107,10 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
 
   const sections: Paragraph[] = [];
 
-  // Name (Title)
+  // Define colors (matching template theme)
+  const primaryColor = "2563EB"; // Blue-600
+
+  // Name (Title) - Large, bold, centered
   const fullName = getFullName(
     personalInfo.firstName,
     personalInfo.lastName,
@@ -885,136 +1119,310 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
   if (fullName) {
     sections.push(
       new Paragraph({
-        text: fullName,
-        heading: HeadingLevel.HEADING_1,
+        children: [
+          new TextRun({
+            text: fullName,
+            bold: true,
+            size: 48, // 24pt
+            font: "Calibri",
+            color: "1F2937", // Gray-800
+          }),
+        ],
         alignment: AlignmentType.CENTER,
-        spacing: { after: 200 },
+        spacing: { after: 120 },
       }),
     );
   }
 
-  // Contact Information
-  const contactParts: string[] = [];
-  if (personalInfo.email) contactParts.push(personalInfo.email);
-  if (personalInfo.phone) contactParts.push(personalInfo.phone);
-  if (personalInfo.location) contactParts.push(personalInfo.location);
+  // Contact Information - Centered with separators
+  const contactParts: TextRun[] = [];
+  if (personalInfo.email) {
+    contactParts.push(
+      new TextRun({
+        text: personalInfo.email,
+        size: 20, // 10pt
+        font: "Calibri",
+        color: "4B5563", // Gray-600
+      }),
+    );
+  }
+  if (personalInfo.phone) {
+    if (contactParts.length > 0) {
+      contactParts.push(
+        new TextRun({
+          text: "  |  ",
+          size: 20,
+          font: "Calibri",
+          color: "9CA3AF", // Gray-400
+        }),
+      );
+    }
+    contactParts.push(
+      new TextRun({
+        text: personalInfo.phone,
+        size: 20,
+        font: "Calibri",
+        color: "4B5563",
+      }),
+    );
+  }
+  if (personalInfo.location) {
+    if (contactParts.length > 0) {
+      contactParts.push(
+        new TextRun({
+          text: "  |  ",
+          size: 20,
+          font: "Calibri",
+          color: "9CA3AF",
+        }),
+      );
+    }
+    contactParts.push(
+      new TextRun({
+        text: personalInfo.location,
+        size: 20,
+        font: "Calibri",
+        color: "4B5563",
+      }),
+    );
+  }
 
   if (contactParts.length > 0) {
     sections.push(
       new Paragraph({
-        text: contactParts.join(" | "),
+        children: contactParts,
         alignment: AlignmentType.CENTER,
         spacing: { after: 300 },
       }),
     );
   }
 
+  // Helper function to create section headers
+  const createSectionHeader = (title: string) => {
+    return new Paragraph({
+      children: [
+        new TextRun({
+          text: title.toUpperCase(),
+          bold: true,
+          size: 24, // 12pt
+          font: "Calibri",
+          color: primaryColor,
+        }),
+      ],
+      spacing: { before: 300, after: 120 },
+      border: {
+        bottom: {
+          color: primaryColor,
+          size: 12, // 0.75pt
+          style: "single" as const,
+        },
+      },
+    });
+  };
+
   // Professional Summary
   if (personalInfo.summary) {
+    sections.push(createSectionHeader("Professional Summary"));
     sections.push(
       new Paragraph({
-        text: "PROFESSIONAL SUMMARY",
-        heading: HeadingLevel.HEADING_2,
-        spacing: { before: 200, after: 200 },
-      }),
-    );
-    sections.push(
-      new Paragraph({
-        text: personalInfo.summary,
-        spacing: { after: 300 },
+        children: [
+          new TextRun({
+            text: personalInfo.summary,
+            size: 22, // 11pt
+            font: "Calibri",
+            color: "374151", // Gray-700
+          }),
+        ],
+        spacing: { after: 200 },
       }),
     );
   }
 
   // Experience
   if (experience.length > 0) {
-    sections.push(
-      new Paragraph({
-        text: "EXPERIENCE",
-        heading: HeadingLevel.HEADING_2,
-        spacing: { before: 200, after: 200 },
-      }),
-    );
+    sections.push(createSectionHeader("Experience"));
 
     for (const exp of experience) {
+      // Position and Date on same line
+      const dateRange = `${exp.startDate || ""} - ${exp.current ? "Present" : exp.endDate || ""}`;
       sections.push(
         new Paragraph({
           children: [
-            new TextRun({ text: exp.position, bold: true }),
-            new TextRun({ text: ` | ${exp.company}` }),
+            new TextRun({
+              text: exp.position || "",
+              bold: true,
+              size: 22,
+              font: "Calibri",
+              color: "1F2937",
+            }),
+            new TextRun({
+              text: `\t${dateRange}`,
+              size: 20,
+              font: "Calibri",
+              color: "6B7280", // Gray-500
+              italics: true,
+            }),
           ],
-          spacing: { after: 100 },
+          tabStops: [
+            {
+              type: "right" as const,
+              position: 9360, // Right aligned at ~6.5 inches
+            },
+          ],
+          spacing: { after: 60 },
         }),
       );
 
-      const dateRange = `${exp.startDate} - ${exp.current ? "Present" : exp.endDate || ""}`;
-      sections.push(
-        new Paragraph({
-          children: [new TextRun({ text: dateRange, italics: true })],
-          spacing: { after: 100 },
-        }),
-      );
-
-      if (exp.description) {
+      // Company
+      if (exp.company) {
         sections.push(
           new Paragraph({
-            text: exp.description,
-            spacing: { after: 100 },
+            children: [
+              new TextRun({
+                text: exp.company,
+                size: 21,
+                font: "Calibri",
+                color: "4B5563",
+                italics: true,
+              }),
+            ],
+            spacing: { after: 80 },
           }),
         );
       }
 
+      // Description
+      if (exp.description) {
+        sections.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: exp.description,
+                size: 20,
+                font: "Calibri",
+                color: "374151",
+              }),
+            ],
+            spacing: { after: 80 },
+          }),
+        );
+      }
+
+      // Highlights as bullet points
       if (exp.highlights && exp.highlights.length > 0) {
         for (const highlight of exp.highlights) {
           sections.push(
             new Paragraph({
-              text: highlight,
+              children: [
+                new TextRun({
+                  text: highlight,
+                  size: 20,
+                  font: "Calibri",
+                  color: "374151",
+                }),
+              ],
               bullet: { level: 0 },
-              spacing: { after: 50 },
+              spacing: { after: 40 },
             }),
           );
         }
       }
 
-      sections.push(new Paragraph({ text: "", spacing: { after: 200 } }));
+      sections.push(new Paragraph({ text: "", spacing: { after: 160 } }));
     }
   }
 
   // Education
   if (education.length > 0) {
-    sections.push(
-      new Paragraph({
-        text: "EDUCATION",
-        heading: HeadingLevel.HEADING_2,
-        spacing: { before: 200, after: 200 },
-      }),
-    );
+    sections.push(createSectionHeader("Education"));
 
     for (const edu of education) {
+      const dateInfo = edu.endDate || (edu.current ? "Present" : "");
+
       sections.push(
         new Paragraph({
           children: [
-            new TextRun({ text: edu.degree, bold: true }),
-            new TextRun({ text: ` | ${edu.institution}` }),
+            new TextRun({
+              text: edu.degree || "",
+              bold: true,
+              size: 22,
+              font: "Calibri",
+              color: "1F2937",
+            }),
+            ...(edu.field
+              ? [
+                  new TextRun({
+                    text: ` in ${edu.field}`,
+                    size: 22,
+                    font: "Calibri",
+                    color: "1F2937",
+                  }),
+                ]
+              : []),
+            ...(dateInfo
+              ? [
+                  new TextRun({
+                    text: `\t${dateInfo}`,
+                    size: 20,
+                    font: "Calibri",
+                    color: "6B7280",
+                    italics: true,
+                  }),
+                ]
+              : []),
           ],
-          spacing: { after: 100 },
+          tabStops: [
+            {
+              type: "right" as const,
+              position: 9360,
+            },
+          ],
+          spacing: { after: 60 },
         }),
       );
 
-      if (edu.endDate) {
+      // Institution
+      if (edu.institution) {
         sections.push(
           new Paragraph({
-            children: [new TextRun({ text: edu.endDate, italics: true })],
-            spacing: { after: 100 },
+            children: [
+              new TextRun({
+                text: edu.institution,
+                size: 21,
+                font: "Calibri",
+                color: "4B5563",
+                italics: true,
+              }),
+              ...(edu.gpa
+                ? [
+                    new TextRun({
+                      text: `  •  GPA: ${edu.gpa}`,
+                      size: 20,
+                      font: "Calibri",
+                      color: "6B7280",
+                    }),
+                  ]
+                : []),
+            ],
+            spacing: { after: 80 },
           }),
         );
       }
 
-      if (edu.gpa) {
+      // Honors
+      if (edu.honors && edu.honors.length > 0) {
         sections.push(
           new Paragraph({
-            text: `GPA: ${edu.gpa}`,
-            spacing: { after: 200 },
+            children: [
+              new TextRun({
+                text: `Honors: ${edu.honors.join(", ")}`,
+                size: 20,
+                font: "Calibri",
+                color: "374151",
+                italics: true,
+              }),
+            ],
+            spacing: { after: 120 },
           }),
         );
       }
@@ -1023,27 +1431,34 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
 
   // Skills
   const skillCategories = [
-    { name: "Technical", items: skills.technical.map(getSkillName) },
+    { name: "Technical Skills", items: skills.technical.map(getSkillName) },
     { name: "Languages", items: skills.languages.map(getSkillName) },
     { name: "Tools", items: skills.tools.map(getSkillName) },
     { name: "Soft Skills", items: skills.soft.map(getSkillName) },
   ].filter((cat) => cat.items.length > 0);
 
   if (skillCategories.length > 0) {
-    sections.push(
-      new Paragraph({
-        text: "SKILLS",
-        heading: HeadingLevel.HEADING_2,
-        spacing: { before: 200, after: 200 },
-      }),
-    );
+    sections.push(createSectionHeader("Skills"));
 
     for (const skillCategory of skillCategories) {
-      const skillText = `${skillCategory.name}: ${skillCategory.items.join(", ")}`;
       sections.push(
         new Paragraph({
-          text: skillText,
-          spacing: { after: 100 },
+          children: [
+            new TextRun({
+              text: `${skillCategory.name}: `,
+              bold: true,
+              size: 20,
+              font: "Calibri",
+              color: "1F2937",
+            }),
+            new TextRun({
+              text: skillCategory.items.join(", "),
+              size: 20,
+              font: "Calibri",
+              color: "374151",
+            }),
+          ],
+          spacing: { after: 80 },
         }),
       );
     }
@@ -1051,20 +1466,42 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
 
   // Certifications
   if (certifications.length > 0) {
-    sections.push(
-      new Paragraph({
-        text: "CERTIFICATIONS",
-        heading: HeadingLevel.HEADING_2,
-        spacing: { before: 200, after: 200 },
-      }),
-    );
+    sections.push(createSectionHeader("Certifications"));
 
     for (const cert of certifications) {
-      const certText = `${cert.name} - ${cert.issuer}${cert.date ? ` (${cert.date})` : ""}`;
       sections.push(
         new Paragraph({
-          text: certText,
-          spacing: { after: 100 },
+          children: [
+            new TextRun({
+              text: cert.name || "",
+              bold: true,
+              size: 21,
+              font: "Calibri",
+              color: "1F2937",
+            }),
+            ...(cert.issuer
+              ? [
+                  new TextRun({
+                    text: ` - ${cert.issuer}`,
+                    size: 20,
+                    font: "Calibri",
+                    color: "4B5563",
+                  }),
+                ]
+              : []),
+            ...(cert.date
+              ? [
+                  new TextRun({
+                    text: ` (${cert.date})`,
+                    size: 20,
+                    font: "Calibri",
+                    color: "6B7280",
+                    italics: true,
+                  }),
+                ]
+              : []),
+          ],
+          spacing: { after: 80 },
         }),
       );
     }
@@ -1072,35 +1509,57 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
 
   // Links
   if (links.length > 0) {
-    sections.push(
-      new Paragraph({
-        text: "LINKS",
-        heading: HeadingLevel.HEADING_2,
-        spacing: { before: 200, after: 200 },
-      }),
-    );
+    sections.push(createSectionHeader("Links"));
 
     for (const link of links) {
       sections.push(
         new Paragraph({
           children: [
-            new TextRun({ text: `${link.label}: ` }),
+            new TextRun({
+              text: `${link.label || "Link"}: `,
+              bold: true,
+              size: 20,
+              font: "Calibri",
+              color: "1F2937",
+            }),
             new TextRun({
               text: link.url,
+              size: 20,
+              font: "Calibri",
+              color: primaryColor,
               underline: { type: UnderlineType.SINGLE },
             }),
           ],
-          spacing: { after: 100 },
+          spacing: { after: 80 },
         }),
       );
     }
   }
 
-  // Create document
+  // Create document with proper page settings
   const doc = new Document({
+    styles: {
+      default: {
+        document: {
+          run: {
+            font: "Calibri",
+            size: 22,
+          },
+        },
+      },
+    },
     sections: [
       {
-        properties: {},
+        properties: {
+          page: {
+            margin: {
+              top: 720, // 0.5 inch
+              right: 720,
+              bottom: 720,
+              left: 720,
+            },
+          },
+        },
         children: sections,
       },
     ],

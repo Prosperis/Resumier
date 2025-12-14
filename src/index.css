@@ -152,3 +152,139 @@
   }
 }
 
+/* ===== PRINT STYLES FOR RESUME EXPORT ===== */
+
+/* Page setup for A4/Letter resume printing */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  /* Reset everything for printing */
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Hide all non-resume elements when printing */
+  html,
+  body {
+    width: 210mm !important;
+    height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide everything except the resume */
+  body > *:not(.print-container),
+  header,
+  footer,
+  nav,
+  aside,
+  [data-no-print],
+  .no-print,
+  button,
+  [role="button"]:not(.print-include),
+  .export-controls,
+  .sidebar,
+  [data-sidebar],
+  .toaster,
+  [data-radix-popper-content-wrapper],
+  [data-state="open"],
+  .tooltip,
+  [role="tooltip"],
+  [role="dialog"],
+  .dialog,
+  .modal {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* Show only the resume preview container */
+  .resume-light-mode {
+    display: block !important;
+    visibility: visible !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    background: white !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure parents of resume are visible */
+  .resume-light-mode,
+  .resume-light-mode * {
+    visibility: visible !important;
+  }
+
+  /* Preserve all backgrounds and colors */
+  .resume-light-mode * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Handle page breaks properly */
+  .resume-light-mode section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .resume-light-mode h1,
+  .resume-light-mode h2,
+  .resume-light-mode h3 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  /* Ensure links show as text (not underlined URL) for cleaner PDFs */
+  .resume-light-mode a {
+    text-decoration: none !important;
+  }
+
+  /* Ensure SVG icons are properly sized and colored */
+  .resume-light-mode svg {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    fill: currentColor;
+    stroke: currentColor;
+  }
+
+  /* Fix flex and grid layouts for print */
+  .resume-light-mode .flex {
+    display: flex !important;
+  }
+
+  .resume-light-mode .grid {
+    display: grid !important;
+  }
+
+  /* Ensure border colors are preserved */
+  .resume-light-mode [style*="border"] {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Print optimized class - added during export */
+  .print-optimized {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    z-index: 999999 !important;
+  }
+}
+
