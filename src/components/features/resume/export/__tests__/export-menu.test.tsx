@@ -83,8 +83,9 @@ describe("ExportMenu", () => {
     const exportButton = screen.getByRole("button", { name: /export/i });
     await user.click(exportButton);
 
-    // Check for all format options
-    expect(screen.getByText("PDF")).toBeInTheDocument();
+    // Check for all format options (labels have been updated)
+    expect(screen.getByText("PDF (Direct Download)")).toBeInTheDocument();
+    expect(screen.getByText("PDF (Print Dialog)")).toBeInTheDocument();
     expect(screen.getByText("Word Document")).toBeInTheDocument();
     expect(screen.getByText("HTML")).toBeInTheDocument();
     expect(screen.getByText("Markdown")).toBeInTheDocument();
@@ -99,8 +100,8 @@ describe("ExportMenu", () => {
     const exportButton = screen.getByRole("button", { name: /export/i });
     await user.click(exportButton);
 
-    expect(screen.getByText("PDF")).toBeInTheDocument();
-    expect(screen.getByText(/print to pdf/i)).toBeInTheDocument();
+    expect(screen.getByText("PDF (Direct Download)")).toBeInTheDocument();
+    expect(screen.getByText(/quick export with template styles/i)).toBeInTheDocument();
   });
 
   it("should display print option", async () => {
@@ -129,7 +130,7 @@ describe("ExportMenu", () => {
     expect(printResumeSpy).toHaveBeenCalledWith(mockResume);
   });
 
-  it("should call downloadPDFWithTemplate when PDF is clicked", async () => {
+  it("should call downloadPDFWithTemplate when PDF Print Dialog is clicked", async () => {
     const user = userEvent.setup();
     const downloadPDFSpy = vi.spyOn(exportUtils, "downloadPDFWithTemplate");
 
@@ -138,7 +139,7 @@ describe("ExportMenu", () => {
     const exportButton = screen.getByRole("button", { name: /export/i });
     await user.click(exportButton);
 
-    const pdfOption = screen.getByText("PDF");
+    const pdfOption = screen.getByText("PDF (Print Dialog)");
     await user.click(pdfOption);
 
     expect(downloadPDFSpy).toHaveBeenCalledWith(mockResume);

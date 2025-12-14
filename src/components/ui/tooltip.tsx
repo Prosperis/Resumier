@@ -49,9 +49,12 @@ function TooltipContent({
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content
-        asChild
-        data-slot="tooltip-content"
         sideOffset={sideOffset}
+        data-slot="tooltip-content"
+        className={cn(
+          "z-50 w-fit rounded-md border bg-popover px-3 py-1.5 text-xs text-popover-foreground shadow-md",
+          className,
+        )}
         {...props}
       >
         <motion.div
@@ -60,10 +63,6 @@ function TooltipContent({
           animate="visible"
           exit="exit"
           transition={transition}
-          className={cn(
-            "z-50 w-fit rounded-md border bg-popover px-3 py-1.5 text-xs text-popover-foreground shadow-md",
-            className,
-          )}
         >
           {children}
         </motion.div>

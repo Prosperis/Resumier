@@ -41,6 +41,10 @@ vi.mock("@/components/features/demo", () => ({
 vi.mock("@tanstack/react-router", () => ({
   createFileRoute: vi.fn(() => (config: any) => ({ ...config })),
   createLazyFileRoute: vi.fn(() => (config: any) => ({ ...config })),
+  useRouter: vi.fn(() => ({
+    navigate: vi.fn(),
+    state: { location: { pathname: "/settings" } },
+  })),
 }));
 
 vi.mock("@/components/ui/route-error", () => ({
@@ -73,13 +77,17 @@ vi.mock("@/lib/animations/hooks/use-reduced-motion", () => ({
   useReducedMotion: () => false,
 }));
 
-// Mock lucide-react icons
-vi.mock("lucide-react", () => ({
-  RotateCcw: () => <span data-testid="rotate-ccw-icon" />,
-  Check: () => <span data-testid="check-icon" />,
-  ChevronDown: () => <span data-testid="chevron-down-icon" />,
-  ChevronUp: () => <span data-testid="chevron-up-icon" />,
-}));
+// Mock lucide-react icons - use importOriginal to include all icons
+vi.mock("lucide-react", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("lucide-react")>();
+  return {
+    ...actual,
+    RotateCcw: () => <span data-testid="rotate-ccw-icon" />,
+    Check: () => <span data-testid="check-icon" />,
+    ChevronDown: () => <span data-testid="chevron-down-icon" />,
+    ChevronUp: () => <span data-testid="chevron-up-icon" />,
+  };
+});
 
 // Import the route module after setting up mocks
 const { Route: settingsRoute } = await import("../settings.lazy");

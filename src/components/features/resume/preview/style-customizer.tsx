@@ -1,5 +1,6 @@
 import { Palette, RotateCcw, Type, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -236,7 +237,7 @@ export function StyleCustomizer() {
   const [isLoadingFont, setIsLoadingFont] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const styleCustomization = useResumeStore(selectStyleCustomization);
-  const styleActions = useResumeStore(selectStyleActions);
+  const styleActions = useResumeStore(useShallow(selectStyleActions));
 
   // Ensure customFonts is always an array (handles persisted state migration)
   const customFonts = styleCustomization.customFonts || [];

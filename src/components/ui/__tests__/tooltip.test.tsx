@@ -72,7 +72,7 @@ describe("Tooltip", () => {
     expect(trigger).toHaveAttribute("data-state", "delayed-open");
   });
 
-  it("renders with open prop controlled", () => {
+  it("renders with open prop controlled", async () => {
     render(
       <Tooltip open={true}>
         <TooltipTrigger>Hover me</TooltipTrigger>
@@ -80,11 +80,13 @@ describe("Tooltip", () => {
       </Tooltip>,
     );
 
-    // Tooltip should be visible immediately
-    expect(screen.getByTestId("content")).toBeInTheDocument();
+    // Tooltip should be visible immediately (wait for portal)
+    await waitFor(() => {
+      expect(screen.getByTestId("content")).toBeInTheDocument();
+    });
   });
 
-  it("renders with defaultOpen prop", () => {
+  it("renders with defaultOpen prop", async () => {
     render(
       <Tooltip defaultOpen={true}>
         <TooltipTrigger>Hover me</TooltipTrigger>
@@ -92,8 +94,10 @@ describe("Tooltip", () => {
       </Tooltip>,
     );
 
-    // Tooltip should be visible initially
-    expect(screen.getByTestId("content")).toBeInTheDocument();
+    // Tooltip should be visible initially (wait for portal)
+    await waitFor(() => {
+      expect(screen.getByTestId("content")).toBeInTheDocument();
+    });
   });
 });
 
@@ -167,8 +171,10 @@ describe("TooltipContent", () => {
       </Tooltip>,
     );
 
-    const content = screen.getByTestId("content");
-    expect(content).toHaveClass("custom-tooltip");
+    await waitFor(() => {
+      const content = screen.getByTestId("content");
+      expect(content).toHaveClass("custom-tooltip");
+    });
   });
 
   it("has data-slot attribute", async () => {
@@ -179,8 +185,10 @@ describe("TooltipContent", () => {
       </Tooltip>,
     );
 
-    const content = screen.getByTestId("content");
-    expect(content).toHaveAttribute("data-slot", "tooltip-content");
+    await waitFor(() => {
+      const content = screen.getByTestId("content");
+      expect(content).toHaveAttribute("data-slot", "tooltip-content");
+    });
   });
 
   it("accepts custom sideOffset", async () => {
@@ -194,7 +202,9 @@ describe("TooltipContent", () => {
     );
 
     // Component should render without errors
-    expect(screen.getByTestId("content")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId("content")).toBeInTheDocument();
+    });
   });
 
   it("renders with side prop for positioning", async () => {
@@ -207,7 +217,9 @@ describe("TooltipContent", () => {
       </Tooltip>,
     );
 
-    expect(screen.getByTestId("content")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId("content")).toBeInTheDocument();
+    });
   });
 
   it("renders arrow element", async () => {
@@ -219,7 +231,9 @@ describe("TooltipContent", () => {
     );
 
     // The arrow is rendered as part of the component
-    expect(screen.getByTestId("content")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId("content")).toBeInTheDocument();
+    });
   });
 });
 
@@ -286,9 +300,11 @@ describe("Tooltip with custom components", () => {
       </Tooltip>,
     );
 
-    const content = screen.getByTestId("content");
-    expect(content).toBeInTheDocument();
-    expect(content.textContent).toContain("Bold text");
-    expect(content.textContent).toContain("Paragraph text");
+    await waitFor(() => {
+      const content = screen.getByTestId("content");
+      expect(content).toBeInTheDocument();
+      expect(content.textContent).toContain("Bold text");
+      expect(content.textContent).toContain("Paragraph text");
+    });
   });
 });

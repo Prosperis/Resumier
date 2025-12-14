@@ -86,14 +86,15 @@ describe("AuthStore", () => {
     });
 
     it("selectAuthActions returns all action methods", () => {
-      const { result } = renderHook(() => useAuthStore(selectAuthActions));
+      // Use getState() instead of renderHook to avoid re-render issues with selectors returning new objects
+      const actions = selectAuthActions(useAuthStore.getState());
 
-      expect(result.current).toHaveProperty("login");
-      expect(result.current).toHaveProperty("logout");
-      expect(result.current).toHaveProperty("setUser");
-      expect(result.current).toHaveProperty("clearError");
-      expect(typeof result.current.login).toBe("function");
-      expect(typeof result.current.logout).toBe("function");
+      expect(actions).toHaveProperty("login");
+      expect(actions).toHaveProperty("logout");
+      expect(actions).toHaveProperty("setUser");
+      expect(actions).toHaveProperty("clearError");
+      expect(typeof actions.login).toBe("function");
+      expect(typeof actions.logout).toBe("function");
     });
   });
 

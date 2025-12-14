@@ -37,12 +37,6 @@ export const auth = betterAuth({
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // 24 hours
   },
-  advanced: {
-    generateId: () => {
-      // Generate random ID for development
-      return Math.random().toString(36).substring(2, 15);
-    },
-  },
 });
 
 /**
