@@ -1,4 +1,4 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useRouter } from "@tanstack/react-router";
 import { useSettingsStore } from "@/stores";
 import { useAuthStore } from "@/stores/auth-store";
 import { useTheme } from "@/app/theme-provider";
@@ -20,13 +20,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { RotateCcw } from "lucide-react";
+import { ArrowLeft, RotateCcw } from "lucide-react";
 
 export const Route = createLazyFileRoute("/settings")({
   component: SettingsComponent,
 });
 
 function SettingsComponent() {
+  const router = useRouter();
   const { settings, updateSettings, resetSettings } = useSettingsStore();
   const { user, isGuest, isDemo } = useAuthStore();
   const { theme, setTheme } = useTheme();
@@ -47,9 +48,25 @@ function SettingsComponent() {
     }
   };
 
+  const handleGoBack = () => {
+    // Use router history to go back to the previous page
+    router.history.back();
+  };
+
   return (
     <div className="container mx-auto max-w-4xl p-4 md:p-8">
       <div className="mb-8">
+        <div className="mb-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleGoBack}
+            className="gap-2 text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="size-4" />
+            Back
+          </Button>
+        </div>
         <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
         <p className="text-muted-foreground">
           Manage your preferences and configuration
