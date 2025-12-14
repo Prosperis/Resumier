@@ -188,9 +188,7 @@ describe("useToast", () => {
       });
 
       // All toasts should be marked as closed
-      expect(result.current.toasts.every((t: any) => t.open === false)).toBe(
-        true,
-      );
+      expect(result.current.toasts.every((t: any) => t.open === false)).toBe(true);
 
       act(() => {
         vi.advanceTimersByTime(5000);

@@ -79,14 +79,7 @@ export const TEMPLATE_INFO: Record<string, TemplateInfo> = {
       "Government jobs",
       "Academic positions",
     ],
-    industries: [
-      "Finance",
-      "Legal",
-      "Government",
-      "Healthcare",
-      "Education",
-      "Accounting",
-    ],
+    industries: ["Finance", "Legal", "Government", "Healthcare", "Education", "Accounting"],
     experienceLevel: ["mid", "senior", "executive"],
     atsScore: 10,
     printOptimized: true,
@@ -128,19 +121,8 @@ export const TEMPLATE_INFO: Record<string, TemplateInfo> = {
     style: "traditional",
     layout: "single-column",
     tags: ["executive", "leadership", "c-suite", "senior", "serif"],
-    bestFor: [
-      "C-suite executives",
-      "VP roles",
-      "Directors",
-      "Senior management",
-    ],
-    industries: [
-      "Corporate",
-      "Finance",
-      "Consulting",
-      "Healthcare",
-      "Manufacturing",
-    ],
+    bestFor: ["C-suite executives", "VP roles", "Directors", "Senior management"],
+    industries: ["Corporate", "Finance", "Consulting", "Healthcare", "Manufacturing"],
     experienceLevel: ["senior", "executive"],
     atsScore: 9,
     printOptimized: true,
@@ -160,12 +142,7 @@ export const TEMPLATE_INFO: Record<string, TemplateInfo> = {
     style: "traditional",
     layout: "single-column",
     tags: ["academic", "cv", "research", "professor", "publications"],
-    bestFor: [
-      "Faculty positions",
-      "Researchers",
-      "PhD candidates",
-      "Academic roles",
-    ],
+    bestFor: ["Faculty positions", "Researchers", "PhD candidates", "Academic roles"],
     industries: ["Education", "Research", "Science", "Healthcare"],
     experienceLevel: ["mid", "senior", "executive"],
     atsScore: 10,
@@ -180,8 +157,7 @@ export const TEMPLATE_INFO: Record<string, TemplateInfo> = {
   corporate: {
     id: "corporate",
     name: "Corporate",
-    description:
-      "Conservative template for banking, finance, and legal sectors",
+    description: "Conservative template for banking, finance, and legal sectors",
     category: "professional",
     style: "traditional",
     layout: "single-column",
@@ -206,12 +182,7 @@ export const TEMPLATE_INFO: Record<string, TemplateInfo> = {
     style: "contemporary",
     layout: "two-column",
     tags: ["tech", "developer", "modern", "skills", "blue"],
-    bestFor: [
-      "Software developers",
-      "Engineers",
-      "Tech professionals",
-      "IT roles",
-    ],
+    bestFor: ["Software developers", "Engineers", "Tech professionals", "IT roles"],
     industries: ["Technology", "Software", "IT", "Startups"],
     experienceLevel: ["entry", "mid", "senior"],
     atsScore: 8,
@@ -233,13 +204,7 @@ export const TEMPLATE_INFO: Record<string, TemplateInfo> = {
     layout: "single-column",
     tags: ["creative", "gradient", "modern", "colorful", "professional"],
     bestFor: ["Designers", "Marketers", "Content creators", "Creative roles"],
-    industries: [
-      "Marketing",
-      "Design",
-      "Media",
-      "Advertising",
-      "Entertainment",
-    ],
+    industries: ["Marketing", "Design", "Media", "Advertising", "Entertainment"],
     experienceLevel: ["entry", "mid", "senior"],
     atsScore: 7,
     printOptimized: true,
@@ -360,12 +325,7 @@ export const TEMPLATE_INFO: Record<string, TemplateInfo> = {
     style: "creative",
     layout: "single-column",
     tags: ["portfolio", "projects", "creative", "showcase"],
-    bestFor: [
-      "Designers",
-      "Developers",
-      "Creative professionals",
-      "Project-based roles",
-    ],
+    bestFor: ["Designers", "Developers", "Creative professionals", "Project-based roles"],
     industries: ["Design", "Technology", "Media", "Creative Services"],
     experienceLevel: ["entry", "mid", "senior"],
     atsScore: 6,
@@ -421,17 +381,12 @@ export const TEMPLATE_INFO: Record<string, TemplateInfo> = {
   threeColumn: {
     id: "threeColumn",
     name: "Three Column",
-    description:
-      "Unique three-column layout with skills sidebar and highlights",
+    description: "Unique three-column layout with skills sidebar and highlights",
     category: "modern",
     style: "creative",
     layout: "two-column",
     tags: ["three-column", "sidebar", "highlights", "unique"],
-    bestFor: [
-      "Multi-talented professionals",
-      "Skills-heavy roles",
-      "Modern companies",
-    ],
+    bestFor: ["Multi-talented professionals", "Skills-heavy roles", "Modern companies"],
     industries: ["Technology", "Creative", "Marketing"],
     experienceLevel: ["mid", "senior"],
     atsScore: 7,
@@ -446,17 +401,12 @@ export const TEMPLATE_INFO: Record<string, TemplateInfo> = {
   boldHeaders: {
     id: "boldHeaders",
     name: "Bold Headers",
-    description:
-      "Statement-making section headers with strong visual hierarchy",
+    description: "Statement-making section headers with strong visual hierarchy",
     category: "creative",
     style: "bold",
     layout: "single-column",
     tags: ["bold", "statement", "modern", "strong"],
-    bestFor: [
-      "Confident professionals",
-      "Leadership roles",
-      "Making an impact",
-    ],
+    bestFor: ["Confident professionals", "Leadership roles", "Making an impact"],
     industries: ["All industries"],
     experienceLevel: ["mid", "senior"],
     atsScore: 7,
@@ -538,11 +488,7 @@ export const TEMPLATE_INFO: Record<string, TemplateInfo> = {
     style: "contemporary",
     layout: "single-column",
     tags: ["border", "framed", "accent", "modern"],
-    bestFor: [
-      "Professional roles",
-      "All experience levels",
-      "Clear organization",
-    ],
+    bestFor: ["Professional roles", "All experience levels", "Clear organization"],
     industries: ["All industries"],
     experienceLevel: ["entry", "mid", "senior"],
     atsScore: 8,
@@ -558,8 +504,7 @@ export const TEMPLATE_INFO: Record<string, TemplateInfo> = {
   splitScreen: {
     id: "splitScreen",
     name: "Split Screen",
-    description:
-      "Distinct left-right content areas with contrasting backgrounds",
+    description: "Distinct left-right content areas with contrasting backgrounds",
     category: "creative",
     style: "creative",
     layout: "two-column",
@@ -835,9 +780,7 @@ export function getTemplateIds(): string[] {
 /**
  * Get templates by category
  */
-export function getTemplatesByCategory(
-  category: TemplateInfo["category"],
-): TemplateInfo[] {
+export function getTemplatesByCategory(category: TemplateInfo["category"]): TemplateInfo[] {
   return getAllTemplates().filter((t) => t.category === category);
 }
 

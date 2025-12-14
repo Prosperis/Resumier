@@ -6,13 +6,7 @@
 import { FileText, MoreHorizontal, Pencil, Trash2, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,8 +32,7 @@ export function ProfileCard({
   onCreateResume,
 }: ProfileCardProps) {
   const { content } = profile;
-  const hasPersonalInfo =
-    content.personalInfo.firstName || content.personalInfo.lastName;
+  const hasPersonalInfo = content.personalInfo.firstName || content.personalInfo.lastName;
   const experienceCount = content.experience.length;
   const educationCount = content.education.length;
   const skillsCount =
@@ -67,9 +60,7 @@ export function ProfileCard({
             <div>
               <CardTitle className="text-lg">{profile.name}</CardTitle>
               {profile.description && (
-                <CardDescription className="line-clamp-1">
-                  {profile.description}
-                </CardDescription>
+                <CardDescription className="line-clamp-1">{profile.description}</CardDescription>
               )}
             </div>
           </div>

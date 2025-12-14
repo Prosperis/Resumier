@@ -100,9 +100,7 @@ describe("useResume", () => {
   it("refetches when ID changes", async () => {
     const mockResume1 = createMockResume({ id: "resume-1", title: "Resume 1" });
     const mockResume2 = createMockResume({ id: "resume-2", title: "Resume 2" });
-    (apiClient.get as any)
-      .mockResolvedValueOnce(mockResume1)
-      .mockResolvedValueOnce(mockResume2);
+    (apiClient.get as any).mockResolvedValueOnce(mockResume1).mockResolvedValueOnce(mockResume2);
 
     const { result, rerender } = renderHook(({ id }) => useResume(id), {
       wrapper: createWrapper(),

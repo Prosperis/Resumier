@@ -1,18 +1,9 @@
 "use client";
 
 import * as React from "react";
-import {
-  CalendarIcon,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { CalendarIcon, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 interface MonthPickerProps {
@@ -23,14 +14,8 @@ interface MonthPickerProps {
   placeholder?: string;
 }
 
-export const MonthPicker = React.forwardRef<
-  HTMLButtonElement,
-  MonthPickerProps
->(
-  (
-    { value, onChange, disabled, className, placeholder = "Pick a month" },
-    ref,
-  ) => {
+export const MonthPicker = React.forwardRef<HTMLButtonElement, MonthPickerProps>(
+  ({ value, onChange, disabled, className, placeholder = "Pick a month" }, ref) => {
     const [date, setDate] = React.useState<Date | undefined>(
       value ? new Date(value + "-01") : undefined,
     );
@@ -148,21 +133,14 @@ export const MonthPicker = React.forwardRef<
         </PopoverTrigger>
         <PopoverContent className="w-48 p-0" align="start">
           <div className="flex items-center justify-between border-b p-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6"
-              onClick={handlePrev}
-            >
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handlePrev}>
               <ChevronLeft className="h-3 w-3" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
               className="h-6 text-xs font-semibold"
-              onClick={() =>
-                setMenuView((prev) => (prev === "month" ? "year" : "month"))
-              }
+              onClick={() => setMenuView((prev) => (prev === "month" ? "year" : "month"))}
             >
               {menuView === "year" ? `${startYear}-${endYear}` : menuYear}
               <ChevronDown
@@ -172,12 +150,7 @@ export const MonthPicker = React.forwardRef<
                 )}
               />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6"
-              onClick={handleNext}
-            >
+            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleNext}>
               <ChevronRight className="h-3 w-3" />
             </Button>
           </div>
@@ -187,9 +160,7 @@ export const MonthPicker = React.forwardRef<
                   <Button
                     key={month}
                     variant={
-                      date &&
-                      date.getMonth() === index &&
-                      date.getFullYear() === menuYear
+                      date && date.getMonth() === index && date.getFullYear() === menuYear
                         ? "default"
                         : "ghost"
                     }

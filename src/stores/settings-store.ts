@@ -108,7 +108,5 @@ export const useSettingsStore = create<SettingsStore>()(
 export const selectSettings = (state: SettingsStore) => state.settings;
 export const selectTheme = (state: SettingsStore) => state.settings.theme;
 export const selectAutoSave = (state: SettingsStore) => state.settings.autoSave;
-export const selectAutoSaveInterval = (state: SettingsStore) =>
-  state.settings.autoSaveInterval;
-export const selectReducedMotion = (state: SettingsStore) =>
-  state.settings.reducedMotion;
+export const selectAutoSaveInterval = (state: SettingsStore) => state.settings.autoSaveInterval;
+export const selectReducedMotion = (state: SettingsStore) => state.settings.reducedMotion;

@@ -34,11 +34,7 @@ interface ResumeTableProps {
   onDuplicate: (resume: Resume) => void;
 }
 
-export function ResumeTable({
-  resumes,
-  onEdit,
-  onDuplicate,
-}: ResumeTableProps) {
+export function ResumeTable({ resumes, onEdit, onDuplicate }: ResumeTableProps) {
   const columns = createResumeColumns({ onEdit, onDuplicate });
 
   // Show only Title, Status, and Last Modified by default
@@ -52,9 +48,8 @@ export function ResumeTable({
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    initialColumnVisibility,
-  );
+  const [columnVisibility, setColumnVisibility] =
+    useState<VisibilityState>(initialColumnVisibility);
   const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
@@ -126,10 +121,7 @@ export function ResumeTable({
                     >
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   );
                 })}
@@ -156,17 +148,10 @@ export function ResumeTable({
                           <TableCell
                             key={cell.id}
                             className={
-                              isSelect
-                                ? "w-[50px]"
-                                : isTitle
-                                  ? "w-auto max-w-0"
-                                  : "w-[150px]"
+                              isSelect ? "w-[50px]" : isTitle ? "w-auto max-w-0" : "w-[150px]"
                             }
                           >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext(),
-                            )}
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </TableCell>
                         );
                       })}
@@ -176,10 +161,7 @@ export function ResumeTable({
               })
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>

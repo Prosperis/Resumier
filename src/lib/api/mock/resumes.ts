@@ -44,24 +44,17 @@ export const mockResumeApi = {
       if (idbData && typeof idbData === "object" && "resumes" in idbData) {
         const resumes = (idbData as { resumes: Resume[] }).resumes;
         if (resumes && resumes.length > 0) {
-          console.log(
-            `MockAPI: ✅ Returning ${resumes.length} resume(s) from IndexedDB`,
-          );
+          console.log(`MockAPI: ✅ Returning ${resumes.length} resume(s) from IndexedDB`);
           return resumes;
         }
       }
     } catch (error) {
-      console.warn(
-        "MockAPI: Failed to load from IndexedDB, falling back to localStorage:",
-        error,
-      );
+      console.warn("MockAPI: Failed to load from IndexedDB, falling back to localStorage:", error);
     }
 
     // Fallback to localStorage mock DB
     const localResumes = mockDb.getResumes();
-    console.log(
-      `MockAPI: ✅ Returning ${localResumes.length} resume(s) from localStorage`,
-    );
+    console.log(`MockAPI: ✅ Returning ${localResumes.length} resume(s) from localStorage`);
     return localResumes;
   },
 
@@ -83,10 +76,7 @@ export const mockResumeApi = {
         }
       }
     } catch (error) {
-      console.warn(
-        "Failed to load from IndexedDB, falling back to localStorage:",
-        error,
-      );
+      console.warn("Failed to load from IndexedDB, falling back to localStorage:", error);
     }
 
     // Fallback to localStorage mock DB
@@ -113,9 +103,7 @@ export const mockResumeApi = {
     // Check for duplicate title
     const existing = mockDb.getResumes().find((r) => r.title === data.title);
     if (existing) {
-      throw new ConflictError(
-        `Resume with title "${data.title}" already exists`,
-      );
+      throw new ConflictError(`Resume with title "${data.title}" already exists`);
     }
 
     return mockDb.createResume(data);
@@ -141,13 +129,9 @@ export const mockResumeApi = {
 
     // Check for duplicate title
     if (data.title && data.title !== existing.title) {
-      const duplicate = mockDb
-        .getResumes()
-        .find((r) => r.id !== id && r.title === data.title);
+      const duplicate = mockDb.getResumes().find((r) => r.id !== id && r.title === data.title);
       if (duplicate) {
-        throw new ConflictError(
-          `Resume with title "${data.title}" already exists`,
-        );
+        throw new ConflictError(`Resume with title "${data.title}" already exists`);
       }
     }
 

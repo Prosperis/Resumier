@@ -44,10 +44,7 @@ export const demoContent: ProfileContent = {
       endDate: "2020-01",
       current: false,
       description: "Developed MVP and scaled to production",
-      highlights: [
-        "Built full-stack application from scratch",
-        "Implemented CI/CD pipeline",
-      ],
+      highlights: ["Built full-stack application from scratch", "Implemented CI/CD pipeline"],
     },
     {
       id: "exp-3",
@@ -57,10 +54,7 @@ export const demoContent: ProfileContent = {
       endDate: "2018-05",
       current: false,
       description: "Worked with various clients on web development projects",
-      highlights: [
-        "Delivered 20+ client projects",
-        "Specialized in e-commerce solutions",
-      ],
+      highlights: ["Delivered 20+ client projects", "Specialized in e-commerce solutions"],
     },
   ],
   education: [
@@ -77,14 +71,7 @@ export const demoContent: ProfileContent = {
     },
   ],
   skills: {
-    technical: [
-      "React",
-      "TypeScript",
-      "Node.js",
-      "Python",
-      "GraphQL",
-      "REST APIs",
-    ],
+    technical: ["React", "TypeScript", "Node.js", "Python", "GraphQL", "REST APIs"],
     languages: ["JavaScript", "TypeScript", "Python", "SQL", "HTML/CSS"],
     tools: ["Git", "Docker", "AWS", "VS Code", "Figma", "Jira"],
     soft: ["Leadership", "Communication", "Problem Solving", "Mentoring"],

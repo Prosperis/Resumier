@@ -32,8 +32,7 @@ export function useUpdateResume() {
         try {
           // Get existing resumes from the store
           const idbData = await get(IDB_STORE_KEY);
-          const resumes =
-            (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
+          const resumes = (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
 
           // Find the resume to update
           const resumeIndex = resumes.findIndex((r) => r.id === id);
@@ -100,9 +99,7 @@ export function useUpdateResume() {
       await queryClient.cancelQueries({ queryKey: resumeQueryKey(id) });
 
       // Snapshot previous value for rollback
-      const previousResume = queryClient.getQueryData<Resume>(
-        resumeQueryKey(id),
-      );
+      const previousResume = queryClient.getQueryData<Resume>(resumeQueryKey(id));
 
       // Optimistically update the resume
       queryClient.setQueryData<Resume>(resumeQueryKey(id), (old) => {
@@ -110,9 +107,7 @@ export function useUpdateResume() {
         return {
           ...old,
           ...data,
-          content: data.content
-            ? { ...old.content, ...data.content }
-            : old.content,
+          content: data.content ? { ...old.content, ...data.content } : old.content,
           updatedAt: new Date().toISOString(),
         };
       });
@@ -125,9 +120,7 @@ export function useUpdateResume() {
           return {
             ...resume,
             ...data,
-            content: data.content
-              ? { ...resume.content, ...data.content }
-              : resume.content,
+            content: data.content ? { ...resume.content, ...data.content } : resume.content,
             updatedAt: new Date().toISOString(),
           };
         });

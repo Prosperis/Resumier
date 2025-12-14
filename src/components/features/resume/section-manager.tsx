@@ -4,29 +4,13 @@
  */
 
 import { useState, useCallback } from "react";
-import {
-  Layers,
-  Eye,
-  EyeOff,
-  GripVertical,
-  ChevronUp,
-  ChevronDown,
-  RotateCcw,
-} from "lucide-react";
+import { Layers, Eye, EyeOff, GripVertical, ChevronUp, ChevronDown, RotateCcw } from "lucide-react";
 import type { Resume, ResumeContent } from "@/lib/api/types";
 import { useUpdateResume } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
@@ -122,11 +106,10 @@ export function SectionManager({ resume }: SectionManagerProps) {
   // Get section settings from resume metadata or use defaults
   const sectionSettings: SectionSettings = {
     hiddenSections:
-      (resume.content as ResumeContent & { hiddenSections?: SectionType[] })
-        .hiddenSections || [],
+      (resume.content as ResumeContent & { hiddenSections?: SectionType[] }).hiddenSections || [],
     sectionOrder:
-      (resume.content as ResumeContent & { sectionOrder?: SectionType[] })
-        .sectionOrder || DEFAULT_SECTION_ORDER,
+      (resume.content as ResumeContent & { sectionOrder?: SectionType[] }).sectionOrder ||
+      DEFAULT_SECTION_ORDER,
   };
 
   const { hiddenSections, sectionOrder } = sectionSettings;
@@ -187,10 +170,7 @@ export function SectionManager({ resume }: SectionManagerProps) {
       if (newIndex < 0 || newIndex >= normalizedOrder.length) return;
 
       const newOrder = [...normalizedOrder];
-      [newOrder[currentIndex], newOrder[newIndex]] = [
-        newOrder[newIndex],
-        newOrder[currentIndex],
-      ];
+      [newOrder[currentIndex], newOrder[newIndex]] = [newOrder[newIndex], newOrder[currentIndex]];
 
       saveSettings({ sectionOrder: newOrder });
     },
@@ -210,8 +190,7 @@ export function SectionManager({ resume }: SectionManagerProps) {
   }, [saveSettings, toast]);
 
   // Get section config by id
-  const getSectionConfig = (id: SectionType) =>
-    SECTION_CONFIGS.find((s) => s.id === id)!;
+  const getSectionConfig = (id: SectionType) => SECTION_CONFIGS.find((s) => s.id === id)!;
 
   // Count hidden sections for badge
   const hiddenCount = hiddenSections.length;
@@ -221,18 +200,11 @@ export function SectionManager({ resume }: SectionManagerProps) {
       <Tooltip>
         <TooltipTrigger asChild>
           <PopoverTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-7 px-2 text-xs gap-1.5"
-            >
+            <Button variant="ghost" size="sm" className="h-7 px-2 text-xs gap-1.5">
               <Layers className="h-3.5 w-3.5" />
               Sections
               {hiddenCount > 0 && (
-                <Badge
-                  variant="secondary"
-                  className="h-4 min-w-4 px-1 text-[10px]"
-                >
+                <Badge variant="secondary" className="h-4 min-w-4 px-1 text-[10px]">
                   {hiddenCount} hidden
                 </Badge>
               )}
@@ -249,18 +221,11 @@ export function SectionManager({ resume }: SectionManagerProps) {
           <div className="flex items-center justify-between">
             <div>
               <h4 className="font-medium text-sm">Manage Sections</h4>
-              <p className="text-xs text-muted-foreground">
-                Hide, show, or reorder sections
-              </p>
+              <p className="text-xs text-muted-foreground">Hide, show, or reorder sections</p>
             </div>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 w-7 p-0"
-                  onClick={resetOrder}
-                >
+                <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={resetOrder}>
                   <RotateCcw className="h-3.5 w-3.5" />
                 </Button>
               </TooltipTrigger>
@@ -283,9 +248,7 @@ export function SectionManager({ resume }: SectionManagerProps) {
                 key={sectionId}
                 className={cn(
                   "flex items-center gap-2 p-2 rounded-md transition-colors",
-                  isHidden
-                    ? "bg-muted/50 text-muted-foreground"
-                    : "hover:bg-accent",
+                  isHidden ? "bg-muted/50 text-muted-foreground" : "hover:bg-accent",
                 )}
               >
                 {/* Drag handle (visual only for now) */}
@@ -295,10 +258,7 @@ export function SectionManager({ resume }: SectionManagerProps) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span
-                      className={cn(
-                        "text-sm font-medium truncate",
-                        isHidden && "line-through",
-                      )}
+                      className={cn("text-sm font-medium truncate", isHidden && "line-through")}
                     >
                       {config.label}
                     </span>
@@ -308,9 +268,7 @@ export function SectionManager({ resume }: SectionManagerProps) {
                       </Badge>
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {config.description}
-                  </p>
+                  <p className="text-xs text-muted-foreground truncate">{config.description}</p>
                 </div>
 
                 {/* Actions */}
@@ -409,10 +367,7 @@ export function useSectionSettings(resume: Resume): SectionSettings {
 /**
  * Check if a section is visible
  */
-export function isSectionVisible(
-  sectionId: SectionType,
-  hiddenSections: SectionType[],
-): boolean {
+export function isSectionVisible(sectionId: SectionType, hiddenSections: SectionType[]): boolean {
   return !hiddenSections.includes(sectionId);
 }
 

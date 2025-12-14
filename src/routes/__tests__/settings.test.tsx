@@ -57,18 +57,14 @@ vi.mock("@/components/ui/route-error", () => ({
 }));
 
 vi.mock("@/components/ui/route-loading", () => ({
-  SettingsLoading: () => (
-    <div data-testid="settings-loading">Loading Settings...</div>
-  ),
+  SettingsLoading: () => <div data-testid="settings-loading">Loading Settings...</div>,
 }));
 
 // Mock framer-motion to avoid animation issues in tests
 vi.mock("framer-motion", () => ({
   motion: {
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    button: ({ children, ...props }: any) => (
-      <button {...props}>{children}</button>
-    ),
+    button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
   },
 }));
 
@@ -116,17 +112,13 @@ describe("Settings Route", () => {
     it("renders the settings page", () => {
       renderSettingsRoute();
 
-      expect(
-        screen.getByRole("heading", { name: /^settings$/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /^settings$/i })).toBeInTheDocument();
     });
 
     it("renders the page description", () => {
       renderSettingsRoute();
 
-      expect(
-        screen.getByText(/manage your preferences and configuration/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/manage your preferences and configuration/i)).toBeInTheDocument();
     });
 
     it("renders the Account section", () => {
@@ -141,9 +133,7 @@ describe("Settings Route", () => {
 
       // CardTitle renders as div with data-slot="card-title", not as a heading
       expect(screen.getByText("Appearance")).toBeInTheDocument();
-      expect(
-        screen.getByText(/customize how resumier looks/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/customize how resumier looks/i)).toBeInTheDocument();
     });
   });
 
@@ -238,9 +228,7 @@ describe("Settings Route", () => {
     it("mentions customization options", () => {
       renderSettingsRoute();
 
-      expect(
-        screen.getByText(/customize how resumier looks/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/customize how resumier looks/i)).toBeInTheDocument();
     });
 
     it("renders Card sections", () => {

@@ -49,15 +49,9 @@ vi.mock("@/components/ui/button-variants", () => ({
 }));
 
 vi.mock("lucide-react", () => ({
-  ChevronDownIcon: (props: any) => (
-    <div data-testid="chevron-down" {...props} />
-  ),
-  ChevronLeftIcon: (props: any) => (
-    <div data-testid="chevron-left" {...props} />
-  ),
-  ChevronRightIcon: (props: any) => (
-    <div data-testid="chevron-right" {...props} />
-  ),
+  ChevronDownIcon: (props: any) => <div data-testid="chevron-down" {...props} />,
+  ChevronLeftIcon: (props: any) => <div data-testid="chevron-left" {...props} />,
+  ChevronRightIcon: (props: any) => <div data-testid="chevron-right" {...props} />,
 }));
 
 describe("Calendar", () => {
@@ -194,10 +188,7 @@ describe("CalendarDayButton", () => {
       </CalendarDayButton>,
     );
     const button = screen.getByTestId("button");
-    expect(button).toHaveAttribute(
-      "data-day",
-      mockDay.date.toLocaleDateString(),
-    );
+    expect(button).toHaveAttribute("data-day", mockDay.date.toLocaleDateString());
   });
 
   it("sets data-selected-single when only selected", () => {
@@ -283,11 +274,7 @@ describe("CalendarDayButton", () => {
 
   it("applies custom className", () => {
     render(
-      <CalendarDayButton
-        day={mockDay}
-        modifiers={mockModifiers}
-        className="custom-day-button"
-      >
+      <CalendarDayButton day={mockDay} modifiers={mockModifiers} className="custom-day-button">
         15
       </CalendarDayButton>,
     );

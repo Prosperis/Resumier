@@ -1,41 +1,23 @@
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Briefcase,
-  GraduationCap,
-  Award,
-} from "lucide-react";
+import { Mail, Phone, MapPin, Briefcase, GraduationCap, Award } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface ContemporaryTemplateProps {
   resume: Resume;
   config?: TemplateConfig;
 }
 
-export function ContemporaryTemplate({
-  resume,
-  config,
-}: ContemporaryTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } =
-    resume.content;
+export function ContemporaryTemplate({ resume, config }: ContemporaryTemplateProps) {
+  const { personalInfo, experience, education, skills, certifications } = resume.content;
   const primaryColor = config?.colorScheme?.primary || "#64748b";
 
   return (
     <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg p-10">
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-4">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <div className="flex flex-wrap gap-4 text-sm text-gray-600">
           {personalInfo.email && (
@@ -47,10 +29,7 @@ export function ContemporaryTemplate({
           {personalInfo.phone && (
             <span className="flex items-center gap-1">
               <Phone className="h-4 w-4" />
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && (
@@ -63,13 +42,8 @@ export function ContemporaryTemplate({
       </div>
 
       {personalInfo.summary && (
-        <div
-          className="mb-8 pb-6 border-l-2 pl-6"
-          style={{ borderColor: primaryColor }}
-        >
-          <p className="text-gray-700 leading-relaxed">
-            {personalInfo.summary}
-          </p>
+        <div className="mb-8 pb-6 border-l-2 pl-6" style={{ borderColor: primaryColor }}>
+          <p className="text-gray-700 leading-relaxed">{personalInfo.summary}</p>
         </div>
       )}
 
@@ -97,9 +71,7 @@ export function ContemporaryTemplate({
                   {exp.startDate} - {exp.current ? "Present" : exp.endDate}
                 </span>
               </div>
-              {exp.description && (
-                <p className="text-sm text-gray-700 mb-2">{exp.description}</p>
-              )}
+              {exp.description && <p className="text-sm text-gray-700 mb-2">{exp.description}</p>}
               {exp.highlights && exp.highlights.length > 0 && (
                 <ul className="space-y-1 text-sm text-gray-700">
                   {exp.highlights.map((highlight, i) => (
@@ -141,10 +113,7 @@ export function ContemporaryTemplate({
         <div>
           {skills && (
             <div className="mb-6">
-              <h2
-                className="text-xl font-bold mb-4"
-                style={{ color: primaryColor }}
-              >
+              <h2 className="text-xl font-bold mb-4" style={{ color: primaryColor }}>
                 Skills
               </h2>
               <div className="space-y-2">
@@ -176,9 +145,7 @@ export function ContemporaryTemplate({
               {certifications.map((cert, idx) => (
                 <div key={idx} className="mb-2 text-sm text-gray-700">
                   <p className="font-semibold">{cert.name}</p>
-                  {cert.issuer && (
-                    <p className="text-xs text-gray-600">{cert.issuer}</p>
-                  )}
+                  {cert.issuer && <p className="text-xs text-gray-600">{cert.issuer}</p>}
                 </div>
               ))}
             </div>

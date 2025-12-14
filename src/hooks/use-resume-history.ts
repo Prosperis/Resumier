@@ -1,10 +1,6 @@
 import { useCallback, useRef } from "react";
 import { useResumeStore, type UserInfo } from "@/stores/resume-store";
-import {
-  useHistoryStore,
-  getFieldLabel,
-  type HistoryChange,
-} from "@/stores/history-store";
+import { useHistoryStore, getFieldLabel, type HistoryChange } from "@/stores/history-store";
 
 /**
  * Hook that provides resume update functions with automatic history tracking.
@@ -27,11 +23,7 @@ export function useResumeHistory() {
 
   // Detect changes between two states
   const detectChanges = useCallback(
-    (
-      oldState: UserInfo,
-      newState: UserInfo,
-      _section: string = "personal",
-    ): HistoryChange[] => {
+    (oldState: UserInfo, newState: UserInfo, _section: string = "personal"): HistoryChange[] => {
       const changes: HistoryChange[] = [];
 
       // Compare top-level fields
@@ -157,12 +149,8 @@ export function useResumeHistory() {
 
         // Apply the changes from this entry
         for (const change of entryToApply.changes) {
-          if (
-            change.section === "personal" &&
-            typeof change.newValue !== "object"
-          ) {
-            (restoredState as Record<string, unknown>)[change.field] =
-              change.newValue;
+          if (change.section === "personal" && typeof change.newValue !== "object") {
+            (restoredState as Record<string, unknown>)[change.field] = change.newValue;
           }
         }
 

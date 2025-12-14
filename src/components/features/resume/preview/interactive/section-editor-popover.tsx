@@ -8,10 +8,7 @@ import { X, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { createPortal } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  useInteractiveResume,
-  type EditableSectionType,
-} from "./interactive-context";
+import { useInteractiveResume, type EditableSectionType } from "./interactive-context";
 
 interface SectionEditorPopoverProps {
   children: ReactNode;
@@ -97,10 +94,7 @@ export function SectionEditorPopover({
   // Click outside to close
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        popoverRef.current &&
-        !popoverRef.current.contains(e.target as Node)
-      ) {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
         // Don't close if clicking on an editable section
         const target = e.target as HTMLElement;
         if (target.closest("[data-editable-section]")) {
@@ -167,22 +161,11 @@ export function SectionEditorPopover({
             </div>
           )}
           <div>
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-              {title}
-            </h3>
-            {subtitle && (
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                {subtitle}
-              </p>
-            )}
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{title}</h3>
+            {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400">{subtitle}</p>}
           </div>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-7 w-7 p-0"
-          onClick={handleClose}
-        >
+        <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={handleClose}>
           <X className="h-4 w-4" />
         </Button>
       </div>
@@ -209,8 +192,7 @@ export function SectionEditorPopover({
  * Hook to manage popover state for a specific section type
  */
 export function useSectionEditor(sectionType: EditableSectionType) {
-  const { selectedSection, selectSection, clearSelection, resume } =
-    useInteractiveResume();
+  const { selectedSection, selectSection, clearSelection, resume } = useInteractiveResume();
 
   const isOpen = selectedSection?.type === sectionType;
   const selectedItemId = isOpen ? selectedSection?.itemId : undefined;

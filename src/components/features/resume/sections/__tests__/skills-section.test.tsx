@@ -114,11 +114,7 @@ describe("SkillsSection", () => {
       await user.type(skillInput, "X");
 
       expect(mockUpdateSkill).toHaveBeenCalled();
-      expect(mockUpdateSkill).toHaveBeenCalledWith(
-        0,
-        "name",
-        expect.any(String),
-      );
+      expect(mockUpdateSkill).toHaveBeenCalledWith(0, "name", expect.any(String));
     });
 
     it("renders skill name placeholder", () => {
@@ -165,11 +161,7 @@ describe("SkillsSection", () => {
       await user.type(yearsInput, "7");
 
       expect(mockUpdateSkill).toHaveBeenCalled();
-      expect(mockUpdateSkill).toHaveBeenCalledWith(
-        0,
-        "years",
-        expect.any(String),
-      );
+      expect(mockUpdateSkill).toHaveBeenCalledWith(0, "years", expect.any(String));
     });
 
     it("renders years input as number type", () => {
@@ -603,21 +595,11 @@ describe("SkillsSection", () => {
         />,
       );
 
-      const nameInputs = container.querySelectorAll(
-        'input[placeholder="Skill name"]',
-      );
+      const nameInputs = container.querySelectorAll('input[placeholder="Skill name"]');
       await user.type(nameInputs[0], "X");
 
-      expect(mockUpdateSkill).toHaveBeenCalledWith(
-        0,
-        "name",
-        expect.any(String),
-      );
-      expect(mockUpdateSkill).not.toHaveBeenCalledWith(
-        1,
-        "name",
-        expect.any(String),
-      );
+      expect(mockUpdateSkill).toHaveBeenCalledWith(0, "name", expect.any(String));
+      expect(mockUpdateSkill).not.toHaveBeenCalledWith(1, "name", expect.any(String));
     });
 
     it("can update different fields of different skills", async () => {
@@ -631,24 +613,14 @@ describe("SkillsSection", () => {
         />,
       );
 
-      const nameInputs = container.querySelectorAll(
-        'input[placeholder="Skill name"]',
-      );
+      const nameInputs = container.querySelectorAll('input[placeholder="Skill name"]');
       const yearsInputs = container.querySelectorAll('input[type="number"]');
 
       await user.type(nameInputs[0], "X");
       await user.type(yearsInputs[1], "9");
 
-      expect(mockUpdateSkill).toHaveBeenCalledWith(
-        0,
-        "name",
-        expect.any(String),
-      );
-      expect(mockUpdateSkill).toHaveBeenCalledWith(
-        1,
-        "years",
-        expect.any(String),
-      );
+      expect(mockUpdateSkill).toHaveBeenCalledWith(0, "name", expect.any(String));
+      expect(mockUpdateSkill).toHaveBeenCalledWith(1, "years", expect.any(String));
     });
   });
 });

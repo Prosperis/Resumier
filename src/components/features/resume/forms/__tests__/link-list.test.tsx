@@ -48,12 +48,9 @@ vi.mock("../link-inline-form", () => ({
 }));
 
 // Mock the getLinkIcon from shared contact-info
-vi.mock(
-  "@/components/features/resume/preview/templates/shared/contact-info",
-  () => ({
-    getLinkIcon: () => null,
-  }),
-);
+vi.mock("@/components/features/resume/preview/templates/shared/contact-info", () => ({
+  getLinkIcon: () => null,
+}));
 
 import { LinkList } from "../link-list";
 
@@ -110,9 +107,7 @@ describe("LinkList", () => {
 
       expect(screen.getByText("No links added yet")).toBeInTheDocument();
       expect(
-        screen.getByText(
-          "Add your portfolio, LinkedIn, GitHub, or other links",
-        ),
+        screen.getByText("Add your portfolio, LinkedIn, GitHub, or other links"),
       ).toBeInTheDocument();
     });
 
@@ -149,9 +144,7 @@ describe("LinkList", () => {
     });
 
     it("displays icons for each link", () => {
-      const { container } = render(
-        <LinkList {...defaultProps} links={mockLinks} />,
-      );
+      const { container } = render(<LinkList {...defaultProps} links={mockLinks} />);
 
       const icons = container.querySelectorAll("svg");
       expect(icons.length).toBeGreaterThan(0);
@@ -164,9 +157,7 @@ describe("LinkList", () => {
       render(<LinkList {...defaultProps} links={mockLinks} />);
 
       const buttons = screen.getAllByRole("button");
-      const editButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-square-pen"),
-      );
+      const editButtons = buttons.filter((btn) => btn.querySelector(".lucide-square-pen"));
       await user.click(editButtons[0]);
 
       expect(mockOnEdit).toHaveBeenCalledTimes(1);
@@ -177,9 +168,7 @@ describe("LinkList", () => {
       render(<LinkList {...defaultProps} links={mockLinks} />);
 
       const buttons = screen.getAllByRole("button");
-      const editButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-square-pen"),
-      );
+      const editButtons = buttons.filter((btn) => btn.querySelector(".lucide-square-pen"));
       expect(editButtons).toHaveLength(4);
     });
   });
@@ -190,9 +179,7 @@ describe("LinkList", () => {
       render(<LinkList {...defaultProps} links={mockLinks} />);
 
       const buttons = screen.getAllByRole("button");
-      const deleteButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-trash"),
-      );
+      const deleteButtons = buttons.filter((btn) => btn.querySelector(".lucide-trash"));
       await user.click(deleteButtons[0]);
 
       expect(mockOnDelete).toHaveBeenCalledTimes(1);
@@ -203,9 +190,7 @@ describe("LinkList", () => {
       render(<LinkList {...defaultProps} links={mockLinks} />);
 
       const buttons = screen.getAllByRole("button");
-      const deleteButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-trash"),
-      );
+      const deleteButtons = buttons.filter((btn) => btn.querySelector(".lucide-trash"));
       expect(deleteButtons).toHaveLength(4);
     });
   });
@@ -226,12 +211,8 @@ describe("LinkList", () => {
       render(<LinkList {...defaultProps} links={mockLinks} />);
 
       const buttons = screen.getAllByRole("button");
-      const editButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-square-pen"),
-      );
-      const deleteButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-trash"),
-      );
+      const editButtons = buttons.filter((btn) => btn.querySelector(".lucide-square-pen"));
+      const deleteButtons = buttons.filter((btn) => btn.querySelector(".lucide-trash"));
 
       expect(editButtons).toHaveLength(4);
       expect(deleteButtons).toHaveLength(4);
@@ -245,8 +226,7 @@ describe("LinkList", () => {
         (link) => link.getAttribute("href") === "https://johndoe.com",
       );
       const linkedinUrl = allLinks.find(
-        (link) =>
-          link.getAttribute("href") === "https://linkedin.com/in/johndoe",
+        (link) => link.getAttribute("href") === "https://linkedin.com/in/johndoe",
       );
       const githubUrl = allLinks.find(
         (link) => link.getAttribute("href") === "https://github.com/johndoe",
@@ -256,10 +236,7 @@ describe("LinkList", () => {
       );
 
       expect(portfolioUrl).toHaveAttribute("href", "https://johndoe.com");
-      expect(linkedinUrl).toHaveAttribute(
-        "href",
-        "https://linkedin.com/in/johndoe",
-      );
+      expect(linkedinUrl).toHaveAttribute("href", "https://linkedin.com/in/johndoe");
       expect(githubUrl).toHaveAttribute("href", "https://github.com/johndoe");
       expect(blogUrl).toHaveAttribute("href", "https://blog.johndoe.com");
     });
@@ -337,12 +314,8 @@ describe("LinkList", () => {
       render(<LinkList {...defaultProps} links={singleLink} />);
 
       const buttons = screen.getAllByRole("button");
-      const editButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-square-pen"),
-      );
-      const deleteButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-trash"),
-      );
+      const editButtons = buttons.filter((btn) => btn.querySelector(".lucide-square-pen"));
+      const deleteButtons = buttons.filter((btn) => btn.querySelector(".lucide-trash"));
       expect(editButtons).toHaveLength(1);
       expect(deleteButtons).toHaveLength(1);
     });

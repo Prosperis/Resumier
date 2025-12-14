@@ -225,11 +225,7 @@ describe("linkSchema", () => {
     });
 
     it("fails for URLs without protocol or clearly malformed", () => {
-      const invalidUrls = [
-        "just-text-without-protocol",
-        "example",
-        "://no-protocol",
-      ];
+      const invalidUrls = ["just-text-without-protocol", "example", "://no-protocol"];
 
       for (const url of invalidUrls) {
         const data = {

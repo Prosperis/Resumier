@@ -1,16 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { forwardRef, useCallback, useMemo, useState } from "react";
-import {
-  getCountries,
-  getCountryCallingCode,
-  type Country,
-} from "react-phone-number-input";
-import {
-  parsePhoneNumber,
-  AsYouType,
-  getExampleNumber,
-  type Examples,
-} from "libphonenumber-js";
+import { getCountries, getCountryCallingCode, type Country } from "react-phone-number-input";
+import { parsePhoneNumber, AsYouType, getExampleNumber, type Examples } from "libphonenumber-js";
 import examples from "libphonenumber-js/mobile/examples";
 import { cn } from "@/lib/utils";
 

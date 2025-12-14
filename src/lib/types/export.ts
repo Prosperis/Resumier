@@ -6,13 +6,7 @@
 /**
  * Supported export formats
  */
-export type ExportFormatType =
-  | "latex"
-  | "docx"
-  | "html"
-  | "markdown"
-  | "txt"
-  | "json";
+export type ExportFormatType = "latex" | "docx" | "html" | "markdown" | "txt" | "json";
 
 /**
  * Export format metadata
@@ -60,8 +54,7 @@ export const EXPORT_FORMATS: Record<ExportFormatType, ExportFormat> = {
     label: "Word Document",
     description: "Microsoft Word format - Editable and ATS-friendly",
     extension: ".docx",
-    mimeType:
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   },
   html: {
     id: "html",
@@ -73,8 +66,7 @@ export const EXPORT_FORMATS: Record<ExportFormatType, ExportFormat> = {
   markdown: {
     id: "markdown",
     label: "Markdown",
-    description:
-      "Plain text format - Developer-friendly and version-control ready",
+    description: "Plain text format - Developer-friendly and version-control ready",
     extension: ".md",
     mimeType: "text/markdown",
   },

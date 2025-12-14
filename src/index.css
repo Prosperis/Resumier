@@ -5,12 +5,12 @@
 
 @theme inline {
   --font-sans: "Inter", sans-serif;
-  
+
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 4px);
-  
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -47,12 +47,12 @@
 :root {
   /* Base: 8px radius for a modern, clean feel */
   --radius: 0.5rem;
-  
+
   /* Light Mode: Professional Slate Palette */
   /* Background: Very slightly off-white for less eye strain/more warmth */
   --background: oklch(0.985 0.005 264.542); /* Slate-50-ish */
   /* Foreground: Deep slate, not pure black */
-  --foreground: oklch(0.208 0.042 265.755); 
+  --foreground: oklch(0.208 0.042 265.755);
 
   /* Cards: White to pop against the background */
   --card: oklch(1 0 0);
@@ -85,7 +85,7 @@
   /* Borders: Subtle and refined */
   --border: oklch(0.894 0.012 264.542);
   --input: oklch(0.894 0.012 264.542);
-  
+
   /* Ring: Matching primary */
   --ring: oklch(0.296 0.107 265.755);
 
@@ -95,7 +95,7 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  
+
   /* Sidebar */
   --sidebar: oklch(0.985 0.005 264.542);
   --sidebar-foreground: oklch(0.208 0.042 265.755);
@@ -148,7 +148,9 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 }
 
@@ -287,4 +289,3 @@
     z-index: 999999 !important;
   }
 }
-

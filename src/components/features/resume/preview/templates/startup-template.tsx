@@ -1,11 +1,7 @@
 import { Zap, Briefcase, GraduationCap } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface StartupTemplateProps {
   resume: Resume;
@@ -20,25 +16,16 @@ export function StartupTemplate({ resume, config }: StartupTemplateProps) {
     <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg p-8">
       <div className="flex items-start gap-6 mb-6">
         <div className="flex-1">
-          <h1
-            className="text-3xl font-bold mb-1"
-            style={{ color: primaryColor }}
-          >
-            {getFullName(
-              personalInfo.firstName,
-              personalInfo.lastName,
-              personalInfo.nameOrder,
-            ) || "Your Name"}
+          <h1 className="text-3xl font-bold mb-1" style={{ color: primaryColor }}>
+            {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+              "Your Name"}
           </h1>
           <div className="flex flex-wrap gap-3 text-sm text-gray-600">
             {personalInfo.email && <span>{personalInfo.email}</span>}
             {personalInfo.phone && <span>|</span>}
             {personalInfo.phone && (
               <span>
-                {formatPhoneDisplay(
-                  personalInfo.phone,
-                  personalInfo.phoneFormat as PhoneFormat,
-                )}
+                {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
               </span>
             )}
             {personalInfo.location && <span>|</span>}
@@ -76,11 +63,7 @@ export function StartupTemplate({ resume, config }: StartupTemplateProps) {
               Experience
             </h2>
             {experience.map((exp, idx) => (
-              <div
-                key={idx}
-                className="mb-4 pl-4 border-l-2"
-                style={{ borderColor: primaryColor }}
-              >
+              <div key={idx} className="mb-4 pl-4 border-l-2" style={{ borderColor: primaryColor }}>
                 <h3 className="font-bold">{exp.position}</h3>
                 <p className="text-sm text-gray-700">{exp.company}</p>
                 <p className="text-xs text-gray-500">
@@ -102,10 +85,7 @@ export function StartupTemplate({ resume, config }: StartupTemplateProps) {
 
         {skills && (
           <div>
-            <h2
-              className="text-lg font-bold mb-3"
-              style={{ color: primaryColor }}
-            >
+            <h2 className="text-lg font-bold mb-3" style={{ color: primaryColor }}>
               Skills
             </h2>
             <div className="flex flex-wrap gap-2">

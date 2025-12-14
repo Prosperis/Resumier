@@ -45,21 +45,15 @@ describe("LoginForm", () => {
 
       // Check title and description
       expect(screen.getByText("Login to your account")).toBeInTheDocument();
-      expect(
-        screen.getByText(/enter your email below to login/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/enter your email below to login/i)).toBeInTheDocument();
 
       // Check form fields
       expect(screen.getByLabelText("Email")).toBeInTheDocument();
       expect(screen.getByLabelText("Password")).toBeInTheDocument();
 
       // Check buttons
-      expect(
-        screen.getByRole("button", { name: /^login$/i }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /login with github/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /^login$/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /login with github/i })).toBeInTheDocument();
     });
 
     it("renders demo credentials banner", () => {
@@ -157,10 +151,7 @@ describe("LoginForm", () => {
 
       // Verify login was called with correct credentials
       await waitFor(() => {
-        expect(mockLogin).toHaveBeenCalledWith(
-          "test@example.com",
-          "password123",
-        );
+        expect(mockLogin).toHaveBeenCalledWith("test@example.com", "password123");
       });
     });
 
@@ -208,9 +199,7 @@ describe("LoginForm", () => {
       await user.type(screen.getByLabelText("Email"), "test@example.com");
       await user.type(screen.getByLabelText("Password"), "password123");
 
-      const form = screen
-        .getByRole("button", { name: /^login$/i })
-        .closest("form");
+      const form = screen.getByRole("button", { name: /^login$/i }).closest("form");
       const submitHandler = vi.fn((e) => e.preventDefault());
       form?.addEventListener("submit", submitHandler);
 
@@ -338,9 +327,7 @@ describe("LoginForm", () => {
     });
 
     it("handles login failure gracefully", async () => {
-      const consoleErrorSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
+      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
       mockLogin.mockRejectedValue(new Error("Network error"));
       const user = userEvent.setup();
 
@@ -353,10 +340,7 @@ describe("LoginForm", () => {
       await user.click(submitButton);
 
       await waitFor(() => {
-        expect(consoleErrorSpy).toHaveBeenCalledWith(
-          "Login failed:",
-          expect.any(Error),
-        );
+        expect(consoleErrorSpy).toHaveBeenCalledWith("Login failed:", expect.any(Error));
       });
 
       consoleErrorSpy.mockRestore();
@@ -385,9 +369,7 @@ describe("LoginForm", () => {
 
   describe("Additional Buttons", () => {
     it("logs message when forgot password is clicked", async () => {
-      const consoleLogSpy = vi
-        .spyOn(console, "log")
-        .mockImplementation(() => {});
+      const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
       const user = userEvent.setup();
 
       render(<LoginForm />);
@@ -403,9 +385,7 @@ describe("LoginForm", () => {
     });
 
     it("logs message when sign up is clicked", async () => {
-      const consoleLogSpy = vi
-        .spyOn(console, "log")
-        .mockImplementation(() => {});
+      const consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
       const user = userEvent.setup();
 
       render(<LoginForm />);
@@ -442,9 +422,7 @@ describe("LoginForm", () => {
     it("renders proper form element", () => {
       render(<LoginForm />);
 
-      const form = screen
-        .getByRole("button", { name: /^login$/i })
-        .closest("form");
+      const form = screen.getByRole("button", { name: /^login$/i }).closest("form");
       expect(form).toBeInTheDocument();
     });
 
@@ -489,18 +467,10 @@ describe("LoginForm", () => {
     it("has descriptive button labels", () => {
       render(<LoginForm />);
 
-      expect(
-        screen.getByRole("button", { name: /^login$/i }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /login with github/i }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /forgot your password/i }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /sign up/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /^login$/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /login with github/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /forgot your password/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /sign up/i })).toBeInTheDocument();
     });
 
     it("GitHub button has SVG title for accessibility", () => {
@@ -565,10 +535,7 @@ describe("LoginForm", () => {
 
       await waitFor(() => {
         // Email input trims leading whitespace, password doesn't
-        expect(mockLogin).toHaveBeenCalledWith(
-          "test@example.com",
-          "  password123  ",
-        );
+        expect(mockLogin).toHaveBeenCalledWith("test@example.com", "  password123  ");
       });
     });
   });

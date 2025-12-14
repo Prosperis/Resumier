@@ -8,13 +8,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { MonthPicker } from "@/components/ui/month-picker";
 import type { Certification } from "@/lib/api/types";
 import {
@@ -27,10 +21,7 @@ interface CertificationEditorProps {
   onChange: (data: Partial<Certification>) => void;
 }
 
-export function CertificationEditor({
-  data,
-  onChange,
-}: CertificationEditorProps) {
+export function CertificationEditor({ data, onChange }: CertificationEditorProps) {
   const form = useForm<CreateCertificationFormData>({
     resolver: zodResolver(createCertificationSchema),
     defaultValues: {
@@ -62,11 +53,7 @@ export function CertificationEditor({
             <FormItem>
               <Label className="text-xs">Certification Name</Label>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="AWS Solutions Architect"
-                  className="h-8 text-xs"
-                />
+                <Input {...field} placeholder="AWS Solutions Architect" className="h-8 text-xs" />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>
@@ -81,11 +68,7 @@ export function CertificationEditor({
             <FormItem>
               <Label className="text-xs">Issuing Organization</Label>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="Amazon Web Services"
-                  className="h-8 text-xs"
-                />
+                <Input {...field} placeholder="Amazon Web Services" className="h-8 text-xs" />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>
@@ -140,11 +123,7 @@ export function CertificationEditor({
             <FormItem>
               <Label className="text-xs">Credential ID (optional)</Label>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="ABC123XYZ"
-                  className="h-8 text-xs"
-                />
+                <Input {...field} placeholder="ABC123XYZ" className="h-8 text-xs" />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>

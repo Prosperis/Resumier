@@ -40,10 +40,7 @@ export function CertificationsList({
           <div key={cert.id}>
             <div className="flex items-start justify-between">
               {cert.name && (
-                <h3
-                  className="text-base font-bold"
-                  style={{ color: textColor }}
-                >
+                <h3 className="text-base font-bold" style={{ color: textColor }}>
                   {cert.name}
                 </h3>
               )}
@@ -75,16 +72,10 @@ export function CertificationsList({
       <div className={`space-y-2 ${className}`}>
         {validCertifications.map((cert) => (
           <div key={cert.id} className="flex items-center gap-2">
-            <Award
-              className="h-4 w-4"
-              style={{ color: colorScheme?.primary }}
-            />
+            <Award className="h-4 w-4" style={{ color: colorScheme?.primary }} />
             <div className="flex-1">
               {cert.name && (
-                <span
-                  className="text-sm font-semibold"
-                  style={{ color: textColor }}
-                >
+                <span className="text-sm font-semibold" style={{ color: textColor }}>
                   {cert.name}
                 </span>
               )}
@@ -119,26 +110,19 @@ export function CertificationsList({
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 {cert.name && (
-                  <h3
-                    className="text-base font-bold"
-                    style={{ color: textColor }}
-                  >
+                  <h3 className="text-base font-bold" style={{ color: textColor }}>
                     {cert.name}
                   </h3>
                 )}
                 {cert.issuer && (
-                  <p
-                    className="text-sm font-semibold"
-                    style={{ color: colorScheme?.primary }}
-                  >
+                  <p className="text-sm font-semibold" style={{ color: colorScheme?.primary }}>
                     {cert.issuer}
                   </p>
                 )}
                 {(cert.date || cert.expiryDate) && (
                   <p className="mt-1 text-xs" style={{ color: textLightColor }}>
                     {cert.date && `Issued: ${cert.date}`}
-                    {cert.expiryDate &&
-                      `${cert.date ? " • " : ""}Expires: ${cert.expiryDate}`}
+                    {cert.expiryDate && `${cert.date ? " • " : ""}Expires: ${cert.expiryDate}`}
                   </p>
                 )}
                 {cert.credentialId && (
@@ -147,10 +131,7 @@ export function CertificationsList({
                   </p>
                 )}
               </div>
-              <Award
-                className="h-5 w-5"
-                style={{ color: colorScheme?.primary }}
-              />
+              <Award className="h-5 w-5" style={{ color: colorScheme?.primary }} />
             </div>
           </div>
         ))}

@@ -26,10 +26,7 @@ interface CreateProfileDialogProps {
   onSuccess?: (id: string) => void;
 }
 
-export function CreateProfileDialog({
-  trigger,
-  onSuccess,
-}: CreateProfileDialogProps) {
+export function CreateProfileDialog({ trigger, onSuccess }: CreateProfileDialogProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -99,9 +96,8 @@ export function CreateProfileDialog({
           <DialogHeader>
             <DialogTitle>Create New Profile</DialogTitle>
             <DialogDescription>
-              Create a master profile to reuse across multiple resumes. Add your
-              experience, education, and skills once, then create tailored
-              resumes from this profile.
+              Create a master profile to reuse across multiple resumes. Add your experience,
+              education, and skills once, then create tailored resumes from this profile.
             </DialogDescription>
           </DialogHeader>
 
@@ -123,28 +119,16 @@ export function CreateProfileDialog({
                 required
                 aria-invalid={!!validationError || !!error}
                 aria-describedby={
-                  validationError
-                    ? "name-validation-error"
-                    : error
-                      ? "name-api-error"
-                      : undefined
+                  validationError ? "name-validation-error" : error ? "name-api-error" : undefined
                 }
               />
               {validationError && (
-                <p
-                  id="name-validation-error"
-                  className="text-destructive text-sm"
-                  role="alert"
-                >
+                <p id="name-validation-error" className="text-destructive text-sm" role="alert">
                   {validationError}
                 </p>
               )}
               {error && !validationError && (
-                <p
-                  id="name-api-error"
-                  className="text-destructive text-sm"
-                  role="alert"
-                >
+                <p id="name-api-error" className="text-destructive text-sm" role="alert">
                   {error.message || "An error occurred"}
                 </p>
               )}
@@ -152,8 +136,7 @@ export function CreateProfileDialog({
 
             <div className="space-y-2">
               <Label htmlFor="profile-description">
-                Description{" "}
-                <span className="text-muted-foreground">(optional)</span>
+                Description <span className="text-muted-foreground">(optional)</span>
               </Label>
               <Textarea
                 id="profile-description"
@@ -180,12 +163,7 @@ export function CreateProfileDialog({
               disabled={isPending}
               aria-label={isPending ? "Creating profile..." : "Create profile"}
             >
-              {isPending && (
-                <Loader2
-                  className="mr-2 h-4 w-4 animate-spin"
-                  aria-hidden="true"
-                />
-              )}
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
               Create Profile
             </Button>
           </DialogFooter>

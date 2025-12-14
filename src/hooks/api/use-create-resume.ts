@@ -31,8 +31,7 @@ export function useCreateResume() {
 
           // Get existing resumes from the store
           const idbData = await get(IDB_STORE_KEY);
-          const existingResumes =
-            (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
+          const existingResumes = (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
 
           // Add new resume to the list and save
           await set(IDB_STORE_KEY, {

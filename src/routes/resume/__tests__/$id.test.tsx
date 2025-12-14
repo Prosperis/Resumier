@@ -44,9 +44,7 @@ vi.mock("@/components/ui/route-error", () => ({
 }));
 
 vi.mock("@/components/ui/route-loading", () => ({
-  ResumeEditorLoading: () => (
-    <div data-testid="resume-loading">Loading Resume...</div>
-  ),
+  ResumeEditorLoading: () => <div data-testid="resume-loading">Loading Resume...</div>,
 }));
 
 // Import the route module and hooks after setting up mocks

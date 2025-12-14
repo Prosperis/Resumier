@@ -23,9 +23,7 @@ describe("EducationFormDialog", () => {
       render(<EducationFormDialog {...defaultProps} />);
       expect(screen.getByRole("dialog")).toBeInTheDocument();
       expect(screen.getByText("Add Education")).toBeInTheDocument();
-      expect(
-        screen.getByText("Add your education details."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Add your education details.")).toBeInTheDocument();
     });
     it("renders with custom title and description", () => {
       render(
@@ -36,9 +34,7 @@ describe("EducationFormDialog", () => {
         />,
       );
       expect(screen.getByText("Edit Education")).toBeInTheDocument();
-      expect(
-        screen.getByText("Update your education information."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Update your education information.")).toBeInTheDocument();
     });
     it("does not render when closed", () => {
       render(<EducationFormDialog {...defaultProps} open={false} />);
@@ -52,25 +48,17 @@ describe("EducationFormDialog", () => {
       // Date fields use MonthPicker which is a button-based component
       expect(screen.getByText(/start date/i)).toBeInTheDocument();
       expect(screen.getByText(/end date/i)).toBeInTheDocument();
-      expect(
-        screen.getByLabelText(/i currently study here/i),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText(/i currently study here/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/gpa/i)).toBeInTheDocument();
     });
     it("renders honors section button", () => {
       render(<EducationFormDialog {...defaultProps} />);
-      expect(
-        screen.getByRole("button", { name: /add honor\/award/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /add honor\/award/i })).toBeInTheDocument();
     });
     it("renders action buttons", () => {
       render(<EducationFormDialog {...defaultProps} />);
-      expect(
-        screen.getByRole("button", { name: /cancel/i }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /^save$/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /^save$/i })).toBeInTheDocument();
     });
   });
   describe("Form Interaction", () => {
@@ -106,9 +94,7 @@ describe("EducationFormDialog", () => {
       await user.click(startDateButtons[0]);
       // Click on a month in the popup
       await waitFor(() => {
-        expect(
-          screen.getByRole("button", { name: /sep/i }),
-        ).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /sep/i })).toBeInTheDocument();
       });
       await user.click(screen.getByRole("button", { name: /sep/i }));
       // Submit the form and verify the date was captured
@@ -132,9 +118,7 @@ describe("EducationFormDialog", () => {
       await user.click(endDateButtons[1]);
       // Click on a month
       await waitFor(() => {
-        expect(
-          screen.getByRole("button", { name: /may/i }),
-        ).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /may/i })).toBeInTheDocument();
       });
       await user.click(screen.getByRole("button", { name: /may/i }));
     });
@@ -173,9 +157,7 @@ describe("EducationFormDialog", () => {
       // First, select an end date
       await user.click(endDateButton);
       await waitFor(() => {
-        expect(
-          screen.getByRole("button", { name: /may/i }),
-        ).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /may/i })).toBeInTheDocument();
       });
       await user.click(screen.getByRole("button", { name: /may/i }));
       // Then check current - end date should reset
@@ -214,9 +196,7 @@ describe("EducationFormDialog", () => {
   describe("Honors Management", () => {
     it("does not show honors inputs by default", () => {
       render(<EducationFormDialog {...defaultProps} />);
-      expect(
-        screen.queryByPlaceholderText(/dean's list/i),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByPlaceholderText(/dean's list/i)).not.toBeInTheDocument();
     });
     it("shows honors section after adding an honor", async () => {
       const user = userEvent.setup();
@@ -247,9 +227,7 @@ describe("EducationFormDialog", () => {
     it("allows typing in honor inputs", async () => {
       const user = userEvent.setup();
       render(<EducationFormDialog {...defaultProps} />);
-      await user.click(
-        screen.getByRole("button", { name: /add honor\/award/i }),
-      );
+      await user.click(screen.getByRole("button", { name: /add honor\/award/i }));
       const honorInput = await screen.findByPlaceholderText(/dean's list/i);
       await user.type(honorInput, "Dean's List");
       expect(honorInput).toHaveValue("Dean's List");
@@ -282,9 +260,7 @@ describe("EducationFormDialog", () => {
     it("can remove all honors", async () => {
       const user = userEvent.setup();
       render(<EducationFormDialog {...defaultProps} />);
-      await user.click(
-        screen.getByRole("button", { name: /add honor\/award/i }),
-      );
+      await user.click(screen.getByRole("button", { name: /add honor\/award/i }));
       await waitFor(() => {
         expect(screen.getByPlaceholderText(/dean's list/i)).toBeInTheDocument();
       });
@@ -296,9 +272,7 @@ describe("EducationFormDialog", () => {
         await user.click(removeButton);
       }
       await waitFor(() => {
-        expect(
-          screen.queryByPlaceholderText(/dean's list/i),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByPlaceholderText(/dean's list/i)).not.toBeInTheDocument();
       });
     });
     it("renders with default honors", async () => {
@@ -329,14 +303,8 @@ describe("EducationFormDialog", () => {
         />,
       );
       await user.type(screen.getByLabelText(/institution/i), "MIT");
-      await user.type(
-        screen.getByLabelText(/^degree$/i),
-        "Bachelor of Science",
-      );
-      await user.type(
-        screen.getByLabelText(/field of study/i),
-        "Computer Science",
-      );
+      await user.type(screen.getByLabelText(/^degree$/i), "Bachelor of Science");
+      await user.type(screen.getByLabelText(/field of study/i), "Computer Science");
       await user.type(screen.getByLabelText(/gpa/i), "3.8");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
@@ -397,14 +365,10 @@ describe("EducationFormDialog", () => {
       await user.type(screen.getByLabelText(/^degree$/i), "PhD");
       await user.type(screen.getByLabelText(/field of study/i), "Physics");
       // Add honors
-      await user.click(
-        screen.getByRole("button", { name: /add honor\/award/i }),
-      );
+      await user.click(screen.getByRole("button", { name: /add honor\/award/i }));
       const honorInput = await screen.findByPlaceholderText(/dean's list/i);
       await user.type(honorInput, "Summa Cum Laude");
-      await user.click(
-        screen.getByRole("button", { name: /add honor\/award/i }),
-      );
+      await user.click(screen.getByRole("button", { name: /add honor\/award/i }));
       const honorInputs = screen.getAllByPlaceholderText(/dean's list/i);
       await user.type(honorInputs[1], "Dean's List");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
@@ -431,17 +395,11 @@ describe("EducationFormDialog", () => {
       await user.type(screen.getByLabelText(/^degree$/i), "BS");
       await user.type(screen.getByLabelText(/field of study/i), "Math");
       // Add multiple honors but leave some empty
-      await user.click(
-        screen.getByRole("button", { name: /add honor\/award/i }),
-      );
+      await user.click(screen.getByRole("button", { name: /add honor\/award/i }));
       const honorInput = await screen.findByPlaceholderText(/dean's list/i);
       await user.type(honorInput, "First honor");
-      await user.click(
-        screen.getByRole("button", { name: /add honor\/award/i }),
-      );
-      await user.click(
-        screen.getByRole("button", { name: /add honor\/award/i }),
-      );
+      await user.click(screen.getByRole("button", { name: /add honor\/award/i }));
+      await user.click(screen.getByRole("button", { name: /add honor\/award/i }));
       const honorInputs = screen.getAllByPlaceholderText(/dean's list/i);
       await user.type(honorInputs[2], "Third honor");
       // Leave second one empty
@@ -502,12 +460,7 @@ describe("EducationFormDialog", () => {
     });
     it("resets form after submission", async () => {
       const user = userEvent.setup();
-      render(
-        <EducationFormDialog
-          {...defaultProps}
-          defaultValues={{ startDate: "2020-01" }}
-        />,
-      );
+      render(<EducationFormDialog {...defaultProps} defaultValues={{ startDate: "2020-01" }} />);
       const institutionInput = screen.getByLabelText(/institution/i);
       await user.type(institutionInput, "Test Institution");
       await user.type(screen.getByLabelText(/^degree$/i), "Test Degree");
@@ -520,28 +473,19 @@ describe("EducationFormDialog", () => {
     });
     it("resets honors after submission", async () => {
       const user = userEvent.setup();
-      render(
-        <EducationFormDialog
-          {...defaultProps}
-          defaultValues={{ startDate: "2020-01" }}
-        />,
-      );
+      render(<EducationFormDialog {...defaultProps} defaultValues={{ startDate: "2020-01" }} />);
       await user.type(screen.getByLabelText(/institution/i), "Test");
       await user.type(screen.getByLabelText(/^degree$/i), "Degree");
       await user.type(screen.getByLabelText(/field of study/i), "Field");
       // Add an honor
-      await user.click(
-        screen.getByRole("button", { name: /add honor\/award/i }),
-      );
+      await user.click(screen.getByRole("button", { name: /add honor\/award/i }));
       await waitFor(() => {
         expect(screen.getByPlaceholderText(/dean's list/i)).toBeInTheDocument();
       });
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
-        expect(
-          screen.queryByPlaceholderText(/dean's list/i),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByPlaceholderText(/dean's list/i)).not.toBeInTheDocument();
       });
     });
   });
@@ -549,9 +493,7 @@ describe("EducationFormDialog", () => {
     it("closes dialog when cancel is clicked", async () => {
       const user = userEvent.setup();
       const onOpenChange = vi.fn();
-      render(
-        <EducationFormDialog {...defaultProps} onOpenChange={onOpenChange} />,
-      );
+      render(<EducationFormDialog {...defaultProps} onOpenChange={onOpenChange} />);
       const cancelButton = screen.getByRole("button", { name: /cancel/i });
       await user.click(cancelButton);
       expect(onOpenChange).toHaveBeenCalledWith(false);
@@ -601,9 +543,7 @@ describe("EducationFormDialog", () => {
       await user.click(submitButton);
       // Should show error message
       await waitFor(() => {
-        expect(
-          screen.getByText(/gpa must be less than 10 characters/i),
-        ).toBeInTheDocument();
+        expect(screen.getByText(/gpa must be less than 10 characters/i)).toBeInTheDocument();
       });
     });
   });
@@ -634,9 +574,7 @@ describe("EducationFormDialog", () => {
     });
     it("shows GPA description text", () => {
       render(<EducationFormDialog {...defaultProps} />);
-      expect(
-        screen.getByText(/e\.g\., 3\.8 or 3\.8\/4\.0/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/e\.g\., 3\.8 or 3\.8\/4\.0/i)).toBeInTheDocument();
     });
   });
 });

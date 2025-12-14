@@ -3,13 +3,7 @@
  * Wraps resume sections to make them interactive with hover/click states
  */
 
-import {
-  forwardRef,
-  type ReactNode,
-  type MouseEvent,
-  useCallback,
-  useState,
-} from "react";
+import { forwardRef, type ReactNode, type MouseEvent, useCallback, useState } from "react";
 import {
   Pencil,
   Plus,
@@ -40,10 +34,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
-import {
-  useOptionalInteractiveResume,
-  type EditableSectionType,
-} from "./interactive-context";
+import { useOptionalInteractiveResume, type EditableSectionType } from "./interactive-context";
 
 interface EditableSectionProps {
   children: ReactNode;
@@ -103,14 +94,10 @@ export const EditableSection = forwardRef<HTMLDivElement, EditableSectionProps>(
       );
     }
 
-    const { selectedSection, hoveredSection, selectSection, hoverSection } =
-      context;
+    const { selectedSection, hoveredSection, selectSection, hoverSection } = context;
 
-    const isSelected =
-      selectedSection?.type === sectionType &&
-      selectedSection?.itemId === itemId;
-    const isHovered =
-      hoveredSection?.type === sectionType && hoveredSection?.itemId === itemId;
+    const isSelected = selectedSection?.type === sectionType && selectedSection?.itemId === itemId;
+    const isHovered = hoveredSection?.type === sectionType && hoveredSection?.itemId === itemId;
 
     const handleClick = (e: MouseEvent<HTMLDivElement>) => {
       e.stopPropagation();
@@ -194,8 +181,7 @@ export const EditableSection = forwardRef<HTMLDivElement, EditableSectionProps>(
             title={editLabel || "Edit"}
             onClick={(e) => {
               e.stopPropagation();
-              const rect =
-                e.currentTarget.parentElement?.parentElement?.getBoundingClientRect();
+              const rect = e.currentTarget.parentElement?.parentElement?.getBoundingClientRect();
               if (rect) {
                 selectSection({ type: sectionType, itemId, rect });
               }
@@ -326,27 +312,15 @@ export function SectionWrapper({
     return <div className={className}>{children}</div>;
   }
 
-  const {
-    toggleSectionVisibility,
-    moveSectionUp,
-    moveSectionDown,
-    getSectionIndex,
-    sectionOrder,
-  } = context;
+  const { toggleSectionVisibility, moveSectionUp, moveSectionDown, getSectionIndex, sectionOrder } =
+    context;
 
   const currentIndex = getSectionIndex(sectionType);
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === sectionOrder.length - 1;
 
   // Use sortable hook for drag and drop
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: sectionType,
     disabled: !isDraggable,
   });
@@ -354,11 +328,8 @@ export function SectionWrapper({
   // Determine if we should show a drop indicator based on drag state from context
   // Use the column-specific sectionIds for calculating positions
   const columnSectionIds = dragState.sectionIds;
-  const isBeingDraggedOver =
-    dragState.overId === sectionType && dragState.activeId !== sectionType;
-  const activeIndex = dragState.activeId
-    ? columnSectionIds.indexOf(dragState.activeId)
-    : -1;
+  const isBeingDraggedOver = dragState.overId === sectionType && dragState.activeId !== sectionType;
+  const activeIndex = dragState.activeId ? columnSectionIds.indexOf(dragState.activeId) : -1;
   const thisIndex = columnSectionIds.indexOf(sectionType);
 
   // Show drop indicator above if dragging from below
@@ -377,11 +348,7 @@ export function SectionWrapper({
     <div
       ref={isDraggable ? setNodeRef : undefined}
       style={style}
-      className={cn(
-        "relative group/section",
-        isDragging && "opacity-50 z-50",
-        className,
-      )}
+      className={cn("relative group/section", isDragging && "opacity-50 z-50", className)}
     >
       {/* Drop indicator above */}
       {showDropIndicatorAbove && (
@@ -685,9 +652,7 @@ export function SortableSectionColumn({
       // Update the full section order by replacing the sections in this column
       // Simple approach: just update the sections within this column at their current positions
       const newOrder = [...context.sectionOrder];
-      const columnPositions = sectionIds
-        .map((s) => newOrder.indexOf(s))
-        .sort((a, b) => a - b);
+      const columnPositions = sectionIds.map((s) => newOrder.indexOf(s)).sort((a, b) => a - b);
 
       newColumnOrder.forEach((sectionType, idx) => {
         newOrder[columnPositions[idx]] = sectionType;
@@ -717,10 +682,7 @@ export function SortableSectionColumn({
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <SortableContext
-        items={sectionIds}
-        strategy={verticalListSortingStrategy}
-      >
+      <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
         <DragStateContext.Provider value={{ activeId, overId, sectionIds }}>
           <div className={className}>{children}</div>
         </DragStateContext.Provider>

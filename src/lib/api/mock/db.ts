@@ -1,10 +1,5 @@
 import { get } from "idb-keyval";
-import type {
-  CreateResumeDto,
-  Resume,
-  ResumeContent,
-  UpdateResumeDto,
-} from "../types";
+import type { CreateResumeDto, Resume, ResumeContent, UpdateResumeDto } from "../types";
 
 /**
  * In-Memory Mock Database
@@ -153,8 +148,7 @@ function generateSampleResumes(): Resume[] {
           email: "jane.smith@example.com",
           phone: "+1 (555) 987-6543",
           location: "New York, NY",
-          summary:
-            "Results-driven product manager with expertise in agile methodologies.",
+          summary: "Results-driven product manager with expertise in agile methodologies.",
         },
       },
       createdAt: now,

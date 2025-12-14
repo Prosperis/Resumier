@@ -1,11 +1,4 @@
-import {
-  AlignmentType,
-  Document,
-  Packer,
-  Paragraph,
-  TextRun,
-  UnderlineType,
-} from "docx";
+import { AlignmentType, Document, Packer, Paragraph, TextRun, UnderlineType } from "docx";
 import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
@@ -171,10 +164,7 @@ function getRenderedTemplateHTML(): string | null {
   }
 
   // Convert computed styles to inline styles for portability
-  const allElements = [
-    clonedElement,
-    ...Array.from(clonedElement.querySelectorAll("*")),
-  ];
+  const allElements = [clonedElement, ...Array.from(clonedElement.querySelectorAll("*"))];
 
   allElements.forEach((el) => {
     const htmlEl = el as HTMLElement;
@@ -198,10 +188,7 @@ function getRenderedTemplateHTML(): string | null {
           value !== "transparent"
         ) {
           // Convert RGB colors to hex for better compatibility
-          if (
-            prop.toLowerCase().includes("color") ||
-            prop.toLowerCase().includes("background")
-          ) {
+          if (prop.toLowerCase().includes("color") || prop.toLowerCase().includes("background")) {
             value = rgbToHex(value);
           }
           (htmlEl.style as any)[camelProp] = value;
@@ -312,14 +299,7 @@ function escapeLaTeX(text: string): string {
  */
 export function downloadLaTeX(resume: Resume): void {
   try {
-    const {
-      personalInfo,
-      experience,
-      education,
-      skills,
-      certifications,
-      links,
-    } = resume.content;
+    const { personalInfo, experience, education, skills, certifications, links } = resume.content;
 
     let latex = `\\documentclass[11pt,a4paper]{article}
 \\usepackage[utf8]{inputenc}
@@ -513,15 +493,11 @@ ${escapeLaTeX(personalInfo.summary)}
  * This preserves the exact visual appearance of the rendered template
  * Provides direct PDF download without needing print dialog
  */
-export async function generatePDFFromRenderedTemplate(
-  resume: Resume,
-): Promise<void> {
+export async function generatePDFFromRenderedTemplate(resume: Resume): Promise<void> {
   // Wait a bit for DOM to be ready
   await new Promise((resolve) => setTimeout(resolve, 100));
 
-  const resumeElement = document.querySelector(
-    ".resume-light-mode",
-  ) as HTMLElement;
+  const resumeElement = document.querySelector(".resume-light-mode") as HTMLElement;
   if (!resumeElement) {
     throw new Error(
       "Resume preview not found. Please ensure you're viewing the resume preview before exporting.",
@@ -570,9 +546,7 @@ export async function generatePDFFromRenderedTemplate(
       windowWidth: A4_WIDTH_PX,
       onclone: (clonedDoc) => {
         // Ensure all styles are applied in the cloned document
-        const clonedResume = clonedDoc.querySelector(
-          ".resume-light-mode",
-        ) as HTMLElement;
+        const clonedResume = clonedDoc.querySelector(".resume-light-mode") as HTMLElement;
         if (clonedResume) {
           clonedResume.style.width = `${A4_WIDTH_PX}px`;
           clonedResume.style.backgroundColor = "#ffffff";
@@ -614,16 +588,7 @@ export async function generatePDFFromRenderedTemplate(
       // Calculate the portion of the image to show on this page
       const yOffset = pageNum * pageHeight;
 
-      pdf.addImage(
-        imgData,
-        "JPEG",
-        0,
-        -yOffset,
-        imgWidth,
-        imgHeight,
-        undefined,
-        "FAST",
-      );
+      pdf.addImage(imgData, "JPEG", 0, -yOffset, imgWidth, imgHeight, undefined, "FAST");
 
       heightLeft -= pageHeight;
       pageNum++;
@@ -662,8 +627,7 @@ export async function downloadPDFDirect(resume: Resume): Promise<void> {
  * @internal Reserved for future use
  */
 export function generateLaTeXCode(resume: Resume): string {
-  const { personalInfo, experience, education, skills, certifications, links } =
-    resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
 
   let latex = `\\documentclass[11pt,a4paper]{article}
 \\usepackage[utf8]{inputenc}
@@ -862,9 +826,7 @@ export async function compileLaTeXToPDF(latexCode: string): Promise<Blob> {
 
     if (!response.ok) {
       await response.text().catch(() => "Unknown error");
-      throw new Error(
-        `LaTeX compilation failed: ${response.status} ${response.statusText}`,
-      );
+      throw new Error(`LaTeX compilation failed: ${response.status} ${response.statusText}`);
     }
 
     const contentType = response.headers.get("content-type") || "";
@@ -902,10 +864,7 @@ export async function downloadPDFWithTemplate(resume: Resume): Promise<void> {
     // Remove extension for document title
     suggestedFilename = filename.replace(/\.pdf$/i, "");
   } else {
-    suggestedFilename = generateDefaultFilename(resume, "pdf").replace(
-      /\.pdf$/i,
-      "",
-    );
+    suggestedFilename = generateDefaultFilename(resume, "pdf").replace(/\.pdf$/i, "");
   }
 
   // Set page title for PDF filename suggestion
@@ -949,10 +908,7 @@ export function printResume(resume: Resume) {
     // Remove extension for document title
     suggestedFilename = filename.replace(/\.pdf$/i, "");
   } else {
-    suggestedFilename = generateDefaultFilename(resume, "pdf").replace(
-      /\.pdf$/i,
-      "",
-    );
+    suggestedFilename = generateDefaultFilename(resume, "pdf").replace(/\.pdf$/i, "");
   }
 
   // Set page title for PDF filename suggestion
@@ -984,9 +940,7 @@ export function downloadHTML(resume: Resume) {
   const renderedHTML = getRenderedTemplateHTML();
 
   if (!renderedHTML) {
-    throw new Error(
-      "Resume preview not found. Please ensure the resume is displayed on the page.",
-    );
+    throw new Error("Resume preview not found. Please ensure the resume is displayed on the page.");
   }
 
   // Build complete HTML document with embedded styles
@@ -1101,8 +1055,7 @@ function escapeHtml(text: string): string {
  * Creates a professionally formatted Word document with proper styling
  */
 export async function downloadDOCX(resume: Resume): Promise<void> {
-  const { personalInfo, experience, education, skills, certifications, links } =
-    resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
 
   const sections: Paragraph[] = [];
 
@@ -1576,8 +1529,7 @@ export async function downloadDOCX(resume: Resume): Promise<void> {
  * Download resume as Markdown file
  */
 export function downloadMarkdown(resume: Resume): void {
-  const { personalInfo, experience, education, skills, certifications, links } =
-    resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
 
   let markdown = "";
 
@@ -1684,8 +1636,7 @@ export function downloadMarkdown(resume: Resume): void {
  * Download resume as plain text file
  */
 export function downloadPlainText(resume: Resume): void {
-  const { personalInfo, experience, education, skills, certifications, links } =
-    resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
 
   let text = "";
 
@@ -1819,10 +1770,7 @@ function sanitizeFilename(filename: string): string {
  * Generate a default filename for export based on resume content
  * Format: FirstName_LastName_Resume_YYYY-MM-DD or Resume_Title_YYYY-MM-DD
  */
-export function generateDefaultFilename(
-  resume: Resume,
-  extension: string,
-): string {
+export function generateDefaultFilename(resume: Resume, extension: string): string {
   const today = new Date();
   const dateStr = today.toISOString().split("T")[0]; // YYYY-MM-DD
 
@@ -1831,14 +1779,10 @@ export function generateDefaultFilename(
   const lastName = resume.content.personalInfo?.lastName?.trim();
   if (firstName || lastName) {
     if (firstName && lastName) {
-      return sanitizeFilename(
-        `${firstName}_${lastName}_Resume_${dateStr}.${extension}`,
-      );
+      return sanitizeFilename(`${firstName}_${lastName}_Resume_${dateStr}.${extension}`);
     } else {
       // Use whichever name is available
-      return sanitizeFilename(
-        `${firstName || lastName}_Resume_${dateStr}.${extension}`,
-      );
+      return sanitizeFilename(`${firstName || lastName}_Resume_${dateStr}.${extension}`);
     }
   }
 
@@ -1851,14 +1795,8 @@ export function generateDefaultFilename(
  * Prompt user for filename with a default value
  * Returns the filename (without extension) or null if cancelled
  */
-export function promptForFilename(
-  defaultFilename: string,
-  extension: string,
-): string | null {
-  const filenameWithoutExt = defaultFilename.replace(
-    new RegExp(`\\.${extension}$`),
-    "",
-  );
+export function promptForFilename(defaultFilename: string, extension: string): string | null {
+  const filenameWithoutExt = defaultFilename.replace(new RegExp(`\\.${extension}$`), "");
 
   const userInput = window.prompt(
     `Enter filename for your resume (without extension):`,
@@ -1872,19 +1810,14 @@ export function promptForFilename(
 
   // Return sanitized filename with extension
   const sanitized = sanitizeFilename(userInput || filenameWithoutExt);
-  return sanitized
-    ? `${sanitized}.${extension}`
-    : `${filenameWithoutExt}.${extension}`;
+  return sanitized ? `${sanitized}.${extension}` : `${filenameWithoutExt}.${extension}`;
 }
 
 /**
  * Get the final filename for export, prompting user if setting is enabled
  * Returns null if user cancels the prompt
  */
-export function getFinalFilename(
-  resume: Resume,
-  extension: string,
-): string | null {
+export function getFinalFilename(resume: Resume, extension: string): string | null {
   const settings = useSettingsStore.getState().settings;
   const defaultFilename = generateDefaultFilename(resume, extension);
 

@@ -24,11 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { MonthPicker } from "@/components/ui/month-picker";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { ExperienceFormat } from "@/lib/api/types";
 import {
   type CreateExperienceFormData,
@@ -52,13 +48,9 @@ export function ExperienceFormDialog({
   title = "Add Experience",
   description = "Add your work experience details.",
 }: ExperienceFormDialogProps) {
-  const [highlights, setHighlights] = useState<string[]>(
-    defaultValues?.highlights || [""],
-  );
+  const [highlights, setHighlights] = useState<string[]>(defaultValues?.highlights || [""]);
   const [previousEndDate, setPreviousEndDate] = useState<string>("");
-  const [format, setFormat] = useState<ExperienceFormat>(
-    defaultValues?.format || "structured",
-  );
+  const [format, setFormat] = useState<ExperienceFormat>(defaultValues?.format || "structured");
 
   const form = useForm<CreateExperienceFormData>({
     resolver: zodResolver(createExperienceSchema),
@@ -110,10 +102,7 @@ export function ExperienceFormDialog({
         </DialogHeader>
 
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-4"
-          >
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="company"
@@ -150,11 +139,7 @@ export function ExperienceFormDialog({
                   <FormItem>
                     <FormLabel>Start Date</FormLabel>
                     <FormControl>
-                      <MonthPicker
-                        value={field.value}
-                        onChange={field.onChange}
-                        ref={field.ref}
-                      />
+                      <MonthPicker value={field.value} onChange={field.onChange} ref={field.ref} />
                     </FormControl>
                     <FormDescription>Format: YYYY-MM</FormDescription>
                     <FormMessage />
@@ -195,9 +180,7 @@ export function ExperienceFormDialog({
                           onCheckedChange={(checked) => {
                             field.onChange(checked);
                             if (checked) {
-                              setPreviousEndDate(
-                                form.getValues("endDate") ?? "",
-                              );
+                              setPreviousEndDate(form.getValues("endDate") ?? "");
                               form.setValue("endDate", "");
                             } else {
                               form.setValue("endDate", previousEndDate);
@@ -207,9 +190,7 @@ export function ExperienceFormDialog({
                           icon={<CheckIcon className="h-2.5 w-2.5" />}
                         />
                       </FormControl>
-                      <FormLabel className="text-xs font-normal">
-                        I currently work here
-                      </FormLabel>
+                      <FormLabel className="text-xs font-normal">I currently work here</FormLabel>
                     </FormItem>
                   )}
                 />
@@ -276,9 +257,7 @@ export function ExperienceFormDialog({
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
                     <p className="font-medium">Freeform</p>
-                    <p className="text-muted-foreground text-xs">
-                      Single text block, write freely
-                    </p>
+                    <p className="text-muted-foreground text-xs">Single text block, write freely</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -396,8 +375,7 @@ export function ExperienceFormDialog({
                       />
                     </FormControl>
                     <FormDescription>
-                      Write freely - paragraphs, sentences, or any format you
-                      prefer
+                      Write freely - paragraphs, sentences, or any format you prefer
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -406,11 +384,7 @@ export function ExperienceFormDialog({
             )}
 
             <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onOpenChange(false)}
-              >
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>
               <Button type="submit" disabled={form.formState.isSubmitting}>

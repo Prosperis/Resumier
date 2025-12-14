@@ -1,13 +1,7 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCreateResume } from "@/hooks/api";
@@ -29,9 +23,7 @@ function NewResumeComponent() {
 
   // Auto-focus title input on mount
   useEffect(() => {
-    const input = document.querySelector(
-      'input[name="title"]',
-    ) as HTMLInputElement;
+    const input = document.querySelector('input[name="title"]') as HTMLInputElement;
     input?.focus();
   }, []);
 
@@ -74,9 +66,7 @@ function NewResumeComponent() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Create New Resume</CardTitle>
-          <CardDescription>
-            Give your resume a title to get started
-          </CardDescription>
+          <CardDescription>Give your resume a title to get started</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -92,9 +82,7 @@ function NewResumeComponent() {
                 disabled={isPending}
                 required
               />
-              <p className="text-sm text-muted-foreground">
-                You can change this later
-              </p>
+              <p className="text-sm text-muted-foreground">You can change this later</p>
             </div>
 
             <div className="flex gap-2">

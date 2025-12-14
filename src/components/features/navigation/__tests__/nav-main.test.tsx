@@ -5,11 +5,7 @@ import { NavMain } from "../nav-main";
 
 // Mock dependencies
 vi.mock("@tanstack/react-router", () => ({
-  Link: ({
-    to,
-    children,
-    ...props
-  }: React.ComponentProps<"a"> & { to: string }) => (
+  Link: ({ to, children, ...props }: React.ComponentProps<"a"> & { to: string }) => (
     <a href={to} {...props}>
       {children}
     </a>
@@ -17,8 +13,7 @@ vi.mock("@tanstack/react-router", () => ({
 }));
 
 vi.mock("lucide-react", async () => {
-  const actual =
-    await vi.importActual<typeof import("lucide-react")>("lucide-react");
+  const actual = await vi.importActual<typeof import("lucide-react")>("lucide-react");
   return {
     ...actual,
     ChevronRight: () => <span data-testid="chevron-icon">›</span>,
@@ -37,10 +32,7 @@ vi.mock("@/components/ui/collapsible", () => ({
   CollapsibleContent: ({ children }: React.PropsWithChildren) => (
     <div data-testid="collapsible-content">{children}</div>
   ),
-  CollapsibleTrigger: ({
-    children,
-    asChild,
-  }: React.PropsWithChildren<{ asChild?: boolean }>) => {
+  CollapsibleTrigger: ({ children, asChild }: React.PropsWithChildren<{ asChild?: boolean }>) => {
     if (asChild) return <div data-testid="collapsible-trigger">{children}</div>;
     return <button data-testid="collapsible-trigger">{children}</button>;
   },
@@ -97,9 +89,7 @@ vi.mock("@/components/ui/sidebar", () => ({
     children,
     asChild,
     ...props
-  }: React.PropsWithChildren<
-    { asChild?: boolean } & React.HTMLAttributes<HTMLElement>
-  >) => {
+  }: React.PropsWithChildren<{ asChild?: boolean } & React.HTMLAttributes<HTMLElement>>) => {
     if (asChild)
       return (
         <div data-testid="sidebar-menu-sub-button" {...props}>
@@ -253,9 +243,7 @@ describe("NavMain", () => {
 
       render(<NavMain items={simpleItems} />);
 
-      expect(
-        screen.queryByTestId("collapsible-content"),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId("collapsible-content")).not.toBeInTheDocument();
     });
 
     it("renders simple items correctly", () => {

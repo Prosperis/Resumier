@@ -1,12 +1,5 @@
 import type { Table } from "@tanstack/react-table";
-import {
-  Copy,
-  ExternalLink,
-  ListFilter,
-  Search,
-  Trash2,
-  X,
-} from "lucide-react";
+import { Copy, ExternalLink, ListFilter, Search, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -71,12 +64,8 @@ export function DataTableToolbar<TData>({
               <Search className="text-muted-foreground absolute left-2.5 top-2.5 h-4 w-4" />
               <Input
                 placeholder={searchPlaceholder}
-                value={
-                  (table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
-                }
-                onChange={(event) =>
-                  table.getColumn(searchKey)?.setFilterValue(event.target.value)
-                }
+                value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
+                onChange={(event) => table.getColumn(searchKey)?.setFilterValue(event.target.value)}
                 className="h-9 pl-9"
               />
             </div>
@@ -86,11 +75,7 @@ export function DataTableToolbar<TData>({
           {statusFilter && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-9 border-dashed"
-                >
+                <Button variant="outline" size="sm" className="h-9 border-dashed">
                   <ListFilter className="mr-2 h-4 w-4" />
                   Status
                 </Button>
@@ -98,15 +83,9 @@ export function DataTableToolbar<TData>({
               <DropdownMenuContent align="start" className="w-[150px]">
                 <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem checked>
-                  Complete
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem checked>
-                  In Progress
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem checked>
-                  Draft
-                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem checked>Complete</DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem checked>In Progress</DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem checked>Draft</DropdownMenuCheckboxItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}

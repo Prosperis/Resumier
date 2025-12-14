@@ -1,10 +1,6 @@
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface CorporateTemplateProps {
   resume: Resume;
@@ -12,35 +8,25 @@ interface CorporateTemplateProps {
 }
 
 export function CorporateTemplate({ resume, config }: CorporateTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } =
-    resume.content;
+  const { personalInfo, experience, education, skills, certifications } = resume.content;
   const primaryColor = config?.colorScheme?.primary || "#374151";
 
   return (
     <div className="mx-auto max-w-[21cm] bg-white p-12 text-gray-900 shadow-lg font-serif">
-      <div
-        className="text-center border-b pb-5 mb-6"
-        style={{ borderColor: primaryColor }}
-      >
+      <div className="text-center border-b pb-5 mb-6" style={{ borderColor: primaryColor }}>
         <h1
           className="text-3xl font-bold tracking-wide uppercase mb-2"
           style={{ color: primaryColor }}
         >
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <div className="text-sm text-gray-700 space-x-3">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && <span>•</span>}
           {personalInfo.phone && (
             <span>
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && <span>•</span>}
@@ -69,11 +55,7 @@ export function CorporateTemplate({ resume, config }: CorporateTemplateProps) {
                 </span>
               </div>
               <p className="text-gray-700 font-semibold">{exp.company}</p>
-              {exp.description && (
-                <p className="text-sm mt-1 leading-relaxed">
-                  {exp.description}
-                </p>
-              )}
+              {exp.description && <p className="text-sm mt-1 leading-relaxed">{exp.description}</p>}
               {exp.highlights && exp.highlights.length > 0 && (
                 <ul className="text-sm mt-2 space-y-1">
                   {exp.highlights.map((highlight, i) => (
@@ -96,9 +78,7 @@ export function CorporateTemplate({ resume, config }: CorporateTemplateProps) {
             <div key={idx} className="mb-3">
               <h3 className="font-bold">{edu.degree}</h3>
               <p>{edu.institution}</p>
-              {edu.endDate && (
-                <p className="text-gray-600 text-sm">{edu.endDate}</p>
-              )}
+              {edu.endDate && <p className="text-gray-600 text-sm">{edu.endDate}</p>}
             </div>
           ))}
         </div>
@@ -128,9 +108,7 @@ export function CorporateTemplate({ resume, config }: CorporateTemplateProps) {
           {certifications.map((cert, idx) => (
             <div key={idx} className="text-sm mb-1">
               <span className="font-semibold">{cert.name}</span>
-              {cert.issuer && (
-                <span className="text-gray-600"> - {cert.issuer}</span>
-              )}
+              {cert.issuer && <span className="text-gray-600"> - {cert.issuer}</span>}
             </div>
           ))}
         </div>

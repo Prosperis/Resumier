@@ -53,10 +53,7 @@ describe("AvatarImage", () => {
   it("renders with src attribute", () => {
     render(
       <Avatar data-testid="avatar">
-        <AvatarImage
-          src="data:image/png;base64,iVBORw0KGgo="
-          alt="User avatar"
-        />
+        <AvatarImage src="data:image/png;base64,iVBORw0KGgo=" alt="User avatar" />
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>,
     );
@@ -82,10 +79,7 @@ describe("AvatarImage", () => {
   it("has data-slot attribute", () => {
     render(
       <Avatar data-testid="avatar">
-        <AvatarImage
-          src="data:image/png;base64,iVBORw0KGgo="
-          alt="User avatar"
-        />
+        <AvatarImage src="data:image/png;base64,iVBORw0KGgo=" alt="User avatar" />
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>,
     );
@@ -96,10 +90,7 @@ describe("AvatarImage", () => {
   it("applies aspect-square and size-full styling", () => {
     render(
       <Avatar data-testid="avatar">
-        <AvatarImage
-          src="data:image/png;base64,iVBORw0KGgo="
-          alt="User avatar"
-        />
+        <AvatarImage src="data:image/png;base64,iVBORw0KGgo=" alt="User avatar" />
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>,
     );
@@ -191,10 +182,7 @@ describe("Avatar with Image and Fallback", () => {
   it("renders both image and fallback components", () => {
     render(
       <Avatar data-testid="avatar">
-        <AvatarImage
-          src="data:image/png;base64,iVBORw0KGgo="
-          alt="User avatar"
-        />
+        <AvatarImage src="data:image/png;base64,iVBORw0KGgo=" alt="User avatar" />
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>,
     );

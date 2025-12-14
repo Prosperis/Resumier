@@ -42,9 +42,7 @@ export function EducationSection({
               <Input
                 type="date"
                 value={ed.startDate ?? ""}
-                onChange={(e) =>
-                  updateEducation(i, "startDate", e.target.value)
-                }
+                onChange={(e) => updateEducation(i, "startDate", e.target.value)}
               />
             </div>
             <div className="grid gap-2">
@@ -60,17 +58,10 @@ export function EducationSection({
             <Label>Description</Label>
             <Textarea
               value={ed.description ?? ""}
-              onChange={(e) =>
-                updateEducation(i, "description", e.target.value)
-              }
+              onChange={(e) => updateEducation(i, "description", e.target.value)}
             />
           </div>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => removeEducation(i)}
-          >
+          <Button type="button" variant="outline" size="sm" onClick={() => removeEducation(i)}>
             <Trash className="mr-2 h-4 w-4" /> Remove
           </Button>
         </div>

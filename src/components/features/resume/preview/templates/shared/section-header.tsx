@@ -96,7 +96,5 @@ export function SectionHeader({
   }
 
   // Default to minimal
-  return (
-    <h2 className={`mb-3 text-xl font-bold uppercase ${className}`}>{title}</h2>
-  );
+  return <h2 className={`mb-3 text-xl font-bold uppercase ${className}`}>{title}</h2>;
 }

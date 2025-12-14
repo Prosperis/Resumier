@@ -16,11 +16,7 @@ import {
   selectSetCurrentResume,
   selectToggleResumeBuilderSection,
 } from "@/stores/ui-store";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { InteractiveResumePreview } from "./preview/interactive-resume-preview";
 import { ResumeBuilder } from "./resume-builder";
@@ -59,9 +55,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
       // Check if user is typing in an input field
       const target = e.target as HTMLElement;
       const isInputField =
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA" ||
-        target.isContentEditable;
+        target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable;
 
       // Only handle shortcuts when not in an input field
       if (isInputField) return;
@@ -150,7 +144,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
               )}
               style={{ filter: "drop-shadow(1px 0 1px rgba(0,0,0,0.05))" }}
             >
-              {/* 
+              {/*
                 Path creates a smooth, rounded bulge - less pointy, more organic.
                 Uses quadratic curves for a softer, more liquid-like appearance.
               */}
@@ -174,12 +168,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
         </div>
 
         {/* Mini sidebar - visible when collapsed */}
-        <div
-          className={cn(
-            "flex flex-col h-full",
-            isSidebarExpanded ? "hidden" : "flex",
-          )}
-        >
+        <div className={cn("flex flex-col h-full", isSidebarExpanded ? "hidden" : "flex")}>
           {/* Section Icons - centered vertically */}
           <div className="flex-1 flex flex-col items-center justify-center gap-1">
             {sidebarSections.map((section) => (
@@ -206,17 +195,10 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
         </div>
 
         {/* Expanded sidebar content */}
-        <div
-          className={cn(
-            "flex flex-col h-full",
-            isSidebarExpanded ? "flex" : "hidden",
-          )}
-        >
+        <div className={cn("flex flex-col h-full", isSidebarExpanded ? "flex" : "hidden")}>
           {/* Sidebar header */}
           <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/30">
-            <span className="text-xs font-medium text-muted-foreground">
-              Edit Resume
-            </span>
+            <span className="text-xs font-medium text-muted-foreground">Edit Resume</span>
           </div>
 
           {/* Resume Builder Form */}
@@ -232,18 +214,11 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
           "flex-1 flex items-start justify-center bg-slate-200 dark:bg-slate-800 overflow-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] p-8",
         )}
       >
-        <InteractiveResumePreview
-          resume={resume}
-          template={template}
-          isInteractive={true}
-        />
+        <InteractiveResumePreview resume={resume} template={template} isInteractive={true} />
       </div>
 
       {/* Right Sidebar: Tools */}
-      <ToolSidebar
-        isExpanded={isToolSidebarExpanded}
-        onToggle={handleToggleToolSidebar}
-      />
+      <ToolSidebar isExpanded={isToolSidebarExpanded} onToggle={handleToggleToolSidebar} />
     </div>
   );
 }

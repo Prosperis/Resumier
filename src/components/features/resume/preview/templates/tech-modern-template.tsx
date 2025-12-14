@@ -7,25 +7,16 @@ interface TechModernTemplateProps {
   config?: TemplateConfig;
 }
 
-export function TechModernTemplate({
-  resume,
-  config,
-}: TechModernTemplateProps) {
+export function TechModernTemplate({ resume, config }: TechModernTemplateProps) {
   const { personalInfo, experience, education, skills } = resume.content;
   const primaryColor = config?.colorScheme?.primary || "#3b82f6";
 
   return (
     <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg">
-      <div
-        className="p-8"
-        style={{ backgroundColor: primaryColor, color: "white" }}
-      >
+      <div className="p-8" style={{ backgroundColor: primaryColor, color: "white" }}>
         <h1 className="text-4xl font-bold mb-2">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <div className="flex flex-wrap gap-4 text-sm">
           {personalInfo.email && <span>{personalInfo.email}</span>}
@@ -63,9 +54,7 @@ export function TechModernTemplate({
                   <p className="text-sm text-gray-600 mb-1">
                     {exp.startDate} - {exp.current ? "Present" : exp.endDate}
                   </p>
-                  {exp.description && (
-                    <p className="text-sm">{exp.description}</p>
-                  )}
+                  {exp.description && <p className="text-sm">{exp.description}</p>}
                 </div>
               ))}
             </div>
@@ -75,44 +64,34 @@ export function TechModernTemplate({
         <div className="flex-1 bg-gray-50 p-6 -mr-8 -mb-8">
           {skills && (
             <div className="mb-6">
-              <h2
-                className="text-lg font-bold mb-3"
-                style={{ color: primaryColor }}
-              >
+              <h2 className="text-lg font-bold mb-3" style={{ color: primaryColor }}>
                 Skills
               </h2>
               <div className="space-y-2">
                 {typeof skills === "object" &&
                   "technical" in skills &&
                   Array.isArray(skills.technical) &&
-                  skills.technical
-                    .slice(0, 8)
-                    .map((skill: any, idx: number) => (
-                      <div key={idx}>
-                        <span className="text-sm font-semibold">
-                          {skill.name || skill}
-                        </span>
-                        <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                          <div
-                            className="h-2 rounded-full"
-                            style={{
-                              width: `${skill.level || 70}%`,
-                              backgroundColor: primaryColor,
-                            }}
-                          />
-                        </div>
+                  skills.technical.slice(0, 8).map((skill: any, idx: number) => (
+                    <div key={idx}>
+                      <span className="text-sm font-semibold">{skill.name || skill}</span>
+                      <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                        <div
+                          className="h-2 rounded-full"
+                          style={{
+                            width: `${skill.level || 70}%`,
+                            backgroundColor: primaryColor,
+                          }}
+                        />
                       </div>
-                    ))}
+                    </div>
+                  ))}
               </div>
             </div>
           )}
 
           {education && education.length > 0 && (
             <div>
-              <h2
-                className="text-lg font-bold mb-3"
-                style={{ color: primaryColor }}
-              >
+              <h2 className="text-lg font-bold mb-3" style={{ color: primaryColor }}>
                 Education
               </h2>
               {education.map((edu, idx) => (

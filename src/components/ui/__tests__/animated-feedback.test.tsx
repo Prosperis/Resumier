@@ -203,9 +203,7 @@ describe("CountUp", () => {
   });
 
   it("applies custom className", () => {
-    const { container } = render(
-      <CountUp value={25} className="count-custom" />,
-    );
+    const { container } = render(<CountUp value={25} className="count-custom" />);
     expect(container.querySelector(".count-custom")).toBeInTheDocument();
   });
 

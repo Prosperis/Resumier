@@ -67,9 +67,7 @@ export function SettingsDialog() {
       </DialogTrigger>
       <DialogContent className="overflow-hidden p-0 md:max-h-[500px] md:max-w-[700px] lg:max-w-[800px]">
         <DialogTitle className="sr-only">Settings</DialogTitle>
-        <DialogDescription className="sr-only">
-          Customize your settings here.
-        </DialogDescription>
+        <DialogDescription className="sr-only">Customize your settings here.</DialogDescription>
         <SidebarProvider className="items-start">
           <Sidebar collapsible="none" className="hidden md:flex">
             <SidebarContent>
@@ -78,9 +76,7 @@ export function SettingsDialog() {
                   <SidebarMenu>
                     {data.nav.map((item) => (
                       <SidebarMenuItem key={item.name}>
-                        <SidebarMenuButton
-                          isActive={item.name === "Messages & media"}
-                        >
+                        <SidebarMenuButton isActive={item.name === "Messages & media"}>
                           <item.icon />
                           <span>{item.name}</span>
                         </SidebarMenuButton>
@@ -108,14 +104,9 @@ export function SettingsDialog() {
               </div>
             </header>
             <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0">
-              {Array.from({ length: 10 }, (_, i) => `placeholder-${i}`).map(
-                (id) => (
-                  <div
-                    key={id}
-                    className="bg-muted/50 aspect-video max-w-3xl rounded-xl"
-                  />
-                ),
-              )}
+              {Array.from({ length: 10 }, (_, i) => `placeholder-${i}`).map((id) => (
+                <div key={id} className="bg-muted/50 aspect-video max-w-3xl rounded-xl" />
+              ))}
             </div>
           </main>
         </SidebarProvider>

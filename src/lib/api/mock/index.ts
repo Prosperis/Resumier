@@ -14,11 +14,7 @@ export const mockApi = {
   /**
    * Route API request to appropriate handler
    */
-  async route(
-    endpoint: string,
-    method: string,
-    body?: unknown,
-  ): Promise<unknown> {
+  async route(endpoint: string, method: string, body?: unknown): Promise<unknown> {
     // Remove leading/trailing slashes
     const path = endpoint.replace(/^\/|\/$/g, "");
     const segments = path.split("/");

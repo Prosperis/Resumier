@@ -80,12 +80,7 @@ export function BasicInfoSection({
           onChange={(e) => onLinkedInUrlChange(e.target.value)}
           placeholder="https://www.linkedin.com/in/username"
         />
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onImport}
-          disabled={importing}
-        >
+        <Button type="button" variant="outline" onClick={onImport} disabled={importing}>
           Import from LinkedIn
         </Button>
       </div>

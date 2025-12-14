@@ -24,9 +24,7 @@ describe("Card", () => {
     expect(getByText("Test Title")).toBeInTheDocument();
   });
   it("renders CardDescription", () => {
-    const { getByText } = render(
-      <CardDescription>Test description</CardDescription>,
-    );
+    const { getByText } = render(<CardDescription>Test description</CardDescription>);
     expect(getByText("Test description")).toBeInTheDocument();
   });
   it("renders CardContent", () => {
@@ -36,9 +34,7 @@ describe("Card", () => {
     expect(getByTestId("content")).toBeInTheDocument();
   });
   it("renders CardFooter", () => {
-    const { getByTestId } = render(
-      <CardFooter data-testid="footer">Card footer</CardFooter>,
-    );
+    const { getByTestId } = render(<CardFooter data-testid="footer">Card footer</CardFooter>);
     expect(getByTestId("footer")).toBeInTheDocument();
   });
   it("renders all subcomponents together", () => {

@@ -66,12 +66,8 @@ export function JobInfoDialog({
   const [title, setTitle] = useState(typedJobInfo.title ?? "");
   const [company, setCompany] = useState(typedJobInfo.company ?? "");
   const [location, setLocation] = useState(typedJobInfo.location ?? "");
-  const [description, setDescription] = useState(
-    typedJobInfo.description ?? "",
-  );
-  const [benefits, setBenefits] = useState<string[]>(
-    typedJobInfo.benefits ?? [],
-  );
+  const [description, setDescription] = useState(typedJobInfo.description ?? "");
+  const [benefits, setBenefits] = useState<string[]>(typedJobInfo.benefits ?? []);
   const [benefitInput, setBenefitInput] = useState("");
   const [workType, setWorkType] = useState(typedJobInfo.workType);
   const [basePay, setBasePay] = useState(typedJobInfo.basePay ?? "");
@@ -163,9 +159,7 @@ export function JobInfoDialog({
                   <Select
                     value={workType}
                     onValueChange={(value) =>
-                      setWorkType(
-                        value as "onsite" | "remote" | "hybrid" | undefined,
-                      )
+                      setWorkType(value as "onsite" | "remote" | "hybrid" | undefined)
                     }
                   >
                     <SelectTrigger id="workType">
@@ -215,11 +209,7 @@ export function JobInfoDialog({
                         type="button"
                         variant="outline"
                         size="icon"
-                        onClick={() =>
-                          setBenefits((prev) =>
-                            prev.filter((_, idx) => idx !== i),
-                          )
-                        }
+                        onClick={() => setBenefits((prev) => prev.filter((_, idx) => idx !== i))}
                       >
                         <Trash className="h-4 w-4" />
                       </Button>

@@ -22,11 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { formatLastSaved, useAutoSave } from "@/hooks/use-auto-save";
 import {
@@ -75,10 +71,7 @@ export function PersonalInfoForm({
   // Handler to flip name order
   const handleFlipNameOrder = () => {
     const currentOrder = form.getValues("nameOrder");
-    form.setValue(
-      "nameOrder",
-      currentOrder === "firstLast" ? "lastFirst" : "firstLast",
-    );
+    form.setValue("nameOrder", currentOrder === "firstLast" ? "lastFirst" : "firstLast");
   };
 
   // State for geolocation
@@ -96,15 +89,13 @@ export function PersonalInfoForm({
     setLocationError(null);
 
     try {
-      const position = await new Promise<GeolocationPosition>(
-        (resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, {
-            enableHighAccuracy: false,
-            timeout: 10000,
-            maximumAge: 300000, // Cache for 5 minutes
-          });
-        },
-      );
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: false,
+          timeout: 10000,
+          maximumAge: 300000, // Cache for 5 minutes
+        });
+      });
 
       const { latitude, longitude } = position.coords;
 
@@ -127,18 +118,8 @@ export function PersonalInfoForm({
 
       // Build a readable location string (City, State/Region, Country)
       const parts: string[] = [];
-      if (
-        address.city ||
-        address.town ||
-        address.village ||
-        address.municipality
-      ) {
-        parts.push(
-          address.city ||
-            address.town ||
-            address.village ||
-            address.municipality,
-        );
+      if (address.city || address.town || address.village || address.municipality) {
+        parts.push(address.city || address.town || address.village || address.municipality);
       }
       if (address.state || address.region || address.county) {
         parts.push(address.state || address.region || address.county);
@@ -243,9 +224,7 @@ export function PersonalInfoForm({
                   >
                     <ArrowRightLeft className="h-3 w-3" />
                     <span className="hidden sm:inline">
-                      {watchedValues.nameOrder === "lastFirst"
-                        ? "Last First"
-                        : "First Last"}
+                      {watchedValues.nameOrder === "lastFirst" ? "Last First" : "First Last"}
                     </span>
                   </Button>
                 </TooltipTrigger>
@@ -253,9 +232,7 @@ export function PersonalInfoForm({
                   <p className="text-xs">
                     Switch name order for different languages
                     <br />
-                    <span className="text-muted-foreground">
-                      e.g., "John Doe" ↔ "Doe, John"
-                    </span>
+                    <span className="text-muted-foreground">e.g., "John Doe" ↔ "Doe, John"</span>
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -270,19 +247,13 @@ export function PersonalInfoForm({
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder={
-                          watchedValues.nameOrder === "lastFirst"
-                            ? "太郎"
-                            : "John"
-                        }
+                        placeholder={watchedValues.nameOrder === "lastFirst" ? "太郎" : "John"}
                         disabled={!enabled}
                         className="h-8 text-xs"
                       />
                     </FormControl>
                     <FormDescription className="text-[10px]">
-                      {watchedValues.nameOrder === "lastFirst"
-                        ? "Given name"
-                        : "First name"}
+                      {watchedValues.nameOrder === "lastFirst" ? "Given name" : "First name"}
                     </FormDescription>
                     <FormMessage className="text-[10px]" />
                   </FormItem>
@@ -297,19 +268,13 @@ export function PersonalInfoForm({
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder={
-                          watchedValues.nameOrder === "lastFirst"
-                            ? "田中"
-                            : "Doe"
-                        }
+                        placeholder={watchedValues.nameOrder === "lastFirst" ? "田中" : "Doe"}
                         disabled={!enabled}
                         className="h-8 text-xs"
                       />
                     </FormControl>
                     <FormDescription className="text-[10px]">
-                      {watchedValues.nameOrder === "lastFirst"
-                        ? "Family name"
-                        : "Last name"}
+                      {watchedValues.nameOrder === "lastFirst" ? "Family name" : "Last name"}
                     </FormDescription>
                     <FormMessage className="text-[10px]" />
                   </FormItem>
@@ -353,20 +318,15 @@ export function PersonalInfoForm({
                     render={({ field: formatField }) => (
                       <select
                         value={formatField.value}
-                        onChange={(e) =>
-                          formatField.onChange(e.target.value as PhoneFormat)
-                        }
+                        onChange={(e) => formatField.onChange(e.target.value as PhoneFormat)}
                         disabled={!enabled}
                         className="border-input bg-muted/50 dark:bg-input/30 h-6 cursor-pointer rounded-md border px-2 text-[10px] outline-none transition-colors focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        {(Object.keys(phoneFormatLabels) as PhoneFormat[]).map(
-                          (format) => (
-                            <option key={format} value={format}>
-                              {phoneFormatLabels[format]} -{" "}
-                              {phoneFormatExamples[format]}
-                            </option>
-                          ),
-                        )}
+                        {(Object.keys(phoneFormatLabels) as PhoneFormat[]).map((format) => (
+                          <option key={format} value={format}>
+                            {phoneFormatLabels[format]} - {phoneFormatExamples[format]}
+                          </option>
+                        ))}
                       </select>
                     )}
                   />
@@ -420,9 +380,7 @@ export function PersonalInfoForm({
                         {locationError && (
                           <>
                             <br />
-                            <span className="text-destructive">
-                              {locationError}
-                            </span>
+                            <span className="text-destructive">{locationError}</span>
                           </>
                         )}
                       </p>
@@ -437,9 +395,7 @@ export function PersonalInfoForm({
                     className="h-8 text-xs"
                   />
                 </FormControl>
-                <FormDescription className="text-[10px]">
-                  City and state/country
-                </FormDescription>
+                <FormDescription className="text-[10px]">City and state/country</FormDescription>
                 <FormMessage className="text-[10px]" />
               </FormItem>
             )}
@@ -457,18 +413,14 @@ export function PersonalInfoForm({
               return (
                 <FormItem className="space-y-1">
                   <div className="flex items-center justify-between">
-                    <FormLabel className="text-[11px]">
-                      Professional Summary
-                    </FormLabel>
+                    <FormLabel className="text-[11px]">Professional Summary</FormLabel>
                     <div className="flex items-center gap-1.5">
                       {(isNearLimit || isOverLimit) && (
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <AlertTriangle
                               className={`h-3 w-3 ${
-                                isOverLimit
-                                  ? "text-destructive"
-                                  : "text-amber-500"
+                                isOverLimit ? "text-destructive" : "text-amber-500"
                               }`}
                             />
                           </TooltipTrigger>

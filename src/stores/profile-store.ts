@@ -95,8 +95,7 @@ export const useProfileStore = create<ProfileStore>()(
           set((state) => ({
             profiles: state.profiles.filter((p) => p.id !== id),
             // Clear active profile if it was deleted
-            activeProfileId:
-              state.activeProfileId === id ? null : state.activeProfileId,
+            activeProfileId: state.activeProfileId === id ? null : state.activeProfileId,
           })),
 
         // Clear all profiles
@@ -141,8 +140,7 @@ export const useProfileStore = create<ProfileStore>()(
 
 // Selectors for optimized access
 export const selectProfiles = (state: ProfileStore) => state.profiles;
-export const selectActiveProfileId = (state: ProfileStore) =>
-  state.activeProfileId;
+export const selectActiveProfileId = (state: ProfileStore) => state.activeProfileId;
 export const selectActiveProfile = (state: ProfileStore) =>
   state.profiles.find((p) => p.id === state.activeProfileId);
 

@@ -50,9 +50,7 @@ describe("Input", () => {
   });
 
   it("renders with value prop", () => {
-    render(
-      <Input value="Initial Value" onChange={() => {}} data-testid="input" />,
-    );
+    render(<Input value="Initial Value" onChange={() => {}} data-testid="input" />);
     const input = screen.getByTestId("input");
     expect(input).toHaveValue("Initial Value");
   });

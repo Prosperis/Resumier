@@ -56,10 +56,7 @@ const mockResumeFull: Resume = {
         endDate: "2024-06",
         current: false,
         description: "Led backend development",
-        highlights: [
-          "Optimized database queries",
-          "Reduced API latency by 50%",
-        ],
+        highlights: ["Optimized database queries", "Reduced API latency by 50%"],
       },
     ],
     education: [
@@ -169,9 +166,7 @@ describe("ModernTemplate", () => {
 
     it("does not render summary when empty", () => {
       render(<ModernTemplate resume={mockResumeMinimal} />);
-      expect(
-        screen.queryByText("Professional Summary"),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText("Professional Summary")).not.toBeInTheDocument();
     });
 
     it("applies primary color to summary heading with inline styles", () => {
@@ -211,12 +206,8 @@ describe("ModernTemplate", () => {
 
     it("renders highlights as bullet list", () => {
       render(<ModernTemplate resume={mockResumeFull} />);
-      expect(
-        screen.getByText("Optimized database queries"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText("Reduced API latency by 50%"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Optimized database queries")).toBeInTheDocument();
+      expect(screen.getByText("Reduced API latency by 50%")).toBeInTheDocument();
     });
   });
 
@@ -360,12 +351,7 @@ describe("ModernTemplate", () => {
     it("applies modern template container styles", () => {
       const { container } = render(<ModernTemplate resume={mockResumeFull} />);
       const mainDiv = container.firstChild;
-      expect(mainDiv).toHaveClass(
-        "bg-white",
-        "shadow-lg",
-        "max-w-[21cm]",
-        "mx-auto",
-      );
+      expect(mainDiv).toHaveClass("bg-white", "shadow-lg", "max-w-[21cm]", "mx-auto");
     });
 
     it("uses primary color theme consistently with inline styles", () => {
@@ -416,9 +402,7 @@ describe("ModernTemplate", () => {
       expect(screen.getByText("Experience")).toBeInTheDocument();
 
       // Should not render
-      expect(
-        screen.queryByText("Professional Summary"),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText("Professional Summary")).not.toBeInTheDocument();
       expect(screen.queryByText("Education")).not.toBeInTheDocument();
       expect(screen.queryByText("Skills")).not.toBeInTheDocument();
       expect(screen.queryByText("Certifications")).not.toBeInTheDocument();

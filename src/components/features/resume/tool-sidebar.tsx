@@ -11,11 +11,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import {
   useHistoryStore,
@@ -118,17 +114,11 @@ function HistoryEntryItem({
 
           {/* Section badges */}
           <div className="flex flex-wrap gap-1 mt-1.5">
-            {[...new Set(entry.changes.map((c) => c.section))].map(
-              (section) => (
-                <Badge
-                  key={section}
-                  variant="secondary"
-                  className="text-[9px] px-1 py-0 h-4"
-                >
-                  {section}
-                </Badge>
-              ),
-            )}
+            {[...new Set(entry.changes.map((c) => c.section))].map((section) => (
+              <Badge key={section} variant="secondary" className="text-[9px] px-1 py-0 h-4">
+                {section}
+              </Badge>
+            ))}
           </div>
         </div>
       </div>
@@ -226,9 +216,7 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
       </div>
 
       {/* Mini sidebar - visible when collapsed */}
-      <div
-        className={cn("flex flex-col h-full", isExpanded ? "hidden" : "flex")}
-      >
+      <div className={cn("flex flex-col h-full", isExpanded ? "hidden" : "flex")}>
         <div className="flex-1 flex flex-col items-center justify-center gap-2">
           {/* History icon with count */}
           <Tooltip delayDuration={0}>
@@ -258,30 +246,21 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
       </div>
 
       {/* Expanded sidebar content */}
-      <div
-        className={cn("flex flex-col h-full", isExpanded ? "flex" : "hidden")}
-      >
+      <div className={cn("flex flex-col h-full", isExpanded ? "flex" : "hidden")}>
         {/* Header */}
         <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/30">
           <div className="flex items-center gap-2">
             <History className="h-4 w-4 text-muted-foreground" />
-            <span className="text-xs font-medium text-muted-foreground">
-              History
-            </span>
+            <span className="text-xs font-medium text-muted-foreground">History</span>
             {entries.length > 0 && (
-              <Badge
-                variant="secondary"
-                className="text-[10px] px-1.5 py-0 h-4"
-              >
+              <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4">
                 {entries.length}
               </Badge>
             )}
           </div>
 
           {/* Keyboard shortcut hint */}
-          <span className="text-[10px] text-muted-foreground/50">
-            Ctrl+Z / Ctrl+Shift+Z
-          </span>
+          <span className="text-[10px] text-muted-foreground/50">Ctrl+Z / Ctrl+Shift+Z</span>
         </div>
 
         {/* Preview mode indicator */}
@@ -289,9 +268,7 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
           <div className="mx-3 mt-3 flex items-center justify-between py-2 px-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg">
             <div className="flex items-center gap-1.5">
               <GitBranch className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
-              <span className="text-xs text-amber-700 dark:text-amber-300">
-                Viewing past
-              </span>
+              <span className="text-xs text-amber-700 dark:text-amber-300">Viewing past</span>
             </div>
             <Button
               variant="ghost"

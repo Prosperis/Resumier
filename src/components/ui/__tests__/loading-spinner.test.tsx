@@ -46,34 +46,23 @@ describe("LoadingSpinner", () => {
   describe("Color Variants", () => {
     it("renders primary variant correctly (default)", () => {
       const { container } = render(<LoadingSpinner variant="primary" />);
-      expect(container.firstChild).toHaveClass(
-        "border-primary",
-        "border-t-transparent",
-      );
+      expect(container.firstChild).toHaveClass("border-primary", "border-t-transparent");
     });
 
     it("renders secondary variant correctly", () => {
       const { container } = render(<LoadingSpinner variant="secondary" />);
-      expect(container.firstChild).toHaveClass(
-        "border-secondary",
-        "border-t-transparent",
-      );
+      expect(container.firstChild).toHaveClass("border-secondary", "border-t-transparent");
     });
 
     it("renders muted variant correctly", () => {
       const { container } = render(<LoadingSpinner variant="muted" />);
-      expect(container.firstChild).toHaveClass(
-        "border-muted-foreground",
-        "border-t-transparent",
-      );
+      expect(container.firstChild).toHaveClass("border-muted-foreground", "border-t-transparent");
     });
   });
 
   describe("Reduced Motion", () => {
     it("respects reduced motion preference", async () => {
-      const { useReducedMotion } = await import(
-        "@/lib/animations/hooks/use-reduced-motion"
-      );
+      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion");
       (useReducedMotion as any).mockReturnValue(true);
 
       const { container } = render(<LoadingSpinner />);
@@ -82,9 +71,7 @@ describe("LoadingSpinner", () => {
     });
 
     it("animates when reduced motion is not preferred", async () => {
-      const { useReducedMotion } = await import(
-        "@/lib/animations/hooks/use-reduced-motion"
-      );
+      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion");
       (useReducedMotion as any).mockReturnValue(false);
 
       const { container } = render(<LoadingSpinner />);
@@ -175,9 +162,7 @@ describe("LoadingDots", () => {
     });
 
     it("respects reduced motion preference", async () => {
-      const { useReducedMotion } = await import(
-        "@/lib/animations/hooks/use-reduced-motion"
-      );
+      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion");
       (useReducedMotion as any).mockReturnValue(true);
 
       const { container } = render(<LoadingDots />);
@@ -236,9 +221,7 @@ describe("LoadingPulse", () => {
 
   describe("Animation", () => {
     it("respects reduced motion preference", async () => {
-      const { useReducedMotion } = await import(
-        "@/lib/animations/hooks/use-reduced-motion"
-      );
+      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion");
       (useReducedMotion as any).mockReturnValue(true);
 
       const { container } = render(<LoadingPulse />);
@@ -246,9 +229,7 @@ describe("LoadingPulse", () => {
     });
 
     it("animates when reduced motion is not preferred", async () => {
-      const { useReducedMotion } = await import(
-        "@/lib/animations/hooks/use-reduced-motion"
-      );
+      const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion");
       (useReducedMotion as any).mockReturnValue(false);
 
       const { container } = render(<LoadingPulse />);

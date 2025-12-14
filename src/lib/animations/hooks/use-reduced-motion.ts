@@ -50,9 +50,9 @@ export function useReducedMotion(): boolean {
       mediaQuery.addEventListener("change", handleChange);
     } else {
       // Fallback for older browsers - using type assertion
-      (
-        mediaQuery as MediaQueryList & { addListener: typeof handleChange }
-      ).addListener(handleChange);
+      (mediaQuery as MediaQueryList & { addListener: typeof handleChange }).addListener(
+        handleChange,
+      );
     }
 
     // Cleanup
@@ -61,9 +61,9 @@ export function useReducedMotion(): boolean {
         mediaQuery.removeEventListener("change", handleChange);
       } else {
         // Fallback for older browsers - using type assertion
-        (
-          mediaQuery as MediaQueryList & { removeListener: typeof handleChange }
-        ).removeListener(handleChange);
+        (mediaQuery as MediaQueryList & { removeListener: typeof handleChange }).removeListener(
+          handleChange,
+        );
       }
     };
   }, []);
@@ -88,9 +88,7 @@ export function useReducedMotion(): boolean {
  * >
  * ```
  */
-export function useAnimationTransition(
-  transition: Transition = {},
-): Transition {
+export function useAnimationTransition(transition: Transition = {}): Transition {
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {
@@ -118,9 +116,7 @@ export function useAnimationTransition(
  * >
  * ```
  */
-export function useAnimationVariants(
-  variants: Variants,
-): Variants | Record<string, never> {
+export function useAnimationVariants(variants: Variants): Variants | Record<string, never> {
   const shouldReduceMotion = useReducedMotion();
 
   if (shouldReduceMotion) {

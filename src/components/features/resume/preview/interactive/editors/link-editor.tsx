@@ -8,13 +8,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -23,10 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Link, LinkType } from "@/lib/api/types";
-import {
-  type CreateLinkFormData,
-  createLinkSchema,
-} from "@/lib/validations/links";
+import { type CreateLinkFormData, createLinkSchema } from "@/lib/validations/links";
 
 const LINK_TYPES: { value: LinkType; label: string }[] = [
   { value: "website", label: "Website" },
@@ -105,11 +96,7 @@ export function LinkEditor({ data, onChange }: LinkEditorProps) {
             <FormItem>
               <Label className="text-xs">Label</Label>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="My Portfolio"
-                  className="h-8 text-xs"
-                />
+                <Input {...field} placeholder="My Portfolio" className="h-8 text-xs" />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>

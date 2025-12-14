@@ -9,21 +9,13 @@ interface TemplateSelectorProps {
   onSelect: (template: TemplateType) => void;
 }
 
-export function TemplateSelector({
-  selected,
-  onSelect,
-}: TemplateSelectorProps) {
+export function TemplateSelector({ selected, onSelect }: TemplateSelectorProps) {
   const [galleryOpen, setGalleryOpen] = useState(false);
   const selectedTemplate = TEMPLATES.find((t) => t.id === selected);
 
   return (
     <>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => setGalleryOpen(true)}
-        className="gap-2"
-      >
+      <Button variant="outline" size="sm" onClick={() => setGalleryOpen(true)} className="gap-2">
         <Sparkles className="h-4 w-4" />
         <span>Template: {selectedTemplate?.name}</span>
       </Button>

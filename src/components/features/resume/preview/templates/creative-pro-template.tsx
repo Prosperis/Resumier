@@ -1,20 +1,13 @@
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface CreativeProTemplateProps {
   resume: Resume;
   config?: TemplateConfig;
 }
 
-export function CreativeProTemplate({
-  resume,
-  config,
-}: CreativeProTemplateProps) {
+export function CreativeProTemplate({ resume, config }: CreativeProTemplateProps) {
   const { personalInfo, experience, education, skills } = resume.content;
   const primaryColor = config?.colorScheme?.primary || "#667eea";
   const secondaryColor = config?.colorScheme?.secondary || "#764ba2";
@@ -29,21 +22,15 @@ export function CreativeProTemplate({
         }}
       >
         <h1 className="text-4xl font-bold mb-2">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <div className="flex flex-wrap gap-4 text-sm opacity-90">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && <span>•</span>}
           {personalInfo.phone && (
             <span>
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && <span>•</span>}
@@ -66,10 +53,7 @@ export function CreativeProTemplate({
 
         {experience && experience.length > 0 && (
           <div className="mb-6">
-            <h2
-              className="text-2xl font-bold mb-4"
-              style={{ color: primaryColor }}
-            >
+            <h2 className="text-2xl font-bold mb-4" style={{ color: primaryColor }}>
               Experience
             </h2>
             {experience.map((exp, idx) => (
@@ -81,10 +65,7 @@ export function CreativeProTemplate({
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-bold text-lg">{exp.position}</h3>
-                    <p
-                      className="font-semibold"
-                      style={{ color: primaryColor }}
-                    >
+                    <p className="font-semibold" style={{ color: primaryColor }}>
                       {exp.company}
                     </p>
                   </div>
@@ -96,9 +77,7 @@ export function CreativeProTemplate({
                   </span>
                 </div>
                 {exp.description && (
-                  <p className="text-sm mt-2 leading-relaxed">
-                    {exp.description}
-                  </p>
+                  <p className="text-sm mt-2 leading-relaxed">{exp.description}</p>
                 )}
               </div>
             ))}
@@ -108,10 +87,7 @@ export function CreativeProTemplate({
         <div className="grid grid-cols-2 gap-6">
           {skills && (
             <div>
-              <h2
-                className="text-2xl font-bold mb-4"
-                style={{ color: primaryColor }}
-              >
+              <h2 className="text-2xl font-bold mb-4" style={{ color: primaryColor }}>
                 Skills
               </h2>
               <div className="flex flex-wrap gap-2">
@@ -133,10 +109,7 @@ export function CreativeProTemplate({
 
           {education && education.length > 0 && (
             <div>
-              <h2
-                className="text-2xl font-bold mb-4"
-                style={{ color: primaryColor }}
-              >
+              <h2 className="text-2xl font-bold mb-4" style={{ color: primaryColor }}>
                 Education
               </h2>
               {education.map((edu, idx) => (

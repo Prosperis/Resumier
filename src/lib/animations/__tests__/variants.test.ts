@@ -218,9 +218,7 @@ describe("Stagger Variants", () => {
 
     it("should work with stagger container", () => {
       // Items should transition from hidden to visible
-      expect(staggerItemVariants.hidden).not.toEqual(
-        staggerItemVariants.visible,
-      );
+      expect(staggerItemVariants.hidden).not.toEqual(staggerItemVariants.visible);
     });
   });
 });

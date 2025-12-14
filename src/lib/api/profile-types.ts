@@ -3,14 +3,7 @@
  * Master profile that stores all professional data which can be reused across multiple resumes
  */
 
-import type {
-  Certification,
-  Education,
-  Experience,
-  Link,
-  PersonalInfo,
-  Skills,
-} from "./types";
+import type { Certification, Education, Experience, Link, PersonalInfo, Skills } from "./types";
 
 /**
  * Profile Document

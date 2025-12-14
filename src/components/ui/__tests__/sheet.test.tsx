@@ -93,9 +93,7 @@ describe("Sheet Components", () => {
     });
 
     it("renders with custom className", () => {
-      const { container } = render(
-        <SheetHeader className="custom-header">Header</SheetHeader>,
-      );
+      const { container } = render(<SheetHeader className="custom-header">Header</SheetHeader>);
       const header = container.querySelector("div");
       expect(header).toHaveClass("custom-header");
     });
@@ -127,9 +125,7 @@ describe("Sheet Components", () => {
     });
 
     it("renders with custom className", () => {
-      const { container } = render(
-        <SheetFooter className="custom-footer">Footer</SheetFooter>,
-      );
+      const { container } = render(<SheetFooter className="custom-footer">Footer</SheetFooter>);
       const footer = container.querySelector("div");
       expect(footer).toHaveClass("custom-footer");
     });
@@ -219,9 +215,7 @@ describe("Sheet Components", () => {
     it("renders with custom className", () => {
       render(
         <Sheet>
-          <SheetDescription className="custom-desc">
-            Description
-          </SheetDescription>
+          <SheetDescription className="custom-desc">Description</SheetDescription>
         </Sheet>,
       );
       const desc = screen.getByText("Description");

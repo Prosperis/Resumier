@@ -4,11 +4,7 @@ import { useShallow } from "zustand/react/shallow";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -23,11 +19,7 @@ import {
   selectStyleActions,
   type CustomFont,
 } from "@/stores/resume-store";
-import {
-  COLOR_SCHEMES,
-  TYPOGRAPHY_PRESETS,
-  type ColorScheme,
-} from "@/lib/types/templates";
+import { COLOR_SCHEMES, TYPOGRAPHY_PRESETS, type ColorScheme } from "@/lib/types/templates";
 import { cn } from "@/lib/utils";
 
 // Color theme options with display names
@@ -137,9 +129,7 @@ function ColorSwatch({ color, isSelected, onClick, label }: ColorSwatchProps) {
       onClick={onClick}
       className={cn(
         "h-8 w-8 rounded-full border-2 transition-all hover:scale-110",
-        isSelected
-          ? "border-foreground ring-2 ring-primary ring-offset-2"
-          : "border-transparent",
+        isSelected ? "border-foreground ring-2 ring-primary ring-offset-2" : "border-transparent",
       )}
       style={{ backgroundColor: color }}
       title={label}
@@ -154,11 +144,7 @@ interface CustomColorSwatchProps {
   onChange: (color: string) => void;
 }
 
-function CustomColorSwatch({
-  color,
-  isSelected,
-  onChange,
-}: CustomColorSwatchProps) {
+function CustomColorSwatch({ color, isSelected, onChange }: CustomColorSwatchProps) {
   return (
     <div className="relative">
       <input
@@ -180,8 +166,7 @@ function CustomColorSwatch({
         <div
           className="absolute inset-0 rounded-full pointer-events-none"
           style={{
-            background:
-              "conic-gradient(red, yellow, lime, aqua, blue, magenta, red)",
+            background: "conic-gradient(red, yellow, lime, aqua, blue, magenta, red)",
             opacity: 0.7,
           }}
         />
@@ -197,12 +182,7 @@ interface ColorPickerRowProps {
   onChange: (key: keyof ColorScheme, value: string) => void;
 }
 
-function ColorPickerRow({
-  label,
-  colorKey,
-  value,
-  onChange,
-}: ColorPickerRowProps) {
+function ColorPickerRow({ label, colorKey, value, onChange }: ColorPickerRowProps) {
   return (
     <div className="flex items-center justify-between gap-2">
       <Label className="text-xs text-muted-foreground">{label}</Label>
@@ -213,9 +193,7 @@ function ColorPickerRow({
           onChange={(e) => onChange(colorKey, e.target.value)}
           className="h-6 w-8 cursor-pointer rounded border border-input bg-transparent"
         />
-        <span className="w-16 text-xs font-mono text-muted-foreground">
-          {value}
-        </span>
+        <span className="w-16 text-xs font-mono text-muted-foreground">{value}</span>
       </div>
     </div>
   );
@@ -248,8 +226,7 @@ export function StyleCustomizer() {
   }, [customFonts]);
 
   // Get current effective colors (theme + overrides)
-  const currentThemeColors =
-    COLOR_SCHEMES[styleCustomization.colorTheme] || COLOR_SCHEMES.purple;
+  const currentThemeColors = COLOR_SCHEMES[styleCustomization.colorTheme] || COLOR_SCHEMES.purple;
   const effectiveColors: ColorScheme = {
     ...currentThemeColors,
     ...styleCustomization.colorOverrides,
@@ -257,8 +234,7 @@ export function StyleCustomizer() {
 
   // Get current effective typography (theme + overrides)
   const currentThemeFonts =
-    TYPOGRAPHY_PRESETS[styleCustomization.fontTheme] ||
-    TYPOGRAPHY_PRESETS.modern;
+    TYPOGRAPHY_PRESETS[styleCustomization.fontTheme] || TYPOGRAPHY_PRESETS.modern;
 
   // Combine built-in fonts with custom fonts
   const allFontOptions = [
@@ -321,9 +297,7 @@ export function StyleCustomizer() {
     ];
 
     const extension = file.name.split(".").pop()?.toLowerCase();
-    const isValidExtension = ["ttf", "otf", "woff", "woff2"].includes(
-      extension || "",
-    );
+    const isValidExtension = ["ttf", "otf", "woff", "woff2"].includes(extension || "");
 
     if (!validTypes.includes(file.type) && !isValidExtension) {
       alert("Please upload a valid font file (.ttf, .otf, .woff, .woff2)");
@@ -342,9 +316,7 @@ export function StyleCustomizer() {
       });
 
       // Generate font family name from filename
-      const fontName = file.name
-        .replace(/\.[^/.]+$/, "")
-        .replace(/[^a-zA-Z0-9]/g, "");
+      const fontName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9]/g, "");
       const fontFamily = `Custom-${fontName}-${Date.now()}`;
 
       const customFont: CustomFont = {
@@ -377,12 +349,7 @@ export function StyleCustomizer() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="gap-2"
-          aria-label="Customize resume style"
-        >
+        <Button variant="outline" size="sm" className="gap-2" aria-label="Customize resume style">
           <Palette className="h-4 w-4" />
           <span className="hidden sm:inline">Style</span>
         </Button>
@@ -391,12 +358,7 @@ export function StyleCustomizer() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h4 className="font-medium text-sm">Customize Style</h4>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleReset}
-              className="h-7 px-2 text-xs"
-            >
+            <Button variant="ghost" size="sm" onClick={handleReset} className="h-7 px-2 text-xs">
               <RotateCcw className="h-3 w-3 mr-1" />
               Reset
             </Button>
@@ -423,9 +385,7 @@ export function StyleCustomizer() {
                     <ColorSwatch
                       key={option.value}
                       color={COLOR_SCHEMES[option.value]?.primary || "#8b5cf6"}
-                      isSelected={
-                        styleCustomization.colorTheme === option.value
-                      }
+                      isSelected={styleCustomization.colorTheme === option.value}
                       onClick={() => handleColorThemeChange(option.value)}
                       label={option.label}
                     />
@@ -475,20 +435,13 @@ export function StyleCustomizer() {
               {/* Font Theme Select */}
               <div className="space-y-2">
                 <Label className="text-xs font-medium">Font Theme</Label>
-                <Select
-                  value={styleCustomization.fontTheme}
-                  onValueChange={handleFontThemeChange}
-                >
+                <Select value={styleCustomization.fontTheme} onValueChange={handleFontThemeChange}>
                   <SelectTrigger className="h-8 text-xs">
                     <SelectValue placeholder="Select font theme" />
                   </SelectTrigger>
                   <SelectContent>
                     {FONT_THEME_OPTIONS.map((option) => (
-                      <SelectItem
-                        key={option.value}
-                        value={option.value}
-                        className="text-xs"
-                      >
+                      <SelectItem key={option.value} value={option.value} className="text-xs">
                         <div className="flex flex-col">
                           <span>{option.label}</span>
                           <span className="text-[10px] text-muted-foreground">
@@ -506,18 +459,13 @@ export function StyleCustomizer() {
                 <Label className="text-xs font-medium">Custom Fonts</Label>
                 <div className="space-y-3">
                   <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">
-                      Heading Font
-                    </Label>
+                    <Label className="text-xs text-muted-foreground">Heading Font</Label>
                     <Select
                       value={
-                        (styleCustomization.fontOverrides
-                          .headingFont as string) ||
+                        (styleCustomization.fontOverrides.headingFont as string) ||
                         currentThemeFonts.headingFont
                       }
-                      onValueChange={(value) =>
-                        styleActions.setFontOverride("headingFont", value)
-                      }
+                      onValueChange={(value) => styleActions.setFontOverride("headingFont", value)}
                     >
                       <SelectTrigger className="h-8 text-xs">
                         <SelectValue placeholder="Select heading font" />
@@ -538,17 +486,13 @@ export function StyleCustomizer() {
                   </div>
 
                   <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">
-                      Body Font
-                    </Label>
+                    <Label className="text-xs text-muted-foreground">Body Font</Label>
                     <Select
                       value={
                         (styleCustomization.fontOverrides.bodyFont as string) ||
                         currentThemeFonts.bodyFont
                       }
-                      onValueChange={(value) =>
-                        styleActions.setFontOverride("bodyFont", value)
-                      }
+                      onValueChange={(value) => styleActions.setFontOverride("bodyFont", value)}
                     >
                       <SelectTrigger className="h-8 text-xs">
                         <SelectValue placeholder="Select body font" />
@@ -572,9 +516,7 @@ export function StyleCustomizer() {
 
               {/* Upload Custom Font */}
               <div className="space-y-3 border-t pt-3">
-                <Label className="text-xs font-medium">
-                  Upload Custom Font
-                </Label>
+                <Label className="text-xs font-medium">Upload Custom Font</Label>
                 <div className="space-y-2">
                   <Input
                     ref={fileInputRef}
@@ -592,9 +534,7 @@ export function StyleCustomizer() {
                 {/* List of custom fonts */}
                 {customFonts.length > 0 && (
                   <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">
-                      Uploaded Fonts
-                    </Label>
+                    <Label className="text-xs text-muted-foreground">Uploaded Fonts</Label>
                     <div className="space-y-1">
                       {customFonts.map((font) => (
                         <div

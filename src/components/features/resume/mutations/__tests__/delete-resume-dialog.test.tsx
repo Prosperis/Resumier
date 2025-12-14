@@ -86,15 +86,9 @@ describe("DeleteResumeDialog", () => {
 
   it("displays resume title in confirmation message", async () => {
     const user = userEvent.setup();
-    render(
-      <DeleteResumeDialog
-        resumeId="test-id"
-        resumeTitle="Software Engineer Resume"
-      />,
-      {
-        wrapper: createWrapper(),
-      },
-    );
+    render(<DeleteResumeDialog resumeId="test-id" resumeTitle="Software Engineer Resume" />, {
+      wrapper: createWrapper(),
+    });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
 
@@ -114,9 +108,7 @@ describe("DeleteResumeDialog", () => {
     });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
-    await user.click(
-      screen.getByRole("button", { name: /confirm delete resume/i }),
-    );
+    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }));
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith("resume-123", expect.any(Object));
@@ -142,9 +134,7 @@ describe("DeleteResumeDialog", () => {
     });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
-    await user.click(
-      screen.getByRole("button", { name: /confirm delete resume/i }),
-    );
+    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }));
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({
@@ -206,9 +196,7 @@ describe("DeleteResumeDialog", () => {
     });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
-    await user.click(
-      screen.getByRole("button", { name: /confirm delete resume/i }),
-    );
+    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }));
 
     await waitFor(() => {
       expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument();
@@ -229,9 +217,7 @@ describe("DeleteResumeDialog", () => {
     });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
-    await user.click(
-      screen.getByRole("button", { name: /confirm delete resume/i }),
-    );
+    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }));
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({
@@ -254,9 +240,7 @@ describe("DeleteResumeDialog", () => {
     });
 
     await user.click(screen.getByRole("button", { name: /delete/i }));
-    await user.click(
-      screen.getByRole("button", { name: /confirm delete resume/i }),
-    );
+    await user.click(screen.getByRole("button", { name: /confirm delete resume/i }));
 
     await waitFor(() => {
       expect(mockToast).toHaveBeenCalledWith({

@@ -1,11 +1,7 @@
 import { Circle, Square, Triangle } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface GeometricTemplateProps {
   resume: Resume;
@@ -36,11 +32,8 @@ export function GeometricTemplate({ resume, config }: GeometricTemplateProps) {
           </div>
           <div>
             <h1 className="text-4xl font-bold" style={{ color: primaryColor }}>
-              {getFullName(
-                personalInfo.firstName,
-                personalInfo.lastName,
-                personalInfo.nameOrder,
-              ) || "Your Name"}
+              {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+                "Your Name"}
             </h1>
             <div className="text-sm text-gray-600">
               {personalInfo.email && <span>{personalInfo.email}</span>}
@@ -48,10 +41,7 @@ export function GeometricTemplate({ resume, config }: GeometricTemplateProps) {
                 <span>
                   {" "}
                   |{" "}
-                  {formatPhoneDisplay(
-                    personalInfo.phone,
-                    personalInfo.phoneFormat as PhoneFormat,
-                  )}
+                  {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
                 </span>
               )}
             </div>
@@ -59,10 +49,7 @@ export function GeometricTemplate({ resume, config }: GeometricTemplateProps) {
         </div>
 
         {personalInfo.summary && (
-          <div
-            className="mb-6 p-4 border-l-4"
-            style={{ borderColor: primaryColor }}
-          >
+          <div className="mb-6 p-4 border-l-4" style={{ borderColor: primaryColor }}>
             <p className="text-gray-700">{personalInfo.summary}</p>
           </div>
         )}
@@ -91,9 +78,7 @@ export function GeometricTemplate({ resume, config }: GeometricTemplateProps) {
                     {exp.startDate} - {exp.current ? "Present" : exp.endDate}
                   </span>
                 </div>
-                {exp.description && (
-                  <p className="text-sm text-gray-700">{exp.description}</p>
-                )}
+                {exp.description && <p className="text-sm text-gray-700">{exp.description}</p>}
               </div>
             ))}
           </div>
@@ -119,9 +104,7 @@ export function GeometricTemplate({ resume, config }: GeometricTemplateProps) {
                         className="w-2 h-2 rounded-full"
                         style={{ backgroundColor: primaryColor }}
                       />
-                      <span className="text-sm text-gray-700">
-                        {skill.name || skill}
-                      </span>
+                      <span className="text-sm text-gray-700">{skill.name || skill}</span>
                     </div>
                   ))}
               </div>

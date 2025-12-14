@@ -29,12 +29,7 @@ describe("RouteLoadingFallback", () => {
     it("centers content on screen", () => {
       const { container } = render(<RouteLoadingFallback />);
       const wrapper = container.firstChild;
-      expect(wrapper).toHaveClass(
-        "flex",
-        "h-screen",
-        "items-center",
-        "justify-center",
-      );
+      expect(wrapper).toHaveClass("flex", "h-screen", "items-center", "justify-center");
     });
 
     it("renders with FadeIn animation wrapper", () => {
@@ -138,12 +133,7 @@ describe("InlineLoading", () => {
     it("has horizontal layout with gap", () => {
       const { container } = render(<InlineLoading message="Test" />);
       const wrapper = container.firstChild;
-      expect(wrapper).toHaveClass(
-        "flex",
-        "items-center",
-        "gap-2",
-        "text-muted-foreground",
-      );
+      expect(wrapper).toHaveClass("flex", "items-center", "gap-2", "text-muted-foreground");
     });
 
     it("displays message with small text", () => {

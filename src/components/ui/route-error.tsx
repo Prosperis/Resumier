@@ -12,11 +12,7 @@ interface RouteErrorProps {
  * Generic error component for route error boundaries
  * Provides consistent error handling with retry and navigation options
  */
-export function RouteError({
-  error,
-  reset,
-  title = "Something went wrong",
-}: RouteErrorProps) {
+export function RouteError({ error, reset, title = "Something went wrong" }: RouteErrorProps) {
   const router = useRouter();
 
   const handleReset = () => {
@@ -39,9 +35,7 @@ export function RouteError({
 
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-          <p className="text-muted-foreground">
-            {error.message || "An unexpected error occurred"}
-          </p>
+          <p className="text-muted-foreground">{error.message || "An unexpected error occurred"}</p>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">

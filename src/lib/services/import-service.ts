@@ -69,9 +69,7 @@ export interface ImportResult {
  * 1. OAuth mode: retrieves data stored in sessionStorage by callback handler (authenticated users)
  * 2. Guest mode: imports public profile data from URL (guests)
  */
-export async function importFromLinkedIn(
-  profileUrl?: string,
-): Promise<ImportResult> {
+export async function importFromLinkedIn(profileUrl?: string): Promise<ImportResult> {
   try {
     if (typeof window === "undefined") {
       // Server-side rendering: no sessionStorage available
@@ -88,9 +86,7 @@ export async function importFromLinkedIn(
     if (importedDataStr && importedState === "completed") {
       // OAuth mode - use stored data
       try {
-        const importedData = JSON.parse(
-          importedDataStr,
-        ) as Partial<ResumeContent>;
+        const importedData = JSON.parse(importedDataStr) as Partial<ResumeContent>;
 
         // Validate that we have at least some data
         if (
@@ -134,10 +130,7 @@ export async function importFromLinkedIn(
 
       // Call backend to import public profile
       try {
-        const data = await apiClient.post<ResumeContent>(
-          "/api/linkedin/import",
-          { profileUrl },
-        );
+        const data = await apiClient.post<ResumeContent>("/api/linkedin/import", { profileUrl });
 
         return {
           success: true,
@@ -145,9 +138,7 @@ export async function importFromLinkedIn(
         };
       } catch (err) {
         const errorMessage =
-          err instanceof Error
-            ? err.message
-            : "Failed to import LinkedIn profile";
+          err instanceof Error ? err.message : "Failed to import LinkedIn profile";
         return {
           success: false,
           error: errorMessage,
@@ -157,16 +148,12 @@ export async function importFromLinkedIn(
 
     return {
       success: false,
-      error:
-        "No LinkedIn data found. Please use the OAuth flow or provide a profile URL.",
+      error: "No LinkedIn data found. Please use the OAuth flow or provide a profile URL.",
     };
   } catch (error) {
     return {
       success: false,
-      error:
-        error instanceof Error
-          ? error.message
-          : "Failed to import from LinkedIn",
+      error: error instanceof Error ? error.message : "Failed to import from LinkedIn",
     };
   }
 }
@@ -183,8 +170,7 @@ export async function importFromJSON(file: File): Promise<ImportResult> {
     if (!data.personalInfo && !data.content?.personalInfo) {
       return {
         success: false,
-        error:
-          "Invalid resume format. Please export a resume from Resumier and try again.",
+        error: "Invalid resume format. Please export a resume from Resumier and try again.",
       };
     }
 
@@ -198,8 +184,7 @@ export async function importFromJSON(file: File): Promise<ImportResult> {
   } catch (error) {
     return {
       success: false,
-      error:
-        error instanceof Error ? error.message : "Failed to parse JSON file",
+      error: error instanceof Error ? error.message : "Failed to parse JSON file",
     };
   }
 }
@@ -228,9 +213,7 @@ export async function importFromPDF(_file: File): Promise<ImportResult> {
 /**
  * Import from GitHub profile
  */
-export async function importFromGitHub(
-  githubUrl: string,
-): Promise<ImportResult> {
+export async function importFromGitHub(githubUrl: string): Promise<ImportResult> {
   try {
     // Extract username from URL
     const username = githubUrl.split("github.com/")[1]?.split("/")[0];
@@ -251,8 +234,7 @@ export async function importFromGitHub(
   } catch (error) {
     return {
       success: false,
-      error:
-        error instanceof Error ? error.message : "Failed to import from GitHub",
+      error: error instanceof Error ? error.message : "Failed to import from GitHub",
     };
   }
 }
@@ -260,9 +242,7 @@ export async function importFromGitHub(
 /**
  * Import from Indeed profile
  */
-export async function importFromIndeed(
-  _indeedUrl: string,
-): Promise<ImportResult> {
+export async function importFromIndeed(_indeedUrl: string): Promise<ImportResult> {
   try {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -273,8 +253,7 @@ export async function importFromIndeed(
   } catch (error) {
     return {
       success: false,
-      error:
-        error instanceof Error ? error.message : "Failed to import from Indeed",
+      error: error instanceof Error ? error.message : "Failed to import from Indeed",
     };
   }
 }
@@ -282,10 +261,7 @@ export async function importFromIndeed(
 /**
  * Main import handler
  */
-export async function importResume(
-  source: string,
-  input: string | File,
-): Promise<ImportResult> {
+export async function importResume(source: string, input: string | File): Promise<ImportResult> {
   switch (source) {
     case "linkedin":
       return importFromLinkedIn(input as string);

@@ -21,10 +21,7 @@ interface SuccessCheckmarkProps {
  * <SuccessCheckmark size="lg" />
  * ```
  */
-export function SuccessCheckmark({
-  size = "md",
-  className,
-}: SuccessCheckmarkProps) {
+export function SuccessCheckmark({ size = "md", className }: SuccessCheckmarkProps) {
   const prefersReducedMotion = useReducedMotion();
 
   const sizeClasses = {
@@ -108,11 +105,7 @@ interface ErrorShakeProps {
  * </ErrorShake>
  * ```
  */
-export function ErrorShake({
-  children,
-  trigger = false,
-  className,
-}: ErrorShakeProps) {
+export function ErrorShake({ children, trigger = false, className }: ErrorShakeProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (

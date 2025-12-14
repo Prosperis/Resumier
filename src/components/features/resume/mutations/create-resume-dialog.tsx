@@ -173,9 +173,7 @@ export function CreateResumeDialog({
           <div className="py-4 space-y-4">
             <Tabs
               value={activeTab}
-              onValueChange={(v) =>
-                setActiveTab(v as "standalone" | "from-profile")
-              }
+              onValueChange={(v) => setActiveTab(v as "standalone" | "from-profile")}
             >
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="standalone">Start Fresh</TabsTrigger>
@@ -190,8 +188,8 @@ export function CreateResumeDialog({
 
               <TabsContent value="from-profile" className="space-y-4 pt-4">
                 <p className="text-sm text-muted-foreground">
-                  Start with data from an existing profile. Changes won't affect
-                  the original profile.
+                  Start with data from an existing profile. Changes won't affect the original
+                  profile.
                 </p>
                 <ProfileSelector
                   selectedProfileId={selectedProfileId}
@@ -223,28 +221,16 @@ export function CreateResumeDialog({
                 required
                 aria-invalid={!!validationError || !!error}
                 aria-describedby={
-                  validationError
-                    ? "title-validation-error"
-                    : error
-                      ? "title-api-error"
-                      : undefined
+                  validationError ? "title-validation-error" : error ? "title-api-error" : undefined
                 }
               />
               {validationError && (
-                <p
-                  id="title-validation-error"
-                  className="text-destructive text-sm"
-                  role="alert"
-                >
+                <p id="title-validation-error" className="text-destructive text-sm" role="alert">
                   {validationError}
                 </p>
               )}
               {error && !validationError && (
-                <p
-                  id="title-api-error"
-                  className="text-destructive text-sm"
-                  role="alert"
-                >
+                <p id="title-api-error" className="text-destructive text-sm" role="alert">
                   {error.message || "An error occurred"}
                 </p>
               )}
@@ -262,18 +248,10 @@ export function CreateResumeDialog({
             </Button>
             <Button
               type="submit"
-              disabled={
-                isPending ||
-                (activeTab === "from-profile" && !selectedProfileId)
-              }
+              disabled={isPending || (activeTab === "from-profile" && !selectedProfileId)}
               aria-label={isPending ? "Creating resume..." : "Create resume"}
             >
-              {isPending && (
-                <Loader2
-                  className="mr-2 h-4 w-4 animate-spin"
-                  aria-hidden="true"
-                />
-              )}
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
               Create Resume
             </Button>
           </DialogFooter>

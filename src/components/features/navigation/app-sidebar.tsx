@@ -1,11 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import {
-  FileText,
-  LayoutDashboard,
-  LifeBuoy,
-  Send,
-  Settings2,
-} from "lucide-react";
+import { FileText, LayoutDashboard, LifeBuoy, Send, Settings2 } from "lucide-react";
 import type * as React from "react";
 import { NavMain } from "@/components/features/navigation/nav-main";
 import { NavSecondary } from "@/components/features/navigation/nav-secondary";

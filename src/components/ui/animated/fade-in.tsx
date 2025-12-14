@@ -29,13 +29,7 @@ interface FadeInProps extends Omit<HTMLMotionProps<"div">, "variants"> {
  * </FadeIn>
  * ```
  */
-export function FadeIn({
-  children,
-  delay = 0,
-  duration,
-  className,
-  ...props
-}: FadeInProps) {
+export function FadeIn({ children, delay = 0, duration, className, ...props }: FadeInProps) {
   const variants = useAnimationVariants(fadeVariants);
   const transition = useAnimationTransition({
     ...defaultTransition,

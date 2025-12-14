@@ -21,9 +21,7 @@ describe("useSidebar", () => {
       toggleSidebar: vi.fn(),
     };
     const wrapper = ({ children }: { children: ReactNode }) => (
-      <SidebarContext.Provider value={mockContext}>
-        {children}
-      </SidebarContext.Provider>
+      <SidebarContext.Provider value={mockContext}>{children}</SidebarContext.Provider>
     );
     const { result } = renderHook(() => useSidebar(), { wrapper });
     expect(result.current).toBe(mockContext);
@@ -43,9 +41,7 @@ describe("useSidebar", () => {
       toggleSidebar: mockToggle,
     };
     const wrapper = ({ children }: { children: ReactNode }) => (
-      <SidebarContext.Provider value={mockContext}>
-        {children}
-      </SidebarContext.Provider>
+      <SidebarContext.Provider value={mockContext}>{children}</SidebarContext.Provider>
     );
     const { result } = renderHook(() => useSidebar(), { wrapper });
     result.current.toggleSidebar();

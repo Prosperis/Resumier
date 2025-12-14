@@ -12,10 +12,7 @@ import { vi } from "vitest";
  * Custom render function with providers
  * Extend this as needed with theme providers, query providers, etc.
  */
-export function renderWithProviders(
-  ui: ReactElement,
-  options?: Omit<RenderOptions, "wrapper">,
-) {
+export function renderWithProviders(ui: ReactElement, options?: Omit<RenderOptions, "wrapper">) {
   return render(ui, { ...options });
 }
 
@@ -51,13 +48,4 @@ export function resetStore<T>(store: {
 
 // Re-export common testing utilities
 export * from "@testing-library/react";
-export {
-  afterAll,
-  afterEach,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
+export { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

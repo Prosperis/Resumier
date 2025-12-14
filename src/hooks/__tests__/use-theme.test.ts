@@ -3,8 +3,7 @@ import { vi } from "vitest";
 import { useTheme } from "@/hooks/use-theme";
 
 // Store the original matchMedia if it exists
-const originalMatchMedia =
-  typeof window !== "undefined" ? window.matchMedia : undefined;
+const originalMatchMedia = typeof window !== "undefined" ? window.matchMedia : undefined;
 
 beforeAll(() => {
   // Mock matchMedia for theme detection

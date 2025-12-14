@@ -13,10 +13,7 @@ export function sanitizeHtml(input: string): string {
   if (!input) return "";
 
   // Remove script tags and their content
-  let sanitized = input.replace(
-    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-    "",
-  );
+  let sanitized = input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
 
   // Remove event handlers (onclick, onerror, etc.)
   sanitized = sanitized.replace(/\s*on\w+\s*=\s*["'][^"']*["']/gi, "");
@@ -29,16 +26,10 @@ export function sanitizeHtml(input: string): string {
   sanitized = sanitized.replace(/data:(?!image)/gi, "");
 
   // Remove iframe tags
-  sanitized = sanitized.replace(
-    /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
-    "",
-  );
+  sanitized = sanitized.replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "");
 
   // Remove object and embed tags
-  sanitized = sanitized.replace(
-    /<(object|embed)\b[^<]*(?:(?!<\/\1>)<[^<]*)*<\/\1>/gi,
-    "",
-  );
+  sanitized = sanitized.replace(/<(object|embed)\b[^<]*(?:(?!<\/\1>)<[^<]*)*<\/\1>/gi, "");
 
   return sanitized.trim();
 }
@@ -224,9 +215,7 @@ export const globalRateLimiter = new RateLimiter();
 export function generateSecureToken(length = 32): string {
   const array = new Uint8Array(length);
   crypto.getRandomValues(array);
-  return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join(
-    "",
-  );
+  return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 /**
@@ -244,10 +233,7 @@ export async function hashString(input: string): Promise<string> {
 /**
  * Validate content length to prevent DoS
  */
-export function validateContentLength(
-  content: string,
-  maxLength: number,
-): boolean {
+export function validateContentLength(content: string, maxLength: number): boolean {
   return content.length <= maxLength;
 }
 
@@ -255,11 +241,7 @@ export function validateContentLength(
  * Detect and prevent ReDoS (Regular Expression Denial of Service)
  * Checks if regex execution takes too long
  */
-export function safeRegexTest(
-  pattern: RegExp,
-  input: string,
-  timeoutMs = 100,
-): boolean {
+export function safeRegexTest(pattern: RegExp, input: string, timeoutMs = 100): boolean {
   const start = Date.now();
 
   try {
@@ -292,17 +274,9 @@ export function validateSecurityHeaders(headers: Headers): {
   missing: string[];
   warnings: string[];
 } {
-  const requiredHeaders = [
-    "content-security-policy",
-    "x-frame-options",
-    "x-content-type-options",
-  ];
+  const requiredHeaders = ["content-security-policy", "x-frame-options", "x-content-type-options"];
 
-  const recommendedHeaders = [
-    "strict-transport-security",
-    "referrer-policy",
-    "permissions-policy",
-  ];
+  const recommendedHeaders = ["strict-transport-security", "referrer-policy", "permissions-policy"];
 
   const missing: string[] = [];
   const warnings: string[] = [];

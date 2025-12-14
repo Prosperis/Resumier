@@ -19,9 +19,7 @@ vi.mock("@/lib/api/client", () => ({
 
 describe("useDeleteResume", () => {
   let queryClient: QueryClient;
-  const consoleErrorSpy = vi
-    .spyOn(console, "error")
-    .mockImplementation(() => {});
+  const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
   const createWrapper = () => {
     queryClient = new QueryClient({
@@ -75,9 +73,7 @@ describe("useDeleteResume", () => {
     ];
     // Set resumes list in cache
     queryClient.setQueryData(resumesQueryKey, resumes);
-    (apiClient.delete as any)
-      .mockResolvedValueOnce(undefined)
-      .mockResolvedValueOnce(undefined);
+    (apiClient.delete as any).mockResolvedValueOnce(undefined).mockResolvedValueOnce(undefined);
 
     const { result } = renderHook(() => useDeleteResume(), {
       wrapper: createWrapper(),

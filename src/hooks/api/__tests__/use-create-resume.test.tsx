@@ -172,10 +172,7 @@ describe("useCreateResume", () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     // Check that individual resume is in cache
-    const cachedResume = queryClient.getQueryData([
-      "resumes",
-      createdResume.id,
-    ]);
+    const cachedResume = queryClient.getQueryData(["resumes", createdResume.id]);
     expect(cachedResume).toEqual(createdResume);
   });
 

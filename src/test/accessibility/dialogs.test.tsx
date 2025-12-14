@@ -8,10 +8,7 @@ import userEvent from "@testing-library/user-event";
 import { CreateResumeDialog } from "@/components/features/resume/mutations/create-resume-dialog";
 import { DeleteResumeDialog } from "@/components/features/resume/mutations/delete-resume-dialog";
 import { RenameResumeDialog } from "@/components/features/resume/mutations/rename-resume-dialog";
-import {
-  expectNoAccessibilityViolations,
-  renderWithQuery,
-} from "@/test/accessibility-utils";
+import { expectNoAccessibilityViolations, renderWithQuery } from "@/test/accessibility-utils";
 
 describe("Dialog Accessibility Tests", () => {
   describe("CreateResumeDialog", () => {

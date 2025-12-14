@@ -49,9 +49,7 @@ describe("RouteError", () => {
       const errorWithoutMessage = new Error();
       errorWithoutMessage.message = "";
       render(<RouteError error={errorWithoutMessage} />);
-      expect(
-        screen.getByText("An unexpected error occurred"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("An unexpected error occurred")).toBeInTheDocument();
     });
 
     it("renders alert icon", () => {
@@ -63,16 +61,12 @@ describe("RouteError", () => {
 
     it("renders Try Again button", () => {
       render(<RouteError error={mockError} />);
-      expect(
-        screen.getByRole("button", { name: /try again/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
     });
 
     it("renders Go Home link", () => {
       render(<RouteError error={mockError} />);
-      expect(
-        screen.getByRole("link", { name: /go home/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: /go home/i })).toBeInTheDocument();
     });
   });
 
@@ -80,12 +74,7 @@ describe("RouteError", () => {
     it("centers content on screen", () => {
       const { container } = render(<RouteError error={mockError} />);
       const wrapper = container.firstChild;
-      expect(wrapper).toHaveClass(
-        "flex",
-        "min-h-screen",
-        "items-center",
-        "justify-center",
-      );
+      expect(wrapper).toHaveClass("flex", "min-h-screen", "items-center", "justify-center");
     });
 
     it("applies destructive styling to icon container", () => {
@@ -175,9 +164,7 @@ describe("RouteError", () => {
       errorWithStack.stack = "Error: Test error\n  at test.js:1:1";
       render(<RouteError error={errorWithStack} />);
 
-      expect(
-        screen.getByText("Error Details (Development Only)"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Error Details (Development Only)")).toBeInTheDocument();
     });
 
     it("displays stack trace in a details element", () => {
@@ -196,9 +183,7 @@ describe("RouteError", () => {
       errorWithStack.stack = "Error: Test error\n  at test.js:1:1";
       render(<RouteError error={errorWithStack} />);
 
-      expect(
-        screen.queryByText("Error Details (Development Only)"),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText("Error Details (Development Only)")).not.toBeInTheDocument();
     });
   });
 
@@ -238,17 +223,13 @@ describe("NotFoundError", () => {
     it("renders helpful description", () => {
       render(<NotFoundError />);
       expect(
-        screen.getByText(
-          /the page you're looking for doesn't exist or has been moved/i,
-        ),
+        screen.getByText(/the page you're looking for doesn't exist or has been moved/i),
       ).toBeInTheDocument();
     });
 
     it("renders Back to Home button", () => {
       render(<NotFoundError />);
-      expect(
-        screen.getByRole("link", { name: /back to home/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: /back to home/i })).toBeInTheDocument();
     });
 
     it("renders Home icon", () => {
@@ -263,12 +244,7 @@ describe("NotFoundError", () => {
     it("centers content on screen", () => {
       const { container } = render(<NotFoundError />);
       const wrapper = container.firstChild;
-      expect(wrapper).toHaveClass(
-        "flex",
-        "min-h-screen",
-        "items-center",
-        "justify-center",
-      );
+      expect(wrapper).toHaveClass("flex", "min-h-screen", "items-center", "justify-center");
     });
 
     it("displays 404 with large bold font", () => {
@@ -323,9 +299,7 @@ describe("NotFoundError", () => {
     it("provides descriptive error message", () => {
       render(<NotFoundError />);
       expect(screen.getByText("Page not found")).toBeInTheDocument();
-      expect(
-        screen.getByText(/the page you're looking for doesn't exist/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/the page you're looking for doesn't exist/i)).toBeInTheDocument();
     });
   });
 });

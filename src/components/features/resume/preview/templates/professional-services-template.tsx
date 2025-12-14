@@ -1,11 +1,7 @@
 import { Briefcase, GraduationCap, Target, TrendingUp } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface ProfessionalServicesTemplateProps {
   resume: Resume;
@@ -26,26 +22,16 @@ export function ProfessionalServicesTemplate({
         style={{ borderColor: primaryColor }}
       >
         <div>
-          <h1
-            className="text-3xl font-bold mb-1"
-            style={{ color: primaryColor }}
-          >
-            {getFullName(
-              personalInfo.firstName,
-              personalInfo.lastName,
-              personalInfo.nameOrder,
-            ) || "Your Name"}
+          <h1 className="text-3xl font-bold mb-1" style={{ color: primaryColor }}>
+            {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+              "Your Name"}
           </h1>
           <div className="text-sm text-gray-600">
             {personalInfo.email && <span>{personalInfo.email}</span>}
             {personalInfo.phone && (
               <span>
                 {" "}
-                |{" "}
-                {formatPhoneDisplay(
-                  personalInfo.phone,
-                  personalInfo.phoneFormat as PhoneFormat,
-                )}
+                | {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
               </span>
             )}
           </div>
@@ -58,51 +44,26 @@ export function ProfessionalServicesTemplate({
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <div
-          className="p-4 text-center rounded"
-          style={{ backgroundColor: `${primaryColor}15` }}
-        >
-          <Target
-            className="h-8 w-8 mx-auto mb-2"
-            style={{ color: primaryColor }}
-          />
+        <div className="p-4 text-center rounded" style={{ backgroundColor: `${primaryColor}15` }}>
+          <Target className="h-8 w-8 mx-auto mb-2" style={{ color: primaryColor }} />
           <p className="text-sm font-semibold">Results-Driven</p>
         </div>
-        <div
-          className="p-4 text-center rounded"
-          style={{ backgroundColor: `${primaryColor}15` }}
-        >
-          <TrendingUp
-            className="h-8 w-8 mx-auto mb-2"
-            style={{ color: primaryColor }}
-          />
+        <div className="p-4 text-center rounded" style={{ backgroundColor: `${primaryColor}15` }}>
+          <TrendingUp className="h-8 w-8 mx-auto mb-2" style={{ color: primaryColor }} />
           <p className="text-sm font-semibold">Growth Focused</p>
         </div>
-        <div
-          className="p-4 text-center rounded"
-          style={{ backgroundColor: `${primaryColor}15` }}
-        >
-          <Briefcase
-            className="h-8 w-8 mx-auto mb-2"
-            style={{ color: primaryColor }}
-          />
-          <p className="text-sm font-semibold">
-            {experience?.length || 0}+ Years
-          </p>
+        <div className="p-4 text-center rounded" style={{ backgroundColor: `${primaryColor}15` }}>
+          <Briefcase className="h-8 w-8 mx-auto mb-2" style={{ color: primaryColor }} />
+          <p className="text-sm font-semibold">{experience?.length || 0}+ Years</p>
         </div>
       </div>
 
       {personalInfo.summary && (
         <div className="mb-6">
-          <h2
-            className="text-xl font-bold mb-3"
-            style={{ color: primaryColor }}
-          >
+          <h2 className="text-xl font-bold mb-3" style={{ color: primaryColor }}>
             Professional Profile
           </h2>
-          <p className="text-gray-700 leading-relaxed">
-            {personalInfo.summary}
-          </p>
+          <p className="text-gray-700 leading-relaxed">{personalInfo.summary}</p>
         </div>
       )}
 
@@ -150,10 +111,7 @@ export function ProfessionalServicesTemplate({
       <div className="grid grid-cols-2 gap-6">
         {skills && (
           <div>
-            <h2
-              className="text-xl font-bold mb-3"
-              style={{ color: primaryColor }}
-            >
+            <h2 className="text-xl font-bold mb-3" style={{ color: primaryColor }}>
               Core Competencies
             </h2>
             <div className="grid grid-cols-2 gap-2">

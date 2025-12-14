@@ -3,13 +3,7 @@
  * Manages editing state and selection for the interactive resume preview
  */
 
-import {
-  createContext,
-  useContext,
-  useCallback,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useCallback, useState, type ReactNode } from "react";
 import type {
   Resume,
   Experience,
@@ -110,8 +104,7 @@ interface InteractiveResumeContextValue {
   onReorderLinks: (fromIndex: number, toIndex: number) => void;
 }
 
-const InteractiveResumeContext =
-  createContext<InteractiveResumeContextValue | null>(null);
+const InteractiveResumeContext = createContext<InteractiveResumeContextValue | null>(null);
 
 interface InteractiveResumeProviderProps {
   children: ReactNode;
@@ -173,11 +166,8 @@ export function InteractiveResumeProvider({
   onReorderLinks,
 }: InteractiveResumeProviderProps) {
   const [isInteractive, setInteractive] = useState(initialInteractive);
-  const [selectedSection, setSelectedSection] =
-    useState<SelectedSection | null>(null);
-  const [hoveredSection, setHoveredSection] = useState<SelectedSection | null>(
-    null,
-  );
+  const [selectedSection, setSelectedSection] = useState<SelectedSection | null>(null);
+  const [hoveredSection, setHoveredSection] = useState<SelectedSection | null>(null);
 
   const selectSection = useCallback((section: SelectedSection | null) => {
     setSelectedSection(section);
@@ -244,18 +234,14 @@ export function InteractiveResumeProvider({
   };
 
   return (
-    <InteractiveResumeContext.Provider value={value}>
-      {children}
-    </InteractiveResumeContext.Provider>
+    <InteractiveResumeContext.Provider value={value}>{children}</InteractiveResumeContext.Provider>
   );
 }
 
 export function useInteractiveResume() {
   const context = useContext(InteractiveResumeContext);
   if (!context) {
-    throw new Error(
-      "useInteractiveResume must be used within an InteractiveResumeProvider",
-    );
+    throw new Error("useInteractiveResume must be used within an InteractiveResumeProvider");
   }
   return context;
 }

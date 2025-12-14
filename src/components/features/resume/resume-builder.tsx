@@ -2,11 +2,7 @@ import { useParams } from "@tanstack/react-router";
 import { ChevronDown, Plus, Upload } from "lucide-react";
 import { Suspense, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useResume, useUpdateResume } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
 import { useAuthStore, selectIsDemo } from "@/stores/auth-store";
@@ -15,13 +11,7 @@ import {
   selectResumeBuilderSection,
   selectToggleResumeBuilderSection,
 } from "@/stores/ui-store";
-import type {
-  Certification,
-  Education,
-  Experience,
-  Link,
-  ResumeContent,
-} from "@/lib/api/types";
+import type { Certification, Education, Experience, Link, ResumeContent } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 import { ImportDialog } from "./import/import-dialog";
 import {
@@ -56,11 +46,7 @@ function CollapsibleSection({
   children,
 }: CollapsibleSectionProps) {
   return (
-    <Collapsible
-      open={isOpen}
-      onOpenChange={() => onToggle(id)}
-      className="border-b border-border"
-    >
+    <Collapsible open={isOpen} onOpenChange={() => onToggle(id)} className="border-b border-border">
       <CollapsibleTrigger className="flex w-full items-center justify-between px-3 py-2.5 hover:bg-muted/50 transition-colors">
         <div className="flex items-center gap-2">
           <ChevronDown
@@ -71,9 +57,7 @@ function CollapsibleSection({
           />
           <div className="text-left">
             <h3 className="text-xs font-semibold">{title}</h3>
-            {description && (
-              <p className="text-[10px] text-muted-foreground">{description}</p>
-            )}
+            {description && <p className="text-[10px] text-muted-foreground">{description}</p>}
           </div>
         </div>
         {action && <div onClick={(e) => e.stopPropagation()}>{action}</div>}
@@ -102,19 +86,13 @@ export function ResumeBuilder() {
   };
 
   // Inline editing states - track which item is being edited or if adding new
-  const [experienceEditingId, setExperienceEditingId] = useState<string | null>(
-    null,
-  );
+  const [experienceEditingId, setExperienceEditingId] = useState<string | null>(null);
   const [experienceAddingNew, setExperienceAddingNew] = useState(false);
 
-  const [educationEditingId, setEducationEditingId] = useState<string | null>(
-    null,
-  );
+  const [educationEditingId, setEducationEditingId] = useState<string | null>(null);
   const [educationAddingNew, setEducationAddingNew] = useState(false);
 
-  const [certificationEditingId, setCertificationEditingId] = useState<
-    string | null
-  >(null);
+  const [certificationEditingId, setCertificationEditingId] = useState<string | null>(null);
   const [certificationAddingNew, setCertificationAddingNew] = useState(false);
 
   const [linkEditingId, setLinkEditingId] = useState<string | null>(null);
@@ -273,9 +251,7 @@ export function ResumeBuilder() {
 
   const handleDeleteCertification = (id: string) => {
     const certifications = content.certifications || [];
-    const updatedCertifications = certifications.filter(
-      (cert) => cert.id !== id,
-    );
+    const updatedCertifications = certifications.filter((cert) => cert.id !== id);
 
     updateResume(
       {
@@ -297,9 +273,7 @@ export function ResumeBuilder() {
     );
   };
 
-  const handleReorderCertifications = (
-    reorderedCertifications: Certification[],
-  ) => {
+  const handleReorderCertifications = (reorderedCertifications: Certification[]) => {
     updateResume(
       {
         id: resumeId,
@@ -382,14 +356,8 @@ export function ResumeBuilder() {
         ...content.personalInfo,
         ...importedData.personalInfo,
       },
-      experience: [
-        ...(content.experience || []),
-        ...(importedData.experience || []),
-      ],
-      education: [
-        ...(content.education || []),
-        ...(importedData.education || []),
-      ],
+      experience: [...(content.experience || []), ...(importedData.experience || [])],
+      education: [...(content.education || []), ...(importedData.education || [])],
       skills: {
         technical: [
           ...(content.skills?.technical || []),
@@ -399,19 +367,10 @@ export function ResumeBuilder() {
           ...(content.skills?.languages || []),
           ...(importedData.skills?.languages || []),
         ],
-        tools: [
-          ...(content.skills?.tools || []),
-          ...(importedData.skills?.tools || []),
-        ],
-        soft: [
-          ...(content.skills?.soft || []),
-          ...(importedData.skills?.soft || []),
-        ],
+        tools: [...(content.skills?.tools || []), ...(importedData.skills?.tools || [])],
+        soft: [...(content.skills?.soft || []), ...(importedData.skills?.soft || [])],
       },
-      certifications: [
-        ...(content.certifications || []),
-        ...(importedData.certifications || []),
-      ],
+      certifications: [...(content.certifications || []), ...(importedData.certifications || [])],
       links: [...(content.links || []), ...(importedData.links || [])],
     };
 
@@ -455,11 +414,7 @@ export function ResumeBuilder() {
             </div>
             <ImportDialog
               trigger={
-                <Button
-                  variant="default"
-                  size="sm"
-                  className="h-6 text-[10px] px-2"
-                >
+                <Button variant="default" size="sm" className="h-6 text-[10px] px-2">
                   <Upload className="mr-1.5 h-2.5 w-2.5" />
                   Import
                 </Button>
@@ -479,10 +434,7 @@ export function ResumeBuilder() {
         onToggle={handleToggleSection}
       >
         <Suspense fallback={<FormSkeleton />}>
-          <LazyPersonalInfoForm
-            resumeId={resumeId}
-            defaultValues={content.personalInfo}
-          />
+          <LazyPersonalInfoForm resumeId={resumeId} defaultValues={content.personalInfo} />
         </Suspense>
       </CollapsibleSection>
 

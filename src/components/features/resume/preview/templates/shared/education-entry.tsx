@@ -24,8 +24,7 @@ export function EducationEntry({
 
   // Helper to format date range
   const formatDateRange = () => {
-    if (!education.startDate && !education.endDate && !education.current)
-      return null;
+    if (!education.startDate && !education.endDate && !education.current) return null;
     const start = education.startDate || "";
     const end = education.current ? "Present" : education.endDate || "";
     if (!start && !end) return null;
@@ -66,10 +65,7 @@ export function EducationEntry({
           </p>
         )}
         {education.honors && education.honors.length > 0 && (
-          <ul
-            className="mt-1 list-inside list-disc text-sm"
-            style={{ color: textLightColor }}
-          >
+          <ul className="mt-1 list-inside list-disc text-sm" style={{ color: textLightColor }}>
             {education.honors.map((honor, idx) => (
               <li key={idx}>{honor}</li>
             ))}
@@ -82,9 +78,7 @@ export function EducationEntry({
   // Compact variant
   if (variant === "compact") {
     // Build degree/field string
-    const degreeField = [education.degree, education.field]
-      .filter(Boolean)
-      .join(" in ");
+    const degreeField = [education.degree, education.field].filter(Boolean).join(" in ");
 
     return (
       <div className={className}>
@@ -140,16 +134,10 @@ export function EducationEntry({
             )}
           </div>
           {(dateRange || education.gpa) && (
-            <div
-              className="text-right text-sm"
-              style={{ color: textLightColor }}
-            >
+            <div className="text-right text-sm" style={{ color: textLightColor }}>
               {dateRange && <div>{dateRange}</div>}
               {education.gpa && (
-                <div
-                  className="mt-1 font-semibold"
-                  style={{ color: colorScheme?.primary }}
-                >
+                <div className="mt-1 font-semibold" style={{ color: colorScheme?.primary }}>
                   GPA: {education.gpa}
                 </div>
               )}
@@ -158,10 +146,7 @@ export function EducationEntry({
         </div>
         {education.honors && education.honors.length > 0 && (
           <div>
-            <p
-              className="mb-1 text-xs font-semibold uppercase"
-              style={{ color: textLightColor }}
-            >
+            <p className="mb-1 text-xs font-semibold uppercase" style={{ color: textLightColor }}>
               Honors & Awards
             </p>
             <ul

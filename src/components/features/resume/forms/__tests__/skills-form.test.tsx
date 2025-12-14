@@ -20,59 +20,37 @@ describe("SkillsForm", () => {
   describe("Rendering", () => {
     it("renders the form with instruction text", () => {
       render(<SkillsForm {...defaultProps} />);
-      expect(
-        screen.getByText(/press enter to add a skill/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/press enter to add a skill/i)).toBeInTheDocument();
     });
     it("renders all skill category fields", () => {
       render(<SkillsForm {...defaultProps} />);
-      expect(
-        screen.getByPlaceholderText(/react, typescript, node\.js/i),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/react, typescript, node\.js/i)).toBeInTheDocument();
       expect(
         screen.getByPlaceholderText(/english \(native\), spanish \(fluent\)/i),
       ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/git, docker, figma/i)).toBeInTheDocument();
       expect(
-        screen.getByPlaceholderText(/git, docker, figma/i),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText(
-          /leadership, communication, problem solving/i,
-        ),
+        screen.getByPlaceholderText(/leadership, communication, problem solving/i),
       ).toBeInTheDocument();
     });
     it("shows field descriptions", () => {
       render(<SkillsForm {...defaultProps} />);
       expect(
-        screen.getByText(
-          /programming languages, frameworks, and technologies/i,
-        ),
+        screen.getByText(/programming languages, frameworks, and technologies/i),
       ).toBeInTheDocument();
-      expect(
-        screen.getByText(/spoken languages and proficiency levels/i),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/development tools, software, and platforms/i),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/interpersonal and professional skills/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/spoken languages and proficiency levels/i)).toBeInTheDocument();
+      expect(screen.getByText(/development tools, software, and platforms/i)).toBeInTheDocument();
+      expect(screen.getByText(/interpersonal and professional skills/i)).toBeInTheDocument();
     });
     it("shows placeholder text for all fields", () => {
       render(<SkillsForm {...defaultProps} />);
-      expect(
-        screen.getByPlaceholderText(/react, typescript, node\.js/i),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/react, typescript, node\.js/i)).toBeInTheDocument();
       expect(
         screen.getByPlaceholderText(/english \(native\), spanish \(fluent\)/i),
       ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/git, docker, figma/i)).toBeInTheDocument();
       expect(
-        screen.getByPlaceholderText(/git, docker, figma/i),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText(
-          /leadership, communication, problem solving/i,
-        ),
+        screen.getByPlaceholderText(/leadership, communication, problem solving/i),
       ).toBeInTheDocument();
     });
   });
@@ -80,9 +58,7 @@ describe("SkillsForm", () => {
     it("adds a technical skill when Enter is pressed", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
       expect(screen.getByText("React")).toBeInTheDocument();
@@ -91,9 +67,7 @@ describe("SkillsForm", () => {
     it("adds multiple technical skills", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
       await user.type(technicalInput, "TypeScript");
@@ -107,9 +81,7 @@ describe("SkillsForm", () => {
     it("trims whitespace when adding skills", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "  React  ");
       await user.keyboard("{Enter}");
       expect(screen.getByText("React")).toBeInTheDocument();
@@ -117,22 +89,16 @@ describe("SkillsForm", () => {
     it("does not add empty skills", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "   ");
       await user.keyboard("{Enter}");
       // Should not add any badge
-      expect(
-        screen.queryByRole("button", { name: /remove/i }),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: /remove/i })).not.toBeInTheDocument();
     });
     it("prevents duplicate skills", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
       await user.type(technicalInput, "React");
@@ -146,9 +112,7 @@ describe("SkillsForm", () => {
     it("adds language skills", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const languageInput = screen.getByPlaceholderText(
-        /english \(native\), spanish/i,
-      );
+      const languageInput = screen.getByPlaceholderText(/english \(native\), spanish/i);
       await user.type(languageInput, "English (Native)");
       await user.keyboard("{Enter}");
       expect(screen.getByText("English (Native)")).toBeInTheDocument();
@@ -164,9 +128,7 @@ describe("SkillsForm", () => {
     it("adds soft skills", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const softInput = screen.getByPlaceholderText(
-        /leadership, communication/i,
-      );
+      const softInput = screen.getByPlaceholderText(/leadership, communication/i);
       await user.type(softInput, "Leadership");
       await user.keyboard("{Enter}");
       expect(screen.getByText("Leadership")).toBeInTheDocument();
@@ -175,15 +137,11 @@ describe("SkillsForm", () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
       // Add technical skill
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
       // Add language
-      const languageInput = screen.getByPlaceholderText(
-        /english \(native\), spanish/i,
-      );
+      const languageInput = screen.getByPlaceholderText(/english \(native\), spanish/i);
       await user.type(languageInput, "English");
       await user.keyboard("{Enter}");
       // Add tool
@@ -191,9 +149,7 @@ describe("SkillsForm", () => {
       await user.type(toolsInput, "Git");
       await user.keyboard("{Enter}");
       // Add soft skill
-      const softInput = screen.getByPlaceholderText(
-        /leadership, communication/i,
-      );
+      const softInput = screen.getByPlaceholderText(/leadership, communication/i);
       await user.type(softInput, "Teamwork");
       await user.keyboard("{Enter}");
       expect(screen.getByText("React")).toBeInTheDocument();
@@ -206,9 +162,7 @@ describe("SkillsForm", () => {
     it("removes a skill when X button is clicked", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
       expect(screen.getByText("React")).toBeInTheDocument();
@@ -221,9 +175,7 @@ describe("SkillsForm", () => {
     it("removes correct skill when multiple exist", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       // Add three skills
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
@@ -243,9 +195,7 @@ describe("SkillsForm", () => {
     it("removes all skills one by one", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       // Add two skills
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
@@ -269,9 +219,7 @@ describe("SkillsForm", () => {
     it("removes last skill when Backspace is pressed on empty input", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       // Add skills
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
@@ -286,9 +234,7 @@ describe("SkillsForm", () => {
     it("does not remove skill when Backspace is pressed with text in input", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       // Add a skill
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
@@ -302,9 +248,7 @@ describe("SkillsForm", () => {
     it("removes multiple skills with repeated Backspace", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       // Add three skills
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
@@ -394,9 +338,7 @@ describe("SkillsForm", () => {
       render(<SkillsForm {...defaultProps} skills={skills} />);
       expect(screen.getByText("React")).toBeInTheDocument();
       // When skills exist, the input might have empty placeholder
-      const technicalInputs = document.querySelectorAll(
-        'input[class*="bg-transparent"]',
-      );
+      const technicalInputs = document.querySelectorAll('input[class*="bg-transparent"]');
       const technicalInput = technicalInputs[0] as HTMLInputElement;
       await user.type(technicalInput, "TypeScript");
       await user.keyboard("{Enter}");
@@ -424,9 +366,7 @@ describe("SkillsForm", () => {
     it("displays skills as badges with remove buttons", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
       const badge = screen.getByText("React");
@@ -439,27 +379,21 @@ describe("SkillsForm", () => {
     it("displays multiple badges in same category", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
       await user.type(technicalInput, "TypeScript");
       await user.keyboard("{Enter}");
       await user.type(technicalInput, "Node.js");
       await user.keyboard("{Enter}");
-      expect(screen.getAllByRole("button", { name: /remove/i })).toHaveLength(
-        3,
-      );
+      expect(screen.getAllByRole("button", { name: /remove/i })).toHaveLength(3);
     });
   });
   describe("Input Field Behavior", () => {
     it("clears input field after adding skill", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "React");
       expect(technicalInput).toHaveValue("React");
       await user.keyboard("{Enter}");
@@ -468,9 +402,7 @@ describe("SkillsForm", () => {
     it("maintains focus on input after adding skill", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
       // Input should still be focused after adding
@@ -479,9 +411,7 @@ describe("SkillsForm", () => {
     it("allows typing immediately after adding a skill", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "React");
       await user.keyboard("{Enter}");
       // Should be able to type immediately
@@ -493,37 +423,27 @@ describe("SkillsForm", () => {
     it("handles Enter key on empty input gracefully", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       // Press Enter without typing anything
       await user.click(technicalInput);
       await user.keyboard("{Enter}");
       // Should not add any badge or throw error
-      expect(
-        screen.queryByRole("button", { name: /remove/i }),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: /remove/i })).not.toBeInTheDocument();
     });
     it("handles Backspace on empty category gracefully", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       // Press Backspace without any skills
       await user.click(technicalInput);
       await user.keyboard("{Backspace}");
       // Should not throw error or cause issues
-      expect(
-        screen.queryByRole("button", { name: /remove/i }),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole("button", { name: /remove/i })).not.toBeInTheDocument();
     });
     it("handles adding skills with special characters", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "C++");
       await user.keyboard("{Enter}");
       expect(screen.getByText("C++")).toBeInTheDocument();
@@ -531,9 +451,7 @@ describe("SkillsForm", () => {
     it("handles adding skills with numbers", async () => {
       const user = userEvent.setup();
       render(<SkillsForm {...defaultProps} />);
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, "Vue 3");
       await user.keyboard("{Enter}");
       expect(screen.getByText("Vue 3")).toBeInTheDocument();
@@ -543,9 +461,7 @@ describe("SkillsForm", () => {
       render(<SkillsForm {...defaultProps} />);
       // Skills are truncated to 30 characters max
       const longSkill = "Advanced Machine Learning AI"; // 28 chars, under limit
-      const technicalInput = screen.getByPlaceholderText(
-        /react, typescript, node\.js/i,
-      );
+      const technicalInput = screen.getByPlaceholderText(/react, typescript, node\.js/i);
       await user.type(technicalInput, longSkill);
       await user.keyboard("{Enter}");
       expect(screen.getByText(longSkill)).toBeInTheDocument();
@@ -556,31 +472,23 @@ describe("SkillsForm", () => {
       render(<SkillsForm {...defaultProps} />);
       expect(screen.getByText("Technical Skills")).toBeInTheDocument();
       expect(
-        screen.getByText(
-          /programming languages, frameworks, and technologies/i,
-        ),
+        screen.getByText(/programming languages, frameworks, and technologies/i),
       ).toBeInTheDocument();
     });
     it("shows correct label for languages", () => {
       render(<SkillsForm {...defaultProps} />);
       expect(screen.getByText("Languages")).toBeInTheDocument();
-      expect(
-        screen.getByText(/spoken languages and proficiency levels/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/spoken languages and proficiency levels/i)).toBeInTheDocument();
     });
     it("shows correct label for tools", () => {
       render(<SkillsForm {...defaultProps} />);
       expect(screen.getByText("Tools & Software")).toBeInTheDocument();
-      expect(
-        screen.getByText(/development tools, software, and platforms/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/development tools, software, and platforms/i)).toBeInTheDocument();
     });
     it("shows correct label for soft skills", () => {
       render(<SkillsForm {...defaultProps} />);
       expect(screen.getByText("Soft Skills")).toBeInTheDocument();
-      expect(
-        screen.getByText(/interpersonal and professional skills/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/interpersonal and professional skills/i)).toBeInTheDocument();
     });
   });
 });

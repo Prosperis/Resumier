@@ -62,15 +62,13 @@ export function DeleteProfileDialog({
           <AlertDialogTitle>Delete Profile</AlertDialogTitle>
           <AlertDialogDescription className="space-y-2">
             <span>
-              Are you sure you want to delete <strong>"{profile?.name}"</strong>
-              ?
+              Are you sure you want to delete <strong>"{profile?.name}"</strong>?
             </span>
             {linkedResumesCount > 0 && (
               <span className="block text-destructive">
                 Warning: This profile is linked to {linkedResumesCount} resume
-                {linkedResumesCount !== 1 ? "s" : ""}. Those resumes will keep
-                their current content but will no longer be linked to this
-                profile.
+                {linkedResumesCount !== 1 ? "s" : ""}. Those resumes will keep their current content
+                but will no longer be linked to this profile.
               </span>
             )}
             <span className="block">This action cannot be undone.</span>

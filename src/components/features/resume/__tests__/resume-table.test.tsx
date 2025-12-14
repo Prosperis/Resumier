@@ -5,13 +5,10 @@ import { ResumeTable } from "../resume-table";
 
 // Mock the RowContextMenu to simplify testing
 vi.mock("../resume-table-columns", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("../resume-table-columns")>();
+  const actual = await importOriginal<typeof import("../resume-table-columns")>();
   return {
     ...actual,
-    RowContextMenu: ({ children }: { children: React.ReactNode }) => (
-      <>{children}</>
-    ),
+    RowContextMenu: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   };
 });
 
@@ -81,11 +78,7 @@ describe("ResumeTable", () => {
   describe("Rendering", () => {
     it("renders the table component", () => {
       render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
+        <ResumeTable resumes={mockResumes} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />,
       );
 
       // Should render a table element
@@ -94,25 +87,15 @@ describe("ResumeTable", () => {
 
     it("renders the search input with correct placeholder", () => {
       render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
+        <ResumeTable resumes={mockResumes} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />,
       );
 
-      expect(
-        screen.getByPlaceholderText("Search resumes by title..."),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("Search resumes by title...")).toBeInTheDocument();
     });
 
     it("renders all resume titles", () => {
       render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
+        <ResumeTable resumes={mockResumes} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />,
       );
 
       expect(screen.getByText("Software Engineer Resume")).toBeInTheDocument();
@@ -120,13 +103,7 @@ describe("ResumeTable", () => {
     });
 
     it("renders empty state when no resumes", () => {
-      render(
-        <ResumeTable
-          resumes={[]}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
-      );
+      render(<ResumeTable resumes={[]} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />);
 
       expect(screen.getByText("No results.")).toBeInTheDocument();
     });
@@ -135,11 +112,7 @@ describe("ResumeTable", () => {
   describe("Column Headers", () => {
     it("renders Title column header", () => {
       render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
+        <ResumeTable resumes={mockResumes} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />,
       );
 
       expect(screen.getByText("Title")).toBeInTheDocument();
@@ -147,11 +120,7 @@ describe("ResumeTable", () => {
 
     it("renders Status column header", () => {
       render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
+        <ResumeTable resumes={mockResumes} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />,
       );
 
       // Status button in filter and column header
@@ -161,11 +130,7 @@ describe("ResumeTable", () => {
 
     it("renders Last Modified column header", () => {
       render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
+        <ResumeTable resumes={mockResumes} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />,
       );
 
       expect(screen.getByText("Last Modified")).toBeInTheDocument();
@@ -175,11 +140,7 @@ describe("ResumeTable", () => {
   describe("Status Display", () => {
     it("shows Draft status for incomplete resumes", () => {
       render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
+        <ResumeTable resumes={mockResumes} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />,
       );
 
       // Both resumes should show Draft status since they have minimal content
@@ -253,11 +214,7 @@ describe("ResumeTable", () => {
   describe("Pagination", () => {
     it("renders pagination controls", () => {
       render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
+        <ResumeTable resumes={mockResumes} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />,
       );
 
       // Check for pagination text
@@ -277,9 +234,7 @@ describe("ResumeTable", () => {
       );
 
       expect(screen.getByText("Software Engineer Resume")).toBeInTheDocument();
-      expect(
-        screen.queryByText("Product Manager Resume"),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText("Product Manager Resume")).not.toBeInTheDocument();
     });
 
     it("handles many resumes", () => {
@@ -290,11 +245,7 @@ describe("ResumeTable", () => {
       }));
 
       render(
-        <ResumeTable
-          resumes={manyResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
+        <ResumeTable resumes={manyResumes} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />,
       );
 
       // Table should render (pagination will limit visible rows)
@@ -305,11 +256,7 @@ describe("ResumeTable", () => {
   describe("Selection", () => {
     it("renders checkboxes for row selection", () => {
       render(
-        <ResumeTable
-          resumes={mockResumes}
-          onEdit={mockOnEdit}
-          onDuplicate={mockOnDuplicate}
-        />,
+        <ResumeTable resumes={mockResumes} onEdit={mockOnEdit} onDuplicate={mockOnDuplicate} />,
       );
 
       // Find checkboxes by their aria-label

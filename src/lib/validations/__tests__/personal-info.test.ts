@@ -120,9 +120,7 @@ describe("personalInfoSchema", () => {
       const result = personalInfoSchema.safeParse(data);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toBe(
-          "First name must be less than 50 characters",
-        );
+        expect(result.error.issues[0].message).toBe("First name must be less than 50 characters");
       }
     });
 
@@ -137,9 +135,7 @@ describe("personalInfoSchema", () => {
       const result = personalInfoSchema.safeParse(data);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toBe(
-          "Last name must be less than 50 characters",
-        );
+        expect(result.error.issues[0].message).toBe("Last name must be less than 50 characters");
       }
     });
 
@@ -190,9 +186,7 @@ describe("personalInfoSchema", () => {
       const result = personalInfoSchema.safeParse(data);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toBe(
-          "First name contains invalid characters",
-        );
+        expect(result.error.issues[0].message).toBe("First name contains invalid characters");
       }
     });
 
@@ -207,9 +201,7 @@ describe("personalInfoSchema", () => {
       const result = personalInfoSchema.safeParse(data);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toBe(
-          "Last name contains invalid characters",
-        );
+        expect(result.error.issues[0].message).toBe("Last name contains invalid characters");
       }
     });
 
@@ -240,12 +232,7 @@ describe("personalInfoSchema", () => {
     });
 
     it("rejects invalid email format", () => {
-      const invalidEmails = [
-        "notanemail",
-        "@example.com",
-        "test@",
-        "test @example.com",
-      ];
+      const invalidEmails = ["notanemail", "@example.com", "test@", "test @example.com"];
 
       invalidEmails.forEach((email) => {
         const result = personalInfoSchema.safeParse({
@@ -257,9 +244,7 @@ describe("personalInfoSchema", () => {
         });
         expect(result.success).toBe(false);
         if (!result.success) {
-          expect(result.error.issues[0].message).toBe(
-            "Please enter a valid email address",
-          );
+          expect(result.error.issues[0].message).toBe("Please enter a valid email address");
         }
       });
     });
@@ -329,9 +314,7 @@ describe("personalInfoSchema", () => {
       });
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toBe(
-          "Please enter a valid phone number",
-        );
+        expect(result.error.issues[0].message).toBe("Please enter a valid phone number");
       }
     });
 
@@ -402,9 +385,7 @@ describe("personalInfoSchema", () => {
       const result = personalInfoSchema.safeParse(data);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toBe(
-          "Location must be less than 100 characters",
-        );
+        expect(result.error.issues[0].message).toBe("Location must be less than 100 characters");
       }
     });
 
@@ -468,9 +449,7 @@ describe("personalInfoSchema", () => {
       const result = personalInfoSchema.safeParse(data);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].message).toBe(
-          "Summary must be less than 500 characters",
-        );
+        expect(result.error.issues[0].message).toBe("Summary must be less than 500 characters");
       }
     });
 
@@ -585,15 +564,11 @@ describe("formatPhoneDisplay", () => {
   });
 
   it("formats US phone number in national format", () => {
-    expect(formatPhoneDisplay("+15551234567", "national")).toBe(
-      "(555) 123-4567",
-    );
+    expect(formatPhoneDisplay("+15551234567", "national")).toBe("(555) 123-4567");
   });
 
   it("formats US phone number in international format", () => {
-    expect(formatPhoneDisplay("+15551234567", "international")).toBe(
-      "+1 555 123 4567",
-    );
+    expect(formatPhoneDisplay("+15551234567", "international")).toBe("+1 555 123 4567");
   });
 
   it("formats US phone number in E.164 format", () => {
@@ -601,15 +576,11 @@ describe("formatPhoneDisplay", () => {
   });
 
   it("formats UK phone number in national format", () => {
-    expect(formatPhoneDisplay("+442071234567", "national")).toBe(
-      "020 7123 4567",
-    );
+    expect(formatPhoneDisplay("+442071234567", "national")).toBe("020 7123 4567");
   });
 
   it("formats UK phone number in international format", () => {
-    expect(formatPhoneDisplay("+442071234567", "international")).toBe(
-      "+44 20 7123 4567",
-    );
+    expect(formatPhoneDisplay("+442071234567", "international")).toBe("+44 20 7123 4567");
   });
 
   it("returns empty string for undefined", () => {

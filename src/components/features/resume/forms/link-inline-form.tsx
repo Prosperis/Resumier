@@ -87,10 +87,7 @@ export function LinkInlineForm({
           link.id === newIdRef.current ? { ...link, ...currentData } : link,
         );
       } else {
-        updatedLinks = [
-          ...existingLinks,
-          { id: newIdRef.current, ...currentData } as Link,
-        ];
+        updatedLinks = [...existingLinks, { id: newIdRef.current, ...currentData } as Link];
       }
     } else {
       return;
@@ -156,11 +153,7 @@ export function LinkInlineForm({
                     </FormControl>
                     <SelectContent className="max-h-60">
                       {linkTypeSchema.options.map((type) => (
-                        <SelectItem
-                          key={type}
-                          value={type}
-                          className="text-[11px]"
-                        >
+                        <SelectItem key={type} value={type} className="text-[11px]">
                           <span className="flex items-center gap-2">
                             {getLinkIcon(type as LinkType, true, "h-3.5 w-3.5")}
                             {linkTypeLabels[type]}
@@ -181,11 +174,7 @@ export function LinkInlineForm({
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">Label</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="My Portfolio"
-                      className="h-7 text-[11px]"
-                      {...field}
-                    />
+                    <Input placeholder="My Portfolio" className="h-7 text-[11px]" {...field} />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>

@@ -77,9 +77,7 @@ describe("Progress", () => {
     });
 
     it("renders destructive variant", () => {
-      const { container } = render(
-        <Progress value={50} variant="destructive" />,
-      );
+      const { container } = render(<Progress value={50} variant="destructive" />);
       const bar = container.querySelector(".bg-destructive");
       expect(bar).toBeInTheDocument();
     });
@@ -104,9 +102,7 @@ describe("Progress", () => {
 
   describe("Custom Styling", () => {
     it("applies custom className", () => {
-      const { container } = render(
-        <Progress value={50} className="custom-progress" />,
-      );
+      const { container } = render(<Progress value={50} className="custom-progress" />);
       expect(container.firstChild).toHaveClass("custom-progress");
     });
   });
@@ -134,9 +130,7 @@ describe("CircularProgress", () => {
 
     it("includes title for accessibility", () => {
       render(<CircularProgress value={50} />);
-      expect(
-        screen.getByText("Circular progress indicator"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Circular progress indicator")).toBeInTheDocument();
     });
   });
 
@@ -156,50 +150,38 @@ describe("CircularProgress", () => {
     });
 
     it("handles custom stroke width", () => {
-      const { container } = render(
-        <CircularProgress value={50} strokeWidth={12} />,
-      );
+      const { container } = render(<CircularProgress value={50} strokeWidth={12} />);
       expect(container.querySelector("svg")).toBeInTheDocument();
     });
   });
 
   describe("Color Variants", () => {
     it("renders default variant", () => {
-      const { container } = render(
-        <CircularProgress value={50} variant="default" />,
-      );
+      const { container } = render(<CircularProgress value={50} variant="default" />);
       const circle = container.querySelector(".stroke-muted-foreground");
       expect(circle).toBeInTheDocument();
     });
 
     it("renders primary variant", () => {
-      const { container } = render(
-        <CircularProgress value={50} variant="primary" />,
-      );
+      const { container } = render(<CircularProgress value={50} variant="primary" />);
       const circle = container.querySelector(".stroke-primary");
       expect(circle).toBeInTheDocument();
     });
 
     it("renders success variant", () => {
-      const { container } = render(
-        <CircularProgress value={50} variant="success" />,
-      );
+      const { container } = render(<CircularProgress value={50} variant="success" />);
       const circle = container.querySelector(".stroke-green-500");
       expect(circle).toBeInTheDocument();
     });
 
     it("renders warning variant", () => {
-      const { container } = render(
-        <CircularProgress value={50} variant="warning" />,
-      );
+      const { container } = render(<CircularProgress value={50} variant="warning" />);
       const circle = container.querySelector(".stroke-yellow-500");
       expect(circle).toBeInTheDocument();
     });
 
     it("renders destructive variant", () => {
-      const { container } = render(
-        <CircularProgress value={50} variant="destructive" />,
-      );
+      const { container } = render(<CircularProgress value={50} variant="destructive" />);
       const circle = container.querySelector(".stroke-destructive");
       expect(circle).toBeInTheDocument();
     });
@@ -263,9 +245,7 @@ describe("IndeterminateProgress", () => {
     });
 
     it("applies custom className", () => {
-      const { container } = render(
-        <IndeterminateProgress className="custom-loading" />,
-      );
+      const { container } = render(<IndeterminateProgress className="custom-loading" />);
       expect(container.firstChild).toHaveClass("custom-loading");
     });
 
@@ -279,9 +259,7 @@ describe("IndeterminateProgress", () => {
 
 describe("Reduced Motion", () => {
   it("respects reduced motion preference", async () => {
-    const { useReducedMotion } = await import(
-      "@/lib/animations/hooks/use-reduced-motion"
-    );
+    const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion");
     vi.mocked(useReducedMotion).mockReturnValue(true);
 
     const { container } = render(<Progress value={50} />);
@@ -289,9 +267,7 @@ describe("Reduced Motion", () => {
   });
 
   it("respects reduced motion for circular progress", async () => {
-    const { useReducedMotion } = await import(
-      "@/lib/animations/hooks/use-reduced-motion"
-    );
+    const { useReducedMotion } = await import("@/lib/animations/hooks/use-reduced-motion");
     vi.mocked(useReducedMotion).mockReturnValue(true);
 
     const { container } = render(<CircularProgress value={50} />);

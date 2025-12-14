@@ -1,13 +1,4 @@
-import {
-  Briefcase,
-  FileJson2,
-  FileText,
-  Github,
-  Linkedin,
-  Loader2,
-  Upload,
-  X,
-} from "lucide-react";
+import { Briefcase, FileJson2, FileText, Github, Linkedin, Loader2, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,11 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import type { ResumeContent } from "@/lib/api/types";
-import {
-  IMPORT_SOURCES,
-  importResume,
-  type ImportSource,
-} from "@/lib/services/import-service";
+import { IMPORT_SOURCES, importResume, type ImportSource } from "@/lib/services/import-service";
 import { LinkedInImportButton } from "./linkedin-import-button";
 import { useAuthStore, selectIsGuest } from "@/stores/auth-store";
 import { cn } from "@/lib/utils";
@@ -47,9 +34,7 @@ const iconMap = {
 
 export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
   const [open, setOpen] = useState(false);
-  const [selectedSource, setSelectedSource] = useState<ImportSource | null>(
-    null,
-  );
+  const [selectedSource, setSelectedSource] = useState<ImportSource | null>(null);
   const [urlInput, setUrlInput] = useState("");
   const [fileInput, setFileInput] = useState<File | null>(null);
   const [isImporting, setIsImporting] = useState(false);
@@ -84,9 +69,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
     if (!input) {
       toast({
         title: "Error",
-        description: selectedSource.requiresFile
-          ? "Please select a file"
-          : "Please enter a URL",
+        description: selectedSource.requiresFile ? "Please select a file" : "Please enter a URL",
         variant: "destructive",
       });
       return;
@@ -118,8 +101,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
     } catch (error) {
       toast({
         title: "Import Error",
-        description:
-          error instanceof Error ? error.message : "An error occurred",
+        description: error instanceof Error ? error.message : "An error occurred",
         variant: "destructive",
       });
     } finally {
@@ -156,9 +138,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>
-            {selectedSource
-              ? `Import from ${selectedSource.name}`
-              : "Import Resume"}
+            {selectedSource ? `Import from ${selectedSource.name}` : "Import Resume"}
           </DialogTitle>
           <DialogDescription>
             {selectedSource
@@ -179,8 +159,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                   onClick={() => handleSourceSelect(source)}
                   className={cn(
                     "hover:border-primary focus:ring-ring group relative flex flex-col items-start gap-2 rounded-lg border-2 border-border p-4 text-left transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2",
-                    source.comingSoon &&
-                      "opacity-60 hover:border-border hover:shadow-none",
+                    source.comingSoon && "opacity-60 hover:border-border hover:shadow-none",
                   )}
                 >
                   {source.comingSoon && (
@@ -194,9 +173,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                     </div>
                     <div>
                       <h3 className="font-semibold">{source.name}</h3>
-                      <p className="text-muted-foreground text-sm">
-                        {source.description}
-                      </p>
+                      <p className="text-muted-foreground text-sm">{source.description}</p>
                     </div>
                   </div>
                 </button>
@@ -212,12 +189,10 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                 // Guest mode: simple URL input
                 <div className="space-y-4">
                   <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4">
-                    <h4 className="mb-2 font-medium">
-                      Import from LinkedIn Profile URL
-                    </h4>
+                    <h4 className="mb-2 font-medium">Import from LinkedIn Profile URL</h4>
                     <p className="text-muted-foreground mb-4 text-sm">
-                      Enter your public LinkedIn profile URL to import your
-                      profile data. Your profile must be publicly visible.
+                      Enter your public LinkedIn profile URL to import your profile data. Your
+                      profile must be publicly visible.
                     </p>
                   </div>
 
@@ -236,9 +211,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                   </div>
 
                   <div className="bg-muted/50 rounded-lg p-4">
-                    <h4 className="mb-2 text-sm font-medium">
-                      What will be imported?
-                    </h4>
+                    <h4 className="mb-2 text-sm font-medium">What will be imported?</h4>
                     <ul className="text-muted-foreground space-y-1 text-sm">
                       <li>• Personal information</li>
                       <li>• Work experience</li>
@@ -247,8 +220,8 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                       <li>• Links and contact information</li>
                     </ul>
                     <p className="text-muted-foreground mt-2 text-xs">
-                      Note: Public profile information will be imported. Make
-                      sure your LinkedIn profile is set to public.
+                      Note: Public profile information will be imported. Make sure your LinkedIn
+                      profile is set to public.
                     </p>
                   </div>
                 </div>
@@ -258,9 +231,8 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                   <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4">
                     <h4 className="mb-2 font-medium">Connect with LinkedIn</h4>
                     <p className="text-muted-foreground mb-4 text-sm">
-                      Click the button below to securely connect your LinkedIn
-                      profile. You'll be redirected to LinkedIn to authorize
-                      access to your profile information.
+                      Click the button below to securely connect your LinkedIn profile. You'll be
+                      redirected to LinkedIn to authorize access to your profile information.
                     </p>
                     <LinkedInImportButton
                       onImportStart={() => {
@@ -271,9 +243,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                   </div>
 
                   <div className="bg-muted/50 rounded-lg p-4">
-                    <h4 className="mb-2 text-sm font-medium">
-                      What will be imported?
-                    </h4>
+                    <h4 className="mb-2 text-sm font-medium">What will be imported?</h4>
                     <ul className="text-muted-foreground space-y-1 text-sm">
                       <li>• Personal information</li>
                       <li>• Work experience</li>
@@ -282,8 +252,8 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                       <li>• Links and contact information</li>
                     </ul>
                     <p className="text-muted-foreground mt-2 text-xs">
-                      Note: Imported data will be merged with your existing
-                      resume. You can review and edit everything before saving.
+                      Note: Imported data will be merged with your existing resume. You can review
+                      and edit everything before saving.
                     </p>
                   </div>
                 </div>
@@ -293,9 +263,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="url">
-                    {selectedSource.name === "LinkedIn"
-                      ? "LinkedIn Profile URL"
-                      : "Profile URL"}
+                    {selectedSource.name === "LinkedIn" ? "LinkedIn Profile URL" : "Profile URL"}
                   </Label>
                   <Input
                     id="url"
@@ -316,9 +284,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                 </div>
 
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <h4 className="mb-2 text-sm font-medium">
-                    What will be imported?
-                  </h4>
+                  <h4 className="mb-2 text-sm font-medium">What will be imported?</h4>
                   <ul className="text-muted-foreground space-y-1 text-sm">
                     <li>• Personal information</li>
                     <li>• Work experience</li>
@@ -327,8 +293,8 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                     <li>• Links and contact information</li>
                   </ul>
                   <p className="text-muted-foreground mt-2 text-xs">
-                    Note: Imported data will be merged with your existing
-                    resume. You can review and edit everything before saving.
+                    Note: Imported data will be merged with your existing resume. You can review and
+                    edit everything before saving.
                   </p>
                 </div>
               </div>
@@ -337,9 +303,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="file">
-                    {selectedSource.name === "JSON File"
-                      ? "Select JSON File"
-                      : "Select File"}
+                    {selectedSource.name === "JSON File" ? "Select JSON File" : "Select File"}
                   </Label>
                   <div className="flex items-center gap-2">
                     <Input
@@ -368,9 +332,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                     )}
                   </div>
                   {fileInput && (
-                    <p className="text-muted-foreground text-sm">
-                      Selected: {fileInput.name}
-                    </p>
+                    <p className="text-muted-foreground text-sm">Selected: {fileInput.name}</p>
                   )}
                   <p className="text-muted-foreground text-sm">
                     {selectedSource.name === "JSON File"
@@ -380,9 +342,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                 </div>
 
                 <div className="bg-muted/50 rounded-lg p-4">
-                  <h4 className="mb-2 text-sm font-medium">
-                    What will be imported?
-                  </h4>
+                  <h4 className="mb-2 text-sm font-medium">What will be imported?</h4>
                   <ul className="text-muted-foreground space-y-1 text-sm">
                     <li>• Personal information</li>
                     <li>• Work experience</li>
@@ -391,8 +351,8 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                     <li>• Links and contact information</li>
                   </ul>
                   <p className="text-muted-foreground mt-2 text-xs">
-                    Note: Imported data will be merged with your existing
-                    resume. You can review and edit everything before saving.
+                    Note: Imported data will be merged with your existing resume. You can review and
+                    edit everything before saving.
                   </p>
                 </div>
               </div>
@@ -406,9 +366,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
               <Button
                 variant="outline"
                 onClick={handleBack}
-                disabled={
-                  (selectedSource.id === "linkedin" && !isGuest) || isImporting
-                }
+                disabled={(selectedSource.id === "linkedin" && !isGuest) || isImporting}
               >
                 Back
               </Button>

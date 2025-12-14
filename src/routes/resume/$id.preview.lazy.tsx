@@ -1,8 +1,4 @@
-import {
-  createLazyFileRoute,
-  useNavigate,
-  useParams,
-} from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate, useParams } from "@tanstack/react-router";
 import { ArrowLeft, Download } from "lucide-react";
 import { PdfViewer } from "@/components/features/resume/pdf-viewer";
 import { Button } from "@/components/ui/button";

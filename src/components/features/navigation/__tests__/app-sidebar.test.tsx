@@ -31,11 +31,7 @@ vi.mock("../nav-secondary", () => ({
 }));
 
 vi.mock("../nav-user", () => ({
-  NavUser: ({
-    user,
-  }: {
-    user: { name: string; email: string; avatar: string };
-  }) => (
+  NavUser: ({ user }: { user: { name: string; email: string; avatar: string } }) => (
     <div data-testid="nav-user">
       <span data-testid="user-name">{user.name}</span>
       <span data-testid="user-email">{user.email}</span>
@@ -145,9 +141,7 @@ describe("AppSidebar", () => {
 
       // Check that user data is passed correctly
       expect(screen.getByTestId("user-name")).toHaveTextContent("Jane Smith");
-      expect(screen.getByTestId("user-email")).toHaveTextContent(
-        "jane.smith@example.com",
-      );
+      expect(screen.getByTestId("user-email")).toHaveTextContent("jane.smith@example.com");
     });
 
     it("renders default user data when user is not logged in", () => {
@@ -160,9 +154,7 @@ describe("AppSidebar", () => {
 
       // Check for default values
       expect(screen.getByTestId("user-name")).toHaveTextContent("User");
-      expect(screen.getByTestId("user-email")).toHaveTextContent(
-        "user@example.com",
-      );
+      expect(screen.getByTestId("user-email")).toHaveTextContent("user@example.com");
     });
 
     it("handles partial user data gracefully", () => {
@@ -178,9 +170,7 @@ describe("AppSidebar", () => {
       expect(navUser).toBeInTheDocument();
 
       expect(screen.getByTestId("user-name")).toHaveTextContent("John Doe");
-      expect(screen.getByTestId("user-email")).toHaveTextContent(
-        "user@example.com",
-      );
+      expect(screen.getByTestId("user-email")).toHaveTextContent("user@example.com");
     });
   });
 
@@ -225,9 +215,7 @@ describe("AppSidebar", () => {
         avatar: "/avatar.jpg",
       });
 
-      const { container } = renderWithProvider(
-        <AppSidebar data-testid="custom-sidebar" />,
-      );
+      const { container } = renderWithProvider(<AppSidebar data-testid="custom-sidebar" />);
 
       const sidebar = container.querySelector('[data-testid="custom-sidebar"]');
       expect(sidebar).toBeInTheDocument();
@@ -314,9 +302,7 @@ describe("AppSidebar", () => {
 
       // Should render with default values
       expect(screen.getByTestId("user-name")).toHaveTextContent("User");
-      expect(screen.getByTestId("user-email")).toHaveTextContent(
-        "user@example.com",
-      );
+      expect(screen.getByTestId("user-email")).toHaveTextContent("user@example.com");
     });
 
     it("handles empty string user data", () => {
@@ -330,9 +316,7 @@ describe("AppSidebar", () => {
 
       // Should fallback to defaults
       expect(screen.getByTestId("user-name")).toHaveTextContent("User");
-      expect(screen.getByTestId("user-email")).toHaveTextContent(
-        "user@example.com",
-      );
+      expect(screen.getByTestId("user-email")).toHaveTextContent("user@example.com");
     });
 
     it("renders correctly with only name provided", () => {
@@ -344,12 +328,8 @@ describe("AppSidebar", () => {
 
       renderWithProvider(<AppSidebar />);
 
-      expect(screen.getByTestId("user-name")).toHaveTextContent(
-        "Alice Johnson",
-      );
-      expect(screen.getByTestId("user-email")).toHaveTextContent(
-        "user@example.com",
-      );
+      expect(screen.getByTestId("user-name")).toHaveTextContent("Alice Johnson");
+      expect(screen.getByTestId("user-email")).toHaveTextContent("user@example.com");
     });
   });
 });

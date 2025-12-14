@@ -1,12 +1,6 @@
 import { vi } from "vitest";
 import { ApiClient } from "../client";
-import {
-  ApiError,
-  NetworkError,
-  NotFoundError,
-  ServerError,
-  UnauthorizedError,
-} from "../errors";
+import { ApiError, NetworkError, NotFoundError, ServerError, UnauthorizedError } from "../errors";
 import { mockApi, useMockApi } from "../mock";
 
 // Mock dependencies
@@ -465,11 +459,7 @@ describe("ApiClient", () => {
       });
 
       await client.delete("/users/1");
-      expect(mockApi.route).toHaveBeenCalledWith(
-        "/users/1",
-        "DELETE",
-        undefined,
-      );
+      expect(mockApi.route).toHaveBeenCalledWith("/users/1", "DELETE", undefined);
     });
   });
 

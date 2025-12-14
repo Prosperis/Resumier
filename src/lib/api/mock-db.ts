@@ -55,9 +55,7 @@ class MockDatabase {
   /**
    * Create new profile
    */
-  createProfile(
-    data: Omit<Profile, "id" | "createdAt" | "updatedAt">,
-  ): Profile {
+  createProfile(data: Omit<Profile, "id" | "createdAt" | "updatedAt">): Profile {
     const now = new Date().toISOString();
     const profile: Profile = {
       ...data,
@@ -73,10 +71,7 @@ class MockDatabase {
   /**
    * Update existing profile
    */
-  updateProfile(
-    id: string,
-    updates: Partial<Omit<Profile, "id" | "createdAt">>,
-  ): Profile | null {
+  updateProfile(id: string, updates: Partial<Omit<Profile, "id" | "createdAt">>): Profile | null {
     const existing = this.profiles.get(id);
     if (!existing) return null;
 
@@ -158,10 +153,7 @@ class MockDatabase {
   /**
    * Update existing resume
    */
-  updateResume(
-    id: string,
-    updates: Partial<Omit<Resume, "id" | "createdAt">>,
-  ): Resume | null {
+  updateResume(id: string, updates: Partial<Omit<Resume, "id" | "createdAt">>): Resume | null {
     const existing = this.resumes.get(id);
     if (!existing) return null;
 

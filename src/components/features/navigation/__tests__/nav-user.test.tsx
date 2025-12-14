@@ -6,8 +6,7 @@ import { NavUser } from "../nav-user";
 
 // Mock useSidebar hook but keep SidebarContext
 vi.mock("@/components/ui/use-sidebar", async (importOriginal) => {
-  const actual =
-    await importOriginal<typeof import("@/components/ui/use-sidebar")>();
+  const actual = await importOriginal<typeof import("@/components/ui/use-sidebar")>();
   return {
     ...actual,
     useSidebar: vi.fn(() => ({ isMobile: false })),
@@ -368,9 +367,7 @@ describe("NavUser", () => {
       const { container } = renderWithProviders(<NavUser user={mockUser} />);
 
       // Component should be wrapped in proper sidebar structure
-      expect(
-        container.querySelector('[data-sidebar="menu"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-sidebar="menu"]')).toBeInTheDocument();
     });
 
     it("applies proper styling classes", () => {

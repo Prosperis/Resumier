@@ -1,27 +1,9 @@
 import { formatDistanceToNow } from "date-fns";
-import {
-  History,
-  Undo2,
-  Redo2,
-  ChevronRight,
-  GitBranch,
-  Circle,
-  CircleDot,
-} from "lucide-react";
+import { History, Undo2, Redo2, ChevronRight, GitBranch, Circle, CircleDot } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import {
   useHistoryStore,
@@ -115,9 +97,7 @@ function HistoryEntryItem({
             >
               {entry.description}
             </span>
-            <span className="text-xs text-muted-foreground/60 whitespace-nowrap">
-              {timeAgo}
-            </span>
+            <span className="text-xs text-muted-foreground/60 whitespace-nowrap">{timeAgo}</span>
           </div>
 
           {/* Changes preview */}
@@ -134,17 +114,11 @@ function HistoryEntryItem({
 
           {/* Section badges */}
           <div className="flex flex-wrap gap-1 mt-2">
-            {[...new Set(entry.changes.map((c) => c.section))].map(
-              (section) => (
-                <Badge
-                  key={section}
-                  variant="secondary"
-                  className="text-[10px] px-1.5 py-0"
-                >
-                  {section}
-                </Badge>
-              ),
-            )}
+            {[...new Set(entry.changes.map((c) => c.section))].map((section) => (
+              <Badge key={section} variant="secondary" className="text-[10px] px-1.5 py-0">
+                {section}
+              </Badge>
+            ))}
           </div>
         </div>
       </div>
@@ -248,9 +222,7 @@ export function HistoryPanel() {
           <div className="flex items-center justify-between py-3 px-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg my-4">
             <div className="flex items-center gap-2">
               <GitBranch className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-              <span className="text-sm text-amber-700 dark:text-amber-300">
-                Viewing past state
-              </span>
+              <span className="text-sm text-amber-700 dark:text-amber-300">Viewing past state</span>
             </div>
             <Button
               variant="ghost"
@@ -335,10 +307,7 @@ export function HistoryControls() {
             size="icon"
             onClick={undoChange}
             disabled={!canUndo}
-            className={cn(
-              "h-8 w-8",
-              isPreviewingHistory && "text-amber-600 dark:text-amber-400",
-            )}
+            className={cn("h-8 w-8", isPreviewingHistory && "text-amber-600 dark:text-amber-400")}
           >
             <Undo2 className="h-4 w-4" />
           </Button>
@@ -355,10 +324,7 @@ export function HistoryControls() {
             size="icon"
             onClick={redoChange}
             disabled={!canRedo}
-            className={cn(
-              "h-8 w-8",
-              isPreviewingHistory && "text-amber-600 dark:text-amber-400",
-            )}
+            className={cn("h-8 w-8", isPreviewingHistory && "text-amber-600 dark:text-amber-400")}
           >
             <Redo2 className="h-4 w-4" />
           </Button>

@@ -228,12 +228,7 @@ export interface TemplateFilterOptions {
 /**
  * Template Sort Options
  */
-export type TemplateSortBy =
-  | "popular"
-  | "newest"
-  | "name"
-  | "ats-score"
-  | "category";
+export type TemplateSortBy = "popular" | "newest" | "name" | "ats-score" | "category";
 
 export type TemplateSortOrder = "asc" | "desc";
 

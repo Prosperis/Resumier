@@ -10,25 +10,21 @@ vi.mock("@/components/features/resume/export/export-menu", () => ({
   ),
 }));
 
-vi.mock(
-  "@/components/features/resume/preview/interactive-resume-preview",
-  () => ({
-    InteractiveResumePreview: ({
-      resume,
-      template,
-      isInteractive,
-    }: {
-      resume: Resume;
-      template: string;
-      isInteractive: boolean;
-    }) => (
-      <div data-testid="interactive-resume-preview">
-        Preview: {resume.title} - {template} -{" "}
-        {isInteractive ? "interactive" : "static"}
-      </div>
-    ),
-  }),
-);
+vi.mock("@/components/features/resume/preview/interactive-resume-preview", () => ({
+  InteractiveResumePreview: ({
+    resume,
+    template,
+    isInteractive,
+  }: {
+    resume: Resume;
+    template: string;
+    isInteractive: boolean;
+  }) => (
+    <div data-testid="interactive-resume-preview">
+      Preview: {resume.title} - {template} - {isInteractive ? "interactive" : "static"}
+    </div>
+  ),
+}));
 
 vi.mock("@/components/features/resume/resume-builder", () => ({
   ResumeBuilder: () => <div data-testid="resume-builder">Resume Builder</div>,
@@ -47,9 +43,7 @@ function createWrapper() {
   });
 
   return function Wrapper({ children }: { children: React.ReactNode }) {
-    return (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    );
+    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   };
 }
 
@@ -81,12 +75,8 @@ describe("ResumeEditor", () => {
     render(<ResumeEditor resume={mockResume} />, { wrapper: createWrapper() });
 
     // Preview should be visible and in interactive mode
-    expect(
-      screen.getByTestId("interactive-resume-preview"),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/Preview: My Resume - modern - interactive/i),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("interactive-resume-preview")).toBeInTheDocument();
+    expect(screen.getByText(/Preview: My Resume - modern - interactive/i)).toBeInTheDocument();
   });
 
   it("should render mini sidebar with section icons", () => {
@@ -108,9 +98,7 @@ describe("ResumeEditor", () => {
   it("should render preview with correct props", () => {
     render(<ResumeEditor resume={mockResume} />, { wrapper: createWrapper() });
 
-    expect(
-      screen.getByText(/Preview: My Resume - modern - interactive/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Preview: My Resume - modern - interactive/i)).toBeInTheDocument();
   });
 
   it("should render with different resume", () => {
@@ -123,8 +111,6 @@ describe("ResumeEditor", () => {
       wrapper: createWrapper(),
     });
 
-    expect(
-      screen.getByText(/Preview: Engineering Resume/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Preview: Engineering Resume/i)).toBeInTheDocument();
   });
 });

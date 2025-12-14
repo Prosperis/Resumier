@@ -14,16 +14,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useAutoSave } from "@/hooks/use-auto-save";
 import type { Skills, SkillWithLevel } from "@/lib/api/types";
 import { type SkillsFormData, skillsSchema } from "@/lib/validations/skills";
@@ -128,9 +120,7 @@ function TagInput({
                 >
                   <span className="truncate">{skillName}</span>
                   {showLevels && (
-                    <span className="text-[8px] text-muted-foreground ml-0.5">
-                      ({skillLevel})
-                    </span>
+                    <span className="text-[8px] text-muted-foreground ml-0.5">({skillLevel})</span>
                   )}
                   <button
                     type="button"
@@ -150,15 +140,11 @@ function TagInput({
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-medium">{skillName}</span>
-                      <span className="text-xs text-muted-foreground">
-                        Level: {skillLevel}/10
-                      </span>
+                      <span className="text-xs text-muted-foreground">Level: {skillLevel}/10</span>
                     </div>
                     <Slider
                       value={[skillLevel]}
-                      onValueChange={(values: number[]) =>
-                        updateSkillLevel(index, values[0])
-                      }
+                      onValueChange={(values: number[]) => updateSkillLevel(index, values[0])}
                       min={1}
                       max={10}
                       step={1}
@@ -368,10 +354,7 @@ export function SkillsForm({ resumeId, skills }: SkillsFormProps) {
                   <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
                 </TooltipTrigger>
                 <TooltipContent side="left" className="max-w-[200px] text-xs">
-                  <p>
-                    Long skills may overflow or break the layout in some resume
-                    templates.
-                  </p>
+                  <p>Long skills may overflow or break the layout in some resume templates.</p>
                 </TooltipContent>
               </Tooltip>
             )}

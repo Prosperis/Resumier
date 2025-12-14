@@ -5,12 +5,7 @@ import { NotificationBadge, PulseBadge, StatusBadge } from "../animated-badge";
 // Mock Badge component
 vi.mock("../badge", () => ({
   Badge: ({ children, className, variant, ...props }: any) => (
-    <span
-      className={className}
-      data-variant={variant}
-      data-testid="badge"
-      {...props}
-    >
+    <span className={className} data-variant={variant} data-testid="badge" {...props}>
       {children}
     </span>
   ),
@@ -68,36 +63,22 @@ describe("NotificationBadge", () => {
   describe("Variants", () => {
     it("should render with default destructive variant", () => {
       const { container } = render(<NotificationBadge count={5} />);
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should render with outline variant", () => {
-      const { container } = render(
-        <NotificationBadge count={5} variant="outline" />,
-      );
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      const { container } = render(<NotificationBadge count={5} variant="outline" />);
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should render with secondary variant", () => {
-      const { container } = render(
-        <NotificationBadge count={5} variant="secondary" />,
-      );
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      const { container } = render(<NotificationBadge count={5} variant="secondary" />);
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should render with default variant", () => {
-      const { container } = render(
-        <NotificationBadge count={5} variant="default" />,
-      );
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      const { container } = render(<NotificationBadge count={5} variant="default" />);
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
   });
 
@@ -130,17 +111,13 @@ describe("NotificationBadge", () => {
 
   describe("ClassName", () => {
     it("should apply custom className", () => {
-      const { container } = render(
-        <NotificationBadge count={5} className="custom-class" />,
-      );
+      const { container } = render(<NotificationBadge count={5} className="custom-class" />);
       expect(container.querySelector(".custom-class")).toBeInTheDocument();
     });
 
     it("should render without className", () => {
       const { container } = render(<NotificationBadge count={5} />);
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
   });
 
@@ -171,43 +148,29 @@ describe("PulseBadge", () => {
 
     it("should render with default variant", () => {
       const { container } = render(<PulseBadge>Test</PulseBadge>);
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should render with motion wrapper", () => {
       const { container } = render(<PulseBadge>Badge</PulseBadge>);
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
   });
 
   describe("Pulse Animation", () => {
     it("should pulse by default", () => {
       const { container } = render(<PulseBadge>Pulsing</PulseBadge>);
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should not pulse when pulse is false", () => {
-      const { container } = render(
-        <PulseBadge pulse={false}>Not Pulsing</PulseBadge>,
-      );
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      const { container } = render(<PulseBadge pulse={false}>Not Pulsing</PulseBadge>);
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should pulse when pulse is explicitly true", () => {
-      const { container } = render(
-        <PulseBadge pulse={true}>Pulsing</PulseBadge>,
-      );
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      const { container } = render(<PulseBadge pulse={true}>Pulsing</PulseBadge>);
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
   });
 
@@ -235,17 +198,13 @@ describe("PulseBadge", () => {
 
   describe("ClassName", () => {
     it("should apply custom className", () => {
-      const { container } = render(
-        <PulseBadge className="custom-pulse">Text</PulseBadge>,
-      );
+      const { container } = render(<PulseBadge className="custom-pulse">Text</PulseBadge>);
       expect(container.querySelector(".custom-pulse")).toBeInTheDocument();
     });
 
     it("should render without className", () => {
       const { container } = render(<PulseBadge>Text</PulseBadge>);
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
   });
 
@@ -276,30 +235,22 @@ describe("StatusBadge", () => {
     it("should render online status", () => {
       render(<StatusBadge status="online" />);
       const { container } = render(<StatusBadge status="online" />);
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should render offline status", () => {
       const { container } = render(<StatusBadge status="offline" />);
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should render away status", () => {
       const { container } = render(<StatusBadge status="away" />);
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should render busy status", () => {
       const { container } = render(<StatusBadge status="busy" />);
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
   });
 
@@ -337,17 +288,13 @@ describe("StatusBadge", () => {
 
   describe("ClassName", () => {
     it("should apply custom className", () => {
-      const { container } = render(
-        <StatusBadge status="online" className="custom-status" />,
-      );
+      const { container } = render(<StatusBadge status="online" className="custom-status" />);
       expect(container.querySelector(".custom-status")).toBeInTheDocument();
     });
 
     it("should render without className", () => {
       const { container } = render(<StatusBadge status="online" />);
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
   });
 
@@ -355,33 +302,25 @@ describe("StatusBadge", () => {
     it("should pulse for online status", () => {
       const { container } = render(<StatusBadge status="online" />);
       // Online status should have pulsing animation
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should pulse for busy status", () => {
       const { container } = render(<StatusBadge status="busy" />);
       // Busy status should have pulsing animation
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should not pulse for offline status", () => {
       const { container } = render(<StatusBadge status="offline" />);
       // Offline doesn't pulse but still renders with motion
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
 
     it("should not pulse for away status", () => {
       const { container } = render(<StatusBadge status="away" />);
       // Away doesn't pulse but still renders with motion
-      expect(
-        container.querySelector('[data-motion="true"]'),
-      ).toBeInTheDocument();
+      expect(container.querySelector('[data-motion="true"]')).toBeInTheDocument();
     });
   });
 

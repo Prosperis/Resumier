@@ -172,12 +172,8 @@ describe("Select", () => {
     const trigger = screen.getByRole("combobox");
     await user.click(trigger);
 
-    expect(
-      screen.getByRole("option", { name: "Option 1" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("option", { name: "Option 3" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Option 1" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "Option 3" })).toBeInTheDocument();
   });
 
   it("updates displayed value on selection", async () => {

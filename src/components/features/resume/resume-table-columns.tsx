@@ -91,45 +91,36 @@ function getCompletionStatus(resume: Resume): {
     const hasExperience = content.experience.length > 0;
     const hasEducation = content.education.length > 0;
     const hasSkills =
-      (content.skills.technical?.length || 0) +
-        (content.skills.soft?.length || 0) >
-      0;
+      (content.skills.technical?.length || 0) + (content.skills.soft?.length || 0) > 0;
 
-    const completeness = [
-      hasPersonalInfo,
-      hasExperience,
-      hasEducation,
-      hasSkills,
-    ].filter(Boolean).length;
+    const completeness = [hasPersonalInfo, hasExperience, hasEducation, hasSkills].filter(
+      Boolean,
+    ).length;
 
     if (completeness === 4) {
       return {
         status: "Complete",
         variant: "default",
-        className:
-          "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
+        className: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
       };
     }
     if (completeness >= 2) {
       return {
         status: "In Progress",
         variant: "outline",
-        className:
-          "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20",
+        className: "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20",
       };
     }
     return {
       status: "Draft",
       variant: "secondary",
-      className:
-        "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
+      className: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
     };
   } catch {
     return {
       status: "Draft",
       variant: "secondary",
-      className:
-        "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
+      className: "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20",
     };
   }
 }
@@ -237,16 +228,12 @@ export function createResumeColumns(_handlers?: {
     // Title column
     {
       accessorKey: "title",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Title" />
-      ),
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Title" />,
       cell: ({ row }) => {
         const resume = row.original;
         return (
           <div className="flex flex-col gap-1 min-w-0">
-            <span className="font-medium truncate">
-              {row.getValue("title")}
-            </span>
+            <span className="font-medium truncate">{row.getValue("title")}</span>
             {/* Show updated date on mobile when date columns are hidden */}
             <span className="text-muted-foreground text-xs md:hidden">
               Updated {formatRelativeTime(resume.updatedAt)}
@@ -261,9 +248,7 @@ export function createResumeColumns(_handlers?: {
     // Version column
     {
       accessorKey: "version",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Version" />
-      ),
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Version" />,
       cell: ({ row }) => {
         const resume = row.original;
         const version = resume.version || 1;
@@ -278,9 +263,7 @@ export function createResumeColumns(_handlers?: {
     // Field/Usage column (optional)
     {
       accessorKey: "field",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Field" />
-      ),
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Field" />,
       cell: ({ row }) => {
         const resume = row.original;
         // This will be empty for now, but ready for future use
@@ -300,17 +283,12 @@ export function createResumeColumns(_handlers?: {
     // Status column
     {
       accessorKey: "status",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Status" />
-      ),
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
       cell: ({ row }) => {
         const resume = row.original;
         const statusInfo = getCompletionStatus(resume);
         return (
-          <Badge
-            variant={statusInfo.variant}
-            className={`text-xs ${statusInfo.className}`}
-          >
+          <Badge variant={statusInfo.variant} className={`text-xs ${statusInfo.className}`}>
             {statusInfo.status}
           </Badge>
         );
@@ -329,9 +307,7 @@ export function createResumeColumns(_handlers?: {
     // Reviewed column
     {
       accessorKey: "reviewed",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Reviewed" />
-      ),
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Reviewed" />,
       cell: ({ row }) => {
         const resume = row.original;
         // This will be empty for now, ready for future review feature
@@ -343,9 +319,7 @@ export function createResumeColumns(_handlers?: {
                 Reviewed
               </Badge>
             ) : (
-              <span className="text-muted-foreground text-xs italic">
-                Not reviewed
-              </span>
+              <span className="text-muted-foreground text-xs italic">Not reviewed</span>
             )}
           </div>
         );
@@ -358,16 +332,11 @@ export function createResumeColumns(_handlers?: {
     },
     {
       accessorKey: "updatedAt",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Last Modified" />
-      ),
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Last Modified" />,
       cell: ({ row }) => {
         const dateString = row.getValue("updatedAt") as string;
         return (
-          <div
-            className="text-muted-foreground text-sm"
-            title={formatDateTime(dateString)}
-          >
+          <div className="text-muted-foreground text-sm" title={formatDateTime(dateString)}>
             {formatRelativeTime(dateString)}
           </div>
         );

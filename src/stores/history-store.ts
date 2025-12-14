@@ -54,8 +54,7 @@ interface HistoryStore {
 }
 
 // Generate unique ID
-const generateId = () =>
-  `history-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+const generateId = () => `history-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
 // Get human-readable label for a field
 export function getFieldLabel(field: string, section: string): string {
@@ -137,8 +136,7 @@ export const useHistoryStore = create<HistoryStore>()(
           ...entryData,
           id: generateId(),
           timestamp: Date.now(),
-          description:
-            entryData.description || generateDescription(entryData.changes),
+          description: entryData.description || generateDescription(entryData.changes),
         };
 
         set((state) => {
@@ -236,10 +234,7 @@ export const useHistoryStore = create<HistoryStore>()(
 
       getCurrentEntry: () => {
         const state = get();
-        if (
-          state.currentIndex >= 0 &&
-          state.currentIndex < state.entries.length
-        ) {
+        if (state.currentIndex >= 0 && state.currentIndex < state.entries.length) {
           return state.entries[state.currentIndex];
         }
         return null;
@@ -275,8 +270,7 @@ export const useHistoryStore = create<HistoryStore>()(
 // Selectors
 export const selectHistoryEntries = (state: HistoryStore) => state.entries;
 export const selectCurrentIndex = (state: HistoryStore) => state.currentIndex;
-export const selectIsPreviewingHistory = (state: HistoryStore) =>
-  state.isPreviewingHistory;
+export const selectIsPreviewingHistory = (state: HistoryStore) => state.isPreviewingHistory;
 export const selectPreviewEntry = (state: HistoryStore) => state.previewEntry;
 export const selectCanUndo = (state: HistoryStore) => state.canUndo();
 export const selectCanRedo = (state: HistoryStore) => state.canRedo();

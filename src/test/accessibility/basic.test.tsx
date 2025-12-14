@@ -33,9 +33,7 @@ describe("Accessibility Infrastructure", () => {
       );
 
       const results = await axe(container);
-      const altTextViolations = results.violations.filter(
-        (v) => v.id === "image-alt",
-      );
+      const altTextViolations = results.violations.filter((v) => v.id === "image-alt");
       expect(altTextViolations.length).toBeGreaterThan(0);
     });
 
@@ -47,9 +45,7 @@ describe("Accessibility Infrastructure", () => {
       );
 
       const results = await axe(container);
-      const altTextViolations = results.violations.filter(
-        (v) => v.id === "image-alt",
-      );
+      const altTextViolations = results.violations.filter((v) => v.id === "image-alt");
       expect(altTextViolations.length).toBe(0);
     });
 
@@ -61,9 +57,7 @@ describe("Accessibility Infrastructure", () => {
       );
 
       const results = await axe(container);
-      const buttonNameViolations = results.violations.filter(
-        (v) => v.id === "button-name",
-      );
+      const buttonNameViolations = results.violations.filter((v) => v.id === "button-name");
       expect(buttonNameViolations.length).toBeGreaterThan(0);
     });
 
@@ -76,9 +70,7 @@ describe("Accessibility Infrastructure", () => {
       );
 
       const results = await axe(container);
-      const buttonNameViolations = results.violations.filter(
-        (v) => v.id === "button-name",
-      );
+      const buttonNameViolations = results.violations.filter((v) => v.id === "button-name");
       expect(buttonNameViolations.length).toBe(0);
     });
 
@@ -93,9 +85,7 @@ describe("Accessibility Infrastructure", () => {
       );
 
       const results = await axe(container);
-      const ariaViolations = results.violations.filter((v) =>
-        v.id.includes("aria"),
-      );
+      const ariaViolations = results.violations.filter((v) => v.id.includes("aria"));
       expect(ariaViolations.length).toBeGreaterThan(0);
     });
 
@@ -111,9 +101,7 @@ describe("Accessibility Infrastructure", () => {
       );
 
       const results = await axe(container);
-      const ariaViolations = results.violations.filter((v) =>
-        v.id.includes("aria-valid"),
-      );
+      const ariaViolations = results.violations.filter((v) => v.id.includes("aria-valid"));
       expect(ariaViolations.length).toBe(0);
     });
 
@@ -125,9 +113,7 @@ describe("Accessibility Infrastructure", () => {
       );
 
       const results = await axe(container);
-      const labelViolations = results.violations.filter(
-        (v) => v.id === "label",
-      );
+      const labelViolations = results.violations.filter((v) => v.id === "label");
       expect(labelViolations.length).toBeGreaterThan(0);
     });
 
@@ -140,9 +126,7 @@ describe("Accessibility Infrastructure", () => {
       );
 
       const results = await axe(container);
-      const labelViolations = results.violations.filter(
-        (v) => v.id === "label",
-      );
+      const labelViolations = results.violations.filter((v) => v.id === "label");
       expect(labelViolations.length).toBe(0);
     });
   });
@@ -196,9 +180,7 @@ describe("Accessibility Infrastructure", () => {
       );
 
       const results = await axe(container);
-      const contrastViolations = results.violations.filter(
-        (v) => v.id === "color-contrast",
-      );
+      const contrastViolations = results.violations.filter((v) => v.id === "color-contrast");
       // Note: This may still fail depending on actual computed styles
       // In production, our OKLCH colors provide ~15:1 contrast
       expect(contrastViolations).toBeDefined();

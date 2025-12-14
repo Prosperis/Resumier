@@ -63,10 +63,7 @@ describe("RenameResumeDialog", () => {
 
   it("renders with custom trigger", () => {
     render(
-      <RenameResumeDialog
-        {...defaultProps}
-        trigger={<button type="button">Edit Title</button>}
-      />,
+      <RenameResumeDialog {...defaultProps} trigger={<button type="button">Edit Title</button>} />,
       { wrapper: createWrapper() },
     );
 

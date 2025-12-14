@@ -112,8 +112,7 @@ describe("export-utils", () => {
       // Mock DOM elements for template extraction
       const mockResumeElement = document.createElement("div");
       mockResumeElement.className = "resume-light-mode";
-      mockResumeElement.innerHTML =
-        "<div><h1>John Doe</h1><p>Resume content</p></div>";
+      mockResumeElement.innerHTML = "<div><h1>John Doe</h1><p>Resume content</p></div>";
       document.body.appendChild(mockResumeElement);
     });
 
@@ -263,18 +262,14 @@ describe("export-utils", () => {
     });
 
     it("should return false on clipboard error", async () => {
-      const writeTextMock = vi
-        .fn()
-        .mockRejectedValue(new Error("Permission denied"));
+      const writeTextMock = vi.fn().mockRejectedValue(new Error("Permission denied"));
       Object.assign(navigator, {
         clipboard: {
           writeText: writeTextMock,
         },
       });
 
-      const consoleErrorSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
+      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
       const result = await copyToClipboard("Test text");
 

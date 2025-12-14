@@ -5,11 +5,7 @@
 
 import type { Resume, Skills, SkillWithLevel } from "@/lib/api/types";
 import { Briefcase, GraduationCap, Mail, Phone, MapPin } from "lucide-react";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface TemplateProps {
   resume: Resume;
@@ -50,11 +46,8 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
       {/* Executive Header */}
       <div className="border-b-4 border-gray-900 pb-6 mb-8">
         <h1 className="text-5xl font-bold mb-2 tracking-tight">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <p className="text-2xl text-gray-600 font-light mb-4">
           {personalInfo.title || "Executive Title"}
@@ -68,10 +61,7 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
           {personalInfo.phone && (
             <span className="flex items-center gap-1">
               <Phone className="h-4 w-4" />{" "}
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && (
@@ -85,12 +75,8 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
       {/* Executive Profile */}
       {personalInfo.summary && (
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4 text-gray-900">
-            Executive Profile
-          </h2>
-          <p className="text-lg leading-relaxed text-gray-700 italic">
-            {personalInfo.summary}
-          </p>
+          <h2 className="text-2xl font-bold mb-4 text-gray-900">Executive Profile</h2>
+          <p className="text-lg leading-relaxed text-gray-700 italic">{personalInfo.summary}</p>
         </div>
       )}
 
@@ -112,9 +98,7 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
                 </span>
               </div>
               {exp.description && (
-                <p className="text-gray-700 leading-relaxed">
-                  {exp.description}
-                </p>
+                <p className="text-gray-700 leading-relaxed">{exp.description}</p>
               )}
             </div>
           ))}
@@ -140,9 +124,7 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
       {/* Core Competencies */}
       {skills && hasSkills(skills) && (
         <div>
-          <h2 className="text-2xl font-bold mb-4 text-gray-900">
-            Core Competencies
-          </h2>
+          <h2 className="text-2xl font-bold mb-4 text-gray-900">Core Competencies</h2>
           <p className="text-gray-700">{getAllSkills(skills).join(" • ")}</p>
         </div>
       )}
@@ -154,31 +136,22 @@ export function ExecutiveTemplate({ resume }: TemplateProps) {
  * Academic Template - CV-style for researchers and professors
  */
 export function AcademicTemplate({ resume }: TemplateProps) {
-  const { personalInfo, experience, education, certifications } =
-    resume.content;
+  const { personalInfo, experience, education, certifications } = resume.content;
 
   return (
     <div className="mx-auto max-w-[21cm] bg-white p-12 text-gray-900 shadow-lg font-serif">
       {/* Centered Academic Header */}
       <div className="text-center border-b-2 border-gray-400 pb-6 mb-8">
         <h1 className="text-4xl font-bold mb-2">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
-        <p className="text-xl text-gray-600 mb-3">
-          {personalInfo.title || "Academic Title"}
-        </p>
+        <p className="text-xl text-gray-600 mb-3">{personalInfo.title || "Academic Title"}</p>
         <div className="flex justify-center flex-wrap gap-3 text-sm text-gray-700">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && (
             <span>
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && <span>{personalInfo.location}</span>}
@@ -198,9 +171,7 @@ export function AcademicTemplate({ resume }: TemplateProps) {
       {/* Education First (Academic CV style) */}
       {education && education.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-lg font-bold mb-2 border-b border-gray-800 pb-1">
-            Education
-          </h2>
+          <h2 className="text-lg font-bold mb-2 border-b border-gray-800 pb-1">Education</h2>
           {education.map((edu, idx) => (
             <div key={idx} className="mb-4">
               <h3 className="font-bold">{edu.degree}</h3>
@@ -224,9 +195,7 @@ export function AcademicTemplate({ resume }: TemplateProps) {
               <p className="text-gray-600 text-sm">
                 {exp.startDate} - {exp.endDate || "Present"}
               </p>
-              {exp.description && (
-                <p className="mt-1 text-sm">{exp.description}</p>
-              )}
+              {exp.description && <p className="mt-1 text-sm">{exp.description}</p>}
             </div>
           ))}
         </div>
@@ -243,15 +212,11 @@ export function AcademicTemplate({ resume }: TemplateProps) {
       {/* Certifications/Awards */}
       {certifications && certifications.length > 0 && (
         <div>
-          <h2 className="text-lg font-bold mb-2 border-b border-gray-800 pb-1">
-            Honors & Awards
-          </h2>
+          <h2 className="text-lg font-bold mb-2 border-b border-gray-800 pb-1">Honors & Awards</h2>
           {certifications.map((cert, idx) => (
             <div key={idx} className="mb-2">
               <span className="font-semibold">{cert.name}</span>
-              {cert.issuer && (
-                <span className="text-gray-600"> - {cert.issuer}</span>
-              )}
+              {cert.issuer && <span className="text-gray-600"> - {cert.issuer}</span>}
             </div>
           ))}
         </div>
@@ -264,29 +229,22 @@ export function AcademicTemplate({ resume }: TemplateProps) {
  * Corporate Template - Conservative for finance/legal
  */
 export function CorporateTemplate({ resume }: TemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } =
-    resume.content;
+  const { personalInfo, experience, education, skills, certifications } = resume.content;
 
   return (
     <div className="mx-auto max-w-[21cm] bg-white p-12 text-gray-900 shadow-lg font-serif">
       {/* Conservative Centered Header */}
       <div className="text-center border-b border-gray-300 pb-5 mb-6">
         <h1 className="text-3xl font-bold tracking-wide uppercase mb-2">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <div className="text-sm text-gray-700 space-x-3">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && <span>•</span>}
           {personalInfo.phone && (
             <span>
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && <span>•</span>}
@@ -319,11 +277,7 @@ export function CorporateTemplate({ resume }: TemplateProps) {
                 </span>
               </div>
               <p className="text-gray-700 font-semibold">{exp.company}</p>
-              {exp.description && (
-                <p className="text-sm mt-1 leading-relaxed">
-                  {exp.description}
-                </p>
-              )}
+              {exp.description && <p className="text-sm mt-1 leading-relaxed">{exp.description}</p>}
             </div>
           ))}
         </div>
@@ -339,9 +293,7 @@ export function CorporateTemplate({ resume }: TemplateProps) {
             <div key={idx} className="mb-3">
               <h3 className="font-bold">{edu.degree}</h3>
               <p>{edu.institution}</p>
-              {edu.endDate && (
-                <p className="text-gray-600 text-sm">{edu.endDate}</p>
-              )}
+              {edu.endDate && <p className="text-gray-600 text-sm">{edu.endDate}</p>}
             </div>
           ))}
         </div>
@@ -372,9 +324,7 @@ export function CorporateTemplate({ resume }: TemplateProps) {
           {certifications.map((cert, idx) => (
             <div key={idx} className="text-sm mb-1">
               <span className="font-semibold">{cert.name}</span>
-              {cert.issuer && (
-                <span className="text-gray-600"> - {cert.issuer}</span>
-              )}
+              {cert.issuer && <span className="text-gray-600"> - {cert.issuer}</span>}
             </div>
           ))}
         </div>
@@ -392,26 +342,17 @@ export function TechModernTemplate({ resume }: TemplateProps) {
   return (
     <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg">
       {/* Tech Header with Blue Accent */}
-      <div
-        className="p-8"
-        style={{ backgroundColor: "#3b82f6", color: "white" }}
-      >
+      <div className="p-8" style={{ backgroundColor: "#3b82f6", color: "white" }}>
         <h1 className="text-4xl font-bold mb-2">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <p className="text-xl mb-3">{personalInfo.title || "Developer"}</p>
         <div className="flex flex-wrap gap-4 text-sm">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && (
             <span>
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && <span>{personalInfo.location}</span>}
@@ -444,9 +385,7 @@ export function TechModernTemplate({ resume }: TemplateProps) {
                   <p className="text-sm text-gray-600 mb-1">
                     {exp.startDate} - {exp.endDate || "Present"}
                   </p>
-                  {exp.description && (
-                    <p className="text-sm">{exp.description}</p>
-                  )}
+                  {exp.description && <p className="text-sm">{exp.description}</p>}
                 </div>
               ))}
             </div>
@@ -472,16 +411,12 @@ export function TechModernTemplate({ resume }: TemplateProps) {
           {/* Education */}
           {education && education.length > 0 && (
             <div>
-              <h2 className="text-lg font-bold mb-3 text-blue-600">
-                Education
-              </h2>
+              <h2 className="text-lg font-bold mb-3 text-blue-600">Education</h2>
               {education.map((edu, idx) => (
                 <div key={idx} className="mb-3">
                   <h3 className="font-bold text-sm">{edu.degree}</h3>
                   <p className="text-sm">{edu.institution}</p>
-                  {edu.endDate && (
-                    <p className="text-xs text-gray-600">{edu.endDate}</p>
-                  )}
+                  {edu.endDate && <p className="text-xs text-gray-600">{edu.endDate}</p>}
                 </div>
               ))}
             </div>
@@ -509,24 +444,16 @@ export function CreativeProfessionalTemplate({ resume }: TemplateProps) {
         }}
       >
         <h1 className="text-4xl font-bold mb-2">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
-        <p className="text-xl font-light mb-4">
-          {personalInfo.title || "Creative Professional"}
-        </p>
+        <p className="text-xl font-light mb-4">{personalInfo.title || "Creative Professional"}</p>
         <div className="flex flex-wrap gap-4 text-sm opacity-90">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && <span>•</span>}
           {personalInfo.phone && (
             <span>
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
         </div>
@@ -543,26 +470,20 @@ export function CreativeProfessionalTemplate({ resume }: TemplateProps) {
         {/* Experience */}
         {experience && experience.length > 0 && (
           <div className="mb-6">
-            <h2 className="text-2xl font-bold mb-4 text-purple-700">
-              Experience
-            </h2>
+            <h2 className="text-2xl font-bold mb-4 text-purple-700">Experience</h2>
             {experience.map((exp, idx) => (
               <div key={idx} className="mb-5 pl-4 border-l-2 border-purple-200">
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="font-bold text-lg">{exp.position}</h3>
-                    <p className="text-purple-700 font-semibold">
-                      {exp.company}
-                    </p>
+                    <p className="text-purple-700 font-semibold">{exp.company}</p>
                   </div>
                   <span className="text-sm text-gray-600 bg-purple-50 px-2 py-1 rounded">
                     {exp.startDate} - {exp.endDate || "Present"}
                   </span>
                 </div>
                 {exp.description && (
-                  <p className="text-sm mt-2 leading-relaxed">
-                    {exp.description}
-                  </p>
+                  <p className="text-sm mt-2 leading-relaxed">{exp.description}</p>
                 )}
               </div>
             ))}
@@ -574,9 +495,7 @@ export function CreativeProfessionalTemplate({ resume }: TemplateProps) {
           {/* Skills */}
           {skills && hasSkills(skills) && (
             <div>
-              <h2 className="text-2xl font-bold mb-4 text-purple-700">
-                Skills
-              </h2>
+              <h2 className="text-2xl font-bold mb-4 text-purple-700">Skills</h2>
               <div className="flex flex-wrap gap-2">
                 {getAllSkills(skills).map((skill, idx) => (
                   <span
@@ -593,16 +512,12 @@ export function CreativeProfessionalTemplate({ resume }: TemplateProps) {
           {/* Education */}
           {education && education.length > 0 && (
             <div>
-              <h2 className="text-2xl font-bold mb-4 text-purple-700">
-                Education
-              </h2>
+              <h2 className="text-2xl font-bold mb-4 text-purple-700">Education</h2>
               {education.map((edu, idx) => (
                 <div key={idx} className="mb-3">
                   <h3 className="font-bold">{edu.degree}</h3>
                   <p className="text-sm">{edu.institution}</p>
-                  {edu.endDate && (
-                    <p className="text-sm text-gray-600">{edu.endDate}</p>
-                  )}
+                  {edu.endDate && <p className="text-sm text-gray-600">{edu.endDate}</p>}
                 </div>
               ))}
             </div>

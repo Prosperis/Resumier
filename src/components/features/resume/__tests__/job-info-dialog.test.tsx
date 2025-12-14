@@ -11,55 +11,32 @@ vi.mock("@/stores", () => ({
 
 // Mock UI components
 vi.mock("@/components/ui/dialog", () => ({
-  Dialog: ({ children, open }: any) =>
-    open ? <div data-testid="dialog">{children}</div> : null,
+  Dialog: ({ children, open }: any) => (open ? <div data-testid="dialog">{children}</div> : null),
   DialogContent: ({ children, className }: any) => (
     <div className={className} data-testid="dialog-content">
       {children}
     </div>
   ),
-  DialogHeader: ({ children }: any) => (
-    <div data-testid="dialog-header">{children}</div>
-  ),
-  DialogTitle: ({ children }: any) => (
-    <h2 data-testid="dialog-title">{children}</h2>
-  ),
-  DialogDescription: ({ children }: any) => (
-    <p data-testid="dialog-description">{children}</p>
-  ),
+  DialogHeader: ({ children }: any) => <div data-testid="dialog-header">{children}</div>,
+  DialogTitle: ({ children }: any) => <h2 data-testid="dialog-title">{children}</h2>,
+  DialogDescription: ({ children }: any) => <p data-testid="dialog-description">{children}</p>,
 }));
 
 vi.mock("@/components/ui/sidebar", () => ({
-  Sidebar: ({ children }: any) => (
-    <aside data-testid="sidebar">{children}</aside>
-  ),
-  SidebarContent: ({ children }: any) => (
-    <div data-testid="sidebar-content">{children}</div>
-  ),
-  SidebarGroup: ({ children }: any) => (
-    <div data-testid="sidebar-group">{children}</div>
-  ),
+  Sidebar: ({ children }: any) => <aside data-testid="sidebar">{children}</aside>,
+  SidebarContent: ({ children }: any) => <div data-testid="sidebar-content">{children}</div>,
+  SidebarGroup: ({ children }: any) => <div data-testid="sidebar-group">{children}</div>,
   SidebarGroupContent: ({ children }: any) => (
     <div data-testid="sidebar-group-content">{children}</div>
   ),
-  SidebarMenu: ({ children }: any) => (
-    <ul data-testid="sidebar-menu">{children}</ul>
-  ),
-  SidebarMenuItem: ({ children }: any) => (
-    <li data-testid="sidebar-menu-item">{children}</li>
-  ),
+  SidebarMenu: ({ children }: any) => <ul data-testid="sidebar-menu">{children}</ul>,
+  SidebarMenuItem: ({ children }: any) => <li data-testid="sidebar-menu-item">{children}</li>,
   SidebarMenuButton: ({ children, onClick, isActive }: any) => (
-    <button
-      onClick={onClick}
-      data-active={isActive}
-      data-testid="sidebar-menu-button"
-    >
+    <button onClick={onClick} data-active={isActive} data-testid="sidebar-menu-button">
       {children}
     </button>
   ),
-  SidebarProvider: ({ children }: any) => (
-    <div data-testid="sidebar-provider">{children}</div>
-  ),
+  SidebarProvider: ({ children }: any) => <div data-testid="sidebar-provider">{children}</div>,
 }));
 
 vi.mock("@/components/ui/input", () => ({
@@ -120,15 +97,7 @@ vi.mock("@/components/ui/select", () => ({
 }));
 
 vi.mock("@/components/ui/button", () => ({
-  Button: ({
-    children,
-    onClick,
-    type = "button",
-    variant,
-    size,
-    className,
-    ...props
-  }: any) => (
+  Button: ({ children, onClick, type = "button", variant, size, className, ...props }: any) => (
     <button
       type={type}
       onClick={onClick}
@@ -180,9 +149,7 @@ describe("JobInfoDialog", () => {
 
     it("should render dialog title", () => {
       render(<JobInfoDialog open={true} onOpenChange={mockOnOpenChange} />);
-      expect(screen.getByTestId("dialog-title")).toHaveTextContent(
-        "Job Information",
-      );
+      expect(screen.getByTestId("dialog-title")).toHaveTextContent("Job Information");
     });
 
     it("should render sidebar with navigation", () => {
@@ -240,40 +207,24 @@ describe("JobInfoDialog", () => {
       render(<JobInfoDialog open={true} onOpenChange={mockOnOpenChange} />);
       expect(screen.getByTestId("label-job")).toHaveTextContent("Job Title");
       expect(screen.getByTestId("label-company")).toHaveTextContent("Company");
-      expect(screen.getByTestId("label-workType")).toHaveTextContent(
-        "Type of Work",
-      );
-      expect(screen.getByTestId("label-location")).toHaveTextContent(
-        "Location",
-      );
-      expect(screen.getByTestId("label-description")).toHaveTextContent(
-        "Description",
-      );
+      expect(screen.getByTestId("label-workType")).toHaveTextContent("Type of Work");
+      expect(screen.getByTestId("label-location")).toHaveTextContent("Location");
+      expect(screen.getByTestId("label-description")).toHaveTextContent("Description");
       expect(screen.getByText("Benefits")).toBeInTheDocument();
       expect(screen.getByTestId("label-basePay")).toHaveTextContent("Base Pay");
       expect(screen.getByTestId("label-bonus")).toHaveTextContent("Bonus");
-      expect(screen.getByTestId("label-stocks")).toHaveTextContent(
-        "Stocks/Options",
-      );
+      expect(screen.getByTestId("label-stocks")).toHaveTextContent("Stocks/Options");
     });
 
     it("should have correct placeholders", () => {
       render(<JobInfoDialog open={true} onOpenChange={mockOnOpenChange} />);
       expect(screen.getByPlaceholderText("Desired role")).toBeInTheDocument();
       expect(screen.getByPlaceholderText("Company name")).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText("Company location"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText("Job description"),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("Company location")).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("Job description")).toBeInTheDocument();
       expect(screen.getByPlaceholderText("Annual salary")).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText("Bonus or incentives"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText("Stock options or RSUs"),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("Bonus or incentives")).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("Stock options or RSUs")).toBeInTheDocument();
     });
   });
 
@@ -460,9 +411,7 @@ describe("JobInfoDialog", () => {
       await user.click(screen.getByText("Add Benefit"));
       const trashIcons = screen.getAllByTestId("trash-icon");
       await user.click(trashIcons[0].closest("button")!);
-      expect(
-        screen.queryByDisplayValue("Health Insurance"),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByDisplayValue("Health Insurance")).not.toBeInTheDocument();
     });
 
     it("should add multiple benefits", async () => {
@@ -676,9 +625,7 @@ describe("JobInfoDialog", () => {
       expect(screen.getByTestId("input-job")).toHaveValue("Senior Developer");
       expect(screen.getByTestId("input-company")).toHaveValue("Big Tech");
       expect(screen.getByTestId("input-location")).toHaveValue("Seattle");
-      expect(screen.getByTestId("textarea-description")).toHaveValue(
-        "Leading projects",
-      );
+      expect(screen.getByTestId("textarea-description")).toHaveValue("Leading projects");
       expect(screen.getByTestId("input-basePay")).toHaveValue("$180k");
       expect(screen.getByTestId("input-bonus")).toHaveValue("$20k");
       expect(screen.getByTestId("input-stocks")).toHaveValue("2000 RSUs");

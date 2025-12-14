@@ -30,8 +30,7 @@ function ExperienceContent({
   showKeyAchievements?: boolean;
 }) {
   const format = experience.format || "structured";
-  const hasDescription =
-    experience.description && experience.description.trim();
+  const hasDescription = experience.description && experience.description.trim();
   const hasHighlights =
     experience.highlights &&
     experience.highlights.length > 0 &&
@@ -41,10 +40,7 @@ function ExperienceContent({
   if (format === "freeform") {
     if (!hasDescription) return null;
     return (
-      <p
-        className="text-sm whitespace-pre-wrap"
-        style={{ color: textLightColor }}
-      >
+      <p className="text-sm whitespace-pre-wrap" style={{ color: textLightColor }}>
         {experience.description}
       </p>
     );
@@ -54,10 +50,7 @@ function ExperienceContent({
   if (format === "bullets") {
     if (!hasHighlights) return null;
     return (
-      <ul
-        className="list-inside list-disc space-y-1 text-sm"
-        style={{ color: textLightColor }}
-      >
+      <ul className="list-inside list-disc space-y-1 text-sm" style={{ color: textLightColor }}>
         {experience
           .highlights!.filter((h) => h.trim())
           .map((highlight, idx) => (
@@ -78,17 +71,11 @@ function ExperienceContent({
       {hasHighlights && (
         <div>
           {showKeyAchievements && (
-            <p
-              className="mb-1 text-xs font-semibold uppercase"
-              style={{ color: textLightColor }}
-            >
+            <p className="mb-1 text-xs font-semibold uppercase" style={{ color: textLightColor }}>
               Key Achievements
             </p>
           )}
-          <ul
-            className="list-inside list-disc space-y-1 text-sm"
-            style={{ color: textLightColor }}
-          >
+          <ul className="list-inside list-disc space-y-1 text-sm" style={{ color: textLightColor }}>
             {experience
               .highlights!.filter((h) => h.trim())
               .map((highlight, idx) => (
@@ -112,8 +99,7 @@ export function ExperienceEntry({
 
   // Helper to format date range
   const formatDateRange = () => {
-    if (!experience.startDate && !experience.endDate && !experience.current)
-      return null;
+    if (!experience.startDate && !experience.endDate && !experience.current) return null;
     const start = experience.startDate || "";
     const end = experience.current ? "Present" : experience.endDate || "";
     if (!start && !end) return null;
@@ -139,10 +125,7 @@ export function ExperienceEntry({
           )}
         </div>
         {experience.company && (
-          <p
-            className="mb-2 text-sm font-semibold"
-            style={{ color: textColor }}
-          >
+          <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
             {experience.company}
           </p>
         )}
@@ -184,18 +167,12 @@ export function ExperienceEntry({
         )}
         {/* For compact, show limited content */}
         {format === "freeform" && experience.description && (
-          <p
-            className="mt-1 text-sm line-clamp-2"
-            style={{ color: textLightColor }}
-          >
+          <p className="mt-1 text-sm line-clamp-2" style={{ color: textLightColor }}>
             {experience.description}
           </p>
         )}
         {(format === "structured" || format === "bullets") && hasHighlights && (
-          <ul
-            className="mt-1 list-inside list-disc text-sm"
-            style={{ color: textLightColor }}
-          >
+          <ul className="mt-1 list-inside list-disc text-sm" style={{ color: textLightColor }}>
             {experience
               .highlights!.filter((h) => h.trim())
               .slice(0, 3)
@@ -232,16 +209,10 @@ export function ExperienceEntry({
             )}
           </div>
           {(dateRange || experience.current) && (
-            <div
-              className="text-right text-sm"
-              style={{ color: textLightColor }}
-            >
+            <div className="text-right text-sm" style={{ color: textLightColor }}>
               {dateRange && <div>{dateRange}</div>}
               {experience.current && (
-                <div
-                  className="mt-1 text-xs font-semibold"
-                  style={{ color: colorScheme?.primary }}
-                >
+                <div className="mt-1 text-xs font-semibold" style={{ color: colorScheme?.primary }}>
                   Current Position
                 </div>
               )}
@@ -280,19 +251,13 @@ export function ExperienceEntry({
             </h3>
           )}
           {dateRange && (
-            <span
-              className="text-sm font-semibold"
-              style={{ color: colorScheme?.primary }}
-            >
+            <span className="text-sm font-semibold" style={{ color: colorScheme?.primary }}>
               {dateRange}
             </span>
           )}
         </div>
         {experience.company && (
-          <p
-            className="mb-2 text-sm font-semibold"
-            style={{ color: textColor }}
-          >
+          <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
             {experience.company}
           </p>
         )}

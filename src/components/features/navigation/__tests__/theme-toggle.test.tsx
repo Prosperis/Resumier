@@ -79,9 +79,7 @@ describe("ThemeToggle", () => {
         </ThemeProvider>,
       );
 
-      expect(
-        screen.getByRole("button", { name: /switch to light theme/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /switch to light theme/i })).toBeInTheDocument();
     });
 
     it("calls toggleTheme when clicked", async () => {
@@ -98,9 +96,7 @@ describe("ThemeToggle", () => {
       await user.click(button);
 
       // After clicking, should switch to light
-      expect(
-        screen.getByRole("button", { name: /switch to dark theme/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /switch to dark theme/i })).toBeInTheDocument();
     });
   });
 
@@ -137,9 +133,7 @@ describe("ThemeToggle", () => {
       await user.click(button);
 
       // After clicking, should switch to dark
-      expect(
-        screen.getByRole("button", { name: /switch to light theme/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /switch to light theme/i })).toBeInTheDocument();
     });
   });
 
@@ -210,9 +204,7 @@ describe("ThemeToggle", () => {
       await user.keyboard("{Enter}");
 
       // After pressing Enter, theme should toggle
-      expect(
-        screen.getByRole("button", { name: /switch to dark theme/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /switch to dark theme/i })).toBeInTheDocument();
     });
   });
 });

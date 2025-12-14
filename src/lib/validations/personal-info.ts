@@ -71,11 +71,7 @@ export const personalInfoSchema = z.object({
   firstName: nameFieldValidation("First name"),
   lastName: nameFieldValidation("Last name"),
   nameOrder: nameOrderSchema.default("firstLast"),
-  title: z
-    .string()
-    .max(100, "Title must be less than 100 characters")
-    .optional()
-    .or(z.literal("")),
+  title: z.string().max(100, "Title must be less than 100 characters").optional().or(z.literal("")),
   email: z
     .string()
     .refine((val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {

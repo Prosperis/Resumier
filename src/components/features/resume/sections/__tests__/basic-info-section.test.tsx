@@ -64,20 +64,11 @@ describe("BasicInfoSection", () => {
 
     it("renders with placeholders", () => {
       render(
-        <BasicInfoSection
-          {...defaultProps}
-          name=""
-          email=""
-          phone=""
-          address=""
-          linkedInUrl=""
-        />,
+        <BasicInfoSection {...defaultProps} name="" email="" phone="" address="" linkedInUrl="" />,
       );
 
       expect(screen.getByPlaceholderText("Your name")).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText("you@example.com"),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("you@example.com")).toBeInTheDocument();
       expect(screen.getByPlaceholderText("555-555-5555")).toBeInTheDocument();
       expect(screen.getByPlaceholderText("Your address")).toBeInTheDocument();
       expect(
@@ -289,14 +280,7 @@ describe("BasicInfoSection", () => {
   describe("Edge Cases", () => {
     it("handles empty string values", () => {
       render(
-        <BasicInfoSection
-          {...defaultProps}
-          name=""
-          email=""
-          phone=""
-          address=""
-          linkedInUrl=""
-        />,
+        <BasicInfoSection {...defaultProps} name="" email="" phone="" address="" linkedInUrl="" />,
       );
 
       expect(screen.getByLabelText("Name")).toHaveValue("");
@@ -328,9 +312,7 @@ describe("BasicInfoSection", () => {
       expect(screen.getByLabelText("Email")).toHaveValue(longEmail);
       expect(screen.getByLabelText("Phone")).toHaveValue(longPhone);
       expect(screen.getByLabelText("Address")).toHaveValue(longAddress);
-      expect(screen.getByLabelText("LinkedIn Profile URL")).toHaveValue(
-        longUrl,
-      );
+      expect(screen.getByLabelText("LinkedIn Profile URL")).toHaveValue(longUrl);
     });
 
     it("handles special characters in inputs", () => {
@@ -355,9 +337,7 @@ describe("BasicInfoSection", () => {
       expect(screen.getByLabelText("Email")).toHaveValue(specialEmail);
       expect(screen.getByLabelText("Phone")).toHaveValue(specialPhone);
       expect(screen.getByLabelText("Address")).toHaveValue(specialAddress);
-      expect(screen.getByLabelText("LinkedIn Profile URL")).toHaveValue(
-        specialUrl,
-      );
+      expect(screen.getByLabelText("LinkedIn Profile URL")).toHaveValue(specialUrl);
     });
   });
 
@@ -369,10 +349,7 @@ describe("BasicInfoSection", () => {
       expect(screen.getByLabelText("Email")).toHaveAttribute("id", "email");
       expect(screen.getByLabelText("Phone")).toHaveAttribute("id", "phone");
       expect(screen.getByLabelText("Address")).toHaveAttribute("id", "address");
-      expect(screen.getByLabelText("LinkedIn Profile URL")).toHaveAttribute(
-        "id",
-        "linkedin",
-      );
+      expect(screen.getByLabelText("LinkedIn Profile URL")).toHaveAttribute("id", "linkedin");
     });
   });
 });

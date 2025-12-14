@@ -112,15 +112,11 @@ describe("EducationList", () => {
       render(<EducationList {...defaultProps} education={[]} />);
 
       expect(screen.getByText("No education added yet.")).toBeInTheDocument();
-      expect(
-        screen.getByText("Click the + button to add your education."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Click the + button to add your education.")).toBeInTheDocument();
     });
 
     it("renders empty state with dashed border card", () => {
-      const { container } = render(
-        <EducationList {...defaultProps} education={[]} />,
-      );
+      const { container } = render(<EducationList {...defaultProps} education={[]} />);
 
       const card = container.querySelector(".border-dashed");
       expect(card).toBeInTheDocument();
@@ -153,34 +149,26 @@ describe("EducationList", () => {
     });
 
     it("formats date range correctly for completed education", () => {
-      render(
-        <EducationList {...defaultProps} education={[sampleEducation[0]]} />,
-      );
+      render(<EducationList {...defaultProps} education={[sampleEducation[0]]} />);
 
       expect(screen.getByText(/Sep 2015.*Jun 2019/)).toBeInTheDocument();
     });
 
     it("formats date range with Present for current education", () => {
-      render(
-        <EducationList {...defaultProps} education={[sampleEducation[1]]} />,
-      );
+      render(<EducationList {...defaultProps} education={[sampleEducation[1]]} />);
 
       expect(screen.getByText(/Sep 2019.*Present/)).toBeInTheDocument();
     });
 
     it("displays GPA when provided", () => {
-      render(
-        <EducationList {...defaultProps} education={[sampleEducation[0]]} />,
-      );
+      render(<EducationList {...defaultProps} education={[sampleEducation[0]]} />);
 
       expect(screen.getByText("GPA:")).toBeInTheDocument();
       expect(screen.getByText("3.8")).toBeInTheDocument();
     });
 
     it("displays honors as bullet list", () => {
-      render(
-        <EducationList {...defaultProps} education={[sampleEducation[0]]} />,
-      );
+      render(<EducationList {...defaultProps} education={[sampleEducation[0]]} />);
 
       expect(screen.getByText("Honors & Awards:")).toBeInTheDocument();
       expect(screen.getByText("Dean's List")).toBeInTheDocument();
@@ -188,9 +176,7 @@ describe("EducationList", () => {
     });
 
     it("does not render CardContent when no GPA and no honors", () => {
-      render(
-        <EducationList {...defaultProps} education={[sampleEducation[2]]} />,
-      );
+      render(<EducationList {...defaultProps} education={[sampleEducation[2]]} />);
 
       expect(screen.getByText("Associate Degree")).toBeInTheDocument();
       expect(screen.queryByText("GPA:")).not.toBeInTheDocument();
@@ -228,9 +214,7 @@ describe("EducationList", () => {
         honors: [],
       };
 
-      render(
-        <EducationList {...defaultProps} education={[eduWithWhitespaceGPA]} />,
-      );
+      render(<EducationList {...defaultProps} education={[eduWithWhitespaceGPA]} />);
 
       expect(screen.getByText("Bachelor of Science")).toBeInTheDocument();
       expect(screen.queryByText("GPA:")).not.toBeInTheDocument();
@@ -244,9 +228,7 @@ describe("EducationList", () => {
       render(<EducationList {...defaultProps} education={sampleEducation} />);
 
       const buttons = screen.getAllByRole("button");
-      const editButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-square-pen"),
-      );
+      const editButtons = buttons.filter((btn) => btn.querySelector(".lucide-square-pen"));
       await user.click(editButtons[0]);
 
       expect(mockOnEdit).toHaveBeenCalledTimes(1);
@@ -258,9 +240,7 @@ describe("EducationList", () => {
       render(<EducationList {...defaultProps} education={sampleEducation} />);
 
       const buttons = screen.getAllByRole("button");
-      const editButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-square-pen"),
-      );
+      const editButtons = buttons.filter((btn) => btn.querySelector(".lucide-square-pen"));
 
       await user.click(editButtons[1]);
       expect(mockOnEdit).toHaveBeenCalledWith("2");
@@ -276,9 +256,7 @@ describe("EducationList", () => {
       render(<EducationList {...defaultProps} education={sampleEducation} />);
 
       const buttons = screen.getAllByRole("button");
-      const deleteButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-trash"),
-      );
+      const deleteButtons = buttons.filter((btn) => btn.querySelector(".lucide-trash"));
       await user.click(deleteButtons[0]);
 
       expect(mockOnDelete).toHaveBeenCalledTimes(1);
@@ -290,9 +268,7 @@ describe("EducationList", () => {
       render(<EducationList {...defaultProps} education={sampleEducation} />);
 
       const buttons = screen.getAllByRole("button");
-      const deleteButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-trash"),
-      );
+      const deleteButtons = buttons.filter((btn) => btn.querySelector(".lucide-trash"));
 
       await user.click(deleteButtons[1]);
       expect(mockOnDelete).toHaveBeenCalledWith("2");
@@ -343,12 +319,8 @@ describe("EducationList", () => {
       render(<EducationList {...defaultProps} education={sampleEducation} />);
 
       const buttons = screen.getAllByRole("button");
-      const editButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-square-pen"),
-      );
-      const deleteButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-trash"),
-      );
+      const editButtons = buttons.filter((btn) => btn.querySelector(".lucide-square-pen"));
+      const deleteButtons = buttons.filter((btn) => btn.querySelector(".lucide-trash"));
 
       expect(editButtons).toHaveLength(3);
       expect(deleteButtons).toHaveLength(3);
@@ -406,9 +378,7 @@ describe("EducationList", () => {
     });
 
     it("renders single education entry correctly", () => {
-      render(
-        <EducationList {...defaultProps} education={[sampleEducation[0]]} />,
-      );
+      render(<EducationList {...defaultProps} education={[sampleEducation[0]]} />);
 
       expect(screen.getByText("Bachelor of Science")).toBeInTheDocument();
       expect(screen.queryByText("Master of Science")).not.toBeInTheDocument();
@@ -423,9 +393,7 @@ describe("EducationList", () => {
 
       render(<EducationList {...defaultProps} education={[edu]} />);
 
-      expect(
-        screen.getByText(/Bachelor of Science in Advanced/),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/Bachelor of Science in Advanced/)).toBeInTheDocument();
     });
 
     it("handles very long institution names", () => {
@@ -437,9 +405,7 @@ describe("EducationList", () => {
 
       render(<EducationList {...defaultProps} education={[edu]} />);
 
-      expect(
-        screen.getByText(/The Very Long Name University/),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/The Very Long Name University/)).toBeInTheDocument();
     });
 
     it("handles GPA with trailing spaces", () => {

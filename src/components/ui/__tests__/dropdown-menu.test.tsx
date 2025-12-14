@@ -56,12 +56,8 @@ describe("DropdownMenu Components", () => {
     });
 
     it("has data-slot attribute", () => {
-      const { container } = render(
-        <DropdownMenuLabel>Label</DropdownMenuLabel>,
-      );
-      const label = container.querySelector(
-        '[data-slot="dropdown-menu-label"]',
-      );
+      const { container } = render(<DropdownMenuLabel>Label</DropdownMenuLabel>);
+      const label = container.querySelector('[data-slot="dropdown-menu-label"]');
       expect(label).toBeInTheDocument();
     });
   });
@@ -82,9 +78,7 @@ describe("DropdownMenu Components", () => {
 
     it("has data-slot attribute", () => {
       const { container } = render(<DropdownMenuSeparator />);
-      const separator = container.querySelector(
-        '[data-slot="dropdown-menu-separator"]',
-      );
+      const separator = container.querySelector('[data-slot="dropdown-menu-separator"]');
       expect(separator).toBeInTheDocument();
     });
   });
@@ -107,12 +101,8 @@ describe("DropdownMenu Components", () => {
     });
 
     it("has data-slot attribute", () => {
-      const { container } = render(
-        <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>,
-      );
-      const shortcut = container.querySelector(
-        '[data-slot="dropdown-menu-shortcut"]',
-      );
+      const { container } = render(<DropdownMenuShortcut>⌘K</DropdownMenuShortcut>);
+      const shortcut = container.querySelector('[data-slot="dropdown-menu-shortcut"]');
       expect(shortcut).toBeInTheDocument();
     });
   });

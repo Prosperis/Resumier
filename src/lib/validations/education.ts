@@ -13,11 +13,7 @@ export const educationSchema = z.object({
   startDate: z.string().optional().or(z.literal("")),
   endDate: z.string().optional().or(z.literal("")),
   current: z.boolean().optional(),
-  gpa: z
-    .string()
-    .max(10, "GPA must be less than 10 characters")
-    .optional()
-    .or(z.literal("")),
+  gpa: z.string().max(10, "GPA must be less than 10 characters").optional().or(z.literal("")),
   honors: z.array(z.string()).optional(),
 });
 

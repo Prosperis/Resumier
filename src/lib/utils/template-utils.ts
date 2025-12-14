@@ -79,9 +79,7 @@ export function filterTemplates(
         template.name.toLowerCase().includes(searchLower) ||
         template.description.toLowerCase().includes(searchLower) ||
         template.tags.some((tag) => tag.toLowerCase().includes(searchLower)) ||
-        template.industries.some((industry) =>
-          industry.toLowerCase().includes(searchLower),
-        );
+        template.industries.some((industry) => industry.toLowerCase().includes(searchLower));
       if (!matchesSearch) return false;
     }
 
@@ -205,8 +203,8 @@ export function calculateTemplateMatchScore(
 
   // Feature preference match (low weight)
   if (userProfile.preferences?.features) {
-    const matchingFeatures = userProfile.preferences.features.filter(
-      (feature) => template.features.includes(feature as any),
+    const matchingFeatures = userProfile.preferences.features.filter((feature) =>
+      template.features.includes(feature as any),
     );
     score += matchingFeatures.length * 5;
   }
@@ -263,29 +261,20 @@ export function groupTemplatesByCategory(
 /**
  * Get popular templates
  */
-export function getPopularTemplates(
-  templates: TemplateInfo[],
-  limit: number = 10,
-): TemplateInfo[] {
+export function getPopularTemplates(templates: TemplateInfo[], limit: number = 10): TemplateInfo[] {
   return templates.filter((t) => t.isPopular).slice(0, limit);
 }
 
 /**
  * Get new templates
  */
-export function getNewTemplates(
-  templates: TemplateInfo[],
-  limit: number = 10,
-): TemplateInfo[] {
+export function getNewTemplates(templates: TemplateInfo[], limit: number = 10): TemplateInfo[] {
   return templates.filter((t) => t.isNew).slice(0, limit);
 }
 
 /**
  * Get ATS-optimized templates
  */
-export function getATSTemplates(
-  templates: TemplateInfo[],
-  minScore: number = 8,
-): TemplateInfo[] {
+export function getATSTemplates(templates: TemplateInfo[], minScore: number = 8): TemplateInfo[] {
   return templates.filter((t) => t.atsScore >= minScore);
 }

@@ -1,11 +1,7 @@
 import { get, set } from "idb-keyval";
 import { getDemoProfiles } from "./demo-data";
 import { mockDb } from "./mock-db";
-import type {
-  CreateProfileDto,
-  Profile,
-  UpdateProfileDto,
-} from "./profile-types";
+import type { CreateProfileDto, Profile, UpdateProfileDto } from "./profile-types";
 import type { CreateResumeDto, Resume, UpdateResumeDto } from "./types";
 
 const IDB_STORE_KEY = "resumier-web-store";
@@ -59,16 +55,11 @@ export const mockApi = {
   /**
    * Route a request to the appropriate handler
    */
-  async route(
-    endpoint: string,
-    method: string,
-    body?: unknown,
-  ): Promise<unknown> {
+  async route(endpoint: string, method: string, body?: unknown): Promise<unknown> {
     await delay();
 
     // Parse endpoint
-    const [, resource, id] =
-      endpoint.match(/^\/api\/(\w+)(?:\/([^/]+))?/) || [];
+    const [, resource, id] = endpoint.match(/^\/api\/(\w+)(?:\/([^/]+))?/) || [];
 
     if (resource === "resumes") {
       return this.handleResumes(method, id, body);
@@ -495,11 +486,7 @@ export const mockApi = {
   /**
    * Handle /api/auth requests
    */
-  async handleAuth(
-    endpoint: string,
-    method: string,
-    body?: unknown,
-  ): Promise<unknown> {
+  async handleAuth(endpoint: string, method: string, body?: unknown): Promise<unknown> {
     if (endpoint === "/api/auth/login" && method === "POST") {
       const { email, password } = body as { email: string; password: string };
 
@@ -572,11 +559,7 @@ export const mockApi = {
   /**
    * Handle /api/linkedin requests
    */
-  async handleLinkedIn(
-    endpoint: string,
-    method: string,
-    body?: unknown,
-  ): Promise<unknown> {
+  async handleLinkedIn(endpoint: string, method: string, body?: unknown): Promise<unknown> {
     if (endpoint === "/api/linkedin/import" && method === "POST") {
       // Handle LinkedIn public profile import from URL
       const { profileUrl } = body as { profileUrl: string };
@@ -600,8 +583,7 @@ export const mockApi = {
       // Generate unique IDs using timestamp + counter to avoid duplicate key errors
       const timestamp = Date.now();
       let counter = 0;
-      const generateId = (prefix: string) =>
-        `${prefix}-${timestamp}-${counter++}`;
+      const generateId = (prefix: string) => `${prefix}-${timestamp}-${counter++}`;
 
       // Return mock public LinkedIn profile data
       return {
@@ -638,8 +620,7 @@ export const mockApi = {
             startDate: "2017-06",
             endDate: "2019-12",
             current: false,
-            description:
-              "Built and maintained multiple web applications using React and Node.js",
+            description: "Built and maintained multiple web applications using React and Node.js",
             highlights: [
               "Built 3 customer-facing web applications",
               "Implemented real-time features using WebSockets",
@@ -658,22 +639,10 @@ export const mockApi = {
           },
         ],
         skills: {
-          technical: [
-            "JavaScript",
-            "TypeScript",
-            "React",
-            "Node.js",
-            "Python",
-            "SQL",
-          ],
+          technical: ["JavaScript", "TypeScript", "React", "Node.js", "Python", "SQL"],
           languages: ["English", "Spanish"],
           tools: ["Git", "Docker", "AWS", "Figma"],
-          soft: [
-            "Leadership",
-            "Communication",
-            "Problem Solving",
-            "Team Collaboration",
-          ],
+          soft: ["Leadership", "Communication", "Problem Solving", "Team Collaboration"],
         },
         certifications: [
           {

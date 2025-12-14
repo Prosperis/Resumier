@@ -47,9 +47,7 @@ describe("useAutoSave", () => {
     });
 
     const apiModule = await import("../api");
-    vi.mocked(apiModule.useUpdateResume).mockImplementation(
-      mockUseUpdateResume as any,
-    );
+    vi.mocked(apiModule.useUpdateResume).mockImplementation(mockUseUpdateResume as any);
   });
 
   afterEach(() => {

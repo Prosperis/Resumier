@@ -5,11 +5,7 @@ import { LoadingDots, LoadingSpinner } from "./loading-spinner";
  * Generic loading component for route pending states
  * Can be customized per route but provides a consistent default
  */
-export function RouteLoadingFallback({
-  message = "Loading...",
-}: {
-  message?: string;
-}) {
+export function RouteLoadingFallback({ message = "Loading..." }: { message?: string }) {
   return (
     <div className="flex h-screen items-center justify-center">
       <FadeIn>

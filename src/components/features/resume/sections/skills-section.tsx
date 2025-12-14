@@ -18,12 +18,7 @@ interface SkillsProps {
   removeSkill: (i: number) => void;
 }
 
-export function SkillsSection({
-  skills,
-  addSkill,
-  updateSkill,
-  removeSkill,
-}: SkillsProps) {
+export function SkillsSection({ skills, addSkill, updateSkill, removeSkill }: SkillsProps) {
   return (
     <div className="grid gap-4">
       {skills.map((skill, i) => (
@@ -71,12 +66,7 @@ export function SkillsSection({
               </SelectContent>
             </Select>
           </div>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => removeSkill(i)}
-          >
+          <Button type="button" variant="outline" size="sm" onClick={() => removeSkill(i)}>
             <Trash className="mr-2 h-4 w-4" /> Remove
           </Button>
         </div>

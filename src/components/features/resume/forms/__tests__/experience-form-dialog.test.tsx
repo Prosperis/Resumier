@@ -27,9 +27,7 @@ describe("ExperienceFormDialog", () => {
       render(<ExperienceFormDialog {...defaultProps} />);
       expect(screen.getByRole("dialog")).toBeInTheDocument();
       expect(screen.getByText("Add Experience")).toBeInTheDocument();
-      expect(
-        screen.getByText("Add your work experience details."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Add your work experience details.")).toBeInTheDocument();
     });
     it("renders with custom title and description", () => {
       render(
@@ -40,9 +38,7 @@ describe("ExperienceFormDialog", () => {
         />,
       );
       expect(screen.getByText("Edit Experience")).toBeInTheDocument();
-      expect(
-        screen.getByText("Update your work experience."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Update your work experience.")).toBeInTheDocument();
     });
     it("does not render when closed", () => {
       render(<ExperienceFormDialog {...defaultProps} open={false} />);
@@ -55,28 +51,20 @@ describe("ExperienceFormDialog", () => {
       // Date pickers are buttons, not inputs, so check for labels instead
       expect(screen.getByText("Start Date")).toBeInTheDocument();
       expect(screen.getByText("End Date")).toBeInTheDocument();
-      expect(
-        screen.getByLabelText(/i currently work here/i),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText(/i currently work here/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
     });
     it("renders highlights section", () => {
       render(<ExperienceFormDialog {...defaultProps} />);
       expect(screen.getByText("Key Highlights")).toBeInTheDocument();
       expect(
-        screen.getByText(
-          "Add bullet points for your achievements and responsibilities",
-        ),
+        screen.getByText("Add bullet points for your achievements and responsibilities"),
       ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /add highlight/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /add highlight/i })).toBeInTheDocument();
     });
     it("renders action buttons", () => {
       render(<ExperienceFormDialog {...defaultProps} />);
-      expect(
-        screen.getByRole("button", { name: /cancel/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
       expect(screen.getByRole("button", { name: /save/i })).toBeInTheDocument();
     });
   });
@@ -106,9 +94,7 @@ describe("ExperienceFormDialog", () => {
       await user.click(dateButtons[0]); // Start date button
       // Select a month from the popup
       await waitFor(() => {
-        expect(
-          screen.getByRole("button", { name: /sep/i }),
-        ).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /sep/i })).toBeInTheDocument();
       });
       await user.click(screen.getByRole("button", { name: /sep/i }));
       // Verify by submitting and checking the value
@@ -133,9 +119,7 @@ describe("ExperienceFormDialog", () => {
       await user.click(dateButtons[1]); // End date button
       // Select a month from the popup
       await waitFor(() => {
-        expect(
-          screen.getByRole("button", { name: /dec/i }),
-        ).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /dec/i })).toBeInTheDocument();
       });
       await user.click(screen.getByRole("button", { name: /dec/i }));
       // Verify by submitting
@@ -175,12 +159,7 @@ describe("ExperienceFormDialog", () => {
     });
     it("clears end date when current is checked", async () => {
       const user = userEvent.setup();
-      render(
-        <ExperienceFormDialog
-          {...defaultProps}
-          defaultValues={{ endDate: "2023-12" }}
-        />,
-      );
+      render(<ExperienceFormDialog {...defaultProps} defaultValues={{ endDate: "2023-12" }} />);
       const currentCheckbox = screen.getByLabelText(/i currently work here/i);
       // Check that end date shows December 2023
       expect(screen.getByText(/december 2023/i)).toBeInTheDocument();
@@ -250,9 +229,7 @@ describe("ExperienceFormDialog", () => {
       expect(highlightInputs).toHaveLength(2);
       // Remove one
       const removeButtons = screen.getAllByRole("button", { name: "" });
-      const removeButton = removeButtons.find((btn) =>
-        btn.querySelector("svg"),
-      );
+      const removeButton = removeButtons.find((btn) => btn.querySelector("svg"));
       if (removeButton) {
         await user.click(removeButton);
       }
@@ -427,12 +404,7 @@ describe("ExperienceFormDialog", () => {
     });
     it("resets form after submission", async () => {
       const user = userEvent.setup();
-      render(
-        <ExperienceFormDialog
-          {...defaultProps}
-          defaultValues={{ startDate: "2020-01" }}
-        />,
-      );
+      render(<ExperienceFormDialog {...defaultProps} defaultValues={{ startDate: "2020-01" }} />);
       const companyInput = screen.getByLabelText(/company/i);
       await user.type(companyInput, "Test Company");
       await user.type(screen.getByLabelText(/position/i), "Test Role");
@@ -447,9 +419,7 @@ describe("ExperienceFormDialog", () => {
     it("closes dialog when cancel is clicked", async () => {
       const user = userEvent.setup();
       const onOpenChange = vi.fn();
-      render(
-        <ExperienceFormDialog {...defaultProps} onOpenChange={onOpenChange} />,
-      );
+      render(<ExperienceFormDialog {...defaultProps} onOpenChange={onOpenChange} />);
       const cancelButton = screen.getByRole("button", { name: /cancel/i });
       await user.click(cancelButton);
       expect(onOpenChange).toHaveBeenCalledWith(false);
@@ -475,38 +445,22 @@ describe("ExperienceFormDialog", () => {
         description: "Default description",
         highlights: ["Highlight 1", "Highlight 2"],
       };
-      render(
-        <ExperienceFormDialog
-          {...defaultProps}
-          defaultValues={defaultValues}
-        />,
-      );
+      render(<ExperienceFormDialog {...defaultProps} defaultValues={defaultValues} />);
       expect(screen.getByLabelText(/company/i)).toHaveValue("Default Corp");
-      expect(screen.getByLabelText(/position/i)).toHaveValue(
-        "Default Position",
-      );
+      expect(screen.getByLabelText(/position/i)).toHaveValue("Default Position");
       // Date pickers show formatted dates
       expect(screen.getByText(/january 2020/i)).toBeInTheDocument();
       expect(screen.getByText(/december 2023/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/description/i)).toHaveValue(
-        "Default description",
-      );
+      expect(screen.getByLabelText(/description/i)).toHaveValue("Default description");
     });
     it("handles partial default values", () => {
       const defaultValues = {
         company: "Partial Corp",
         position: "Partial Position",
       };
-      render(
-        <ExperienceFormDialog
-          {...defaultProps}
-          defaultValues={defaultValues}
-        />,
-      );
+      render(<ExperienceFormDialog {...defaultProps} defaultValues={defaultValues} />);
       expect(screen.getByLabelText(/company/i)).toHaveValue("Partial Corp");
-      expect(screen.getByLabelText(/position/i)).toHaveValue(
-        "Partial Position",
-      );
+      expect(screen.getByLabelText(/position/i)).toHaveValue("Partial Position");
       // Date pickers should show placeholder
       expect(screen.getAllByText(/pick a month/i)).toHaveLength(2);
     });

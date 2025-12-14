@@ -26,11 +26,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import type { Resume } from "@/lib/api/types";
-import type {
-  TemplateType,
-  TemplateInfo,
-  TemplateCategory,
-} from "@/lib/types/templates";
+import type { TemplateType, TemplateInfo, TemplateCategory } from "@/lib/types/templates";
 import { getAllTemplates } from "./templates/template-registry";
 
 interface TemplateGalleryProps {
@@ -59,10 +55,7 @@ function useFavoriteTemplates() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(
-        FAVORITES_STORAGE_KEY,
-        JSON.stringify(Array.from(favorites)),
-      );
+      localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(Array.from(favorites)));
     } catch (error) {
       console.warn("Failed to save favorites to localStorage:", error);
     }
@@ -80,20 +73,12 @@ function useFavoriteTemplates() {
     });
   }, []);
 
-  const isFavorite = useCallback(
-    (templateId: string) => favorites.has(templateId),
-    [favorites],
-  );
+  const isFavorite = useCallback((templateId: string) => favorites.has(templateId), [favorites]);
 
   return { favorites, toggleFavorite, isFavorite };
 }
 
-export function TemplateGallery({
-  open,
-  onOpenChange,
-  selected,
-  onSelect,
-}: TemplateGalleryProps) {
+export function TemplateGallery({ open, onOpenChange, selected, onSelect }: TemplateGalleryProps) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<FilterCategory>("all");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -147,12 +132,8 @@ export function TemplateGallery({
         (t: TemplateInfo) =>
           t.name.toLowerCase().includes(searchLower) ||
           t.description.toLowerCase().includes(searchLower) ||
-          t.tags.some((tag: string) =>
-            tag.toLowerCase().includes(searchLower),
-          ) ||
-          t.industries.some((ind: string) =>
-            ind.toLowerCase().includes(searchLower),
-          ),
+          t.tags.some((tag: string) => tag.toLowerCase().includes(searchLower)) ||
+          t.industries.some((ind: string) => ind.toLowerCase().includes(searchLower)),
       );
     }
 
@@ -214,9 +195,7 @@ export function TemplateGallery({
             >
               <Star
                 className={`h-4 w-4 ${
-                  showFavoritesOnly
-                    ? "fill-yellow-400 text-yellow-400"
-                    : "text-gray-500"
+                  showFavoritesOnly ? "fill-yellow-400 text-yellow-400" : "text-gray-500"
                 }`}
               />
               Favorites
@@ -292,8 +271,7 @@ export function TemplateGallery({
                     No templates found
                   </h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md">
-                    Try adjusting your search or filters to find what you're
-                    looking for.
+                    Try adjusting your search or filters to find what you're looking for.
                   </p>
                   <Button
                     variant="outline"
@@ -321,44 +299,37 @@ export function TemplateGallery({
               )}
 
               {/* Grid View */}
-              {isReady &&
-                viewMode === "grid" &&
-                filteredTemplates.length > 0 && (
-                  <div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-                    style={{ contentVisibility: "auto" }}
-                  >
-                    {filteredTemplates.map((template: TemplateInfo) => (
-                      <MemoTemplateCard
-                        key={template.id}
-                        template={template}
-                        selected={selected === template.id}
-                        onSelect={() => handleSelectTemplate(template.id)}
-                        isFavorite={isFavorite(template.id)}
-                        onToggleFavorite={() => toggleFavorite(template.id)}
-                      />
-                    ))}
-                  </div>
-                )}
+              {isReady && viewMode === "grid" && filteredTemplates.length > 0 && (
+                <div
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                  style={{ contentVisibility: "auto" }}
+                >
+                  {filteredTemplates.map((template: TemplateInfo) => (
+                    <MemoTemplateCard
+                      key={template.id}
+                      template={template}
+                      selected={selected === template.id}
+                      onSelect={() => handleSelectTemplate(template.id)}
+                      isFavorite={isFavorite(template.id)}
+                      onToggleFavorite={() => toggleFavorite(template.id)}
+                    />
+                  ))}
+                </div>
+              )}
 
               {/* List View */}
-              {isReady &&
-                viewMode === "list" &&
-                filteredTemplates.length > 0 && (
-                  <div
-                    className="space-y-3"
-                    style={{ contentVisibility: "auto" }}
-                  >
-                    {filteredTemplates.map((template: TemplateInfo) => (
-                      <MemoTemplateListItem
-                        key={template.id}
-                        template={template}
-                        selected={selected === template.id}
-                        onSelect={() => handleSelectTemplate(template.id)}
-                      />
-                    ))}
-                  </div>
-                )}
+              {isReady && viewMode === "list" && filteredTemplates.length > 0 && (
+                <div className="space-y-3" style={{ contentVisibility: "auto" }}>
+                  {filteredTemplates.map((template: TemplateInfo) => (
+                    <MemoTemplateListItem
+                      key={template.id}
+                      template={template}
+                      selected={selected === template.id}
+                      onSelect={() => handleSelectTemplate(template.id)}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -403,10 +374,7 @@ const TemplatePreviewMini = memo(function TemplatePreviewMini({
     return (
       <div className="w-full h-full flex flex-col text-[4px] leading-tight">
         {/* Colored header */}
-        <div
-          className="p-3 space-y-1"
-          style={{ backgroundColor: colorScheme.primary }}
-        >
+        <div className="p-3 space-y-1" style={{ backgroundColor: colorScheme.primary }}>
           <div className="h-2 w-20 bg-white/90 rounded" />
           <div className="h-1 w-16 bg-white/70 rounded" />
         </div>
@@ -549,10 +517,7 @@ const TemplatePreviewMini = memo(function TemplatePreviewMini({
       <div className="w-full h-full flex flex-col text-[4px] leading-relaxed p-4">
         {/* Minimalist header */}
         <div className="space-y-1.5 mb-3">
-          <div
-            className="h-3 w-32 rounded"
-            style={{ backgroundColor: colorScheme.text }}
-          />
+          <div className="h-3 w-32 rounded" style={{ backgroundColor: colorScheme.text }} />
           <div className="h-1 w-24 bg-gray-400 rounded" />
           <div className="h-0.5 w-28 bg-gray-300 rounded" />
         </div>
@@ -1423,10 +1388,7 @@ const TemplatePreviewMini = memo(function TemplatePreviewMini({
             width: "80%",
           }}
         />
-        <div
-          className="h-1 rounded"
-          style={{ backgroundColor: colorScheme.text, opacity: 0.2 }}
-        />
+        <div className="h-1 rounded" style={{ backgroundColor: colorScheme.text, opacity: 0.2 }} />
         <div
           className="h-1 rounded"
           style={{
@@ -1498,9 +1460,7 @@ const TemplateCard = memo(function TemplateCard({
         >
           <Star
             className={`h-4 w-4 transition-colors ${
-              isFavorite
-                ? "fill-yellow-400 text-yellow-400"
-                : "text-gray-400 hover:text-yellow-400"
+              isFavorite ? "fill-yellow-400 text-yellow-400" : "text-gray-400 hover:text-yellow-400"
             }`}
           />
         </button>
@@ -1622,16 +1582,10 @@ const TemplateListItem = memo(function TemplateListItem({
       {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
-            {template.name}
-          </h3>
-          {selected && (
-            <Check className="h-5 w-5 text-violet-600 flex-shrink-0" />
-          )}
+          <h3 className="font-semibold text-lg text-gray-900 dark:text-white">{template.name}</h3>
+          {selected && <Check className="h-5 w-5 text-violet-600 flex-shrink-0" />}
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-          {template.description}
-        </p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{template.description}</p>
 
         <div className="flex items-center gap-2 flex-wrap">
           {/* Badges */}
@@ -1666,9 +1620,7 @@ const TemplateListItem = memo(function TemplateListItem({
         <div className="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
           <span className="capitalize">{template.style}</span>
           <span>•</span>
-          <span className="capitalize">
-            {template.layout.replace("-", " ")}
-          </span>
+          <span className="capitalize">{template.layout.replace("-", " ")}</span>
           {template.bestFor.length > 0 && (
             <>
               <span>•</span>

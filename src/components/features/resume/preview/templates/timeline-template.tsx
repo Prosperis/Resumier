@@ -7,11 +7,7 @@
 import { Briefcase, GraduationCap, Mail, MapPin, Phone } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface TimelineTemplateProps {
   resume: Resume;
@@ -30,11 +26,8 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
       {/* Header */}
       <div className="mb-8">
         <h1 className="mb-2 text-4xl font-bold">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <div
           className="flex flex-wrap gap-4 text-sm text-gray-600"
@@ -108,10 +101,7 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
                   verticalAlign: "middle",
                 }}
               >
-                {formatPhoneDisplay(
-                  personalInfo.phone,
-                  personalInfo.phoneFormat as PhoneFormat,
-                )}
+                {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
               </span>
             </div>
           )}
@@ -154,9 +144,7 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
       {/* Summary */}
       {personalInfo.summary && (
         <div className="mb-8">
-          <p className="text-gray-700 leading-relaxed">
-            {personalInfo.summary}
-          </p>
+          <p className="text-gray-700 leading-relaxed">{personalInfo.summary}</p>
         </div>
       )}
 
@@ -201,10 +189,7 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
               }}
             />
 
-            <div
-              className="space-y-8"
-              style={{ marginTop: "0", marginBottom: "0" }}
-            >
+            <div className="space-y-8" style={{ marginTop: "0", marginBottom: "0" }}>
               {experience.map((exp, index) => (
                 <div
                   key={index}
@@ -235,20 +220,15 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
                   <div className="mb-2">
                     <h3 className="text-lg font-bold">{exp.position}</h3>
                     <div className="flex items-center justify-between flex-wrap gap-2">
-                      <p className="font-semibold text-gray-700">
-                        {exp.company}
-                      </p>
+                      <p className="font-semibold text-gray-700">{exp.company}</p>
                       <p className="text-sm text-gray-600">
-                        {exp.startDate} -{" "}
-                        {exp.current ? "Present" : exp.endDate}
+                        {exp.startDate} - {exp.current ? "Present" : exp.endDate}
                       </p>
                     </div>
                   </div>
 
                   {exp.description && (
-                    <p className="mb-3 text-gray-700 text-sm">
-                      {exp.description}
-                    </p>
+                    <p className="mb-3 text-gray-700 text-sm">{exp.description}</p>
                   )}
 
                   {exp.highlights && exp.highlights.length > 0 && (
@@ -265,8 +245,7 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
                           key={i}
                           style={{
                             display: "block",
-                            marginBottom:
-                              i < exp.highlights.length - 1 ? "0.375rem" : "0",
+                            marginBottom: i < exp.highlights.length - 1 ? "0.375rem" : "0",
                             lineHeight: "1.5",
                             color: "#374151",
                           }}
@@ -345,10 +324,7 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
               }}
             />
 
-            <div
-              className="space-y-6"
-              style={{ marginTop: "0", marginBottom: "0" }}
-            >
+            <div className="space-y-6" style={{ marginTop: "0", marginBottom: "0" }}>
               {education.map((edu, index) => (
                 <div
                   key={index}
@@ -380,9 +356,7 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
                     <div>
                       <h3 className="font-bold">{edu.degree}</h3>
                       <p className="text-gray-700">{edu.institution}</p>
-                      {edu.gpa && (
-                        <p className="text-sm text-gray-600">GPA: {edu.gpa}</p>
-                      )}
+                      {edu.gpa && <p className="text-sm text-gray-600">GPA: {edu.gpa}</p>}
                     </div>
                     <p className="text-sm text-gray-600">
                       {edu.startDate} - {edu.endDate}
@@ -398,10 +372,7 @@ export function TimelineTemplate({ resume, config }: TimelineTemplateProps) {
       {/* Skills */}
       {skills && (
         <div>
-          <h2
-            className="mb-4 text-2xl font-bold"
-            style={{ color: primaryColor }}
-          >
+          <h2 className="mb-4 text-2xl font-bold" style={{ color: primaryColor }}>
             Skills
           </h2>
           <div

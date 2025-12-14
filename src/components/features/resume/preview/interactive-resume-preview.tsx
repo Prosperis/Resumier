@@ -46,8 +46,7 @@ export function InteractiveResumePreview({
   };
 
   const hiddenSections = contentWithSettings.hiddenSections || [];
-  const sectionOrder =
-    contentWithSettings.sectionOrder || DEFAULT_SECTION_ORDER;
+  const sectionOrder = contentWithSettings.sectionOrder || DEFAULT_SECTION_ORDER;
 
   // Ensure all sections are in the order array
   const normalizedOrder = [
@@ -93,9 +92,7 @@ export function InteractiveResumePreview({
         ? hiddenSections.filter((s) => s !== sectionType)
         : [...hiddenSections, sectionType];
 
-      saveContent({ hiddenSections: newHiddenSections } as Partial<
-        typeof resume.content
-      >);
+      saveContent({ hiddenSections: newHiddenSections } as Partial<typeof resume.content>);
     },
     [hiddenSections, saveContent],
   );
@@ -121,8 +118,7 @@ export function InteractiveResumePreview({
   const handleMoveSectionDown = useCallback(
     (sectionType: EditableSectionType) => {
       const currentIndex = normalizedOrder.indexOf(sectionType);
-      if (currentIndex === -1 || currentIndex >= normalizedOrder.length - 1)
-        return;
+      if (currentIndex === -1 || currentIndex >= normalizedOrder.length - 1) return;
 
       const newOrder = [...normalizedOrder];
       [newOrder[currentIndex], newOrder[currentIndex + 1]] = [
@@ -184,9 +180,7 @@ export function InteractiveResumePreview({
 
   const handleDeleteExperience = useCallback(
     (id: string) => {
-      const updatedExperiences = resume.content.experience.filter(
-        (exp) => exp.id !== id,
-      );
+      const updatedExperiences = resume.content.experience.filter((exp) => exp.id !== id);
       saveContent({ experience: updatedExperiences });
     },
     [resume.content.experience, saveContent],
@@ -231,9 +225,7 @@ export function InteractiveResumePreview({
 
   const handleDeleteEducation = useCallback(
     (id: string) => {
-      const updatedEducation = resume.content.education.filter(
-        (edu) => edu.id !== id,
-      );
+      const updatedEducation = resume.content.education.filter((edu) => edu.id !== id);
       saveContent({ education: updatedEducation });
     },
     [resume.content.education, saveContent],
@@ -285,9 +277,7 @@ export function InteractiveResumePreview({
 
   const handleDeleteCertification = useCallback(
     (id: string) => {
-      const updatedCertifications = resume.content.certifications.filter(
-        (cert) => cert.id !== id,
-      );
+      const updatedCertifications = resume.content.certifications.filter((cert) => cert.id !== id);
       saveContent({ certifications: updatedCertifications });
     },
     [resume.content.certifications, saveContent],
@@ -327,9 +317,7 @@ export function InteractiveResumePreview({
 
   const handleDeleteLink = useCallback(
     (id: string) => {
-      const updatedLinks = resume.content.links.filter(
-        (link) => link.id !== id,
-      );
+      const updatedLinks = resume.content.links.filter((link) => link.id !== id);
       saveContent({ links: updatedLinks });
     },
     [resume.content.links, saveContent],

@@ -56,9 +56,7 @@ describe("PersonalInfoForm", () => {
     it("shows field descriptions", () => {
       render(<PersonalInfoForm {...defaultProps} />);
       expect(screen.getByText(/city and state\/country/i)).toBeInTheDocument();
-      expect(
-        screen.getByText(/a brief professional summary/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/a brief professional summary/i)).toBeInTheDocument();
     });
 
     it("shows placeholder text for form fields", () => {
@@ -67,18 +65,12 @@ describe("PersonalInfoForm", () => {
       expect(screen.getByPlaceholderText("John")).toBeInTheDocument();
       expect(screen.getByPlaceholderText("Doe")).toBeInTheDocument();
       // Email placeholder
-      expect(
-        screen.getByPlaceholderText(/john@example\.com/i),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/john@example\.com/i)).toBeInTheDocument();
       // Location placeholder
-      expect(
-        screen.getByPlaceholderText(/san francisco, ca/i),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/san francisco, ca/i)).toBeInTheDocument();
       // Summary placeholder
       expect(
-        screen.getByPlaceholderText(
-          /brief overview of your professional background/i,
-        ),
+        screen.getByPlaceholderText(/brief overview of your professional background/i),
       ).toBeInTheDocument();
     });
   });
@@ -219,9 +211,7 @@ describe("PersonalInfoForm", () => {
 
     it("shows summary description", () => {
       render(<PersonalInfoForm {...defaultProps} />);
-      expect(
-        screen.getByText(/a brief professional summary/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/a brief professional summary/i)).toBeInTheDocument();
     });
 
     it("triggers auto-save when summary is entered", async () => {
@@ -230,10 +220,7 @@ describe("PersonalInfoForm", () => {
       // First add name to trigger save (needs name or email)
       await user.type(screen.getByPlaceholderText("John"), "John");
       const summaryInput = screen.getByPlaceholderText(/brief overview/i);
-      await user.type(
-        summaryInput,
-        "Software engineer with 5 years of experience",
-      );
+      await user.type(summaryInput, "Software engineer with 5 years of experience");
 
       await waitFor(() => {
         expect(mockSave).toHaveBeenCalledWith(
@@ -254,15 +241,9 @@ describe("PersonalInfoForm", () => {
       render(<PersonalInfoForm {...defaultProps} />);
       await user.type(screen.getByPlaceholderText("John"), "John");
       await user.type(screen.getByPlaceholderText("Doe"), "Doe");
-      await user.type(
-        screen.getByPlaceholderText(/john@example/i),
-        "john@test.com",
-      );
+      await user.type(screen.getByPlaceholderText(/john@example/i), "john@test.com");
       await user.type(screen.getByPlaceholderText(/san francisco/i), "NYC");
-      await user.type(
-        screen.getByPlaceholderText(/brief overview/i),
-        "Summary text",
-      );
+      await user.type(screen.getByPlaceholderText(/brief overview/i), "Summary text");
       // Should have called save
       expect(mockSave).toHaveBeenCalled();
     });
@@ -273,14 +254,8 @@ describe("PersonalInfoForm", () => {
       // Fill all fields
       await user.type(screen.getByPlaceholderText("John"), "Jane");
       await user.type(screen.getByPlaceholderText("Doe"), "Smith");
-      await user.type(
-        screen.getByPlaceholderText(/john@example/i),
-        "jane@example.com",
-      );
-      await user.type(
-        screen.getByPlaceholderText(/san francisco/i),
-        "Boston, MA",
-      );
+      await user.type(screen.getByPlaceholderText(/john@example/i), "jane@example.com");
+      await user.type(screen.getByPlaceholderText(/san francisco/i), "Boston, MA");
 
       await waitFor(() => {
         expect(mockSave).toHaveBeenCalledWith(
@@ -378,20 +353,12 @@ describe("PersonalInfoForm", () => {
         location: "San Francisco, CA",
         summary: "Experienced developer",
       };
-      render(
-        <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
-      );
+      render(<PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />);
       expect(screen.getByPlaceholderText("John")).toHaveValue("John");
       expect(screen.getByPlaceholderText("Doe")).toHaveValue("Doe");
-      expect(screen.getByPlaceholderText(/john@example/i)).toHaveValue(
-        "john@example.com",
-      );
-      expect(screen.getByPlaceholderText(/san francisco/i)).toHaveValue(
-        "San Francisco, CA",
-      );
-      expect(screen.getByPlaceholderText(/brief overview/i)).toHaveValue(
-        "Experienced developer",
-      );
+      expect(screen.getByPlaceholderText(/john@example/i)).toHaveValue("john@example.com");
+      expect(screen.getByPlaceholderText(/san francisco/i)).toHaveValue("San Francisco, CA");
+      expect(screen.getByPlaceholderText(/brief overview/i)).toHaveValue("Experienced developer");
     });
 
     it("handles partial default values", () => {
@@ -399,13 +366,9 @@ describe("PersonalInfoForm", () => {
         firstName: "Jane",
         email: "jane@example.com",
       };
-      render(
-        <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
-      );
+      render(<PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />);
       expect(screen.getByPlaceholderText("John")).toHaveValue("Jane");
-      expect(screen.getByPlaceholderText(/john@example/i)).toHaveValue(
-        "jane@example.com",
-      );
+      expect(screen.getByPlaceholderText(/john@example/i)).toHaveValue("jane@example.com");
       expect(screen.getByPlaceholderText("Doe")).toHaveValue("");
       expect(screen.getByPlaceholderText(/san francisco/i)).toHaveValue("");
       expect(screen.getByPlaceholderText(/brief overview/i)).toHaveValue("");
@@ -413,9 +376,7 @@ describe("PersonalInfoForm", () => {
 
     it("handles empty default values", () => {
       const defaultValues = {};
-      render(
-        <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
-      );
+      render(<PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />);
       expect(screen.getByPlaceholderText("John")).toHaveValue("");
       expect(screen.getByPlaceholderText("Doe")).toHaveValue("");
       expect(screen.getByPlaceholderText(/john@example/i)).toHaveValue("");
@@ -428,9 +389,7 @@ describe("PersonalInfoForm", () => {
       const defaultValues = {
         firstName: "Original",
       };
-      render(
-        <PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />,
-      );
+      render(<PersonalInfoForm {...defaultProps} defaultValues={defaultValues} />);
       const firstNameInput = screen.getByPlaceholderText("John");
       expect(firstNameInput).toHaveValue("Original");
       await user.clear(firstNameInput);
@@ -567,9 +526,7 @@ describe("PersonalInfoForm", () => {
     it("shows name order toggle button", () => {
       render(<PersonalInfoForm {...defaultProps} />);
       // Should show "First Last" by default
-      expect(
-        screen.getByRole("button", { name: /first last/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /first last/i })).toBeInTheDocument();
     });
 
     it("toggles name order when clicked", async () => {
@@ -578,9 +535,7 @@ describe("PersonalInfoForm", () => {
       const toggleButton = screen.getByRole("button", { name: /first last/i });
       await user.click(toggleButton);
       // After clicking, should show "Last First"
-      expect(
-        screen.getByRole("button", { name: /last first/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /last first/i })).toBeInTheDocument();
     });
   });
 });

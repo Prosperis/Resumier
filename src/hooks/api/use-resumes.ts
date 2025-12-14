@@ -3,11 +3,7 @@ import { get, set } from "idb-keyval";
 import { apiClient } from "../../lib/api/client";
 import { getDemoResumes } from "../../lib/api/demo-data";
 import type { Resume } from "../../lib/api/types";
-import {
-  selectIsDemo,
-  selectIsGuest,
-  useAuthStore,
-} from "../../stores/auth-store";
+import { selectIsDemo, selectIsGuest, useAuthStore } from "../../stores/auth-store";
 
 const IDB_STORE_KEY = "resumier-web-store";
 

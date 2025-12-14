@@ -60,11 +60,7 @@ export function DeleteResumeDialog({
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         {trigger || (
-          <Button
-            variant="destructive"
-            size="sm"
-            aria-label={`Delete ${resumeTitle}`}
-          >
+          <Button variant="destructive" size="sm" aria-label={`Delete ${resumeTitle}`}>
             <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
             Delete
           </Button>
@@ -74,8 +70,8 @@ export function DeleteResumeDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the
-            resume <strong>"{resumeTitle}"</strong> from your account.
+            This action cannot be undone. This will permanently delete the resume{" "}
+            <strong>"{resumeTitle}"</strong> from your account.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -87,16 +83,9 @@ export function DeleteResumeDialog({
             }}
             disabled={isPending}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            aria-label={
-              isPending ? "Deleting resume..." : "Confirm delete resume"
-            }
+            aria-label={isPending ? "Deleting resume..." : "Confirm delete resume"}
           >
-            {isPending && (
-              <Loader2
-                className="mr-2 h-4 w-4 animate-spin"
-                aria-hidden="true"
-              />
-            )}
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
             Delete Resume
           </AlertDialogAction>
         </AlertDialogFooter>

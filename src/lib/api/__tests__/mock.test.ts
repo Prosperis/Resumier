@@ -156,27 +156,21 @@ describe("mockApi", () => {
       });
 
       it("throws 400 when title is missing", async () => {
-        await expect(
-          mockApi.handleResumes("POST", undefined, {}),
-        ).rejects.toEqual({
+        await expect(mockApi.handleResumes("POST", undefined, {})).rejects.toEqual({
           status: 400,
           message: "Title is required",
         });
       });
 
       it("throws 400 when body is undefined", async () => {
-        await expect(
-          mockApi.handleResumes("POST", undefined, undefined),
-        ).rejects.toEqual({
+        await expect(mockApi.handleResumes("POST", undefined, undefined)).rejects.toEqual({
           status: 400,
           message: "Title is required",
         });
       });
 
       it("throws 400 when title is empty", async () => {
-        await expect(
-          mockApi.handleResumes("POST", undefined, { title: "" }),
-        ).rejects.toEqual({
+        await expect(mockApi.handleResumes("POST", undefined, { title: "" })).rejects.toEqual({
           status: 400,
           message: "Title is required",
         });
@@ -213,9 +207,7 @@ describe("mockApi", () => {
       });
 
       it("throws 400 when ID is missing", async () => {
-        await expect(
-          mockApi.handleResumes("PUT", undefined, { title: "Test" }),
-        ).rejects.toEqual({
+        await expect(mockApi.handleResumes("PUT", undefined, { title: "Test" })).rejects.toEqual({
           status: 400,
           message: "Resume ID is required",
         });
@@ -224,9 +216,7 @@ describe("mockApi", () => {
       it("throws 404 when resume not found", async () => {
         (mockDb.updateResume as any).mockReturnValue(null);
 
-        await expect(
-          mockApi.handleResumes("PUT", "999", { title: "Test" }),
-        ).rejects.toEqual({
+        await expect(mockApi.handleResumes("PUT", "999", { title: "Test" })).rejects.toEqual({
           status: 404,
           message: "Resume not found",
         });
@@ -244,9 +234,7 @@ describe("mockApi", () => {
       });
 
       it("throws 400 when ID is missing", async () => {
-        await expect(
-          mockApi.handleResumes("DELETE", undefined),
-        ).rejects.toEqual({
+        await expect(mockApi.handleResumes("DELETE", undefined)).rejects.toEqual({
           status: 400,
           message: "Resume ID is required",
         });
@@ -264,9 +252,7 @@ describe("mockApi", () => {
 
     describe("unsupported methods", () => {
       it("throws 405 for unsupported method", async () => {
-        await expect(
-          mockApi.handleResumes("OPTIONS", undefined),
-        ).rejects.toEqual({
+        await expect(mockApi.handleResumes("OPTIONS", undefined)).rejects.toEqual({
           status: 405,
           message: "Method not allowed",
         });
@@ -340,9 +326,7 @@ describe("mockApi", () => {
 
     describe("unknown endpoints", () => {
       it("throws 404 for unknown auth endpoint", async () => {
-        await expect(
-          mockApi.handleAuth("/api/auth/unknown", "GET"),
-        ).rejects.toEqual({
+        await expect(mockApi.handleAuth("/api/auth/unknown", "GET")).rejects.toEqual({
           status: 404,
           message: "Auth endpoint not found",
         });
@@ -353,11 +337,9 @@ describe("mockApi", () => {
   describe("handleLinkedIn", () => {
     describe("import", () => {
       it("successfully imports LinkedIn profile from URL", async () => {
-        const result = (await mockApi.handleLinkedIn(
-          "/api/linkedin/import",
-          "POST",
-          { profileUrl: "https://www.linkedin.com/in/johndoe" },
-        )) as any;
+        const result = (await mockApi.handleLinkedIn("/api/linkedin/import", "POST", {
+          profileUrl: "https://www.linkedin.com/in/johndoe",
+        })) as any;
 
         expect(result).toHaveProperty("personalInfo");
         expect(result).toHaveProperty("experience");
@@ -392,9 +374,7 @@ describe("mockApi", () => {
 
     describe("unknown endpoints", () => {
       it("throws 404 for unknown LinkedIn endpoint", async () => {
-        await expect(
-          mockApi.handleLinkedIn("/api/linkedin/unknown", "GET"),
-        ).rejects.toEqual({
+        await expect(mockApi.handleLinkedIn("/api/linkedin/unknown", "GET")).rejects.toEqual({
           status: 404,
           message: "LinkedIn endpoint not found",
         });

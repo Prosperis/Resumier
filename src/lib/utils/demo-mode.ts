@@ -17,9 +17,7 @@ export interface DemoModeConfig {
  * Loads complete resume data into IndexedDB
  * Backs up existing user data before loading demo data
  */
-export async function initializeDemoMode(
-  config: DemoModeConfig = {},
-): Promise<void> {
+export async function initializeDemoMode(config: DemoModeConfig = {}): Promise<void> {
   const { multipleResumes = false, clearExisting = false } = config;
 
   try {
@@ -35,9 +33,7 @@ export async function initializeDemoMode(
     }
 
     // Create demo resume(s)
-    const demoResumes = multipleResumes
-      ? createDemoResumes()
-      : [createDemoResume()];
+    const demoResumes = multipleResumes ? createDemoResumes() : [createDemoResume()];
     console.log(
       `Created ${demoResumes.length} demo resume(s):`,
       demoResumes.map((r) => r.title),

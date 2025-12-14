@@ -7,18 +7,13 @@ import { Linkedin, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import {
-  getLinkedInAuthUrl,
-  LINKEDIN_CONFIG,
-} from "@/lib/services/linkedin-service";
+import { getLinkedInAuthUrl, LINKEDIN_CONFIG } from "@/lib/services/linkedin-service";
 
 interface LinkedInImportButtonProps {
   onImportStart?: () => void;
 }
 
-export function LinkedInImportButton({
-  onImportStart,
-}: LinkedInImportButtonProps) {
+export function LinkedInImportButton({ onImportStart }: LinkedInImportButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -50,10 +45,7 @@ export function LinkedInImportButton({
       setIsLoading(false);
       toast({
         title: "Error",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to initiate LinkedIn login",
+        description: error instanceof Error ? error.message : "Failed to initiate LinkedIn login",
         variant: "destructive",
       });
     }

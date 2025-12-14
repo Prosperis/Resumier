@@ -1,23 +1,15 @@
 import { Briefcase, GraduationCap, Award } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface BorderAccentTemplateProps {
   resume: Resume;
   config?: TemplateConfig;
 }
 
-export function BorderAccentTemplate({
-  resume,
-  config,
-}: BorderAccentTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } =
-    resume.content;
+export function BorderAccentTemplate({ resume, config }: BorderAccentTemplateProps) {
+  const { personalInfo, experience, education, skills, certifications } = resume.content;
   const primaryColor = config?.colorScheme?.primary || "#10b981";
 
   return (
@@ -25,30 +17,17 @@ export function BorderAccentTemplate({
       className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg p-10 border-8"
       style={{ borderColor: primaryColor }}
     >
-      <div
-        className="border-4 border-dashed p-6 mb-6"
-        style={{ borderColor: `${primaryColor}40` }}
-      >
-        <h1
-          className="text-4xl font-bold text-center mb-2"
-          style={{ color: primaryColor }}
-        >
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+      <div className="border-4 border-dashed p-6 mb-6" style={{ borderColor: `${primaryColor}40` }}>
+        <h1 className="text-4xl font-bold text-center mb-2" style={{ color: primaryColor }}>
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <p className="text-center text-gray-600">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && (
             <span>
               {" "}
-              •{" "}
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              • {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && <span> • {personalInfo.location}</span>}
@@ -56,10 +35,7 @@ export function BorderAccentTemplate({
       </div>
 
       {personalInfo.summary && (
-        <div
-          className="mb-6 p-4 border-4"
-          style={{ borderColor: primaryColor }}
-        >
+        <div className="mb-6 p-4 border-4" style={{ borderColor: primaryColor }}>
           <p className="text-gray-700 text-center">{personalInfo.summary}</p>
         </div>
       )}

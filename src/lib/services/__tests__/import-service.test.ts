@@ -76,9 +76,7 @@ describe("Import Service", () => {
       const result = await importFromLinkedIn();
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe(
-        "LinkedIn data appears to be empty. Please try again.",
-      );
+      expect(result.error).toBe("LinkedIn data appears to be empty. Please try again.");
     });
 
     it("returns error when sessionStorage data is invalid JSON", async () => {

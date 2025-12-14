@@ -12,12 +12,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import {
-  CalendarIcon,
-  EditIcon,
-  ExternalLinkIcon,
-  TrashIcon,
-} from "lucide-react";
+import { CalendarIcon, EditIcon, ExternalLinkIcon, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Certification } from "@/lib/api/types";
@@ -107,9 +102,7 @@ export function CertificationList({
     return (
       <Card className="border-dashed gap-3 py-3">
         <CardContent className="flex flex-col items-center justify-center py-6 text-center px-3">
-          <p className="text-muted-foreground text-xs">
-            No certifications added yet.
-          </p>
+          <p className="text-muted-foreground text-xs">No certifications added yet.</p>
           <p className="text-muted-foreground mt-1 text-[10px]">
             Click the + button to add a certification.
           </p>
@@ -119,11 +112,7 @@ export function CertificationList({
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext
         items={certifications.map((c) => c.id)}
         strategy={verticalListSortingStrategy}
@@ -208,32 +197,18 @@ function CertificationPreviewCard({
             <div className="text-muted-foreground mt-0.5 flex items-center gap-1 text-[10px]">
               <CalendarIcon className="h-2.5 w-2.5" />
               <span>Issued {formatDate(cert.date)}</span>
-              {cert.expiryDate && (
-                <span> · Expires {formatDate(cert.expiryDate)}</span>
-              )}
+              {cert.expiryDate && <span> · Expires {formatDate(cert.expiryDate)}</span>}
             </div>
             {cert.credentialId && (
-              <p className="text-muted-foreground mt-0.5 text-[10px]">
-                ID: {cert.credentialId}
-              </p>
+              <p className="text-muted-foreground mt-0.5 text-[10px]">ID: {cert.credentialId}</p>
             )}
           </div>
           {!disabled && (
             <div className="flex gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                onClick={onEdit}
-              >
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onEdit}>
                 <EditIcon className="h-3 w-3" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                onClick={onDelete}
-              >
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onDelete}>
                 <TrashIcon className="h-3 w-3" />
               </Button>
             </div>

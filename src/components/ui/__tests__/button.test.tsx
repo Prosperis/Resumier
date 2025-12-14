@@ -29,9 +29,7 @@ describe("Button", () => {
   });
   it("handles click events", () => {
     const handleClick = vi.fn();
-    const { getByText } = render(
-      <Button onClick={handleClick}>Click me</Button>,
-    );
+    const { getByText } = render(<Button onClick={handleClick}>Click me</Button>);
     getByText("Click me").click();
     expect(handleClick).toHaveBeenCalledTimes(1);
   });

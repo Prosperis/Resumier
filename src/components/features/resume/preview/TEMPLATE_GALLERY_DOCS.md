@@ -7,6 +7,7 @@ A comprehensive, full-screen template selection portal that provides users with 
 ## Features
 
 ### 🎨 Visual Design
+
 - **Full-screen dialog** - Immersive template browsing experience
 - **Grid and List views** - Switch between visual grid cards or detailed list items
 - **Mini previews** - Each template shows a simulated resume preview with its color scheme
@@ -14,18 +15,21 @@ A comprehensive, full-screen template selection portal that provides users with 
 - **Selected indicators** - Clear checkmark badges on selected templates
 
 ### 🔍 Filtering & Search
+
 - **Category filters** - Filter by Professional, Modern, Creative, Industry-specific, Experience-level, Specialized
 - **Search bar** - Real-time search across template names, descriptions, tags, and industries
 - **Results count** - Shows how many templates match current filters
 - **Clear filters** - Quick reset button when no results found
 
 ### 🏷️ Template Metadata Display
+
 - **Badges** - Popular, New, ATS Score indicators
 - **Tags** - Quick visual tags (professional, colorful, two-column, etc.)
 - **Meta info** - Style, layout, "Best for" information
 - **Color-coded previews** - Each template preview uses its actual color scheme
 
 ### 📱 Responsive Design
+
 - **Modal layout** - Clean header with search and controls
 - **Sidebar categories** - Easy navigation through template types
 - **Scrollable content** - Smooth scrolling through template grid/list
@@ -36,6 +40,7 @@ A comprehensive, full-screen template selection portal that provides users with 
 ### Main Component: `TemplateGallery`
 
 **Props:**
+
 ```typescript
 interface TemplateGalleryProps {
   open: boolean;                    // Dialog open state
@@ -47,6 +52,7 @@ interface TemplateGalleryProps {
 ```
 
 **Features:**
+
 - Search state management
 - Category filtering
 - View mode toggle (grid/list)
@@ -56,6 +62,7 @@ interface TemplateGalleryProps {
 ### Sub-Component: `TemplateCard` (Grid View)
 
 **Visual Elements:**
+
 - Aspect ratio 8.5:11 (mimics US Letter paper)
 - Simulated resume preview with:
   - Header area (colored based on template's primary color)
@@ -71,6 +78,7 @@ interface TemplateGalleryProps {
 ### Sub-Component: `TemplateListItem` (List View)
 
 **Layout:**
+
 - Horizontal layout with mini preview on left
 - Larger template name and description
 - More badges and tags visible (up to 4)
@@ -89,9 +97,9 @@ function ResumeEditor() {
 
   return (
     <div>
-      <TemplateSelector 
-        selected={template} 
-        onSelect={setTemplate} 
+      <TemplateSelector
+        selected={template}
+        onSelect={setTemplate}
       />
     </div>
   );
@@ -114,7 +122,7 @@ function MyComponent() {
       <Button onClick={() => setOpen(true)}>
         Choose Template
       </Button>
-      
+
       <TemplateGallery
         open={open}
         onOpenChange={setOpen}
@@ -132,9 +140,9 @@ The gallery generates realistic template previews without needing actual images:
 
 ```tsx
 // Simulated header
-<div style={{ 
+<div style={{
   backgroundColor: template.colorScheme.primary,
-  opacity: 0.2 
+  opacity: 0.2
 }} />
 
 // Simulated content lines with varying widths
@@ -148,6 +156,7 @@ The gallery generates realistic template previews without needing actual images:
 ```
 
 This creates:
+
 - **Realistic previews** without needing screenshots
 - **Dynamic color schemes** - Each template shows its actual colors
 - **Fast loading** - No image files to download
@@ -156,12 +165,15 @@ This creates:
 ## Filtering Logic
 
 ### Category Filter
+
 ```typescript
 filtered = filtered.filter((t: TemplateInfo) => t.category === category);
 ```
 
 ### Search Filter
+
 Searches across multiple fields:
+
 - Template name
 - Description
 - Tags
@@ -179,13 +191,16 @@ filtered = filtered.filter((t: TemplateInfo) =>
 ## UI States
 
 ### Empty State
+
 When no templates match filters:
+
 - Filter icon
 - "No templates found" message
 - Helpful description
 - "Clear Filters" button
 
 ### Grid View
+
 - 3-column grid on large screens
 - 2-column on medium screens
 - 1-column on small screens
@@ -193,6 +208,7 @@ When no templates match filters:
 - Hover effects
 
 ### List View
+
 - Horizontal cards with mini preview
 - More detailed information visible
 - Better for comparing template details
@@ -218,6 +234,7 @@ Templates can have multiple badges:
 ## Styling System
 
 ### Colors
+
 - **Primary actions**: Violet/purple theme
 - **Selected state**: Violet-600 border and shadow
 - **Hover state**: Violet-300 border
@@ -225,12 +242,14 @@ Templates can have multiple badges:
 - **Text**: Gray-900 for headings, gray-600 for descriptions
 
 ### Spacing
+
 - **Card padding**: p-4 (16px)
 - **Card gap**: gap-6 (24px)
 - **Dialog padding**: p-6 (24px)
 - **Border radius**: rounded-lg (8px)
 
 ### Transitions
+
 - All interactive elements have `transition-all`
 - Hover states animate smoothly
 - Border and shadow changes are animated
@@ -247,12 +266,14 @@ Templates can have multiple badges:
 ## Performance
 
 ### Optimizations
+
 - **useMemo** for filtered templates - Prevents unnecessary recalculations
 - **Lazy rendering** - Only renders visible templates
 - **No images** - Simulated previews load instantly
 - **Efficient filtering** - Single pass through templates
 
 ### Future Enhancements
+
 - [ ] Virtual scrolling for 100+ templates
 - [ ] Template preview on hover (live render)
 - [ ] Side-by-side comparison mode
@@ -265,19 +286,25 @@ Templates can have multiple badges:
 ## Integration Points
 
 ### Template Registry
+
 Pulls all templates from:
+
 ```typescript
 import { getAllTemplates } from "../templates/template-registry";
 ```
 
 ### Template Types
+
 Uses enhanced type system:
+
 ```typescript
 import type { TemplateCategory, TemplateInfo } from "@/lib/types/templates";
 ```
 
 ### UI Components
+
 Uses shadcn/ui components:
+
 - Dialog (modal)
 - Button
 - Input (search)
@@ -286,7 +313,9 @@ Uses shadcn/ui components:
 ## Customization
 
 ### Adding New Categories
+
 Edit the `categories` array:
+
 ```typescript
 const categories: { id: FilterCategory; label: string }[] = [
   { id: "all", label: "All Templates" },
@@ -295,13 +324,17 @@ const categories: { id: FilterCategory; label: string }[] = [
 ```
 
 ### Changing Grid Columns
+
 Modify the grid classes:
+
 ```tsx
 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 ```
 
 ### Custom Preview Generation
+
 Edit the preview simulation in `TemplateCard`:
+
 ```tsx
 <div className="w-full h-full p-6 space-y-3 scale-90">
   {/* Customize your preview structure here */}
@@ -311,6 +344,7 @@ Edit the preview simulation in `TemplateCard`:
 ## Testing
 
 ### Manual Testing Checklist
+
 - [ ] Dialog opens and closes correctly
 - [ ] Search filters templates in real-time
 - [ ] Category filters work
@@ -324,6 +358,7 @@ Edit the preview simulation in `TemplateCard`:
 - [ ] Mobile responsive
 
 ### Edge Cases
+
 - [ ] No templates available
 - [ ] All templates filtered out
 - [ ] Very long template names
@@ -333,6 +368,7 @@ Edit the preview simulation in `TemplateCard`:
 ## Screenshots/Mockup Description
 
 ### Grid View
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │  ✨ Choose Your Template      [Search...]  [Grid][List]   X  │
@@ -352,6 +388,7 @@ Edit the preview simulation in `TemplateCard`:
 ```
 
 ### List View
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │  ✨ Choose Your Template      [Search...]  [Grid][List]   X  │
@@ -370,6 +407,7 @@ Edit the preview simulation in `TemplateCard`:
 ## Summary
 
 The Template Gallery provides a **professional, visual, and intuitive** way for users to:
+
 1. **Browse** all available templates
 2. **Filter** by category and search
 3. **Preview** template designs with actual colors

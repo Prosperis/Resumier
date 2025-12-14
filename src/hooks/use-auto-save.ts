@@ -84,9 +84,7 @@ export function useAutoSave({
 
       // Capture previous data for potential rollback (only on first save in batch)
       if (!previousDataRef.current) {
-        previousDataRef.current = queryClient.getQueryData<Resume>(
-          resumeQueryKey(resumeId),
-        );
+        previousDataRef.current = queryClient.getQueryData<Resume>(resumeQueryKey(resumeId));
       }
 
       // Immediately update the cache for live preview
@@ -95,9 +93,7 @@ export function useAutoSave({
         return {
           ...old,
           ...data,
-          content: data.content
-            ? { ...old.content, ...data.content }
-            : old.content,
+          content: data.content ? { ...old.content, ...data.content } : old.content,
         };
       });
 
@@ -144,10 +140,7 @@ export function useAutoSave({
                 setError(err);
                 // Rollback to previous data on error
                 if (previousDataRef.current) {
-                  queryClient.setQueryData(
-                    resumeQueryKey(resumeId),
-                    previousDataRef.current,
-                  );
+                  queryClient.setQueryData(resumeQueryKey(resumeId), previousDataRef.current);
                   // Reset lastSavedData so user can retry
                   lastSavedDataRef.current = "";
                 }

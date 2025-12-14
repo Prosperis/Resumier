@@ -284,9 +284,7 @@ describe("AuthStore", () => {
     });
 
     it("handles login failure with error message", async () => {
-      (authApi.login as any).mockRejectedValue(
-        new Error("Invalid credentials"),
-      );
+      (authApi.login as any).mockRejectedValue(new Error("Invalid credentials"));
 
       const { result } = renderHook(() => useAuthStore());
 
@@ -357,9 +355,7 @@ describe("AuthStore", () => {
 
     it("clears state even if logout API fails", async () => {
       (authApi.logout as any).mockRejectedValue(new Error("API error"));
-      const consoleSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
       const { result } = renderHook(() => useAuthStore());
 
@@ -378,10 +374,7 @@ describe("AuthStore", () => {
         await result.current.logout();
       });
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Logout API error:",
-        expect.any(Error),
-      );
+      expect(consoleSpy).toHaveBeenCalledWith("Logout API error:", expect.any(Error));
       expect(result.current.user).toBeNull();
       expect(result.current.isAuthenticated).toBe(false);
 

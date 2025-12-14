@@ -102,9 +102,7 @@ export function EducationList({
     return (
       <Card className="border-dashed gap-3 py-3">
         <CardContent className="flex flex-col items-center justify-center py-6 text-center px-3">
-          <p className="text-muted-foreground text-xs">
-            No education added yet.
-          </p>
+          <p className="text-muted-foreground text-xs">No education added yet.</p>
           <p className="text-muted-foreground mt-1 text-[10px]">
             Click the + button to add your education.
           </p>
@@ -114,11 +112,7 @@ export function EducationList({
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext
         items={education.map((edu) => edu.id)}
         strategy={verticalListSortingStrategy}
@@ -202,28 +196,17 @@ function EducationPreviewCard({
           </div>
           {!disabled && (
             <div className="flex gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                onClick={onEdit}
-              >
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onEdit}>
                 <EditIcon className="h-3 w-3" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                onClick={onDelete}
-              >
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onDelete}>
                 <TrashIcon className="h-3 w-3" />
               </Button>
             </div>
           )}
         </div>
       </CardHeader>
-      {((edu.gpa && edu.gpa.trim() !== "") ||
-        (edu.honors && edu.honors.length > 0)) && (
+      {((edu.gpa && edu.gpa.trim() !== "") || (edu.honors && edu.honors.length > 0)) && (
         <CardContent className="px-3">
           {edu.gpa && edu.gpa.trim() !== "" && (
             <p className="text-[11px]">

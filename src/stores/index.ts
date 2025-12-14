@@ -47,12 +47,7 @@ export {
   useHistoryStore,
 } from "./history-store";
 export type { Theme } from "./theme-store";
-export {
-  selectSetTheme,
-  selectTheme,
-  selectToggleTheme,
-  useThemeStore,
-} from "./theme-store";
+export { selectSetTheme, selectTheme, selectToggleTheme, useThemeStore } from "./theme-store";
 export {
   defaultProfileContent,
   selectActiveProfile,
@@ -70,11 +65,7 @@ export {
   selectTheme as selectSettingsTheme,
   useSettingsStore,
 } from "./settings-store";
-export type {
-  Notification,
-  PersonalInfoSection,
-  ResumeBuilderSection,
-} from "./ui-store";
+export type { Notification, PersonalInfoSection, ResumeBuilderSection } from "./ui-store";
 export {
   selectActiveDialog,
   selectDialogActions,

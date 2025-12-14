@@ -67,10 +67,7 @@ describe("useUpdateResume", () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     expect(result.current.data).toEqual(updatedResume);
-    expect(apiClient.put).toHaveBeenCalledWith(
-      `/api/resumes/${resumeId}`,
-      updateData,
-    );
+    expect(apiClient.put).toHaveBeenCalledWith(`/api/resumes/${resumeId}`, updateData);
   });
 
   it("handles error when update fails", async () => {

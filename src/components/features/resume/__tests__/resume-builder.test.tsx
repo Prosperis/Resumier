@@ -56,22 +56,10 @@ vi.mock("../lazy", () => ({
     </div>
   )),
   LazyExperienceList: vi.fn(
-    ({
-      experiences,
-      editingId,
-      isAddingNew,
-      onEdit,
-      onClose,
-      onDelete,
-      onReorder,
-    }) => (
+    ({ experiences, editingId, isAddingNew, onEdit, onClose, onDelete, onReorder }) => (
       <div data-testid="experience-list">
-        {isAddingNew && (
-          <div data-testid="adding-experience">Adding new experience</div>
-        )}
-        {editingId && (
-          <div data-testid="editing-experience">Editing {editingId}</div>
-        )}
+        {isAddingNew && <div data-testid="adding-experience">Adding new experience</div>}
+        {editingId && <div data-testid="editing-experience">Editing {editingId}</div>}
         {experiences.length === 0 && !isAddingNew ? (
           <div>No experiences added yet</div>
         ) : (
@@ -89,22 +77,10 @@ vi.mock("../lazy", () => ({
     ),
   ),
   LazyEducationList: vi.fn(
-    ({
-      education,
-      editingId,
-      isAddingNew,
-      onEdit,
-      onClose,
-      onDelete,
-      onReorder,
-    }) => (
+    ({ education, editingId, isAddingNew, onEdit, onClose, onDelete, onReorder }) => (
       <div data-testid="education-list">
-        {isAddingNew && (
-          <div data-testid="adding-education">Adding new education</div>
-        )}
-        {editingId && (
-          <div data-testid="editing-education">Editing {editingId}</div>
-        )}
+        {isAddingNew && <div data-testid="adding-education">Adding new education</div>}
+        {editingId && <div data-testid="editing-education">Editing {editingId}</div>}
         {education.length === 0 && !isAddingNew ? (
           <div>No education added yet</div>
         ) : (
@@ -122,22 +98,10 @@ vi.mock("../lazy", () => ({
     ),
   ),
   LazyCertificationList: vi.fn(
-    ({
-      certifications,
-      editingId,
-      isAddingNew,
-      onEdit,
-      onClose,
-      onDelete,
-      onReorder,
-    }) => (
+    ({ certifications, editingId, isAddingNew, onEdit, onClose, onDelete, onReorder }) => (
       <div data-testid="certification-list">
-        {isAddingNew && (
-          <div data-testid="adding-certification">Adding new certification</div>
-        )}
-        {editingId && (
-          <div data-testid="editing-certification">Editing {editingId}</div>
-        )}
+        {isAddingNew && <div data-testid="adding-certification">Adding new certification</div>}
+        {editingId && <div data-testid="editing-certification">Editing {editingId}</div>}
         {certifications.length === 0 && !isAddingNew ? (
           <div>No certifications added yet</div>
         ) : (
@@ -145,9 +109,7 @@ vi.mock("../lazy", () => ({
             <div key={cert.id} data-testid={`certification-${cert.id}`}>
               <div>{cert.name}</div>
               <button onClick={() => onEdit(cert.id)}>Edit {cert.id}</button>
-              <button onClick={() => onDelete(cert.id)}>
-                Delete {cert.id}
-              </button>
+              <button onClick={() => onDelete(cert.id)}>Delete {cert.id}</button>
               <button onClick={() => onReorder([cert])}>Reorder cert</button>
             </div>
           ))
@@ -156,44 +118,30 @@ vi.mock("../lazy", () => ({
       </div>
     ),
   ),
-  LazyLinkList: vi.fn(
-    ({
-      links,
-      editingId,
-      isAddingNew,
-      onEdit,
-      onClose,
-      onDelete,
-      onReorder,
-    }) => (
-      <div data-testid="link-list">
-        {isAddingNew && <div data-testid="adding-link">Adding new link</div>}
-        {editingId && <div data-testid="editing-link">Editing {editingId}</div>}
-        {links.length === 0 && !isAddingNew ? (
-          <div>No links added yet</div>
-        ) : (
-          links.map((link: any) => (
-            <div key={link.id} data-testid={`link-${link.id}`}>
-              <div>{link.label}</div>
-              <button onClick={() => onEdit(link.id)}>Edit {link.id}</button>
-              <button onClick={() => onDelete(link.id)}>
-                Delete {link.id}
-              </button>
-              <button onClick={() => onReorder([link])}>Reorder link</button>
-            </div>
-          ))
-        )}
-        {(isAddingNew || editingId) && <button onClick={onClose}>Close</button>}
-      </div>
-    ),
-  ),
+  LazyLinkList: vi.fn(({ links, editingId, isAddingNew, onEdit, onClose, onDelete, onReorder }) => (
+    <div data-testid="link-list">
+      {isAddingNew && <div data-testid="adding-link">Adding new link</div>}
+      {editingId && <div data-testid="editing-link">Editing {editingId}</div>}
+      {links.length === 0 && !isAddingNew ? (
+        <div>No links added yet</div>
+      ) : (
+        links.map((link: any) => (
+          <div key={link.id} data-testid={`link-${link.id}`}>
+            <div>{link.label}</div>
+            <button onClick={() => onEdit(link.id)}>Edit {link.id}</button>
+            <button onClick={() => onDelete(link.id)}>Delete {link.id}</button>
+            <button onClick={() => onReorder([link])}>Reorder link</button>
+          </div>
+        ))
+      )}
+      {(isAddingNew || editingId) && <button onClick={onClose}>Close</button>}
+    </div>
+  )),
 }));
 
 // Mock import dialog
 vi.mock("../import/import-dialog", () => ({
-  ImportDialog: vi.fn(({ trigger }) => (
-    <div data-testid="import-dialog">{trigger}</div>
-  )),
+  ImportDialog: vi.fn(({ trigger }) => <div data-testid="import-dialog">{trigger}</div>),
 }));
 
 const mockResume: Resume = {
@@ -304,15 +252,9 @@ describe("ResumeBuilder", () => {
     it("renders section descriptions", () => {
       render(<ResumeBuilder />);
 
-      expect(
-        screen.getByText(/Basic contact info and summary/),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/Professional experience and accomplishments/),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/Educational background and achievements/),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/Basic contact info and summary/)).toBeInTheDocument();
+      expect(screen.getByText(/Professional experience and accomplishments/)).toBeInTheDocument();
+      expect(screen.getByText(/Educational background and achievements/)).toBeInTheDocument();
     });
 
     it("renders import section when not in demo mode", () => {
@@ -325,9 +267,7 @@ describe("ResumeBuilder", () => {
     it("renders collapsible sections", () => {
       const { container } = render(<ResumeBuilder />);
 
-      const collapsibles = container.querySelectorAll(
-        '[data-slot="collapsible"]',
-      );
+      const collapsibles = container.querySelectorAll('[data-slot="collapsible"]');
       expect(collapsibles.length).toBeGreaterThanOrEqual(6); // 6 sections
     });
   });

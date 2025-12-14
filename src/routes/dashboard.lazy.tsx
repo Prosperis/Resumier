@@ -22,10 +22,7 @@ function DashboardComponent() {
 
   return (
     <div className="container mx-auto p-8">
-      <ResumeDashboard
-        onResumeClick={handleResumeClick}
-        onEditProfile={handleEditProfile}
-      />
+      <ResumeDashboard onResumeClick={handleResumeClick} onEditProfile={handleEditProfile} />
     </div>
   );
 }

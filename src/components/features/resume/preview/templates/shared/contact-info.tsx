@@ -48,10 +48,7 @@ export function ContactInfo({
   if (style === "centered") {
     return (
       <div className={`text-center ${className}`}>
-        <div
-          className="flex flex-wrap justify-center gap-3 text-sm"
-          style={{ color: textColor }}
-        >
+        <div className="flex flex-wrap justify-center gap-3 text-sm" style={{ color: textColor }}>
           {personalInfo.email && (
             <div className="flex items-center gap-1">
               {showIcons && <Mail className="h-4 w-4" />}
@@ -64,10 +61,7 @@ export function ContactInfo({
               <div className="flex items-center gap-1">
                 {showIcons && <Phone className="h-4 w-4" />}
                 <span>
-                  {formatPhoneDisplay(
-                    personalInfo.phone,
-                    personalInfo.phoneFormat as PhoneFormat,
-                  )}
+                  {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
                 </span>
               </div>
             </>
@@ -88,11 +82,7 @@ export function ContactInfo({
             style={{ color: textColor }}
           >
             {links.map((link) => (
-              <a
-                key={link.id}
-                href={link.url}
-                className="flex items-center gap-1 hover:underline"
-              >
+              <a key={link.id} href={link.url} className="flex items-center gap-1 hover:underline">
                 {getLinkIcon(link.type, showIcons)}
                 <span>{link.label}</span>
               </a>
@@ -118,10 +108,7 @@ export function ContactInfo({
             <div className="flex items-center gap-2">
               {showIcons && <Phone className="h-4 w-4" />}
               <span>
-                {formatPhoneDisplay(
-                  personalInfo.phone,
-                  personalInfo.phoneFormat as PhoneFormat,
-                )}
+                {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
               </span>
             </div>
           )}
@@ -147,13 +134,8 @@ export function ContactInfo({
   // Split style - horizontal layout
   if (style === "split") {
     return (
-      <div
-        className={`flex flex-wrap items-center justify-between gap-4 ${className}`}
-      >
-        <div
-          className="flex flex-wrap gap-3 text-sm"
-          style={{ color: textColor }}
-        >
+      <div className={`flex flex-wrap items-center justify-between gap-4 ${className}`}>
+        <div className="flex flex-wrap gap-3 text-sm" style={{ color: textColor }}>
           {personalInfo.email && (
             <div className="flex items-center gap-1">
               {showIcons && <Mail className="h-4 w-4" />}
@@ -164,10 +146,7 @@ export function ContactInfo({
             <div className="flex items-center gap-1">
               {showIcons && <Phone className="h-4 w-4" />}
               <span>
-                {formatPhoneDisplay(
-                  personalInfo.phone,
-                  personalInfo.phoneFormat as PhoneFormat,
-                )}
+                {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
               </span>
             </div>
           )}
@@ -179,16 +158,9 @@ export function ContactInfo({
           )}
         </div>
         {links.length > 0 && (
-          <div
-            className="flex flex-wrap gap-3 text-sm"
-            style={{ color: textColor }}
-          >
+          <div className="flex flex-wrap gap-3 text-sm" style={{ color: textColor }}>
             {links.map((link) => (
-              <a
-                key={link.id}
-                href={link.url}
-                className="flex items-center gap-1 hover:underline"
-              >
+              <a key={link.id} href={link.url} className="flex items-center gap-1 hover:underline">
                 {getLinkIcon(link.type, showIcons)}
                 <span>{link.label}</span>
               </a>
@@ -205,10 +177,7 @@ export function ContactInfo({
       <div className={`text-sm ${className}`} style={{ color: textColor }}>
         {[
           personalInfo.email,
-          formatPhoneDisplay(
-            personalInfo.phone,
-            personalInfo.phoneFormat as PhoneFormat,
-          ),
+          formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat),
           personalInfo.location,
           ...links.map((l) => l.url),
         ]
@@ -220,18 +189,10 @@ export function ContactInfo({
 
   // Default to centered
   return (
-    <div
-      className={`text-center text-sm ${className}`}
-      style={{ color: textColor }}
-    >
+    <div className={`text-center text-sm ${className}`} style={{ color: textColor }}>
       {personalInfo.email && <div>{personalInfo.email}</div>}
       {personalInfo.phone && (
-        <div>
-          {formatPhoneDisplay(
-            personalInfo.phone,
-            personalInfo.phoneFormat as PhoneFormat,
-          )}
-        </div>
+        <div>{formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}</div>
       )}
       {personalInfo.location && <div>{personalInfo.location}</div>}
     </div>
@@ -242,11 +203,7 @@ export function ContactInfo({
  * Get the appropriate icon for a link type
  * Each type has a distinct icon
  */
-export function getLinkIcon(
-  type: LinkType,
-  showIcons: boolean,
-  className = "h-4 w-4",
-) {
+export function getLinkIcon(type: LinkType, showIcons: boolean, className = "h-4 w-4") {
   if (!showIcons) return null;
 
   const iconProps = { className };

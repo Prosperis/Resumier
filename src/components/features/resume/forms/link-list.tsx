@@ -12,12 +12,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import {
-  ExternalLink,
-  Link as LinkIcon,
-  EditIcon,
-  TrashIcon,
-} from "lucide-react";
+import { ExternalLink, Link as LinkIcon, EditIcon, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Link } from "@/lib/api/types";
@@ -91,18 +86,10 @@ export function LinkList({
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
           >
-            <SortableContext
-              items={links.map((l) => l.id)}
-              strategy={verticalListSortingStrategy}
-            >
+            <SortableContext items={links.map((l) => l.id)} strategy={verticalListSortingStrategy}>
               {links.map((link) => (
                 <SortableItem key={link.id} id={link.id}>
-                  <LinkPreviewCard
-                    link={link}
-                    onEdit={() => {}}
-                    onDelete={() => {}}
-                    disabled
-                  />
+                  <LinkPreviewCard link={link} onEdit={() => {}} onDelete={() => {}} disabled />
                 </SortableItem>
               ))}
             </SortableContext>
@@ -127,15 +114,8 @@ export function LinkList({
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={links.map((l) => l.id)}
-        strategy={verticalListSortingStrategy}
-      >
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <SortableContext items={links.map((l) => l.id)} strategy={verticalListSortingStrategy}>
         <div className="space-y-2">
           {links.map((link) => (
             <SortableItem key={link.id} id={link.id}>
@@ -195,20 +175,10 @@ function LinkPreviewCard({
           </div>
           {!disabled && (
             <div className="flex gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                onClick={onEdit}
-              >
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onEdit}>
                 <EditIcon className="h-3 w-3" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-6 w-6"
-                onClick={onDelete}
-              >
+              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={onDelete}>
                 <TrashIcon className="h-3 w-3" />
               </Button>
             </div>

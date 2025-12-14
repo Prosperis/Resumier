@@ -80,9 +80,7 @@ export function useUpdateProfile() {
       // Update in list cache
       queryClient.setQueryData<Profile[]>(profilesQueryKey, (old) => {
         if (!old) return [updatedProfile];
-        return old.map((p) =>
-          p.id === updatedProfile.id ? updatedProfile : p,
-        );
+        return old.map((p) => (p.id === updatedProfile.id ? updatedProfile : p));
       });
     },
   });

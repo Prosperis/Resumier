@@ -1,10 +1,4 @@
-import {
-  act,
-  render,
-  renderHook,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { act, render, renderHook, screen, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import { ThemeProvider, useTheme } from "../theme-provider";
 
@@ -184,9 +178,7 @@ describe("ThemeProvider", () => {
         result.current.setTheme(initialTheme === "light" ? "dark" : "light");
       });
 
-      expect(result.current.theme).toBe(
-        initialTheme === "light" ? "dark" : "light",
-      );
+      expect(result.current.theme).toBe(initialTheme === "light" ? "dark" : "light");
     });
 
     it("should persist theme to localStorage", () => {
@@ -263,9 +255,7 @@ describe("ThemeProvider", () => {
       });
 
       await waitFor(() => {
-        expect(document.documentElement.classList.contains("light")).toBe(
-          false,
-        );
+        expect(document.documentElement.classList.contains("light")).toBe(false);
         expect(document.documentElement.classList.contains("dark")).toBe(true);
       });
     });

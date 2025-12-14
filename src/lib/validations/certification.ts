@@ -21,6 +21,4 @@ export type CertificationFormData = z.infer<typeof certificationSchema>;
  * Schema for creating new certification (without ID)
  */
 export const createCertificationSchema = certificationSchema.omit({ id: true });
-export type CreateCertificationFormData = z.infer<
-  typeof createCertificationSchema
->;
+export type CreateCertificationFormData = z.infer<typeof createCertificationSchema>;

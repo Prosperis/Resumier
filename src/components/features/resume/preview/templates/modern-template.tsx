@@ -9,11 +9,7 @@ import {
 } from "lucide-react";
 import type { Resume, SkillWithLevel } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 import { getLinkIcon } from "./shared/contact-info";
 
 // Helper to get skill name from string or SkillWithLevel
@@ -27,8 +23,7 @@ interface ModernTemplateProps {
 }
 
 export function ModernTemplate({ resume, config }: ModernTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications, links } =
-    resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
 
   // Get colors from config or use defaults
   const colors = {
@@ -64,19 +59,10 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
       }}
     >
       {/* Header Section */}
-      <div
-        className="p-8"
-        style={{ backgroundColor: colors.primary, color: "white" }}
-      >
-        <h1
-          className="mb-2 text-4xl font-bold"
-          style={{ fontFamily: typography.headingFont }}
-        >
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+      <div className="p-8" style={{ backgroundColor: colors.primary, color: "white" }}>
+        <h1 className="mb-2 text-4xl font-bold" style={{ fontFamily: typography.headingFont }}>
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <div className="flex flex-wrap gap-4 text-sm">
           {personalInfo.email && (
@@ -89,10 +75,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
             <div className="flex items-center gap-1">
               <Phone className="h-4 w-4" />
               <span>
-                {formatPhoneDisplay(
-                  personalInfo.phone,
-                  personalInfo.phoneFormat as PhoneFormat,
-                )}
+                {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
               </span>
             </div>
           )}
@@ -121,10 +104,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
               >
                 Professional Summary
               </h2>
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: colors.textLight }}
-              >
+              <p className="text-sm leading-relaxed" style={{ color: colors.textLight }}>
                 {personalInfo.summary}
               </p>
             </section>
@@ -168,18 +148,12 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                       <div key={exp.id}>
                         <div className="mb-1 flex items-start justify-between">
                           {exp.position && (
-                            <h3
-                              className="text-base font-bold"
-                              style={{ color: colors.text }}
-                            >
+                            <h3 className="text-base font-bold" style={{ color: colors.text }}>
                               {exp.position}
                             </h3>
                           )}
                           {dateRange && (
-                            <span
-                              className="text-sm"
-                              style={{ color: colors.textLight }}
-                            >
+                            <span className="text-sm" style={{ color: colors.textLight }}>
                               {dateRange}
                             </span>
                           )}
@@ -193,10 +167,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                           </p>
                         )}
                         {exp.description && (
-                          <p
-                            className="mb-2 text-sm"
-                            style={{ color: colors.textLight }}
-                          >
+                          <p className="mb-2 text-sm" style={{ color: colors.textLight }}>
                             {exp.description}
                           </p>
                         )}
@@ -218,8 +189,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
           )}
 
           {/* Education */}
-          {education.filter((edu) => edu.degree || edu.institution || edu.field)
-            .length > 0 && (
+          {education.filter((edu) => edu.degree || edu.institution || edu.field).length > 0 && (
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-xl font-bold"
@@ -244,43 +214,28 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                       <div key={edu.id}>
                         <div className="mb-1 flex items-start justify-between">
                           {edu.degree && (
-                            <h3
-                              className="text-base font-bold"
-                              style={{ color: colors.text }}
-                            >
+                            <h3 className="text-base font-bold" style={{ color: colors.text }}>
                               {edu.degree}
                             </h3>
                           )}
                           {dateRange && (
-                            <span
-                              className="text-sm"
-                              style={{ color: colors.textLight }}
-                            >
+                            <span className="text-sm" style={{ color: colors.textLight }}>
                               {dateRange}
                             </span>
                           )}
                         </div>
                         {edu.institution && (
-                          <p
-                            className="text-sm font-semibold"
-                            style={{ color: colors.textLight }}
-                          >
+                          <p className="text-sm font-semibold" style={{ color: colors.textLight }}>
                             {edu.institution}
                           </p>
                         )}
                         {edu.field && (
-                          <p
-                            className="text-sm"
-                            style={{ color: colors.textLight }}
-                          >
+                          <p className="text-sm" style={{ color: colors.textLight }}>
                             {edu.field}
                           </p>
                         )}
                         {edu.gpa && (
-                          <p
-                            className="text-sm"
-                            style={{ color: colors.textLight }}
-                          >
+                          <p className="text-sm" style={{ color: colors.textLight }}>
                             GPA: {edu.gpa}
                           </p>
                         )}
@@ -323,10 +278,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
               <div className="space-y-3">
                 {skills.technical && skills.technical.length > 0 && (
                   <div>
-                    <h3
-                      className="mb-1 text-sm font-semibold"
-                      style={{ color: colors.text }}
-                    >
+                    <h3 className="mb-1 text-sm font-semibold" style={{ color: colors.text }}>
                       Technical
                     </h3>
                     <div className="flex flex-wrap gap-1">
@@ -347,10 +299,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                 )}
                 {skills.languages && skills.languages.length > 0 && (
                   <div>
-                    <h3
-                      className="mb-1 text-sm font-semibold"
-                      style={{ color: colors.text }}
-                    >
+                    <h3 className="mb-1 text-sm font-semibold" style={{ color: colors.text }}>
                       Languages
                     </h3>
                     <div className="flex flex-wrap gap-1">
@@ -371,10 +320,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                 )}
                 {skills.tools && skills.tools.length > 0 && (
                   <div>
-                    <h3
-                      className="mb-1 text-sm font-semibold"
-                      style={{ color: colors.text }}
-                    >
+                    <h3 className="mb-1 text-sm font-semibold" style={{ color: colors.text }}>
                       Tools
                     </h3>
                     <div className="flex flex-wrap gap-1">
@@ -395,10 +341,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                 )}
                 {skills.soft && skills.soft.length > 0 && (
                   <div>
-                    <h3
-                      className="mb-1 text-sm font-semibold"
-                      style={{ color: colors.text }}
-                    >
+                    <h3 className="mb-1 text-sm font-semibold" style={{ color: colors.text }}>
                       Soft Skills
                     </h3>
                     <div className="flex flex-wrap gap-1">
@@ -422,9 +365,7 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
           )}
 
           {/* Certifications */}
-          {certifications.filter(
-            (cert) => cert.name || cert.issuer || cert.date,
-          ).length > 0 && (
+          {certifications.filter((cert) => cert.name || cert.issuer || cert.date).length > 0 && (
             <section>
               <h2
                 className="mb-3 flex items-center gap-2 border-b-2 pb-1 text-lg font-bold"
@@ -443,26 +384,17 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                   .map((cert) => (
                     <div key={cert.id}>
                       {cert.name && (
-                        <p
-                          className="text-sm font-semibold"
-                          style={{ color: colors.text }}
-                        >
+                        <p className="text-sm font-semibold" style={{ color: colors.text }}>
                           {cert.name}
                         </p>
                       )}
                       {cert.issuer && (
-                        <p
-                          className="text-xs"
-                          style={{ color: colors.textLight }}
-                        >
+                        <p className="text-xs" style={{ color: colors.textLight }}>
                           {cert.issuer}
                         </p>
                       )}
                       {cert.date && (
-                        <p
-                          className="text-xs"
-                          style={{ color: colors.textLight }}
-                        >
+                        <p className="text-xs" style={{ color: colors.textLight }}>
                           {cert.date}
                         </p>
                       )}
@@ -491,18 +423,12 @@ export function ModernTemplate({ resume, config }: ModernTemplateProps) {
                   .filter((link) => link.label || link.url)
                   .map((link) => (
                     <div key={link.id} className="flex items-start gap-2">
-                      <span
-                        className="mt-0.5 flex-shrink-0"
-                        style={{ color: colors.primary }}
-                      >
+                      <span className="mt-0.5 flex-shrink-0" style={{ color: colors.primary }}>
                         {getLinkIcon(link.type, true, "h-3 w-3")}
                       </span>
                       <div>
                         {link.label && (
-                          <p
-                            className="text-xs font-semibold"
-                            style={{ color: colors.text }}
-                          >
+                          <p className="text-xs font-semibold" style={{ color: colors.text }}>
                             {link.label}
                           </p>
                         )}

@@ -12,18 +12,9 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MonthPicker } from "@/components/ui/month-picker";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import type { Education } from "@/lib/api/types";
-import {
-  type CreateEducationFormData,
-  createEducationSchema,
-} from "@/lib/validations/education";
+import { type CreateEducationFormData, createEducationSchema } from "@/lib/validations/education";
 
 interface EducationEditorProps {
   data: Education;
@@ -31,9 +22,7 @@ interface EducationEditorProps {
 }
 
 export function EducationEditor({ data, onChange }: EducationEditorProps) {
-  const [honors, setHonors] = useState<string[]>(
-    data.honors?.length ? data.honors : [],
-  );
+  const [honors, setHonors] = useState<string[]>(data.honors?.length ? data.honors : []);
 
   const form = useForm<CreateEducationFormData>({
     resolver: zodResolver(createEducationSchema),
@@ -88,11 +77,7 @@ export function EducationEditor({ data, onChange }: EducationEditorProps) {
             <FormItem>
               <Label className="text-xs">Institution</Label>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="University of California"
-                  className="h-8 text-xs"
-                />
+                <Input {...field} placeholder="University of California" className="h-8 text-xs" />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>
@@ -108,11 +93,7 @@ export function EducationEditor({ data, onChange }: EducationEditorProps) {
               <FormItem>
                 <Label className="text-xs">Degree</Label>
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Bachelor of Science"
-                    className="h-8 text-xs"
-                  />
+                  <Input {...field} placeholder="Bachelor of Science" className="h-8 text-xs" />
                 </FormControl>
                 <FormMessage className="text-xs" />
               </FormItem>
@@ -125,11 +106,7 @@ export function EducationEditor({ data, onChange }: EducationEditorProps) {
               <FormItem>
                 <Label className="text-xs">Field of Study</Label>
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Computer Science"
-                    className="h-8 text-xs"
-                  />
+                  <Input {...field} placeholder="Computer Science" className="h-8 text-xs" />
                 </FormControl>
                 <FormMessage className="text-xs" />
               </FormItem>
@@ -194,9 +171,7 @@ export function EducationEditor({ data, onChange }: EducationEditorProps) {
                       className="h-3 w-3 rounded-sm"
                     />
                   </FormControl>
-                  <Label className="text-[10px] font-normal">
-                    Currently enrolled
-                  </Label>
+                  <Label className="text-[10px] font-normal">Currently enrolled</Label>
                 </FormItem>
               )}
             />
@@ -211,11 +186,7 @@ export function EducationEditor({ data, onChange }: EducationEditorProps) {
             <FormItem>
               <Label className="text-xs">GPA (optional)</Label>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="3.8/4.0"
-                  className="h-8 text-xs w-24"
-                />
+                <Input {...field} placeholder="3.8/4.0" className="h-8 text-xs w-24" />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>

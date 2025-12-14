@@ -9,13 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUpdateProfile } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
@@ -96,8 +90,8 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
               <CardHeader>
                 <CardTitle>Profile Details</CardTitle>
                 <CardDescription>
-                  Basic information about this profile. This helps you organize
-                  multiple profiles for different roles.
+                  Basic information about this profile. This helps you organize multiple profiles
+                  for different roles.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -109,9 +103,7 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g., Software Engineer, Product Manager"
                   />
-                  <p className="text-xs text-muted-foreground">
-                    A name to identify this profile
-                  </p>
+                  <p className="text-xs text-muted-foreground">A name to identify this profile</p>
                 </div>
 
                 <div className="space-y-2">
@@ -124,15 +116,11 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
                     rows={3}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Optional description to help you remember what this profile
-                    is used for
+                    Optional description to help you remember what this profile is used for
                   </p>
                 </div>
 
-                <Button
-                  onClick={handleSaveDetails}
-                  disabled={isPending || !name.trim()}
-                >
+                <Button onClick={handleSaveDetails} disabled={isPending || !name.trim()}>
                   <Save className="mr-2 h-4 w-4" />
                   {isPending ? "Saving..." : "Save Details"}
                 </Button>
@@ -146,23 +134,23 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
               <CardHeader>
                 <CardTitle>Profile Content</CardTitle>
                 <CardDescription>
-                  Add your professional information here. This content will be
-                  available when creating resumes from this profile.
+                  Add your professional information here. This content will be available when
+                  creating resumes from this profile.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Note: Profile content editing uses the same interface as
-                  resume editing. Changes are saved to the profile and will be
-                  available for all resumes created from this profile.
+                  Note: Profile content editing uses the same interface as resume editing. Changes
+                  are saved to the profile and will be available for all resumes created from this
+                  profile.
                 </p>
                 <div className="border rounded-lg p-4 bg-muted/30">
                   <p className="text-center text-muted-foreground">
                     Profile content editor coming soon...
                   </p>
                   <p className="text-center text-xs text-muted-foreground mt-2">
-                    For now, create a resume from this profile to add content,
-                    then the content will be saved here.
+                    For now, create a resume from this profile to add content, then the content will
+                    be saved here.
                   </p>
                 </div>
               </CardContent>

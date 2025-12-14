@@ -1,20 +1,9 @@
 import { Suspense, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Resume } from "@/lib/api/types";
-import {
-  COLOR_SCHEMES,
-  TYPOGRAPHY_PRESETS,
-  type TemplateType,
-} from "@/lib/types/templates";
-import {
-  useResumeStore,
-  selectStyleCustomization,
-  type CustomFont,
-} from "@/stores/resume-store";
-import {
-  getTemplateComponent,
-  getTemplateInfo,
-} from "./templates/template-registry";
+import { COLOR_SCHEMES, TYPOGRAPHY_PRESETS, type TemplateType } from "@/lib/types/templates";
+import { useResumeStore, selectStyleCustomization, type CustomFont } from "@/stores/resume-store";
+import { getTemplateComponent, getTemplateInfo } from "./templates/template-registry";
 
 // Track loaded fonts to avoid duplicate loading
 const loadedFonts = new Set<string>();

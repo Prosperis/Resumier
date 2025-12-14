@@ -37,8 +37,7 @@ function sendToAnalytics(metric: Metric) {
 
   // Log to console in development
   if (import.meta.env.DEV) {
-    const emoji =
-      rating === "good" ? "✅" : rating === "needs-improvement" ? "⚠️" : "❌";
+    const emoji = rating === "good" ? "✅" : rating === "needs-improvement" ? "⚠️" : "❌";
     console.group(
       `${emoji} ${metric.name}: ${metric.value.toFixed(2)}${metric.name === "CLS" ? "" : "ms"}`,
     );

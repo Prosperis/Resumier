@@ -19,9 +19,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
       )}
       whileFocus={prefersReducedMotion ? undefined : { scale: 1.01 }}
       transition={
-        prefersReducedMotion
-          ? undefined
-          : { type: "spring", stiffness: 300, damping: 25 }
+        prefersReducedMotion ? undefined : { type: "spring", stiffness: 300, damping: 25 }
       }
       {...(props as React.ComponentProps<typeof MotionInput>)}
     />

@@ -201,9 +201,7 @@ describe("ExperienceList", () => {
         />,
       );
 
-      expect(
-        screen.getByText("Led development of key features"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Led development of key features")).toBeInTheDocument();
     });
 
     it("displays highlights as bullet list", () => {
@@ -216,12 +214,8 @@ describe("ExperienceList", () => {
         />,
       );
 
-      expect(
-        screen.getByText("Improved performance by 50%"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText("Mentored junior developers"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Improved performance by 50%")).toBeInTheDocument();
+      expect(screen.getByText("Mentored junior developers")).toBeInTheDocument();
     });
 
     it("does not render CardContent when no description and no highlights", () => {
@@ -262,9 +256,7 @@ describe("ExperienceList", () => {
         />,
       );
 
-      expect(
-        screen.getByText("Led development of key features"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Led development of key features")).toBeInTheDocument();
     });
 
     it("renders CardContent when only highlights are provided", () => {
@@ -282,9 +274,7 @@ describe("ExperienceList", () => {
         />,
       );
 
-      expect(
-        screen.getByText("Improved performance by 50%"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Improved performance by 50%")).toBeInTheDocument();
     });
   });
 
@@ -317,9 +307,7 @@ describe("ExperienceList", () => {
         />,
       );
 
-      expect(
-        screen.getByLabelText("Edit Senior Software Engineer experience"),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText("Edit Senior Software Engineer experience")).toBeInTheDocument();
     });
 
     it("calls onEdit for different experiences independently", async () => {
@@ -585,8 +573,7 @@ describe("ExperienceList", () => {
     it("handles very long company names", () => {
       const exp: Experience = {
         ...sampleExperiences[0],
-        company:
-          "Very Long Company Name International Corporation Limited LLC Inc",
+        company: "Very Long Company Name International Corporation Limited LLC Inc",
       };
 
       render(
@@ -606,11 +593,7 @@ describe("ExperienceList", () => {
     it("renders multiple highlights with bullets", () => {
       const exp: Experience = {
         ...sampleExperiences[0],
-        highlights: [
-          "First achievement",
-          "Second achievement",
-          "Third achievement",
-        ],
+        highlights: ["First achievement", "Second achievement", "Third achievement"],
       };
 
       render(

@@ -7,11 +7,7 @@
 import { Award, Mail, MapPin, Phone } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface ExecutiveTemplateProps {
   resume: Resume;
@@ -19,8 +15,7 @@ interface ExecutiveTemplateProps {
 }
 
 export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } =
-    resume.content;
+  const { personalInfo, experience, education, skills, certifications } = resume.content;
 
   const primaryColor = config?.colorScheme?.primary || "#1e40af";
 
@@ -38,11 +33,8 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
       {/* Header - Centered */}
       <div className="border-b-4 border-gray-900 px-12 py-8 text-center">
         <h1 className="mb-4 text-5xl font-bold tracking-tight">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
 
         {/* Contact Info - Horizontal */}
@@ -57,10 +49,7 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4" />
               <span>
-                {formatPhoneDisplay(
-                  personalInfo.phone,
-                  personalInfo.phoneFormat as PhoneFormat,
-                )}
+                {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
               </span>
             </div>
           )}
@@ -82,9 +71,7 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
           >
             Executive Profile
           </h2>
-          <p className="text-base leading-relaxed text-gray-800">
-            {personalInfo.summary}
-          </p>
+          <p className="text-base leading-relaxed text-gray-800">{personalInfo.summary}</p>
         </div>
       )}
 
@@ -103,27 +90,20 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
                 <div className="mb-2">
                   <h3 className="text-xl font-bold">{exp.position}</h3>
                   <div className="flex items-center justify-between">
-                    <p className="text-lg font-semibold text-gray-700">
-                      {exp.company}
-                    </p>
+                    <p className="text-lg font-semibold text-gray-700">{exp.company}</p>
                     <p className="text-sm text-gray-600">
                       {exp.startDate} - {exp.current ? "Present" : exp.endDate}
                     </p>
                   </div>
                 </div>
                 {exp.description && (
-                  <p className="mb-3 text-gray-700 leading-relaxed">
-                    {exp.description}
-                  </p>
+                  <p className="mb-3 text-gray-700 leading-relaxed">{exp.description}</p>
                 )}
                 {exp.highlights && exp.highlights.length > 0 && (
                   <ul className="space-y-2">
                     {exp.highlights.map((highlight, i) => (
                       <li key={i} className="flex gap-2 text-gray-800">
-                        <span
-                          className="font-bold"
-                          style={{ color: primaryColor }}
-                        >
+                        <span className="font-bold" style={{ color: primaryColor }}>
                           •
                         </span>
                         <span>{highlight}</span>
@@ -204,17 +184,10 @@ export function ExecutiveTemplate({ resume, config }: ExecutiveTemplateProps) {
               {certifications.map((cert, index) => (
                 <div key={index}>
                   <div className="flex items-center gap-2">
-                    <Award
-                      className="h-4 w-4"
-                      style={{ color: primaryColor }}
-                    />
-                    <span className="font-semibold text-gray-800">
-                      {cert.name}
-                    </span>
+                    <Award className="h-4 w-4" style={{ color: primaryColor }} />
+                    <span className="font-semibold text-gray-800">{cert.name}</span>
                   </div>
-                  {cert.issuer && (
-                    <p className="ml-6 text-sm text-gray-600">{cert.issuer}</p>
-                  )}
+                  {cert.issuer && <p className="ml-6 text-sm text-gray-600">{cert.issuer}</p>}
                 </div>
               ))}
             </div>

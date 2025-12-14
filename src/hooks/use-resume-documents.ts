@@ -16,8 +16,7 @@ export const useResumeDocuments = create<DocumentsState>()(
   persist(
     (set) => ({
       documents: [],
-      addDocument: (doc) =>
-        set((state) => ({ documents: [...state.documents, doc] })),
+      addDocument: (doc) => set((state) => ({ documents: [...state.documents, doc] })),
     }),
     {
       name: "resumier-documents",

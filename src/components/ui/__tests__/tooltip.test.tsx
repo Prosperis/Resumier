@@ -1,11 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 describe("TooltipProvider", () => {
   it("renders children correctly", () => {
@@ -119,10 +114,7 @@ describe("TooltipTrigger", () => {
         <TooltipContent>Content</TooltipContent>
       </Tooltip>,
     );
-    expect(screen.getByTestId("trigger")).toHaveAttribute(
-      "data-slot",
-      "tooltip-trigger",
-    );
+    expect(screen.getByTestId("trigger")).toHaveAttribute("data-slot", "tooltip-trigger");
   });
 
   it("can be a button element", () => {
@@ -145,9 +137,7 @@ describe("TooltipContent", () => {
     render(
       <Tooltip>
         <TooltipTrigger data-testid="trigger">Hover</TooltipTrigger>
-        <TooltipContent data-testid="content">
-          This is tooltip content
-        </TooltipContent>
+        <TooltipContent data-testid="content">This is tooltip content</TooltipContent>
       </Tooltip>,
     );
 
@@ -155,9 +145,7 @@ describe("TooltipContent", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("content")).toBeInTheDocument();
-      expect(screen.getByTestId("content").textContent).toContain(
-        "This is tooltip content",
-      );
+      expect(screen.getByTestId("content").textContent).toContain("This is tooltip content");
     });
   });
 

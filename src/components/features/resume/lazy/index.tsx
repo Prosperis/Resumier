@@ -116,10 +116,7 @@ interface LazyFormDialogProps extends Record<string, unknown> {
   component: React.ComponentType<Record<string, unknown>>;
 }
 
-export function LazyFormDialog({
-  component: Component,
-  ...props
-}: LazyFormDialogProps) {
+export function LazyFormDialog({ component: Component, ...props }: LazyFormDialogProps) {
   return (
     <Suspense fallback={<FormDialogSkeleton />}>
       <Component {...props} />
@@ -127,10 +124,7 @@ export function LazyFormDialog({
   );
 }
 
-export function LazyFormList({
-  component: Component,
-  ...props
-}: LazyFormDialogProps) {
+export function LazyFormList({ component: Component, ...props }: LazyFormDialogProps) {
   return (
     <Suspense fallback={<ListSkeleton />}>
       <Component {...props} />
@@ -138,10 +132,7 @@ export function LazyFormList({
   );
 }
 
-export function LazyForm({
-  component: Component,
-  ...props
-}: LazyFormDialogProps) {
+export function LazyForm({ component: Component, ...props }: LazyFormDialogProps) {
   return (
     <Suspense fallback={<FormSkeleton />}>
       <Component {...props} />

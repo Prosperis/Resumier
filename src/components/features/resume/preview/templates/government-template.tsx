@@ -1,48 +1,30 @@
 import { Briefcase, GraduationCap, Award } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface GovernmentTemplateProps {
   resume: Resume;
   config?: TemplateConfig;
 }
 
-export function GovernmentTemplate({
-  resume,
-  config,
-}: GovernmentTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } =
-    resume.content;
+export function GovernmentTemplate({ resume, config }: GovernmentTemplateProps) {
+  const { personalInfo, experience, education, skills, certifications } = resume.content;
   const primaryColor = config?.colorScheme?.primary || "#1e3a8a";
 
   return (
     <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg p-10 font-serif">
-      <div
-        className="border-t-4 border-b-4 py-4 mb-6"
-        style={{ borderColor: primaryColor }}
-      >
+      <div className="border-t-4 border-b-4 py-4 mb-6" style={{ borderColor: primaryColor }}>
         <h1 className="text-center text-3xl font-bold uppercase tracking-widest mb-2">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "YOUR NAME"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "YOUR NAME"}
         </h1>
         <div className="text-center text-sm text-gray-700">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && (
             <span>
               {" "}
-              |{" "}
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              | {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && <span> | {personalInfo.location}</span>}
@@ -57,9 +39,7 @@ export function GovernmentTemplate({
           >
             Professional Summary
           </h2>
-          <p className="text-gray-800 leading-relaxed text-justify">
-            {personalInfo.summary}
-          </p>
+          <p className="text-gray-800 leading-relaxed text-justify">{personalInfo.summary}</p>
         </div>
       )}
 
@@ -79,18 +59,14 @@ export function GovernmentTemplate({
                 style={{ borderColor: `${primaryColor}30` }}
               >
                 <div>
-                  <h3 className="font-bold uppercase tracking-wide">
-                    {exp.position}
-                  </h3>
+                  <h3 className="font-bold uppercase tracking-wide">{exp.position}</h3>
                   <p className="text-gray-800">{exp.company}</p>
                 </div>
                 <span className="text-sm text-gray-600 whitespace-nowrap">
                   {exp.startDate} - {exp.current ? "Present" : exp.endDate}
                 </span>
               </div>
-              {exp.description && (
-                <p className="text-sm text-gray-700 mb-2">{exp.description}</p>
-              )}
+              {exp.description && <p className="text-sm text-gray-700 mb-2">{exp.description}</p>}
               {exp.highlights && exp.highlights.length > 0 && (
                 <ul className="space-y-1">
                   {exp.highlights.map((highlight, i) => (
@@ -120,9 +96,7 @@ export function GovernmentTemplate({
               <div>
                 <h3 className="font-bold uppercase">{edu.degree}</h3>
                 <p className="text-gray-800">{edu.institution}</p>
-                {edu.field && (
-                  <p className="text-sm text-gray-600">Field: {edu.field}</p>
-                )}
+                {edu.field && <p className="text-sm text-gray-600">Field: {edu.field}</p>}
               </div>
               <span className="text-sm text-gray-600">
                 {edu.startDate} - {edu.endDate}
@@ -166,9 +140,7 @@ export function GovernmentTemplate({
             {certifications.map((cert, idx) => (
               <div key={idx} className="mb-2">
                 <p className="font-semibold text-sm">{cert.name}</p>
-                {cert.issuer && (
-                  <p className="text-xs text-gray-600">{cert.issuer}</p>
-                )}
+                {cert.issuer && <p className="text-xs text-gray-600">{cert.issuer}</p>}
               </div>
             ))}
           </div>

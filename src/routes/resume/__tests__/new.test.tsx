@@ -88,9 +88,7 @@ describe("New Resume Route (/resume/new)", () => {
 
     it("renders the page description", () => {
       renderNewResumeRoute();
-      expect(
-        screen.getByText("Give your resume a title to get started"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Give your resume a title to get started")).toBeInTheDocument();
     });
 
     it("renders the resume title input", () => {
@@ -121,17 +119,13 @@ describe("New Resume Route (/resume/new)", () => {
   describe("Typography", () => {
     it("uses proper heading styles", () => {
       const { container } = renderNewResumeRoute();
-      const heading = container.querySelector(
-        "[data-slot='card-title'][class*='font-semibold']",
-      );
+      const heading = container.querySelector("[data-slot='card-title'][class*='font-semibold']");
       expect(heading).toBeInTheDocument();
     });
 
     it("uses muted foreground for description", () => {
       const { container } = renderNewResumeRoute();
-      const description = container.querySelector(
-        "[class*='text-muted-foreground']",
-      );
+      const description = container.querySelector("[class*='text-muted-foreground']");
       expect(description).toBeInTheDocument();
     });
   });
@@ -164,9 +158,7 @@ describe("New Resume Route (/resume/new)", () => {
 
     it("displays instructions for creating resume", () => {
       renderNewResumeRoute();
-      const instructions = screen.getByText(
-        /give your resume a title to get started/i,
-      );
+      const instructions = screen.getByText(/give your resume a title to get started/i);
       expect(instructions).toBeInTheDocument();
     });
   });

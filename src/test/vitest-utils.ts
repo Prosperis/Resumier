@@ -19,10 +19,7 @@ if (!("clearAllMocks" in vitestVi)) {
   // In Vitest 1.6.1, clearAllMocks doesn't exist but restoreAllMocks does
   // Use restoreAllMocks as a polyfill
   (vitestVi as any).clearAllMocks = function clearAllMocks() {
-    if (
-      "restoreAllMocks" in vitestVi &&
-      typeof (vitestVi as any).restoreAllMocks === "function"
-    ) {
+    if ("restoreAllMocks" in vitestVi && typeof (vitestVi as any).restoreAllMocks === "function") {
       return (vitestVi as any).restoreAllMocks();
     }
     return;
@@ -33,23 +30,12 @@ if (!("clearAllMocks" in vitestVi)) {
 export const vi = vitestVi;
 
 // Re-export specific items from vitest for convenience
-export const {
-  describe,
-  it,
-  test,
-  expect,
-  beforeEach,
-  afterEach,
-  beforeAll,
-  afterAll,
-} = vitestExports;
+export const { describe, it, test, expect, beforeEach, afterEach, beforeAll, afterAll } =
+  vitestExports;
 
 // Add standalone clearAllMocks export that doesn't cause hoisting issues
 export const clearAllMocks = () => {
-  if (
-    "restoreAllMocks" in vitestVi &&
-    typeof (vitestVi as any).restoreAllMocks === "function"
-  ) {
+  if ("restoreAllMocks" in vitestVi && typeof (vitestVi as any).restoreAllMocks === "function") {
     return (vitestVi as any).restoreAllMocks();
   }
   return;

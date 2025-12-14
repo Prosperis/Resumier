@@ -50,9 +50,7 @@ describe("queryClient", () => {
 
     it("should calculate exponential backoff correctly", () => {
       const options = queryClient.getDefaultOptions();
-      const retryDelay = options.queries?.retryDelay as (
-        attemptIndex: number,
-      ) => number;
+      const retryDelay = options.queries?.retryDelay as (attemptIndex: number) => number;
 
       // First retry: 2^0 * 1000 = 1000ms
       expect(retryDelay(0)).toBe(1000);
@@ -69,9 +67,7 @@ describe("queryClient", () => {
 
     it("should cap retry delay at 30 seconds", () => {
       const options = queryClient.getDefaultOptions();
-      const retryDelay = options.queries?.retryDelay as (
-        attemptIndex: number,
-      ) => number;
+      const retryDelay = options.queries?.retryDelay as (attemptIndex: number) => number;
 
       // Very large attempt index should still cap at 30000ms
       expect(retryDelay(10)).toBe(30000);

@@ -16,11 +16,7 @@ vi.mock("@tanstack/react-router", () => ({
 }));
 
 vi.mock("@/components/features/resume/resume-dashboard", () => ({
-  ResumeDashboard: ({
-    onResumeClick,
-  }: {
-    onResumeClick: (id: string) => void;
-  }) => (
+  ResumeDashboard: ({ onResumeClick }: { onResumeClick: (id: string) => void }) => (
     <div data-testid="resume-dashboard">
       <button onClick={() => onResumeClick("test-id")}>Test Resume</button>
     </div>
@@ -37,9 +33,7 @@ vi.mock("@/components/ui/route-error", () => ({
 }));
 
 vi.mock("@/components/ui/route-loading", () => ({
-  DashboardLoading: () => (
-    <div data-testid="dashboard-loading">Loading Dashboard...</div>
-  ),
+  DashboardLoading: () => <div data-testid="dashboard-loading">Loading Dashboard...</div>,
 }));
 
 // Import the route module after setting up mocks

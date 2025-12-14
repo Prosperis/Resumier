@@ -21,9 +21,7 @@ vi.mock("lucide-react", () => ({
 }));
 
 vi.mock("@/components/ui/button", () => ({
-  Button: ({ children, ...props }: any) => (
-    <button {...props}>{children}</button>
-  ),
+  Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
 }));
 
 vi.mock("@/components/features/auth/auth-modal", () => ({
@@ -66,9 +64,7 @@ describe("Index Route", () => {
     it("renders the hero description", () => {
       renderIndexRoute();
 
-      expect(
-        screen.getByText(/professional resume builder/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/professional resume builder/i)).toBeInTheDocument();
     });
 
     it("renders Get Started button", () => {
@@ -92,33 +88,25 @@ describe("Index Route", () => {
     it("renders Professional Templates feature", () => {
       renderIndexRoute();
 
-      expect(
-        screen.getByRole("heading", { name: /professional templates/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /professional templates/i })).toBeInTheDocument();
     });
 
     it("renders Real-time Preview feature", () => {
       renderIndexRoute();
 
-      expect(
-        screen.getByRole("heading", { name: /real-time preview/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /real-time preview/i })).toBeInTheDocument();
     });
 
     it("renders Easy Export feature", () => {
       renderIndexRoute();
 
-      expect(
-        screen.getByRole("heading", { name: /easy export/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /easy export/i })).toBeInTheDocument();
     });
 
     it("renders Cloud Sync feature", () => {
       renderIndexRoute();
 
-      expect(
-        screen.getByRole("heading", { name: /cloud sync/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: /cloud sync/i })).toBeInTheDocument();
     });
 
     it("displays all feature icons", () => {
@@ -179,9 +167,7 @@ describe("Index Route", () => {
     it("emphasizes professional resume building", () => {
       renderIndexRoute();
 
-      expect(
-        screen.getByText(/professional resume builder/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/professional resume builder/i)).toBeInTheDocument();
     });
 
     it("highlights speed and efficiency", () => {

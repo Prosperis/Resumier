@@ -1,37 +1,23 @@
 import { Mail, Phone, MapPin, Briefcase, GraduationCap } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface ThreeColumnTemplateProps {
   resume: Resume;
   config?: TemplateConfig;
 }
 
-export function ThreeColumnTemplate({
-  resume,
-  config,
-}: ThreeColumnTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } =
-    resume.content;
+export function ThreeColumnTemplate({ resume, config }: ThreeColumnTemplateProps) {
+  const { personalInfo, experience, education, skills, certifications } = resume.content;
   const primaryColor = config?.colorScheme?.primary || "#8b5cf6";
 
   return (
     <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg">
-      <div
-        className="p-8 text-center"
-        style={{ backgroundColor: primaryColor, color: "white" }}
-      >
+      <div className="p-8 text-center" style={{ backgroundColor: primaryColor, color: "white" }}>
         <h1 className="text-4xl font-bold mb-2">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <div className="flex justify-center gap-4 text-sm opacity-90">
           {personalInfo.email && (
@@ -43,10 +29,7 @@ export function ThreeColumnTemplate({
           {personalInfo.phone && (
             <span className="flex items-center gap-1">
               <Phone className="h-3 w-3" />
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && (
@@ -59,60 +42,44 @@ export function ThreeColumnTemplate({
       </div>
 
       {personalInfo.summary && (
-        <div
-          className="p-6 text-center"
-          style={{ backgroundColor: `${primaryColor}10` }}
-        >
+        <div className="p-6 text-center" style={{ backgroundColor: `${primaryColor}10` }}>
           <p className="text-gray-700">{personalInfo.summary}</p>
         </div>
       )}
 
       <div className="grid grid-cols-3 gap-4 p-6">
-        <div
-          className="pr-4 border-r"
-          style={{ borderColor: `${primaryColor}40` }}
-        >
+        <div className="pr-4 border-r" style={{ borderColor: `${primaryColor}40` }}>
           {skills && (
             <div className="mb-6">
-              <h2
-                className="text-lg font-bold mb-3"
-                style={{ color: primaryColor }}
-              >
+              <h2 className="text-lg font-bold mb-3" style={{ color: primaryColor }}>
                 Skills
               </h2>
               <div className="space-y-2">
                 {typeof skills === "object" &&
                   "technical" in skills &&
                   Array.isArray(skills.technical) &&
-                  skills.technical
-                    .slice(0, 8)
-                    .map((skill: any, idx: number) => (
-                      <div
-                        key={idx}
-                        className="p-2 text-xs rounded"
-                        style={{ backgroundColor: `${primaryColor}10` }}
-                      >
-                        {skill.name || skill}
-                      </div>
-                    ))}
+                  skills.technical.slice(0, 8).map((skill: any, idx: number) => (
+                    <div
+                      key={idx}
+                      className="p-2 text-xs rounded"
+                      style={{ backgroundColor: `${primaryColor}10` }}
+                    >
+                      {skill.name || skill}
+                    </div>
+                  ))}
               </div>
             </div>
           )}
 
           {certifications && certifications.length > 0 && (
             <div>
-              <h2
-                className="text-lg font-bold mb-3"
-                style={{ color: primaryColor }}
-              >
+              <h2 className="text-lg font-bold mb-3" style={{ color: primaryColor }}>
                 Certifications
               </h2>
               {certifications.map((cert, idx) => (
                 <div key={idx} className="mb-2 text-xs">
                   <p className="font-semibold">{cert.name}</p>
-                  {cert.issuer && (
-                    <p className="text-gray-600">{cert.issuer}</p>
-                  )}
+                  {cert.issuer && <p className="text-gray-600">{cert.issuer}</p>}
                 </div>
               ))}
             </div>
@@ -141,9 +108,7 @@ export function ThreeColumnTemplate({
                     </span>
                   </div>
                   {exp.description && (
-                    <p className="text-xs text-gray-700 mb-1">
-                      {exp.description}
-                    </p>
+                    <p className="text-xs text-gray-700 mb-1">{exp.description}</p>
                   )}
                   {exp.highlights && exp.highlights.length > 0 && (
                     <ul className="space-y-1">

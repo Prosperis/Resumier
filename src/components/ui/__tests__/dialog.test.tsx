@@ -44,10 +44,7 @@ describe("Dialog", () => {
       </Dialog>,
     );
 
-    expect(screen.getByText("Open")).toHaveAttribute(
-      "data-slot",
-      "dialog-trigger",
-    );
+    expect(screen.getByText("Open")).toHaveAttribute("data-slot", "dialog-trigger");
   });
 
   it("renders with open prop controlled", () => {
@@ -119,10 +116,7 @@ describe("DialogTrigger", () => {
       </Dialog>,
     );
 
-    expect(screen.getByTestId("trigger")).toHaveAttribute(
-      "data-slot",
-      "dialog-trigger",
-    );
+    expect(screen.getByTestId("trigger")).toHaveAttribute("data-slot", "dialog-trigger");
   });
 
   it("opens dialog when clicked", async () => {
@@ -155,9 +149,7 @@ describe("DialogTrigger", () => {
       </Dialog>,
     );
 
-    expect(
-      screen.getByRole("button", { name: "Custom Button" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Custom Button" })).toBeInTheDocument();
   });
 });
 
@@ -198,10 +190,7 @@ describe("DialogContent", () => {
       </Dialog>,
     );
 
-    expect(screen.getByTestId("content")).toHaveAttribute(
-      "data-slot",
-      "dialog-content",
-    );
+    expect(screen.getByTestId("content")).toHaveAttribute("data-slot", "dialog-content");
   });
 
   it("renders close button", () => {
@@ -279,10 +268,7 @@ describe("DialogHeader", () => {
       </Dialog>,
     );
 
-    expect(screen.getByTestId("header")).toHaveAttribute(
-      "data-slot",
-      "dialog-header",
-    );
+    expect(screen.getByTestId("header")).toHaveAttribute("data-slot", "dialog-header");
   });
 
   it("applies flex layout classes", () => {
@@ -346,10 +332,7 @@ describe("DialogFooter", () => {
       </Dialog>,
     );
 
-    expect(screen.getByTestId("footer")).toHaveAttribute(
-      "data-slot",
-      "dialog-footer",
-    );
+    expect(screen.getByTestId("footer")).toHaveAttribute("data-slot", "dialog-footer");
   });
 
   it("applies flex layout classes", () => {
@@ -409,10 +392,7 @@ describe("DialogTitle", () => {
       </Dialog>,
     );
 
-    expect(screen.getByTestId("title")).toHaveAttribute(
-      "data-slot",
-      "dialog-title",
-    );
+    expect(screen.getByTestId("title")).toHaveAttribute("data-slot", "dialog-title");
   });
 
   it("applies font styling classes", () => {
@@ -456,9 +436,7 @@ describe("DialogDescription", () => {
       </Dialog>,
     );
 
-    expect(
-      screen.getByText("This is a dialog description"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("This is a dialog description")).toBeInTheDocument();
   });
 
   it("has data-slot attribute", () => {
@@ -467,17 +445,12 @@ describe("DialogDescription", () => {
         <DialogTrigger>Open</DialogTrigger>
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
-          <DialogDescription data-testid="description">
-            Description
-          </DialogDescription>
+          <DialogDescription data-testid="description">Description</DialogDescription>
         </DialogContent>
       </Dialog>,
     );
 
-    expect(screen.getByTestId("description")).toHaveAttribute(
-      "data-slot",
-      "dialog-description",
-    );
+    expect(screen.getByTestId("description")).toHaveAttribute("data-slot", "dialog-description");
   });
 
   it("applies text styling classes", () => {
@@ -486,17 +459,12 @@ describe("DialogDescription", () => {
         <DialogTrigger>Open</DialogTrigger>
         <DialogContent>
           <DialogTitle>Title</DialogTitle>
-          <DialogDescription data-testid="description">
-            Description
-          </DialogDescription>
+          <DialogDescription data-testid="description">Description</DialogDescription>
         </DialogContent>
       </Dialog>,
     );
 
-    expect(screen.getByTestId("description")).toHaveClass(
-      "text-sm",
-      "text-muted-foreground",
-    );
+    expect(screen.getByTestId("description")).toHaveClass("text-sm", "text-muted-foreground");
   });
 
   it("renders with custom className", () => {
@@ -547,10 +515,7 @@ describe("DialogClose", () => {
       </Dialog>,
     );
 
-    expect(screen.getByTestId("close")).toHaveAttribute(
-      "data-slot",
-      "dialog-close",
-    );
+    expect(screen.getByTestId("close")).toHaveAttribute("data-slot", "dialog-close");
   });
 
   it("can be a custom button", async () => {

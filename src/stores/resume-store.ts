@@ -1,11 +1,7 @@
 import { del, get, set } from "idb-keyval";
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import type {
-  ColorScheme,
-  TemplateType,
-  Typography,
-} from "@/lib/types/templates";
+import type { ColorScheme, TemplateType, Typography } from "@/lib/types/templates";
 
 // Custom Font Type
 export interface CustomFont {
@@ -112,10 +108,7 @@ interface ResumeStore {
   setColorTheme: (theme: string) => void;
   setColorOverride: (key: keyof ColorScheme, value: string) => void;
   setFontTheme: (theme: string) => void;
-  setFontOverride: (
-    key: keyof Typography,
-    value: Typography[keyof Typography],
-  ) => void;
+  setFontOverride: (key: keyof Typography, value: Typography[keyof Typography]) => void;
   addCustomFont: (font: CustomFont) => void;
   removeCustomFont: (fontName: string) => void;
   resetStyleCustomization: () => void;
@@ -225,9 +218,7 @@ export const useResumeStore = create<ResumeStore>()(
             styleCustomization: {
               ...state.styleCustomization,
               customFonts: [
-                ...state.styleCustomization.customFonts.filter(
-                  (f) => f.name !== font.name,
-                ),
+                ...state.styleCustomization.customFonts.filter((f) => f.name !== font.name),
                 font,
               ],
             },
@@ -236,13 +227,10 @@ export const useResumeStore = create<ResumeStore>()(
           set((state) => ({
             styleCustomization: {
               ...state.styleCustomization,
-              customFonts: state.styleCustomization.customFonts.filter(
-                (f) => f.name !== fontName,
-              ),
+              customFonts: state.styleCustomization.customFonts.filter((f) => f.name !== fontName),
             },
           })),
-        resetStyleCustomization: () =>
-          set({ styleCustomization: initialStyleCustomization }),
+        resetStyleCustomization: () => set({ styleCustomization: initialStyleCustomization }),
 
         // User Info Actions
         setUserInfo: (info) => set({ userInfo: { ...info } }),
@@ -261,13 +249,10 @@ export const useResumeStore = create<ResumeStore>()(
         resetJobInfo: () => set({ jobInfo: {} }),
 
         // Jobs List Actions
-        addJob: (job) =>
-          set((state) => ({ jobs: [...state.jobs, { ...job }] })),
+        addJob: (job) => set((state) => ({ jobs: [...state.jobs, { ...job }] })),
         updateJob: (index, updates) =>
           set((state) => ({
-            jobs: state.jobs.map((job, i) =>
-              i === index ? { ...job, ...updates } : job,
-            ),
+            jobs: state.jobs.map((job, i) => (i === index ? { ...job, ...updates } : job)),
           })),
         removeJob: (index) =>
           set((state) => ({
@@ -278,17 +263,12 @@ export const useResumeStore = create<ResumeStore>()(
         // Documents Actions (merged from use-resume-documents)
         addDocument: (doc) =>
           set((state) => ({
-            documents: [
-              ...state.documents,
-              { ...doc, createdAt: new Date().toISOString() },
-            ],
+            documents: [...state.documents, { ...doc, createdAt: new Date().toISOString() }],
           })),
         updateDocument: (id, updates) =>
           set((state) => ({
             documents: state.documents.map((doc) =>
-              doc.id === id
-                ? { ...doc, ...updates, updatedAt: new Date().toISOString() }
-                : doc,
+              doc.id === id ? { ...doc, ...updates, updatedAt: new Date().toISOString() } : doc,
             ),
           })),
         removeDocument: (id) =>
@@ -334,8 +314,7 @@ export const selectJobInfo = (state: ResumeStore) => state.jobInfo;
 export const selectJobs = (state: ResumeStore) => state.jobs;
 export const selectDocuments = (state: ResumeStore) => state.documents;
 export const selectContent = (state: ResumeStore) => state.content;
-export const selectStyleCustomization = (state: ResumeStore) =>
-  state.styleCustomization;
+export const selectStyleCustomization = (state: ResumeStore) => state.styleCustomization;
 
 // Action selectors
 export const selectUserInfoActions = (state: ResumeStore) => ({

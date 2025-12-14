@@ -48,10 +48,7 @@ export function SkillsDisplay({
       <div className={`space-y-2 ${className}`}>
         {skills.technical && skills.technical.length > 0 && (
           <div>
-            <span
-              className="text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <span className="text-sm font-semibold" style={{ color: textColor }}>
               Technical:{" "}
             </span>
             <span className="text-sm" style={{ color: textLightColor }}>
@@ -61,10 +58,7 @@ export function SkillsDisplay({
         )}
         {skills.languages && skills.languages.length > 0 && (
           <div>
-            <span
-              className="text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <span className="text-sm font-semibold" style={{ color: textColor }}>
               Languages:{" "}
             </span>
             <span className="text-sm" style={{ color: textLightColor }}>
@@ -74,10 +68,7 @@ export function SkillsDisplay({
         )}
         {skills.tools && skills.tools.length > 0 && (
           <div>
-            <span
-              className="text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <span className="text-sm font-semibold" style={{ color: textColor }}>
               Tools:{" "}
             </span>
             <span className="text-sm" style={{ color: textLightColor }}>
@@ -87,10 +78,7 @@ export function SkillsDisplay({
         )}
         {skills.soft && skills.soft.length > 0 && (
           <div>
-            <span
-              className="text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <span className="text-sm font-semibold" style={{ color: textColor }}>
               Soft Skills:{" "}
             </span>
             <span className="text-sm" style={{ color: textLightColor }}>
@@ -108,10 +96,7 @@ export function SkillsDisplay({
       <div className={`space-y-3 ${className}`}>
         {skills.technical && skills.technical.length > 0 && (
           <div>
-            <p
-              className="mb-2 text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
               Technical
             </p>
             <div className="flex flex-wrap gap-2">
@@ -132,10 +117,7 @@ export function SkillsDisplay({
         )}
         {skills.tools && skills.tools.length > 0 && (
           <div>
-            <p
-              className="mb-2 text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
               Tools
             </p>
             <div className="flex flex-wrap gap-2">
@@ -156,10 +138,7 @@ export function SkillsDisplay({
         )}
         {skills.languages && skills.languages.length > 0 && (
           <div>
-            <p
-              className="mb-2 text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
               Languages
             </p>
             <div className="flex flex-wrap gap-2">
@@ -180,10 +159,7 @@ export function SkillsDisplay({
         )}
         {skills.soft && skills.soft.length > 0 && (
           <div>
-            <p
-              className="mb-2 text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
               Soft Skills
             </p>
             <div className="flex flex-wrap gap-2">
@@ -212,10 +188,7 @@ export function SkillsDisplay({
       <div className={`grid grid-cols-2 gap-4 ${className}`}>
         {skills.technical && skills.technical.length > 0 && (
           <div>
-            <p
-              className="mb-2 text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
               Technical
             </p>
             <ul className="space-y-1 text-sm" style={{ color: textLightColor }}>
@@ -227,10 +200,7 @@ export function SkillsDisplay({
         )}
         {skills.tools && skills.tools.length > 0 && (
           <div>
-            <p
-              className="mb-2 text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
               Tools
             </p>
             <ul className="space-y-1 text-sm" style={{ color: textLightColor }}>
@@ -242,10 +212,7 @@ export function SkillsDisplay({
         )}
         {skills.languages && skills.languages.length > 0 && (
           <div>
-            <p
-              className="mb-2 text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
               Languages
             </p>
             <ul className="space-y-1 text-sm" style={{ color: textLightColor }}>
@@ -257,10 +224,7 @@ export function SkillsDisplay({
         )}
         {skills.soft && skills.soft.length > 0 && (
           <div>
-            <p
-              className="mb-2 text-sm font-semibold"
-              style={{ color: textColor }}
-            >
+            <p className="mb-2 text-sm font-semibold" style={{ color: textColor }}>
               Soft Skills
             </p>
             <ul className="space-y-1 text-sm" style={{ color: textLightColor }}>
@@ -290,10 +254,7 @@ export function SkillsDisplay({
 
           return (
             <div key={idx} className="flex items-center gap-3">
-              <span
-                className="w-32 text-sm font-medium"
-                style={{ color: textColor }}
-              >
+              <span className="w-32 text-sm font-medium" style={{ color: textColor }}>
                 {getSkillName(skill)}
               </span>
               <div

@@ -93,18 +93,12 @@ describe("CertificationList", () => {
     it("renders empty state when no certifications are provided", () => {
       render(<CertificationList {...defaultProps} certifications={[]} />);
 
-      expect(
-        screen.getByText("No certifications added yet."),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText("Click the + button to add a certification."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("No certifications added yet.")).toBeInTheDocument();
+      expect(screen.getByText("Click the + button to add a certification.")).toBeInTheDocument();
     });
 
     it("renders empty state card with dashed border", () => {
-      const { container } = render(
-        <CertificationList {...defaultProps} certifications={[]} />,
-      );
+      const { container } = render(<CertificationList {...defaultProps} certifications={[]} />);
 
       const card = container.querySelector(".border-dashed");
       expect(card).toBeInTheDocument();
@@ -113,103 +107,58 @@ describe("CertificationList", () => {
 
   describe("Certification Rendering", () => {
     it("renders all certifications", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
-      expect(
-        screen.getByText("AWS Certified Solutions Architect"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText("Professional Scrum Master I"),
-      ).toBeInTheDocument();
+      expect(screen.getByText("AWS Certified Solutions Architect")).toBeInTheDocument();
+      expect(screen.getByText("Professional Scrum Master I")).toBeInTheDocument();
     });
 
     it("displays certification issuer", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       expect(screen.getByText("Amazon Web Services")).toBeInTheDocument();
       expect(screen.getByText("Scrum.org")).toBeInTheDocument();
     });
 
     it("displays issue date", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       expect(screen.getByText(/Issued Jun 2023/)).toBeInTheDocument();
       expect(screen.getByText(/Issued Mar 2022/)).toBeInTheDocument();
     });
 
     it("displays expiry date when provided", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       expect(screen.getByText(/Expires Jun 2026/)).toBeInTheDocument();
     });
 
     it("does not display expiry date when not provided", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       const psmText = screen.getByText(/Issued Mar 2022/);
       expect(psmText.textContent).not.toContain("Expires");
     });
 
     it("displays credential ID when provided", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       expect(screen.getByText(/ID: AWS-123456/)).toBeInTheDocument();
     });
 
     it("does not display credential ID when not provided", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       const credentialIds = screen.queryAllByText(/ID:/);
       expect(credentialIds).toHaveLength(1);
     });
 
     it("displays external link icon when URL is provided", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       const links = screen.getAllByRole("link");
       const awsLink = links.find(
-        (l) =>
-          l.getAttribute("href") === "https://aws.amazon.com/certification",
+        (l) => l.getAttribute("href") === "https://aws.amazon.com/certification",
       );
       expect(awsLink).toBeInTheDocument();
       expect(awsLink).toHaveAttribute("target", "_blank");
@@ -218,10 +167,7 @@ describe("CertificationList", () => {
 
     it("displays calendar icon with dates", () => {
       const { container } = render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
+        <CertificationList {...defaultProps} certifications={mockCertifications} />,
       );
 
       const calendarIcons = container.querySelectorAll("svg");
@@ -232,17 +178,10 @@ describe("CertificationList", () => {
   describe("Edit Functionality", () => {
     it("calls onEdit with certification id when edit button is clicked", async () => {
       const user = userEvent.setup();
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       const buttons = screen.getAllByRole("button");
-      const editButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-square-pen"),
-      );
+      const editButtons = buttons.filter((btn) => btn.querySelector(".lucide-square-pen"));
       await user.click(editButtons[0]);
 
       expect(mockOnEdit).toHaveBeenCalledTimes(1);
@@ -250,17 +189,10 @@ describe("CertificationList", () => {
     });
 
     it("edit button is rendered as icon button", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       const buttons = screen.getAllByRole("button");
-      const editButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-square-pen"),
-      );
+      const editButtons = buttons.filter((btn) => btn.querySelector(".lucide-square-pen"));
       expect(editButtons.length).toBeGreaterThan(0);
     });
   });
@@ -268,17 +200,10 @@ describe("CertificationList", () => {
   describe("Delete Functionality", () => {
     it("calls onDelete with certification ID when delete button is clicked", async () => {
       const user = userEvent.setup();
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       const buttons = screen.getAllByRole("button");
-      const deleteButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-trash"),
-      );
+      const deleteButtons = buttons.filter((btn) => btn.querySelector(".lucide-trash"));
       await user.click(deleteButtons[0]);
 
       expect(mockOnDelete).toHaveBeenCalledTimes(1);
@@ -286,17 +211,10 @@ describe("CertificationList", () => {
     });
 
     it("delete button is rendered as icon button", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       const buttons = screen.getAllByRole("button");
-      const deleteButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-trash"),
-      );
+      const deleteButtons = buttons.filter((btn) => btn.querySelector(".lucide-trash"));
       expect(deleteButtons.length).toBeGreaterThan(0);
     });
   });
@@ -318,12 +236,7 @@ describe("CertificationList", () => {
         { id: "12", name: "Cert 12", issuer: "Issuer", date: "2023-12" },
       ];
 
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={certWithAllMonths}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={certWithAllMonths} />);
 
       expect(screen.getByText(/Issued Jan 2023/)).toBeInTheDocument();
       expect(screen.getByText(/Issued Feb 2023/)).toBeInTheDocument();
@@ -359,36 +272,20 @@ describe("CertificationList", () => {
 
   describe("Multiple Certifications", () => {
     it("renders multiple certifications in order", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       const certNames = screen.getAllByRole("heading", { level: 3 });
       expect(certNames).toHaveLength(2);
-      expect(certNames[0]).toHaveTextContent(
-        "AWS Certified Solutions Architect",
-      );
+      expect(certNames[0]).toHaveTextContent("AWS Certified Solutions Architect");
       expect(certNames[1]).toHaveTextContent("Professional Scrum Master I");
     });
 
     it("each certification has its own edit and delete buttons", () => {
-      render(
-        <CertificationList
-          {...defaultProps}
-          certifications={mockCertifications}
-        />,
-      );
+      render(<CertificationList {...defaultProps} certifications={mockCertifications} />);
 
       const buttons = screen.getAllByRole("button");
-      const editButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-square-pen"),
-      );
-      const deleteButtons = buttons.filter((btn) =>
-        btn.querySelector(".lucide-trash"),
-      );
+      const editButtons = buttons.filter((btn) => btn.querySelector(".lucide-square-pen"));
+      const deleteButtons = buttons.filter((btn) => btn.querySelector(".lucide-trash"));
 
       expect(editButtons).toHaveLength(2);
       expect(deleteButtons).toHaveLength(2);
@@ -406,9 +303,7 @@ describe("CertificationList", () => {
         },
       ];
 
-      render(
-        <CertificationList {...defaultProps} certifications={longNameCert} />,
-      );
+      render(<CertificationList {...defaultProps} certifications={longNameCert} />);
 
       expect(
         screen.getByText(
@@ -428,9 +323,7 @@ describe("CertificationList", () => {
         },
       ];
 
-      render(
-        <CertificationList {...defaultProps} certifications={longIssuerCert} />,
-      );
+      render(<CertificationList {...defaultProps} certifications={longIssuerCert} />);
 
       expect(
         screen.getByText(
@@ -471,9 +364,7 @@ describe("CertificationList", () => {
         },
       ];
 
-      render(
-        <CertificationList {...defaultProps} certifications={minimalCert} />,
-      );
+      render(<CertificationList {...defaultProps} certifications={minimalCert} />);
 
       expect(screen.getByText("Minimal Cert")).toBeInTheDocument();
       expect(screen.getByText("Minimal Issuer")).toBeInTheDocument();
@@ -489,19 +380,14 @@ describe("CertificationList", () => {
           name: "Test Cert",
           issuer: "Test Issuer",
           date: "2023-06",
-          credentialId:
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-VERY-LONG-CREDENTIAL-ID",
+          credentialId: "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-VERY-LONG-CREDENTIAL-ID",
         },
       ];
 
-      render(
-        <CertificationList {...defaultProps} certifications={longIdCert} />,
-      );
+      render(<CertificationList {...defaultProps} certifications={longIdCert} />);
 
       expect(
-        screen.getByText(
-          /ID: ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-VERY-LONG-CREDENTIAL-ID/,
-        ),
+        screen.getByText(/ID: ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-VERY-LONG-CREDENTIAL-ID/),
       ).toBeInTheDocument();
     });
   });

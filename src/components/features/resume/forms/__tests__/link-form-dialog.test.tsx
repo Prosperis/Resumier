@@ -24,9 +24,7 @@ describe("LinkFormDialog", () => {
       expect(screen.getByRole("dialog")).toBeInTheDocument();
       expect(screen.getByText("Add Link")).toBeInTheDocument();
       expect(
-        screen.getByText(
-          "Add a link to your portfolio, social media, or other profiles.",
-        ),
+        screen.getByText("Add a link to your portfolio, social media, or other profiles."),
       ).toBeInTheDocument();
     });
     it("renders with custom title and description", () => {
@@ -38,9 +36,7 @@ describe("LinkFormDialog", () => {
         />,
       );
       expect(screen.getByText("Edit Link")).toBeInTheDocument();
-      expect(
-        screen.getByText("Update your link information."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Update your link information.")).toBeInTheDocument();
     });
     it("does not render when closed", () => {
       render(<LinkFormDialog {...defaultProps} open={false} />);
@@ -54,24 +50,14 @@ describe("LinkFormDialog", () => {
     });
     it("renders action buttons", () => {
       render(<LinkFormDialog {...defaultProps} />);
-      expect(
-        screen.getByRole("button", { name: /cancel/i }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole("button", { name: /^save$/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /cancel/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /^save$/i })).toBeInTheDocument();
     });
     it("shows field descriptions", () => {
       render(<LinkFormDialog {...defaultProps} />);
-      expect(
-        screen.getByText(/choose the type of link you're adding/i),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/display name for this link/i),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/full url including https:\/\//i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/choose the type of link you're adding/i)).toBeInTheDocument();
+      expect(screen.getByText(/display name for this link/i)).toBeInTheDocument();
+      expect(screen.getByText(/full url including https:\/\//i)).toBeInTheDocument();
     });
   });
 
@@ -91,9 +77,7 @@ describe("LinkFormDialog", () => {
 
     it("shows description for link type", () => {
       render(<LinkFormDialog {...defaultProps} />);
-      expect(
-        screen.getByText(/choose the type of link you're adding/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/choose the type of link you're adding/i)).toBeInTheDocument();
     });
   });
 
@@ -188,24 +172,18 @@ describe("LinkFormDialog", () => {
         label: "Default GitHub",
         url: "https://github.com/default",
       };
-      render(
-        <LinkFormDialog {...defaultProps} defaultValues={defaultValues} />,
-      );
+      render(<LinkFormDialog {...defaultProps} defaultValues={defaultValues} />);
       // Use getAllByText since type text may appear multiple times
       expect(screen.getAllByText("GitHub").length).toBeGreaterThan(0);
       expect(screen.getByLabelText(/^label$/i)).toHaveValue("Default GitHub");
-      expect(screen.getByLabelText(/^url$/i)).toHaveValue(
-        "https://github.com/default",
-      );
+      expect(screen.getByLabelText(/^url$/i)).toHaveValue("https://github.com/default");
     });
 
     it("handles partial default values", () => {
       const defaultValues = {
         label: "Partial Link",
       };
-      render(
-        <LinkFormDialog {...defaultProps} defaultValues={defaultValues} />,
-      );
+      render(<LinkFormDialog {...defaultProps} defaultValues={defaultValues} />);
       expect(screen.getByLabelText(/^label$/i)).toHaveValue("Partial Link");
       expect(screen.getByLabelText(/^url$/i)).toHaveValue("");
     });
@@ -216,15 +194,11 @@ describe("LinkFormDialog", () => {
         label: "My Portfolio",
         url: "https://portfolio.com",
       };
-      render(
-        <LinkFormDialog {...defaultProps} defaultValues={defaultValues} />,
-      );
+      render(<LinkFormDialog {...defaultProps} defaultValues={defaultValues} />);
       // Use getAllByText since type text may appear multiple times
       expect(screen.getAllByText("Website").length).toBeGreaterThan(0);
       expect(screen.getByLabelText(/^label$/i)).toHaveValue("My Portfolio");
-      expect(screen.getByLabelText(/^url$/i)).toHaveValue(
-        "https://portfolio.com",
-      );
+      expect(screen.getByLabelText(/^url$/i)).toHaveValue("https://portfolio.com");
     });
 
     it("populates with linkedin type default", () => {
@@ -233,15 +207,11 @@ describe("LinkFormDialog", () => {
         label: "LinkedIn Profile",
         url: "https://linkedin.com/in/user",
       };
-      render(
-        <LinkFormDialog {...defaultProps} defaultValues={defaultValues} />,
-      );
+      render(<LinkFormDialog {...defaultProps} defaultValues={defaultValues} />);
       // Use getAllByText since type text may appear multiple times
       expect(screen.getAllByText("LinkedIn").length).toBeGreaterThan(0);
       expect(screen.getByLabelText(/^label$/i)).toHaveValue("LinkedIn Profile");
-      expect(screen.getByLabelText(/^url$/i)).toHaveValue(
-        "https://linkedin.com/in/user",
-      );
+      expect(screen.getByLabelText(/^url$/i)).toHaveValue("https://linkedin.com/in/user");
     });
   });
 
@@ -257,10 +227,7 @@ describe("LinkFormDialog", () => {
       const onSubmit = vi.fn();
       render(<LinkFormDialog {...defaultProps} onSubmit={onSubmit} />);
       await user.type(screen.getByLabelText(/^label$/i), "Valid URL");
-      await user.type(
-        screen.getByLabelText(/^url$/i),
-        "https://valid-url.com/path?query=1",
-      );
+      await user.type(screen.getByLabelText(/^url$/i), "https://valid-url.com/path?query=1");
       const submitButton = screen.getByRole("button", { name: /^save$/i });
       await user.click(submitButton);
       await waitFor(() => {
@@ -274,9 +241,7 @@ describe("LinkFormDialog", () => {
 
     it("shows URL description", () => {
       render(<LinkFormDialog {...defaultProps} />);
-      expect(
-        screen.getByText(/full url including https:\/\//i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/full url including https:\/\//i)).toBeInTheDocument();
     });
   });
 

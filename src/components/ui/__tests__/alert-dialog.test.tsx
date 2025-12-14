@@ -22,9 +22,7 @@ describe("AlertDialog", () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone.
-            </AlertDialogDescription>
+            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
@@ -327,17 +325,12 @@ describe("AlertDialogDescription", () => {
         <AlertDialogTrigger>Open</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogTitle>Title</AlertDialogTitle>
-          <AlertDialogDescription data-testid="description">
-            Description
-          </AlertDialogDescription>
+          <AlertDialogDescription data-testid="description">Description</AlertDialogDescription>
         </AlertDialogContent>
       </AlertDialog>,
     );
 
-    expect(screen.getByTestId("description")).toHaveClass(
-      "text-sm",
-      "text-muted-foreground",
-    );
+    expect(screen.getByTestId("description")).toHaveClass("text-sm", "text-muted-foreground");
   });
 
   it("renders with custom className", () => {
@@ -346,10 +339,7 @@ describe("AlertDialogDescription", () => {
         <AlertDialogTrigger>Open</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogTitle>Title</AlertDialogTitle>
-          <AlertDialogDescription
-            className="custom-desc"
-            data-testid="description"
-          >
+          <AlertDialogDescription className="custom-desc" data-testid="description">
             Description
           </AlertDialogDescription>
         </AlertDialogContent>

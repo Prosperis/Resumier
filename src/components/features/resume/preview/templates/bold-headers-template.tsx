@@ -1,48 +1,30 @@
 import { Briefcase, GraduationCap, Award } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface BoldHeadersTemplateProps {
   resume: Resume;
   config?: TemplateConfig;
 }
 
-export function BoldHeadersTemplate({
-  resume,
-  config,
-}: BoldHeadersTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } =
-    resume.content;
+export function BoldHeadersTemplate({ resume, config }: BoldHeadersTemplateProps) {
+  const { personalInfo, experience, education, skills, certifications } = resume.content;
   const primaryColor = config?.colorScheme?.primary || "#dc2626";
 
   return (
     <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg p-10">
       <div className="mb-8">
-        <h1
-          className="text-5xl font-black mb-3"
-          style={{ color: primaryColor }}
-        >
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "YOUR NAME"}
+        <h1 className="text-5xl font-black mb-3" style={{ color: primaryColor }}>
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "YOUR NAME"}
         </h1>
         <div className="text-gray-600">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && (
             <span>
               {" "}
-              •{" "}
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              • {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && <span> • {personalInfo.location}</span>}
@@ -57,9 +39,7 @@ export function BoldHeadersTemplate({
           >
             ABOUT
           </div>
-          <p className="text-gray-700 text-lg leading-relaxed pl-2">
-            {personalInfo.summary}
-          </p>
+          <p className="text-gray-700 text-lg leading-relaxed pl-2">{personalInfo.summary}</p>
         </div>
       )}
 
@@ -83,17 +63,12 @@ export function BoldHeadersTemplate({
                   {exp.startDate} - {exp.current ? "PRESENT" : exp.endDate}
                 </span>
               </div>
-              {exp.description && (
-                <p className="text-gray-700 mb-2">{exp.description}</p>
-              )}
+              {exp.description && <p className="text-gray-700 mb-2">{exp.description}</p>}
               {exp.highlights && exp.highlights.length > 0 && (
                 <ul className="space-y-1">
                   {exp.highlights.map((highlight, i) => (
                     <li key={i} className="flex gap-2 text-gray-700">
-                      <span
-                        className="font-bold"
-                        style={{ color: primaryColor }}
-                      >
+                      <span className="font-bold" style={{ color: primaryColor }}>
                         ▸
                       </span>
                       <span>{highlight}</span>
@@ -162,9 +137,7 @@ export function BoldHeadersTemplate({
               {certifications.map((cert, idx) => (
                 <div key={idx} className="mb-2 pl-2">
                   <p className="font-bold text-gray-800">{cert.name}</p>
-                  {cert.issuer && (
-                    <p className="text-sm text-gray-600">{cert.issuer}</p>
-                  )}
+                  {cert.issuer && <p className="text-sm text-gray-600">{cert.issuer}</p>}
                 </div>
               ))}
             </div>

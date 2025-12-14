@@ -28,6 +28,7 @@ templates/
 ### 1. Type System (`src/lib/types/templates.ts`)
 
 **Enhanced Types:**
+
 - `TemplateInfo` - Complete template metadata
 - `TemplateCategory` - professional, modern, creative, etc.
 - `TemplateStyle` - traditional, contemporary, minimal, etc.
@@ -38,6 +39,7 @@ templates/
 - `TemplateFilterOptions` - Filtering criteria
 
 **Predefined Resources:**
+
 - `COLOR_SCHEMES` - 7 predefined color palettes
 - `TYPOGRAPHY_PRESETS` - 5 font pairings
 
@@ -46,10 +48,12 @@ templates/
 All templates can use these reusable building blocks:
 
 #### SectionHeader
+
 Multiple styles: minimal, accented, bordered, icons, cards
+
 ```tsx
-<SectionHeader 
-  title="Experience" 
+<SectionHeader
+  title="Experience"
   icon={Briefcase}
   style="icons"
   colorScheme={colorScheme}
@@ -57,9 +61,11 @@ Multiple styles: minimal, accented, bordered, icons, cards
 ```
 
 #### ContactInfo
+
 Multiple layouts: centered, left, split, minimal
+
 ```tsx
-<ContactInfo 
+<ContactInfo
   personalInfo={personalInfo}
   links={links}
   style="centered"
@@ -68,9 +74,11 @@ Multiple layouts: centered, left, split, minimal
 ```
 
 #### ExperienceEntry
+
 Multiple variants: default, compact, detailed, timeline
+
 ```tsx
-<ExperienceEntry 
+<ExperienceEntry
   experience={exp}
   variant="timeline"
   colorScheme={colorScheme}
@@ -78,9 +86,11 @@ Multiple variants: default, compact, detailed, timeline
 ```
 
 #### EducationEntry
+
 Multiple variants: default, compact, detailed
+
 ```tsx
-<EducationEntry 
+<EducationEntry
   education={edu}
   variant="detailed"
   colorScheme={colorScheme}
@@ -88,9 +98,11 @@ Multiple variants: default, compact, detailed
 ```
 
 #### SkillsDisplay
+
 Multiple variants: inline, tags, columns, bars, grid
+
 ```tsx
-<SkillsDisplay 
+<SkillsDisplay
   skills={skills}
   variant="tags"
   colorScheme={colorScheme}
@@ -98,9 +110,11 @@ Multiple variants: inline, tags, columns, bars, grid
 ```
 
 #### CertificationsList
+
 Multiple variants: default, compact, detailed
+
 ```tsx
-<CertificationsList 
+<CertificationsList
   certifications={certifications}
   variant="compact"
   colorScheme={colorScheme}
@@ -128,6 +142,7 @@ export const TEMPLATE_REGISTRY: TemplateRegistry = {
 ```
 
 **Helper Functions:**
+
 - `getAllTemplates()` - Get all template info
 - `getTemplateInfo(id)` - Get specific template metadata
 - `getTemplateComponent(id)` - Get template React component
@@ -335,6 +350,7 @@ Use predefined color schemes or create custom ones:
 ### 2. Typography
 
 Available presets:
+
 - **classic** - Georgia + Arial (traditional)
 - **modern** - Inter (contemporary)
 - **creative** - Montserrat + Open Sans (artistic)
@@ -358,6 +374,7 @@ Available presets:
 ### 5. ATS Optimization
 
 For high ATS scores (8-10):
+
 - Use standard section headers
 - Avoid tables and columns (or test thoroughly)
 - Use standard fonts
@@ -389,6 +406,7 @@ This approach: **5 base templates × 7 colors × 2-3 layouts = 70-105 variants!*
 ## Component Variants Reference
 
 ### SectionHeader Styles
+
 - `minimal` - Simple border
 - `accented` - Color accent with optional icon
 - `icons` - Icon + border
@@ -396,18 +414,21 @@ This approach: **5 base templates × 7 colors × 2-3 layouts = 70-105 variants!*
 - `cards` - Background color
 
 ### ContactInfo Layouts
+
 - `centered` - Center-aligned (traditional header)
 - `left` - Left-aligned (sidebar style)
 - `split` - Horizontal spread (name left, contact right)
 - `minimal` - Inline, no icons
 
 ### ExperienceEntry Variants
+
 - `default` - Standard format
 - `compact` - Condensed for space
 - `detailed` - Expanded with emphasis
 - `timeline` - Visual timeline style
 
 ### SkillsDisplay Variants
+
 - `inline` - Comma-separated by category
 - `tags` - Pill-style tags
 - `columns` - Multi-column list
@@ -417,6 +438,7 @@ This approach: **5 base templates × 7 colors × 2-3 layouts = 70-105 variants!*
 ## Testing Templates
 
 Ensure each template:
+
 - ✅ Prints correctly on A4/Letter
 - ✅ Handles missing optional fields gracefully
 - ✅ Maintains readability at 100% and 80% zoom

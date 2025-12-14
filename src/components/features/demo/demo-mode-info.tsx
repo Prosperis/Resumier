@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDemoMode } from "@/hooks/use-demo-mode";
 import { useAuthStore } from "@/stores/auth-store";
 
@@ -72,9 +66,7 @@ export function DemoModeInfo() {
             <span>🎭</span>
             Demo Mode
           </CardTitle>
-          <CardDescription>
-            Try Resumier with pre-populated sample data
-          </CardDescription>
+          <CardDescription>Try Resumier with pre-populated sample data</CardDescription>
         </CardHeader>
         <CardContent>
           <Button onClick={handleStartDemo} disabled={isInitializing} size="sm">
@@ -97,12 +89,7 @@ export function DemoModeInfo() {
         <CardDescription>Currently exploring with demo data</CardDescription>
       </CardHeader>
       <CardContent>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleExitDemo}
-          disabled={isExiting}
-        >
+        <Button variant="outline" size="sm" onClick={handleExitDemo} disabled={isExiting}>
           {isExiting ? "Exiting..." : "Exit Demo Mode"}
         </Button>
       </CardContent>

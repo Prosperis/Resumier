@@ -13,18 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MonthPicker } from "@/components/ui/month-picker";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { Experience, ExperienceFormat } from "@/lib/api/types";
 import {
   type CreateExperienceFormData,
@@ -40,9 +30,7 @@ export function ExperienceEditor({ data, onChange }: ExperienceEditorProps) {
   const [highlights, setHighlights] = useState<string[]>(
     data.highlights?.length ? data.highlights : [""],
   );
-  const [format, setFormat] = useState<ExperienceFormat>(
-    data.format || "structured",
-  );
+  const [format, setFormat] = useState<ExperienceFormat>(data.format || "structured");
 
   const form = useForm<CreateExperienceFormData>({
     resolver: zodResolver(createExperienceSchema),
@@ -99,11 +87,7 @@ export function ExperienceEditor({ data, onChange }: ExperienceEditorProps) {
               <FormItem>
                 <Label className="text-xs">Company</Label>
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Acme Inc."
-                    className="h-8 text-xs"
-                  />
+                  <Input {...field} placeholder="Acme Inc." className="h-8 text-xs" />
                 </FormControl>
                 <FormMessage className="text-xs" />
               </FormItem>
@@ -116,11 +100,7 @@ export function ExperienceEditor({ data, onChange }: ExperienceEditorProps) {
               <FormItem>
                 <Label className="text-xs">Position</Label>
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Software Engineer"
-                    className="h-8 text-xs"
-                  />
+                  <Input {...field} placeholder="Software Engineer" className="h-8 text-xs" />
                 </FormControl>
                 <FormMessage className="text-xs" />
               </FormItem>
@@ -185,9 +165,7 @@ export function ExperienceEditor({ data, onChange }: ExperienceEditorProps) {
                       className="h-3 w-3 rounded-sm"
                     />
                   </FormControl>
-                  <Label className="text-[10px] font-normal">
-                    Currently working here
-                  </Label>
+                  <Label className="text-[10px] font-normal">Currently working here</Label>
                 </FormItem>
               )}
             />

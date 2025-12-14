@@ -8,10 +8,7 @@ interface MagazineStyleTemplateProps {
   config?: TemplateConfig;
 }
 
-export function MagazineStyleTemplate({
-  resume,
-  config,
-}: MagazineStyleTemplateProps) {
+export function MagazineStyleTemplate({ resume, config }: MagazineStyleTemplateProps) {
   const { personalInfo, experience, education, skills } = resume.content;
   const primaryColor = config?.colorScheme?.primary || "#6366f1";
 
@@ -19,10 +16,7 @@ export function MagazineStyleTemplate({
     <div className="mx-auto max-w-[21cm] bg-white text-gray-900 shadow-lg">
       <div className="p-10" style={{ backgroundColor: `${primaryColor}05` }}>
         <div className="flex items-end gap-6 mb-4">
-          <h1
-            className="text-6xl font-black leading-none"
-            style={{ color: primaryColor }}
-          >
+          <h1 className="text-6xl font-black leading-none" style={{ color: primaryColor }}>
             {personalInfo.nameOrder === "lastFirst"
               ? personalInfo.lastName || "Last"
               : personalInfo.firstName || "First"}
@@ -38,10 +32,7 @@ export function MagazineStyleTemplate({
           {personalInfo.phone && <span>|</span>}
           {personalInfo.phone && (
             <span>
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
         </div>
@@ -50,13 +41,8 @@ export function MagazineStyleTemplate({
       <div className="p-10">
         {personalInfo.summary && (
           <div className="mb-8">
-            <div
-              className="w-20 h-1 mb-3"
-              style={{ backgroundColor: primaryColor }}
-            />
-            <p className="text-lg leading-relaxed text-gray-800 italic">
-              "{personalInfo.summary}"
-            </p>
+            <div className="w-20 h-1 mb-3" style={{ backgroundColor: primaryColor }} />
+            <p className="text-lg leading-relaxed text-gray-800 italic">"{personalInfo.summary}"</p>
           </div>
         )}
 
@@ -64,29 +50,21 @@ export function MagazineStyleTemplate({
           <div>
             {experience && experience.length > 0 && (
               <div className="mb-6">
-                <h2
-                  className="text-2xl font-black mb-4"
-                  style={{ color: primaryColor }}
-                >
+                <h2 className="text-2xl font-black mb-4" style={{ color: primaryColor }}>
                   <Briefcase className="inline h-6 w-6 mr-2" />
                   Experience
                 </h2>
                 {experience.map((exp, idx) => (
                   <div key={idx} className="mb-6">
                     <h3 className="font-bold text-xl mb-1">{exp.position}</h3>
-                    <p
-                      className="text-sm font-semibold mb-1"
-                      style={{ color: primaryColor }}
-                    >
+                    <p className="text-sm font-semibold mb-1" style={{ color: primaryColor }}>
                       {exp.company}
                     </p>
                     <p className="text-xs text-gray-500 mb-2">
                       {exp.startDate} — {exp.current ? "Present" : exp.endDate}
                     </p>
                     {exp.description && (
-                      <p className="text-sm text-gray-700 leading-relaxed">
-                        {exp.description}
-                      </p>
+                      <p className="text-sm text-gray-700 leading-relaxed">{exp.description}</p>
                     )}
                   </div>
                 ))}
@@ -97,10 +75,7 @@ export function MagazineStyleTemplate({
           <div>
             {education && education.length > 0 && (
               <div className="mb-6">
-                <h2
-                  className="text-2xl font-black mb-4"
-                  style={{ color: primaryColor }}
-                >
+                <h2 className="text-2xl font-black mb-4" style={{ color: primaryColor }}>
                   <GraduationCap className="inline h-6 w-6 mr-2" />
                   Education
                 </h2>
@@ -118,10 +93,7 @@ export function MagazineStyleTemplate({
 
             {skills && (
               <div>
-                <h2
-                  className="text-2xl font-black mb-4"
-                  style={{ color: primaryColor }}
-                >
+                <h2 className="text-2xl font-black mb-4" style={{ color: primaryColor }}>
                   Skills
                 </h2>
                 <div className="flex flex-wrap gap-2">

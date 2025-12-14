@@ -207,12 +207,7 @@ describe("certificationSchema", () => {
     });
 
     it("validates with credential ID formats", () => {
-      const credentialIds = [
-        "ABC123",
-        "cert-2023-001",
-        "1234567890",
-        "GUID-1234-5678-90AB-CDEF",
-      ];
+      const credentialIds = ["ABC123", "cert-2023-001", "1234567890", "GUID-1234-5678-90AB-CDEF"];
 
       for (const credentialId of credentialIds) {
         const data = {

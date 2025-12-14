@@ -65,8 +65,7 @@ export function ExportMenu({ resume }: ExportMenuProps) {
       });
     } catch (error) {
       console.error("Error generating PDF:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "PDF Export Failed",
         description: `Failed to generate PDF: ${errorMessage}. Try using Print to PDF instead.`,
@@ -80,13 +79,11 @@ export function ExportMenu({ resume }: ExportMenuProps) {
       await downloadPDFWithTemplate(resume);
       toast({
         title: "Print Dialog Opened",
-        description:
-          'Select "Save as PDF" in the print dialog for best quality.',
+        description: 'Select "Save as PDF" in the print dialog for best quality.',
       });
     } catch (error) {
       console.error("Error opening print dialog:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       toast({
         title: "Print Failed",
         description: `Failed to open print dialog: ${errorMessage}`,
@@ -95,10 +92,7 @@ export function ExportMenu({ resume }: ExportMenuProps) {
     }
   };
 
-  const handleExport = async (
-    format: string,
-    handler: () => void | Promise<void>,
-  ) => {
+  const handleExport = async (format: string, handler: () => void | Promise<void>) => {
     setIsExporting(true);
     try {
       await handler();
@@ -212,9 +206,7 @@ export function ExportMenu({ resume }: ExportMenuProps) {
                     </Badge>
                   )}
                 </div>
-                <span className="text-muted-foreground text-xs">
-                  {format.description}
-                </span>
+                <span className="text-muted-foreground text-xs">{format.description}</span>
               </div>
             </DropdownMenuItem>
           );
@@ -222,17 +214,11 @@ export function ExportMenu({ resume }: ExportMenuProps) {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem
-          onClick={handlePrint}
-          className="cursor-pointer"
-          disabled={isExporting}
-        >
+        <DropdownMenuItem onClick={handlePrint} className="cursor-pointer" disabled={isExporting}>
           <Printer className="mr-2 h-4 w-4" />
           <div className="flex flex-col">
             <span>Print</span>
-            <span className="text-muted-foreground text-xs">
-              Open print preview
-            </span>
+            <span className="text-muted-foreground text-xs">Open print preview</span>
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

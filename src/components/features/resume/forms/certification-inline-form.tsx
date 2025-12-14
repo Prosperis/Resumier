@@ -75,9 +75,7 @@ export function CertificationInlineForm({
         cert.id === editingId ? { ...cert, ...currentData } : cert,
       );
     } else if (isNew) {
-      const existingNew = existingCertifications.find(
-        (c) => c.id === newIdRef.current,
-      );
+      const existingNew = existingCertifications.find((c) => c.id === newIdRef.current);
       if (existingNew) {
         updatedCertifications = existingCertifications.map((cert) =>
           cert.id === newIdRef.current ? { ...cert, ...currentData } : cert,
@@ -143,9 +141,7 @@ export function CertificationInlineForm({
               name="name"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">
-                    Certification Name
-                  </FormLabel>
+                  <FormLabel className="text-[10px]">Certification Name</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="AWS Solutions Architect"
@@ -163,9 +159,7 @@ export function CertificationInlineForm({
               name="issuer"
               render={({ field }) => (
                 <FormItem className="space-y-0.5">
-                  <FormLabel className="text-[10px]">
-                    Issuing Organization
-                  </FormLabel>
+                  <FormLabel className="text-[10px]">Issuing Organization</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Amazon Web Services"
@@ -224,11 +218,7 @@ export function CertificationInlineForm({
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">Credential ID</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="ABC123XYZ"
-                      className="h-7 text-[11px]"
-                      {...field}
-                    />
+                    <Input placeholder="ABC123XYZ" className="h-7 text-[11px]" {...field} />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>

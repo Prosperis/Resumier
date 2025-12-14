@@ -25,12 +25,8 @@ describe("Breadcrumb Components", () => {
     });
 
     it("forwards additional props", () => {
-      const { container } = render(
-        <Breadcrumb data-testid="custom-breadcrumb" />,
-      );
-      expect(
-        container.querySelector('[data-testid="custom-breadcrumb"]'),
-      ).toBeInTheDocument();
+      const { container } = render(<Breadcrumb data-testid="custom-breadcrumb" />);
+      expect(container.querySelector('[data-testid="custom-breadcrumb"]')).toBeInTheDocument();
     });
   });
 
@@ -105,9 +101,7 @@ describe("Breadcrumb Components", () => {
     });
 
     it("renders with custom className", () => {
-      const { container } = render(
-        <BreadcrumbLink className="custom-link">Link</BreadcrumbLink>,
-      );
+      const { container } = render(<BreadcrumbLink className="custom-link">Link</BreadcrumbLink>);
       const link = container.querySelector("a");
       expect(link).toHaveClass("custom-link");
     });
@@ -184,9 +178,7 @@ describe("Breadcrumb Components", () => {
 
     it("has data-slot attribute", () => {
       const { container } = render(<BreadcrumbSeparator />);
-      const separator = container.querySelector(
-        '[data-slot="breadcrumb-separator"]',
-      );
+      const separator = container.querySelector('[data-slot="breadcrumb-separator"]');
       expect(separator).toBeInTheDocument();
     });
 
@@ -196,9 +188,7 @@ describe("Breadcrumb Components", () => {
     });
 
     it("renders with custom className", () => {
-      const { container } = render(
-        <BreadcrumbSeparator className="custom-sep" />,
-      );
+      const { container } = render(<BreadcrumbSeparator className="custom-sep" />);
       const separator = container.querySelector("li");
       expect(separator).toHaveClass("custom-sep");
     });
@@ -227,9 +217,7 @@ describe("Breadcrumb Components", () => {
 
     it("has data-slot attribute", () => {
       const { container } = render(<BreadcrumbEllipsis />);
-      const ellipsis = container.querySelector(
-        '[data-slot="breadcrumb-ellipsis"]',
-      );
+      const ellipsis = container.querySelector('[data-slot="breadcrumb-ellipsis"]');
       expect(ellipsis).toBeInTheDocument();
     });
 

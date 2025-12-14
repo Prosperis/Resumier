@@ -1,11 +1,7 @@
 import { Briefcase, GraduationCap, Award } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface PortfolioTemplateProps {
   resume: Resume;
@@ -13,8 +9,7 @@ interface PortfolioTemplateProps {
 }
 
 export function PortfolioTemplate({ resume, config }: PortfolioTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications } =
-    resume.content;
+  const { personalInfo, experience, education, skills, certifications } = resume.content;
   const primaryColor = config?.colorScheme?.primary || "#e11d48";
 
   return (
@@ -27,11 +22,8 @@ export function PortfolioTemplate({ resume, config }: PortfolioTemplateProps) {
         }}
       >
         <h1 className="text-5xl font-bold mb-2">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <p className="text-xl opacity-90 mb-4">Creative Portfolio</p>
         <div className="flex flex-wrap gap-4 text-sm opacity-80">
@@ -39,10 +31,7 @@ export function PortfolioTemplate({ resume, config }: PortfolioTemplateProps) {
           {personalInfo.phone && <span>•</span>}
           {personalInfo.phone && (
             <span>
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && <span>•</span>}
@@ -53,15 +42,10 @@ export function PortfolioTemplate({ resume, config }: PortfolioTemplateProps) {
       <div className="p-10">
         {personalInfo.summary && (
           <div className="mb-8">
-            <h2
-              className="text-2xl font-bold mb-3"
-              style={{ color: primaryColor }}
-            >
+            <h2 className="text-2xl font-bold mb-3" style={{ color: primaryColor }}>
               About Me
             </h2>
-            <p className="text-gray-700 leading-relaxed">
-              {personalInfo.summary}
-            </p>
+            <p className="text-gray-700 leading-relaxed">{personalInfo.summary}</p>
           </div>
         )}
 
@@ -90,9 +74,7 @@ export function PortfolioTemplate({ resume, config }: PortfolioTemplateProps) {
                   <h3 className="font-bold mb-1">{exp.position}</h3>
                   <p className="text-sm text-gray-600 mb-2">{exp.company}</p>
                   {exp.description && (
-                    <p className="text-xs text-gray-700 line-clamp-2">
-                      {exp.description}
-                    </p>
+                    <p className="text-xs text-gray-700 line-clamp-2">{exp.description}</p>
                   )}
                 </div>
               ))}
@@ -103,39 +85,30 @@ export function PortfolioTemplate({ resume, config }: PortfolioTemplateProps) {
         <div className="grid grid-cols-2 gap-8">
           {skills && (
             <div>
-              <h2
-                className="text-xl font-bold mb-4"
-                style={{ color: primaryColor }}
-              >
+              <h2 className="text-xl font-bold mb-4" style={{ color: primaryColor }}>
                 Skills
               </h2>
               <div className="space-y-3">
                 {typeof skills === "object" &&
                   "technical" in skills &&
                   Array.isArray(skills.technical) &&
-                  skills.technical
-                    .slice(0, 8)
-                    .map((skill: any, idx: number) => (
-                      <div key={idx}>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="font-medium">
-                            {skill.name || skill}
-                          </span>
-                          <span className="text-gray-600">
-                            {skill.level || 85}%
-                          </span>
-                        </div>
-                        <div className="w-full h-2 bg-gray-200 rounded-full">
-                          <div
-                            className="h-2 rounded-full"
-                            style={{
-                              width: `${skill.level || 85}%`,
-                              backgroundColor: primaryColor,
-                            }}
-                          />
-                        </div>
+                  skills.technical.slice(0, 8).map((skill: any, idx: number) => (
+                    <div key={idx}>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="font-medium">{skill.name || skill}</span>
+                        <span className="text-gray-600">{skill.level || 85}%</span>
                       </div>
-                    ))}
+                      <div className="w-full h-2 bg-gray-200 rounded-full">
+                        <div
+                          className="h-2 rounded-full"
+                          style={{
+                            width: `${skill.level || 85}%`,
+                            backgroundColor: primaryColor,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
               </div>
             </div>
           )}
@@ -178,9 +151,7 @@ export function PortfolioTemplate({ resume, config }: PortfolioTemplateProps) {
                 {certifications.map((cert, idx) => (
                   <div key={idx} className="mb-2 text-sm">
                     <p className="font-semibold">{cert.name}</p>
-                    {cert.issuer && (
-                      <p className="text-xs text-gray-600">{cert.issuer}</p>
-                    )}
+                    {cert.issuer && <p className="text-xs text-gray-600">{cert.issuer}</p>}
                   </div>
                 ))}
               </div>

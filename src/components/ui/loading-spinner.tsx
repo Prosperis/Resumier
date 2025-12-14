@@ -42,12 +42,7 @@ export function LoadingSpinner({
 
   return (
     <motion.div
-      className={cn(
-        "rounded-full",
-        sizeClasses[size],
-        variantClasses[variant],
-        className,
-      )}
+      className={cn("rounded-full", sizeClasses[size], variantClasses[variant], className)}
       animate={
         prefersReducedMotion
           ? undefined
@@ -82,11 +77,7 @@ interface LoadingDotsProps {
  * <LoadingDots size="md" variant="primary" />
  * ```
  */
-export function LoadingDots({
-  size = "md",
-  variant = "primary",
-  className,
-}: LoadingDotsProps) {
+export function LoadingDots({ size = "md", variant = "primary", className }: LoadingDotsProps) {
   const prefersReducedMotion = useReducedMotion();
 
   const sizeClasses = {
@@ -111,11 +102,7 @@ export function LoadingDots({
       {[0, 1, 2].map((index) => (
         <motion.div
           key={index}
-          className={cn(
-            "rounded-full",
-            sizeClasses[size],
-            variantClasses[variant],
-          )}
+          className={cn("rounded-full", sizeClasses[size], variantClasses[variant])}
           variants={prefersReducedMotion ? undefined : dotVariants}
           initial={prefersReducedMotion ? undefined : "initial"}
           animate={prefersReducedMotion ? undefined : "animate"}
@@ -149,11 +136,7 @@ interface LoadingPulseProps {
  * <LoadingPulse size="md" variant="primary" />
  * ```
  */
-export function LoadingPulse({
-  size = "md",
-  variant = "primary",
-  className,
-}: LoadingPulseProps) {
+export function LoadingPulse({ size = "md", variant = "primary", className }: LoadingPulseProps) {
   const prefersReducedMotion = useReducedMotion();
 
   const sizeClasses = {
@@ -170,12 +153,7 @@ export function LoadingPulse({
 
   return (
     <motion.div
-      className={cn(
-        "rounded-full",
-        sizeClasses[size],
-        variantClasses[variant],
-        className,
-      )}
+      className={cn("rounded-full", sizeClasses[size], variantClasses[variant], className)}
       animate={
         prefersReducedMotion
           ? undefined

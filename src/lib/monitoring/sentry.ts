@@ -101,9 +101,7 @@ export function initSentry() {
 /**
  * Set user context for better error tracking
  */
-export function setUser(
-  user: { id: string; email: string; name?: string } | null,
-) {
+export function setUser(user: { id: string; email: string; name?: string } | null) {
   if (user) {
     Sentry.setUser({
       id: user.id,

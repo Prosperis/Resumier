@@ -46,16 +46,12 @@ describe("ExperienceSection", () => {
 
     it("renders Add Experience button", () => {
       render(<ExperienceSection {...defaultProps} />);
-      expect(
-        screen.getByRole("button", { name: /add experience/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /add experience/i })).toBeInTheDocument();
     });
 
     it("renders empty state correctly", () => {
       render(<ExperienceSection {...defaultProps} experiences={[]} />);
-      expect(
-        screen.getByRole("button", { name: /add experience/i }),
-      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /add experience/i })).toBeInTheDocument();
     });
 
     it("renders multiple experiences", () => {
@@ -107,9 +103,7 @@ describe("ExperienceSection", () => {
 
   describe("Collapsible Behavior", () => {
     it("renders collapsible toggle button", () => {
-      render(
-        <ExperienceSection {...defaultProps} experiences={[mockExperience]} />,
-      );
+      render(<ExperienceSection {...defaultProps} experiences={[mockExperience]} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       expect(toggleButton).toBeInTheDocument();
@@ -117,12 +111,7 @@ describe("ExperienceSection", () => {
 
     it("opens collapsed item by default when company is empty", async () => {
       const experienceWithEmptyCompany = { ...mockExperience, company: "" };
-      render(
-        <ExperienceSection
-          {...defaultProps}
-          experiences={[experienceWithEmptyCompany]}
-        />,
-      );
+      render(<ExperienceSection {...defaultProps} experiences={[experienceWithEmptyCompany]} />);
 
       // Collapsible should be open by default when company is empty (defaultOpen={!company})
       // Check if form fields are visible
@@ -158,11 +147,7 @@ describe("ExperienceSection", () => {
       await user.type(companyInput, "X");
 
       // Check that updateExperience was called with the company field
-      expect(mockUpdateExperience).toHaveBeenCalledWith(
-        0,
-        "company",
-        "Acme CorpX",
-      );
+      expect(mockUpdateExperience).toHaveBeenCalledWith(0, "company", "Acme CorpX");
     });
   });
 
@@ -192,11 +177,7 @@ describe("ExperienceSection", () => {
       await user.type(titleInput, "X");
 
       // Check that updateExperience was called with the title field
-      expect(mockUpdateExperience).toHaveBeenCalledWith(
-        0,
-        "title",
-        "Software EngineerX",
-      );
+      expect(mockUpdateExperience).toHaveBeenCalledWith(0, "title", "Software EngineerX");
     });
   });
 
@@ -233,11 +214,7 @@ describe("ExperienceSection", () => {
       const dateInputs = container.querySelectorAll('input[type="date"]');
       fireEvent.change(dateInputs[0], { target: { value: "2021-01-01" } });
 
-      expect(mockUpdateExperience).toHaveBeenCalledWith(
-        0,
-        "startDate",
-        "2021-01-01",
-      );
+      expect(mockUpdateExperience).toHaveBeenCalledWith(0, "startDate", "2021-01-01");
     });
 
     it("calls updateExperience when end date is changed", async () => {
@@ -250,11 +227,7 @@ describe("ExperienceSection", () => {
       const dateInputs = container.querySelectorAll('input[type="date"]');
       fireEvent.change(dateInputs[1], { target: { value: "2024-01-01" } });
 
-      expect(mockUpdateExperience).toHaveBeenCalledWith(
-        0,
-        "endDate",
-        "2024-01-01",
-      );
+      expect(mockUpdateExperience).toHaveBeenCalledWith(0, "endDate", "2024-01-01");
     });
   });
 
@@ -284,9 +257,7 @@ describe("ExperienceSection", () => {
     it("checkbox is checked when current is true", async () => {
       const user = userEvent.setup();
       const expWithCurrent = { ...mockExperience, current: true };
-      render(
-        <ExperienceSection {...defaultProps} experiences={[expWithCurrent]} />,
-      );
+      render(<ExperienceSection {...defaultProps} experiences={[expWithCurrent]} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       await user.click(toggleButton);
@@ -483,12 +454,7 @@ describe("ExperienceSection", () => {
     it("handles empty awards array", async () => {
       const user = userEvent.setup();
       const expWithoutAwards = { ...mockExperience, awards: [] };
-      render(
-        <ExperienceSection
-          {...defaultProps}
-          experiences={[expWithoutAwards]}
-        />,
-      );
+      render(<ExperienceSection {...defaultProps} experiences={[expWithoutAwards]} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       await user.click(toggleButton);
@@ -499,12 +465,7 @@ describe("ExperienceSection", () => {
     it("handles undefined awards", async () => {
       const user = userEvent.setup();
       const expWithoutAwards = { ...mockExperience, awards: undefined };
-      render(
-        <ExperienceSection
-          {...defaultProps}
-          experiences={[expWithoutAwards]}
-        />,
-      );
+      render(<ExperienceSection {...defaultProps} experiences={[expWithoutAwards]} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       await user.click(toggleButton);
@@ -519,12 +480,7 @@ describe("ExperienceSection", () => {
         ...mockExperience,
         company: undefined as unknown as string,
       };
-      render(
-        <ExperienceSection
-          {...defaultProps}
-          experiences={[expWithUndefined]}
-        />,
-      );
+      render(<ExperienceSection {...defaultProps} experiences={[expWithUndefined]} />);
 
       expect(screen.getByText("Experience 1")).toBeInTheDocument();
     });
@@ -535,12 +491,7 @@ describe("ExperienceSection", () => {
         ...mockExperience,
         title: undefined as unknown as string,
       };
-      render(
-        <ExperienceSection
-          {...defaultProps}
-          experiences={[expWithUndefined]}
-        />,
-      );
+      render(<ExperienceSection {...defaultProps} experiences={[expWithUndefined]} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       await user.click(toggleButton);
@@ -558,10 +509,7 @@ describe("ExperienceSection", () => {
         endDate: undefined as unknown as string,
       };
       const { container } = render(
-        <ExperienceSection
-          {...defaultProps}
-          experiences={[expWithUndefined]}
-        />,
+        <ExperienceSection {...defaultProps} experiences={[expWithUndefined]} />,
       );
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
@@ -578,12 +526,7 @@ describe("ExperienceSection", () => {
         ...mockExperience,
         description: undefined as unknown as string,
       };
-      render(
-        <ExperienceSection
-          {...defaultProps}
-          experiences={[expWithUndefined]}
-        />,
-      );
+      render(<ExperienceSection {...defaultProps} experiences={[expWithUndefined]} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       await user.click(toggleButton);
@@ -599,12 +542,7 @@ describe("ExperienceSection", () => {
         ...mockExperience,
         current: undefined as unknown as boolean,
       };
-      render(
-        <ExperienceSection
-          {...defaultProps}
-          experiences={[expWithUndefined]}
-        />,
-      );
+      render(<ExperienceSection {...defaultProps} experiences={[expWithUndefined]} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       await user.click(toggleButton);

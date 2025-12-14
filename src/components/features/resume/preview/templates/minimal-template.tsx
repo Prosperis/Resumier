@@ -1,17 +1,12 @@
 import type { Resume } from "@/lib/api/types";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface MinimalTemplateProps {
   resume: Resume;
 }
 
 export function MinimalTemplate({ resume }: MinimalTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications, links } =
-    resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
 
   return (
     <div
@@ -21,20 +16,14 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
       {/* Header Section */}
       <header className="mb-12">
         <h1 className="mb-3 text-5xl font-light tracking-tight">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <div className="space-x-4 text-sm text-gray-600">
           {personalInfo.email && <span>{personalInfo.email}</span>}
           {personalInfo.phone && (
             <span>
-              {formatPhoneDisplay(
-                personalInfo.phone,
-                personalInfo.phoneFormat as PhoneFormat,
-              )}
+              {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
             </span>
           )}
           {personalInfo.location && <span>{personalInfo.location}</span>}
@@ -44,9 +33,7 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
       {/* Summary */}
       {personalInfo.summary && (
         <section className="mb-12">
-          <p className="text-sm leading-relaxed text-gray-700">
-            {personalInfo.summary}
-          </p>
+          <p className="text-sm leading-relaxed text-gray-700">{personalInfo.summary}</p>
         </section>
       )}
 
@@ -79,20 +66,10 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
                 return (
                   <div key={exp.id}>
                     <div className="mb-2 flex items-baseline justify-between">
-                      {exp.position && (
-                        <h3 className="text-lg font-medium">{exp.position}</h3>
-                      )}
-                      {dateRange && (
-                        <span className="text-xs text-gray-500">
-                          {dateRange}
-                        </span>
-                      )}
+                      {exp.position && <h3 className="text-lg font-medium">{exp.position}</h3>}
+                      {dateRange && <span className="text-xs text-gray-500">{dateRange}</span>}
                     </div>
-                    {exp.company && (
-                      <p className="mb-3 text-sm text-gray-600">
-                        {exp.company}
-                      </p>
-                    )}
+                    {exp.company && <p className="mb-3 text-sm text-gray-600">{exp.company}</p>}
                     {exp.description && (
                       <p className="mb-2 text-sm leading-relaxed text-gray-700">
                         {exp.description}
@@ -118,8 +95,7 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
       )}
 
       {/* Education */}
-      {education.filter((edu) => edu.degree || edu.institution || edu.field)
-        .length > 0 && (
+      {education.filter((edu) => edu.degree || edu.institution || edu.field).length > 0 && (
         <section className="mb-12">
           <h2 className="mb-6 text-xs font-semibold tracking-wider text-gray-500 uppercase">
             Education
@@ -135,26 +111,12 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
                 return (
                   <div key={edu.id}>
                     <div className="mb-2 flex items-baseline justify-between">
-                      {edu.degree && (
-                        <h3 className="text-lg font-medium">{edu.degree}</h3>
-                      )}
-                      {dateRange && (
-                        <span className="text-xs text-gray-500">
-                          {dateRange}
-                        </span>
-                      )}
+                      {edu.degree && <h3 className="text-lg font-medium">{edu.degree}</h3>}
+                      {dateRange && <span className="text-xs text-gray-500">{dateRange}</span>}
                     </div>
-                    {edu.institution && (
-                      <p className="text-sm text-gray-600">{edu.institution}</p>
-                    )}
-                    {edu.field && (
-                      <p className="text-sm text-gray-500">{edu.field}</p>
-                    )}
-                    {edu.gpa && (
-                      <p className="mt-1 text-sm text-gray-500">
-                        GPA: {edu.gpa}
-                      </p>
-                    )}
+                    {edu.institution && <p className="text-sm text-gray-600">{edu.institution}</p>}
+                    {edu.field && <p className="text-sm text-gray-500">{edu.field}</p>}
+                    {edu.gpa && <p className="mt-1 text-sm text-gray-500">GPA: {edu.gpa}</p>}
                     {edu.honors && edu.honors.length > 0 && (
                       <ul className="mt-2 space-y-1">
                         {edu.honors.map((honor, idx) => (
@@ -186,42 +148,26 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
           <div className="grid grid-cols-2 gap-4">
             {skills.technical && skills.technical.length > 0 && (
               <div>
-                <h3 className="mb-2 text-xs font-medium text-gray-700">
-                  Technical
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {skills.technical.join(" • ")}
-                </p>
+                <h3 className="mb-2 text-xs font-medium text-gray-700">Technical</h3>
+                <p className="text-sm text-gray-600">{skills.technical.join(" • ")}</p>
               </div>
             )}
             {skills.languages && skills.languages.length > 0 && (
               <div>
-                <h3 className="mb-2 text-xs font-medium text-gray-700">
-                  Languages
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {skills.languages.join(" • ")}
-                </p>
+                <h3 className="mb-2 text-xs font-medium text-gray-700">Languages</h3>
+                <p className="text-sm text-gray-600">{skills.languages.join(" • ")}</p>
               </div>
             )}
             {skills.tools && skills.tools.length > 0 && (
               <div>
-                <h3 className="mb-2 text-xs font-medium text-gray-700">
-                  Tools
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {skills.tools.join(" • ")}
-                </p>
+                <h3 className="mb-2 text-xs font-medium text-gray-700">Tools</h3>
+                <p className="text-sm text-gray-600">{skills.tools.join(" • ")}</p>
               </div>
             )}
             {skills.soft && skills.soft.length > 0 && (
               <div>
-                <h3 className="mb-2 text-xs font-medium text-gray-700">
-                  Soft Skills
-                </h3>
-                <p className="text-sm text-gray-600">
-                  {skills.soft.join(" • ")}
-                </p>
+                <h3 className="mb-2 text-xs font-medium text-gray-700">Soft Skills</h3>
+                <p className="text-sm text-gray-600">{skills.soft.join(" • ")}</p>
               </div>
             )}
           </div>
@@ -229,8 +175,7 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
       )}
 
       {/* Certifications */}
-      {certifications.filter((cert) => cert.name || cert.issuer || cert.date)
-        .length > 0 && (
+      {certifications.filter((cert) => cert.name || cert.issuer || cert.date).length > 0 && (
         <section className="mb-12">
           <h2 className="mb-6 text-xs font-semibold tracking-wider text-gray-500 uppercase">
             Certifications
@@ -240,11 +185,7 @@ export function MinimalTemplate({ resume }: MinimalTemplateProps) {
               .filter((cert) => cert.name || cert.issuer || cert.date)
               .map((cert) => (
                 <div key={cert.id}>
-                  {cert.name && (
-                    <p className="text-sm font-medium text-gray-800">
-                      {cert.name}
-                    </p>
-                  )}
+                  {cert.name && <p className="text-sm font-medium text-gray-800">{cert.name}</p>}
                   {(cert.issuer || cert.date) && (
                     <p className="text-xs text-gray-600">
                       {[cert.issuer, cert.date].filter(Boolean).join(" • ")}

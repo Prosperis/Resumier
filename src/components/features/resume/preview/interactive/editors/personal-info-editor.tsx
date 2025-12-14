@@ -9,28 +9,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import type { PersonalInfo } from "@/lib/api/types";
-import {
-  type PersonalInfoFormData,
-  personalInfoSchema,
-} from "@/lib/validations";
+import { type PersonalInfoFormData, personalInfoSchema } from "@/lib/validations";
 
 interface PersonalInfoEditorProps {
   data: PersonalInfo;
   onChange: (data: Partial<PersonalInfo>) => void;
 }
 
-export function PersonalInfoEditor({
-  data,
-  onChange,
-}: PersonalInfoEditorProps) {
+export function PersonalInfoEditor({ data, onChange }: PersonalInfoEditorProps) {
   const form = useForm<PersonalInfoFormData>({
     resolver: zodResolver(personalInfoSchema) as never,
     defaultValues: {
@@ -66,11 +54,7 @@ export function PersonalInfoEditor({
               <FormItem>
                 <Label className="text-xs">First Name</Label>
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="John"
-                    className="h-8 text-xs"
-                  />
+                  <Input {...field} placeholder="John" className="h-8 text-xs" />
                 </FormControl>
                 <FormMessage className="text-xs" />
               </FormItem>
@@ -119,11 +103,7 @@ export function PersonalInfoEditor({
             <FormItem>
               <Label className="text-xs">Phone</Label>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="(555) 123-4567"
-                  className="h-8 text-xs"
-                />
+                <Input {...field} placeholder="(555) 123-4567" className="h-8 text-xs" />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>
@@ -138,11 +118,7 @@ export function PersonalInfoEditor({
             <FormItem>
               <Label className="text-xs">Location</Label>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="San Francisco, CA"
-                  className="h-8 text-xs"
-                />
+                <Input {...field} placeholder="San Francisco, CA" className="h-8 text-xs" />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>

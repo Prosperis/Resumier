@@ -40,9 +40,7 @@ export function RootLayout({ children }: RootLayoutProps) {
             <div className="flex items-center justify-center gap-2 text-[10px] font-medium text-blue-700">
               <span>🎭 Demo Mode</span>
               <span className="hidden sm:inline">•</span>
-              <span className="hidden sm:inline">
-                Exploring with sample data
-              </span>
+              <span className="hidden sm:inline">Exploring with sample data</span>
             </div>
           </div>
         )}
@@ -69,14 +67,9 @@ export function RootLayout({ children }: RootLayoutProps) {
               aria-label="Resumier home"
             >
               <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary">
-                <FileText
-                  className="size-4 text-primary-foreground"
-                  aria-hidden="true"
-                />
+                <FileText className="size-4 text-primary-foreground" aria-hidden="true" />
               </div>
-              <span className="text-lg font-bold tracking-tight text-foreground">
-                Resumier
-              </span>
+              <span className="text-lg font-bold tracking-tight text-foreground">Resumier</span>
             </Link>
 
             {/* Dynamic resume context indicator */}
@@ -97,13 +90,7 @@ export function RootLayout({ children }: RootLayoutProps) {
               </>
             )}
 
-            <Button
-              variant="ghost"
-              size="icon"
-              asChild
-              aria-label="Settings"
-              className="h-8 w-8"
-            >
+            <Button variant="ghost" size="icon" asChild aria-label="Settings" className="h-8 w-8">
               <Link to="/settings">
                 <Settings className="size-4" />
               </Link>

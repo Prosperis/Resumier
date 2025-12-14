@@ -1,11 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGuestStorage } from "@/hooks/use-guest-storage";
 import { useAuthStore } from "@/stores/auth-store";
 import { Download, LogIn, Trash2 } from "lucide-react";
@@ -16,8 +10,7 @@ import { useState } from "react";
  * Shows guest users their status and provides data management options
  */
 export function GuestModeInfo() {
-  const { isGuest, hasData, isChecking, clearData, exportData } =
-    useGuestStorage();
+  const { isGuest, hasData, isChecking, clearData, exportData } = useGuestStorage();
   const logout = useAuthStore((state) => state.logout);
   const [isClearing, setIsClearing] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -82,8 +75,7 @@ export function GuestModeInfo() {
           Guest Mode
         </CardTitle>
         <CardDescription className="text-orange-700 dark:text-orange-300">
-          You're using Resumier as a guest. Your data is stored locally on this
-          device.
+          You're using Resumier as a guest. Your data is stored locally on this device.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

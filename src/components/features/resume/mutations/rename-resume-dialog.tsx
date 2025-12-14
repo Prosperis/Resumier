@@ -92,11 +92,7 @@ export function RenameResumeDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || (
-          <Button
-            variant="outline"
-            size="sm"
-            aria-label={`Rename ${currentTitle}`}
-          >
+          <Button variant="outline" size="sm" aria-label={`Rename ${currentTitle}`}>
             <Pencil className="mr-2 h-4 w-4" aria-hidden="true" />
             Rename
           </Button>
@@ -106,9 +102,7 @@ export function RenameResumeDialog({
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Rename Resume</DialogTitle>
-            <DialogDescription>
-              Enter a new title for your resume
-            </DialogDescription>
+            <DialogDescription>Enter a new title for your resume</DialogDescription>
           </DialogHeader>
 
           <div className="py-4">
@@ -128,28 +122,16 @@ export function RenameResumeDialog({
               autoFocus
               aria-invalid={!!validationError || !!error}
               aria-describedby={
-                validationError
-                  ? "title-validation-error"
-                  : error
-                    ? "title-api-error"
-                    : undefined
+                validationError ? "title-validation-error" : error ? "title-api-error" : undefined
               }
             />
             {validationError && (
-              <p
-                id="title-validation-error"
-                className="text-destructive mt-2 text-sm"
-                role="alert"
-              >
+              <p id="title-validation-error" className="text-destructive mt-2 text-sm" role="alert">
                 {validationError}
               </p>
             )}
             {error && !validationError && (
-              <p
-                id="title-api-error"
-                className="text-destructive mt-2 text-sm"
-                role="alert"
-              >
+              <p id="title-api-error" className="text-destructive mt-2 text-sm" role="alert">
                 {error.message || "An error occurred"}
               </p>
             )}
@@ -172,12 +154,7 @@ export function RenameResumeDialog({
               disabled={isPending}
               aria-label={isPending ? "Saving changes..." : "Save changes"}
             >
-              {isPending && (
-                <Loader2
-                  className="mr-2 h-4 w-4 animate-spin"
-                  aria-hidden="true"
-                />
-              )}
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
               Save Changes
             </Button>
           </DialogFooter>

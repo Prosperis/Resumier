@@ -1,9 +1,6 @@
 import { act, cleanup, renderHook, waitFor } from "@testing-library/react";
 import { get } from "idb-keyval";
-import {
-  type ResumeDocument,
-  useResumeDocuments,
-} from "../use-resume-documents";
+import { type ResumeDocument, useResumeDocuments } from "../use-resume-documents";
 
 describe("useResumeDocuments", () => {
   beforeEach(() => {

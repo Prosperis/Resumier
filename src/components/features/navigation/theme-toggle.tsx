@@ -14,17 +14,8 @@ export function ThemeToggle() {
   const ariaLabel = `Switch to ${isDark ? "light" : "dark"} theme`;
 
   return (
-    <Button
-      variant="outline"
-      size="icon"
-      onClick={toggleTheme}
-      aria-label={ariaLabel}
-    >
-      {isDark ? (
-        <Sun className="size-5" aria-hidden />
-      ) : (
-        <Moon className="size-5" aria-hidden />
-      )}
+    <Button variant="outline" size="icon" onClick={toggleTheme} aria-label={ariaLabel}>
+      {isDark ? <Sun className="size-5" aria-hidden /> : <Moon className="size-5" aria-hidden />}
     </Button>
   );
 }

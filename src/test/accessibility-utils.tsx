@@ -22,9 +22,7 @@ export function createQueryWrapper() {
   });
 
   return function QueryWrapper({ children }: { children: React.ReactNode }) {
-    return (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    );
+    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
   };
 }
 
@@ -102,9 +100,7 @@ export async function expectNoAccessibilityViolations(
       const nodes = violation.nodes.map((node) => node.html).join("\n");
       return `${violation.id}: ${violation.description}\n${violation.help}\n${nodes}`;
     });
-    throw new Error(
-      `Accessibility violations found:\n\n${violationMessages.join("\n\n")}`,
-    );
+    throw new Error(`Accessibility violations found:\n\n${violationMessages.join("\n\n")}`);
   }
 
   expect(results.violations).toHaveLength(0);
@@ -132,9 +128,7 @@ export async function checkAccessibility(
       const nodes = violation.nodes.map((node) => node.html).join("\n");
       return `${violation.id}: ${violation.description}\n${violation.help}\n${nodes}`;
     });
-    throw new Error(
-      `Accessibility violations found:\n\n${violationMessages.join("\n\n")}`,
-    );
+    throw new Error(`Accessibility violations found:\n\n${violationMessages.join("\n\n")}`);
   }
 
   expect(results.violations).toHaveLength(0);
@@ -260,10 +254,9 @@ export const accessibilityTests = {
       // Elements should not have tabindex > 0
       if (tabIndex !== null) {
         const tabIndexNum = Number.parseInt(tabIndex, 10);
-        expect(
-          tabIndexNum <= 0,
-          `Element should not have tabindex > 0: ${element.outerHTML}`,
-        ).toBe(true);
+        expect(tabIndexNum <= 0, `Element should not have tabindex > 0: ${element.outerHTML}`).toBe(
+          true,
+        );
       }
     });
   },
@@ -272,12 +265,8 @@ export const accessibilityTests = {
    * Test heading hierarchy
    */
   testHeadingHierarchy(container: HTMLElement) {
-    const headings = Array.from(
-      container.querySelectorAll("h1, h2, h3, h4, h5, h6"),
-    );
-    const levels = headings.map((h) =>
-      Number.parseInt(h.tagName.charAt(1), 10),
-    );
+    const headings = Array.from(container.querySelectorAll("h1, h2, h3, h4, h5, h6"));
+    const levels = headings.map((h) => Number.parseInt(h.tagName.charAt(1), 10));
 
     // Check for skipped heading levels
     for (let i = 1; i < levels.length; i++) {

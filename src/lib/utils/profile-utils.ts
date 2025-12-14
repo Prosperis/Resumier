@@ -64,10 +64,7 @@ function getPersonalInfo(
       email: "",
       phone: "",
       location: "",
-      summary:
-        selection.includeSummary === false
-          ? ""
-          : profileContent.personalInfo.summary,
+      summary: selection.includeSummary === false ? "" : profileContent.personalInfo.summary,
     };
   }
 
@@ -145,9 +142,7 @@ function getEducation(
   if (!selection.educationIds || selection.educationIds.length === 0) {
     education = [...profileContent.education];
   } else {
-    education = profileContent.education.filter((edu) =>
-      selection.educationIds!.includes(edu.id),
-    );
+    education = profileContent.education.filter((edu) => selection.educationIds!.includes(edu.id));
   }
 
   // Apply per-item overrides
@@ -212,36 +207,18 @@ function getSkills(
   };
 
   // Apply selection
-  result.technical = filterSkills(
-    profileContent.skills.technical,
-    selection.skills?.technical,
-  );
-  result.languages = filterSkills(
-    profileContent.skills.languages,
-    selection.skills?.languages,
-  );
-  result.tools = filterSkills(
-    profileContent.skills.tools,
-    selection.skills?.tools,
-  );
-  result.soft = filterSkills(
-    profileContent.skills.soft,
-    selection.skills?.soft,
-  );
+  result.technical = filterSkills(profileContent.skills.technical, selection.skills?.technical);
+  result.languages = filterSkills(profileContent.skills.languages, selection.skills?.languages);
+  result.tools = filterSkills(profileContent.skills.tools, selection.skills?.tools);
+  result.soft = filterSkills(profileContent.skills.soft, selection.skills?.soft);
 
   // Add additional skills from overrides
   if (overrides?.additionalSkills) {
     if (overrides.additionalSkills.technical) {
-      result.technical = [
-        ...result.technical,
-        ...overrides.additionalSkills.technical,
-      ];
+      result.technical = [...result.technical, ...overrides.additionalSkills.technical];
     }
     if (overrides.additionalSkills.languages) {
-      result.languages = [
-        ...result.languages,
-        ...overrides.additionalSkills.languages,
-      ];
+      result.languages = [...result.languages, ...overrides.additionalSkills.languages];
     }
     if (overrides.additionalSkills.tools) {
       result.tools = [...result.tools, ...overrides.additionalSkills.tools];
@@ -303,9 +280,7 @@ function getLinks(
   if (!selection.linkIds || selection.linkIds.length === 0) {
     links = [...profileContent.links];
   } else {
-    links = profileContent.links.filter((link) =>
-      selection.linkIds!.includes(link.id),
-    );
+    links = profileContent.links.filter((link) => selection.linkIds!.includes(link.id));
   }
 
   // Add additional links from overrides
@@ -319,9 +294,7 @@ function getLinks(
 /**
  * Check if a resume is linked to a profile
  */
-export function isLinkedToProfile(
-  resume: { profileLink?: ProfileLink } | undefined,
-): boolean {
+export function isLinkedToProfile(resume: { profileLink?: ProfileLink } | undefined): boolean {
   return !!resume?.profileLink?.profileId;
 }
 

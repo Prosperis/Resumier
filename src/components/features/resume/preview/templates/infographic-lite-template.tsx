@@ -1,28 +1,14 @@
-import {
-  Circle,
-  Briefcase,
-  GraduationCap,
-  Mail,
-  Phone,
-  MapPin,
-} from "lucide-react";
+import { Circle, Briefcase, GraduationCap, Mail, Phone, MapPin } from "lucide-react";
 import type { Resume } from "@/lib/api/types";
 import type { TemplateConfig } from "@/lib/types/templates";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface InfographicLiteTemplateProps {
   resume: Resume;
   config?: TemplateConfig;
 }
 
-export function InfographicLiteTemplate({
-  resume,
-  config,
-}: InfographicLiteTemplateProps) {
+export function InfographicLiteTemplate({ resume, config }: InfographicLiteTemplateProps) {
   const { personalInfo, experience, education, skills } = resume.content;
   const primaryColor = config?.colorScheme?.primary || "#f97316";
 
@@ -37,11 +23,8 @@ export function InfographicLiteTemplate({
         </div>
         <div className="flex-1">
           <h1 className="text-3xl font-bold mb-2">
-            {getFullName(
-              personalInfo.firstName,
-              personalInfo.lastName,
-              personalInfo.nameOrder,
-            ) || "Your Name"}
+            {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+              "Your Name"}
           </h1>
           <div className="flex flex-wrap gap-3 text-sm">
             {personalInfo.email && (
@@ -53,10 +36,7 @@ export function InfographicLiteTemplate({
             {personalInfo.phone && (
               <span className="flex items-center gap-1">
                 <Phone className="h-3 w-3" />
-                {formatPhoneDisplay(
-                  personalInfo.phone,
-                  personalInfo.phoneFormat as PhoneFormat,
-                )}
+                {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
               </span>
             )}
             {personalInfo.location && (
@@ -70,41 +50,27 @@ export function InfographicLiteTemplate({
       </div>
 
       {personalInfo.summary && (
-        <div
-          className="mb-6 p-4 rounded"
-          style={{ backgroundColor: `${primaryColor}15` }}
-        >
+        <div className="mb-6 p-4 rounded" style={{ backgroundColor: `${primaryColor}15` }}>
           <p className="text-gray-700">{personalInfo.summary}</p>
         </div>
       )}
 
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div
-          className="p-4 text-center rounded"
-          style={{ backgroundColor: `${primaryColor}10` }}
-        >
+        <div className="p-4 text-center rounded" style={{ backgroundColor: `${primaryColor}10` }}>
           <div className="text-3xl font-bold" style={{ color: primaryColor }}>
             {experience?.length || 0}
           </div>
           <div className="text-sm text-gray-600">Years Experience</div>
         </div>
-        <div
-          className="p-4 text-center rounded"
-          style={{ backgroundColor: `${primaryColor}10` }}
-        >
+        <div className="p-4 text-center rounded" style={{ backgroundColor: `${primaryColor}10` }}>
           <div className="text-3xl font-bold" style={{ color: primaryColor }}>
             {education?.length || 0}
           </div>
           <div className="text-sm text-gray-600">Degrees</div>
         </div>
-        <div
-          className="p-4 text-center rounded"
-          style={{ backgroundColor: `${primaryColor}10` }}
-        >
+        <div className="p-4 text-center rounded" style={{ backgroundColor: `${primaryColor}10` }}>
           <div className="text-3xl font-bold" style={{ color: primaryColor }}>
-            {typeof skills === "object" &&
-            "technical" in skills &&
-            Array.isArray(skills.technical)
+            {typeof skills === "object" && "technical" in skills && Array.isArray(skills.technical)
               ? skills.technical.length
               : 0}
           </div>
@@ -145,10 +111,7 @@ export function InfographicLiteTemplate({
       <div className="grid grid-cols-2 gap-6">
         {skills && (
           <div>
-            <h2
-              className="text-lg font-bold mb-3"
-              style={{ color: primaryColor }}
-            >
+            <h2 className="text-lg font-bold mb-3" style={{ color: primaryColor }}>
               Skills
             </h2>
             <div className="flex flex-wrap gap-2">

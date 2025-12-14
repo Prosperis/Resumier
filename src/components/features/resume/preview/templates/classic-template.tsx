@@ -1,17 +1,12 @@
 import type { Resume } from "@/lib/api/types";
-import {
-  formatPhoneDisplay,
-  getFullName,
-  type PhoneFormat,
-} from "@/lib/validations";
+import { formatPhoneDisplay, getFullName, type PhoneFormat } from "@/lib/validations";
 
 interface ClassicTemplateProps {
   resume: Resume;
 }
 
 export function ClassicTemplate({ resume }: ClassicTemplateProps) {
-  const { personalInfo, experience, education, skills, certifications, links } =
-    resume.content;
+  const { personalInfo, experience, education, skills, certifications, links } = resume.content;
 
   return (
     <div
@@ -21,11 +16,8 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
       {/* Header Section - Centered */}
       <header className="mb-8 border-b-2 border-black pb-4 text-center">
         <h1 className="mb-2 text-3xl font-bold">
-          {getFullName(
-            personalInfo.firstName,
-            personalInfo.lastName,
-            personalInfo.nameOrder,
-          ) || "Your Name"}
+          {getFullName(personalInfo.firstName, personalInfo.lastName, personalInfo.nameOrder) ||
+            "Your Name"}
         </h1>
         <div className="space-x-3 text-sm">
           {personalInfo.email && <span>{personalInfo.email}</span>}
@@ -33,10 +25,7 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
             <>
               <span>•</span>
               <span>
-                {formatPhoneDisplay(
-                  personalInfo.phone,
-                  personalInfo.phoneFormat as PhoneFormat,
-                )}
+                {formatPhoneDisplay(personalInfo.phone, personalInfo.phoneFormat as PhoneFormat)}
               </span>
             </>
           )}
@@ -88,19 +77,11 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
                 return (
                   <div key={exp.id}>
                     <div className="mb-1 flex items-baseline justify-between">
-                      {exp.position && (
-                        <h3 className="font-bold">{exp.position}</h3>
-                      )}
-                      {dateRange && (
-                        <span className="text-sm">{dateRange}</span>
-                      )}
+                      {exp.position && <h3 className="font-bold">{exp.position}</h3>}
+                      {dateRange && <span className="text-sm">{dateRange}</span>}
                     </div>
-                    {exp.company && (
-                      <p className="mb-2 text-sm italic">{exp.company}</p>
-                    )}
-                    {exp.description && (
-                      <p className="mb-2 text-sm">{exp.description}</p>
-                    )}
+                    {exp.company && <p className="mb-2 text-sm italic">{exp.company}</p>}
+                    {exp.description && <p className="mb-2 text-sm">{exp.description}</p>}
                     {exp.highlights && exp.highlights.length > 0 && (
                       <ul className="list-inside list-disc space-y-1 text-sm">
                         {exp.highlights.map((highlight, idx) => (
@@ -116,19 +97,14 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
       )}
 
       {/* Education */}
-      {education.filter((edu) => edu.degree || edu.institution || edu.field)
-        .length > 0 && (
+      {education.filter((edu) => edu.degree || edu.institution || edu.field).length > 0 && (
         <section className="mb-6">
-          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">
-            Education
-          </h2>
+          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">Education</h2>
           <div className="space-y-3">
             {education
               .filter((edu) => edu.degree || edu.institution || edu.field)
               .map((edu) => {
-                const degreeField = [edu.degree, edu.field]
-                  .filter(Boolean)
-                  .join(" in ");
+                const degreeField = [edu.degree, edu.field].filter(Boolean).join(" in ");
                 const dateRange =
                   edu.startDate || edu.endDate || edu.current
                     ? `${edu.startDate || ""}${edu.startDate && (edu.endDate || edu.current) ? " - " : ""}${edu.current ? "Present" : edu.endDate || ""}`
@@ -136,16 +112,10 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
                 return (
                   <div key={edu.id}>
                     <div className="mb-1 flex items-baseline justify-between">
-                      {degreeField && (
-                        <h3 className="font-bold">{degreeField}</h3>
-                      )}
-                      {dateRange && (
-                        <span className="text-sm">{dateRange}</span>
-                      )}
+                      {degreeField && <h3 className="font-bold">{degreeField}</h3>}
+                      {dateRange && <span className="text-sm">{dateRange}</span>}
                     </div>
-                    {edu.institution && (
-                      <p className="text-sm italic">{edu.institution}</p>
-                    )}
+                    {edu.institution && <p className="text-sm italic">{edu.institution}</p>}
                     {edu.gpa && <p className="text-sm">GPA: {edu.gpa}</p>}
                     {edu.honors && edu.honors.length > 0 && (
                       <ul className="mt-1 list-inside list-disc text-sm">
@@ -167,9 +137,7 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
         skills.tools?.length > 0 ||
         skills.soft?.length > 0) && (
         <section className="mb-6">
-          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">
-            Skills
-          </h2>
+          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">Skills</h2>
           <div className="space-y-2">
             {skills.technical && skills.technical.length > 0 && (
               <div>
@@ -200,25 +168,18 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
       )}
 
       {/* Certifications */}
-      {certifications.filter((cert) => cert.name || cert.issuer || cert.date)
-        .length > 0 && (
+      {certifications.filter((cert) => cert.name || cert.issuer || cert.date).length > 0 && (
         <section className="mb-6">
-          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">
-            Certifications
-          </h2>
+          <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">Certifications</h2>
           <div className="space-y-2">
             {certifications
               .filter((cert) => cert.name || cert.issuer || cert.date)
               .map((cert) => (
                 <div key={cert.id}>
                   <p className="text-sm">
-                    {cert.name && (
-                      <span className="font-semibold">{cert.name}</span>
-                    )}
+                    {cert.name && <span className="font-semibold">{cert.name}</span>}
                     {cert.name && cert.issuer && " - "}
-                    {cert.issuer && (
-                      <span className="italic">{cert.issuer}</span>
-                    )}
+                    {cert.issuer && <span className="italic">{cert.issuer}</span>}
                     {(cert.name || cert.issuer) && cert.date && ", "}
                     {cert.date && <span>{cert.date}</span>}
                   </p>

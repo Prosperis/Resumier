@@ -8,12 +8,7 @@ import {
   LinksSection,
   SkillsSection,
 } from "@/components/features/resume/sections";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Sidebar,
   SidebarContent,
@@ -26,14 +21,7 @@ import {
   SidebarProvider,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import type {
-  Certification,
-  Education,
-  Link,
-  Skill,
-  UserInfo,
-  WorkExperience,
-} from "@/stores";
+import type { Certification, Education, Link, Skill, UserInfo, WorkExperience } from "@/stores";
 import { useResumeStore } from "@/stores";
 import {
   type PersonalInfoSection,
@@ -58,12 +46,8 @@ export function PersonalInfoDialog({
   const [email, setEmail] = useState(userInfo.email ?? "");
   const [phone, setPhone] = useState(userInfo.phone ?? "");
   const [address, setAddress] = useState(userInfo.address ?? "");
-  const [experiences, setExperiences] = useState<WorkExperience[]>(
-    userInfo.experiences ?? [],
-  );
-  const [education, setEducation] = useState<Education[]>(
-    userInfo.education ?? [],
-  );
+  const [experiences, setExperiences] = useState<WorkExperience[]>(userInfo.experiences ?? []);
+  const [education, setEducation] = useState<Education[]>(userInfo.education ?? []);
   const [skills, setSkills] = useState<Skill[]>(userInfo.skills ?? []);
   const [certifications, setCertifications] = useState<Certification[]>(
     userInfo.certifications ?? [],
@@ -178,11 +162,7 @@ export function PersonalInfoDialog({
     setEducation([...education, {}]);
   }
 
-  function updateEducation(
-    index: number,
-    field: keyof Education,
-    value: string,
-  ) {
+  function updateEducation(index: number, field: keyof Education, value: string) {
     setEducation((prev) => {
       const next = [...prev];
       next[index] = { ...next[index], [field]: value };
@@ -214,11 +194,7 @@ export function PersonalInfoDialog({
     setCertifications([...certifications, {}]);
   }
 
-  function updateCertification(
-    index: number,
-    field: keyof Certification,
-    value: string,
-  ) {
+  function updateCertification(index: number, field: keyof Certification, value: string) {
     setCertifications((prev) => {
       const next = [...prev];
       next[index] = { ...next[index], [field]: value };
@@ -256,9 +232,7 @@ export function PersonalInfoDialog({
           <Sidebar collapsible="none" className="hidden md:flex">
             <SidebarContent>
               <SidebarHeader>
-                <DialogTitle className="text-base">
-                  Personal Information
-                </DialogTitle>
+                <DialogTitle className="text-base">Personal Information</DialogTitle>
               </SidebarHeader>
               <SidebarSeparator />
               <SidebarGroup>
@@ -275,9 +249,7 @@ export function PersonalInfoDialog({
                       <SidebarMenuItem key={item.value}>
                         <SidebarMenuButton
                           isActive={section === item.value}
-                          onClick={() =>
-                            setSection(item.value as PersonalInfoSection)
-                          }
+                          onClick={() => setSection(item.value as PersonalInfoSection)}
                         >
                           <span>{item.label}</span>
                         </SidebarMenuButton>

@@ -24,10 +24,7 @@ export {
   useDragState,
 } from "./editable-section";
 
-export {
-  SectionEditorPopover,
-  useSectionEditor,
-} from "./section-editor-popover";
+export { SectionEditorPopover, useSectionEditor } from "./section-editor-popover";
 
 export { SectionEditorController } from "./section-editor-controller";
 

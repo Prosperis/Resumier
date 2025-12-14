@@ -115,17 +115,14 @@ export const useUIStore = create<UIStore>()(
           })),
 
         // Personal Info Section Actions
-        setPersonalInfoSection: (personalInfoSection) =>
-          set({ personalInfoSection }),
+        setPersonalInfoSection: (personalInfoSection) => set({ personalInfoSection }),
 
         // Resume Builder Section Actions
-        setResumeBuilderSection: (resumeBuilderSection) =>
-          set({ resumeBuilderSection }),
+        setResumeBuilderSection: (resumeBuilderSection) => set({ resumeBuilderSection }),
 
         toggleResumeBuilderSection: (section) =>
           set((state) => ({
-            resumeBuilderSection:
-              state.resumeBuilderSection === section ? "" : section,
+            resumeBuilderSection: state.resumeBuilderSection === section ? "" : section,
           })),
 
         // Dialog Actions
@@ -205,8 +202,7 @@ export const useUIStore = create<UIStore>()(
             return {
               ...state,
               resumeBuilderSection:
-                state.resumeBuilderSection ??
-                ("personal" as ResumeBuilderSection),
+                state.resumeBuilderSection ?? ("personal" as ResumeBuilderSection),
             };
           }
           return state as UIStore;
@@ -231,16 +227,11 @@ export const useUIStore = create<UIStore>()(
 
 // Selectors for optimized access
 export const selectSidebarOpen = (state: UIStore) => state.sidebarOpen;
-export const selectSidebarCollapsed = (state: UIStore) =>
-  state.sidebarCollapsed;
-export const selectPersonalInfoSection = (state: UIStore) =>
-  state.personalInfoSection;
-export const selectSetPersonalInfoSection = (state: UIStore) =>
-  state.setPersonalInfoSection;
-export const selectResumeBuilderSection = (state: UIStore) =>
-  state.resumeBuilderSection;
-export const selectSetResumeBuilderSection = (state: UIStore) =>
-  state.setResumeBuilderSection;
+export const selectSidebarCollapsed = (state: UIStore) => state.sidebarCollapsed;
+export const selectPersonalInfoSection = (state: UIStore) => state.personalInfoSection;
+export const selectSetPersonalInfoSection = (state: UIStore) => state.setPersonalInfoSection;
+export const selectResumeBuilderSection = (state: UIStore) => state.resumeBuilderSection;
+export const selectSetResumeBuilderSection = (state: UIStore) => state.setResumeBuilderSection;
 export const selectToggleResumeBuilderSection = (state: UIStore) =>
   state.toggleResumeBuilderSection;
 export const selectActiveDialog = (state: UIStore) => state.activeDialog;
@@ -268,5 +259,4 @@ export const selectNotificationActions = (state: UIStore) => ({
 
 // Current Resume selectors
 export const selectCurrentResume = (state: UIStore) => state.currentResume;
-export const selectSetCurrentResume = (state: UIStore) =>
-  state.setCurrentResume;
+export const selectSetCurrentResume = (state: UIStore) => state.setCurrentResume;

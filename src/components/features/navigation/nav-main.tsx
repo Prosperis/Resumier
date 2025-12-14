@@ -3,11 +3,7 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronRight, type LucideIcon } from "lucide-react";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -60,10 +56,7 @@ export function NavMain({
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <Link
-                              to={subItem.url}
-                              activeProps={{ className: "bg-accent" }}
-                            >
+                            <Link to={subItem.url} activeProps={{ className: "bg-accent" }}>
                               <span>{subItem.title}</span>
                             </Link>
                           </SidebarMenuSubButton>

@@ -1,12 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  CheckCircle2,
-  CheckIcon,
-  Loader2,
-  PlusIcon,
-  X,
-  XIcon,
-} from "lucide-react";
+import { CheckCircle2, CheckIcon, Loader2, PlusIcon, X, XIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -25,10 +18,7 @@ import { MonthPicker } from "@/components/ui/month-picker";
 import { cn } from "@/lib/utils";
 import { useAutoSave } from "@/hooks/use-auto-save";
 import type { Education } from "@/lib/api/types";
-import {
-  type CreateEducationFormData,
-  createEducationSchema,
-} from "@/lib/validations/education";
+import { type CreateEducationFormData, createEducationSchema } from "@/lib/validations/education";
 
 interface EducationInlineFormProps {
   resumeId: string;
@@ -79,11 +69,7 @@ export function EducationInlineForm({
     const filteredHonors = honors.filter((h) => h.trim() !== "");
     const currentData = { ...watchedValues, honors: filteredHonors };
 
-    if (
-      !currentData.institution ||
-      !currentData.degree ||
-      !currentData.startDate
-    ) {
+    if (!currentData.institution || !currentData.degree || !currentData.startDate) {
       return;
     }
 
@@ -93,9 +79,7 @@ export function EducationInlineForm({
         edu.id === editingId ? { ...edu, ...currentData } : edu,
       );
     } else if (isNew) {
-      const existingNew = existingEducation.find(
-        (e) => e.id === newIdRef.current,
-      );
+      const existingNew = existingEducation.find((e) => e.id === newIdRef.current);
       if (existingNew) {
         updatedEducation = existingEducation.map((edu) =>
           edu.id === newIdRef.current ? { ...edu, ...currentData } : edu,
@@ -118,8 +102,7 @@ export function EducationInlineForm({
   }, [triggerSave]);
 
   const addHonor = () => setHonors([...honors, ""]);
-  const removeHonor = (index: number) =>
-    setHonors(honors.filter((_, i) => i !== index));
+  const removeHonor = (index: number) => setHonors(honors.filter((_, i) => i !== index));
   const updateHonor = (index: number, value: string) => {
     const newHonors = [...honors];
     newHonors[index] = value;
@@ -206,9 +189,7 @@ export function EducationInlineForm({
                 name="field"
                 render={({ field }) => (
                   <FormItem className="space-y-0.5">
-                    <FormLabel className="text-[10px]">
-                      Field of Study
-                    </FormLabel>
+                    <FormLabel className="text-[10px]">Field of Study</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Computer Science"
@@ -272,9 +253,7 @@ export function EducationInlineForm({
                           onCheckedChange={(checked) => {
                             field.onChange(checked);
                             if (checked) {
-                              setPreviousEndDate(
-                                form.getValues("endDate") ?? "",
-                              );
+                              setPreviousEndDate(form.getValues("endDate") ?? "");
                               form.setValue("endDate", "");
                             } else {
                               form.setValue("endDate", previousEndDate);
@@ -300,11 +279,7 @@ export function EducationInlineForm({
                 <FormItem className="space-y-0.5">
                   <FormLabel className="text-[10px]">GPA</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="3.8"
-                      className="h-7 text-[11px]"
-                      {...field}
-                    />
+                    <Input placeholder="3.8" className="h-7 text-[11px]" {...field} />
                   </FormControl>
                   <FormMessage className="text-[9px]" />
                 </FormItem>

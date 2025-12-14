@@ -67,14 +67,9 @@ describe("CreateResumeDialog", () => {
   });
 
   it("renders with custom trigger", () => {
-    render(
-      <CreateResumeDialog
-        trigger={<button type="button">Custom Trigger</button>}
-      />,
-      {
-        wrapper: createWrapper(),
-      },
-    );
+    render(<CreateResumeDialog trigger={<button type="button">Custom Trigger</button>} />, {
+      wrapper: createWrapper(),
+    });
 
     const button = screen.getByRole("button", { name: /custom trigger/i });
     expect(button).toBeInTheDocument();

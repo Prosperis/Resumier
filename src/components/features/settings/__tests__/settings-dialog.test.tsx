@@ -39,9 +39,7 @@ describe("SettingsDialog", () => {
 
     it("renders dialog description", () => {
       render(<SettingsDialog />);
-      expect(
-        screen.getByText("Customize your settings here."),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Customize your settings here.")).toBeInTheDocument();
     });
   });
 

@@ -12,12 +12,7 @@ export class ApiError extends Error {
   code?: string;
   details?: unknown;
 
-  constructor(
-    message: string,
-    status: number,
-    code?: string,
-    details?: unknown,
-  ) {
+  constructor(message: string, status: number, code?: string, details?: unknown) {
     super(message);
     this.name = "ApiError";
     this.status = status;
@@ -119,10 +114,7 @@ export class NetworkError extends ApiError {
  */
 export function parseErrorResponse(status: number, data: unknown): never {
   // biome-ignore lint/suspicious/noExplicitAny: error responses have dynamic structure
-  const message =
-    (data as any)?.message ||
-    (data as any)?.error ||
-    "An unexpected error occurred";
+  const message = (data as any)?.message || (data as any)?.error || "An unexpected error occurred";
 
   switch (status) {
     case 400:

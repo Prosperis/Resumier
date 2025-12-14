@@ -19,10 +19,7 @@ interface ProfileManagerProps {
   onCreateResumeFromProfile?: (profile: Profile) => void;
 }
 
-export function ProfileManager({
-  onEditProfile,
-  onCreateResumeFromProfile,
-}: ProfileManagerProps) {
+export function ProfileManager({ onEditProfile, onCreateResumeFromProfile }: ProfileManagerProps) {
   const { data: profiles, isLoading, error } = useProfiles();
   const { data: resumes } = useResumes();
   const { toast } = useToast();
@@ -70,19 +67,11 @@ export function ProfileManager({
   if (error) {
     return (
       <div className="p-4">
-        <div
-          className="border-destructive bg-destructive/10 rounded-lg border p-4"
-          role="alert"
-        >
+        <div className="border-destructive bg-destructive/10 rounded-lg border p-4" role="alert">
           <div className="flex items-start gap-3">
-            <AlertCircle
-              className="text-destructive mt-0.5 h-5 w-5"
-              aria-hidden="true"
-            />
+            <AlertCircle className="text-destructive mt-0.5 h-5 w-5" aria-hidden="true" />
             <div>
-              <h3 className="text-destructive font-semibold">
-                Failed to load profiles
-              </h3>
+              <h3 className="text-destructive font-semibold">Failed to load profiles</h3>
               <p className="text-destructive/90 mt-1 text-sm">
                 {error instanceof Error ? error.message : "Unknown error"}
               </p>
@@ -102,9 +91,8 @@ export function ProfileManager({
         </div>
         <h3 className="mb-2 text-lg font-semibold">No profiles yet</h3>
         <p className="text-muted-foreground mb-4 max-w-md mx-auto text-sm">
-          Create a master profile with your experience, education, and skills.
-          Then create multiple tailored resumes from this single source of
-          truth.
+          Create a master profile with your experience, education, and skills. Then create multiple
+          tailored resumes from this single source of truth.
         </p>
         <CreateProfileDialog
           trigger={
@@ -139,9 +127,7 @@ export function ProfileManager({
         profile={profileToDelete}
         open={!!profileToDelete}
         onOpenChange={(open) => !open && setProfileToDelete(null)}
-        linkedResumesCount={
-          profileToDelete ? getLinkedResumesCount(profileToDelete.id) : 0
-        }
+        linkedResumesCount={profileToDelete ? getLinkedResumesCount(profileToDelete.id) : 0}
       />
     </>
   );

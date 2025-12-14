@@ -24,8 +24,7 @@ export function useDeleteResume() {
         try {
           // Get existing resumes from the store
           const idbData = await get(IDB_STORE_KEY);
-          const resumes =
-            (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
+          const resumes = (idbData as { resumes: Resume[] } | undefined)?.resumes || [];
 
           // Filter out the deleted resume
           const updatedResumes = resumes.filter((r) => r.id !== id);
@@ -61,8 +60,7 @@ export function useDeleteResume() {
       await queryClient.cancelQueries({ queryKey: resumesQueryKey });
 
       // Snapshot previous value for rollback
-      const previousResumes =
-        queryClient.getQueryData<Resume[]>(resumesQueryKey);
+      const previousResumes = queryClient.getQueryData<Resume[]>(resumesQueryKey);
 
       // Optimistically remove from list
       queryClient.setQueryData<Resume[]>(resumesQueryKey, (old) => {

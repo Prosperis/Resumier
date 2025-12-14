@@ -106,9 +106,7 @@ export function ExperienceList({
     return (
       <Card className="border-dashed gap-3 py-3">
         <CardContent className="flex flex-col items-center justify-center py-6 text-center px-3">
-          <p className="text-muted-foreground text-xs">
-            No experience added yet.
-          </p>
+          <p className="text-muted-foreground text-xs">No experience added yet.</p>
           <p className="text-muted-foreground mt-1 text-[10px]">
             Click the + button to add your first experience.
           </p>
@@ -118,11 +116,7 @@ export function ExperienceList({
   }
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
       <SortableContext
         items={experiences.map((exp) => exp.id)}
         strategy={verticalListSortingStrategy}
@@ -231,9 +225,7 @@ function ExperiencePreviewCard({
       {(exp.description || (exp.highlights && exp.highlights.length > 0)) && (
         <CardContent className="px-3">
           {exp.description && (
-            <p className="text-muted-foreground text-[11px]">
-              {exp.description}
-            </p>
+            <p className="text-muted-foreground text-[11px]">{exp.description}</p>
           )}
           {exp.highlights && exp.highlights.length > 0 && (
             <ul className="mt-1 space-y-0.5 text-[11px]">

@@ -151,11 +151,7 @@ describe("TabsList", () => {
       </Tabs>,
     );
 
-    expect(screen.getByTestId("tabs-list")).toHaveClass(
-      "inline-flex",
-      "items-center",
-      "bg-muted",
-    );
+    expect(screen.getByTestId("tabs-list")).toHaveClass("inline-flex", "items-center", "bg-muted");
   });
 
   it("renders with custom className", () => {
@@ -227,11 +223,7 @@ describe("TabsTrigger", () => {
     render(
       <Tabs defaultValue="tab1">
         <TabsList>
-          <TabsTrigger
-            value="tab1"
-            className="custom-trigger"
-            data-testid="trigger"
-          >
+          <TabsTrigger value="tab1" className="custom-trigger" data-testid="trigger">
             Tab
           </TabsTrigger>
         </TabsList>
@@ -297,9 +289,7 @@ describe("TabsTrigger", () => {
       </Tabs>,
     );
 
-    expect(
-      screen.getByRole("tab", { name: "Custom Button" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Custom Button" })).toBeInTheDocument();
   });
 });
 
@@ -341,11 +331,7 @@ describe("TabsContent", () => {
         <TabsList>
           <TabsTrigger value="tab1">Tab 1</TabsTrigger>
         </TabsList>
-        <TabsContent
-          value="tab1"
-          className="custom-content"
-          data-testid="content"
-        >
+        <TabsContent value="tab1" className="custom-content" data-testid="content">
           Content
         </TabsContent>
       </Tabs>,
@@ -366,9 +352,7 @@ describe("TabsContent", () => {
       </Tabs>,
     );
 
-    expect(screen.getByTestId("content")).toHaveClass(
-      "focus-visible:outline-none",
-    );
+    expect(screen.getByTestId("content")).toHaveClass("focus-visible:outline-none");
   });
 
   it("supports rich content", () => {

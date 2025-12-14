@@ -26,11 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { MonthPicker } from "@/components/ui/month-picker";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useAutoSave } from "@/hooks/use-auto-save";
 import type { Experience, ExperienceFormat } from "@/lib/api/types";
@@ -60,9 +56,7 @@ export function ExperienceInlineForm({
     defaultValues?.highlights?.length ? defaultValues.highlights : [""],
   );
   const [previousEndDate, setPreviousEndDate] = useState<string>("");
-  const [format, setFormat] = useState<ExperienceFormat>(
-    defaultValues?.format || "structured",
-  );
+  const [format, setFormat] = useState<ExperienceFormat>(defaultValues?.format || "structured");
   const newIdRef = useRef<string>(crypto.randomUUID());
 
   const form = useForm<CreateExperienceFormData>({
@@ -98,11 +92,7 @@ export function ExperienceInlineForm({
     };
 
     // Only save if we have required fields
-    if (
-      !currentData.company ||
-      !currentData.position ||
-      !currentData.startDate
-    ) {
+    if (!currentData.company || !currentData.position || !currentData.startDate) {
       return;
     }
 
@@ -112,9 +102,7 @@ export function ExperienceInlineForm({
         exp.id === editingId ? { ...exp, ...currentData } : exp,
       );
     } else if (isNew) {
-      const existingNew = existingExperiences.find(
-        (e) => e.id === newIdRef.current,
-      );
+      const existingNew = existingExperiences.find((e) => e.id === newIdRef.current);
       if (existingNew) {
         updatedExperiences = existingExperiences.map((exp) =>
           exp.id === newIdRef.current ? { ...exp, ...currentData } : exp,
@@ -204,11 +192,7 @@ export function ExperienceInlineForm({
                   <FormItem className="space-y-0.5">
                     <FormLabel className="text-[10px]">Company</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Acme Inc."
-                        className="h-7 text-[11px]"
-                        {...field}
-                      />
+                      <Input placeholder="Acme Inc." className="h-7 text-[11px]" {...field} />
                     </FormControl>
                     <FormMessage className="text-[9px]" />
                   </FormItem>
@@ -285,9 +269,7 @@ export function ExperienceInlineForm({
                           onCheckedChange={(checked) => {
                             field.onChange(checked);
                             if (checked) {
-                              setPreviousEndDate(
-                                form.getValues("endDate") || "",
-                              );
+                              setPreviousEndDate(form.getValues("endDate") || "");
                               form.setValue("endDate", "");
                             } else {
                               form.setValue("endDate", previousEndDate);
@@ -344,9 +326,7 @@ export function ExperienceInlineForm({
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="text-xs">
                     <p className="font-medium">Bullets Only</p>
-                    <p className="text-muted-foreground">
-                      Just bullet points, no paragraph
-                    </p>
+                    <p className="text-muted-foreground">Just bullet points, no paragraph</p>
                   </TooltipContent>
                 </Tooltip>
                 <Tooltip>
@@ -363,9 +343,7 @@ export function ExperienceInlineForm({
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="text-xs">
                     <p className="font-medium">Freeform</p>
-                    <p className="text-muted-foreground">
-                      Single text block, write freely
-                    </p>
+                    <p className="text-muted-foreground">Single text block, write freely</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -481,8 +459,7 @@ export function ExperienceInlineForm({
                       />
                     </FormControl>
                     <FormDescription className="text-[9px]">
-                      Write freely - paragraphs, sentences, or any format you
-                      prefer
+                      Write freely - paragraphs, sentences, or any format you prefer
                     </FormDescription>
                     <FormMessage className="text-[9px]" />
                   </FormItem>

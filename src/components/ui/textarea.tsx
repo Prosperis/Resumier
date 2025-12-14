@@ -18,9 +18,7 @@ function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
       )}
       whileFocus={prefersReducedMotion ? undefined : { scale: 1.01 }}
       transition={
-        prefersReducedMotion
-          ? undefined
-          : { type: "spring", stiffness: 300, damping: 25 }
+        prefersReducedMotion ? undefined : { type: "spring", stiffness: 300, damping: 25 }
       }
       {...(props as React.ComponentProps<typeof MotionTextarea>)}
     />

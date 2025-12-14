@@ -4,9 +4,7 @@ import { Providers } from "../providers";
 
 // Mock React Query devtools
 vi.mock("@tanstack/react-query-devtools", () => ({
-  ReactQueryDevtools: () => (
-    <div data-testid="react-query-devtools">DevTools</div>
-  ),
+  ReactQueryDevtools: () => <div data-testid="react-query-devtools">DevTools</div>,
 }));
 
 describe("Providers", () => {
@@ -55,14 +53,10 @@ describe("Providers", () => {
       // The devtools are hidden by default (showDevtools state is false)
       if (import.meta.env.DEV) {
         // Devtools should NOT be visible initially
-        expect(
-          screen.queryByTestId("react-query-devtools"),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByTestId("react-query-devtools")).not.toBeInTheDocument();
 
         // Find the hover trigger div and simulate mouse enter
-        const hoverTrigger = document.querySelector(
-          'div[style*="position: fixed"]',
-        );
+        const hoverTrigger = document.querySelector('div[style*="position: fixed"]');
         expect(hoverTrigger).toBeInTheDocument();
 
         // Hover over the trigger to show devtools
@@ -71,9 +65,7 @@ describe("Providers", () => {
 
         // Mouse leave should hide devtools
         fireEvent.mouseLeave(hoverTrigger!);
-        expect(
-          screen.queryByTestId("react-query-devtools"),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByTestId("react-query-devtools")).not.toBeInTheDocument();
       }
     });
 
@@ -151,9 +143,7 @@ describe("Providers", () => {
 
         return (
           <div>
-            <div>
-              QueryClient: {queryClient ? "Available" : "Not Available"}
-            </div>
+            <div>QueryClient: {queryClient ? "Available" : "Not Available"}</div>
             <div>Theme: {theme}</div>
           </div>
         );
@@ -191,11 +181,7 @@ describe("Providers", () => {
         const providedClient = useQueryClient();
 
         return (
-          <div>
-            {providedClient === importedClient
-              ? "Same Instance"
-              : "Different Instance"}
-          </div>
+          <div>{providedClient === importedClient ? "Same Instance" : "Different Instance"}</div>
         );
       };
 
