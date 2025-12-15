@@ -152,6 +152,7 @@ const mockResume: Resume = {
     personalInfo: {
       firstName: "John",
       lastName: "Doe",
+      nameOrder: "firstLast",
       email: "john@example.com",
       phone: "555-1234",
       location: "New York",
@@ -201,6 +202,7 @@ const mockResume: Resume = {
         id: "link-1",
         label: "GitHub",
         url: "https://github.com/johndoe",
+        type: "github",
       },
     ],
   },

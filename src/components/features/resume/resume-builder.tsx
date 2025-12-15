@@ -1,9 +1,10 @@
 import { useParams } from "@tanstack/react-router";
 import { ChevronDown, Plus, Upload } from "lucide-react";
-import { Suspense, useState } from "react";
+import { Suspense, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useResume, useUpdateResume } from "@/hooks/api";
+import { useEntityListHandlers } from "@/hooks/use-entity-list-handlers";
 import { useToast } from "@/hooks/use-toast";
 import { useAuthStore, selectIsDemo } from "@/stores/auth-store";
 import {
@@ -11,7 +12,7 @@ import {
   selectResumeBuilderSection,
   selectToggleResumeBuilderSection,
 } from "@/stores/ui-store";
-import type { Certification, Education, Experience, Link, ResumeContent } from "@/lib/api/types";
+import type { ResumeContent } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 import { ImportDialog } from "./import/import-dialog";
 import {
@@ -69,6 +70,24 @@ function CollapsibleSection({
   );
 }
 
+// Default empty content structure
+const DEFAULT_CONTENT: ResumeContent = {
+  personalInfo: {
+    firstName: "",
+    lastName: "",
+    nameOrder: "firstLast",
+    email: "",
+    phone: "",
+    location: "",
+    summary: "",
+  },
+  experience: [],
+  education: [],
+  skills: { technical: [], languages: [], tools: [], soft: [] },
+  certifications: [],
+  links: [],
+};
+
 export function ResumeBuilder() {
   const { id } = useParams({ strict: false });
   const resumeId = id || "";
@@ -85,269 +104,46 @@ export function ResumeBuilder() {
     toggleSection(sectionId as Parameters<typeof toggleSection>[0]);
   };
 
-  // Inline editing states - track which item is being edited or if adding new
-  const [experienceEditingId, setExperienceEditingId] = useState<string | null>(null);
-  const [experienceAddingNew, setExperienceAddingNew] = useState(false);
+  // Get content with fallback
+  const content = resume?.content || DEFAULT_CONTENT;
 
-  const [educationEditingId, setEducationEditingId] = useState<string | null>(null);
-  const [educationAddingNew, setEducationAddingNew] = useState(false);
+  // Memoize getCurrentItems callbacks to prevent unnecessary re-renders
+  const getExperiences = useMemo(() => () => content.experience || [], [content.experience]);
+  const getEducation = useMemo(() => () => content.education || [], [content.education]);
+  const getCertifications = useMemo(
+    () => () => content.certifications || [],
+    [content.certifications],
+  );
+  const getLinks = useMemo(() => () => content.links || [], [content.links]);
 
-  const [certificationEditingId, setCertificationEditingId] = useState<string | null>(null);
-  const [certificationAddingNew, setCertificationAddingNew] = useState(false);
+  // Entity handlers using the custom hook
+  const experienceHandlers = useEntityListHandlers({
+    resumeId,
+    entityKey: "experience",
+    getCurrentItems: getExperiences,
+    entityLabel: "Experience",
+  });
 
-  const [linkEditingId, setLinkEditingId] = useState<string | null>(null);
-  const [linkAddingNew, setLinkAddingNew] = useState(false);
+  const educationHandlers = useEntityListHandlers({
+    resumeId,
+    entityKey: "education",
+    getCurrentItems: getEducation,
+    entityLabel: "Education",
+  });
 
-  if (!resume) {
-    return null;
-  }
+  const certificationHandlers = useEntityListHandlers({
+    resumeId,
+    entityKey: "certifications",
+    getCurrentItems: getCertifications,
+    entityLabel: "Certification",
+  });
 
-  const content = resume.content || {
-    personalInfo: {
-      name: "",
-      email: "",
-      phone: "",
-      location: "",
-      summary: "",
-    },
-    experience: [],
-    education: [],
-    skills: { technical: [], languages: [], tools: [], soft: [] },
-    certifications: [],
-    links: [],
-  };
-
-  // Experience handlers
-  const handleAddExperience = () => {
-    setExperienceEditingId(null);
-    setExperienceAddingNew(true);
-  };
-
-  const handleEditExperience = (id: string) => {
-    setExperienceAddingNew(false);
-    setExperienceEditingId(id);
-  };
-
-  const handleCancelExperienceEdit = () => {
-    setExperienceEditingId(null);
-    setExperienceAddingNew(false);
-  };
-
-  const handleDeleteExperience = (id: string) => {
-    const experiences = content.experience || [];
-    const updatedExperiences = experiences.filter((exp) => exp.id !== id);
-
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { experience: updatedExperiences } },
-      },
-      {
-        onSuccess: () => {
-          toast({ title: "Success", description: "Experience deleted" });
-        },
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to delete: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
-  };
-
-  const handleReorderExperiences = (reorderedExperiences: Experience[]) => {
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { experience: reorderedExperiences } },
-      },
-      {
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to reorder: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
-  };
-
-  // Education handlers
-  const handleAddEducation = () => {
-    setEducationEditingId(null);
-    setEducationAddingNew(true);
-  };
-
-  const handleEditEducation = (id: string) => {
-    setEducationAddingNew(false);
-    setEducationEditingId(id);
-  };
-
-  const handleCancelEducationEdit = () => {
-    setEducationEditingId(null);
-    setEducationAddingNew(false);
-  };
-
-  const handleDeleteEducation = (id: string) => {
-    const educations = content.education || [];
-    const updatedEducations = educations.filter((edu) => edu.id !== id);
-
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { education: updatedEducations } },
-      },
-      {
-        onSuccess: () => {
-          toast({ title: "Success", description: "Education deleted" });
-        },
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to delete: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
-  };
-
-  const handleReorderEducation = (reorderedEducation: Education[]) => {
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { education: reorderedEducation } },
-      },
-      {
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to reorder: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
-  };
-
-  // Certification handlers
-  const handleAddCertification = () => {
-    setCertificationEditingId(null);
-    setCertificationAddingNew(true);
-  };
-
-  const handleEditCertification = (id: string) => {
-    setCertificationAddingNew(false);
-    setCertificationEditingId(id);
-  };
-
-  const handleCancelCertificationEdit = () => {
-    setCertificationEditingId(null);
-    setCertificationAddingNew(false);
-  };
-
-  const handleDeleteCertification = (id: string) => {
-    const certifications = content.certifications || [];
-    const updatedCertifications = certifications.filter((cert) => cert.id !== id);
-
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { certifications: updatedCertifications } },
-      },
-      {
-        onSuccess: () => {
-          toast({ title: "Success", description: "Certification deleted" });
-        },
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to delete: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
-  };
-
-  const handleReorderCertifications = (reorderedCertifications: Certification[]) => {
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { certifications: reorderedCertifications } },
-      },
-      {
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to reorder: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
-  };
-
-  // Link handlers
-  const handleAddLink = () => {
-    setLinkEditingId(null);
-    setLinkAddingNew(true);
-  };
-
-  const handleEditLink = (id: string) => {
-    setLinkAddingNew(false);
-    setLinkEditingId(id);
-  };
-
-  const handleCancelLinkEdit = () => {
-    setLinkEditingId(null);
-    setLinkAddingNew(false);
-  };
-
-  const handleDeleteLink = (id: string) => {
-    const links = content.links || [];
-    const updatedLinks = links.filter((link) => link.id !== id);
-
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { links: updatedLinks } },
-      },
-      {
-        onSuccess: () => {
-          toast({ title: "Success", description: "Link deleted" });
-        },
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to delete: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
-  };
-
-  const handleReorderLinks = (reorderedLinks: Link[]) => {
-    updateResume(
-      {
-        id: resumeId,
-        data: { content: { links: reorderedLinks } },
-      },
-      {
-        onError: (error) => {
-          toast({
-            title: "Error",
-            description: `Failed to reorder: ${error.message}`,
-            variant: "destructive",
-          });
-        },
-      },
-    );
-  };
+  const linkHandlers = useEntityListHandlers({
+    resumeId,
+    entityKey: "links",
+    getCurrentItems: getLinks,
+    entityLabel: "Link",
+  });
 
   // Import handler
   const handleImportSuccess = (importedData: Partial<ResumeContent>) => {
@@ -396,6 +192,10 @@ export function ResumeBuilder() {
       },
     );
   };
+
+  if (!resume) {
+    return null;
+  }
 
   return (
     <div className="w-full">
@@ -450,8 +250,8 @@ export function ResumeBuilder() {
             size="sm"
             variant="ghost"
             className="h-6 w-6 p-0"
-            onClick={handleAddExperience}
-            disabled={experienceAddingNew || experienceEditingId !== null}
+            onClick={experienceHandlers.handleAdd}
+            disabled={experienceHandlers.isEditing}
           >
             <Plus className="h-3 w-3" />
           </Button>
@@ -461,12 +261,12 @@ export function ResumeBuilder() {
           <LazyExperienceList
             resumeId={resumeId}
             experiences={content.experience || []}
-            editingId={experienceEditingId}
-            isAddingNew={experienceAddingNew}
-            onEdit={handleEditExperience}
-            onClose={handleCancelExperienceEdit}
-            onDelete={handleDeleteExperience}
-            onReorder={handleReorderExperiences}
+            editingId={experienceHandlers.editingId}
+            isAddingNew={experienceHandlers.isAddingNew}
+            onEdit={experienceHandlers.handleEdit}
+            onClose={experienceHandlers.handleCancel}
+            onDelete={experienceHandlers.handleDelete}
+            onReorder={experienceHandlers.handleReorder}
           />
         </Suspense>
       </CollapsibleSection>
@@ -483,8 +283,8 @@ export function ResumeBuilder() {
             size="sm"
             variant="ghost"
             className="h-6 w-6 p-0"
-            onClick={handleAddEducation}
-            disabled={educationAddingNew || educationEditingId !== null}
+            onClick={educationHandlers.handleAdd}
+            disabled={educationHandlers.isEditing}
           >
             <Plus className="h-3 w-3" />
           </Button>
@@ -494,12 +294,12 @@ export function ResumeBuilder() {
           <LazyEducationList
             resumeId={resumeId}
             education={content.education || []}
-            editingId={educationEditingId}
-            isAddingNew={educationAddingNew}
-            onEdit={handleEditEducation}
-            onClose={handleCancelEducationEdit}
-            onDelete={handleDeleteEducation}
-            onReorder={handleReorderEducation}
+            editingId={educationHandlers.editingId}
+            isAddingNew={educationHandlers.isAddingNew}
+            onEdit={educationHandlers.handleEdit}
+            onClose={educationHandlers.handleCancel}
+            onDelete={educationHandlers.handleDelete}
+            onReorder={educationHandlers.handleReorder}
           />
         </Suspense>
       </CollapsibleSection>
@@ -528,9 +328,9 @@ export function ResumeBuilder() {
           <Button
             size="sm"
             variant="ghost"
-            className="h-6 w-6 p-0"
-            onClick={handleAddCertification}
-            disabled={certificationAddingNew || certificationEditingId !== null}
+            className="h-6 w-3 p-0"
+            onClick={certificationHandlers.handleAdd}
+            disabled={certificationHandlers.isEditing}
           >
             <Plus className="h-3 w-3" />
           </Button>
@@ -540,12 +340,12 @@ export function ResumeBuilder() {
           <LazyCertificationList
             resumeId={resumeId}
             certifications={content.certifications || []}
-            editingId={certificationEditingId}
-            isAddingNew={certificationAddingNew}
-            onEdit={handleEditCertification}
-            onClose={handleCancelCertificationEdit}
-            onDelete={handleDeleteCertification}
-            onReorder={handleReorderCertifications}
+            editingId={certificationHandlers.editingId}
+            isAddingNew={certificationHandlers.isAddingNew}
+            onEdit={certificationHandlers.handleEdit}
+            onClose={certificationHandlers.handleCancel}
+            onDelete={certificationHandlers.handleDelete}
+            onReorder={certificationHandlers.handleReorder}
           />
         </Suspense>
       </CollapsibleSection>
@@ -562,8 +362,8 @@ export function ResumeBuilder() {
             size="sm"
             variant="ghost"
             className="h-6 w-6 p-0"
-            onClick={handleAddLink}
-            disabled={linkAddingNew || linkEditingId !== null}
+            onClick={linkHandlers.handleAdd}
+            disabled={linkHandlers.isEditing}
           >
             <Plus className="h-3 w-3" />
           </Button>
@@ -573,12 +373,12 @@ export function ResumeBuilder() {
           <LazyLinkList
             resumeId={resumeId}
             links={content.links || []}
-            editingId={linkEditingId}
-            isAddingNew={linkAddingNew}
-            onEdit={handleEditLink}
-            onClose={handleCancelLinkEdit}
-            onDelete={handleDeleteLink}
-            onReorder={handleReorderLinks}
+            editingId={linkHandlers.editingId}
+            isAddingNew={linkHandlers.isAddingNew}
+            onEdit={linkHandlers.handleEdit}
+            onClose={linkHandlers.handleCancel}
+            onDelete={linkHandlers.handleDelete}
+            onReorder={linkHandlers.handleReorder}
           />
         </Suspense>
       </CollapsibleSection>
