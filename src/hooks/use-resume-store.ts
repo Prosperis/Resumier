@@ -2,6 +2,25 @@ import { del, get, set } from "idb-keyval";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
+// Re-export types from the main resume store for backward compatibility
+export type {
+  UserInfo,
+  JobInfo,
+  WorkExperience,
+  LegacyEducation as Education,
+  LegacySkill as Skill,
+  LegacyCertification as Certification,
+  LegacyLink as Link,
+} from "@/stores/resume-store";
+
+// Import types for internal use
+import type { UserInfo, JobInfo } from "@/stores/resume-store";
+
+import type { ResumeContent } from "@/lib/api/types";
+
+// Re-export ResumeContent for external use
+export type { ResumeContent } from "@/lib/api/types";
+
 /**
  * Reorder an array by moving an item from one index to another
  */
@@ -12,81 +31,20 @@ function reorderArray<T>(list: T[], startIndex: number, endIndex: number): T[] {
   return result;
 }
 
-export interface WorkExperience {
-  company?: string;
-  title?: string;
-  startDate?: string;
-  endDate?: string;
-  current?: boolean;
-  description?: string;
-  awards?: string[];
-}
-
-export interface Education {
-  school?: string;
-  degree?: string;
-  startDate?: string;
-  endDate?: string;
-  description?: string;
-}
-
-export interface Skill {
-  name?: string;
-  years?: string;
-  proficiency?: string;
-}
-
-export interface Certification {
-  name?: string;
-  expiration?: string;
-}
-
-export interface Link {
-  label?: string;
-  url?: string;
-}
-
-export interface UserInfo {
-  name?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  customUrl?: string;
-  links?: Link[];
-  experiences?: WorkExperience[];
-  education?: Education[];
-  skills?: Skill[];
-  certifications?: Certification[];
-  [key: string]: unknown;
-}
-
-export interface JobInfo {
-  title?: string;
-  company?: string;
-  location?: string;
-  description?: string;
-  benefits?: string[];
-  workType?: "onsite" | "remote" | "hybrid";
-  basePay?: string;
-  bonus?: string;
-  stocks?: string;
-  [key: string]: unknown;
-}
-
-export interface ResumeContent {
-  [key: string]: unknown;
-}
-
+/**
+ * Resume store state and actions.
+ * Uses Partial<ResumeContent> since content is built incrementally.
+ */
 export interface ResumeStore {
   userInfo: UserInfo;
   jobInfo: JobInfo;
   jobs: JobInfo[];
-  content: ResumeContent;
+  content: Partial<ResumeContent>;
   setUserInfo: (info: UserInfo) => void;
   setJobInfo: (info: JobInfo) => void;
   addJob: (job: JobInfo) => void;
   removeJob: (index: number) => void;
-  setContent: (data: ResumeContent) => void;
+  setContent: (data: Partial<ResumeContent>) => void;
   reset: () => void;
   // Reordering actions for drag and drop
   reorderExperiences: (startIndex: number, endIndex: number) => void;

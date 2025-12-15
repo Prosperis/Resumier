@@ -3,6 +3,25 @@ import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import type { ColorScheme, TemplateType, Typography } from "@/lib/types/templates";
 
+// Re-export types from the API for external use
+export type {
+  ResumeContent,
+  PersonalInfo,
+  Experience,
+  Education,
+  Skills,
+  SkillWithLevel,
+  Certification,
+  Link,
+  LinkType,
+  NameOrder,
+  PhoneFormat,
+  ExperienceFormat,
+} from "@/lib/api/types";
+
+// Import types for internal use
+import type { ResumeContent } from "@/lib/api/types";
+
 // Custom Font Type
 export interface CustomFont {
   name: string;
@@ -24,7 +43,10 @@ export interface StyleCustomization {
   customFonts: CustomFont[];
 }
 
-// Types
+/**
+ * Legacy work experience type used in the store's UserInfo.
+ * @deprecated Use Experience from @/lib/api/types for new code.
+ */
 export interface WorkExperience {
   company?: string;
   title?: string;
@@ -35,7 +57,11 @@ export interface WorkExperience {
   awards?: string[];
 }
 
-export interface Education {
+/**
+ * Legacy education type used in the store's UserInfo.
+ * @deprecated Use Education from @/lib/api/types for new code.
+ */
+export interface LegacyEducation {
   school?: string;
   degree?: string;
   startDate?: string;
@@ -43,36 +69,56 @@ export interface Education {
   description?: string;
 }
 
-export interface Skill {
+/**
+ * Legacy skill type used in the store's UserInfo.
+ * @deprecated Use Skills from @/lib/api/types for new code.
+ */
+export interface LegacySkill {
   name?: string;
   years?: string;
   proficiency?: string;
 }
 
-export interface Certification {
+/**
+ * Legacy certification type used in the store's UserInfo.
+ * @deprecated Use Certification from @/lib/api/types for new code.
+ */
+export interface LegacyCertification {
   name?: string;
   expiration?: string;
 }
 
-export interface Link {
+/**
+ * Legacy link type used in the store's UserInfo.
+ * @deprecated Use Link from @/lib/api/types for new code.
+ */
+export interface LegacyLink {
   label?: string;
   url?: string;
 }
 
+/**
+ * User information stored in the resume store.
+ * This is the legacy format used for direct user input.
+ * For resume content, use ResumeContent from @/lib/api/types.
+ */
 export interface UserInfo {
   name?: string;
   email?: string;
   phone?: string;
   address?: string;
   customUrl?: string;
-  links?: Link[];
+  links?: LegacyLink[];
   experiences?: WorkExperience[];
-  education?: Education[];
-  skills?: Skill[];
-  certifications?: Certification[];
-  [key: string]: unknown;
+  education?: LegacyEducation[];
+  skills?: LegacySkill[];
+  certifications?: LegacyCertification[];
 }
 
+/**
+ * Job information for job applications.
+ * Contains details about a job posting the user is applying to.
+ */
 export interface JobInfo {
   title?: string;
   company?: string;
@@ -83,11 +129,6 @@ export interface JobInfo {
   basePay?: string;
   bonus?: string;
   stocks?: string;
-  [key: string]: unknown;
-}
-
-export interface ResumeContent {
-  [key: string]: unknown;
 }
 
 export interface ResumeDocument {
@@ -139,9 +180,9 @@ interface ResumeStore {
   removeDocument: (id: string) => void;
   clearDocuments: () => void;
 
-  // Content
-  content: ResumeContent;
-  setContent: (data: ResumeContent) => void;
+  // Content - uses Partial since content is built incrementally
+  content: Partial<ResumeContent>;
+  setContent: (data: Partial<ResumeContent>) => void;
   updateContent: (updates: Partial<ResumeContent>) => void;
   resetContent: () => void;
 
