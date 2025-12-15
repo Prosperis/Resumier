@@ -87,6 +87,7 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.57.0",
     "@storybook/addon-a11y": "^10.1.8",
