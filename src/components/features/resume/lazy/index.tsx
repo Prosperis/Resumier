@@ -5,10 +5,7 @@
 
 import { lazy, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  FormSectionSkeleton,
-  EntityListSkeleton,
-} from "@/components/ui/loading-skeletons";
+import { FormSectionSkeleton, EntityListSkeleton } from "@/components/ui/loading-skeletons";
 
 // Lazy load form dialogs
 export const LazyExperienceFormDialog = lazy(() =>

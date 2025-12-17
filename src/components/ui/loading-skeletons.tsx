@@ -110,12 +110,7 @@ export function ResumeEditorExpandedSkeleton({ className }: { className?: string
  */
 export function ResumePreviewSkeleton({ className }: { className?: string }) {
   return (
-    <div
-      className={cn(
-        "w-full max-w-2xl aspect-[8.5/11] bg-card rounded-sm shadow-lg",
-        className,
-      )}
-    >
+    <div className={cn("w-full max-w-2xl aspect-[8.5/11] bg-card rounded-sm shadow-lg", className)}>
       <div className="p-8 h-full flex flex-col">
         {/* Header section */}
         <div className="mb-6 text-center">
@@ -451,4 +446,3 @@ export function ToolSidebarSkeleton({
     </div>
   );
 }
-
