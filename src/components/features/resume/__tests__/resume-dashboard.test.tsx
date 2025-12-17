@@ -109,17 +109,18 @@ describe("ResumeDashboard", () => {
   });
 
   describe("Loading State", () => {
-    it("shows loading indicator when loading", () => {
+    it("shows skeleton loading when loading", () => {
       (useResumes as any).mockReturnValue({
         data: undefined,
         isLoading: true,
         error: null,
       } as any);
 
-      render(<ResumeDashboard />);
+      const { container } = render(<ResumeDashboard />);
 
-      expect(screen.getByTestId("loading")).toBeInTheDocument();
-      expect(screen.getByText("Loading your dashboard...")).toBeInTheDocument();
+      // Should show skeleton elements with data-slot="skeleton"
+      const skeletons = container.querySelectorAll('[data-slot="skeleton"]');
+      expect(skeletons.length).toBeGreaterThan(0);
     });
 
     it("does not show content while loading", () => {

@@ -1,5 +1,11 @@
 import { FadeIn } from "@/components/ui/animated";
 import { LoadingDots, LoadingSpinner } from "./loading-spinner";
+import {
+  DashboardSkeleton,
+  ResumeEditorSkeleton,
+  SettingsSkeleton,
+  ProfileGridSkeleton,
+} from "./loading-skeletons";
 
 /**
  * Generic loading component for route pending states
@@ -19,24 +25,56 @@ export function RouteLoadingFallback({ message = "Loading..." }: { message?: str
 }
 
 /**
- * Dashboard-specific loading component
+ * Dashboard-specific loading component with skeleton
  */
 export function DashboardLoading() {
-  return <RouteLoadingFallback message="Loading your resumes..." />;
+  return (
+    <FadeIn>
+      <div data-testid="dashboard-loading">
+        <DashboardSkeleton />
+      </div>
+    </FadeIn>
+  );
 }
 
 /**
- * Resume editor loading component
+ * Resume editor loading component with skeleton
  */
 export function ResumeEditorLoading() {
-  return <RouteLoadingFallback message="Loading resume editor..." />;
+  return (
+    <FadeIn>
+      <div data-testid="resume-loading" className="h-screen">
+        <ResumeEditorSkeleton className="h-full" />
+        <span className="sr-only">Loading Resume...</span>
+      </div>
+    </FadeIn>
+  );
 }
 
 /**
- * Settings loading component
+ * Settings loading component with skeleton
  */
 export function SettingsLoading() {
-  return <RouteLoadingFallback message="Loading settings..." />;
+  return (
+    <FadeIn>
+      <div data-testid="settings-loading">
+        <SettingsSkeleton />
+      </div>
+    </FadeIn>
+  );
+}
+
+/**
+ * Profile manager loading component with skeleton
+ */
+export function ProfileManagerLoading() {
+  return (
+    <FadeIn>
+      <div data-testid="profile-loading">
+        <ProfileGridSkeleton count={3} />
+      </div>
+    </FadeIn>
+  );
 }
 
 /**

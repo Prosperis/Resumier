@@ -19,7 +19,7 @@
 | 1 | Reduce Code Duplication in Resume Builder | ✅ Done | Dec 2025 |
 | 2 | Improve Type Safety in Resume Store | ✅ Done | Dec 2025 |
 | 3 | Expand E2E Test Coverage | ✅ Done | Dec 2025 |
-| 4 | Add Loading States for Better UX | ⏳ Pending | - |
+| 4 | Add Loading States for Better UX | ✅ Done | Dec 2025 |
 | 5 | Add Internationalization (i18n) Support | ⏳ Pending | - |
 | 6 | Implement Undo/Redo at Global Level | ⏳ Pending | - |
 | 7 | Add Resume Versioning | ⏳ Pending | - |
@@ -314,40 +314,40 @@ test.describe("Authentication Flow", () => {
 
 ---
 
-### 4. Add Loading States for Better UX ⏳
+### 4. Add Loading States for Better UX ✅
 
-**Status:** ⏳ Pending
+**Status:** ✅ Done (December 2025)
 
-**Location:** Various components
+**Location:** `src/components/ui/loading-skeletons.tsx`, `src/components/ui/route-loading.tsx`
 
-**Issue:** Some components lack proper loading states or skeleton loaders.
+**Implementation:** Created comprehensive skeleton loading components that match the actual component layouts:
 
-**Solution:** Implement consistent loading patterns:
+1. **Created `loading-skeletons.tsx`** with domain-specific skeletons:
+   - `ResumeEditorSkeleton` - 3-panel layout matching the editor
+   - `ResumePreviewSkeleton` - A4 paper preview format
+   - `DashboardSkeleton` - Header, tabs, and table layout
+   - `ResumeTableSkeleton` - Table with rows and columns
+   - `ProfileCardSkeleton` - Card with avatar and content
+   - `ProfileGridSkeleton` - Grid of profile cards
+   - `SettingsSkeleton` - Settings page sections
+   - `FormSectionSkeleton` - Form fields layout
+   - `EntityListSkeleton` - Experience/Education lists
+   - `TemplateGallerySkeleton` - Template grid
+   - `ToolSidebarSkeleton` - Tool sidebar panel
 
-```typescript
-// src/components/features/resume/resume-editor-skeleton.tsx
-export function ResumeEditorSkeleton() {
-  return (
-    <div className="flex h-full gap-4">
-      {/* Left panel skeleton */}
-      <div className="w-80 space-y-4 border-r p-4">
-        <Skeleton className="h-8 w-full" />
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="space-y-2">
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-4 w-3/4" />
-          </div>
-        ))}
-      </div>
-      
-      {/* Preview skeleton */}
-      <div className="flex-1 p-4">
-        <Skeleton className="mx-auto aspect-[8.5/11] w-full max-w-2xl" />
-      </div>
-    </div>
-  );
-}
-```
+2. **Updated `route-loading.tsx`** to use skeleton-based loading:
+   - `DashboardLoading` - Uses `DashboardSkeleton`
+   - `ResumeEditorLoading` - Uses `ResumeEditorSkeleton`
+   - `SettingsLoading` - Uses `SettingsSkeleton`
+   - `ProfileManagerLoading` - Uses `ProfileGridSkeleton`
+
+3. **Updated components** to use new skeletons:
+   - `resume-dashboard.tsx` - Uses `DashboardSkeleton`
+   - `profile-manager.tsx` - Uses `ProfileGridSkeleton`
+   - `lazy/index.tsx` - Improved form and list skeletons
+   - `resume-preview.tsx` - Enhanced template loading skeleton
+
+**Impact:** Users now see realistic loading placeholders that match the actual UI structure, reducing perceived loading time and improving UX.
 
 ---
 
@@ -1231,7 +1231,7 @@ export const AllVariants: Story = {
 | #1 Reduce code duplication | High | Medium | High | ✅ Done |
 | #2 Improve type safety | High | Low | Medium | ✅ Done |
 | #3 Expand E2E tests | High | High | High | ✅ Done |
-| #4 Loading states | High | Low | High | ⏳ Pending |
+| #4 Loading states | High | Low | High | ✅ Done |
 | #5 Internationalization | Medium | High | Medium | ⏳ Pending |
 | #6 Undo/Redo shortcuts | Medium | Low | Medium | ⏳ Pending |
 | #16 Error handling | Medium | Medium | High | ⏳ Pending |
@@ -1245,7 +1245,7 @@ export const AllVariants: Story = {
 | # | Task | Status |
 |---|------|--------|
 | 1 | Add keyboard shortcuts for undo/redo | ⏳ Pending |
-| 2 | Add loading skeletons for all async operations | ⏳ Pending |
+| 2 | Add loading skeletons for all async operations | ✅ Done |
 | 3 | Add more JSDoc comments | ⏳ Pending |
 | 4 | Fix type safety issues in stores | ✅ Done |
 | 5 | Add pre-commit hooks | ✅ Done |
@@ -1264,15 +1264,15 @@ Resumier is already a solid application with good architecture and practices. Th
 - Comprehensive test coverage
 
 **Progress Summary:**
-- ✅ **4 of 35** improvements completed
-- High-priority items #1 (code duplication), #2 (type safety), and #3 (E2E tests) are done
+- ✅ **5 of 35** improvements completed
+- High-priority items #1 (code duplication), #2 (type safety), #3 (E2E tests), and #4 (loading states) are done
 - Pre-commit hooks (#30) are in place for code quality
-- Quick win #4 (type safety) is done
+- Quick wins #2 (loading skeletons) and #4 (type safety) are done
 
 The recommended approach is to tackle high-priority items first, then gradually work through medium and low priority improvements as resources allow.
 
 **Next recommended items:**
-1. #4 - Add Loading States for Better UX (High priority, Low effort)
-2. #6 - Implement Undo/Redo at Global Level (Quick win)
-3. #16 - Standardize Error Handling (Medium priority, High impact)
+1. #6 - Implement Undo/Redo at Global Level (Quick win)
+2. #16 - Standardize Error Handling (Medium priority, High impact)
+3. #5 - Add Internationalization (i18n) Support
 

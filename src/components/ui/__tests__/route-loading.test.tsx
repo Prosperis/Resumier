@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import {
   DashboardLoading,
   InlineLoading,
+  ProfileManagerLoading,
   ResumeEditorLoading,
   RouteLoadingFallback,
   SettingsLoading,
@@ -54,56 +55,88 @@ describe("RouteLoadingFallback", () => {
 });
 
 describe("DashboardLoading", () => {
-  it("renders dashboard-specific message", () => {
+  it("renders skeleton-based dashboard loading", () => {
     render(<DashboardLoading />);
-    expect(screen.getByText("Loading your resumes...")).toBeInTheDocument();
+    expect(screen.getByTestId("dashboard-loading")).toBeInTheDocument();
   });
 
-  it("uses RouteLoadingFallback component", () => {
+  it("renders skeleton elements", () => {
     const { container } = render(<DashboardLoading />);
-    expect(container.querySelector(".h-screen")).toBeInTheDocument();
+    // Should have skeleton elements with rounded-md class
+    const skeletons = container.querySelectorAll('[data-slot="skeleton"]');
+    expect(skeletons.length).toBeGreaterThan(0);
   });
 
-  it("renders loading spinner", () => {
+  it("does not use h-screen class (skeleton fills content naturally)", () => {
     const { container } = render(<DashboardLoading />);
-    const spinner = container.querySelector(".rounded-full");
-    expect(spinner).toBeInTheDocument();
+    // The skeleton doesn't need full height since it's content-based
+    expect(container.querySelector(".space-y-6")).toBeInTheDocument();
   });
 });
 
 describe("ResumeEditorLoading", () => {
-  it("renders resume editor-specific message", () => {
+  it("renders skeleton-based resume editor loading", () => {
     render(<ResumeEditorLoading />);
-    expect(screen.getByText("Loading resume editor...")).toBeInTheDocument();
+    expect(screen.getByTestId("resume-loading")).toBeInTheDocument();
   });
 
-  it("uses RouteLoadingFallback component", () => {
+  it("has screen reader text for accessibility", () => {
+    render(<ResumeEditorLoading />);
+    expect(screen.getByText("Loading Resume...")).toBeInTheDocument();
+  });
+
+  it("uses h-screen class for full viewport height", () => {
     const { container } = render(<ResumeEditorLoading />);
     expect(container.querySelector(".h-screen")).toBeInTheDocument();
   });
 
-  it("renders loading spinner", () => {
+  it("renders skeleton layout with 3-panel structure", () => {
     const { container } = render(<ResumeEditorLoading />);
-    const spinner = container.querySelector(".rounded-full");
-    expect(spinner).toBeInTheDocument();
+    // Should have the main flex container with sidebars and preview
+    const flexContainer = container.querySelector(".flex.h-full");
+    expect(flexContainer).toBeInTheDocument();
   });
 });
 
 describe("SettingsLoading", () => {
-  it("renders settings-specific message", () => {
+  it("renders skeleton-based settings loading", () => {
     render(<SettingsLoading />);
-    expect(screen.getByText("Loading settings...")).toBeInTheDocument();
+    expect(screen.getByTestId("settings-loading")).toBeInTheDocument();
   });
 
-  it("uses RouteLoadingFallback component", () => {
+  it("renders skeleton elements for settings sections", () => {
     const { container } = render(<SettingsLoading />);
-    expect(container.querySelector(".h-screen")).toBeInTheDocument();
+    // Should have multiple skeleton elements
+    const skeletons = container.querySelectorAll('[data-slot="skeleton"]');
+    expect(skeletons.length).toBeGreaterThan(0);
   });
 
-  it("renders loading spinner", () => {
+  it("renders settings form structure", () => {
     const { container } = render(<SettingsLoading />);
-    const spinner = container.querySelector(".rounded-full");
-    expect(spinner).toBeInTheDocument();
+    // Should have sections with borders
+    const borders = container.querySelectorAll(".border");
+    expect(borders.length).toBeGreaterThan(0);
+  });
+});
+
+describe("ProfileManagerLoading", () => {
+  it("renders skeleton-based profile loading", () => {
+    render(<ProfileManagerLoading />);
+    expect(screen.getByTestId("profile-loading")).toBeInTheDocument();
+  });
+
+  it("renders profile card skeletons in a grid", () => {
+    const { container } = render(<ProfileManagerLoading />);
+    // Should have grid layout
+    const grid = container.querySelector(".grid");
+    expect(grid).toBeInTheDocument();
+  });
+
+  it("renders multiple skeleton cards", () => {
+    const { container } = render(<ProfileManagerLoading />);
+    // Should have 3 profile card skeletons by default
+    const cards = container.querySelectorAll(".rounded-xl.border");
+    expect(cards.length).toBe(3);
   });
 });
 

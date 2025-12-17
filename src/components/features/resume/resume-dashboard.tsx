@@ -2,7 +2,7 @@ import { AlertCircle, FileText, Plus, User } from "lucide-react";
 import { useState } from "react";
 import { FadeIn } from "@/components/ui/animated";
 import { Button } from "@/components/ui/button";
-import { RouteLoadingFallback } from "@/components/ui/route-loading";
+import { DashboardSkeleton } from "@/components/ui/loading-skeletons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDuplicateResume, useResumes } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
@@ -54,7 +54,11 @@ export function ResumeDashboard({
   };
 
   if (isLoading) {
-    return <RouteLoadingFallback message="Loading your dashboard..." />;
+    return (
+      <FadeIn>
+        <DashboardSkeleton />
+      </FadeIn>
+    );
   }
 
   if (error) {

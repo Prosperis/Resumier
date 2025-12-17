@@ -5,6 +5,10 @@
 
 import { lazy, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  FormSectionSkeleton,
+  EntityListSkeleton,
+} from "@/components/ui/loading-skeletons";
 
 // Lazy load form dialogs
 export const LazyExperienceFormDialog = lazy(() =>
@@ -74,10 +78,22 @@ export const LazyPdfViewer = lazy(() =>
 export function FormDialogSkeleton() {
   return (
     <div className="space-y-4 p-4">
-      <Skeleton className="h-10 w-full" />
-      <Skeleton className="h-10 w-full" />
-      <Skeleton className="h-20 w-full" />
-      <Skeleton className="h-10 w-full" />
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-24" />
+        <Skeleton className="h-10 w-full rounded-md" />
+      </div>
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-20" />
+        <Skeleton className="h-10 w-full rounded-md" />
+      </div>
+      <div className="space-y-2">
+        <Skeleton className="h-4 w-28" />
+        <Skeleton className="h-24 w-full rounded-md" />
+      </div>
+      <div className="flex gap-2 pt-4">
+        <Skeleton className="h-10 w-20 rounded-md" />
+        <Skeleton className="h-10 w-20 rounded-md" />
+      </div>
     </div>
   );
 }
@@ -86,26 +102,14 @@ export function FormDialogSkeleton() {
  * Loading fallback for lists
  */
 export function ListSkeleton() {
-  return (
-    <div className="space-y-2">
-      <Skeleton className="h-24 w-full" />
-      <Skeleton className="h-24 w-full" />
-      <Skeleton className="h-24 w-full" />
-    </div>
-  );
+  return <EntityListSkeleton count={3} />;
 }
 
 /**
  * Loading fallback for forms
  */
 export function FormSkeleton() {
-  return (
-    <div className="space-y-4">
-      <Skeleton className="h-10 w-full" />
-      <Skeleton className="h-10 w-full" />
-      <Skeleton className="h-20 w-full" />
-    </div>
-  );
+  return <FormSectionSkeleton />;
 }
 
 /**

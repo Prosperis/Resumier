@@ -5,8 +5,9 @@
 
 import { AlertCircle, Plus, User } from "lucide-react";
 import { useState } from "react";
+import { FadeIn } from "@/components/ui/animated";
 import { Button } from "@/components/ui/button";
-import { RouteLoadingFallback } from "@/components/ui/route-loading";
+import { ProfileGridSkeleton } from "@/components/ui/loading-skeletons";
 import { useProfiles, useResumes } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
 import type { Profile } from "@/lib/api/profile-types";
@@ -61,7 +62,11 @@ export function ProfileManager({ onEditProfile, onCreateResumeFromProfile }: Pro
   };
 
   if (isLoading) {
-    return <RouteLoadingFallback message="Loading your profiles..." />;
+    return (
+      <FadeIn>
+        <ProfileGridSkeleton count={3} />
+      </FadeIn>
+    );
   }
 
   if (error) {

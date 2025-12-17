@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton, SkeletonText } from "@/components/ui/skeleton";
 import type { Resume } from "@/lib/api/types";
 import { COLOR_SCHEMES, TYPOGRAPHY_PRESETS, type TemplateType } from "@/lib/types/templates";
 import { useResumeStore, selectStyleCustomization, type CustomFont } from "@/stores/resume-store";
@@ -30,29 +30,67 @@ interface ResumePreviewProps {
   template: TemplateType;
 }
 
-// Template loading skeleton
+/**
+ * Template loading skeleton - Matches the actual resume preview layout
+ */
 function TemplateLoadingSkeleton() {
   return (
     <div
       className="mx-auto w-full max-w-[21cm] space-y-8 bg-white p-16 shadow-lg"
       style={{ colorScheme: "light" }}
     >
-      <div className="space-y-4">
-        <Skeleton className="h-12 w-2/3" />
-        <Skeleton className="h-4 w-1/2" />
-        <Skeleton className="h-4 w-1/3" />
+      {/* Header section */}
+      <div className="space-y-3 text-center">
+        <Skeleton className="h-10 w-64 mx-auto" />
+        <Skeleton className="h-5 w-40 mx-auto" />
+        <div className="flex justify-center gap-4 pt-2">
+          <Skeleton className="h-3 w-32" />
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-3 w-28" />
+        </div>
       </div>
-      <Skeleton className="h-24 w-full" />
-      <div className="space-y-4">
-        <Skeleton className="h-6 w-1/4" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-3/4" />
+
+      {/* Summary section */}
+      <div className="space-y-3">
+        <Skeleton className="h-6 w-24" />
+        <SkeletonText lines={3} />
       </div>
+
+      {/* Experience section */}
       <div className="space-y-4">
-        <Skeleton className="h-6 w-1/4" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-6 w-36" />
+        <div className="space-y-4">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="space-y-2">
+              <div className="flex justify-between">
+                <Skeleton className="h-5 w-48" />
+                <Skeleton className="h-4 w-28" />
+              </div>
+              <Skeleton className="h-4 w-36" />
+              <SkeletonText lines={2} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Education section */}
+      <div className="space-y-3">
+        <Skeleton className="h-6 w-28" />
+        <div className="flex justify-between">
+          <Skeleton className="h-5 w-44" />
+          <Skeleton className="h-4 w-24" />
+        </div>
+        <Skeleton className="h-4 w-32" />
+      </div>
+
+      {/* Skills section */}
+      <div className="space-y-3">
+        <Skeleton className="h-6 w-16" />
+        <div className="flex flex-wrap gap-2">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="h-6 w-20 rounded-full" />
+          ))}
+        </div>
       </div>
     </div>
   );
