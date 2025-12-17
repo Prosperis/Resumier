@@ -1,64 +1,64 @@
 {
-	"title": "Configuración",
-	"subtitle": "Administra tus preferencias",
-	"sections": {
-		"appearance": {
-			"title": "Apariencia",
-			"description": "Personaliza cómo se ve Resumier",
-			"theme": "Tema",
-			"themeLight": "Claro",
-			"themeDark": "Oscuro",
-			"themeSystem": "Sistema",
-			"language": "Idioma",
-			"selectTheme": "Selecciona tu tema de color",
-			"selectLanguage": "Elige tu idioma preferido",
-			"reducedMotion": "Movimiento Reducido",
-			"reducedMotionDescription": "Minimizar animaciones"
-		},
-		"account": {
-			"title": "Cuenta",
-			"description": "Administra la configuración de tu cuenta",
-			"email": "Correo Electrónico",
-			"password": "Contraseña",
-			"changePassword": "Cambiar Contraseña",
-			"deleteAccount": "Eliminar Cuenta",
-			"status": "Estado",
-			"guestMode": "Estás usando Resumier como invitado",
-			"loggedInAs": "Conectado como {{email}}",
-			"demoMode": "Modo Demo",
-			"guestUser": "Usuario Invitado",
-			"authenticated": "Autenticado"
-		},
-		"editor": {
-			"title": "Preferencias del Editor",
-			"description": "Personaliza tu experiencia de edición",
-			"autoSave": "Guardado Automático",
-			"autoSaveDescription": "Guardar cambios automáticamente"
-		},
-		"export": {
-			"title": "Configuración de Exportación",
-			"description": "Configura las opciones de exportación",
-			"promptFilename": "Solicitar Nombre de Archivo",
-			"promptFilenameDescription": "Preguntar por un nombre de archivo antes de exportar (incluye un valor predeterminado inteligente)"
-		},
-		"data": {
-			"title": "Gestión de Datos",
-			"description": "Exporta, importa o elimina tus datos",
-			"exportData": "Exportar Todos los Datos",
-			"importData": "Importar Datos",
-			"clearData": "Eliminar Todos los Datos",
-			"clearDataWarning": "Esto eliminará permanentemente todos tus currículums y perfiles. Esta acción no se puede deshacer."
-		},
-		"notifications": {
-			"title": "Notificaciones",
-			"description": "Configura las preferencias de notificación",
-			"email": "Notificaciones por Correo",
-			"browser": "Notificaciones del Navegador"
-		},
-		"reset": {
-			"title": "Restablecer Configuración",
-			"description": "Restaurar valores predeterminados"
-		}
-	},
-	"saved": "Configuración guardada"
+  "title": "Configuración",
+  "subtitle": "Administra tus preferencias",
+  "sections": {
+    "appearance": {
+      "title": "Apariencia",
+      "description": "Personaliza cómo se ve Resumier",
+      "theme": "Tema",
+      "themeLight": "Claro",
+      "themeDark": "Oscuro",
+      "themeSystem": "Sistema",
+      "language": "Idioma",
+      "selectTheme": "Selecciona tu tema de color",
+      "selectLanguage": "Elige tu idioma preferido",
+      "reducedMotion": "Movimiento Reducido",
+      "reducedMotionDescription": "Minimizar animaciones"
+    },
+    "account": {
+      "title": "Cuenta",
+      "description": "Administra la configuración de tu cuenta",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "changePassword": "Cambiar Contraseña",
+      "deleteAccount": "Eliminar Cuenta",
+      "status": "Estado",
+      "guestMode": "Estás usando Resumier como invitado",
+      "loggedInAs": "Conectado como {{email}}",
+      "demoMode": "Modo Demo",
+      "guestUser": "Usuario Invitado",
+      "authenticated": "Autenticado"
+    },
+    "editor": {
+      "title": "Preferencias del Editor",
+      "description": "Personaliza tu experiencia de edición",
+      "autoSave": "Guardado Automático",
+      "autoSaveDescription": "Guardar cambios automáticamente"
+    },
+    "export": {
+      "title": "Configuración de Exportación",
+      "description": "Configura las opciones de exportación",
+      "promptFilename": "Solicitar Nombre de Archivo",
+      "promptFilenameDescription": "Preguntar por un nombre de archivo antes de exportar (incluye un valor predeterminado inteligente)"
+    },
+    "data": {
+      "title": "Gestión de Datos",
+      "description": "Exporta, importa o elimina tus datos",
+      "exportData": "Exportar Todos los Datos",
+      "importData": "Importar Datos",
+      "clearData": "Eliminar Todos los Datos",
+      "clearDataWarning": "Esto eliminará permanentemente todos tus currículums y perfiles. Esta acción no se puede deshacer."
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "description": "Configura las preferencias de notificación",
+      "email": "Notificaciones por Correo",
+      "browser": "Notificaciones del Navegador"
+    },
+    "reset": {
+      "title": "Restablecer Configuración",
+      "description": "Restaurar valores predeterminados"
+    }
+  },
+  "saved": "Configuración guardada"
 }

@@ -4,7 +4,12 @@
 import { useCallback } from "react";
 import { useTranslation as useI18nTranslation } from "react-i18next";
 
-import { changeLanguage, getCurrentDirection, getLanguageByCode, supportedLanguages } from "@/lib/i18n";
+import {
+  changeLanguage,
+  getCurrentDirection,
+  getLanguageByCode,
+  supportedLanguages,
+} from "@/lib/i18n";
 import type { Language } from "@/lib/i18n/types";
 
 /**
@@ -25,17 +30,17 @@ import type { Language } from "@/lib/i18n/types";
  * ```
  */
 export function useAppTranslation(
-	namespace: "common" | "dashboard" | "editor" | "templates" | "validation" | "settings" = "common",
+  namespace: "common" | "dashboard" | "editor" | "templates" | "validation" | "settings" = "common",
 ) {
-	const { t, i18n, ready } = useI18nTranslation(namespace);
+  const { t, i18n, ready } = useI18nTranslation(namespace);
 
-	return {
-		t,
-		i18n,
-		ready,
-		currentLanguage: i18n.language,
-		isRTL: getCurrentDirection() === "rtl",
-	};
+  return {
+    t,
+    i18n,
+    ready,
+    currentLanguage: i18n.language,
+    isRTL: getCurrentDirection() === "rtl",
+  };
 }
 
 /**
@@ -53,26 +58,26 @@ export function useAppTranslation(
  * ```
  */
 export function useLanguage() {
-	const { i18n } = useI18nTranslation();
+  const { i18n } = useI18nTranslation();
 
-	const currentLanguage: Language = getLanguageByCode(i18n.language) || supportedLanguages[0];
+  const currentLanguage: Language = getLanguageByCode(i18n.language) || supportedLanguages[0];
 
-	const setLanguage = useCallback(async (langCode: string) => {
-		await changeLanguage(langCode);
-	}, []);
+  const setLanguage = useCallback(async (langCode: string) => {
+    await changeLanguage(langCode);
+  }, []);
 
-	return {
-		/** Current active language configuration */
-		currentLanguage,
-		/** All supported languages */
-		languages: supportedLanguages,
-		/** Change the application language */
-		setLanguage,
-		/** Whether current language is RTL */
-		isRTL: currentLanguage.dir === "rtl",
-		/** Current language code */
-		languageCode: i18n.language,
-	};
+  return {
+    /** Current active language configuration */
+    currentLanguage,
+    /** All supported languages */
+    languages: supportedLanguages,
+    /** Change the application language */
+    setLanguage,
+    /** Whether current language is RTL */
+    isRTL: currentLanguage.dir === "rtl",
+    /** Current language code */
+    languageCode: i18n.language,
+  };
 }
 
 /**
@@ -87,67 +92,67 @@ export function useLanguage() {
  * ```
  */
 export function useDateFormatter() {
-	const { i18n, t } = useI18nTranslation("common");
+  const { i18n, t } = useI18nTranslation("common");
 
-	const formatDate = useCallback(
-		(date: Date | string, options?: Intl.DateTimeFormatOptions) => {
-			const dateObj = typeof date === "string" ? new Date(date) : date;
-			return new Intl.DateTimeFormat(i18n.language, {
-				dateStyle: "medium",
-				...options,
-			}).format(dateObj);
-		},
-		[i18n.language],
-	);
+  const formatDate = useCallback(
+    (date: Date | string, options?: Intl.DateTimeFormatOptions) => {
+      const dateObj = typeof date === "string" ? new Date(date) : date;
+      return new Intl.DateTimeFormat(i18n.language, {
+        dateStyle: "medium",
+        ...options,
+      }).format(dateObj);
+    },
+    [i18n.language],
+  );
 
-	const formatDateTime = useCallback(
-		(date: Date | string, options?: Intl.DateTimeFormatOptions) => {
-			const dateObj = typeof date === "string" ? new Date(date) : date;
-			return new Intl.DateTimeFormat(i18n.language, {
-				dateStyle: "medium",
-				timeStyle: "short",
-				...options,
-			}).format(dateObj);
-		},
-		[i18n.language],
-	);
+  const formatDateTime = useCallback(
+    (date: Date | string, options?: Intl.DateTimeFormatOptions) => {
+      const dateObj = typeof date === "string" ? new Date(date) : date;
+      return new Intl.DateTimeFormat(i18n.language, {
+        dateStyle: "medium",
+        timeStyle: "short",
+        ...options,
+      }).format(dateObj);
+    },
+    [i18n.language],
+  );
 
-	const formatRelativeTime = useCallback(
-		(date: Date | string) => {
-			const dateObj = typeof date === "string" ? new Date(date) : date;
-			const now = new Date();
-			const diffMs = now.getTime() - dateObj.getTime();
-			const diffMinutes = Math.floor(diffMs / (1000 * 60));
-			const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-			const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-			const diffWeeks = Math.floor(diffDays / 7);
-			const diffMonths = Math.floor(diffDays / 30);
+  const formatRelativeTime = useCallback(
+    (date: Date | string) => {
+      const dateObj = typeof date === "string" ? new Date(date) : date;
+      const now = new Date();
+      const diffMs = now.getTime() - dateObj.getTime();
+      const diffMinutes = Math.floor(diffMs / (1000 * 60));
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const diffWeeks = Math.floor(diffDays / 7);
+      const diffMonths = Math.floor(diffDays / 30);
 
-			if (diffMinutes < 1) {
-				return t("time.justNow");
-			}
-			if (diffMinutes < 60) {
-				return t("time.minutesAgo", { count: diffMinutes });
-			}
-			if (diffHours < 24) {
-				return t("time.hoursAgo", { count: diffHours });
-			}
-			if (diffDays < 7) {
-				return t("time.daysAgo", { count: diffDays });
-			}
-			if (diffWeeks < 4) {
-				return t("time.weeksAgo", { count: diffWeeks });
-			}
-			return t("time.monthsAgo", { count: diffMonths });
-		},
-		[t],
-	);
+      if (diffMinutes < 1) {
+        return t("time.justNow");
+      }
+      if (diffMinutes < 60) {
+        return t("time.minutesAgo", { count: diffMinutes });
+      }
+      if (diffHours < 24) {
+        return t("time.hoursAgo", { count: diffHours });
+      }
+      if (diffDays < 7) {
+        return t("time.daysAgo", { count: diffDays });
+      }
+      if (diffWeeks < 4) {
+        return t("time.weeksAgo", { count: diffWeeks });
+      }
+      return t("time.monthsAgo", { count: diffMonths });
+    },
+    [t],
+  );
 
-	return {
-		formatDate,
-		formatDateTime,
-		formatRelativeTime,
-	};
+  return {
+    formatDate,
+    formatDateTime,
+    formatRelativeTime,
+  };
 }
 
 /**
@@ -163,40 +168,39 @@ export function useDateFormatter() {
  * ```
  */
 export function useNumberFormatter() {
-	const { i18n } = useI18nTranslation();
+  const { i18n } = useI18nTranslation();
 
-	const formatNumber = useCallback(
-		(value: number, options?: Intl.NumberFormatOptions) => {
-			return new Intl.NumberFormat(i18n.language, options).format(value);
-		},
-		[i18n.language],
-	);
+  const formatNumber = useCallback(
+    (value: number, options?: Intl.NumberFormatOptions) => {
+      return new Intl.NumberFormat(i18n.language, options).format(value);
+    },
+    [i18n.language],
+  );
 
-	const formatCurrency = useCallback(
-		(value: number, currency: string = "USD") => {
-			return new Intl.NumberFormat(i18n.language, {
-				style: "currency",
-				currency,
-			}).format(value);
-		},
-		[i18n.language],
-	);
+  const formatCurrency = useCallback(
+    (value: number, currency: string = "USD") => {
+      return new Intl.NumberFormat(i18n.language, {
+        style: "currency",
+        currency,
+      }).format(value);
+    },
+    [i18n.language],
+  );
 
-	const formatPercent = useCallback(
-		(value: number, decimals: number = 0) => {
-			return new Intl.NumberFormat(i18n.language, {
-				style: "percent",
-				minimumFractionDigits: decimals,
-				maximumFractionDigits: decimals,
-			}).format(value);
-		},
-		[i18n.language],
-	);
+  const formatPercent = useCallback(
+    (value: number, decimals: number = 0) => {
+      return new Intl.NumberFormat(i18n.language, {
+        style: "percent",
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      }).format(value);
+    },
+    [i18n.language],
+  );
 
-	return {
-		formatNumber,
-		formatCurrency,
-		formatPercent,
-	};
+  return {
+    formatNumber,
+    formatCurrency,
+    formatPercent,
+  };
 }
-

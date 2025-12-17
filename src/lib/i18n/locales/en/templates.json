@@ -1,18 +1,17 @@
 {
-	"title": "Resume Templates",
-	"subtitle": "Choose a template that fits your style",
-	"categories": {
-		"all": "All Templates",
-		"professional": "Professional",
-		"creative": "Creative",
-		"modern": "Modern",
-		"simple": "Simple",
-		"academic": "Academic"
-	},
-	"preview": "Preview",
-	"select": "Use This Template",
-	"current": "Current Template",
-	"popular": "Popular",
-	"new": "New"
+  "title": "Resume Templates",
+  "subtitle": "Choose a template that fits your style",
+  "categories": {
+    "all": "All Templates",
+    "professional": "Professional",
+    "creative": "Creative",
+    "modern": "Modern",
+    "simple": "Simple",
+    "academic": "Academic"
+  },
+  "preview": "Preview",
+  "select": "Use This Template",
+  "current": "Current Template",
+  "popular": "Popular",
+  "new": "New"
 }
-

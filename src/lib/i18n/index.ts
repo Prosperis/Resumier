@@ -28,101 +28,100 @@ import validationEs from "./locales/es/validation.json";
  * Each language includes display names and text direction
  */
 export const supportedLanguages: Language[] = [
-	{ code: "en", name: "English", nativeName: "English", dir: "ltr" },
-	{ code: "es", name: "Spanish", nativeName: "Español", dir: "ltr" },
-	// Future languages to add:
-	// { code: "fr", name: "French", nativeName: "Français", dir: "ltr" },
-	// { code: "de", name: "German", nativeName: "Deutsch", dir: "ltr" },
-	// { code: "pt", name: "Portuguese", nativeName: "Português", dir: "ltr" },
-	// { code: "zh", name: "Chinese", nativeName: "中文", dir: "ltr" },
-	// { code: "ar", name: "Arabic", nativeName: "العربية", dir: "rtl" },
-	// { code: "ja", name: "Japanese", nativeName: "日本語", dir: "ltr" },
+  { code: "en", name: "English", nativeName: "English", dir: "ltr" },
+  { code: "es", name: "Spanish", nativeName: "Español", dir: "ltr" },
+  // Future languages to add:
+  // { code: "fr", name: "French", nativeName: "Français", dir: "ltr" },
+  // { code: "de", name: "German", nativeName: "Deutsch", dir: "ltr" },
+  // { code: "pt", name: "Portuguese", nativeName: "Português", dir: "ltr" },
+  // { code: "zh", name: "Chinese", nativeName: "中文", dir: "ltr" },
+  // { code: "ar", name: "Arabic", nativeName: "العربية", dir: "rtl" },
+  // { code: "ja", name: "Japanese", nativeName: "日本語", dir: "ltr" },
 ];
 
 /**
  * Translation resources bundled with the app
  */
 const resources = {
-	en: {
-		common: commonEn,
-		dashboard: dashboardEn,
-		editor: editorEn,
-		templates: templatesEn,
-		validation: validationEn,
-		settings: settingsEn,
-	},
-	es: {
-		common: commonEs,
-		dashboard: dashboardEs,
-		editor: editorEs,
-		templates: templatesEs,
-		validation: validationEs,
-		settings: settingsEs,
-	},
+  en: {
+    common: commonEn,
+    dashboard: dashboardEn,
+    editor: editorEn,
+    templates: templatesEn,
+    validation: validationEn,
+    settings: settingsEn,
+  },
+  es: {
+    common: commonEs,
+    dashboard: dashboardEs,
+    editor: editorEs,
+    templates: templatesEs,
+    validation: validationEs,
+    settings: settingsEs,
+  },
 };
 
 /**
  * Initialize i18next with React integration
  */
 i18n
-	.use(LanguageDetector)
-	.use(initReactI18next)
-	.init({
-		resources,
-		fallbackLng: "en",
-		supportedLngs: supportedLanguages.map((l) => l.code),
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    fallbackLng: "en",
+    supportedLngs: supportedLanguages.map((l) => l.code),
 
-		// Namespace configuration
-		ns: ["common", "dashboard", "editor", "templates", "validation", "settings"],
-		defaultNS: "common",
+    // Namespace configuration
+    ns: ["common", "dashboard", "editor", "templates", "validation", "settings"],
+    defaultNS: "common",
 
-		// Language detection
-		detection: {
-			order: ["localStorage", "navigator", "htmlTag"],
-			caches: ["localStorage"],
-			lookupLocalStorage: "resumier-language",
-		},
+    // Language detection
+    detection: {
+      order: ["localStorage", "navigator", "htmlTag"],
+      caches: ["localStorage"],
+      lookupLocalStorage: "resumier-language",
+    },
 
-		// Interpolation settings
-		interpolation: {
-			escapeValue: false, // React already escapes by default
-		},
+    // Interpolation settings
+    interpolation: {
+      escapeValue: false, // React already escapes by default
+    },
 
-		// React specific
-		react: {
-			useSuspense: true,
-		},
-	});
+    // React specific
+    react: {
+      useSuspense: true,
+    },
+  });
 
 /**
  * Get language configuration by code
  */
 export function getLanguageByCode(code: string): Language | undefined {
-	return supportedLanguages.find((lang) => lang.code === code);
+  return supportedLanguages.find((lang) => lang.code === code);
 }
 
 /**
  * Get current language direction (ltr or rtl)
  */
 export function getCurrentDirection(): "ltr" | "rtl" {
-	const lang = getLanguageByCode(i18n.language);
-	return lang?.dir || "ltr";
+  const lang = getLanguageByCode(i18n.language);
+  return lang?.dir || "ltr";
 }
 
 /**
  * Change language and update document direction
  */
 export async function changeLanguage(langCode: string): Promise<void> {
-	await i18n.changeLanguage(langCode);
+  await i18n.changeLanguage(langCode);
 
-	// Update document attributes for RTL support
-	const lang = getLanguageByCode(langCode);
-	if (lang) {
-		document.documentElement.dir = lang.dir;
-		document.documentElement.lang = langCode;
-	}
+  // Update document attributes for RTL support
+  const lang = getLanguageByCode(langCode);
+  if (lang) {
+    document.documentElement.dir = lang.dir;
+    document.documentElement.lang = langCode;
+  }
 }
 
 export default i18n;
 export { supportedLanguages as languages };
-

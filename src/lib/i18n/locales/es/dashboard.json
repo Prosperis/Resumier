@@ -1,58 +1,58 @@
 {
-	"title": "Panel",
-	"subtitle": "Administra tus perfiles y currículums",
-	"newResume": "Nuevo Currículum",
-	"newProfile": "Nuevo Perfil",
-	"noResumes": {
-		"title": "Aún no hay currículums",
-		"description": "Crea tu primer currículum para comenzar. Puedes empezar de cero o crear uno a partir de un perfil existente.",
-		"cta": "Crear Currículum"
-	},
-	"noProfiles": {
-		"title": "Aún no hay perfiles",
-		"description": "Crea tu primer perfil para comenzar.",
-		"cta": "Crear Perfil"
-	},
-	"resumeCard": {
-		"lastModified": "Última modificación {{date}}",
-		"created": "Creado {{date}}",
-		"template": "Plantilla: {{name}}",
-		"untitled": "Currículum sin título"
-	},
-	"filters": {
-		"all": "Todos los Currículums",
-		"recent": "Recientes",
-		"favorites": "Favoritos"
-	},
-	"sort": {
-		"label": "Ordenar por",
-		"dateModified": "Fecha de modificación",
-		"dateCreated": "Fecha de creación",
-		"name": "Nombre"
-	},
-	"search": {
-		"placeholder": "Buscar currículums...",
-		"noResults": "No se encontraron currículums que coincidan con \"{{query}}\""
-	},
-	"stats": {
-		"totalResumes": "{{count}} currículum",
-		"totalResumes_plural": "{{count}} currículums"
-	},
-	"tabs": {
-		"resumes": "Currículums",
-		"profiles": "Perfiles"
-	},
-	"actions": {
-		"viewAll": "Ver Todo",
-		"createNew": "Crear Nuevo"
-	},
-	"messages": {
-		"duplicateSuccess": "Se ha creado el currículum \"{{title}}\"",
-		"duplicateError": "Error al duplicar el currículum",
-		"deleteSuccess": "Currículum eliminado exitosamente",
-		"deleteError": "Error al eliminar el currículum"
-	},
-	"errors": {
-		"loadFailed": "Error al cargar el panel"
-	}
+  "title": "Panel",
+  "subtitle": "Administra tus perfiles y currículums",
+  "newResume": "Nuevo Currículum",
+  "newProfile": "Nuevo Perfil",
+  "noResumes": {
+    "title": "Aún no hay currículums",
+    "description": "Crea tu primer currículum para comenzar. Puedes empezar de cero o crear uno a partir de un perfil existente.",
+    "cta": "Crear Currículum"
+  },
+  "noProfiles": {
+    "title": "Aún no hay perfiles",
+    "description": "Crea tu primer perfil para comenzar.",
+    "cta": "Crear Perfil"
+  },
+  "resumeCard": {
+    "lastModified": "Última modificación {{date}}",
+    "created": "Creado {{date}}",
+    "template": "Plantilla: {{name}}",
+    "untitled": "Currículum sin título"
+  },
+  "filters": {
+    "all": "Todos los Currículums",
+    "recent": "Recientes",
+    "favorites": "Favoritos"
+  },
+  "sort": {
+    "label": "Ordenar por",
+    "dateModified": "Fecha de modificación",
+    "dateCreated": "Fecha de creación",
+    "name": "Nombre"
+  },
+  "search": {
+    "placeholder": "Buscar currículums...",
+    "noResults": "No se encontraron currículums que coincidan con \"{{query}}\""
+  },
+  "stats": {
+    "totalResumes": "{{count}} currículum",
+    "totalResumes_plural": "{{count}} currículums"
+  },
+  "tabs": {
+    "resumes": "Currículums",
+    "profiles": "Perfiles"
+  },
+  "actions": {
+    "viewAll": "Ver Todo",
+    "createNew": "Crear Nuevo"
+  },
+  "messages": {
+    "duplicateSuccess": "Se ha creado el currículum \"{{title}}\"",
+    "duplicateError": "Error al duplicar el currículum",
+    "deleteSuccess": "Currículum eliminado exitosamente",
+    "deleteError": "Error al eliminar el currículum"
+  },
+  "errors": {
+    "loadFailed": "Error al cargar el panel"
+  }
 }

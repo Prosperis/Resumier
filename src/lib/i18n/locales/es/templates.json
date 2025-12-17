@@ -1,18 +1,17 @@
 {
-	"title": "Plantillas de Currículum",
-	"subtitle": "Elige una plantilla que se adapte a tu estilo",
-	"categories": {
-		"all": "Todas las Plantillas",
-		"professional": "Profesional",
-		"creative": "Creativo",
-		"modern": "Moderno",
-		"simple": "Simple",
-		"academic": "Académico"
-	},
-	"preview": "Vista Previa",
-	"select": "Usar Esta Plantilla",
-	"current": "Plantilla Actual",
-	"popular": "Popular",
-	"new": "Nuevo"
+  "title": "Plantillas de Currículum",
+  "subtitle": "Elige una plantilla que se adapte a tu estilo",
+  "categories": {
+    "all": "Todas las Plantillas",
+    "professional": "Profesional",
+    "creative": "Creativo",
+    "modern": "Moderno",
+    "simple": "Simple",
+    "academic": "Académico"
+  },
+  "preview": "Vista Previa",
+  "select": "Usar Esta Plantilla",
+  "current": "Plantilla Actual",
+  "popular": "Popular",
+  "new": "Nuevo"
 }
-

@@ -1,64 +1,64 @@
 {
-	"title": "Settings",
-	"subtitle": "Manage your preferences",
-	"sections": {
-		"appearance": {
-			"title": "Appearance",
-			"description": "Customize how Resumier looks",
-			"theme": "Theme",
-			"themeLight": "Light",
-			"themeDark": "Dark",
-			"themeSystem": "System",
-			"language": "Language",
-			"selectTheme": "Select your color theme",
-			"selectLanguage": "Choose your preferred language",
-			"reducedMotion": "Reduced Motion",
-			"reducedMotionDescription": "Minimize animations"
-		},
-		"account": {
-			"title": "Account",
-			"description": "Manage your account settings",
-			"email": "Email Address",
-			"password": "Password",
-			"changePassword": "Change Password",
-			"deleteAccount": "Delete Account",
-			"status": "Status",
-			"guestMode": "You're using Resumier as a guest",
-			"loggedInAs": "Logged in as {{email}}",
-			"demoMode": "Demo Mode",
-			"guestUser": "Guest User",
-			"authenticated": "Authenticated"
-		},
-		"editor": {
-			"title": "Editor Preferences",
-			"description": "Customize your editing experience",
-			"autoSave": "Auto Save",
-			"autoSaveDescription": "Automatically save changes"
-		},
-		"export": {
-			"title": "Export Settings",
-			"description": "Configure export options",
-			"promptFilename": "Prompt for Filename",
-			"promptFilenameDescription": "Ask for a filename before exporting (includes a smart default)"
-		},
-		"data": {
-			"title": "Data Management",
-			"description": "Export, import, or clear your data",
-			"exportData": "Export All Data",
-			"importData": "Import Data",
-			"clearData": "Clear All Data",
-			"clearDataWarning": "This will permanently delete all your resumes and profiles. This action cannot be undone."
-		},
-		"notifications": {
-			"title": "Notifications",
-			"description": "Configure notification preferences",
-			"email": "Email Notifications",
-			"browser": "Browser Notifications"
-		},
-		"reset": {
-			"title": "Reset Settings",
-			"description": "Restore defaults"
-		}
-	},
-	"saved": "Settings saved"
+  "title": "Settings",
+  "subtitle": "Manage your preferences",
+  "sections": {
+    "appearance": {
+      "title": "Appearance",
+      "description": "Customize how Resumier looks",
+      "theme": "Theme",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "themeSystem": "System",
+      "language": "Language",
+      "selectTheme": "Select your color theme",
+      "selectLanguage": "Choose your preferred language",
+      "reducedMotion": "Reduced Motion",
+      "reducedMotionDescription": "Minimize animations"
+    },
+    "account": {
+      "title": "Account",
+      "description": "Manage your account settings",
+      "email": "Email Address",
+      "password": "Password",
+      "changePassword": "Change Password",
+      "deleteAccount": "Delete Account",
+      "status": "Status",
+      "guestMode": "You're using Resumier as a guest",
+      "loggedInAs": "Logged in as {{email}}",
+      "demoMode": "Demo Mode",
+      "guestUser": "Guest User",
+      "authenticated": "Authenticated"
+    },
+    "editor": {
+      "title": "Editor Preferences",
+      "description": "Customize your editing experience",
+      "autoSave": "Auto Save",
+      "autoSaveDescription": "Automatically save changes"
+    },
+    "export": {
+      "title": "Export Settings",
+      "description": "Configure export options",
+      "promptFilename": "Prompt for Filename",
+      "promptFilenameDescription": "Ask for a filename before exporting (includes a smart default)"
+    },
+    "data": {
+      "title": "Data Management",
+      "description": "Export, import, or clear your data",
+      "exportData": "Export All Data",
+      "importData": "Import Data",
+      "clearData": "Clear All Data",
+      "clearDataWarning": "This will permanently delete all your resumes and profiles. This action cannot be undone."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Configure notification preferences",
+      "email": "Email Notifications",
+      "browser": "Browser Notifications"
+    },
+    "reset": {
+      "title": "Reset Settings",
+      "description": "Restore defaults"
+    }
+  },
+  "saved": "Settings saved"
 }

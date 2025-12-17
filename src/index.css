@@ -164,50 +164,146 @@
 }
 
 /* Margin utilities - flip for RTL */
-[dir="rtl"] .mr-1 { margin-left: 0.25rem; margin-right: 0; }
-[dir="rtl"] .mr-2 { margin-left: 0.5rem; margin-right: 0; }
-[dir="rtl"] .mr-3 { margin-left: 0.75rem; margin-right: 0; }
-[dir="rtl"] .mr-4 { margin-left: 1rem; margin-right: 0; }
-[dir="rtl"] .ml-1 { margin-right: 0.25rem; margin-left: 0; }
-[dir="rtl"] .ml-2 { margin-right: 0.5rem; margin-left: 0; }
-[dir="rtl"] .ml-3 { margin-right: 0.75rem; margin-left: 0; }
-[dir="rtl"] .ml-4 { margin-right: 1rem; margin-left: 0; }
-[dir="rtl"] .ml-auto { margin-right: auto; margin-left: 0; }
-[dir="rtl"] .mr-auto { margin-left: auto; margin-right: 0; }
+[dir="rtl"] .mr-1 {
+  margin-left: 0.25rem;
+  margin-right: 0;
+}
+[dir="rtl"] .mr-2 {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+[dir="rtl"] .mr-3 {
+  margin-left: 0.75rem;
+  margin-right: 0;
+}
+[dir="rtl"] .mr-4 {
+  margin-left: 1rem;
+  margin-right: 0;
+}
+[dir="rtl"] .ml-1 {
+  margin-right: 0.25rem;
+  margin-left: 0;
+}
+[dir="rtl"] .ml-2 {
+  margin-right: 0.5rem;
+  margin-left: 0;
+}
+[dir="rtl"] .ml-3 {
+  margin-right: 0.75rem;
+  margin-left: 0;
+}
+[dir="rtl"] .ml-4 {
+  margin-right: 1rem;
+  margin-left: 0;
+}
+[dir="rtl"] .ml-auto {
+  margin-right: auto;
+  margin-left: 0;
+}
+[dir="rtl"] .mr-auto {
+  margin-left: auto;
+  margin-right: 0;
+}
 
 /* Padding utilities - flip for RTL */
-[dir="rtl"] .pr-1 { padding-left: 0.25rem; padding-right: 0; }
-[dir="rtl"] .pr-2 { padding-left: 0.5rem; padding-right: 0; }
-[dir="rtl"] .pr-3 { padding-left: 0.75rem; padding-right: 0; }
-[dir="rtl"] .pr-4 { padding-left: 1rem; padding-right: 0; }
-[dir="rtl"] .pl-1 { padding-right: 0.25rem; padding-left: 0; }
-[dir="rtl"] .pl-2 { padding-right: 0.5rem; padding-left: 0; }
-[dir="rtl"] .pl-3 { padding-right: 0.75rem; padding-left: 0; }
-[dir="rtl"] .pl-4 { padding-right: 1rem; padding-left: 0; }
+[dir="rtl"] .pr-1 {
+  padding-left: 0.25rem;
+  padding-right: 0;
+}
+[dir="rtl"] .pr-2 {
+  padding-left: 0.5rem;
+  padding-right: 0;
+}
+[dir="rtl"] .pr-3 {
+  padding-left: 0.75rem;
+  padding-right: 0;
+}
+[dir="rtl"] .pr-4 {
+  padding-left: 1rem;
+  padding-right: 0;
+}
+[dir="rtl"] .pl-1 {
+  padding-right: 0.25rem;
+  padding-left: 0;
+}
+[dir="rtl"] .pl-2 {
+  padding-right: 0.5rem;
+  padding-left: 0;
+}
+[dir="rtl"] .pl-3 {
+  padding-right: 0.75rem;
+  padding-left: 0;
+}
+[dir="rtl"] .pl-4 {
+  padding-right: 1rem;
+  padding-left: 0;
+}
 
 /* Text alignment - flip for RTL */
-[dir="rtl"] .text-left { text-align: right; }
-[dir="rtl"] .text-right { text-align: left; }
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+[dir="rtl"] .text-right {
+  text-align: left;
+}
 
 /* Flex/positioning utilities - flip for RTL */
-[dir="rtl"] .left-0 { right: 0; left: auto; }
-[dir="rtl"] .right-0 { left: 0; right: auto; }
-[dir="rtl"] .left-2 { right: 0.5rem; left: auto; }
-[dir="rtl"] .right-2 { left: 0.5rem; right: auto; }
-[dir="rtl"] .left-4 { right: 1rem; left: auto; }
-[dir="rtl"] .right-4 { left: 1rem; right: auto; }
+[dir="rtl"] .left-0 {
+  right: 0;
+  left: auto;
+}
+[dir="rtl"] .right-0 {
+  left: 0;
+  right: auto;
+}
+[dir="rtl"] .left-2 {
+  right: 0.5rem;
+  left: auto;
+}
+[dir="rtl"] .right-2 {
+  left: 0.5rem;
+  right: auto;
+}
+[dir="rtl"] .left-4 {
+  right: 1rem;
+  left: auto;
+}
+[dir="rtl"] .right-4 {
+  left: 1rem;
+  right: auto;
+}
 
 /* Border radius - flip for RTL */
-[dir="rtl"] .rounded-l { border-radius: 0 var(--radius) var(--radius) 0; }
-[dir="rtl"] .rounded-r { border-radius: var(--radius) 0 0 var(--radius); }
-[dir="rtl"] .rounded-tl { border-top-left-radius: 0; border-top-right-radius: var(--radius); }
-[dir="rtl"] .rounded-tr { border-top-right-radius: 0; border-top-left-radius: var(--radius); }
-[dir="rtl"] .rounded-bl { border-bottom-left-radius: 0; border-bottom-right-radius: var(--radius); }
-[dir="rtl"] .rounded-br { border-bottom-right-radius: 0; border-bottom-left-radius: var(--radius); }
+[dir="rtl"] .rounded-l {
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+[dir="rtl"] .rounded-r {
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+[dir="rtl"] .rounded-tl {
+  border-top-left-radius: 0;
+  border-top-right-radius: var(--radius);
+}
+[dir="rtl"] .rounded-tr {
+  border-top-right-radius: 0;
+  border-top-left-radius: var(--radius);
+}
+[dir="rtl"] .rounded-bl {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: var(--radius);
+}
+[dir="rtl"] .rounded-br {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: var(--radius);
+}
 
 /* Transform - flip horizontal translations for RTL */
-[dir="rtl"] .translate-x-full { transform: translateX(-100%); }
-[dir="rtl"] .-translate-x-full { transform: translateX(100%); }
+[dir="rtl"] .translate-x-full {
+  transform: translateX(-100%);
+}
+[dir="rtl"] .-translate-x-full {
+  transform: translateX(100%);
+}
 
 /* Icons that indicate direction should be flipped */
 [dir="rtl"] .icon-directional,
@@ -216,28 +312,32 @@
 }
 
 /* Space utilities - flip for RTL */
-[dir="rtl"] .space-x-1 > :not([hidden]) ~ :not([hidden]) { 
-  margin-left: 0.25rem; 
-  margin-right: 0; 
+[dir="rtl"] .space-x-1 > :not([hidden]) ~ :not([hidden]) {
+  margin-left: 0.25rem;
+  margin-right: 0;
 }
-[dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]) { 
-  margin-left: 0.5rem; 
-  margin-right: 0; 
+[dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  margin-left: 0.5rem;
+  margin-right: 0;
 }
-[dir="rtl"] .space-x-3 > :not([hidden]) ~ :not([hidden]) { 
-  margin-left: 0.75rem; 
-  margin-right: 0; 
+[dir="rtl"] .space-x-3 > :not([hidden]) ~ :not([hidden]) {
+  margin-left: 0.75rem;
+  margin-right: 0;
 }
-[dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]) { 
-  margin-left: 1rem; 
-  margin-right: 0; 
+[dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]) {
+  margin-left: 1rem;
+  margin-right: 0;
 }
 
 /* Gap utilities remain the same, no RTL flip needed */
 
 /* Flex direction - keep row-reverse behavior consistent */
-[dir="rtl"] .flex-row { flex-direction: row-reverse; }
-[dir="rtl"] .flex-row-reverse { flex-direction: row; }
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+[dir="rtl"] .flex-row-reverse {
+  flex-direction: row;
+}
 
 /* ===== PRINT STYLES FOR RESUME EXPORT ===== */
 
