@@ -1,0 +1,112 @@
+{
+	"sections": {
+		"personalInfo": {
+			"title": "Personal Information",
+			"description": "Your contact details and basic info"
+		},
+		"summary": {
+			"title": "Professional Summary",
+			"description": "A brief overview of your career",
+			"placeholder": "Write a compelling summary of your professional background..."
+		},
+		"experience": {
+			"title": "Work Experience",
+			"description": "Your employment history",
+			"addButton": "Add Experience"
+		},
+		"education": {
+			"title": "Education",
+			"description": "Your academic background",
+			"addButton": "Add Education"
+		},
+		"skills": {
+			"title": "Skills",
+			"description": "Your professional skills",
+			"addButton": "Add Skill"
+		},
+		"certifications": {
+			"title": "Certifications",
+			"description": "Professional certifications and licenses",
+			"addButton": "Add Certification"
+		},
+		"links": {
+			"title": "Links",
+			"description": "Portfolio, LinkedIn, GitHub, etc.",
+			"addButton": "Add Link"
+		}
+	},
+	"fields": {
+		"name": "Full Name",
+		"email": "Email Address",
+		"phone": "Phone Number",
+		"location": "Location",
+		"website": "Website",
+		"linkedin": "LinkedIn URL",
+		"github": "GitHub URL",
+		"company": "Company",
+		"position": "Position / Title",
+		"startDate": "Start Date",
+		"endDate": "End Date",
+		"current": "I currently work here",
+		"description": "Description",
+		"institution": "Institution",
+		"degree": "Degree",
+		"field": "Field of Study",
+		"gpa": "GPA",
+		"skillName": "Skill Name",
+		"skillLevel": "Proficiency Level",
+		"certName": "Certification Name",
+		"certIssuer": "Issuing Organization",
+		"certDate": "Date Obtained",
+		"certExpiry": "Expiry Date",
+		"linkLabel": "Label",
+		"linkUrl": "URL",
+		"summary": "Summary",
+		"title": "Title"
+	},
+	"placeholders": {
+		"name": "John Doe",
+		"email": "john@example.com",
+		"phone": "+1 (555) 123-4567",
+		"location": "New York, NY",
+		"company": "Acme Corporation",
+		"position": "Software Engineer",
+		"institution": "University of Example",
+		"degree": "Bachelor of Science",
+		"skillName": "JavaScript",
+		"summary": "Experienced professional with a passion for..."
+	},
+	"toolbar": {
+		"template": "Change Template",
+		"export": "Export",
+		"save": "Save",
+		"autoSave": "Auto-save enabled",
+		"undo": "Undo",
+		"redo": "Redo",
+		"preview": "Preview",
+		"download": "Download PDF",
+		"print": "Print"
+	},
+	"exportOptions": {
+		"pdf": "Export as PDF",
+		"docx": "Export as Word",
+		"json": "Export as JSON",
+		"png": "Export as Image"
+	},
+	"messages": {
+		"saved": "Resume saved successfully",
+		"exportSuccess": "Resume exported successfully",
+		"exportError": "Failed to export resume",
+		"deleteSuccess": "Item deleted successfully",
+		"reorderSuccess": "Order updated",
+		"updateSuccess": "Updated successfully",
+		"createSuccess": "Created successfully"
+	},
+	"skillLevels": {
+		"beginner": "Beginner",
+		"intermediate": "Intermediate",
+		"advanced": "Advanced",
+		"expert": "Expert"
+	}
+}
+

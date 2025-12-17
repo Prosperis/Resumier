@@ -1,0 +1,58 @@
+{
+	"title": "Dashboard",
+	"subtitle": "Manage your profiles and resumes",
+	"newResume": "New Resume",
+	"newProfile": "New Profile",
+	"noResumes": {
+		"title": "No resumes yet",
+		"description": "Create your first resume to get started. You can start fresh or create one from an existing profile.",
+		"cta": "Create Resume"
+	},
+	"noProfiles": {
+		"title": "No profiles yet",
+		"description": "Create your first profile to get started.",
+		"cta": "Create Profile"
+	},
+	"resumeCard": {
+		"lastModified": "Last modified {{date}}",
+		"created": "Created {{date}}",
+		"template": "Template: {{name}}",
+		"untitled": "Untitled Resume"
+	},
+	"filters": {
+		"all": "All Resumes",
+		"recent": "Recent",
+		"favorites": "Favorites"
+	},
+	"sort": {
+		"label": "Sort by",
+		"dateModified": "Date Modified",
+		"dateCreated": "Date Created",
+		"name": "Name"
+	},
+	"search": {
+		"placeholder": "Search resumes...",
+		"noResults": "No resumes found matching \"{{query}}\""
+	},
+	"stats": {
+		"totalResumes": "{{count}} resume",
+		"totalResumes_plural": "{{count}} resumes"
+	},
+	"tabs": {
+		"resumes": "Resumes",
+		"profiles": "Profiles"
+	},
+	"actions": {
+		"viewAll": "View All",
+		"createNew": "Create New"
+	},
+	"messages": {
+		"duplicateSuccess": "Resume \"{{title}}\" has been created",
+		"duplicateError": "Failed to duplicate resume",
+		"deleteSuccess": "Resume deleted successfully",
+		"deleteError": "Failed to delete resume"
+	},
+	"errors": {
+		"loadFailed": "Failed to load dashboard"
+	}
+}

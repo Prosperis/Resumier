@@ -1,0 +1,112 @@
+{
+	"sections": {
+		"personalInfo": {
+			"title": "Información Personal",
+			"description": "Tus datos de contacto e información básica"
+		},
+		"summary": {
+			"title": "Resumen Profesional",
+			"description": "Una breve descripción de tu carrera",
+			"placeholder": "Escribe un resumen atractivo de tu experiencia profesional..."
+		},
+		"experience": {
+			"title": "Experiencia Laboral",
+			"description": "Tu historial de empleo",
+			"addButton": "Agregar Experiencia"
+		},
+		"education": {
+			"title": "Educación",
+			"description": "Tu formación académica",
+			"addButton": "Agregar Educación"
+		},
+		"skills": {
+			"title": "Habilidades",
+			"description": "Tus habilidades profesionales",
+			"addButton": "Agregar Habilidad"
+		},
+		"certifications": {
+			"title": "Certificaciones",
+			"description": "Certificaciones y licencias profesionales",
+			"addButton": "Agregar Certificación"
+		},
+		"links": {
+			"title": "Enlaces",
+			"description": "Portafolio, LinkedIn, GitHub, etc.",
+			"addButton": "Agregar Enlace"
+		}
+	},
+	"fields": {
+		"name": "Nombre Completo",
+		"email": "Correo Electrónico",
+		"phone": "Número de Teléfono",
+		"location": "Ubicación",
+		"website": "Sitio Web",
+		"linkedin": "URL de LinkedIn",
+		"github": "URL de GitHub",
+		"company": "Empresa",
+		"position": "Puesto / Título",
+		"startDate": "Fecha de Inicio",
+		"endDate": "Fecha de Fin",
+		"current": "Actualmente trabajo aquí",
+		"description": "Descripción",
+		"institution": "Institución",
+		"degree": "Título",
+		"field": "Campo de Estudio",
+		"gpa": "Promedio",
+		"skillName": "Nombre de la Habilidad",
+		"skillLevel": "Nivel de Competencia",
+		"certName": "Nombre de la Certificación",
+		"certIssuer": "Organización Emisora",
+		"certDate": "Fecha de Obtención",
+		"certExpiry": "Fecha de Vencimiento",
+		"linkLabel": "Etiqueta",
+		"linkUrl": "URL",
+		"summary": "Resumen",
+		"title": "Título"
+	},
+	"placeholders": {
+		"name": "Juan Pérez",
+		"email": "juan@ejemplo.com",
+		"phone": "+52 (55) 1234-5678",
+		"location": "Ciudad de México, México",
+		"company": "Empresa Ejemplo",
+		"position": "Ingeniero de Software",
+		"institution": "Universidad Ejemplo",
+		"degree": "Licenciatura en Ciencias",
+		"skillName": "JavaScript",
+		"summary": "Profesional con experiencia y pasión por..."
+	},
+	"toolbar": {
+		"template": "Cambiar Plantilla",
+		"export": "Exportar",
+		"save": "Guardar",
+		"autoSave": "Guardado automático activado",
+		"undo": "Deshacer",
+		"redo": "Rehacer",
+		"preview": "Vista Previa",
+		"download": "Descargar PDF",
+		"print": "Imprimir"
+	},
+	"exportOptions": {
+		"pdf": "Exportar como PDF",
+		"docx": "Exportar como Word",
+		"json": "Exportar como JSON",
+		"png": "Exportar como Imagen"
+	},
+	"messages": {
+		"saved": "Currículum guardado exitosamente",
+		"exportSuccess": "Currículum exportado exitosamente",
+		"exportError": "Error al exportar el currículum",
+		"deleteSuccess": "Elemento eliminado exitosamente",
+		"reorderSuccess": "Orden actualizado",
+		"updateSuccess": "Actualizado exitosamente",
+		"createSuccess": "Creado exitosamente"
+	},
+	"skillLevels": {
+		"beginner": "Principiante",
+		"intermediate": "Intermedio",
+		"advanced": "Avanzado",
+		"expert": "Experto"
+	}
+}
+

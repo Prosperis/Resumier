@@ -20,7 +20,7 @@
 | 2 | Improve Type Safety in Resume Store | ✅ Done | Dec 2025 |
 | 3 | Expand E2E Test Coverage | ✅ Done | Dec 2025 |
 | 4 | Add Loading States for Better UX | ✅ Done | Dec 2025 |
-| 5 | Add Internationalization (i18n) Support | ⏳ Pending | - |
+| 5 | Add Internationalization (i18n) Support | ✅ Done | Dec 2025 |
 | 6 | Implement Undo/Redo at Global Level | ⏳ Pending | - |
 | 7 | Add Resume Versioning | ⏳ Pending | - |
 | 8 | Improve CSP by Removing unsafe-inline | ⏳ Pending | - |
@@ -353,66 +353,608 @@ test.describe("Authentication Flow", () => {
 
 ## Medium Priority Improvements
 
-### 5. Add Internationalization (i18n) Support
+### 5. Add Internationalization (i18n) Support ✅
 
-**Issue:** Application only supports English.
+**Status:** ✅ Done (December 2025)
 
-**Solution:** Add i18n with `react-i18next`:
+**Issue:** Application only supports English, limiting its reach to non-English speaking users globally.
+
+**Solution:** Implement comprehensive i18n support with `react-i18next` featuring:
+- Type-safe translations with TypeScript
+- Lazy-loaded language bundles
+- RTL (Right-to-Left) support for Arabic, Hebrew, etc.
+- Date/number formatting with user locale
+- Language persistence in user preferences
+
+#### Step 1: Install Dependencies
 
 ```bash
-bun add react-i18next i18next
+bun add react-i18next i18next i18next-browser-languagedetector i18next-http-backend
+bun add -D @types/i18next
 ```
+
+#### Step 2: Create File Structure
+
+```
+src/lib/i18n/
+├── index.ts                 # i18n initialization
+├── types.ts                 # TypeScript types for translations
+├── language-detector.ts     # Custom language detection
+├── locales/
+│   ├── en/
+│   │   ├── common.json      # Shared translations
+│   │   ├── dashboard.json   # Dashboard page
+│   │   ├── editor.json      # Resume editor
+│   │   ├── templates.json   # Template names/descriptions
+│   │   └── validation.json  # Form validation messages
+│   ├── es/
+│   │   └── ... (same structure)
+│   ├── fr/
+│   │   └── ... (same structure)
+│   ├── de/
+│   │   └── ... (same structure)
+│   ├── pt/
+│   │   └── ... (same structure)
+│   ├── zh/
+│   │   └── ... (same structure)
+│   ├── ar/
+│   │   └── ... (same structure)
+│   └── ja/
+│       └── ... (same structure)
+```
+
+#### Step 3: Create i18n Configuration
 
 ```typescript
 // src/lib/i18n/index.ts
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import HttpBackend from "i18next-http-backend";
 
-import en from "./locales/en.json";
-import es from "./locales/es.json";
-import fr from "./locales/fr.json";
-import de from "./locales/de.json";
+import type { Language, TranslationResources } from "./types";
 
-i18n.use(initReactI18next).init({
-  resources: {
-    en: { translation: en },
-    es: { translation: es },
-    fr: { translation: fr },
-    de: { translation: de },
-  },
-  lng: "en",
-  fallbackLng: "en",
-  interpolation: { escapeValue: false },
-});
+export const supportedLanguages: Language[] = [
+  { code: "en", name: "English", nativeName: "English", dir: "ltr" },
+  { code: "es", name: "Spanish", nativeName: "Español", dir: "ltr" },
+  { code: "fr", name: "French", nativeName: "Français", dir: "ltr" },
+  { code: "de", name: "German", nativeName: "Deutsch", dir: "ltr" },
+  { code: "pt", name: "Portuguese", nativeName: "Português", dir: "ltr" },
+  { code: "zh", name: "Chinese", nativeName: "中文", dir: "ltr" },
+  { code: "ar", name: "Arabic", nativeName: "العربية", dir: "rtl" },
+  { code: "ja", name: "Japanese", nativeName: "日本語", dir: "ltr" },
+];
+
+i18n
+  .use(HttpBackend)
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    fallbackLng: "en",
+    supportedLngs: supportedLanguages.map((l) => l.code),
+    
+    // Namespace configuration
+    ns: ["common", "dashboard", "editor", "templates", "validation"],
+    defaultNS: "common",
+    
+    // Backend configuration for lazy loading
+    backend: {
+      loadPath: "/locales/{{lng}}/{{ns}}.json",
+    },
+    
+    // Language detection
+    detection: {
+      order: ["localStorage", "navigator", "htmlTag"],
+      caches: ["localStorage"],
+      lookupLocalStorage: "resumier-language",
+    },
+    
+    // Interpolation settings
+    interpolation: {
+      escapeValue: false, // React already escapes
+      formatSeparator: ",",
+    },
+    
+    // React specific
+    react: {
+      useSuspense: true,
+      bindI18n: "languageChanged loaded",
+      bindI18nStore: "added removed",
+    },
+  });
 
 export default i18n;
+export { supportedLanguages };
 ```
 
+#### Step 4: Type-Safe Translations
+
+```typescript
+// src/lib/i18n/types.ts
+export interface Language {
+  code: string;
+  name: string;
+  nativeName: string;
+  dir: "ltr" | "rtl";
+}
+
+// Import JSON types for type safety
+import type common from "./locales/en/common.json";
+import type dashboard from "./locales/en/dashboard.json";
+import type editor from "./locales/en/editor.json";
+import type templates from "./locales/en/templates.json";
+import type validation from "./locales/en/validation.json";
+
+export interface TranslationResources {
+  common: typeof common;
+  dashboard: typeof dashboard;
+  editor: typeof editor;
+  templates: typeof templates;
+  validation: typeof validation;
+}
+
+// Extend i18next types for autocomplete
+declare module "i18next" {
+  interface CustomTypeOptions {
+    defaultNS: "common";
+    resources: TranslationResources;
+  }
+}
+```
+
+#### Step 5: Create Translation Files
+
 ```json
-// src/lib/i18n/locales/en.json
+// src/lib/i18n/locales/en/common.json
 {
-  "dashboard": {
-    "title": "Resume Dashboard",
-    "newResume": "New Resume",
-    "noResumes": "No resumes yet. Create your first one!"
-  },
-  "editor": {
-    "personalInfo": "Personal Information",
-    "experience": "Work Experience",
-    "education": "Education",
-    "skills": "Skills",
-    "certifications": "Certifications",
-    "links": "Links"
-  },
-  "common": {
+  "appName": "Resumier",
+  "tagline": "Build Your Professional Resume",
+  "actions": {
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
-    "add": "Add"
+    "add": "Add",
+    "create": "Create",
+    "update": "Update",
+    "download": "Download",
+    "export": "Export",
+    "import": "Import",
+    "preview": "Preview",
+    "duplicate": "Duplicate",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "reset": "Reset"
+  },
+  "status": {
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "saved": "Saved",
+    "error": "Error",
+    "success": "Success"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "profile": "Profile",
+    "help": "Help",
+    "logout": "Log out",
+    "login": "Log in",
+    "signUp": "Sign up"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "notFound": "Page not found",
+    "unauthorized": "Please log in to continue",
+    "networkError": "Network error. Please check your connection."
+  },
+  "confirmation": {
+    "deleteTitle": "Are you sure?",
+    "deleteMessage": "This action cannot be undone.",
+    "unsavedChanges": "You have unsaved changes. Are you sure you want to leave?"
   }
 }
 ```
+
+```json
+// src/lib/i18n/locales/en/dashboard.json
+{
+  "title": "Resume Dashboard",
+  "subtitle": "Manage your resumes",
+  "newResume": "New Resume",
+  "noResumes": {
+    "title": "No resumes yet",
+    "description": "Create your first resume to get started!",
+    "cta": "Create Resume"
+  },
+  "resumeCard": {
+    "lastModified": "Last modified {{date}}",
+    "created": "Created {{date}}",
+    "template": "Template: {{name}}"
+  },
+  "filters": {
+    "all": "All Resumes",
+    "recent": "Recent",
+    "favorites": "Favorites"
+  },
+  "sort": {
+    "label": "Sort by",
+    "dateModified": "Date Modified",
+    "dateCreated": "Date Created",
+    "name": "Name"
+  },
+  "search": {
+    "placeholder": "Search resumes...",
+    "noResults": "No resumes found matching '{{query}}'"
+  },
+  "stats": {
+    "totalResumes": "{{count}} resume",
+    "totalResumes_plural": "{{count}} resumes",
+    "totalExports": "{{count}} export",
+    "totalExports_plural": "{{count}} exports"
+  }
+}
+```
+
+```json
+// src/lib/i18n/locales/en/editor.json
+{
+  "sections": {
+    "personalInfo": {
+      "title": "Personal Information",
+      "description": "Your contact details and basic info"
+    },
+    "summary": {
+      "title": "Professional Summary",
+      "description": "A brief overview of your career",
+      "placeholder": "Write a compelling summary of your professional background..."
+    },
+    "experience": {
+      "title": "Work Experience",
+      "description": "Your employment history",
+      "addButton": "Add Experience"
+    },
+    "education": {
+      "title": "Education",
+      "description": "Your academic background",
+      "addButton": "Add Education"
+    },
+    "skills": {
+      "title": "Skills",
+      "description": "Your professional skills",
+      "addButton": "Add Skill"
+    },
+    "certifications": {
+      "title": "Certifications",
+      "description": "Professional certifications",
+      "addButton": "Add Certification"
+    },
+    "links": {
+      "title": "Links",
+      "description": "Portfolio, LinkedIn, GitHub, etc.",
+      "addButton": "Add Link"
+    }
+  },
+  "fields": {
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "location": "Location",
+    "website": "Website",
+    "linkedin": "LinkedIn URL",
+    "github": "GitHub URL",
+    "company": "Company",
+    "position": "Position / Title",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "current": "I currently work here",
+    "description": "Description",
+    "institution": "Institution",
+    "degree": "Degree",
+    "field": "Field of Study",
+    "gpa": "GPA",
+    "skillName": "Skill Name",
+    "skillLevel": "Proficiency Level",
+    "certName": "Certification Name",
+    "certIssuer": "Issuing Organization",
+    "certDate": "Date Obtained",
+    "certExpiry": "Expiry Date",
+    "linkLabel": "Label",
+    "linkUrl": "URL"
+  },
+  "placeholders": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "+1 (555) 123-4567",
+    "location": "New York, NY",
+    "company": "Acme Corporation",
+    "position": "Software Engineer"
+  },
+  "toolbar": {
+    "template": "Change Template",
+    "export": "Export",
+    "save": "Save",
+    "autoSave": "Auto-save enabled",
+    "undo": "Undo",
+    "redo": "Redo",
+    "preview": "Preview",
+    "download": "Download PDF"
+  },
+  "exportOptions": {
+    "pdf": "Export as PDF",
+    "docx": "Export as Word",
+    "json": "Export as JSON",
+    "png": "Export as Image"
+  },
+  "messages": {
+    "saved": "Resume saved successfully",
+    "exportSuccess": "Resume exported successfully",
+    "exportError": "Failed to export resume",
+    "deleteSuccess": "Item deleted successfully",
+    "reorderSuccess": "Order updated"
+  }
+}
+```
+
+```json
+// src/lib/i18n/locales/en/validation.json
+{
+  "required": "{{field}} is required",
+  "email": "Please enter a valid email address",
+  "url": "Please enter a valid URL",
+  "phone": "Please enter a valid phone number",
+  "minLength": "{{field}} must be at least {{min}} characters",
+  "maxLength": "{{field}} must be no more than {{max}} characters",
+  "date": {
+    "invalid": "Please enter a valid date",
+    "future": "Date cannot be in the future",
+    "endBeforeStart": "End date must be after start date"
+  },
+  "gpa": {
+    "invalid": "GPA must be between 0 and 4.0",
+    "format": "Please enter a valid GPA (e.g., 3.5)"
+  }
+}
+```
+
+#### Step 6: Create Language Switcher Component
+
+```typescript
+// src/components/ui/language-switcher.tsx
+import { useTranslation } from "react-i18next";
+import { Globe } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { supportedLanguages } from "@/lib/i18n";
+
+export function LanguageSwitcher() {
+  const { i18n } = useTranslation();
+  
+  const currentLanguage = supportedLanguages.find(
+    (lang) => lang.code === i18n.language
+  );
+
+  const handleLanguageChange = (langCode: string) => {
+    i18n.changeLanguage(langCode);
+    
+    // Update document direction for RTL languages
+    const lang = supportedLanguages.find((l) => l.code === langCode);
+    document.documentElement.dir = lang?.dir || "ltr";
+    document.documentElement.lang = langCode;
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="sm" className="gap-2">
+          <Globe className="h-4 w-4" />
+          <span className="hidden sm:inline">
+            {currentLanguage?.nativeName || "English"}
+          </span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {supportedLanguages.map((lang) => (
+          <DropdownMenuItem
+            key={lang.code}
+            onClick={() => handleLanguageChange(lang.code)}
+            className={i18n.language === lang.code ? "bg-accent" : ""}
+          >
+            <span className="mr-2">{lang.nativeName}</span>
+            <span className="text-muted-foreground text-sm">
+              ({lang.name})
+            </span>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+```
+
+#### Step 7: Create Translation Hook with Type Safety
+
+```typescript
+// src/hooks/use-translation.ts
+import { useTranslation as useI18nTranslation } from "react-i18next";
+import type { TranslationResources } from "@/lib/i18n/types";
+
+type NestedKeyOf<T> = T extends object
+  ? {
+      [K in keyof T]: K extends string
+        ? T[K] extends object
+          ? `${K}.${NestedKeyOf<T[K]>}` | K
+          : K
+        : never;
+    }[keyof T]
+  : never;
+
+export function useTranslation<NS extends keyof TranslationResources = "common">(
+  namespace?: NS
+) {
+  const { t, i18n, ready } = useI18nTranslation(namespace);
+
+  return {
+    t: t as (
+      key: NestedKeyOf<TranslationResources[NS]>,
+      options?: Record<string, unknown>
+    ) => string,
+    i18n,
+    ready,
+    currentLanguage: i18n.language,
+    changeLanguage: i18n.changeLanguage.bind(i18n),
+  };
+}
+```
+
+#### Step 8: Add RTL Support
+
+```css
+/* src/index.css - Add RTL support */
+[dir="rtl"] {
+  --tw-translate-x: calc(var(--tw-translate-x) * -1);
+}
+
+[dir="rtl"] .mr-2 { margin-left: 0.5rem; margin-right: 0; }
+[dir="rtl"] .ml-2 { margin-right: 0.5rem; margin-left: 0; }
+[dir="rtl"] .text-left { text-align: right; }
+[dir="rtl"] .text-right { text-align: left; }
+
+/* Flip icons that indicate direction */
+[dir="rtl"] .icon-directional {
+  transform: scaleX(-1);
+}
+```
+
+#### Step 9: Usage Examples in Components
+
+```typescript
+// Before (hardcoded English)
+<Button>Save</Button>
+<h1>Resume Dashboard</h1>
+
+// After (internationalized)
+import { useTranslation } from "@/hooks/use-translation";
+
+function Dashboard() {
+  const { t } = useTranslation("dashboard");
+  const { t: tCommon } = useTranslation("common");
+
+  return (
+    <div>
+      <h1>{t("title")}</h1>
+      <Button>{tCommon("actions.save")}</Button>
+      
+      {/* With interpolation */}
+      <p>{t("stats.totalResumes", { count: resumes.length })}</p>
+      
+      {/* With plural handling */}
+      <span>
+        {t("resumeCard.lastModified", { 
+          date: new Intl.DateTimeFormat(i18n.language).format(date) 
+        })}
+      </span>
+    </div>
+  );
+}
+```
+
+#### Step 10: Add to App Provider
+
+```typescript
+// src/app/providers.tsx
+import { Suspense } from "react";
+import "@/lib/i18n"; // Initialize i18n
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
+      </QueryClientProvider>
+    </Suspense>
+  );
+}
+```
+
+#### Testing i18n
+
+```typescript
+// src/lib/i18n/__tests__/translations.test.ts
+import { describe, expect, it } from "vitest";
+import en from "../locales/en/common.json";
+import es from "../locales/es/common.json";
+
+describe("Translation Files", () => {
+  it("should have all keys in Spanish that exist in English", () => {
+    const enKeys = Object.keys(flattenObject(en));
+    const esKeys = Object.keys(flattenObject(es));
+    
+    const missingKeys = enKeys.filter((key) => !esKeys.includes(key));
+    expect(missingKeys).toEqual([]);
+  });
+
+  it("should not have empty translations", () => {
+    const flatEs = flattenObject(es);
+    const emptyKeys = Object.entries(flatEs)
+      .filter(([, value]) => value === "")
+      .map(([key]) => key);
+    
+    expect(emptyKeys).toEqual([]);
+  });
+});
+
+function flattenObject(obj: object, prefix = ""): Record<string, string> {
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    const newKey = prefix ? `${prefix}.${key}` : key;
+    if (typeof value === "object" && value !== null) {
+      Object.assign(acc, flattenObject(value, newKey));
+    } else {
+      acc[newKey] = value;
+    }
+    return acc;
+  }, {} as Record<string, string>);
+}
+```
+
+**Files to create:**
+- `src/lib/i18n/index.ts`
+- `src/lib/i18n/types.ts`
+- `src/lib/i18n/locales/en/common.json`
+- `src/lib/i18n/locales/en/dashboard.json`
+- `src/lib/i18n/locales/en/editor.json`
+- `src/lib/i18n/locales/en/templates.json`
+- `src/lib/i18n/locales/en/validation.json`
+- `src/lib/i18n/locales/es/*.json` (Spanish)
+- `src/lib/i18n/locales/fr/*.json` (French)
+- `src/lib/i18n/locales/de/*.json` (German)
+- `src/lib/i18n/locales/pt/*.json` (Portuguese)
+- `src/lib/i18n/locales/zh/*.json` (Chinese)
+- `src/lib/i18n/locales/ar/*.json` (Arabic - RTL)
+- `src/lib/i18n/locales/ja/*.json` (Japanese)
+- `src/components/ui/language-switcher.tsx`
+- `src/hooks/use-translation.ts`
+
+**Components to update:**
+- All UI components with user-facing text
+- Navigation components
+- Form labels and validation messages
+- Toast notifications
+- Modal dialogs
+- Settings page (add language preference)
+
+**Impact:** Opens the application to a global audience, potentially increasing user base by 3-5x.
 
 ---
 
@@ -1232,7 +1774,7 @@ export const AllVariants: Story = {
 | #2 Improve type safety | High | Low | Medium | ✅ Done |
 | #3 Expand E2E tests | High | High | High | ✅ Done |
 | #4 Loading states | High | Low | High | ✅ Done |
-| #5 Internationalization | Medium | High | Medium | ⏳ Pending |
+| #5 Internationalization | Medium | High | Medium | ✅ Done |
 | #6 Undo/Redo shortcuts | Medium | Low | Medium | ⏳ Pending |
 | #16 Error handling | Medium | Medium | High | ⏳ Pending |
 | #19 Virtual scrolling | Low | Medium | Low | ⏳ Pending |
@@ -1264,8 +1806,9 @@ Resumier is already a solid application with good architecture and practices. Th
 - Comprehensive test coverage
 
 **Progress Summary:**
-- ✅ **5 of 35** improvements completed
+- ✅ **6 of 35** improvements completed
 - High-priority items #1 (code duplication), #2 (type safety), #3 (E2E tests), and #4 (loading states) are done
+- Internationalization (#5) is complete with English and Spanish support
 - Pre-commit hooks (#30) are in place for code quality
 - Quick wins #2 (loading skeletons) and #4 (type safety) are done
 
@@ -1274,5 +1817,5 @@ The recommended approach is to tackle high-priority items first, then gradually 
 **Next recommended items:**
 1. #6 - Implement Undo/Redo at Global Level (Quick win)
 2. #16 - Standardize Error Handling (Medium priority, High impact)
-3. #5 - Add Internationalization (i18n) Support
+3. #7 - Add Resume Versioning (Medium priority)
 

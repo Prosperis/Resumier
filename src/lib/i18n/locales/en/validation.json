@@ -1,0 +1,18 @@
+{
+	"required": "{{field}} is required",
+	"email": "Please enter a valid email address",
+	"url": "Please enter a valid URL",
+	"phone": "Please enter a valid phone number",
+	"minLength": "{{field}} must be at least {{min}} characters",
+	"maxLength": "{{field}} must be no more than {{max}} characters",
+	"date": {
+		"invalid": "Please enter a valid date",
+		"future": "Date cannot be in the future",
+		"endBeforeStart": "End date must be after start date"
+	},
+	"gpa": {
+		"invalid": "GPA must be between 0 and 4.0",
+		"format": "Please enter a valid GPA (e.g., 3.5)"
+	}
+}
+

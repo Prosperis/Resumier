@@ -1,0 +1,92 @@
+{
+	"appName": "Resumier",
+	"tagline": "Crea Tu Currículum Profesional",
+	"actions": {
+		"save": "Guardar",
+		"cancel": "Cancelar",
+		"delete": "Eliminar",
+		"edit": "Editar",
+		"add": "Agregar",
+		"create": "Crear",
+		"update": "Actualizar",
+		"download": "Descargar",
+		"export": "Exportar",
+		"import": "Importar",
+		"preview": "Vista previa",
+		"duplicate": "Duplicar",
+		"close": "Cerrar",
+		"confirm": "Confirmar",
+		"back": "Atrás",
+		"next": "Siguiente",
+		"submit": "Enviar",
+		"reset": "Restablecer",
+		"search": "Buscar",
+		"filter": "Filtrar",
+		"sort": "Ordenar",
+		"clear": "Limpiar",
+		"select": "Seleccionar",
+		"upload": "Subir",
+		"remove": "Quitar",
+		"retry": "Reintentar",
+		"continue": "Continuar",
+		"skip": "Omitir"
+	},
+	"status": {
+		"loading": "Cargando...",
+		"saving": "Guardando...",
+		"saved": "Guardado",
+		"error": "Error",
+		"success": "Éxito",
+		"pending": "Pendiente",
+		"processing": "Procesando...",
+		"complete": "Completo"
+	},
+	"navigation": {
+		"dashboard": "Panel",
+		"settings": "Configuración",
+		"profile": "Perfil",
+		"help": "Ayuda",
+		"logout": "Cerrar sesión",
+		"login": "Iniciar sesión",
+		"signUp": "Registrarse",
+		"home": "Inicio",
+		"main": "Navegación principal"
+	},
+	"errors": {
+		"generic": "Algo salió mal. Por favor, inténtalo de nuevo.",
+		"notFound": "Página no encontrada",
+		"unauthorized": "Por favor, inicia sesión para continuar",
+		"networkError": "Error de red. Por favor, verifica tu conexión.",
+		"validationError": "Por favor, revisa el formulario en busca de errores.",
+		"serverError": "Error del servidor. Por favor, inténtalo más tarde."
+	},
+	"confirmation": {
+		"deleteTitle": "¿Estás seguro?",
+		"deleteMessage": "Esta acción no se puede deshacer.",
+		"unsavedChanges": "Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?"
+	},
+	"time": {
+		"justNow": "Ahora mismo",
+		"minutesAgo": "Hace {{count}} minuto",
+		"minutesAgo_plural": "Hace {{count}} minutos",
+		"hoursAgo": "Hace {{count}} hora",
+		"hoursAgo_plural": "Hace {{count}} horas",
+		"daysAgo": "Hace {{count}} día",
+		"daysAgo_plural": "Hace {{count}} días",
+		"weeksAgo": "Hace {{count}} semana",
+		"weeksAgo_plural": "Hace {{count}} semanas",
+		"monthsAgo": "Hace {{count}} mes",
+		"monthsAgo_plural": "Hace {{count}} meses"
+	},
+	"accessibility": {
+		"skipToContent": "Saltar al contenido principal",
+		"openMenu": "Abrir menú",
+		"closeMenu": "Cerrar menú",
+		"expand": "Expandir",
+		"collapse": "Contraer"
+	},
+	"demo": {
+		"modeLabel": "Modo Demo",
+		"exploringSample": "Explorando con datos de muestra"
+	}
+}

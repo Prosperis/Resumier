@@ -1,0 +1,92 @@
+{
+	"appName": "Resumier",
+	"tagline": "Build Your Professional Resume",
+	"actions": {
+		"save": "Save",
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"edit": "Edit",
+		"add": "Add",
+		"create": "Create",
+		"update": "Update",
+		"download": "Download",
+		"export": "Export",
+		"import": "Import",
+		"preview": "Preview",
+		"duplicate": "Duplicate",
+		"close": "Close",
+		"confirm": "Confirm",
+		"back": "Back",
+		"next": "Next",
+		"submit": "Submit",
+		"reset": "Reset",
+		"search": "Search",
+		"filter": "Filter",
+		"sort": "Sort",
+		"clear": "Clear",
+		"select": "Select",
+		"upload": "Upload",
+		"remove": "Remove",
+		"retry": "Retry",
+		"continue": "Continue",
+		"skip": "Skip"
+	},
+	"status": {
+		"loading": "Loading...",
+		"saving": "Saving...",
+		"saved": "Saved",
+		"error": "Error",
+		"success": "Success",
+		"pending": "Pending",
+		"processing": "Processing...",
+		"complete": "Complete"
+	},
+	"navigation": {
+		"dashboard": "Dashboard",
+		"settings": "Settings",
+		"profile": "Profile",
+		"help": "Help",
+		"logout": "Log out",
+		"login": "Log in",
+		"signUp": "Sign up",
+		"home": "Home",
+		"main": "Main navigation"
+	},
+	"errors": {
+		"generic": "Something went wrong. Please try again.",
+		"notFound": "Page not found",
+		"unauthorized": "Please log in to continue",
+		"networkError": "Network error. Please check your connection.",
+		"validationError": "Please check the form for errors.",
+		"serverError": "Server error. Please try again later."
+	},
+	"confirmation": {
+		"deleteTitle": "Are you sure?",
+		"deleteMessage": "This action cannot be undone.",
+		"unsavedChanges": "You have unsaved changes. Are you sure you want to leave?"
+	},
+	"time": {
+		"justNow": "Just now",
+		"minutesAgo": "{{count}} minute ago",
+		"minutesAgo_plural": "{{count}} minutes ago",
+		"hoursAgo": "{{count}} hour ago",
+		"hoursAgo_plural": "{{count}} hours ago",
+		"daysAgo": "{{count}} day ago",
+		"daysAgo_plural": "{{count}} days ago",
+		"weeksAgo": "{{count}} week ago",
+		"weeksAgo_plural": "{{count}} weeks ago",
+		"monthsAgo": "{{count}} month ago",
+		"monthsAgo_plural": "{{count}} months ago"
+	},
+	"accessibility": {
+		"skipToContent": "Skip to main content",
+		"openMenu": "Open menu",
+		"closeMenu": "Close menu",
+		"expand": "Expand",
+		"collapse": "Collapse"
+	},
+	"demo": {
+		"modeLabel": "Demo Mode",
+		"exploringSample": "Exploring with sample data"
+	}
+}

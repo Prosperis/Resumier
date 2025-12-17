@@ -1,0 +1,18 @@
+{
+	"required": "{{field}} es requerido",
+	"email": "Por favor, ingresa una dirección de correo válida",
+	"url": "Por favor, ingresa una URL válida",
+	"phone": "Por favor, ingresa un número de teléfono válido",
+	"minLength": "{{field}} debe tener al menos {{min}} caracteres",
+	"maxLength": "{{field}} no debe tener más de {{max}} caracteres",
+	"date": {
+		"invalid": "Por favor, ingresa una fecha válida",
+		"future": "La fecha no puede ser en el futuro",
+		"endBeforeStart": "La fecha de fin debe ser posterior a la fecha de inicio"
+	},
+	"gpa": {
+		"invalid": "El promedio debe estar entre 0 y 4.0",
+		"format": "Por favor, ingresa un promedio válido (ej. 3.5)"
+	}
+}
+
