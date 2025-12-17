@@ -1,14 +1,57 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import type { UserInfo } from "./resume-store";
+import type {
+  LegacyCertification,
+  LegacyEducation,
+  LegacyLink,
+  LegacySkill,
+  UserInfo,
+  WorkExperience,
+} from "./resume-store";
 
-// Types for tracking changes
+/**
+ * Union type of all possible values that can be tracked in history.
+ * This includes primitive types and array types used in UserInfo.
+ */
+export type HistoryValue =
+  | string
+  | boolean
+  | undefined
+  | null
+  | string[]
+  | WorkExperience[]
+  | LegacyEducation[]
+  | LegacySkill[]
+  | LegacyCertification[]
+  | LegacyLink[];
+
+/**
+ * Section identifiers for history tracking.
+ * Used to categorize changes for display and filtering.
+ */
+export type HistorySection =
+  | "personal"
+  | "experience"
+  | "education"
+  | "skills"
+  | "certifications"
+  | "links";
+
+/**
+ * Represents a single field change in the history.
+ * Tracks the old and new values along with metadata.
+ */
 export interface HistoryChange {
+  /** The field name that was changed (e.g., "name", "email") */
   field: string;
-  label: string; // Human-readable label
-  oldValue: unknown;
-  newValue: unknown;
-  section: string; // e.g., "personal", "experience", "education"
+  /** Human-readable label for the field */
+  label: string;
+  /** The value before the change */
+  oldValue: HistoryValue;
+  /** The value after the change */
+  newValue: HistoryValue;
+  /** The section this field belongs to */
+  section: HistorySection;
 }
 
 export interface HistoryEntry {

@@ -5,18 +5,18 @@ import type { ColorScheme, TemplateType, Typography } from "@/lib/types/template
 
 // Re-export types from the API for external use
 export type {
-  ResumeContent,
-  PersonalInfo,
-  Experience,
-  Education,
-  Skills,
-  SkillWithLevel,
   Certification,
+  Education,
+  Experience,
+  ExperienceFormat,
   Link,
   LinkType,
   NameOrder,
+  PersonalInfo,
   PhoneFormat,
-  ExperienceFormat,
+  ResumeContent,
+  Skills,
+  SkillWithLevel,
 } from "@/lib/api/types";
 
 // Import types for internal use

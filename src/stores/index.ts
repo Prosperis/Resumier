@@ -11,15 +11,31 @@ export {
   useAuthStore,
 } from "./auth-store";
 export type {
+  // API types (re-exported from @/lib/api/types)
   Certification,
   Education,
-  JobInfo,
+  Experience,
+  ExperienceFormat,
   Link,
+  LinkType,
+  NameOrder,
+  PersonalInfo,
+  PhoneFormat,
   ResumeContent,
+  Skills,
+  SkillWithLevel,
+  // Store-specific types
+  CustomFont,
+  JobInfo,
   ResumeDocument,
-  Skill,
+  StyleCustomization,
   UserInfo,
   WorkExperience,
+  // Legacy types (deprecated, for backward compatibility)
+  LegacyCertification,
+  LegacyEducation,
+  LegacyLink,
+  LegacySkill,
 } from "./resume-store";
 export {
   selectContent,
@@ -34,7 +50,7 @@ export {
   selectUserInfoActions,
   useResumeStore,
 } from "./resume-store";
-export type { HistoryChange, HistoryEntry } from "./history-store";
+export type { HistoryChange, HistoryEntry, HistorySection, HistoryValue } from "./history-store";
 export {
   getFieldLabel,
   selectCanRedo,

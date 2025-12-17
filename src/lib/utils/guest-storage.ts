@@ -1,10 +1,54 @@
 import { del, entries, set } from "idb-keyval";
+import type { Profile } from "../api/profile-types";
 import { mockDb } from "../api/mock/db";
+import type { ResumeDocument, StyleCustomization, UserInfo, JobInfo } from "@/stores/resume-store";
 
 /**
  * Guest Mode Storage Utilities
  * Manages IndexedDB data for guest users
  */
+
+/**
+ * Zustand persist state wrapper type.
+ * The actual state is wrapped in a `state` property by zustand-persist.
+ */
+interface ZustandPersistedState<T> {
+  state: T;
+  version?: number;
+}
+
+/**
+ * Resume store state structure (as persisted by Zustand).
+ */
+interface ResumeStoreState {
+  template: string;
+  styleCustomization: StyleCustomization;
+  userInfo: UserInfo;
+  jobInfo: JobInfo;
+  jobs: JobInfo[];
+  documents: ResumeDocument[];
+  content: Record<string, unknown>;
+}
+
+/**
+ * Profile store state structure (as persisted by Zustand).
+ */
+interface ProfileStoreState {
+  activeProfileId: string | null;
+  profiles: Profile[];
+}
+
+/**
+ * Type-safe guest data structure for import/export operations.
+ */
+export interface GuestData {
+  /** Resume store data (null if not present) */
+  resumeStore: ZustandPersistedState<ResumeStoreState> | null;
+  /** Documents data (null if not present) - legacy, now part of resumeStore */
+  documents: ResumeDocument[] | null;
+  /** Profiles data (null if not present) */
+  profiles: ZustandPersistedState<ProfileStoreState> | null;
+}
 
 /**
  * Clear all guest data from IndexedDB
@@ -25,11 +69,7 @@ export async function clearGuestData(): Promise<void> {
  * Export all guest data from IndexedDB
  * Returns serializable data that can be sent to backend
  */
-export async function exportGuestData(): Promise<{
-  resumeStore: unknown;
-  documents: unknown;
-  profiles: unknown;
-}> {
+export async function exportGuestData(): Promise<GuestData> {
   try {
     const allEntries = await entries();
     const data: Record<string, unknown> = {};
@@ -45,9 +85,9 @@ export async function exportGuestData(): Promise<{
     }
 
     return {
-      resumeStore: data["resumier-web-store"] || null,
-      documents: data["resumier-documents"] || null,
-      profiles: data["resumier-profiles-store"] || null,
+      resumeStore: (data["resumier-web-store"] as GuestData["resumeStore"]) || null,
+      documents: (data["resumier-documents"] as GuestData["documents"]) || null,
+      profiles: (data["resumier-profiles-store"] as GuestData["profiles"]) || null,
     };
   } catch (error) {
     console.error("Failed to export guest data:", error);
@@ -59,11 +99,7 @@ export async function exportGuestData(): Promise<{
  * Import data into IndexedDB
  * Used to restore backed up data or migrate from another storage
  */
-export async function importGuestData(data: {
-  resumeStore?: unknown;
-  documents?: unknown;
-  profiles?: unknown;
-}): Promise<void> {
+export async function importGuestData(data: Partial<GuestData>): Promise<void> {
   try {
     if (data.resumeStore) {
       await set("resumier-web-store", data.resumeStore);

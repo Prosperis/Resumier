@@ -1,7 +1,58 @@
 # Resumier - Improvement Opportunities
 
 > A comprehensive analysis of potential improvements to enhance the Resumier application.
-> Last updated: December 14, 2025
+> Last updated: December 17, 2025
+
+## Status Legend
+
+| Status | Description |
+|--------|-------------|
+| ✅ Done | Fully implemented |
+| 🚧 In Progress | Currently being worked on |
+| 📋 Planned | Scheduled for implementation |
+| ⏳ Pending | Not yet started |
+
+## Implementation Status Overview
+
+| # | Improvement | Status | Date Completed |
+|---|-------------|--------|----------------|
+| 1 | Reduce Code Duplication in Resume Builder | ✅ Done | Dec 2025 |
+| 2 | Improve Type Safety in Resume Store | ✅ Done | Dec 2025 |
+| 3 | Expand E2E Test Coverage | ✅ Done | Dec 2025 |
+| 4 | Add Loading States for Better UX | ⏳ Pending | - |
+| 5 | Add Internationalization (i18n) Support | ⏳ Pending | - |
+| 6 | Implement Undo/Redo at Global Level | ⏳ Pending | - |
+| 7 | Add Resume Versioning | ⏳ Pending | - |
+| 8 | Improve CSP by Removing unsafe-inline | ⏳ Pending | - |
+| 9 | Add Analytics Integration | ⏳ Pending | - |
+| 10 | Add Resume Sharing Feature | ⏳ Pending | - |
+| 11 | Add Dark Mode for Resume Preview | ⏳ Pending | - |
+| 12 | Add Keyboard Navigation | ⏳ Pending | - |
+| 13 | Add Drag-and-Drop Section Reordering | ⏳ Pending | - |
+| 14 | Add AI-Powered Content Suggestions | ⏳ Pending | - |
+| 15 | Add Resume Analytics Dashboard | ⏳ Pending | - |
+| 16 | Standardize Error Handling | ⏳ Pending | - |
+| 17 | Add Strict ESLint Rules | ⏳ Pending | - |
+| 18 | Add JSDoc Comments for Public APIs | ⏳ Pending | - |
+| 19 | Implement Virtual Scrolling for Long Lists | ⏳ Pending | - |
+| 20 | Optimize Bundle Splitting | ⏳ Pending | - |
+| 21 | Add Resource Hints | ⏳ Pending | - |
+| 22 | Implement Selective Hydration | ⏳ Pending | - |
+| 23 | Add Visual Regression Testing | ⏳ Pending | - |
+| 24 | Add Contract Testing for Mock API | ⏳ Pending | - |
+| 25 | Add Performance Testing | ⏳ Pending | - |
+| 26 | Implement Content Security Policy Reporting | ⏳ Pending | - |
+| 27 | Add Input Validation at Form Level | ⏳ Pending | - |
+| 28 | Add Rate Limiting for Export Operations | ⏳ Pending | - |
+| 29 | Add Development Scripts | ⏳ Pending | - |
+| 30 | Add Pre-commit Hooks | ✅ Done | Dec 2025 |
+| 31 | Add Storybook for All UI Components | ⏳ Pending | - |
+| 32 | Add Resume Comparison View | ⏳ Pending | - |
+| 33 | Add Resume Templates Marketplace | ⏳ Pending | - |
+| 34 | Add Resume Scoring | ⏳ Pending | - |
+| 35 | Add Multi-Resume Support | ⏳ Pending | - |
+
+---
 
 ## Table of Contents
 
@@ -33,9 +84,13 @@ This document outlines opportunities to further enhance the application across v
 
 ## High Priority Improvements
 
-### 1. Reduce Code Duplication in Resume Builder
+### 1. Reduce Code Duplication in Resume Builder ✅
+
+**Status:** ✅ Done (December 2025)
 
 **Location:** `src/components/features/resume/resume-builder.tsx`
+
+**Implementation:** Created `src/hooks/use-entity-list-handlers.ts` with full test coverage.
 
 **Issue:** The component has significant repetition across entity handlers (Experience, Education, Certifications, Links). Each entity has nearly identical:
 - State management (`editingId`, `addingNew`)
@@ -122,56 +177,43 @@ function useEntityListHandlers<T extends { id: string }>({
 
 ---
 
-### 2. Improve Type Safety in Resume Store
+### 2. Improve Type Safety in Resume Store ✅
 
-**Location:** `src/stores/resume-store.ts`
+**Status:** ✅ Done (December 2025)
 
-**Issue:** Several interfaces use `unknown` types or allow arbitrary keys:
+**Location:** `src/stores/resume-store.ts`, `src/stores/history-store.ts`, `src/lib/utils/guest-storage.ts`
 
-```typescript
-export interface UserInfo {
-  // ...
-  [key: string]: unknown;  // Too permissive
-}
+**Implementation:** Improved type safety across the store layer:
 
-export interface ResumeContent {
-  [key: string]: unknown;  // Should be strictly typed
-}
-```
+1. **Fixed store exports** (`src/stores/index.ts`):
+   - Removed non-existent `Skill` type export
+   - Added proper exports for `Experience`, `ExperienceFormat`, `LinkType`, `NameOrder`, `PersonalInfo`, `PhoneFormat`, `Skills`, `SkillWithLevel`
+   - Added exports for style types: `CustomFont`, `StyleCustomization`
+   - Added exports for legacy types with deprecation notices
 
-**Solution:** Create strict type definitions:
+2. **Improved HistoryChange type** (`src/stores/history-store.ts`):
+   - Created `HistoryValue` union type to replace `unknown`
+   - Created `HistorySection` type for section identifiers
+   - Added JSDoc comments for all types
+   - Values now properly typed as: `string | boolean | undefined | null | string[] | WorkExperience[] | LegacyEducation[] | LegacySkill[] | LegacyCertification[] | LegacyLink[]`
 
-```typescript
-// src/stores/resume-store.ts
-export interface UserInfo {
-  name?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  customUrl?: string;
-  links?: Link[];
-  experiences?: WorkExperience[];
-  education?: Education[];
-  skills?: Skill[];
-  certifications?: Certification[];
-  // Remove index signature - be explicit about allowed fields
-}
+3. **Type-safe guest storage** (`src/lib/utils/guest-storage.ts`):
+   - Created `GuestData` interface for import/export operations
+   - Created `ZustandPersistedState<T>` wrapper type
+   - Created `ResumeStoreState` and `ProfileStoreState` interfaces
+   - Replaced `unknown` types with proper typed interfaces
 
-export interface ResumeContent {
-  personalInfo?: PersonalInfo;
-  experience?: Experience[];
-  education?: Education[];
-  skills?: Skills;
-  certifications?: Certification[];
-  links?: Link[];
-}
-```
+**Note:** The original issue from the analysis mentioned index signatures (`[key: string]: unknown`) but those were already removed in a previous update. The `ResumeContent` type in `src/lib/api/types.ts` is strictly typed.
 
 ---
 
-### 3. Expand E2E Test Coverage
+### 3. Expand E2E Test Coverage ✅
 
-**Location:** `e2e/dashboard.e2e.ts`
+**Status:** ✅ Done (December 2025)
+
+**Location:** `e2e/` directory
+
+**Implementation:** Created comprehensive E2E test files covering all critical user flows.
 
 **Issue:** Only 2 basic E2E tests exist. Critical user flows are untested.
 
@@ -272,7 +314,9 @@ test.describe("Authentication Flow", () => {
 
 ---
 
-### 4. Add Loading States for Better UX
+### 4. Add Loading States for Better UX ⏳
+
+**Status:** ⏳ Pending
 
 **Location:** Various components
 
@@ -1070,7 +1114,11 @@ export function canExport(userId: string): boolean {
 
 ---
 
-### 30. Add Pre-commit Hooks
+### 30. Add Pre-commit Hooks ✅
+
+**Status:** ✅ Done (December 2025)
+
+**Implementation:** Added `.husky/pre-commit` and `.husky/pre-push` hooks that run formatting and linting.
 
 **Enhancement:** Ensure code quality before commits:
 
@@ -1178,28 +1226,30 @@ export const AllVariants: Story = {
 
 ## Implementation Priority Matrix
 
-| Improvement | Priority | Effort | Impact |
-|-------------|----------|--------|--------|
-| #1 Reduce code duplication | High | Medium | High |
-| #2 Improve type safety | High | Low | Medium |
-| #3 Expand E2E tests | High | High | High |
-| #4 Loading states | High | Low | High |
-| #5 Internationalization | Medium | High | Medium |
-| #6 Undo/Redo shortcuts | Medium | Low | Medium |
-| #16 Error handling | Medium | Medium | High |
-| #19 Virtual scrolling | Low | Medium | Low |
-| #23 Visual regression | Low | Medium | Medium |
+| Improvement | Priority | Effort | Impact | Status |
+|-------------|----------|--------|--------|--------|
+| #1 Reduce code duplication | High | Medium | High | ✅ Done |
+| #2 Improve type safety | High | Low | Medium | ✅ Done |
+| #3 Expand E2E tests | High | High | High | ✅ Done |
+| #4 Loading states | High | Low | High | ⏳ Pending |
+| #5 Internationalization | Medium | High | Medium | ⏳ Pending |
+| #6 Undo/Redo shortcuts | Medium | Low | Medium | ⏳ Pending |
+| #16 Error handling | Medium | Medium | High | ⏳ Pending |
+| #19 Virtual scrolling | Low | Medium | Low | ⏳ Pending |
+| #23 Visual regression | Low | Medium | Medium | ⏳ Pending |
 
 ---
 
 ## Quick Wins (Can be done in < 2 hours each)
 
-1. ✅ Add keyboard shortcuts for undo/redo
-2. ✅ Add loading skeletons for all async operations
-3. ✅ Add more JSDoc comments
-4. ✅ Fix type safety issues in stores
-5. ✅ Add pre-commit hooks
-6. ✅ Add more npm scripts for DX
+| # | Task | Status |
+|---|------|--------|
+| 1 | Add keyboard shortcuts for undo/redo | ⏳ Pending |
+| 2 | Add loading skeletons for all async operations | ⏳ Pending |
+| 3 | Add more JSDoc comments | ⏳ Pending |
+| 4 | Fix type safety issues in stores | ✅ Done |
+| 5 | Add pre-commit hooks | ✅ Done |
+| 6 | Add more npm scripts for DX | ⏳ Pending |
 
 ---
 
@@ -1213,5 +1263,16 @@ Resumier is already a solid application with good architecture and practices. Th
 - Stronger security posture
 - Comprehensive test coverage
 
+**Progress Summary:**
+- ✅ **4 of 35** improvements completed
+- High-priority items #1 (code duplication), #2 (type safety), and #3 (E2E tests) are done
+- Pre-commit hooks (#30) are in place for code quality
+- Quick win #4 (type safety) is done
+
 The recommended approach is to tackle high-priority items first, then gradually work through medium and low priority improvements as resources allow.
+
+**Next recommended items:**
+1. #4 - Add Loading States for Better UX (High priority, Low effort)
+2. #6 - Implement Undo/Redo at Global Level (Quick win)
+3. #16 - Standardize Error Handling (Medium priority, High impact)
 
