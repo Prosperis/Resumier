@@ -33,14 +33,8 @@ export function useResumeVersions(resumeId: string) {
   // Computed values
   const versionCount = versions.length;
   const latestVersion = versions[0] || null;
-  const manualVersions = useMemo(
-    () => versions.filter((v) => !v.isAutoSave),
-    [versions],
-  );
-  const autoSaveVersions = useMemo(
-    () => versions.filter((v) => v.isAutoSave),
-    [versions],
-  );
+  const manualVersions = useMemo(() => versions.filter((v) => !v.isAutoSave), [versions]);
+  const autoSaveVersions = useMemo(() => versions.filter((v) => v.isAutoSave), [versions]);
 
   /**
    * Save a new version of the resume
@@ -184,17 +178,12 @@ export function useResumeVersions(resumeId: string) {
       const changes: string[] = [];
 
       // Compare personal info
-      if (
-        JSON.stringify(v1.content.personalInfo) !==
-        JSON.stringify(v2.content.personalInfo)
-      ) {
+      if (JSON.stringify(v1.content.personalInfo) !== JSON.stringify(v2.content.personalInfo)) {
         changes.push("Personal info changed");
       }
 
       // Compare experience
-      if (
-        JSON.stringify(v1.content.experience) !== JSON.stringify(v2.content.experience)
-      ) {
+      if (JSON.stringify(v1.content.experience) !== JSON.stringify(v2.content.experience)) {
         const diff = v2.content.experience.length - v1.content.experience.length;
         if (diff > 0) {
           changes.push(`Added ${diff} experience${diff > 1 ? "s" : ""}`);
@@ -206,9 +195,7 @@ export function useResumeVersions(resumeId: string) {
       }
 
       // Compare education
-      if (
-        JSON.stringify(v1.content.education) !== JSON.stringify(v2.content.education)
-      ) {
+      if (JSON.stringify(v1.content.education) !== JSON.stringify(v2.content.education)) {
         changes.push("Education changed");
       }
 
@@ -218,10 +205,7 @@ export function useResumeVersions(resumeId: string) {
       }
 
       // Compare certifications
-      if (
-        JSON.stringify(v1.content.certifications) !==
-        JSON.stringify(v2.content.certifications)
-      ) {
+      if (JSON.stringify(v1.content.certifications) !== JSON.stringify(v2.content.certifications)) {
         changes.push("Certifications changed");
       }
 
@@ -266,4 +250,3 @@ export function useResumeVersions(resumeId: string) {
     compareVersions,
   };
 }
-

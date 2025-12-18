@@ -173,8 +173,7 @@ describe("version-store", () => {
 
   describe("updateVersionLabel", () => {
     it("should update a version label", () => {
-      const { saveVersion, updateVersionLabel, getVersion } =
-        useVersionStore.getState();
+      const { saveVersion, updateVersionLabel, getVersion } = useVersionStore.getState();
       const resumeId = "resume-1";
 
       const version = saveVersion(resumeId, sampleContent);
@@ -216,8 +215,7 @@ describe("version-store", () => {
 
   describe("cleanupAutoSaves", () => {
     it("should keep only the most recent auto-saves", () => {
-      const { saveVersion, cleanupAutoSaves, getVersions } =
-        useVersionStore.getState();
+      const { saveVersion, cleanupAutoSaves, getVersions } = useVersionStore.getState();
       const resumeId = "resume-1";
 
       // Create 15 auto-saves
@@ -244,11 +242,11 @@ describe("version-store", () => {
   describe("max versions limit", () => {
     it("should enforce max versions limit", () => {
       // Set a lower max for testing before getting state
-      useVersionStore.setState({ 
+      useVersionStore.setState({
         versions: {},
-        maxVersionsPerResume: 5 
+        maxVersionsPerResume: 5,
       });
-      
+
       const resumeId = "resume-1";
 
       // Create more than max versions - need to get saveVersion fresh each time
@@ -262,11 +260,11 @@ describe("version-store", () => {
     });
 
     it("should prioritize manual saves when trimming", () => {
-      useVersionStore.setState({ 
+      useVersionStore.setState({
         versions: {},
-        maxVersionsPerResume: 5 
+        maxVersionsPerResume: 5,
       });
-      
+
       const resumeId = "resume-1";
       const store = useVersionStore.getState();
 
@@ -288,4 +286,3 @@ describe("version-store", () => {
     });
   });
 });
-

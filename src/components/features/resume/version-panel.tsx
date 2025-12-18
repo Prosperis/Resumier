@@ -32,11 +32,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useResumeVersions } from "@/hooks/use-resume-versions";
 import type { ResumeContent, ResumeVersion } from "@/lib/api/types";
 
@@ -49,13 +45,7 @@ interface VersionItemProps {
   onUpdateLabel: (versionId: string, label: string) => void;
 }
 
-function VersionItem({
-  version,
-  isLatest,
-  onRestore,
-  onDelete,
-  onUpdateLabel,
-}: VersionItemProps) {
+function VersionItem({ version, isLatest, onRestore, onDelete, onUpdateLabel }: VersionItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editLabel, setEditLabel] = useState(version.label || "");
 
@@ -79,9 +69,7 @@ function VersionItem({
       className={cn(
         "group relative p-3 rounded-lg border transition-all duration-200",
         "hover:bg-muted/50 hover:border-border",
-        isLatest
-          ? "border-primary/30 bg-primary/5"
-          : "border-transparent bg-transparent",
+        isLatest ? "border-primary/30 bg-primary/5" : "border-transparent bg-transparent",
       )}
     >
       {/* Version indicator line */}
@@ -135,20 +123,10 @@ function VersionItem({
                     if (e.key === "Escape") handleCancelEdit();
                   }}
                 />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7"
-                  onClick={handleSaveLabel}
-                >
+                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleSaveLabel}>
                   <Check className="h-3.5 w-3.5 text-green-500" />
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7"
-                  onClick={handleCancelEdit}
-                >
+                <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleCancelEdit}>
                   <X className="h-3.5 w-3.5 text-muted-foreground" />
                 </Button>
               </div>
@@ -236,8 +214,7 @@ function VersionItem({
                   <AlertDialogTitle>Delete Version</AlertDialogTitle>
                   <AlertDialogDescription>
                     Are you sure you want to delete version {version.version}
-                    {version.label ? ` (${version.label})` : ""}? This action cannot
-                    be undone.
+                    {version.label ? ` (${version.label})` : ""}? This action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -291,8 +268,7 @@ function SaveVersionDialog({ onSave, trigger }: SaveVersionDialogProps) {
             Save New Version
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Create a snapshot of your current resume. You can restore this version
-            anytime.
+            Create a snapshot of your current resume. You can restore this version anytime.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="py-4">
@@ -470,8 +446,7 @@ export function VersionPanel({ resumeId, currentContent, className }: VersionPan
                 <AlertDialogTitle>Clear All Versions</AlertDialogTitle>
                 <AlertDialogDescription>
                   This will permanently delete all {versionCount} saved version
-                  {versionCount > 1 ? "s" : ""} for this resume. This action cannot
-                  be undone.
+                  {versionCount > 1 ? "s" : ""} for this resume. This action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -520,4 +495,3 @@ export function VersionIndicator({ resumeId }: VersionIndicatorProps) {
     </Tooltip>
   );
 }
-

@@ -299,7 +299,11 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
       {/* Expanded sidebar content */}
       <div className={cn("flex flex-col h-full", isExpanded ? "flex" : "hidden")}>
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as ToolTab)} className="flex flex-col h-full">
+        <Tabs
+          value={activeTab}
+          onValueChange={(v) => setActiveTab(v as ToolTab)}
+          className="flex flex-col h-full"
+        >
           <TabsList className="grid w-full grid-cols-2 h-9 rounded-none border-b border-border bg-muted/30">
             <TabsTrigger
               value="history"

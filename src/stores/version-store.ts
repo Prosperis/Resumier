@@ -68,10 +68,7 @@ export const useVersionStore = create<VersionStore>()(
           const existingVersions = state.versions[resumeId] || [];
 
           // Calculate next version number
-          const maxVersion = existingVersions.reduce(
-            (max, v) => Math.max(max, v.version),
-            0,
-          );
+          const maxVersion = existingVersions.reduce((max, v) => Math.max(max, v.version), 0);
 
           const newVersion: ResumeVersion = {
             id: generateVersionId(),
@@ -102,13 +99,9 @@ export const useVersionStore = create<VersionStore>()(
               0,
               state.maxVersionsPerResume - manualSavesToKeep.length,
             );
-            
-            updatedVersions = [
-              ...manualSavesToKeep,
-              ...autoSaves.slice(0, autoSavesToKeep),
-            ].sort(
-              (a, b) =>
-                new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+
+            updatedVersions = [...manualSavesToKeep, ...autoSaves.slice(0, autoSavesToKeep)].sort(
+              (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
             );
           }
 
@@ -155,9 +148,7 @@ export const useVersionStore = create<VersionStore>()(
           set({
             versions: {
               ...state.versions,
-              [resumeId]: versions.map((v) =>
-                v.id === versionId ? { ...v, label } : v,
-              ),
+              [resumeId]: versions.map((v) => (v.id === versionId ? { ...v, label } : v)),
             },
           });
         },
@@ -179,8 +170,7 @@ export const useVersionStore = create<VersionStore>()(
           const trimmedAutoSaves = autoSaves.slice(0, keepCount);
 
           const updatedVersions = [...manualSaves, ...trimmedAutoSaves].sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           );
 
           set({
@@ -238,4 +228,3 @@ export const selectVersionActions = (state: VersionStore) => ({
   clearVersions: state.clearVersions,
   cleanupAutoSaves: state.cleanupAutoSaves,
 });
-
