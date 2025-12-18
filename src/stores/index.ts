@@ -114,3 +114,12 @@ export {
   selectToggleResumeBuilderSection,
   useUIStore,
 } from "./ui-store";
+export {
+  selectAutoSaveVersions,
+  selectLatestVersion,
+  selectManualVersions,
+  selectVersionActions,
+  selectVersionCount,
+  selectVersions,
+  useVersionStore,
+} from "./version-store";

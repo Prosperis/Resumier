@@ -216,3 +216,22 @@ export interface ErrorResponse {
 export interface ValidationErrorResponse extends ErrorResponse {
   errors: Record<string, string[]>;
 }
+
+/**
+ * Resume Version for versioning system
+ * Allows users to save and restore snapshots of their resume
+ */
+export interface ResumeVersion {
+  id: string;
+  resumeId: string;
+  version: number;
+  content: ResumeContent;
+  template: string;
+  styleCustomization?: {
+    colorTheme: string;
+    fontTheme: string;
+  };
+  createdAt: string;
+  label?: string; // User-defined label like "Before template change"
+  isAutoSave?: boolean; // Whether this was auto-saved or manually created
+}

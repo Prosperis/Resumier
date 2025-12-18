@@ -22,7 +22,7 @@
 | 4 | Add Loading States for Better UX | ✅ Done | Dec 2025 |
 | 5 | Add Internationalization (i18n) Support | ✅ Done | Dec 2025 |
 | 6 | Implement Undo/Redo at Global Level | ✅ Done | Dec 2025 |
-| 7 | Add Resume Versioning | ⏳ Pending | - |
+| 7 | Add Resume Versioning | ✅ Done | Dec 2025 |
 | 8 | Improve CSP by Removing unsafe-inline | ⏳ Pending | - |
 | 9 | Add Analytics Integration | ⏳ Pending | - |
 | 10 | Add Resume Sharing Feature | ⏳ Pending | - |
@@ -1012,32 +1012,59 @@ function flattenObject(obj: object, prefix = ""): Record<string, string> {
 
 ---
 
-### 7. Add Resume Versioning
+### 7. Add Resume Versioning ✅
+
+**Status:** ✅ Done (December 2025)
 
 **Feature:** Allow users to save and restore versions of their resume.
 
-```typescript
-// src/lib/api/types.ts
-export interface ResumeVersion {
-  id: string;
-  resumeId: string;
-  version: number;
-  content: ResumeContent;
-  createdAt: string;
-  label?: string; // e.g., "Before template change"
-}
+**Location:** `src/stores/version-store.ts`, `src/hooks/use-resume-versions.ts`, `src/components/features/resume/version-panel.tsx`
 
-// src/stores/version-store.ts
-interface VersionStore {
-  versions: Map<string, ResumeVersion[]>;
-  
-  // Actions
-  saveVersion: (resumeId: string, content: ResumeContent, label?: string) => void;
-  restoreVersion: (resumeId: string, versionId: string) => void;
-  getVersions: (resumeId: string) => ResumeVersion[];
-  deleteVersion: (resumeId: string, versionId: string) => void;
-}
-```
+**Implementation:** Created a comprehensive versioning system with persistent storage and integrated UI.
+
+**Files Created:**
+1. `src/lib/api/types.ts` - Added `ResumeVersion` interface
+   - Tracks version number, content, template, style customization
+   - Supports labels and auto-save vs manual save distinction
+
+2. `src/stores/version-store.ts` - Version management store
+   - Zustand store with IndexedDB persistence via idb-keyval
+   - Up to 50 versions per resume (configurable)
+   - Smart cleanup: prioritizes keeping manual saves over auto-saves
+   - Full CRUD operations: save, restore, delete, update labels
+
+3. `src/hooks/use-resume-versions.ts` - Integration hook
+   - Convenient methods for saving/restoring versions
+   - Auto-save support (silent, no toast)
+   - Restores template and style along with content
+   - Version comparison utility
+   - Toast notifications for user feedback
+
+4. `src/components/features/resume/version-panel.tsx` - UI Component
+   - `<VersionPanel />` - Full version management panel
+   - `<VersionIndicator />` - Compact badge for toolbar
+   - Save version dialog with optional labels
+   - Editable version labels
+   - Collapsible auto-saves section
+   - Confirm dialogs for delete and clear actions
+
+**Modified Files:**
+- `src/stores/index.ts` - Added exports for version store
+- `src/components/features/resume/tool-sidebar.tsx` - Added tabbed interface with History + Versions
+
+**Features:**
+- ✅ Save named versions with optional labels
+- ✅ Auto-save versions (silent, separate from manual saves)
+- ✅ Restore any previous version (content, template, styles)
+- ✅ Edit version labels inline
+- ✅ Delete individual versions with confirmation
+- ✅ Clear all versions with confirmation
+- ✅ Cleanup old auto-saves to save storage
+- ✅ Tabbed UI alongside existing History panel
+- ✅ Version count badges in sidebar
+- ✅ Timestamps with relative time display
+- ✅ Template and style info per version
+- ✅ Persistent storage with IndexedDB
 
 ---
 
@@ -1783,6 +1810,7 @@ export const AllVariants: Story = {
 | #4 Loading states | High | Low | High | ✅ Done |
 | #5 Internationalization | Medium | High | Medium | ✅ Done |
 | #6 Undo/Redo shortcuts | Medium | Low | Medium | ✅ Done |
+| #7 Resume Versioning | Medium | Medium | High | ✅ Done |
 | #16 Error handling | Medium | Medium | High | ⏳ Pending |
 | #19 Virtual scrolling | Low | Medium | Low | ⏳ Pending |
 | #23 Visual regression | Low | Medium | Medium | ⏳ Pending |
@@ -1813,10 +1841,11 @@ Resumier is already a solid application with good architecture and practices. Th
 - Comprehensive test coverage
 
 **Progress Summary:**
-- ✅ **7 of 35** improvements completed
+- ✅ **8 of 35** improvements completed
 - High-priority items #1 (code duplication), #2 (type safety), #3 (E2E tests), and #4 (loading states) are done
 - Internationalization (#5) is complete with English and Spanish support
 - Global Undo/Redo (#6) is complete with keyboard shortcuts and UI buttons
+- Resume Versioning (#7) is complete with save/restore, labels, auto-save, and tabbed UI
 - Pre-commit hooks (#30) are in place for code quality
 - Quick wins #1 (undo/redo shortcuts), #2 (loading skeletons), and #4 (type safety) are done
 
@@ -1824,6 +1853,6 @@ The recommended approach is to tackle high-priority items first, then gradually 
 
 **Next recommended items:**
 1. #16 - Standardize Error Handling (Medium priority, High impact)
-2. #7 - Add Resume Versioning (Medium priority)
+2. #10 - Add Resume Sharing Feature (Medium priority)
 3. #12 - Add Keyboard Navigation (Low priority, enhances accessibility)
 

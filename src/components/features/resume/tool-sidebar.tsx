@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import {
   History,
@@ -8,11 +9,13 @@ import {
   CircleDot,
   Clock,
   Trash2,
+  Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   useHistoryStore,
   selectHistoryEntries,
@@ -21,7 +24,11 @@ import {
   type HistoryEntry,
   type HistoryChange,
 } from "@/stores/history-store";
+import { useVersionStore } from "@/stores/version-store";
 import { useResumeHistory } from "@/hooks/use-resume-history";
+import { VersionPanel } from "./version-panel";
+import { useUIStore } from "@/stores/ui-store";
+import type { ResumeContent } from "@/lib/api/types";
 
 // Change indicator component
 function ChangeIndicator({ change }: { change: HistoryChange }) {
@@ -131,13 +138,26 @@ interface ToolSidebarProps {
   onToggle: () => void;
 }
 
+type ToolTab = "history" | "versions";
+
 export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
+  const [activeTab, setActiveTab] = useState<ToolTab>("history");
+
   const entries = useHistoryStore(selectHistoryEntries);
   const currentIndex = useHistoryStore(selectCurrentIndex);
   const isPreviewingHistory = useHistoryStore(selectIsPreviewingHistory);
   const stopPreview = useHistoryStore((state) => state.stopPreview);
   const clearHistory = useHistoryStore((state) => state.clearHistory);
   const canRedo = useHistoryStore((state) => state.canRedo());
+
+  // Get current resume for versioning
+  const currentResume = useUIStore((state) => state.currentResume);
+  const resumeId = currentResume?.id || "";
+
+  // Get version count for badge
+  const versionCount = useVersionStore((state) =>
+    resumeId ? (state.versions[resumeId] || []).length : 0,
+  );
 
   const { undoChange, redoChange } = useResumeHistory();
 
@@ -223,7 +243,10 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
             <TooltipTrigger asChild>
               <button
                 type="button"
-                onClick={onToggle}
+                onClick={() => {
+                  setActiveTab("history");
+                  onToggle();
+                }}
                 className={cn(
                   "relative flex items-center justify-center w-8 h-8 rounded-md",
                   "text-muted-foreground hover:text-foreground hover:bg-muted",
@@ -242,99 +265,162 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
               <p>History (Ctrl+Z / Ctrl+Shift+Z)</p>
             </TooltipContent>
           </Tooltip>
+
+          {/* Versions icon with count */}
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab("versions");
+                  onToggle();
+                }}
+                className={cn(
+                  "relative flex items-center justify-center w-8 h-8 rounded-md",
+                  "text-muted-foreground hover:text-foreground hover:bg-muted",
+                  "transition-colors",
+                )}
+              >
+                <Layers className="h-4 w-4" />
+                {versionCount > 0 && (
+                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[9px] text-primary-foreground flex items-center justify-center">
+                    {versionCount > 9 ? "9+" : versionCount}
+                  </span>
+                )}
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="left" sideOffset={8}>
+              <p>Saved Versions</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
 
       {/* Expanded sidebar content */}
       <div className={cn("flex flex-col h-full", isExpanded ? "flex" : "hidden")}>
-        {/* Header */}
-        <div className="flex items-center justify-between px-3 py-2 border-b border-border bg-muted/30">
-          <div className="flex items-center gap-2">
-            <History className="h-4 w-4 text-muted-foreground" />
-            <span className="text-xs font-medium text-muted-foreground">History</span>
-            {entries.length > 0 && (
-              <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4">
-                {entries.length}
-              </Badge>
-            )}
-          </div>
-
-          {/* Keyboard shortcut hint */}
-          <span className="text-[10px] text-muted-foreground/50">Ctrl+Z / Ctrl+Shift+Z</span>
-        </div>
-
-        {/* Preview mode indicator */}
-        {isPreviewingHistory && (
-          <div className="mx-3 mt-3 flex items-center justify-between py-2 px-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg">
-            <div className="flex items-center gap-1.5">
-              <GitBranch className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
-              <span className="text-xs text-amber-700 dark:text-amber-300">Viewing past</span>
-            </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleBackToCurrent}
-              className="h-6 px-2 text-[10px] text-amber-700 dark:text-amber-300 hover:text-amber-900 dark:hover:text-amber-100"
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as ToolTab)} className="flex flex-col h-full">
+          <TabsList className="grid w-full grid-cols-2 h-9 rounded-none border-b border-border bg-muted/30">
+            <TabsTrigger
+              value="history"
+              className="text-xs rounded-none data-[state=active]:bg-background data-[state=active]:shadow-none relative"
             >
-              Back
-            </Button>
-          </div>
-        )}
-
-        {/* History entries */}
-        <div className="flex-1 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] p-3 space-y-1.5">
-          {entries.length === 0 ? (
-            <div className="text-center py-8">
-              <History className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
-              <p className="text-xs text-muted-foreground">No changes yet</p>
-              <p className="text-[10px] text-muted-foreground/60 mt-1">
-                Your edits will appear here
-              </p>
-            </div>
-          ) : (
-            <>
-              {/* Current state indicator */}
-              {!isPreviewingHistory && (
-                <div className="flex items-center gap-2 px-2 py-1.5 text-xs text-muted-foreground">
-                  <CircleDot className="h-3.5 w-3.5 text-green-500" />
-                  <span className="font-medium">Current</span>
-                </div>
+              <History className="h-3.5 w-3.5 mr-1.5" />
+              History
+              {entries.length > 0 && (
+                <Badge variant="secondary" className="ml-1.5 text-[9px] px-1 py-0 h-4">
+                  {entries.length}
+                </Badge>
               )}
-
-              {/* Timeline */}
-              <div className="relative">
-                {/* Vertical line */}
-                <div className="absolute left-[13px] top-3 bottom-3 w-px bg-border" />
-
-                {/* Entries */}
-                {entries.map((entry, index) => (
-                  <HistoryEntryItem
-                    key={entry.id}
-                    entry={entry}
-                    isActive={currentIndex === index}
-                    isCurrent={currentIndex === index && isPreviewingHistory}
-                    onSelect={() => handleSelectEntry(entry, index)}
-                  />
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Footer with clear button */}
-        {entries.length > 0 && (
-          <div className="border-t border-border p-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearHistory}
-              className="w-full h-7 text-xs text-muted-foreground hover:text-destructive"
+            </TabsTrigger>
+            <TabsTrigger
+              value="versions"
+              className="text-xs rounded-none data-[state=active]:bg-background data-[state=active]:shadow-none relative"
             >
-              <Trash2 className="h-3 w-3 mr-1.5" />
-              Clear History
-            </Button>
-          </div>
-        )}
+              <Layers className="h-3.5 w-3.5 mr-1.5" />
+              Versions
+              {versionCount > 0 && (
+                <Badge variant="secondary" className="ml-1.5 text-[9px] px-1 py-0 h-4">
+                  {versionCount}
+                </Badge>
+              )}
+            </TabsTrigger>
+          </TabsList>
+
+          {/* History Tab Content */}
+          <TabsContent value="history" className="flex-1 flex flex-col mt-0 overflow-hidden">
+            {/* Preview mode indicator */}
+            {isPreviewingHistory && (
+              <div className="mx-3 mt-3 flex items-center justify-between py-2 px-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg">
+                <div className="flex items-center gap-1.5">
+                  <GitBranch className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+                  <span className="text-xs text-amber-700 dark:text-amber-300">Viewing past</span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleBackToCurrent}
+                  className="h-6 px-2 text-[10px] text-amber-700 dark:text-amber-300 hover:text-amber-900 dark:hover:text-amber-100"
+                >
+                  Back
+                </Button>
+              </div>
+            )}
+
+            {/* History entries */}
+            <div className="flex-1 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] p-3 space-y-1.5">
+              {entries.length === 0 ? (
+                <div className="text-center py-8">
+                  <History className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+                  <p className="text-xs text-muted-foreground">No changes yet</p>
+                  <p className="text-[10px] text-muted-foreground/60 mt-1">
+                    Your edits will appear here
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {/* Current state indicator */}
+                  {!isPreviewingHistory && (
+                    <div className="flex items-center gap-2 px-2 py-1.5 text-xs text-muted-foreground">
+                      <CircleDot className="h-3.5 w-3.5 text-green-500" />
+                      <span className="font-medium">Current</span>
+                    </div>
+                  )}
+
+                  {/* Timeline */}
+                  <div className="relative">
+                    {/* Vertical line */}
+                    <div className="absolute left-[13px] top-3 bottom-3 w-px bg-border" />
+
+                    {/* Entries */}
+                    {entries.map((entry, index) => (
+                      <HistoryEntryItem
+                        key={entry.id}
+                        entry={entry}
+                        isActive={currentIndex === index}
+                        isCurrent={currentIndex === index && isPreviewingHistory}
+                        onSelect={() => handleSelectEntry(entry, index)}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Footer with clear button */}
+            {entries.length > 0 && (
+              <div className="border-t border-border p-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearHistory}
+                  className="w-full h-7 text-xs text-muted-foreground hover:text-destructive"
+                >
+                  <Trash2 className="h-3 w-3 mr-1.5" />
+                  Clear History
+                </Button>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Versions Tab Content */}
+          <TabsContent value="versions" className="flex-1 flex flex-col mt-0 overflow-hidden">
+            {resumeId ? (
+              <VersionPanel
+                resumeId={resumeId}
+                currentContent={currentResume?.content as ResumeContent}
+                className="flex-1"
+              />
+            ) : (
+              <div className="flex-1 flex items-center justify-center p-4">
+                <div className="text-center">
+                  <Layers className="h-10 w-10 mx-auto text-muted-foreground/20 mb-3" />
+                  <p className="text-xs text-muted-foreground">No resume selected</p>
+                </div>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
