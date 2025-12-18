@@ -5,8 +5,10 @@ import { useTranslation } from "react-i18next";
 import { ExportMenu } from "@/components/features/resume/export/export-menu";
 import { StyleCustomizer } from "@/components/features/resume/preview/style-customizer";
 import { TemplateSelector } from "@/components/features/resume/preview/template-selector";
+import { UndoRedoButtons } from "@/components/features/undo-redo-buttons";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { Separator } from "@/components/ui/separator";
 import { selectIsDemo, useAuthStore } from "@/stores/auth-store";
 import { useResumeStore } from "@/stores/resume-store";
 import { selectCurrentResume, useUIStore } from "@/stores/ui-store";
@@ -95,6 +97,8 @@ export function RootLayout({ children }: RootLayoutProps) {
             {/* Resume-specific actions - only show when editing a resume */}
             {currentResume && (
               <>
+                <UndoRedoButtons size="icon" variant="ghost" />
+                <Separator orientation="vertical" className="h-6 mx-1" />
                 <TemplateSelector selected={template} onSelect={setTemplate} />
                 <StyleCustomizer />
                 <ExportMenu resume={currentResume} />

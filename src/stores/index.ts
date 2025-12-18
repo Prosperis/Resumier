@@ -1,6 +1,21 @@
 // Store exports
 
 export { useAnimationStore } from "./animation-store";
+export type {
+  GlobalChangeType,
+  GlobalHistoryEntry,
+  GlobalStateSnapshot,
+} from "./global-undo-store";
+export {
+  selectGlobalCanRedo,
+  selectGlobalCanUndo,
+  selectGlobalCurrentIndex,
+  selectGlobalHistoryEntries,
+  selectGlobalIsPaused,
+  selectGlobalUndoActions,
+  selectIsGlobalPreviewingHistory,
+  useGlobalUndoStore,
+} from "./global-undo-store";
 export type { User } from "./auth-store";
 export {
   selectAuthActions,

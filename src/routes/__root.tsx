@@ -1,5 +1,6 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { GlobalUndoProvider } from "@/components/features/global-undo-provider";
 import { RootLayout } from "@/components/layouts/root-layout";
 import { NotFoundError } from "@/components/ui/route-error";
 import { useCacheCleanup } from "@/hooks/use-cache-cleanup";
@@ -22,12 +23,12 @@ function RootComponent() {
   });
 
   return (
-    <>
+    <GlobalUndoProvider>
       <RootLayout>
         <Outlet />
       </RootLayout>
       {/* Show router devtools in development */}
       {import.meta.env.DEV && <TanStackRouterDevtools position="bottom-right" />}
-    </>
+    </GlobalUndoProvider>
   );
 }
