@@ -21,7 +21,7 @@
 | 3 | Expand E2E Test Coverage | ✅ Done | Dec 2025 |
 | 4 | Add Loading States for Better UX | ✅ Done | Dec 2025 |
 | 5 | Add Internationalization (i18n) Support | ✅ Done | Dec 2025 |
-| 6 | Implement Undo/Redo at Global Level | ⏳ Pending | - |
+| 6 | Implement Undo/Redo at Global Level | ✅ Done | Dec 2025 |
 | 7 | Add Resume Versioning | ⏳ Pending | - |
 | 8 | Improve CSP by Removing unsafe-inline | ⏳ Pending | - |
 | 9 | Add Analytics Integration | ⏳ Pending | - |
@@ -958,50 +958,57 @@ function flattenObject(obj: object, prefix = ""): Record<string, string> {
 
 ---
 
-### 6. Implement Undo/Redo at Global Level
+### 6. Implement Undo/Redo at Global Level ✅
 
-**Location:** `src/stores/history-store.ts`
+**Status:** ✅ Done (December 2025)
 
-**Issue:** Undo/redo exists but may not cover all content changes.
+**Location:** `src/stores/global-undo-store.ts`, `src/hooks/use-global-undo-redo.ts`, `src/hooks/use-keyboard-shortcuts.ts`
 
-**Enhancement:** Make undo/redo more comprehensive with keyboard shortcuts:
+**Implementation:** Created a comprehensive global undo/redo system that tracks all state changes across the application.
 
-```typescript
-// src/hooks/use-keyboard-shortcuts.ts
-import { useEffect } from "react";
-import { useHistoryStore, selectHistoryActions, selectCanUndo, selectCanRedo } from "@/stores";
+**Files Created:**
+1. `src/stores/global-undo-store.ts` - Global undo manager store
+   - Tracks state snapshots (template, styleCustomization, userInfo, jobInfo)
+   - Supports up to 100 history entries
+   - Built-in debouncing to group rapid changes
+   - Pause/resume functionality to prevent tracking during undo/redo operations
 
-export function useKeyboardShortcuts() {
-  const { undo, redo } = useHistoryStore(selectHistoryActions);
-  const canUndo = useHistoryStore(selectCanUndo);
-  const canRedo = useHistoryStore(selectCanRedo);
+2. `src/hooks/use-global-undo-redo.ts` - Main integration hook
+   - Automatically tracks changes to the resume store
+   - Provides `undo()` and `redo()` functions
+   - Detects change types and generates descriptions
+   - Applies snapshots back to stores during undo/redo
 
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      // Ctrl/Cmd + Z = Undo
-      if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.shiftKey) {
-        e.preventDefault();
-        if (canUndo) undo();
-      }
-      
-      // Ctrl/Cmd + Shift + Z or Ctrl/Cmd + Y = Redo
-      if ((e.ctrlKey || e.metaKey) && (e.key === "y" || (e.key === "z" && e.shiftKey))) {
-        e.preventDefault();
-        if (canRedo) redo();
-      }
-      
-      // Ctrl/Cmd + S = Save (prevent default, trigger auto-save)
-      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
-        e.preventDefault();
-        // Trigger manual save if needed
-      }
-    }
+3. `src/hooks/use-keyboard-shortcuts.ts` - Global keyboard shortcuts
+   - `Ctrl/Cmd + Z` for Undo
+   - `Ctrl/Cmd + Shift + Z` for Redo
+   - `Ctrl/Cmd + Y` for Redo (Windows alternative)
+   - `Ctrl/Cmd + S` intercept (prevents browser save dialog, shows auto-save toast)
+   - Smart detection to skip when in input fields
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [canUndo, canRedo, undo, redo]);
-}
-```
+4. `src/components/features/global-undo-provider.tsx` - Provider component
+   - Wraps the app to enable global undo/redo
+   - Initializes tracking and keyboard shortcuts
+
+5. `src/components/features/undo-redo-buttons.tsx` - UI components
+   - `<UndoRedoButtons />` - Paired undo/redo buttons with tooltips
+   - `<UndoButton />` and `<RedoButton />` - Individual buttons
+   - Shows keyboard shortcuts in tooltips
+   - Disabled state when action not available
+
+**Modified Files:**
+- `src/routes/__root.tsx` - Added `GlobalUndoProvider` wrapper
+- `src/components/layouts/root-layout.tsx` - Added undo/redo buttons to header
+- `src/components/features/resume/resume-editor.tsx` - Removed duplicate keyboard handler
+- `src/stores/index.ts` - Added exports for new store
+
+**Features:**
+- ✅ Global keyboard shortcuts (Ctrl+Z, Ctrl+Shift+Z, Ctrl+Y)
+- ✅ Tracks template changes, style customization, personal info, job info
+- ✅ Debouncing to prevent flooding history with rapid changes
+- ✅ Toast notifications on undo/redo
+- ✅ Undo/Redo buttons in header toolbar when editing resumes
+- ✅ Works alongside the existing detailed history panel
 
 ---
 
@@ -1775,7 +1782,7 @@ export const AllVariants: Story = {
 | #3 Expand E2E tests | High | High | High | ✅ Done |
 | #4 Loading states | High | Low | High | ✅ Done |
 | #5 Internationalization | Medium | High | Medium | ✅ Done |
-| #6 Undo/Redo shortcuts | Medium | Low | Medium | ⏳ Pending |
+| #6 Undo/Redo shortcuts | Medium | Low | Medium | ✅ Done |
 | #16 Error handling | Medium | Medium | High | ⏳ Pending |
 | #19 Virtual scrolling | Low | Medium | Low | ⏳ Pending |
 | #23 Visual regression | Low | Medium | Medium | ⏳ Pending |
@@ -1786,7 +1793,7 @@ export const AllVariants: Story = {
 
 | # | Task | Status |
 |---|------|--------|
-| 1 | Add keyboard shortcuts for undo/redo | ⏳ Pending |
+| 1 | Add keyboard shortcuts for undo/redo | ✅ Done |
 | 2 | Add loading skeletons for all async operations | ✅ Done |
 | 3 | Add more JSDoc comments | ⏳ Pending |
 | 4 | Fix type safety issues in stores | ✅ Done |
@@ -1806,16 +1813,17 @@ Resumier is already a solid application with good architecture and practices. Th
 - Comprehensive test coverage
 
 **Progress Summary:**
-- ✅ **6 of 35** improvements completed
+- ✅ **7 of 35** improvements completed
 - High-priority items #1 (code duplication), #2 (type safety), #3 (E2E tests), and #4 (loading states) are done
 - Internationalization (#5) is complete with English and Spanish support
+- Global Undo/Redo (#6) is complete with keyboard shortcuts and UI buttons
 - Pre-commit hooks (#30) are in place for code quality
-- Quick wins #2 (loading skeletons) and #4 (type safety) are done
+- Quick wins #1 (undo/redo shortcuts), #2 (loading skeletons), and #4 (type safety) are done
 
 The recommended approach is to tackle high-priority items first, then gradually work through medium and low priority improvements as resources allow.
 
 **Next recommended items:**
-1. #6 - Implement Undo/Redo at Global Level (Quick win)
-2. #16 - Standardize Error Handling (Medium priority, High impact)
-3. #7 - Add Resume Versioning (Medium priority)
+1. #16 - Standardize Error Handling (Medium priority, High impact)
+2. #7 - Add Resume Versioning (Medium priority)
+3. #12 - Add Keyboard Navigation (Low priority, enhances accessibility)
 
