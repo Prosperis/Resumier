@@ -44,12 +44,8 @@ export function useGlobalUndoRedo() {
   const isPaused = useGlobalUndoStore((state) => state.isPaused);
   const currentIndex = useGlobalUndoStore((state) => state.currentIndex);
   const entries = useGlobalUndoStore((state) => state.entries);
-  const getUndoDescription = useGlobalUndoStore(
-    (state) => state.getUndoDescription
-  );
-  const getRedoDescription = useGlobalUndoStore(
-    (state) => state.getRedoDescription
-  );
+  const getUndoDescription = useGlobalUndoStore((state) => state.getUndoDescription);
+  const getRedoDescription = useGlobalUndoStore((state) => state.getRedoDescription);
 
   // Keep track of previous state for change detection
   const previousStateRef = useRef<GlobalStateSnapshot | null>(null);
@@ -83,14 +79,14 @@ export function useGlobalUndoRedo() {
         previousStateRef.current = snapshot;
       }, 50);
     },
-    [pause, resume, setTemplate, setUserInfo, setJobInfo]
+    [pause, resume, setTemplate, setUserInfo, setJobInfo],
   );
 
   // Detect what type of change occurred
   const detectChangeType = useCallback(
     (
       oldSnapshot: GlobalStateSnapshot,
-      newSnapshot: GlobalStateSnapshot
+      newSnapshot: GlobalStateSnapshot,
     ): GlobalChangeType | null => {
       const changes: GlobalChangeType[] = [];
 
@@ -105,17 +101,11 @@ export function useGlobalUndoRedo() {
         changes.push("styleCustomization");
       }
 
-      if (
-        JSON.stringify(oldSnapshot.userInfo) !==
-        JSON.stringify(newSnapshot.userInfo)
-      ) {
+      if (JSON.stringify(oldSnapshot.userInfo) !== JSON.stringify(newSnapshot.userInfo)) {
         changes.push("userInfo");
       }
 
-      if (
-        JSON.stringify(oldSnapshot.jobInfo) !==
-        JSON.stringify(newSnapshot.jobInfo)
-      ) {
+      if (JSON.stringify(oldSnapshot.jobInfo) !== JSON.stringify(newSnapshot.jobInfo)) {
         changes.push("jobInfo");
       }
 
@@ -123,16 +113,13 @@ export function useGlobalUndoRedo() {
       if (changes.length === 1) return changes[0];
       return "bulk";
     },
-    []
+    [],
   );
 
   // Generate a description for the change
-  const generateDescription = useCallback(
-    (changeType: GlobalChangeType): string => {
-      return CHANGE_DESCRIPTIONS[changeType] || "Made changes";
-    },
-    []
-  );
+  const generateDescription = useCallback((changeType: GlobalChangeType): string => {
+    return CHANGE_DESCRIPTIONS[changeType] || "Made changes";
+  }, []);
 
   // Track state changes
   useEffect(() => {
@@ -228,12 +215,8 @@ export function useGlobalUndoRedo() {
 export function useUndoRedoStatus() {
   const canUndo = useGlobalUndoStore((state) => state.canUndo());
   const canRedo = useGlobalUndoStore((state) => state.canRedo());
-  const getUndoDescription = useGlobalUndoStore(
-    (state) => state.getUndoDescription
-  );
-  const getRedoDescription = useGlobalUndoStore(
-    (state) => state.getRedoDescription
-  );
+  const getUndoDescription = useGlobalUndoStore((state) => state.getUndoDescription);
+  const getRedoDescription = useGlobalUndoStore((state) => state.getRedoDescription);
   const currentIndex = useGlobalUndoStore((state) => state.currentIndex);
   const entries = useGlobalUndoStore((state) => state.entries);
 
@@ -246,4 +229,3 @@ export function useUndoRedoStatus() {
     entriesCount: entries.length,
   };
 }
-

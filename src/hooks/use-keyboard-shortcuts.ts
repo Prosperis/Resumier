@@ -16,14 +16,9 @@ interface KeyboardShortcutsOptions {
  * Handles Ctrl+Z (undo), Ctrl+Shift+Z/Ctrl+Y (redo), and more.
  */
 export function useKeyboardShortcuts(options: KeyboardShortcutsOptions = {}) {
-  const {
-    enabled = true,
-    showToasts = true,
-    allowInInputs = false,
-  } = options;
+  const { enabled = true, showToasts = true, allowInInputs = false } = options;
 
-  const { undo, redo, canUndo, canRedo, undoDescription, redoDescription } =
-    useGlobalUndoRedo();
+  const { undo, redo, canUndo, canRedo, undoDescription, redoDescription } = useGlobalUndoRedo();
   const addNotification = useUIStore((state) => state.addNotification);
 
   const handleKeyDown = useCallback(
@@ -127,7 +122,7 @@ export function useKeyboardShortcuts(options: KeyboardShortcutsOptions = {}) {
       redoDescription,
       showToasts,
       addNotification,
-    ]
+    ],
   );
 
   useEffect(() => {
@@ -153,8 +148,7 @@ export function useKeyboardShortcuts(options: KeyboardShortcutsOptions = {}) {
  * This is useful for toolbar buttons.
  */
 export function useUndoRedoActions() {
-  const { undo, redo, canUndo, canRedo, undoDescription, redoDescription } =
-    useGlobalUndoRedo();
+  const { undo, redo, canUndo, canRedo, undoDescription, redoDescription } = useGlobalUndoRedo();
 
   return {
     undo,
@@ -165,4 +159,3 @@ export function useUndoRedoActions() {
     redoDescription,
   };
 }
-

@@ -1,11 +1,6 @@
 import { Redo2, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useUndoRedoActions } from "@/hooks/use-keyboard-shortcuts";
 import { cn } from "@/lib/utils";
 
@@ -33,12 +28,10 @@ export function UndoRedoButtons({
   className,
   showTooltips = true,
 }: UndoRedoButtonsProps) {
-  const { undo, redo, canUndo, canRedo, undoDescription, redoDescription } =
-    useUndoRedoActions();
+  const { undo, redo, canUndo, canRedo, undoDescription, redoDescription } = useUndoRedoActions();
 
   const isMac =
-    typeof navigator !== "undefined" &&
-    navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+    typeof navigator !== "undefined" && navigator.platform.toUpperCase().indexOf("MAC") >= 0;
   const modKey = isMac ? "⌘" : "Ctrl";
 
   const UndoButton = (
@@ -48,10 +41,7 @@ export function UndoRedoButtons({
       onClick={undo}
       disabled={!canUndo}
       aria-label="Undo"
-      className={cn(
-        "transition-opacity",
-        !canUndo && "opacity-50 cursor-not-allowed"
-      )}
+      className={cn("transition-opacity", !canUndo && "opacity-50 cursor-not-allowed")}
     >
       <Undo2 className={cn("h-4 w-4", showLabels && "mr-2")} />
       {showLabels && "Undo"}
@@ -65,10 +55,7 @@ export function UndoRedoButtons({
       onClick={redo}
       disabled={!canRedo}
       aria-label="Redo"
-      className={cn(
-        "transition-opacity",
-        !canRedo && "opacity-50 cursor-not-allowed"
-      )}
+      className={cn("transition-opacity", !canRedo && "opacity-50 cursor-not-allowed")}
     >
       <Redo2 className={cn("h-4 w-4", showLabels && "mr-2")} />
       {showLabels && "Redo"}
@@ -91,12 +78,8 @@ export function UndoRedoButtons({
           <TooltipTrigger asChild>{UndoButton}</TooltipTrigger>
           <TooltipContent side="bottom">
             <p className="font-medium">Undo</p>
-            {undoDescription && (
-              <p className="text-xs text-muted-foreground">{undoDescription}</p>
-            )}
-            <p className="text-xs text-muted-foreground mt-1">
-              {modKey}+Z
-            </p>
+            {undoDescription && <p className="text-xs text-muted-foreground">{undoDescription}</p>}
+            <p className="text-xs text-muted-foreground mt-1">{modKey}+Z</p>
           </TooltipContent>
         </Tooltip>
 
@@ -104,12 +87,8 @@ export function UndoRedoButtons({
           <TooltipTrigger asChild>{RedoButton}</TooltipTrigger>
           <TooltipContent side="bottom">
             <p className="font-medium">Redo</p>
-            {redoDescription && (
-              <p className="text-xs text-muted-foreground">{redoDescription}</p>
-            )}
-            <p className="text-xs text-muted-foreground mt-1">
-              {modKey}+Shift+Z
-            </p>
+            {redoDescription && <p className="text-xs text-muted-foreground">{redoDescription}</p>}
+            <p className="text-xs text-muted-foreground mt-1">{modKey}+Shift+Z</p>
           </TooltipContent>
         </Tooltip>
       </div>
@@ -132,8 +111,7 @@ export function UndoButton({
   const { undo, canUndo, undoDescription } = useUndoRedoActions();
 
   const isMac =
-    typeof navigator !== "undefined" &&
-    navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+    typeof navigator !== "undefined" && navigator.platform.toUpperCase().indexOf("MAC") >= 0;
   const modKey = isMac ? "⌘" : "Ctrl";
 
   return (
@@ -149,7 +127,7 @@ export function UndoButton({
             className={cn(
               "transition-opacity",
               !canUndo && "opacity-50 cursor-not-allowed",
-              className
+              className,
             )}
           >
             <Undo2 className="h-4 w-4" />
@@ -157,9 +135,7 @@ export function UndoButton({
         </TooltipTrigger>
         <TooltipContent side="bottom">
           <p className="font-medium">Undo</p>
-          {undoDescription && (
-            <p className="text-xs text-muted-foreground">{undoDescription}</p>
-          )}
+          {undoDescription && <p className="text-xs text-muted-foreground">{undoDescription}</p>}
           <p className="text-xs text-muted-foreground mt-1">{modKey}+Z</p>
         </TooltipContent>
       </Tooltip>
@@ -182,8 +158,7 @@ export function RedoButton({
   const { redo, canRedo, redoDescription } = useUndoRedoActions();
 
   const isMac =
-    typeof navigator !== "undefined" &&
-    navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+    typeof navigator !== "undefined" && navigator.platform.toUpperCase().indexOf("MAC") >= 0;
   const modKey = isMac ? "⌘" : "Ctrl";
 
   return (
@@ -199,7 +174,7 @@ export function RedoButton({
             className={cn(
               "transition-opacity",
               !canRedo && "opacity-50 cursor-not-allowed",
-              className
+              className,
             )}
           >
             <Redo2 className="h-4 w-4" />
@@ -207,15 +182,10 @@ export function RedoButton({
         </TooltipTrigger>
         <TooltipContent side="bottom">
           <p className="font-medium">Redo</p>
-          {redoDescription && (
-            <p className="text-xs text-muted-foreground">{redoDescription}</p>
-          )}
-          <p className="text-xs text-muted-foreground mt-1">
-            {modKey}+Shift+Z
-          </p>
+          {redoDescription && <p className="text-xs text-muted-foreground">{redoDescription}</p>}
+          <p className="text-xs text-muted-foreground mt-1">{modKey}+Shift+Z</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
 }
-

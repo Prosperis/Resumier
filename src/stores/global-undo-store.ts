@@ -18,12 +18,7 @@ export interface GlobalStateSnapshot {
 /**
  * Types of changes that can be tracked globally.
  */
-export type GlobalChangeType =
-  | "userInfo"
-  | "jobInfo"
-  | "template"
-  | "styleCustomization"
-  | "bulk";
+export type GlobalChangeType = "userInfo" | "jobInfo" | "template" | "styleCustomization" | "bulk";
 
 /**
  * Represents a single entry in the global undo history.
@@ -60,7 +55,7 @@ interface GlobalUndoStore {
   pushEntry: (
     changeType: GlobalChangeType,
     description: string,
-    snapshot: GlobalStateSnapshot
+    snapshot: GlobalStateSnapshot,
   ) => void;
   undo: () => GlobalStateSnapshot | null;
   redo: () => GlobalStateSnapshot | null;
@@ -78,8 +73,7 @@ interface GlobalUndoStore {
 }
 
 // Generate unique ID
-const generateId = () =>
-  `global-history-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+const generateId = () => `global-history-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
 // Debounce time for grouping related changes (ms)
 const DEBOUNCE_TIME = 500;
@@ -160,8 +154,7 @@ export const useGlobalUndoStore = create<GlobalUndoStore>()(
         const state = get();
         if (!state.canUndo()) return null;
 
-        const newIndex =
-          state.currentIndex === -1 ? 0 : state.currentIndex + 1;
+        const newIndex = state.currentIndex === -1 ? 0 : state.currentIndex + 1;
         const entry = state.entries[newIndex];
 
         if (entry) {
@@ -235,8 +228,7 @@ export const useGlobalUndoStore = create<GlobalUndoStore>()(
 
       getUndoDescription: () => {
         const state = get();
-        const index =
-          state.currentIndex === -1 ? 0 : state.currentIndex + 1;
+        const index = state.currentIndex === -1 ? 0 : state.currentIndex + 1;
         const entry = state.entries[index];
         return entry?.description ?? null;
       },
@@ -252,15 +244,13 @@ export const useGlobalUndoStore = create<GlobalUndoStore>()(
         return entry?.description ?? null;
       },
     })),
-    { name: "GlobalUndoStore" }
-  )
+    { name: "GlobalUndoStore" },
+  ),
 );
 
 // Selectors
-export const selectGlobalHistoryEntries = (state: GlobalUndoStore) =>
-  state.entries;
-export const selectGlobalCurrentIndex = (state: GlobalUndoStore) =>
-  state.currentIndex;
+export const selectGlobalHistoryEntries = (state: GlobalUndoStore) => state.entries;
+export const selectGlobalCurrentIndex = (state: GlobalUndoStore) => state.currentIndex;
 export const selectIsGlobalPreviewingHistory = (state: GlobalUndoStore) =>
   state.isPreviewingHistory;
 export const selectGlobalCanUndo = (state: GlobalUndoStore) => state.canUndo();
@@ -277,4 +267,3 @@ export const selectGlobalUndoActions = (state: GlobalUndoStore) => ({
   getUndoDescription: state.getUndoDescription,
   getRedoDescription: state.getRedoDescription,
 });
-
