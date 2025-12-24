@@ -2,15 +2,15 @@ import { del, get, set } from "idb-keyval";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-// Re-export types from the main resume store for backward compatibility
+// Re-export types from the main resume store
 export type {
   UserInfo,
   JobInfo,
-  WorkExperience,
-  LegacyEducation as Education,
-  LegacySkill as Skill,
-  LegacyCertification as Certification,
-  LegacyLink as Link,
+  Experience,
+  Education,
+  Skill,
+  Certification,
+  Link,
 } from "@/stores/resume-store";
 
 // Import types for internal use

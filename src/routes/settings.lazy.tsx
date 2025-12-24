@@ -62,8 +62,9 @@ function SettingsComponent() {
   };
 
   return (
-    <div className="container mx-auto max-w-4xl p-4 md:p-8">
-      <div className="mb-8">
+    <div className="h-full overflow-y-auto">
+      <div className="container mx-auto max-w-4xl p-4 md:p-8">
+        <div className="mb-8">
         <div className="mb-4">
           <Button
             variant="ghost"
@@ -210,6 +211,7 @@ function SettingsComponent() {
           </CardContent>
         </Card>
       </div>
+    </div>
     </div>
   );
 }

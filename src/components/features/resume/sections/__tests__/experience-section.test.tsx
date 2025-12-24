@@ -2,36 +2,37 @@ import { fireEvent, render, screen } from "@testing-library/react";
 
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
-import type { WorkExperience } from "@/stores/resume-store";
+import type { Experience } from "@/stores/resume-store";
 import { ExperienceSection } from "../experience-section";
 
 describe("ExperienceSection", () => {
-  const mockExperience: WorkExperience = {
+  const mockExperience: Experience = {
+    id: "test-exp-1",
     company: "Acme Corp",
-    title: "Software Engineer",
+    position: "Software Engineer",
     startDate: "2020-01-01",
     endDate: "2023-12-31",
     current: false,
     description: "Worked on various projects",
-    awards: ["Best Developer 2021", "Innovation Award 2022"],
+    highlights: ["Best Developer 2021", "Innovation Award 2022"],
   };
 
   const mockAddExperience = vi.fn();
   const mockRemoveExperience = vi.fn();
   const mockUpdateExperience = vi.fn();
-  const mockAddExperienceAward = vi.fn();
-  const mockRemoveExperienceAward = vi.fn();
-  const mockSetAwardInput = vi.fn();
+  const mockAddExperienceHighlight = vi.fn();
+  const mockRemoveExperienceHighlight = vi.fn();
+  const mockSetHighlightInput = vi.fn();
 
   const defaultProps = {
     experiences: [mockExperience],
     addExperience: mockAddExperience,
     removeExperience: mockRemoveExperience,
     updateExperience: mockUpdateExperience,
-    addExperienceAward: mockAddExperienceAward,
-    removeExperienceAward: mockRemoveExperienceAward,
-    awardInputs: { "0": "" },
-    setAwardInput: mockSetAwardInput,
+    addExperienceHighlight: mockAddExperienceHighlight,
+    removeExperienceHighlight: mockRemoveExperienceHighlight,
+    highlightInputs: { "0": "" },
+    setHighlightInput: mockSetHighlightInput,
   };
 
   beforeEach(() => {
@@ -55,9 +56,9 @@ describe("ExperienceSection", () => {
     });
 
     it("renders multiple experiences", () => {
-      const experiences: WorkExperience[] = [
-        { ...mockExperience, company: "Company A" },
-        { ...mockExperience, company: "Company B" },
+      const experiences: Experience[] = [
+        { ...mockExperience, id: "exp-a", company: "Company A" },
+        { ...mockExperience, id: "exp-b", company: "Company B" },
       ];
       render(<ExperienceSection {...defaultProps} experiences={experiences} />);
 
@@ -66,9 +67,9 @@ describe("ExperienceSection", () => {
     });
 
     it("renders Experience N when company name is empty", () => {
-      const experiences: WorkExperience[] = [
-        { ...mockExperience, company: "" },
-        { ...mockExperience, company: "" },
+      const experiences: Experience[] = [
+        { ...mockExperience, id: "exp-1", company: "" },
+        { ...mockExperience, id: "exp-2", company: "" },
       ];
       render(<ExperienceSection {...defaultProps} experiences={experiences} />);
 
@@ -151,21 +152,22 @@ describe("ExperienceSection", () => {
     });
   });
 
-  describe("Title Field", () => {
-    it("displays title value", async () => {
+  describe("Position Field", () => {
+    it("displays position value", async () => {
       const user = userEvent.setup();
       render(<ExperienceSection {...defaultProps} />);
 
+      // Click toggle to open collapsible
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       await user.click(toggleButton);
 
-      // Title is the second textbox input
+      // Position is the second textbox input
       const inputs = screen.getAllByRole("textbox");
-      const titleInput = inputs[1];
-      expect(titleInput).toHaveValue("Software Engineer");
+      const positionInput = inputs[1];
+      expect(positionInput).toHaveValue("Software Engineer");
     });
 
-    it("calls updateExperience when title is changed", async () => {
+    it("calls updateExperience when position is changed", async () => {
       const user = userEvent.setup();
       render(<ExperienceSection {...defaultProps} />);
 
@@ -173,11 +175,11 @@ describe("ExperienceSection", () => {
       await user.click(toggleButton);
 
       const inputs = screen.getAllByRole("textbox");
-      const titleInput = inputs[1];
-      await user.type(titleInput, "X");
+      const positionInput = inputs[1];
+      await user.type(positionInput, "X");
 
-      // Check that updateExperience was called with the title field
-      expect(mockUpdateExperience).toHaveBeenCalledWith(0, "title", "Software EngineerX");
+      // Check that updateExperience was called with the position field
+      expect(mockUpdateExperience).toHaveBeenCalledWith(0, "position", "Software EngineerX");
     });
   });
 
@@ -343,18 +345,18 @@ describe("ExperienceSection", () => {
     });
   });
 
-  describe("Awards Section", () => {
-    it("displays awards label", async () => {
+  describe("Highlights Section", () => {
+    it("displays highlights label", async () => {
       const user = userEvent.setup();
       render(<ExperienceSection {...defaultProps} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       await user.click(toggleButton);
 
-      expect(screen.getByText(/awards/i)).toBeInTheDocument();
+      expect(screen.getByText(/highlights/i)).toBeInTheDocument();
     });
 
-    it("displays existing awards", async () => {
+    it("displays existing highlights", async () => {
       const user = userEvent.setup();
       render(<ExperienceSection {...defaultProps} />);
 
@@ -365,7 +367,7 @@ describe("ExperienceSection", () => {
       expect(screen.getByText("Innovation Award 2022")).toBeInTheDocument();
     });
 
-    it("displays award input field", async () => {
+    it("displays highlight input field", async () => {
       const user = userEvent.setup();
       render(<ExperienceSection {...defaultProps} />);
 
@@ -373,12 +375,12 @@ describe("ExperienceSection", () => {
       await user.click(toggleButton);
 
       const textboxes = screen.getAllByRole("textbox");
-      // The last textbox should be the award input (after company, title, description)
-      const awardInput = textboxes[textboxes.length - 1];
-      expect(awardInput).toBeInTheDocument();
+      // The last textbox should be the highlight input (after company, position, description)
+      const highlightInput = textboxes[textboxes.length - 1];
+      expect(highlightInput).toBeInTheDocument();
     });
 
-    it("displays Add button for awards", async () => {
+    it("displays Add button for highlights", async () => {
       const user = userEvent.setup();
       render(<ExperienceSection {...defaultProps} />);
 
@@ -389,7 +391,7 @@ describe("ExperienceSection", () => {
       expect(addButtons.length).toBeGreaterThanOrEqual(1);
     });
 
-    it("calls setAwardInput when award input is changed", async () => {
+    it("calls setHighlightInput when highlight input is changed", async () => {
       const user = userEvent.setup();
       render(<ExperienceSection {...defaultProps} />);
 
@@ -397,13 +399,13 @@ describe("ExperienceSection", () => {
       await user.click(toggleButton);
 
       const textboxes = screen.getAllByRole("textbox");
-      const awardInput = textboxes[textboxes.length - 1];
-      await user.type(awardInput, "New Award");
+      const highlightInput = textboxes[textboxes.length - 1];
+      await user.type(highlightInput, "New Highlight");
 
-      expect(mockSetAwardInput).toHaveBeenCalled();
+      expect(mockSetHighlightInput).toHaveBeenCalled();
     });
 
-    it("calls addExperienceAward when Add award button is clicked", async () => {
+    it("calls addExperienceHighlight when Add highlight button is clicked", async () => {
       const user = userEvent.setup();
       render(<ExperienceSection {...defaultProps} />);
 
@@ -411,30 +413,30 @@ describe("ExperienceSection", () => {
       await user.click(toggleButton);
 
       const addButtons = screen.getAllByRole("button", { name: /add/i });
-      const addAwardButton = addButtons[0]; // First Add button is for awards
-      await user.click(addAwardButton);
+      const addHighlightButton = addButtons[0]; // First Add button is for highlights
+      await user.click(addHighlightButton);
 
-      expect(mockAddExperienceAward).toHaveBeenCalledWith(0);
+      expect(mockAddExperienceHighlight).toHaveBeenCalledWith(0);
     });
 
-    it("displays remove button for each award", async () => {
+    it("displays remove button for each highlight", async () => {
       const user = userEvent.setup();
       render(<ExperienceSection {...defaultProps} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       await user.click(toggleButton);
 
-      // There should be multiple remove buttons: 1 for experience + award buttons
+      // There should be multiple remove buttons: 1 for experience + highlight buttons
       const removeButtons = screen.getAllByRole("button", { name: /remove/i });
       // At least 1 for the experience itself
       expect(removeButtons.length).toBeGreaterThanOrEqual(1);
 
-      // Awards should be visible in the document
+      // Highlights should be visible in the document
       expect(screen.getByText("Best Developer 2021")).toBeInTheDocument();
       expect(screen.getByText("Innovation Award 2022")).toBeInTheDocument();
     });
 
-    it("calls removeExperienceAward when award remove button is clicked", async () => {
+    it("calls removeExperienceHighlight when highlight remove button is clicked", async () => {
       const user = userEvent.setup();
       render(<ExperienceSection {...defaultProps} />);
 
@@ -442,35 +444,35 @@ describe("ExperienceSection", () => {
       await user.click(toggleButton);
 
       const removeButtons = screen.getAllByRole("button", { name: /remove/i });
-      // Click the 2nd remove button (first award's remove button)
+      // Click the 2nd remove button (first highlight's remove button)
       // Index 0 is the main experience remove button
-      // Index 1 & 2 are the award remove buttons
+      // Index 1 & 2 are the highlight remove buttons
       if (removeButtons.length >= 3) {
         await user.click(removeButtons[1]);
-        expect(mockRemoveExperienceAward).toHaveBeenCalled();
+        expect(mockRemoveExperienceHighlight).toHaveBeenCalled();
       }
     });
 
-    it("handles empty awards array", async () => {
+    it("handles empty highlights array", async () => {
       const user = userEvent.setup();
-      const expWithoutAwards = { ...mockExperience, awards: [] };
-      render(<ExperienceSection {...defaultProps} experiences={[expWithoutAwards]} />);
+      const expWithoutHighlights = { ...mockExperience, highlights: [] };
+      render(<ExperienceSection {...defaultProps} experiences={[expWithoutHighlights]} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       await user.click(toggleButton);
 
-      expect(screen.getByText(/awards/i)).toBeInTheDocument();
+      expect(screen.getByText(/highlights/i)).toBeInTheDocument();
     });
 
-    it("handles undefined awards", async () => {
+    it("handles undefined highlights", async () => {
       const user = userEvent.setup();
-      const expWithoutAwards = { ...mockExperience, awards: undefined };
-      render(<ExperienceSection {...defaultProps} experiences={[expWithoutAwards]} />);
+      const expWithoutHighlights = { ...mockExperience, highlights: undefined as unknown as string[] };
+      render(<ExperienceSection {...defaultProps} experiences={[expWithoutHighlights]} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });
       await user.click(toggleButton);
 
-      expect(screen.getByText(/awards/i)).toBeInTheDocument();
+      expect(screen.getByText(/highlights/i)).toBeInTheDocument();
     });
   });
 
@@ -485,11 +487,11 @@ describe("ExperienceSection", () => {
       expect(screen.getByText("Experience 1")).toBeInTheDocument();
     });
 
-    it("handles undefined title", async () => {
+    it("handles undefined position", async () => {
       const user = userEvent.setup();
       const expWithUndefined = {
         ...mockExperience,
-        title: undefined as unknown as string,
+        position: undefined as unknown as string,
       };
       render(<ExperienceSection {...defaultProps} experiences={[expWithUndefined]} />);
 
@@ -497,8 +499,8 @@ describe("ExperienceSection", () => {
       await user.click(toggleButton);
 
       const inputs = screen.getAllByRole("textbox");
-      const titleInput = inputs[1];
-      expect(titleInput).toHaveValue("");
+      const positionInput = inputs[1];
+      expect(positionInput).toHaveValue("");
     });
 
     it("handles undefined dates", async () => {
@@ -552,12 +554,12 @@ describe("ExperienceSection", () => {
     });
   });
 
-  describe("Award Input Values", () => {
-    it("displays award input value from props", async () => {
+  describe("Highlight Input Values", () => {
+    it("displays highlight input value from props", async () => {
       const user = userEvent.setup();
       const propsWithInput = {
         ...defaultProps,
-        awardInputs: { "0": "Test Award" },
+        highlightInputs: { "0": "Test Highlight" },
       };
       render(<ExperienceSection {...propsWithInput} />);
 
@@ -565,11 +567,11 @@ describe("ExperienceSection", () => {
       await user.click(toggleButton);
 
       const textboxes = screen.getAllByRole("textbox");
-      const awardInput = textboxes[textboxes.length - 1];
-      expect(awardInput).toHaveValue("Test Award");
+      const highlightInput = textboxes[textboxes.length - 1];
+      expect(highlightInput).toHaveValue("Test Highlight");
     });
 
-    it("displays empty award input when no value in awardInputs", async () => {
+    it("displays empty highlight input when no value in highlightInputs", async () => {
       const user = userEvent.setup();
       render(<ExperienceSection {...defaultProps} />);
 
@@ -577,8 +579,8 @@ describe("ExperienceSection", () => {
       await user.click(toggleButton);
 
       const textboxes = screen.getAllByRole("textbox");
-      const awardInput = textboxes[textboxes.length - 1];
-      expect(awardInput).toHaveValue("");
+      const highlightInput = textboxes[textboxes.length - 1];
+      expect(highlightInput).toHaveValue("");
     });
   });
 });

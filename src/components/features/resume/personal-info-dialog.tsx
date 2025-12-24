@@ -21,8 +21,22 @@ import {
   SidebarProvider,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import type { LegacyCertification, LegacyEducation, LegacyLink, LegacySkill, UserInfo, WorkExperience } from "@/stores";
-import { useResumeStore } from "@/stores";
+import type {
+  Certification,
+  Education,
+  Experience,
+  Link,
+  Skill,
+  UserInfo,
+} from "@/stores";
+import {
+  createCertification,
+  createEducation,
+  createExperience,
+  createLink,
+  createSkill,
+  useResumeStore,
+} from "@/stores";
 import {
   type PersonalInfoSection,
   selectPersonalInfoSection,
@@ -46,14 +60,14 @@ export function PersonalInfoDialog({
   const [email, setEmail] = useState(userInfo.email ?? "");
   const [phone, setPhone] = useState(userInfo.phone ?? "");
   const [address, setAddress] = useState(userInfo.address ?? "");
-  const [experiences, setExperiences] = useState<WorkExperience[]>(userInfo.experiences ?? []);
-  const [education, setEducation] = useState<LegacyEducation[]>(userInfo.education ?? []);
-  const [skills, setSkills] = useState<LegacySkill[]>(userInfo.skills ?? []);
-  const [certifications, setCertifications] = useState<LegacyCertification[]>(
+  const [experiences, setExperiences] = useState<Experience[]>(userInfo.experiences ?? []);
+  const [education, setEducation] = useState<Education[]>(userInfo.education ?? []);
+  const [skills, setSkills] = useState<Skill[]>(userInfo.skills ?? []);
+  const [certifications, setCertifications] = useState<Certification[]>(
     userInfo.certifications ?? [],
   );
-  const [awardInputs, setAwardInputs] = useState<Record<number, string>>({});
-  const [links, setLinks] = useState<LegacyLink[]>(userInfo.links ?? []);
+  const [highlightInputs, setHighlightInputs] = useState<Record<number, string>>({});
+  const [links, setLinks] = useState<Link[]>(userInfo.links ?? []);
   const [customUrl, setCustomUrl] = useState(userInfo.customUrl ?? "");
 
   const importMutation = useMutation({
@@ -97,19 +111,19 @@ export function PersonalInfoDialog({
   }
 
   function addExperience() {
-    setExperiences([...experiences, {}]);
-    setAwardInputs((prev) => ({ ...prev, [experiences.length]: "" }));
+    setExperiences([...experiences, createExperience()]);
+    setHighlightInputs((prev) => ({ ...prev, [experiences.length]: "" }));
   }
 
   function updateExperience(
     index: number,
-    field: keyof WorkExperience,
+    field: keyof Experience,
     value: string | string[] | boolean,
   ) {
     setExperiences((prev) => {
       const next = [...prev];
       if (field === "current" && value === true) {
-        next[index] = { ...next[index], current: true, endDate: undefined };
+        next[index] = { ...next[index], current: true, endDate: "" };
       } else {
         next[index] = { ...next[index], [field]: value };
       }
@@ -119,7 +133,7 @@ export function PersonalInfoDialog({
 
   function removeExperience(index: number) {
     setExperiences((prev) => prev.filter((_, i) => i !== index));
-    setAwardInputs((prev) => {
+    setHighlightInputs((prev) => {
       const next: Record<number, string> = {};
       Object.keys(prev).forEach((key) => {
         const i = Number(key);
@@ -130,39 +144,39 @@ export function PersonalInfoDialog({
     });
   }
 
-  function setAwardInput(index: number, value: string) {
-    setAwardInputs((prev) => ({ ...prev, [index]: value }));
+  function setHighlightInput(index: number, value: string) {
+    setHighlightInputs((prev) => ({ ...prev, [index]: value }));
   }
 
-  function addExperienceAward(index: number) {
-    const award = awardInputs[index]?.trim();
-    if (!award) return;
+  function addExperienceHighlight(index: number) {
+    const highlight = highlightInputs[index]?.trim();
+    if (!highlight) return;
     setExperiences((prev) => {
       const next = [...prev];
-      const awards = next[index].awards ?? [];
-      next[index] = { ...next[index], awards: [...awards, award] };
+      const highlights = next[index].highlights ?? [];
+      next[index] = { ...next[index], highlights: [...highlights, highlight] };
       return next;
     });
-    setAwardInputs((prev) => ({ ...prev, [index]: "" }));
+    setHighlightInputs((prev) => ({ ...prev, [index]: "" }));
   }
 
-  function removeExperienceAward(index: number, awardIndex: number) {
+  function removeExperienceHighlight(index: number, highlightIndex: number) {
     setExperiences((prev) => {
       const next = [...prev];
-      const awards = next[index].awards ?? [];
+      const highlights = next[index].highlights ?? [];
       next[index] = {
         ...next[index],
-        awards: awards.filter((_, i) => i !== awardIndex),
+        highlights: highlights.filter((_, i) => i !== highlightIndex),
       };
       return next;
     });
   }
 
   function addEducation() {
-    setEducation([...education, {} as LegacyEducation]);
+    setEducation([...education, createEducation()]);
   }
 
-  function updateEducation(index: number, field: keyof LegacyEducation, value: string) {
+  function updateEducation(index: number, field: keyof Education, value: string | boolean) {
     setEducation((prev) => {
       const next = [...prev];
       next[index] = { ...next[index], [field]: value };
@@ -175,10 +189,10 @@ export function PersonalInfoDialog({
   }
 
   function addSkill() {
-    setSkills((prev) => [...prev, {} as LegacySkill]);
+    setSkills((prev) => [...prev, createSkill()]);
   }
 
-  function updateSkill(index: number, field: keyof LegacySkill, value: string) {
+  function updateSkill(index: number, field: keyof Skill, value: string | number) {
     setSkills((prev) => {
       const next = [...prev];
       next[index] = { ...next[index], [field]: value };
@@ -191,10 +205,10 @@ export function PersonalInfoDialog({
   }
 
   function addCertification() {
-    setCertifications([...certifications, {} as LegacyCertification]);
+    setCertifications([...certifications, createCertification()]);
   }
 
-  function updateCertification(index: number, field: keyof LegacyCertification, value: string) {
+  function updateCertification(index: number, field: keyof Certification, value: string) {
     setCertifications((prev) => {
       const next = [...prev];
       next[index] = { ...next[index], [field]: value };
@@ -207,10 +221,10 @@ export function PersonalInfoDialog({
   }
 
   function addLink() {
-    setLinks([...links, {} as LegacyLink]);
+    setLinks([...links, createLink()]);
   }
 
-  function updateLink(index: number, field: keyof LegacyLink, value: string) {
+  function updateLink(index: number, field: keyof Link, value: string) {
     setLinks((prev) => {
       const next = [...prev];
       next[index] = { ...next[index], [field]: value };
@@ -281,13 +295,13 @@ export function PersonalInfoDialog({
             {section === "experience" && (
               <ExperienceSection
                 experiences={experiences}
-                awardInputs={awardInputs}
+                highlightInputs={highlightInputs}
                 addExperience={addExperience}
                 updateExperience={updateExperience}
                 removeExperience={removeExperience}
-                setAwardInput={setAwardInput}
-                addExperienceAward={addExperienceAward}
-                removeExperienceAward={removeExperienceAward}
+                setHighlightInput={setHighlightInput}
+                addExperienceHighlight={addExperienceHighlight}
+                removeExperienceHighlight={removeExperienceHighlight}
               />
             )}
             {section === "education" && (

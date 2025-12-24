@@ -4,32 +4,32 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import type { WorkExperience } from "@/stores";
+import type { Experience } from "@/stores";
 
 interface ExperienceProps {
-  experiences: WorkExperience[];
-  awardInputs: Record<number, string>;
+  experiences: Experience[];
+  highlightInputs: Record<number, string>;
   addExperience: () => void;
   updateExperience: (
     i: number,
-    field: keyof WorkExperience,
+    field: keyof Experience,
     value: string | string[] | boolean,
   ) => void;
   removeExperience: (i: number) => void;
-  setAwardInput: (i: number, value: string) => void;
-  addExperienceAward: (i: number) => void;
-  removeExperienceAward: (i: number, j: number) => void;
+  setHighlightInput: (i: number, value: string) => void;
+  addExperienceHighlight: (i: number) => void;
+  removeExperienceHighlight: (i: number, j: number) => void;
 }
 
 export function ExperienceSection({
   experiences,
-  awardInputs,
+  highlightInputs,
   addExperience,
   updateExperience,
   removeExperience,
-  setAwardInput,
-  addExperienceAward,
-  removeExperienceAward,
+  setHighlightInput,
+  addExperienceHighlight,
+  removeExperienceHighlight,
 }: ExperienceProps) {
   return (
     <div className="grid gap-4">
@@ -58,10 +58,10 @@ export function ExperienceSection({
               />
             </div>
             <div className="grid gap-2">
-              <Label>Title</Label>
+              <Label>Position</Label>
               <Input
-                value={exp.title ?? ""}
-                onChange={(e) => updateExperience(i, "title", e.target.value)}
+                value={exp.position ?? ""}
+                onChange={(e) => updateExperience(i, "position", e.target.value)}
               />
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -102,26 +102,26 @@ export function ExperienceSection({
               />
             </div>
             <div className="grid gap-2">
-              <Label>Awards</Label>
+              <Label>Highlights</Label>
               <div className="flex gap-2">
                 <Input
-                  value={awardInputs[i] ?? ""}
-                  onChange={(e) => setAwardInput(i, e.target.value)}
-                  placeholder="Add award"
+                  value={highlightInputs[i] ?? ""}
+                  onChange={(e) => setHighlightInput(i, e.target.value)}
+                  placeholder="Add highlight"
                 />
-                <Button type="button" onClick={() => addExperienceAward(i)}>
+                <Button type="button" onClick={() => addExperienceHighlight(i)}>
                   <Plus className="mr-2 h-4 w-4" /> Add
                 </Button>
               </div>
               <ul className="grid gap-2">
-                {(exp.awards ?? []).map((award, j) => (
+                {(exp.highlights ?? []).map((highlight, j) => (
                   <li key={j} className="flex items-center gap-2">
-                    <span className="flex-1">{award}</span>
+                    <span className="flex-1">{highlight}</span>
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => removeExperienceAward(i, j)}
+                      onClick={() => removeExperienceHighlight(i, j)}
                     >
                       <Trash className="mr-2 h-4 w-4" />
                     </Button>

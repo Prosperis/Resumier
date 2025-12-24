@@ -249,7 +249,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
 }
 
 function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
-  const { toggleSidebar, state, open } = useSidebar();
+  const { toggleSidebar, state } = useSidebar();
   const isCollapsed = state === "collapsed";
 
   return (

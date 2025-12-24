@@ -2,14 +2,21 @@ import { Plus, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { LegacyLink } from "@/stores";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { Link } from "@/stores";
 
 interface LinksProps {
   customUrl: string;
-  links: LegacyLink[];
+  links: Link[];
   setCustomUrl: (v: string) => void;
   addLink: () => void;
-  updateLink: (i: number, field: keyof LegacyLink, value: string) => void;
+  updateLink: (i: number, field: keyof Link, value: string) => void;
   removeLink: (i: number) => void;
 }
 
@@ -33,14 +40,38 @@ export function LinksSection({
         />
       </div>
       {links.map((link, i) => (
-        <div key={i} className="grid gap-2 rounded-md border p-4">
-          <div className="grid gap-2">
-            <Label>Label</Label>
-            <Input
-              value={link.label ?? ""}
-              onChange={(e) => updateLink(i, "label", e.target.value)}
-              placeholder="LinkedIn"
-            />
+        <div key={link.id || i} className="grid gap-2 rounded-md border p-4">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="grid gap-2">
+              <Label>Label</Label>
+              <Input
+                value={link.label ?? ""}
+                onChange={(e) => updateLink(i, "label", e.target.value)}
+                placeholder="LinkedIn"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label>Type</Label>
+              <Select
+                value={link.type ?? "website"}
+                onValueChange={(value) => updateLink(i, "type", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="website">Website</SelectItem>
+                  <SelectItem value="linkedin">LinkedIn</SelectItem>
+                  <SelectItem value="github">GitHub</SelectItem>
+                  <SelectItem value="twitter">Twitter</SelectItem>
+                  <SelectItem value="dribbble">Dribbble</SelectItem>
+                  <SelectItem value="figma">Figma</SelectItem>
+                  <SelectItem value="youtube">YouTube</SelectItem>
+                  <SelectItem value="email">Email</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <div className="grid gap-2">
             <Label>URL</Label>

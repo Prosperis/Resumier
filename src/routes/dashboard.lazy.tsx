@@ -21,8 +21,10 @@ function DashboardComponent() {
   };
 
   return (
-    <div className="container mx-auto p-8">
-      <ResumeDashboard onResumeClick={handleResumeClick} onEditProfile={handleEditProfile} />
+    <div className="h-full overflow-y-auto">
+      <div className="container mx-auto p-8">
+        <ResumeDashboard onResumeClick={handleResumeClick} onEditProfile={handleEditProfile} />
+      </div>
     </div>
   );
 }

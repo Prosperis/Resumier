@@ -16,7 +16,8 @@ function IndexComponent() {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   return (
-    <div className="container mx-auto min-h-[calc(100vh-4rem)] px-8 py-16">
+    <div className="h-full overflow-y-auto">
+      <div className="container mx-auto min-h-[calc(100vh-4rem)] px-8 py-16">
       <div className="mx-auto max-w-5xl space-y-24">
         {/* Hero Section - Clean & Professional */}
         <div className="space-y-10 text-center">
@@ -111,6 +112,7 @@ function IndexComponent() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

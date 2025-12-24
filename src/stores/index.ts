@@ -27,32 +27,38 @@ export {
 } from "./auth-store";
 export type {
   // API types (re-exported from @/lib/api/types)
-  Certification,
-  Education,
-  Experience,
+  APICertification,
+  APIEducation,
+  APIExperience,
+  APILink,
+  APISkills,
   ExperienceFormat,
-  Link,
   LinkType,
   NameOrder,
   PersonalInfo,
   PhoneFormat,
   ResumeContent,
-  Skills,
   SkillWithLevel,
+  // Store types (used in UserInfo)
+  Certification,
+  Education,
+  Experience,
+  Link,
+  Skill,
   // Store-specific types
   CustomFont,
   JobInfo,
   ResumeDocument,
   StyleCustomization,
   UserInfo,
-  WorkExperience,
-  // Legacy types (deprecated, for backward compatibility)
-  LegacyCertification,
-  LegacyEducation,
-  LegacyLink,
-  LegacySkill,
 } from "./resume-store";
 export {
+  // Factory functions for creating new items
+  createCertification,
+  createEducation,
+  createExperience,
+  createLink,
+  createSkill,
   selectContent,
   selectContentActions,
   selectDocuments,

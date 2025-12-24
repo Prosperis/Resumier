@@ -5,22 +5,25 @@ import type { ColorScheme, TemplateType, Typography } from "@/lib/types/template
 
 // Re-export types from the API for external use
 export type {
-  Certification,
-  Education,
-  Experience,
+  Certification as APICertification,
+  Education as APIEducation,
+  Experience as APIExperience,
   ExperienceFormat,
-  Link,
+  Link as APILink,
   LinkType,
   NameOrder,
   PersonalInfo,
   PhoneFormat,
   ResumeContent,
-  Skills,
+  Skills as APISkills,
   SkillWithLevel,
 } from "@/lib/api/types";
 
 // Import types for internal use
-import type { ResumeContent } from "@/lib/api/types";
+import type { ResumeContent, LinkType } from "@/lib/api/types";
+
+// Helper to generate unique IDs
+const generateId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
 // Custom Font Type
 export interface CustomFont {
@@ -44,63 +47,123 @@ export interface StyleCustomization {
 }
 
 /**
- * Legacy work experience type used in the store's UserInfo.
- * @deprecated Use Experience from @/lib/api/types for new code.
+ * Work experience type used in the store's UserInfo.
+ * Compatible with API Experience type but with optional fields for form editing.
  */
-export interface WorkExperience {
-  company?: string;
-  title?: string;
-  startDate?: string;
-  endDate?: string;
+export interface Experience {
+  id: string;
+  company: string;
+  position: string;
+  startDate: string;
+  endDate: string;
   current?: boolean;
-  description?: string;
-  awards?: string[];
+  description: string;
+  highlights: string[];
 }
 
 /**
- * Legacy education type used in the store's UserInfo.
- * @deprecated Use Education from @/lib/api/types for new code.
+ * Education type used in the store's UserInfo.
+ * Compatible with API Education type but with optional fields for form editing.
  */
-export interface LegacyEducation {
-  school?: string;
-  degree?: string;
-  startDate?: string;
-  endDate?: string;
-  description?: string;
+export interface Education {
+  id: string;
+  institution: string;
+  degree: string;
+  field: string;
+  startDate: string;
+  endDate: string;
+  current?: boolean;
+  gpa?: string;
+  honors?: string[];
 }
 
 /**
- * Legacy skill type used in the store's UserInfo.
- * @deprecated Use Skills from @/lib/api/types for new code.
+ * Skill type used in the store's UserInfo.
+ * Flat structure for form editing - can be converted to grouped Skills for API.
  */
-export interface LegacySkill {
-  name?: string;
-  years?: string;
-  proficiency?: string;
+export interface Skill {
+  id: string;
+  name: string;
+  level?: number; // 1-10 scale
+  category?: "technical" | "languages" | "tools" | "soft";
 }
 
 /**
- * Legacy certification type used in the store's UserInfo.
- * @deprecated Use Certification from @/lib/api/types for new code.
+ * Certification type used in the store's UserInfo.
+ * Compatible with API Certification type but with optional fields for form editing.
  */
-export interface LegacyCertification {
-  name?: string;
-  expiration?: string;
-}
-
-/**
- * Legacy link type used in the store's UserInfo.
- * @deprecated Use Link from @/lib/api/types for new code.
- */
-export interface LegacyLink {
-  label?: string;
+export interface Certification {
+  id: string;
+  name: string;
+  issuer: string;
+  date: string;
+  expiryDate?: string;
+  credentialId?: string;
   url?: string;
 }
 
 /**
+ * Link type used in the store's UserInfo.
+ * Compatible with API Link type.
+ */
+export interface Link {
+  id: string;
+  label: string;
+  url: string;
+  type: LinkType;
+}
+
+/**
+ * Helper functions to create new items with generated IDs
+ */
+export const createExperience = (data?: Partial<Experience>): Experience => ({
+  id: generateId(),
+  company: "",
+  position: "",
+  startDate: "",
+  endDate: "",
+  current: false,
+  description: "",
+  highlights: [],
+  ...data,
+});
+
+export const createEducation = (data?: Partial<Education>): Education => ({
+  id: generateId(),
+  institution: "",
+  degree: "",
+  field: "",
+  startDate: "",
+  endDate: "",
+  current: false,
+  ...data,
+});
+
+export const createSkill = (data?: Partial<Skill>): Skill => ({
+  id: generateId(),
+  name: "",
+  ...data,
+});
+
+export const createCertification = (data?: Partial<Certification>): Certification => ({
+  id: generateId(),
+  name: "",
+  issuer: "",
+  date: "",
+  ...data,
+});
+
+export const createLink = (data?: Partial<Link>): Link => ({
+  id: generateId(),
+  label: "",
+  url: "",
+  type: "website",
+  ...data,
+});
+
+/**
  * User information stored in the resume store.
- * This is the legacy format used for direct user input.
- * For resume content, use ResumeContent from @/lib/api/types.
+ * Uses structured types compatible with the API.
  */
 export interface UserInfo {
   name?: string;
@@ -108,11 +171,11 @@ export interface UserInfo {
   phone?: string;
   address?: string;
   customUrl?: string;
-  links?: LegacyLink[];
-  experiences?: WorkExperience[];
-  education?: LegacyEducation[];
-  skills?: LegacySkill[];
-  certifications?: LegacyCertification[];
+  links?: Link[];
+  experiences?: Experience[];
+  education?: Education[];
+  skills?: Skill[];
+  certifications?: Certification[];
 }
 
 /**

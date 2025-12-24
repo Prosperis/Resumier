@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import type {
-  LegacyCertification,
-  LegacyEducation,
-  LegacyLink,
-  LegacySkill,
+  Certification,
+  Education,
+  Link,
+  Skill,
   UserInfo,
-  WorkExperience,
+  Experience,
 } from "./resume-store";
 
 /**
@@ -19,11 +19,11 @@ export type HistoryValue =
   | undefined
   | null
   | string[]
-  | WorkExperience[]
-  | LegacyEducation[]
-  | LegacySkill[]
-  | LegacyCertification[]
-  | LegacyLink[];
+  | Experience[]
+  | Education[]
+  | Skill[]
+  | Certification[]
+  | Link[];
 
 /**
  * Section identifiers for history tracking.

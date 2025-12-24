@@ -9,12 +9,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { LegacySkill } from "@/stores";
+import type { Skill } from "@/stores";
 
 interface SkillsProps {
-  skills: LegacySkill[];
+  skills: Skill[];
   addSkill: () => void;
-  updateSkill: (i: number, field: keyof LegacySkill, value: string) => void;
+  updateSkill: (i: number, field: keyof Skill, value: string | number) => void;
   removeSkill: (i: number) => void;
 }
 
@@ -22,7 +22,7 @@ export function SkillsSection({ skills, addSkill, updateSkill, removeSkill }: Sk
   return (
     <div className="grid gap-4">
       {skills.map((skill, i) => (
-        <div key={i} className="grid gap-2 rounded-md border p-4">
+        <div key={skill.id || i} className="grid gap-2 rounded-md border p-4">
           <div className="grid gap-2">
             <Label>Skill</Label>
             <Input
@@ -31,40 +31,35 @@ export function SkillsSection({ skills, addSkill, updateSkill, removeSkill }: Sk
               placeholder="Skill name"
             />
           </div>
-          <div className="grid gap-2">
-            <Label>Years of Experience</Label>
-            <Input
-              type="number"
-              min="0"
-              value={skill.years ?? ""}
-              onChange={(e) => updateSkill(i, "years", e.target.value)}
-              placeholder="0"
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label>Proficiency</Label>
-            <Select
-              value={skill.proficiency ?? ""}
-              onValueChange={(value) => updateSkill(i, "proficiency", value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="beginner">Beginner</SelectItem>
-                <SelectItem value="intermediate">Intermediate</SelectItem>
-                <SelectItem value="professional">Professional</SelectItem>
-                <SelectItem value="expert">Expert</SelectItem>
-                {[...Array(10)].map((_, idx) => {
-                  const val = (idx + 1).toString();
-                  return (
-                    <SelectItem key={val} value={val}>
-                      {val}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="grid gap-2">
+              <Label>Level (1-10)</Label>
+              <Input
+                type="number"
+                min="1"
+                max="10"
+                value={skill.level ?? ""}
+                onChange={(e) => updateSkill(i, "level", parseInt(e.target.value) || 0)}
+                placeholder="5"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label>Category</Label>
+              <Select
+                value={skill.category ?? ""}
+                onValueChange={(value) => updateSkill(i, "category", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="technical">Technical</SelectItem>
+                  <SelectItem value="languages">Languages</SelectItem>
+                  <SelectItem value="tools">Tools</SelectItem>
+                  <SelectItem value="soft">Soft Skills</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <Button type="button" variant="outline" size="sm" onClick={() => removeSkill(i)}>
             <Trash className="mr-2 h-4 w-4" /> Remove

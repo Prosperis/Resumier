@@ -29,7 +29,7 @@ export function RootLayout({ children }: RootLayoutProps) {
   const setTemplate = useResumeStore((state) => state.setTemplate);
 
   return (
-    <div className="relative flex h-screen flex-col overflow-hidden bg-background">
+    <div className="relative flex h-screen flex-col overflow-hidden">
       {/* Skip link for keyboard navigation - visible on focus */}
       <a
         href="#main-content"
