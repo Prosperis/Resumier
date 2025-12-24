@@ -158,6 +158,8 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
       <div
         className={cn(
           "flex-1 flex items-start justify-center bg-slate-200 dark:bg-slate-800 overflow-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] p-8",
+          "[background-image:radial-gradient(circle,_rgba(148,163,184,0.4)_1px,_transparent_1px)] dark:[background-image:radial-gradient(circle,_rgba(71,85,105,0.5)_1px,_transparent_1px)]",
+          "[background-size:16px_16px]",
         )}
       >
         <InteractiveResumePreview resume={resume} template={template} isInteractive={true} />
