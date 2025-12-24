@@ -5,6 +5,7 @@
 
 import { apiClient } from "@/lib/api/client";
 import type { ResumeContent } from "@/lib/api/types";
+import { parseLinkedInZip } from "./linkedin-data-parser";
 
 export interface ImportSource {
   id: string;
@@ -14,15 +15,21 @@ export interface ImportSource {
   requiresUrl?: boolean;
   requiresFile?: boolean;
   comingSoon?: boolean;
+  /**
+   * Whether this source supports both URL and file input
+   * When true, the dialog shows options for both
+   */
+  supportsMultipleInputTypes?: boolean;
 }
 
 export const IMPORT_SOURCES: ImportSource[] = [
   {
     id: "linkedin",
     name: "LinkedIn",
-    description: "Import your profile from LinkedIn",
+    description: "Import your profile from LinkedIn data export",
     icon: "linkedin",
-    requiresUrl: true,
+    requiresFile: true,
+    supportsMultipleInputTypes: true, // Supports both ZIP file and OAuth/URL
   },
   {
     id: "json",
@@ -65,11 +72,12 @@ export interface ImportResult {
 
 /**
  * Import from LinkedIn profile
- * Supports two modes:
- * 1. OAuth mode: retrieves data stored in sessionStorage by callback handler (authenticated users)
- * 2. Guest mode: imports public profile data from URL (guests)
+ * Supports three modes:
+ * 1. ZIP file mode: parses LinkedIn data export ZIP file (preferred for guests)
+ * 2. OAuth mode: retrieves data stored in sessionStorage by callback handler (authenticated users)
+ * 3. URL mode: imports public profile data from URL (guests, fallback)
  */
-export async function importFromLinkedIn(profileUrl?: string): Promise<ImportResult> {
+export async function importFromLinkedIn(input?: string | File): Promise<ImportResult> {
   try {
     if (typeof window === "undefined") {
       // Server-side rendering: no sessionStorage available
@@ -79,7 +87,29 @@ export async function importFromLinkedIn(profileUrl?: string): Promise<ImportRes
       };
     }
 
-    // Check if this is OAuth mode (data in sessionStorage)
+    // Mode 1: ZIP file import (if input is a File)
+    if (input instanceof File) {
+      const result = await parseLinkedInZip(input);
+
+      if (!result.success) {
+        return {
+          success: false,
+          error: result.error || "Failed to parse LinkedIn ZIP file",
+        };
+      }
+
+      // Log warnings but don't fail
+      if (result.warnings && result.warnings.length > 0) {
+        console.warn("LinkedIn import warnings:", result.warnings);
+      }
+
+      return {
+        success: true,
+        data: result.data,
+      };
+    }
+
+    // Mode 2: Check if this is OAuth mode (data in sessionStorage)
     const importedDataStr = sessionStorage.getItem("linkedin_import_data");
     const importedState = sessionStorage.getItem("linkedin_import_state");
 
@@ -118,7 +148,8 @@ export async function importFromLinkedIn(profileUrl?: string): Promise<ImportRes
       }
     }
 
-    // Guest mode - import from URL
+    // Mode 3: Guest mode - import from URL
+    const profileUrl = typeof input === "string" ? input : undefined;
     if (profileUrl) {
       // Validate LinkedIn URL
       if (!profileUrl.includes("linkedin.com")) {
@@ -148,7 +179,7 @@ export async function importFromLinkedIn(profileUrl?: string): Promise<ImportRes
 
     return {
       success: false,
-      error: "No LinkedIn data found. Please use the OAuth flow or provide a profile URL.",
+      error: "No LinkedIn data found. Please upload your LinkedIn data export ZIP file, use the OAuth flow, or provide a profile URL.",
     };
   } catch (error) {
     return {
@@ -264,7 +295,8 @@ export async function importFromIndeed(_indeedUrl: string): Promise<ImportResult
 export async function importResume(source: string, input: string | File): Promise<ImportResult> {
   switch (source) {
     case "linkedin":
-      return importFromLinkedIn(input as string);
+      // LinkedIn accepts both File (ZIP) and string (URL)
+      return importFromLinkedIn(input);
     case "json":
       return importFromJSON(input as File);
     case "pdf":
