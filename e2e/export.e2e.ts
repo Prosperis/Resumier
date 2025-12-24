@@ -86,18 +86,6 @@ test.describe("Export Menu", () => {
     await expect(page.getByText(/HTML/i).first()).toBeVisible();
   });
 
-  test("should show JSON export option", async ({ page }) => {
-    await setupResumeEditor(page);
-
-    const exportButton = page
-      .getByRole("button", { name: /Export/i })
-      .or(page.getByRole("button", { name: /Download/i }));
-
-    await exportButton.click();
-
-    await expect(page.getByText(/JSON/i).first()).toBeVisible();
-  });
-
   test("should show Markdown export option", async ({ page }) => {
     await setupResumeEditor(page);
 
@@ -188,34 +176,6 @@ test.describe("DOCX Export", () => {
       if (download) {
         const filename = download.suggestedFilename();
         expect(filename).toMatch(/\.docx$/i);
-      }
-    }
-  });
-});
-
-test.describe("JSON Export", () => {
-  test("should trigger JSON download", async ({ page }) => {
-    await setupResumeEditor(page);
-
-    const exportButton = page
-      .getByRole("button", { name: /Export/i })
-      .or(page.getByRole("button", { name: /Download/i }));
-
-    await exportButton.click();
-
-    // Start waiting for download
-    const downloadPromise = page.waitForEvent("download", { timeout: 30000 }).catch(() => null);
-
-    // Click JSON option
-    const jsonOption = page.getByRole("menuitem", { name: /JSON/i }).first();
-    if (await jsonOption.isVisible()) {
-      await jsonOption.click();
-
-      const download = await downloadPromise;
-
-      if (download) {
-        const filename = download.suggestedFilename();
-        expect(filename).toMatch(/\.json$/i);
       }
     }
   });

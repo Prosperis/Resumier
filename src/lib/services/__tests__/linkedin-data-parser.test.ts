@@ -6,10 +6,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import JSZip from "jszip";
 
 // Mock the parser functions
-import {
-  parseLinkedInZip,
-  isLinkedInExport,
-} from "@/lib/services/linkedin-data-parser";
+import { parseLinkedInZip, isLinkedInExport } from "@/lib/services/linkedin-data-parser";
 
 /**
  * Helper to create a File from JSZip instance
@@ -71,7 +68,7 @@ describe("LinkedIn Data Parser", () => {
       zip.file(
         "Profile.csv",
         `First Name,Last Name,Headline,Summary,Geo Location
-John,Doe,Software Engineer,Experienced developer with 10+ years,San Francisco Bay Area`
+John,Doe,Software Engineer,Experienced developer with 10+ years,San Francisco Bay Area`,
       );
 
       // Add Positions CSV
@@ -79,7 +76,7 @@ John,Doe,Software Engineer,Experienced developer with 10+ years,San Francisco Ba
         "Positions.csv",
         `Company Name,Title,Description,Started On,Finished On,Location
 Tech Corp,Senior Developer,Led development team,Jan 2020,,San Francisco
-Startup Inc,Developer,Built web apps,Jun 2017,Dec 2019,New York`
+Startup Inc,Developer,Built web apps,Jun 2017,Dec 2019,New York`,
       );
 
       // Add Skills CSV
@@ -89,21 +86,21 @@ Startup Inc,Developer,Built web apps,Jun 2017,Dec 2019,New York`
 JavaScript
 TypeScript
 React
-Node.js`
+Node.js`,
       );
 
       // Add Education CSV - note: degree name with comma separates degree from field
       zip.file(
         "Education.csv",
         `School Name,Start Date,End Date,Degree Name,Notes
-MIT,Sep 2013,May 2017,"Bachelor of Science, Computer Science",`
+MIT,Sep 2013,May 2017,"Bachelor of Science, Computer Science",`,
       );
 
       // Add Email Addresses CSV
       zip.file(
         "Email Addresses.csv",
         `Email Address,Confirmed,Primary
-john.doe@email.com,Yes,Yes`
+john.doe@email.com,Yes,Yes`,
       );
 
       const file = await createZipFile(zip, "LinkedInDataExport.zip");
@@ -144,7 +141,7 @@ john.doe@email.com,Yes,Yes`
       zip.file(
         "Profile.csv",
         `First Name,Last Name,Headline,Summary
-Jane,Smith,Product Manager,Building great products`
+Jane,Smith,Product Manager,Building great products`,
       );
 
       const file = await createZipFile(zip, "LinkedInDataExport.zip");
@@ -177,7 +174,7 @@ Jane,Smith,Product Manager,Building great products`
       zip.file(
         "Profile.csv",
         `First Name,Last Name
-Test,User`
+Test,User`,
       );
 
       zip.file(
@@ -190,7 +187,7 @@ Communication
 Docker
 Problem Solving
 Python
-Figma`
+Figma`,
       );
 
       const file = await createZipFile(zip, "LinkedInDataExport.zip");
@@ -220,7 +217,7 @@ Figma`
       zip.file(
         "Profile.csv",
         `First Name,Last Name
-Test,User`
+Test,User`,
       );
 
       zip.file(
@@ -228,7 +225,7 @@ Test,User`
         `Company Name,Title,Started On,Finished On
 Company A,Role A,January 2020,December 2022
 Company B,Role B,Jan 2023,
-Company C,Role C,2019,2020`
+Company C,Role C,2019,2020`,
       );
 
       const file = await createZipFile(zip, "LinkedInDataExport.zip");
@@ -257,7 +254,7 @@ Company C,Role C,2019,2020`
       zip.file(
         "Profile.csv",
         `First Name,Last Name
-Test,User`
+Test,User`,
       );
 
       zip.file(
@@ -266,7 +263,7 @@ Test,User`
 Tech Corp,Developer,"Led a team of engineers.
 • Increased performance by 40%
 • Implemented CI/CD pipeline
-- Mentored 3 junior developers",2020-01,`
+- Mentored 3 junior developers",2020-01,`,
       );
 
       const file = await createZipFile(zip, "LinkedInDataExport.zip");
@@ -274,18 +271,10 @@ Tech Corp,Developer,"Led a team of engineers.
       const result = await parseLinkedInZip(file);
 
       expect(result.success).toBe(true);
-      expect(result.data?.experience?.[0].description).toBe(
-        "Led a team of engineers."
-      );
-      expect(result.data?.experience?.[0].highlights).toContain(
-        "Increased performance by 40%"
-      );
-      expect(result.data?.experience?.[0].highlights).toContain(
-        "Implemented CI/CD pipeline"
-      );
-      expect(result.data?.experience?.[0].highlights).toContain(
-        "Mentored 3 junior developers"
-      );
+      expect(result.data?.experience?.[0].description).toBe("Led a team of engineers.");
+      expect(result.data?.experience?.[0].highlights).toContain("Increased performance by 40%");
+      expect(result.data?.experience?.[0].highlights).toContain("Implemented CI/CD pipeline");
+      expect(result.data?.experience?.[0].highlights).toContain("Mentored 3 junior developers");
     });
 
     it("should parse certifications", async () => {
@@ -294,14 +283,14 @@ Tech Corp,Developer,"Led a team of engineers.
       zip.file(
         "Profile.csv",
         `First Name,Last Name
-Test,User`
+Test,User`,
       );
 
       zip.file(
         "Certifications.csv",
         `Name,Authority,Started On,Finished On,License Number,Url
 AWS Solutions Architect,Amazon Web Services,Jun 2021,,ABC123,https://aws.amazon.com/cert/123
-Google Cloud Professional,Google,Jan 2020,Jan 2023,GCP456,`
+Google Cloud Professional,Google,Jan 2020,Jan 2023,GCP456,`,
       );
 
       const file = await createZipFile(zip, "LinkedInDataExport.zip");
@@ -311,16 +300,10 @@ Google Cloud Professional,Google,Jan 2020,Jan 2023,GCP456,`
       expect(result.success).toBe(true);
       expect(result.data?.certifications).toHaveLength(2);
 
-      expect(result.data?.certifications?.[0].name).toBe(
-        "AWS Solutions Architect"
-      );
-      expect(result.data?.certifications?.[0].issuer).toBe(
-        "Amazon Web Services"
-      );
+      expect(result.data?.certifications?.[0].name).toBe("AWS Solutions Architect");
+      expect(result.data?.certifications?.[0].issuer).toBe("Amazon Web Services");
       expect(result.data?.certifications?.[0].credentialId).toBe("ABC123");
-      expect(result.data?.certifications?.[0].url).toBe(
-        "https://aws.amazon.com/cert/123"
-      );
+      expect(result.data?.certifications?.[0].url).toBe("https://aws.amazon.com/cert/123");
 
       expect(result.data?.certifications?.[1].expiryDate).toBe("2023-01");
     });
@@ -331,7 +314,7 @@ Google Cloud Professional,Google,Jan 2020,Jan 2023,GCP456,`
       zip.file(
         "Profile.csv",
         `First Name,Last Name
-Test,User`
+Test,User`,
       );
 
       zip.file(
@@ -339,7 +322,7 @@ Test,User`
         `Name,Proficiency
 English,Native
 Spanish,Professional
-French,Elementary`
+French,Elementary`,
       );
 
       const file = await createZipFile(zip, "LinkedInDataExport.zip");
@@ -359,7 +342,7 @@ French,Elementary`
       zip.file(
         "Profile.csv",
         `First Name,Last Name,Headline
-,,Software Engineer`
+,,Software Engineer`,
       );
 
       const file = await createZipFile(zip, "LinkedInDataExport.zip");

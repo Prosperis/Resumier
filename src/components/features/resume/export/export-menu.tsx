@@ -1,6 +1,5 @@
 import {
   Code,
-  Database,
   Download,
   FileCode,
   FileText,
@@ -24,7 +23,6 @@ import type { Resume } from "@/lib/api/types";
 import {
   downloadDOCX,
   downloadHTML,
-  downloadJSON,
   downloadMarkdown,
   downloadPDFDirect,
   downloadPDFWithTemplate,
@@ -154,13 +152,6 @@ export function ExportMenu({ resume }: ExportMenuProps) {
       description: "Universal compatibility",
       icon: FileText,
       handler: () => downloadPlainText(resume),
-    },
-    {
-      id: "json",
-      label: "JSON",
-      description: "Structured data export",
-      icon: Database,
-      handler: () => downloadJSON(resume),
     },
   ];
 

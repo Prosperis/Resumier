@@ -91,48 +91,57 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
         </DialogHeader>
 
         <div className="space-y-4 pt-2">
-          <div className="grid grid-cols-2 gap-3">
+          {/* Row 1: Major providers */}
+          <div className="grid grid-cols-3 gap-2">
             <Button
               variant="outline"
               type="button"
               onClick={() => handleOAuthSignIn("google")}
-              className="w-full h-14 relative group overflow-hidden border-2 hover:border-blue-500 hover:shadow-lg hover:shadow-[#4285F4]/20 hover:scale-[1.02] transition-all duration-300 bg-gradient-to-br from-background to-blue-50/30 dark:to-blue-950/10"
+              className="w-full h-12 relative group overflow-hidden border hover:border-blue-500 hover:shadow-md hover:shadow-[#4285F4]/20 hover:scale-[1.02] transition-all duration-300"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-[#4285F4]/0 via-[#34A853]/10 via-[#FBBC05]/10 via-[#EA4335]/10 to-[#4285F4]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#4285F4]/0 via-[#4285F4]/10 to-[#4285F4]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               <svg
-                className="mr-2 h-6 w-6 group-hover:scale-110 transition-transform"
-                viewBox="0 0 256 262"
+                className="h-5 w-5 group-hover:scale-110 transition-transform"
+                viewBox="0 0 87.3 78"
                 role="img"
-                aria-label="Google"
+                aria-label="Google Drive"
               >
                 <path
-                  fill="#4285F4"
-                  d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"
+                  fill="#0066DA"
+                  d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L29 52.2H0c0 1.55.4 3.1 1.2 4.5l5.4 10.15z"
                 />
                 <path
-                  fill="#34A853"
-                  d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"
+                  fill="#00AC47"
+                  d="M43.65 25.25L29 1.2C27.65 2 26.5 3.1 25.7 4.5L1.2 46.5c-.8 1.4-1.2 2.95-1.2 4.5h29l14.65-25.75z"
                 />
                 <path
-                  fill="#FBBC05"
-                  d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782"
+                  fill="#EA4335"
+                  d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75L86.1 58.7c.8-1.4 1.2-2.95 1.2-4.5H58.3L43.65 78h16.2c2.65 0 5.2-.7 7.5-2.1l6.2-1.1z"
                 />
                 <path
-                  fill="#EB4335"
-                  d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
+                  fill="#00832D"
+                  d="M43.65 25.25L58.3 0H29c-2.65 0-5.2.7-7.5 2.1l22.15 23.15z"
+                />
+                <path
+                  fill="#2684FC"
+                  d="M58.3 52.2H29l-15.25 26.6c2.3 1.4 4.85 2.1 7.5 2.1h44.3c2.65 0 5.2-.7 7.5-2.1L58.3 52.2z"
+                />
+                <path
+                  fill="#FFBA00"
+                  d="M73.35 26.5L58.3 0h-14.65l14.65 25.25L87.3 52.2c0-1.55-.4-3.1-1.2-4.5L73.35 26.5z"
                 />
               </svg>
-              <span className="font-semibold text-base">Google</span>
+              <span className="font-medium text-xs ml-1.5">gDrive</span>
             </Button>
             <Button
               variant="outline"
               type="button"
               onClick={() => handleOAuthSignIn("dropbox")}
-              className="w-full h-14 relative group overflow-hidden border-2 hover:border-blue-600 hover:shadow-lg hover:shadow-blue-600/30 hover:scale-[1.02] transition-all duration-300 bg-gradient-to-br from-background to-blue-50/30 dark:to-blue-950/10"
+              className="w-full h-12 relative group overflow-hidden border hover:border-blue-600 hover:shadow-md hover:shadow-blue-600/20 hover:scale-[1.02] transition-all duration-300"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-blue-600/10 to-blue-600/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               <svg
-                className="mr-2 h-6 w-6 group-hover:scale-110 transition-transform"
+                className="h-5 w-5 group-hover:scale-110 transition-transform"
                 viewBox="0 0 256 218"
                 fill="none"
                 role="img"
@@ -143,64 +152,115 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
                   d="M63.995 0L0 37.368l63.995 37.369 64.005-37.369L63.995 0zm128.01 0l-64.005 37.368 64.005 37.369L256 37.368 192.005 0zM0 112.106l63.995 37.368 64.005-37.368-64.005-37.369L0 112.106zm192.005-37.369l-64.005 37.369 64.005 37.368L256 112.106l-63.995-37.369zm-64.005 100.476l-64.005 37.369-21.328-12.456v13.937l85.333 49.935 85.343-49.935v-13.937l-21.338 12.456-64.005-37.369z"
                 />
               </svg>
-              <span className="font-semibold text-base">Dropbox</span>
+              <span className="font-medium text-xs ml-1.5">Dropbox</span>
+            </Button>
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => handleOAuthSignIn("onedrive")}
+              className="w-full h-12 relative group overflow-hidden border hover:border-sky-500 hover:shadow-md hover:shadow-sky-500/20 hover:scale-[1.02] transition-all duration-300"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-sky-500/0 via-sky-500/10 to-sky-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              <svg
+                className="h-5 w-5 group-hover:scale-110 transition-transform"
+                viewBox="0 0 256 154"
+                fill="none"
+                role="img"
+                aria-label="OneDrive"
+              >
+                <path
+                  fill="#0364B8"
+                  d="M154.66 110.682L103.573 71.09a54.83 54.83 0 0 1 25.644-6.395c.945 0 1.882.027 2.812.077A54.836 54.836 0 0 1 181.4 109.43l.067.393-26.806.86z"
+                />
+                <path
+                  fill="#0078D4"
+                  d="M104.598 47.468A45.08 45.08 0 0 1 130.71 39.5c16.573 0 31.315 8.974 39.198 22.383a55.243 55.243 0 0 1 11.722-1.255c.944 0 1.881.027 2.811.077l-79.843 49.977V47.468z"
+                />
+                <path
+                  fill="#1490DF"
+                  d="M104.598 110.682v-63.214A45.025 45.025 0 0 0 85.64 114.16l.001.003a44.947 44.947 0 0 0 3.8 4.04l48.03-7.521h-32.873z"
+                />
+                <path
+                  fill="#28A8EA"
+                  d="M181.467 109.823a54.79 54.79 0 0 0-49.438-45.05 45.1 45.1 0 0 0-27.431-17.305v63.214h70.135l6.734-1.259z"
+                />
+                <path
+                  fill="#0078D4"
+                  d="M215.908 82.345c-1.013-.072-2.033-.109-3.06-.109a40.092 40.092 0 0 0-31.381 15.082l-.067-.393a54.87 54.87 0 0 0-49.371-32.152c-.93-.05-1.867-.077-2.812-.077a54.83 54.83 0 0 0-25.644 6.395l51.087 39.591h-50.062l-15.157 2.377a44.91 44.91 0 0 0 .001.003 44.947 44.947 0 0 0 3.8 4.04c.003.003.006.004.009.007a45.019 45.019 0 0 0 30.249 11.611h87.958C231.037 128.72 256 103.757 256 83.235a40.09 40.09 0 0 0-40.092-.89z"
+                />
+                <path
+                  fill="#14447D"
+                  d="M85.64 114.16l.001.003a44.947 44.947 0 0 0 3.8 4.04c.003.003.006.004.009.007a45.019 45.019 0 0 0 30.249 11.611H45.015C20.154 129.82 0 109.665 0 84.804c0-20.65 13.92-38.534 33.85-43.87a64.727 64.727 0 0 0-1.048 11.544A64.962 64.962 0 0 0 85.64 114.16z"
+                />
+              </svg>
+              <span className="font-medium text-xs ml-1.5">OneDrive</span>
             </Button>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          {/* Row 2: Additional providers */}
+          <div className="grid grid-cols-3 gap-2">
             <Button
               variant="outline"
               type="button"
-              onClick={() => handleOAuthSignIn("github")}
-              className="w-full h-14 relative group overflow-hidden border-2 hover:border-gray-700 dark:hover:border-gray-300 hover:shadow-lg hover:shadow-gray-700/30 dark:hover:shadow-gray-300/20 hover:scale-[1.02] transition-all duration-300 bg-gradient-to-br from-background to-gray-50/50 dark:to-gray-900/20"
+              onClick={() => handleOAuthSignIn("box")}
+              className="w-full h-12 relative group overflow-hidden border hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/20 hover:scale-[1.02] transition-all duration-300"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-700/0 via-gray-700/10 to-gray-700/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               <svg
-                className="mr-2 h-6 w-6 text-gray-800 dark:text-gray-200 group-hover:scale-110 group-hover:rotate-[360deg] transition-all duration-500"
-                viewBox="0 0 256 250"
-                fill="currentColor"
+                className="h-5 w-5 group-hover:scale-110 transition-transform"
+                viewBox="0 0 256 256"
+                fill="none"
                 role="img"
-                aria-label="GitHub"
+                aria-label="Box"
               >
-                <path d="M128.001 0C57.317 0 0 57.307 0 128.001c0 56.554 36.676 104.535 87.535 121.46 6.397 1.185 8.746-2.777 8.746-6.158 0-3.052-.12-13.135-.174-23.83-35.61 7.742-43.124-15.103-43.124-15.103-5.823-14.795-14.213-18.73-14.213-18.73-11.613-7.944.876-7.78.876-7.78 12.853.902 19.621 13.19 19.621 13.19 11.417 19.568 29.945 13.911 37.249 10.64 1.149-8.272 4.466-13.92 8.127-17.116-28.431-3.236-58.318-14.212-58.318-63.258 0-13.975 5-25.394 13.188-34.358-1.329-3.224-5.71-16.242 1.24-33.874 0 0 10.749-3.44 35.21 13.121 10.21-2.836 21.16-4.258 32.038-4.307 10.878.049 21.837 1.47 32.066 4.307 24.431-16.56 35.165-13.12 35.165-13.12 6.967 17.63 2.584 30.65 1.255 33.873 8.207 8.964 13.173 20.383 13.173 34.358 0 49.163-29.944 59.988-58.447 63.157 4.591 3.972 8.682 11.762 8.682 23.704 0 17.126-.148 30.91-.148 35.126 0 3.407 2.304 7.398 8.792 6.14C219.37 232.5 256 184.537 256 128.002 256 57.307 198.691 0 128.001 0zm-80.06 182.34c-.282.636-1.283.827-2.194.39-.929-.417-1.45-1.284-1.15-1.922.276-.655 1.279-.838 2.205-.399.93.418 1.46 1.293 1.139 1.931zm6.296 5.618c-.61.566-1.804.303-2.614-.591-.837-.892-.994-2.086-.375-2.66.63-.566 1.787-.301 2.626.591.838.903 1 2.088.363 2.66zm4.32 7.188c-.785.545-2.067.034-2.86-1.104-.784-1.138-.784-2.503.017-3.05.795-.547 2.058-.055 2.861 1.075.782 1.157.782 2.522-.019 3.08zm7.304 8.325c-.701.774-2.196.566-3.29-.49-1.119-1.032-1.43-2.496-.726-3.27.71-.776 2.213-.558 3.315.49 1.11 1.03 1.45 2.505.701 3.27zm9.442 2.81c-.31 1.003-1.75 1.459-3.199 1.033-1.448-.439-2.395-1.613-2.103-2.626.301-1.01 1.747-1.484 3.207-1.028 1.446.436 2.396 1.602 2.095 2.622zm10.744 1.193c.036 1.055-1.193 1.93-2.715 1.95-1.53.034-2.769-.82-2.786-1.86 0-1.065 1.202-1.932 2.733-1.958 1.522-.03 2.768.818 2.768 1.868zm10.555-.405c.182 1.03-.875 2.088-2.387 2.37-1.485.271-2.861-.365-3.05-1.386-.184-1.056.893-2.114 2.376-2.387 1.514-.263 2.868.356 3.061 1.403z" />
+                <path
+                  fill="#0061D5"
+                  d="M53.5 187.3L0 153.6V68.3l53.5 33.7v85.3zm149-119L128 28.6 53.5 68.3v33.7L128 62.3l74.5 39.7V68.3zm0 85.3V102L128 141.7 53.5 102v51.6L128 193.3l74.5-39.7zM256 153.6l-53.5 33.7V102L256 68.3v85.3z"
+                />
               </svg>
-              <span className="font-semibold text-base">GitHub</span>
+              <span className="font-medium text-xs ml-1.5">Box</span>
             </Button>
             <Button
               variant="outline"
               type="button"
-              onClick={() => handleOAuthSignIn("gitlab")}
-              className="w-full h-14 relative group overflow-hidden border-2 hover:border-orange-600 hover:shadow-lg hover:shadow-orange-600/30 hover:scale-[1.02] transition-all duration-300 bg-gradient-to-br from-background to-orange-50/30 dark:to-orange-950/10"
+              onClick={() => handleOAuthSignIn("pcloud")}
+              className="w-full h-12 relative group overflow-hidden border hover:border-cyan-500 hover:shadow-md hover:shadow-cyan-500/20 hover:scale-[1.02] transition-all duration-300"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-600/0 via-orange-600/10 to-orange-600/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/10 to-cyan-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
               <svg
-                className="mr-2 h-6 w-6 group-hover:scale-110 transition-transform"
-                viewBox="0 0 256 236"
+                className="h-5 w-5 group-hover:scale-110 transition-transform"
+                viewBox="0 0 256 256"
                 fill="none"
                 role="img"
-                aria-label="GitLab"
+                aria-label="pCloud"
               >
-                <path fill="#E24329" d="M128.075 236.075l47.104-144.97H80.97l47.104 144.97z" />
-                <path fill="#FC6D26" d="M128.075 236.074L80.97 91.104H14.956l113.119 144.97z" />
                 <path
-                  fill="#FCA326"
-                  d="M14.956 91.104L.642 135.16a9.752 9.752 0 0 0 3.542 10.903l123.891 90.012-113.12-144.97z"
-                />
-                <path
-                  fill="#E24329"
-                  d="M14.956 91.105H80.97L52.601 3.79c-1.46-4.493-7.816-4.492-9.275 0l-28.37 87.315z"
-                />
-                <path fill="#FC6D26" d="M128.075 236.074l47.104-144.97h66.015l-113.12 144.97z" />
-                <path
-                  fill="#FCA326"
-                  d="M241.194 91.104l14.314 44.056a9.752 9.752 0 0 1-3.543 10.903l-123.89 90.012 113.119-144.97z"
-                />
-                <path
-                  fill="#E24329"
-                  d="M241.194 91.105h-66.015l28.37-87.315c1.46-4.493 7.816-4.492 9.275 0l28.37 87.315z"
+                  fill="#20BEC6"
+                  d="M128 24C70.6 24 24 70.6 24 128c0 57.4 46.6 104 104 104s104-46.6 104-104C232 70.6 185.4 24 128 24zm40 144h-80c-22.1 0-40-17.9-40-40s17.9-40 40-40c4.4 0 8.6.7 12.6 2C107.3 73 120.6 64 136 64c22.1 0 40 17.9 40 40 0 1.4-.1 2.7-.2 4 14.1 5.7 24.2 19.4 24.2 35.5 0 21.3-17.2 38.5-38.5 38.5H168z"
                 />
               </svg>
-              <span className="font-semibold text-base">GitLab</span>
+              <span className="font-medium text-xs ml-1.5">pCloud</span>
+            </Button>
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => handleOAuthSignIn("mega")}
+              className="w-full h-12 relative group overflow-hidden border hover:border-red-500 hover:shadow-md hover:shadow-red-500/20 hover:scale-[1.02] transition-all duration-300"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/10 to-red-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              <svg
+                className="h-5 w-5 group-hover:scale-110 transition-transform"
+                viewBox="0 0 256 256"
+                fill="none"
+                role="img"
+                aria-label="MEGA"
+              >
+                <path
+                  fill="#D9272E"
+                  d="M128 28L28 128l100 100 100-100L128 28zm0 40l60 60-60 60-60-60 60-60z"
+                />
+              </svg>
+              <span className="font-medium text-xs ml-1.5">MEGA</span>
             </Button>
           </div>
 

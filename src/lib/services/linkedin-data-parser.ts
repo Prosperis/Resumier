@@ -45,16 +45,16 @@ interface LinkedInProfileRow {
   "First Name"?: string;
   "Last Name"?: string;
   "Maiden Name"?: string;
-  "Headline"?: string;
-  "Summary"?: string;
-  "Industry"?: string;
+  Headline?: string;
+  Summary?: string;
+  Industry?: string;
   "Zip Code"?: string;
   "Geo Location"?: string;
   "Twitter Handles"?: string;
-  "Websites"?: string;
+  Websites?: string;
   "Instant Messengers"?: string;
   "Birth Date"?: string;
-  "Address"?: string;
+  Address?: string;
 }
 
 /**
@@ -62,9 +62,9 @@ interface LinkedInProfileRow {
  */
 interface LinkedInPositionRow {
   "Company Name"?: string;
-  "Title"?: string;
-  "Description"?: string;
-  "Location"?: string;
+  Title?: string;
+  Description?: string;
+  Location?: string;
   "Started On"?: string;
   "Finished On"?: string;
 }
@@ -76,25 +76,25 @@ interface LinkedInEducationRow {
   "School Name"?: string;
   "Start Date"?: string;
   "End Date"?: string;
-  "Notes"?: string;
+  Notes?: string;
   "Degree Name"?: string;
-  "Activities"?: string;
+  Activities?: string;
 }
 
 /**
  * Raw LinkedIn Skills CSV row
  */
 interface LinkedInSkillRow {
-  "Name"?: string;
+  Name?: string;
 }
 
 /**
  * Raw LinkedIn Certification CSV row
  */
 interface LinkedInCertificationRow {
-  "Name"?: string;
-  "Url"?: string;
-  "Authority"?: string;
+  Name?: string;
+  Url?: string;
+  Authority?: string;
   "Started On"?: string;
   "Finished On"?: string;
   "License Number"?: string;
@@ -104,8 +104,8 @@ interface LinkedInCertificationRow {
  * Raw LinkedIn Language CSV row
  */
 interface LinkedInLanguageRow {
-  "Name"?: string;
-  "Proficiency"?: string;
+  Name?: string;
+  Proficiency?: string;
 }
 
 /**
@@ -113,8 +113,8 @@ interface LinkedInLanguageRow {
  */
 interface LinkedInEmailRow {
   "Email Address"?: string;
-  "Confirmed"?: string;
-  "Primary"?: string;
+  Confirmed?: string;
+  Primary?: string;
   "Updated On"?: string;
 }
 
@@ -161,15 +161,10 @@ function parseCSV<T>(csvContent: string): T[] {
 /**
  * Find CSV file in ZIP by partial name match
  */
-async function findCSVFile(
-  zip: JSZip,
-  searchName: LinkedInCSVType,
-): Promise<string | null> {
+async function findCSVFile(zip: JSZip, searchName: LinkedInCSVType): Promise<string | null> {
   const files = Object.keys(zip.files);
   const csvFile = files.find(
-    (name) =>
-      name.toLowerCase().includes(searchName.toLowerCase()) &&
-      name.endsWith(".csv"),
+    (name) => name.toLowerCase().includes(searchName.toLowerCase()) && name.endsWith(".csv"),
   );
   if (!csvFile) return null;
   return await zip.files[csvFile].async("string");
@@ -458,7 +453,10 @@ function parseWebsites(websitesStr?: string): Link[] {
 
   const links: Link[] = [];
   // LinkedIn exports websites as comma or newline separated URLs
-  const urls = websitesStr.split(/[,\n]/).map((s) => s.trim()).filter(Boolean);
+  const urls = websitesStr
+    .split(/[,\n]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
 
   for (const url of urls) {
     const id = crypto.randomUUID();
@@ -505,14 +503,17 @@ function parseWebsites(websitesStr?: string): Link[] {
 /**
  * Convert parsed LinkedIn data to ResumeContent
  */
-function convertToResumeContent(
-  data: ParsedLinkedInData,
-): { content: Partial<ResumeContent>; warnings: string[] } {
+function convertToResumeContent(data: ParsedLinkedInData): {
+  content: Partial<ResumeContent>;
+  warnings: string[];
+} {
   const warnings: string[] = [];
 
   // Get primary email
   const primaryEmail =
-    data.emails?.find((e) => e["Primary"] === "Yes" || e["Confirmed"] === "Yes")?.["Email Address"] ||
+    data.emails?.find((e) => e["Primary"] === "Yes" || e["Confirmed"] === "Yes")?.[
+      "Email Address"
+    ] ||
     data.emails?.[0]?.["Email Address"] ||
     "";
 
@@ -582,22 +583,21 @@ function convertToResumeContent(
       endDate,
       current: !endDate || endDate === "",
       honors: edu["Activities"]
-        ? edu["Activities"].split(/[,\n]/).map((s) => s.trim()).filter(Boolean)
+        ? edu["Activities"]
+            .split(/[,\n]/)
+            .map((s) => s.trim())
+            .filter(Boolean)
         : undefined,
     };
   });
 
   // Parse skills
-  const skillNames = (data.skills || [])
-    .map((s) => s["Name"])
-    .filter((s): s is string => !!s);
+  const skillNames = (data.skills || []).map((s) => s["Name"]).filter((s): s is string => !!s);
   const skills = categorizeSkills(skillNames);
 
   // Add languages to skills
   if (data.languages && data.languages.length > 0) {
-    skills.languages = data.languages
-      .map((lang) => lang["Name"])
-      .filter((s): s is string => !!s);
+    skills.languages = data.languages.map((lang) => lang["Name"]).filter((s): s is string => !!s);
   }
 
   // Parse certifications
@@ -625,7 +625,10 @@ function convertToResumeContent(
 
   // Add Twitter if present
   if (data.profile?.["Twitter Handles"]) {
-    const handles = data.profile["Twitter Handles"].split(",").map((s) => s.trim()).filter(Boolean);
+    const handles = data.profile["Twitter Handles"]
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
     for (const handle of handles) {
       links.push({
         id: crypto.randomUUID(),
@@ -766,13 +769,7 @@ export function isLinkedInExport(file: File): boolean {
 
   // LinkedIn exports are typically named like "Complete_LinkedInDataExport_..."
   // or just have standard names from LinkedIn
-  const commonPatterns = [
-    "linkedin",
-    "complete_",
-    "data_export",
-    "dataexport",
-    "basic_linkedin",
-  ];
+  const commonPatterns = ["linkedin", "complete_", "data_export", "dataexport", "basic_linkedin"];
 
   const fileNameLower = file.name.toLowerCase();
   return commonPatterns.some((pattern) => fileNameLower.includes(pattern));

@@ -179,7 +179,8 @@ export async function importFromLinkedIn(input?: string | File): Promise<ImportR
 
     return {
       success: false,
-      error: "No LinkedIn data found. Please upload your LinkedIn data export ZIP file, use the OAuth flow, or provide a profile URL.",
+      error:
+        "No LinkedIn data found. Please upload your LinkedIn data export ZIP file, use the OAuth flow, or provide a profile URL.",
     };
   } catch (error) {
     return {

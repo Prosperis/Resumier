@@ -90,7 +90,6 @@
   "exportOptions": {
     "pdf": "Exportar como PDF",
     "docx": "Exportar como Word",
-    "json": "Exportar como JSON",
     "png": "Exportar como Imagen"
   },
   "messages": {

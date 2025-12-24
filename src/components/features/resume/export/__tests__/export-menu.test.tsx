@@ -175,21 +175,6 @@ describe("ExportMenu", () => {
     expect(downloadMarkdownSpy).toHaveBeenCalledWith(mockResume);
   });
 
-  it("should call downloadJSON when JSON is clicked", async () => {
-    const user = userEvent.setup();
-    const downloadJSONSpy = vi.spyOn(exportUtils, "downloadJSON");
-
-    render(<ExportMenu resume={mockResume} />);
-
-    const exportButton = screen.getByRole("button", { name: /export/i });
-    await user.click(exportButton);
-
-    const jsonOption = screen.getByText("JSON");
-    await user.click(jsonOption);
-
-    expect(downloadJSONSpy).toHaveBeenCalledWith(mockResume);
-  });
-
   it("should render with different resume title", () => {
     const differentResume: Resume = {
       ...mockResume,

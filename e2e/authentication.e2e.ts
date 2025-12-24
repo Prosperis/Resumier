@@ -59,15 +59,17 @@ test.describe("Authentication Flow", () => {
       await expect(page.getByText("Welcome to Resumier")).toBeVisible();
     });
 
-    test("should display OAuth provider buttons", async ({ page }) => {
+    test("should display cloud storage provider buttons", async ({ page }) => {
       await page.goto("/");
       await page.getByRole("button", { name: /Get Started Free/i }).click();
 
-      // Check OAuth buttons are present
-      await expect(page.getByRole("button", { name: /Google/i })).toBeVisible();
+      // Check cloud storage providers are present
+      await expect(page.getByRole("button", { name: /gDrive/i })).toBeVisible();
       await expect(page.getByRole("button", { name: /Dropbox/i })).toBeVisible();
-      await expect(page.getByRole("button", { name: /GitHub/i })).toBeVisible();
-      await expect(page.getByRole("button", { name: /GitLab/i })).toBeVisible();
+      await expect(page.getByRole("button", { name: /OneDrive/i })).toBeVisible();
+      await expect(page.getByRole("button", { name: /Box/i })).toBeVisible();
+      await expect(page.getByRole("button", { name: /pCloud/i })).toBeVisible();
+      await expect(page.getByRole("button", { name: /MEGA/i })).toBeVisible();
     });
 
     test("should display Try Demo Mode button", async ({ page }) => {
