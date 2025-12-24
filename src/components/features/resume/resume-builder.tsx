@@ -48,8 +48,8 @@ function CollapsibleSection({
 }: CollapsibleSectionProps) {
   return (
     <Collapsible open={isOpen} onOpenChange={() => onToggle(id)} className="border-b border-border">
-      <CollapsibleTrigger className="flex w-full items-center justify-between px-3 py-2.5 hover:bg-muted/50 transition-colors">
-        <div className="flex items-center gap-2">
+      <div className="flex w-full items-center justify-between px-3 py-2.5 hover:bg-muted/50 transition-colors">
+        <CollapsibleTrigger className="flex flex-1 items-center gap-2 text-left">
           <ChevronDown
             className={cn(
               "h-3.5 w-3.5 text-muted-foreground transition-transform duration-200",
@@ -60,9 +60,9 @@ function CollapsibleSection({
             <h3 className="text-xs font-semibold">{title}</h3>
             {description && <p className="text-[10px] text-muted-foreground">{description}</p>}
           </div>
-        </div>
+        </CollapsibleTrigger>
         {action && <div onClick={(e) => e.stopPropagation()}>{action}</div>}
-      </CollapsibleTrigger>
+      </div>
       <CollapsibleContent className="px-3 pb-3 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
         {children}
       </CollapsibleContent>
