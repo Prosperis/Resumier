@@ -151,7 +151,11 @@
     font-feature-settings:
       "rlig" 1,
       "calt" 1;
-    background-image: radial-gradient(circle, oklch(0.5 0.02 264.542 / 0.15) 1.5px, transparent 1.5px);
+    background-image: radial-gradient(
+      circle,
+      oklch(0.5 0.02 264.542 / 0.15) 1.5px,
+      transparent 1.5px
+    );
     background-size: 20px 20px;
   }
   .dark body {

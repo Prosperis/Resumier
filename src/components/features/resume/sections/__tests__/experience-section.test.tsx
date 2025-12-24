@@ -466,7 +466,10 @@ describe("ExperienceSection", () => {
 
     it("handles undefined highlights", async () => {
       const user = userEvent.setup();
-      const expWithoutHighlights = { ...mockExperience, highlights: undefined as unknown as string[] };
+      const expWithoutHighlights = {
+        ...mockExperience,
+        highlights: undefined as unknown as string[],
+      };
       render(<ExperienceSection {...defaultProps} experiences={[expWithoutHighlights]} />);
 
       const toggleButton = screen.getByRole("button", { name: /toggle/i });

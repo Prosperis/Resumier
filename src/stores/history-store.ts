@@ -1,13 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import type {
-  Certification,
-  Education,
-  Link,
-  Skill,
-  UserInfo,
-  Experience,
-} from "./resume-store";
+import type { Certification, Education, Link, Skill, UserInfo, Experience } from "./resume-store";
 
 /**
  * Union type of all possible values that can be tracked in history.

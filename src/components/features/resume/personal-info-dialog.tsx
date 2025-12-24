@@ -21,14 +21,7 @@ import {
   SidebarProvider,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import type {
-  Certification,
-  Education,
-  Experience,
-  Link,
-  Skill,
-  UserInfo,
-} from "@/stores";
+import type { Certification, Education, Experience, Link, Skill, UserInfo } from "@/stores";
 import {
   createCertification,
   createEducation,

@@ -7,7 +7,6 @@ import { StyleCustomizer } from "@/components/features/resume/preview/style-cust
 import { TemplateSelector } from "@/components/features/resume/preview/template-selector";
 import { UndoRedoButtons } from "@/components/features/undo-redo-buttons";
 import { Button } from "@/components/ui/button";
-import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { Separator } from "@/components/ui/separator";
 import { selectIsDemo, useAuthStore } from "@/stores/auth-store";
 import { useResumeStore } from "@/stores/resume-store";
@@ -104,9 +103,6 @@ export function RootLayout({ children }: RootLayoutProps) {
                 <ExportMenu resume={currentResume} />
               </>
             )}
-
-            {/* Language switcher - compact version in header */}
-            <LanguageSwitcher showLabel={false} size="icon" className="h-8 w-8" />
 
             <Button
               variant="ghost"
