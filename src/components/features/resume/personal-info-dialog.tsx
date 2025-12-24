@@ -21,7 +21,7 @@ import {
   SidebarProvider,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
-import type { Certification, Education, Link, Skill, UserInfo, WorkExperience } from "@/stores";
+import type { LegacyCertification, LegacyEducation, LegacyLink, LegacySkill, UserInfo, WorkExperience } from "@/stores";
 import { useResumeStore } from "@/stores";
 import {
   type PersonalInfoSection,
@@ -47,13 +47,13 @@ export function PersonalInfoDialog({
   const [phone, setPhone] = useState(userInfo.phone ?? "");
   const [address, setAddress] = useState(userInfo.address ?? "");
   const [experiences, setExperiences] = useState<WorkExperience[]>(userInfo.experiences ?? []);
-  const [education, setEducation] = useState<Education[]>(userInfo.education ?? []);
-  const [skills, setSkills] = useState<Skill[]>(userInfo.skills ?? []);
-  const [certifications, setCertifications] = useState<Certification[]>(
+  const [education, setEducation] = useState<LegacyEducation[]>(userInfo.education ?? []);
+  const [skills, setSkills] = useState<LegacySkill[]>(userInfo.skills ?? []);
+  const [certifications, setCertifications] = useState<LegacyCertification[]>(
     userInfo.certifications ?? [],
   );
   const [awardInputs, setAwardInputs] = useState<Record<number, string>>({});
-  const [links, setLinks] = useState<Link[]>(userInfo.links ?? []);
+  const [links, setLinks] = useState<LegacyLink[]>(userInfo.links ?? []);
   const [customUrl, setCustomUrl] = useState(userInfo.customUrl ?? "");
 
   const importMutation = useMutation({
@@ -159,10 +159,10 @@ export function PersonalInfoDialog({
   }
 
   function addEducation() {
-    setEducation([...education, {}]);
+    setEducation([...education, {} as LegacyEducation]);
   }
 
-  function updateEducation(index: number, field: keyof Education, value: string) {
+  function updateEducation(index: number, field: keyof LegacyEducation, value: string) {
     setEducation((prev) => {
       const next = [...prev];
       next[index] = { ...next[index], [field]: value };
@@ -175,10 +175,10 @@ export function PersonalInfoDialog({
   }
 
   function addSkill() {
-    setSkills((prev) => [...prev, {}]);
+    setSkills((prev) => [...prev, {} as LegacySkill]);
   }
 
-  function updateSkill(index: number, field: keyof Skill, value: string) {
+  function updateSkill(index: number, field: keyof LegacySkill, value: string) {
     setSkills((prev) => {
       const next = [...prev];
       next[index] = { ...next[index], [field]: value };
@@ -191,10 +191,10 @@ export function PersonalInfoDialog({
   }
 
   function addCertification() {
-    setCertifications([...certifications, {}]);
+    setCertifications([...certifications, {} as LegacyCertification]);
   }
 
-  function updateCertification(index: number, field: keyof Certification, value: string) {
+  function updateCertification(index: number, field: keyof LegacyCertification, value: string) {
     setCertifications((prev) => {
       const next = [...prev];
       next[index] = { ...next[index], [field]: value };
@@ -207,10 +207,10 @@ export function PersonalInfoDialog({
   }
 
   function addLink() {
-    setLinks([...links, {}]);
+    setLinks([...links, {} as LegacyLink]);
   }
 
-  function updateLink(index: number, field: keyof Link, value: string) {
+  function updateLink(index: number, field: keyof LegacyLink, value: string) {
     setLinks((prev) => {
       const next = [...prev];
       next[index] = { ...next[index], [field]: value };

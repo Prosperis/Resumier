@@ -63,6 +63,7 @@ export interface CommonTranslations {
     login: string;
     signUp: string;
     home: string;
+    main: string;
   };
   errors: {
     generic: string;
@@ -92,7 +93,13 @@ export interface DashboardTranslations {
   title: string;
   subtitle: string;
   newResume: string;
+  newProfile: string;
   noResumes: {
+    title: string;
+    description: string;
+    cta: string;
+  };
+  noProfiles: {
     title: string;
     description: string;
     cta: string;
@@ -124,11 +131,20 @@ export interface DashboardTranslations {
   };
   tabs: {
     resumes: string;
-    templates: string;
+    profiles: string;
   };
   actions: {
     viewAll: string;
     createNew: string;
+  };
+  messages: {
+    duplicateSuccess: string;
+    duplicateError: string;
+    deleteSuccess: string;
+    deleteError: string;
+  };
+  errors: {
+    loadFailed: string;
   };
 }
 
@@ -296,6 +312,10 @@ export interface SettingsTranslations {
       themeDark: string;
       themeSystem: string;
       language: string;
+      selectTheme: string;
+      selectLanguage: string;
+      reducedMotion: string;
+      reducedMotionDescription: string;
     };
     account: {
       title: string;
@@ -304,6 +324,24 @@ export interface SettingsTranslations {
       password: string;
       changePassword: string;
       deleteAccount: string;
+      status: string;
+      guestMode: string;
+      loggedInAs: string;
+      demoMode: string;
+      guestUser: string;
+      authenticated: string;
+    };
+    editor: {
+      title: string;
+      description: string;
+      autoSave: string;
+      autoSaveDescription: string;
+    };
+    export: {
+      title: string;
+      description: string;
+      promptFilename: string;
+      promptFilenameDescription: string;
     };
     data: {
       title: string;
@@ -318,6 +356,10 @@ export interface SettingsTranslations {
       description: string;
       email: string;
       browser: string;
+    };
+    reset: {
+      title: string;
+      description: string;
     };
   };
   saved: string;

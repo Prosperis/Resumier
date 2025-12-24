@@ -2,12 +2,12 @@ import { Plus, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { Certification } from "@/stores";
+import type { LegacyCertification } from "@/stores";
 
 interface CertProps {
-  certifications: Certification[];
+  certifications: LegacyCertification[];
   addCertification: () => void;
-  updateCertification: (i: number, field: keyof Certification, value: string) => void;
+  updateCertification: (i: number, field: keyof LegacyCertification, value: string) => void;
   removeCertification: (i: number) => void;
 }
 

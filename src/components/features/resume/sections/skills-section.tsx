@@ -9,12 +9,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Skill } from "@/stores";
+import type { LegacySkill } from "@/stores";
 
 interface SkillsProps {
-  skills: Skill[];
+  skills: LegacySkill[];
   addSkill: () => void;
-  updateSkill: (i: number, field: keyof Skill, value: string) => void;
+  updateSkill: (i: number, field: keyof LegacySkill, value: string) => void;
   removeSkill: (i: number) => void;
 }
 

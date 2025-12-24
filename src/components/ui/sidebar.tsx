@@ -249,27 +249,47 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
 }
 
 function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, state, open } = useSidebar();
+  const isCollapsed = state === "collapsed";
 
   return (
     <button
       data-sidebar="rail"
       data-slot="sidebar-rail"
-      aria-label="Toggle Sidebar"
-      tabIndex={-1}
+      aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+      tabIndex={0}
       onClick={toggleSidebar}
-      title="Toggle Sidebar"
+      title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
       className={cn(
-        "hover:after:bg-sidebar-border absolute top-16 bottom-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:top-0 after:bottom-0 after:left-1/2 after:w-[2px] sm:flex",
-        "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
-        "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
-        "hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full",
-        "[[data-side=left][data-collapsible=offcanvas]_&]:-right-2",
-        "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2",
+        // Base - vertical handle attached to sidebar edge
+        "absolute top-1/2 z-30 -translate-y-1/2",
+        "flex flex-col items-center justify-center gap-1",
+        "h-14 w-4 cursor-pointer",
+        // Position: for left sidebar put on right edge, for right sidebar put on left edge
+        // Using peer/sibling selectors since we're inside sidebar-inner
+        "[[data-side=left]_&]:rounded-r-lg [[data-side=left]_&]:-right-4",
+        "[[data-side=right]_&]:rounded-l-lg [[data-side=right]_&]:-left-4",
+        // Styling
+        "bg-background/95 backdrop-blur-sm",
+        "border border-border shadow-sm",
+        "[[data-side=left]_&]:border-l-0 [[data-side=left]_&]:rounded-l-none",
+        "[[data-side=right]_&]:border-r-0 [[data-side=right]_&]:rounded-r-none",
+        // Hover & transitions
+        "transition-all duration-150 ease-out",
+        "hover:bg-accent hover:w-5 hover:shadow-md",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "active:scale-95",
+        // Hide on mobile
+        "hidden sm:flex",
         className,
       )}
       {...props}
-    />
+    >
+      {/* Three grip dots */}
+      <span className="size-1.5 rounded-full bg-muted-foreground/50 transition-colors hover:bg-foreground" />
+      <span className="size-1.5 rounded-full bg-muted-foreground/50 transition-colors hover:bg-foreground" />
+      <span className="size-1.5 rounded-full bg-muted-foreground/50 transition-colors hover:bg-foreground" />
+    </button>
   );
 }
 

@@ -2,8 +2,8 @@ import { useState, useCallback } from "react";
 import { formatDistanceToNow } from "date-fns";
 import {
   History,
-  ChevronRight,
   ChevronLeft,
+  ChevronRight,
   GitBranch,
   Circle,
   CircleDot,
@@ -156,10 +156,7 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
 
   // Get version count for badge - use selectVersionCount for consistency
   const versionCount = useVersionStore(
-    useCallback(
-      (state) => (resumeId ? (state.versions[resumeId]?.length ?? 0) : 0),
-      [resumeId],
-    ),
+    useCallback((state) => (resumeId ? (state.versions[resumeId]?.length ?? 0) : 0), [resumeId]),
   );
 
   const { undoChange, redoChange } = useResumeHistory();
@@ -192,49 +189,37 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
         isExpanded ? "w-72 min-w-72" : "w-12",
       )}
     >
-      {/* Expand/Collapse Arrow - Fluid Design (mirrored for right side) */}
+      {/* Toggle Handle - Minimal Hover Design */}
       <div
         className={cn(
-          "absolute top-1/2 -translate-y-1/2 right-full z-20",
-          "flex items-center justify-center",
-          "opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300",
-          "h-14 w-6",
+          "absolute top-1/2 -translate-y-1/2 -left-3 z-20",
+          "opacity-0 group-hover/sidebar:opacity-100",
+          "transition-opacity duration-300 ease-out",
         )}
       >
         <button
           type="button"
           onClick={onToggle}
-          className="relative w-full h-full flex items-center justify-center focus:outline-none group/toggle"
+          className={cn(
+            "flex items-center justify-center",
+            "h-6 w-6",
+            "rounded-full",
+            "bg-background",
+            "border border-border",
+            "shadow-sm",
+            "text-muted-foreground",
+            "cursor-pointer",
+            "hover:border-primary hover:text-primary hover:bg-primary/10",
+            "transition-colors duration-200",
+            "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          )}
+          aria-label={isExpanded ? "Collapse panel" : "Expand panel"}
         >
-          {/* Fluid Shape SVG - mirrored */}
-          <svg
-            viewBox="0 0 24 56"
-            className={cn(
-              "absolute inset-0 w-full h-full",
-              "fill-background stroke-border",
-              "transition-colors duration-300",
-            )}
-            style={{
-              filter: "drop-shadow(-1px 0 1px rgba(0,0,0,0.05))",
-              transform: "scaleX(-1)",
-            }}
-          >
-            <path
-              d="M 0 0 C 0 12, 18 16, 18 28 S 0 44, 0 56"
-              strokeWidth="1"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-
-          {/* Icon */}
-          <div className="relative z-10 text-muted-foreground group-hover/toggle:text-foreground transition-colors">
-            {isExpanded ? (
-              <ChevronRight className="h-4 w-4" />
-            ) : (
-              <ChevronLeft className="h-4 w-4" />
-            )}
-          </div>
+          {isExpanded ? (
+            <ChevronRight className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronLeft className="h-3.5 w-3.5" />
+          )}
         </button>
       </div>
 

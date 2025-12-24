@@ -304,7 +304,6 @@ export function VersionPanel({ resumeId, currentContent, className }: VersionPan
   const [showAutoSaves, setShowAutoSaves] = useState(false);
 
   const {
-    versions,
     versionCount,
     manualVersions,
     autoSaveVersions,

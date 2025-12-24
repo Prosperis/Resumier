@@ -27,7 +27,7 @@ export function useResumeHistory() {
       const changes: HistoryChange[] = [];
 
       // Compare top-level fields
-      const simpleFields = ["name", "email", "phone", "address", "customUrl"];
+      const simpleFields = ["name", "email", "phone", "address", "customUrl"] as const;
       for (const field of simpleFields) {
         const oldVal = oldState[field];
         const newVal = newState[field];
@@ -44,16 +44,16 @@ export function useResumeHistory() {
 
       // Compare arrays (experiences, education, skills, etc.)
       const arrayFields = [
-        { key: "experiences", section: "experience" },
-        { key: "education", section: "education" },
-        { key: "skills", section: "skills" },
-        { key: "certifications", section: "certifications" },
-        { key: "links", section: "links" },
+        { key: "experiences" as const, section: "experience" as const },
+        { key: "education" as const, section: "education" as const },
+        { key: "skills" as const, section: "skills" as const },
+        { key: "certifications" as const, section: "certifications" as const },
+        { key: "links" as const, section: "links" as const },
       ];
 
       for (const { key, section: arraySection } of arrayFields) {
-        const oldArr = (oldState[key] as unknown[]) || [];
-        const newArr = (newState[key] as unknown[]) || [];
+        const oldArr = (oldState[key] as unknown[] | undefined) || [];
+        const newArr = (newState[key] as unknown[] | undefined) || [];
 
         if (JSON.stringify(oldArr) !== JSON.stringify(newArr)) {
           // Determine what kind of change
@@ -61,24 +61,24 @@ export function useResumeHistory() {
             changes.push({
               field: key,
               label: `Added ${arraySection}`,
-              oldValue: oldArr.length,
-              newValue: newArr.length,
+              oldValue: String(oldArr.length),
+              newValue: String(newArr.length),
               section: arraySection,
             });
           } else if (newArr.length < oldArr.length) {
             changes.push({
               field: key,
               label: `Removed ${arraySection}`,
-              oldValue: oldArr.length,
-              newValue: newArr.length,
+              oldValue: String(oldArr.length),
+              newValue: String(newArr.length),
               section: arraySection,
             });
           } else {
             changes.push({
               field: key,
               label: `Updated ${arraySection}`,
-              oldValue: oldArr,
-              newValue: newArr,
+              oldValue: oldState[key] as HistoryChange["oldValue"],
+              newValue: newState[key] as HistoryChange["newValue"],
               section: arraySection,
             });
           }

@@ -4,6 +4,7 @@ import { useVersionStore, selectVersionActions } from "@/stores/version-store";
 import { useResumeStore } from "@/stores/resume-store";
 import { useToast } from "@/hooks/use-toast";
 import type { ResumeContent, ResumeVersion } from "@/lib/api/types";
+import type { TemplateType } from "@/lib/types/templates";
 
 // Empty array constant to avoid creating new references on each render
 const EMPTY_VERSIONS: ResumeVersion[] = [];
@@ -104,7 +105,7 @@ export function useResumeVersions(resumeId: string) {
 
       // Also restore template and style if available
       if (version.template) {
-        setTemplate(version.template as "modern" | "minimal" | "professional" | "creative");
+        setTemplate(version.template as TemplateType);
       }
 
       if (version.styleCustomization) {
