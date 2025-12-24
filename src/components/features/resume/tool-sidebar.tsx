@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { formatDistanceToNow } from "date-fns";
 import {
   History,
@@ -154,9 +154,12 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
   const currentResume = useUIStore((state) => state.currentResume);
   const resumeId = currentResume?.id || "";
 
-  // Get version count for badge
-  const versionCount = useVersionStore((state) =>
-    resumeId ? (state.versions[resumeId] || []).length : 0,
+  // Get version count for badge - use selectVersionCount for consistency
+  const versionCount = useVersionStore(
+    useCallback(
+      (state) => (resumeId ? (state.versions[resumeId]?.length ?? 0) : 0),
+      [resumeId],
+    ),
   );
 
   const { undoChange, redoChange } = useResumeHistory();

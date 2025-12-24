@@ -201,23 +201,26 @@ export const useVersionStore = create<VersionStore>()(
   ),
 );
 
+// Empty array constant to prevent creating new references on each selector call
+const EMPTY_VERSIONS: ResumeVersion[] = [];
+
 // Selectors for optimized access
 export const selectVersions = (resumeId: string) => (state: VersionStore) =>
-  state.versions[resumeId] || [];
+  state.versions[resumeId] ?? EMPTY_VERSIONS;
 
 export const selectVersionCount = (resumeId: string) => (state: VersionStore) =>
-  (state.versions[resumeId] || []).length;
+  (state.versions[resumeId] ?? EMPTY_VERSIONS).length;
 
 export const selectLatestVersion = (resumeId: string) => (state: VersionStore) => {
-  const versions = state.versions[resumeId] || [];
-  return versions[0] || null;
+  const versions = state.versions[resumeId] ?? EMPTY_VERSIONS;
+  return versions[0] ?? null;
 };
 
 export const selectManualVersions = (resumeId: string) => (state: VersionStore) =>
-  (state.versions[resumeId] || []).filter((v) => !v.isAutoSave);
+  (state.versions[resumeId] ?? EMPTY_VERSIONS).filter((v) => !v.isAutoSave);
 
 export const selectAutoSaveVersions = (resumeId: string) => (state: VersionStore) =>
-  (state.versions[resumeId] || []).filter((v) => v.isAutoSave);
+  (state.versions[resumeId] ?? EMPTY_VERSIONS).filter((v) => v.isAutoSave);
 
 // Action selectors
 export const selectVersionActions = (state: VersionStore) => ({

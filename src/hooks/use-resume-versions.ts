@@ -1,8 +1,12 @@
 import { useCallback, useMemo } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { useVersionStore, selectVersionActions } from "@/stores/version-store";
 import { useResumeStore } from "@/stores/resume-store";
 import { useToast } from "@/hooks/use-toast";
 import type { ResumeContent, ResumeVersion } from "@/lib/api/types";
+
+// Empty array constant to avoid creating new references on each render
+const EMPTY_VERSIONS: ResumeVersion[] = [];
 
 /**
  * Hook for managing resume versions with convenient methods
@@ -12,7 +16,9 @@ export function useResumeVersions(resumeId: string) {
   const { toast } = useToast();
 
   // Version store state and actions
-  const versions = useVersionStore((state) => state.versions[resumeId] || []);
+  // Use a stable empty array reference to prevent infinite re-renders
+  const versions = useVersionStore((state) => state.versions[resumeId] ?? EMPTY_VERSIONS);
+  // Use useShallow to prevent infinite re-renders from the object selector
   const {
     saveVersion,
     restoreVersion,
@@ -20,7 +26,7 @@ export function useResumeVersions(resumeId: string) {
     updateVersionLabel,
     clearVersions,
     cleanupAutoSaves,
-  } = useVersionStore(selectVersionActions);
+  } = useVersionStore(useShallow(selectVersionActions));
 
   // Resume store state and actions
   const template = useResumeStore((state) => state.template);
