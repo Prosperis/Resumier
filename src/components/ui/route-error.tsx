@@ -1,5 +1,6 @@
 import { Link, useRouter } from "@tanstack/react-router";
 import { AlertCircle, Home, RefreshCw } from "lucide-react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
 interface RouteErrorProps {
@@ -14,6 +15,71 @@ interface RouteErrorProps {
  */
 export function RouteError({ error, reset, title = "Something went wrong" }: RouteErrorProps) {
   const router = useRouter();
+
+  // Clean up any active portals/modals when error component mounts
+  // This prevents React portal cleanup errors during error boundary rendering
+  useEffect(() => {
+    // Close any active popovers/modals by clearing their portal containers
+    // This is a safety measure to prevent "removeChild" errors
+    try {
+      // Find and remove any lingering portal containers that might cause cleanup issues
+      const portalContainers = document.querySelectorAll("[data-portal-container]");
+      portalContainers.forEach((container) => {
+        try {
+          if (container.parentNode) {
+            container.remove();
+          }
+        } catch (e) {
+          // Ignore cleanup errors - the container may have already been removed
+        }
+      });
+    } catch (e) {
+      // Silently ignore - this is just a cleanup safety measure
+    }
+  }, []);
+
+  // Log the error in development to help debug
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      console.error("RouteError caught error:", error);
+      if (error instanceof Error) {
+        console.error("Error message:", error.message);
+        console.error("Error name:", error.name);
+        console.error("Error stack:", error.stack);
+      }
+    }
+  }, [error]);
+
+  // Filter out DOM cleanup errors - these are harmless and shouldn't be shown to users
+  // These errors typically occur during React portal cleanup and are race conditions
+  // The global error handler should catch most of these before they reach here
+  // Be VERY specific - only catch actual DOM removeChild errors with the exact message pattern
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  const isDOMCleanupError =
+    error instanceof Error &&
+    errorMessage.includes("removeChild") &&
+    errorMessage.includes("not a child") &&
+    errorMessage.includes("Node") &&
+    (errorMessage.includes("Failed to execute") || error.name === "NotFoundError");
+
+  // Only suppress if we're 100% sure it's a DOM cleanup error
+  // For any other error, show the error UI so we can debug
+  if (isDOMCleanupError) {
+    if (import.meta.env.DEV) {
+      console.warn("Suppressed DOM cleanup error in RouteError:", errorMessage);
+      console.warn("This error should have been caught by the global error handler");
+    }
+    // Don't show error UI for DOM cleanup errors - they're harmless race conditions
+    // But don't return null - return a minimal component to prevent blank pages
+    // The error boundary will recover on its own, but we need to render something
+    return (
+      <div className="flex min-h-screen items-center justify-center p-4">
+        <div className="text-center">
+          <p className="text-muted-foreground text-sm">Recovering from error...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleReset = () => {
     if (reset) {

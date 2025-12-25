@@ -606,9 +606,14 @@ export async function generatePDFFromRenderedTemplate(resume: Resume): Promise<v
     console.error("Error in PDF generation:", error);
     throw error;
   } finally {
-    // Clean up
-    if (document.body.contains(container)) {
-      document.body.removeChild(container);
+    // Clean up - use remove() which is safer than removeChild()
+    try {
+      if (container && container.parentNode) {
+        container.remove();
+      }
+    } catch (cleanupError) {
+      // Silently ignore cleanup errors - the element may have already been removed
+      console.warn("Error during cleanup:", cleanupError);
     }
   }
 }

@@ -190,17 +190,18 @@ export function ResumeDashboard({
         </Tabs>
 
         {/* Dialog for creating resume from profile */}
-        {createResumeFromProfile && (
-          <CreateResumeDialog
-            defaultProfileId={createResumeFromProfile.id}
-            onSuccess={(id) => {
-              setCreateResumeFromProfile(null);
-              setActiveTab("resumes");
-              onResumeClick?.(id);
-            }}
-            trigger={<span />}
-          />
-        )}
+        <CreateResumeDialog
+          defaultProfileId={createResumeFromProfile?.id}
+          open={!!createResumeFromProfile}
+          onOpenChange={(isOpen) => {
+            if (!isOpen) setCreateResumeFromProfile(null);
+          }}
+          onSuccess={(id) => {
+            setCreateResumeFromProfile(null);
+            setActiveTab("resumes");
+            onResumeClick?.(id);
+          }}
+        />
       </div>
     </FadeIn>
   );

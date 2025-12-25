@@ -57,7 +57,15 @@ export function GuestModeInfo() {
       a.download = `resumier-backup-${new Date().toISOString().split("T")[0]}.json`;
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
+      // Use remove() which is safer than removeChild()
+      try {
+        if (a.parentNode) {
+          a.remove();
+        }
+      } catch (cleanupError) {
+        // Silently ignore cleanup errors - the element may have already been removed
+        console.warn("Error during cleanup:", cleanupError);
+      }
       URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Failed to export data:", error);

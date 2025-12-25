@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Loader2, Plus } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,14 +23,25 @@ interface CreateResumeDialogProps {
   onSuccess?: (id: string) => void;
   /** Pre-selected profile ID when creating from a profile */
   defaultProfileId?: string;
+  /** Controlled open state */
+  open?: boolean;
+  /** Callback when open state changes */
+  onOpenChange?: (open: boolean) => void;
 }
 
 export function CreateResumeDialog({
   trigger,
   onSuccess,
   defaultProfileId,
+  open: controlledOpen,
+  onOpenChange,
 }: CreateResumeDialogProps) {
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  
+  // Use controlled or uncontrolled open state
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = isControlled ? (onOpenChange || (() => {})) : setInternalOpen;
   const [title, setTitle] = useState("");
   const [validationError, setValidationError] = useState("");
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
@@ -42,10 +53,23 @@ export function CreateResumeDialog({
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Sync state when defaultProfileId changes (for controlled mode)
+  useEffect(() => {
+    if (defaultProfileId) {
+      setSelectedProfileId(defaultProfileId);
+      setActiveTab("from-profile");
+    }
+  }, [defaultProfileId]);
+
   // Fetch the selected profile to use its content
   const { data: selectedProfile } = useProfile(selectedProfileId || "");
 
   const { mutate, isPending, error } = useCreateResume();
+
+  // Generate a suggested title based on context
+  const suggestedTitle = selectedProfile 
+    ? `${selectedProfile.content.personalInfo.firstName || selectedProfile.name}'s Resume`
+    : "My Resume";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,17 +77,8 @@ export function CreateResumeDialog({
     // Clear previous validation error
     setValidationError("");
 
-    if (!title.trim()) {
-      setValidationError("Please enter a resume title");
-      toast({
-        title: "Error",
-        description: "Please enter a resume title",
-        variant: "destructive",
-      });
-      // Focus the input field
-      document.getElementById("title")?.focus();
-      return;
-    }
+    // Use suggested title if user didn't enter anything
+    const finalTitle = title.trim() || suggestedTitle;
 
     // Default empty content
     const defaultContent = {
@@ -102,7 +117,7 @@ export function CreateResumeDialog({
 
     mutate(
       {
-        title: title.trim(),
+        title: finalTitle,
         content,
         // Note: profileLink is not part of CreateResumeDto yet
         // We'll need to update the resume after creation to add the link
@@ -120,12 +135,19 @@ export function CreateResumeDialog({
           setSelectedProfileId(null);
           setActiveTab("standalone");
 
-          if (onSuccess) {
-            onSuccess(data.id);
-          } else {
-            // Default: navigate to edit page
-            navigate({ to: "/resume/$id", params: { id: data.id } });
-          }
+          // Add a small delay to ensure dialog portal cleanup completes before navigation
+          // This prevents "removeChild" errors during React portal cleanup
+          const navigateToResume = () => {
+            if (onSuccess) {
+              onSuccess(data.id);
+            } else {
+              // Default: navigate to edit page
+              navigate({ to: "/resume/$id", params: { id: data.id } });
+            }
+          };
+
+          // Delay navigation to allow dialog portal to clean up
+          setTimeout(navigateToResume, 150);
         },
         onError: (err) => {
           toast({
@@ -211,19 +233,17 @@ export function CreateResumeDialog({
                     setValidationError("");
                   }
                 }}
-                placeholder={
-                  selectedProfile
-                    ? `${selectedProfile.name} - Resume`
-                    : "e.g., Software Engineer Resume"
-                }
+                placeholder={suggestedTitle}
                 disabled={isPending}
                 autoFocus
-                required
                 aria-invalid={!!validationError || !!error}
                 aria-describedby={
                   validationError ? "title-validation-error" : error ? "title-api-error" : undefined
                 }
               />
+              <p className="text-xs text-muted-foreground">
+                Leave empty to use "{suggestedTitle}"
+              </p>
               {validationError && (
                 <p id="title-validation-error" className="text-destructive text-sm" role="alert">
                   {validationError}

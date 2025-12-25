@@ -37,9 +37,11 @@ export function ProfileCard({
   const educationCount = content.education.length;
   const skillsCount =
     content.skills.technical.length +
-    content.skills.languages.length +
     content.skills.tools.length +
     content.skills.soft.length;
+  const languagesCount = content.skills.languages.length;
+  const certificationsCount = content.certifications?.length || 0;
+  const linksCount = content.links?.length || 0;
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -120,6 +122,21 @@ export function ProfileCard({
           {skillsCount > 0 && (
             <Badge variant="secondary" className="text-xs">
               {skillsCount} Skill{skillsCount !== 1 ? "s" : ""}
+            </Badge>
+          )}
+          {languagesCount > 0 && (
+            <Badge variant="secondary" className="text-xs">
+              {languagesCount} Language{languagesCount !== 1 ? "s" : ""}
+            </Badge>
+          )}
+          {certificationsCount > 0 && (
+            <Badge variant="secondary" className="text-xs">
+              {certificationsCount} Cert{certificationsCount !== 1 ? "s" : ""}
+            </Badge>
+          )}
+          {linksCount > 0 && (
+            <Badge variant="secondary" className="text-xs">
+              {linksCount} Link{linksCount !== 1 ? "s" : ""}
             </Badge>
           )}
         </div>

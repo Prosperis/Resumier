@@ -115,9 +115,13 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
       const result = await importResume(selectedSource.id, input);
 
       if (result.success && result.data) {
+        const hasWarnings = result.warnings && result.warnings.length > 0;
         toast({
-          title: "Import Successful",
-          description: `Successfully imported data from ${selectedSource.name}`,
+          title: hasWarnings ? "Import Completed with Warnings" : "Import Successful",
+          description: hasWarnings
+            ? `Data imported, but some information is missing. ${result.warnings[0]}`
+            : `Successfully imported data from ${selectedSource.name}`,
+          variant: hasWarnings ? "default" : "default",
         });
         onImportSuccess(result.data);
         setOpen(false);
@@ -251,7 +255,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                     )}
                   </TabsList>
 
-                  {/* ZIP File Import (Recommended) */}
+                  {/* File Import (ZIP or PDF) */}
                   <TabsContent value="file" className="space-y-4 mt-4">
                     <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4">
                       <div className="flex items-start gap-3">
@@ -266,7 +270,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                             </span>
                           </h4>
                           <p className="text-muted-foreground text-sm mt-1">
-                            Upload your LinkedIn data export ZIP file for the most complete and
+                            Upload your LinkedIn data export ZIP file or PDF profile for the most complete and
                             accurate import.
                           </p>
                         </div>
@@ -279,59 +283,93 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                         <Download className="h-4 w-4" />
                         How to export your LinkedIn data:
                       </h5>
-                      <ol className="text-sm text-muted-foreground space-y-2 ml-4">
-                        <li className="flex gap-2">
-                          <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
-                            1
-                          </span>
-                          <span>
-                            Go to{" "}
-                            <a
-                              href="https://www.linkedin.com/mypreferences/d/download-my-data"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-primary hover:underline inline-flex items-center gap-1"
-                            >
-                              LinkedIn Settings → Get a copy of your data
-                              <ExternalLink className="h-3 w-3" />
-                            </a>
-                          </span>
-                        </li>
-                        <li className="flex gap-2">
-                          <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
-                            2
-                          </span>
-                          <span>
-                            Select <strong>"Want something in particular?"</strong> and choose the
-                            data you want (Profile, Positions, Education, Skills, etc.)
-                          </span>
-                        </li>
-                        <li className="flex gap-2">
-                          <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
-                            3
-                          </span>
-                          <span>
-                            Click <strong>"Request archive"</strong> - you'll receive an email when
-                            it's ready (usually within minutes)
-                          </span>
-                        </li>
-                        <li className="flex gap-2">
-                          <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
-                            4
-                          </span>
-                          <span>Download the ZIP file and upload it below</span>
-                        </li>
-                      </ol>
+                      <div className="space-y-3">
+                        <div>
+                          <h6 className="text-sm font-medium mb-2">Option 1: Data Export (ZIP) - Most Complete</h6>
+                          <ol className="text-sm text-muted-foreground space-y-2 ml-4">
+                            <li className="flex gap-2">
+                              <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
+                                1
+                              </span>
+                              <span>
+                                Go to{" "}
+                                <a
+                                  href="https://www.linkedin.com/mypreferences/d/download-my-data"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-primary hover:underline inline-flex items-center gap-1"
+                                >
+                                  LinkedIn Settings → Get a copy of your data
+                                  <ExternalLink className="h-3 w-3" />
+                                </a>
+                              </span>
+                            </li>
+                            <li className="flex gap-2">
+                              <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
+                                2
+                              </span>
+                              <span>
+                                Select <strong>"Want something in particular?"</strong> and choose the
+                                data you want (Profile, Positions, Education, Skills, etc.)
+                              </span>
+                            </li>
+                            <li className="flex gap-2">
+                              <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
+                                3
+                              </span>
+                              <span>
+                                Click <strong>"Request archive"</strong> - you'll receive an email when
+                                it's ready (usually within minutes)
+                              </span>
+                            </li>
+                            <li className="flex gap-2">
+                              <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
+                                4
+                              </span>
+                              <span>Download the ZIP file and upload it below</span>
+                            </li>
+                          </ol>
+                        </div>
+                        <div className="border-t pt-3">
+                          <h6 className="text-sm font-medium mb-2">Option 2: PDF Profile Export - Quick & Easy</h6>
+                          <ol className="text-sm text-muted-foreground space-y-2 ml-4">
+                            <li className="flex gap-2">
+                              <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
+                                1
+                              </span>
+                              <span>Go to your LinkedIn profile page</span>
+                            </li>
+                            <li className="flex gap-2">
+                              <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
+                                2
+                              </span>
+                              <span>Click the <strong>"More"</strong> button (three dots) on your profile</span>
+                            </li>
+                            <li className="flex gap-2">
+                              <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
+                                3
+                              </span>
+                              <span>Select <strong>"Save to PDF"</strong> from the dropdown menu</span>
+                            </li>
+                            <li className="flex gap-2">
+                              <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
+                                4
+                              </span>
+                              <span>Download the PDF and upload it below</span>
+                            </li>
+                          </ol>
+                        </div>
+                      </div>
                     </div>
 
                     {/* File input */}
                     <div className="space-y-2">
-                      <Label htmlFor="linkedin-file">LinkedIn Data Export (ZIP)</Label>
+                      <Label htmlFor="linkedin-file">LinkedIn Data Export (ZIP or PDF)</Label>
                       <div className="flex items-center gap-2">
                         <Input
                           id="linkedin-file"
                           type="file"
-                          accept=".zip"
+                          accept=".zip,.pdf"
                           onChange={handleFileChange}
                           disabled={isImporting}
                           className="cursor-pointer"
@@ -349,10 +387,17 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                       </div>
                       {fileInput && (
                         <p className="text-muted-foreground text-sm flex items-center gap-2">
-                          <FileArchive className="h-4 w-4" />
+                          {fileInput.name.endsWith(".pdf") ? (
+                            <FileText className="h-4 w-4" />
+                          ) : (
+                            <FileArchive className="h-4 w-4" />
+                          )}
                           {fileInput.name} ({(fileInput.size / 1024).toFixed(1)} KB)
                         </p>
                       )}
+                      <p className="text-muted-foreground text-xs">
+                        Supported formats: ZIP (data export) or PDF (profile export)
+                      </p>
                     </div>
                   </TabsContent>
 

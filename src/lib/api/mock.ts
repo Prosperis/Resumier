@@ -1,5 +1,6 @@
 import { get, set } from "idb-keyval";
 import { getDemoProfiles } from "./demo-data";
+import { getKnownProfileData } from "./linkedin-scraper";
 import { mockDb } from "./mock-db";
 import type { CreateProfileDto, Profile, UpdateProfileDto } from "./profile-types";
 import type { CreateResumeDto, Resume, UpdateResumeDto } from "./types";
@@ -580,12 +581,21 @@ export const mockApi = {
 
       await delay(500); // Simulate web scraping/parsing
 
+      // Try to get known profile data first (for local development)
+      const knownData = getKnownProfileData(profileUrl);
+      
+      if (knownData) {
+        console.log("[Mock API] Using known LinkedIn profile data for:", profileUrl);
+        return knownData;
+      }
+
       // Generate unique IDs using timestamp + counter to avoid duplicate key errors
       const timestamp = Date.now();
       let counter = 0;
       const generateId = (prefix: string) => `${prefix}-${timestamp}-${counter++}`;
 
-      // Return mock public LinkedIn profile data
+      // Fallback: Return generic mock data for unknown profiles
+      console.log("[Mock API] Using generic mock data for unknown profile:", profileUrl);
       return {
         personalInfo: {
           firstName: "John",

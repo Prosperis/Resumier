@@ -108,6 +108,21 @@ export function SectionEditorPopover({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Cleanup: ensure popover closes on unmount to prevent portal cleanup errors
+  useEffect(() => {
+    return () => {
+      // Close the popover when component unmounts to prevent React portal cleanup errors
+      if (selectedSection) {
+        try {
+          clearSelection();
+        } catch (error) {
+          // Silently ignore cleanup errors during unmount
+          console.warn("Error during popover cleanup:", error);
+        }
+      }
+    };
+  }, [selectedSection, clearSelection]);
+
   const handleClose = () => {
     onClose?.();
     clearSelection();
@@ -119,6 +134,10 @@ export function SectionEditorPopover({
   };
 
   if (!selectedSection) return null;
+
+  // Use a stable portal container to avoid cleanup issues
+  const portalContainer = typeof document !== "undefined" ? document.body : null;
+  if (!portalContainer) return null;
 
   return createPortal(
     <div
@@ -184,7 +203,7 @@ export function SectionEditorPopover({
         </Button>
       </div>
     </div>,
-    document.body,
+    portalContainer,
   );
 }
 
