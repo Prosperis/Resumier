@@ -63,6 +63,7 @@
     "@tanstack/react-router": "^1.141.2",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.13",
+    "@vercel/node": "^5.5.16",
     "animejs": "^4.2.2",
     "better-auth": "^1.4.7",
     "class-variance-authority": "^0.7.1",

@@ -14,6 +14,7 @@ import type { Profile } from "@/lib/api/profile-types";
 import { ProfileCard } from "./profile-card";
 import { CreateProfileDialog } from "./create-profile-dialog";
 import { DeleteProfileDialog } from "./delete-profile-dialog";
+import { ImportProfileDialog } from "./import-profile-dialog";
 
 interface ProfileManagerProps {
   onEditProfile?: (profileId: string) => void;
@@ -99,14 +100,17 @@ export function ProfileManager({ onEditProfile, onCreateResumeFromProfile }: Pro
           Create a master profile with your experience, education, and skills. Then create multiple
           tailored resumes from this single source of truth.
         </p>
-        <CreateProfileDialog
-          trigger={
-            <Button aria-label="Create your first profile">
-              <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
-              Create Profile
-            </Button>
-          }
-        />
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <CreateProfileDialog
+            trigger={
+              <Button aria-label="Create your first profile">
+                <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+                Create Profile
+              </Button>
+            }
+          />
+          <ImportProfileDialog />
+        </div>
       </div>
     );
   }

@@ -10,7 +10,7 @@ import { useDuplicateResume, useResumes } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
 import type { Resume } from "@/lib/api/types";
 import type { Profile } from "@/lib/api/profile-types";
-import { ProfileManager, CreateProfileDialog } from "@/components/features/profile";
+import { ProfileManager, CreateProfileDialog, ImportProfileDialog } from "@/components/features/profile";
 import { CreateResumeDialog } from "./mutations";
 import { ResumeTable } from "./resume-table";
 
@@ -131,14 +131,17 @@ export function ResumeDashboard({
                 />
               )}
               {activeTab === "profiles" && (
-                <CreateProfileDialog
-                  trigger={
-                    <Button size="default" aria-label={t("newProfile")}>
-                      <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
-                      {t("newProfile")}
-                    </Button>
-                  }
-                />
+                <>
+                  <ImportProfileDialog />
+                  <CreateProfileDialog
+                    trigger={
+                      <Button size="default" aria-label={t("newProfile")}>
+                        <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+                        {t("newProfile")}
+                      </Button>
+                    }
+                  />
+                </>
               )}
             </div>
           </div>

@@ -19,8 +19,11 @@ export {
 export type { User } from "./auth-store";
 export {
   selectAuthActions,
+  selectConnectedProvider,
   selectError,
   selectIsAuthenticated,
+  selectIsDemo,
+  selectIsGuest,
   selectIsLoading,
   selectUser,
   useAuthStore,
@@ -102,6 +105,16 @@ export {
   selectTheme as selectSettingsTheme,
   useSettingsStore,
 } from "./settings-store";
+export type { CloudProvider, CloudStorageSettings } from "./cloud-storage-store";
+export {
+  selectCloudAuthError,
+  selectCloudProvider,
+  selectCloudSettings,
+  selectCloudUserInfo,
+  selectIsCloudAuthenticated,
+  selectIsFolderPickerOpen,
+  useCloudStorageStore,
+} from "./cloud-storage-store";
 export type { Notification, PersonalInfoSection, ResumeBuilderSection } from "./ui-store";
 export {
   selectActiveDialog,

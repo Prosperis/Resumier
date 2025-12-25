@@ -13,6 +13,9 @@ import { hasGuestData } from "@/lib/utils/guest-storage";
 import { initializeDemoMode } from "@/lib/utils/demo-mode";
 import { queryClient } from "@/app/query-client";
 import { resumesQueryKey } from "@/hooks/api";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
+import type { AuthProvider } from "@/lib/auth/client";
 
 interface AuthModalProps {
   open: boolean;
@@ -23,11 +26,61 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const navigate = useNavigate();
   const loginAsGuest = useAuthStore((state) => state.loginAsGuest);
   const loginAsDemo = useAuthStore((state) => state.loginAsDemo);
+  const loginWithOAuth = useAuthStore((state) => state.loginWithOAuth);
+  const isLoading = useAuthStore((state) => state.isLoading);
+  const authError = useAuthStore((state) => state.error);
   const [isLoadingDemo, setIsLoadingDemo] = useState(false);
+  const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
+  const { toast } = useToast();
 
-  const handleOAuthSignIn = (provider: string) => {
-    console.log(`Sign in with ${provider}`);
-    // TODO: Implement OAuth sign in
+  const handleOAuthSignIn = async (provider: string) => {
+    // Map provider names to Better Auth provider type
+    const providerMap: Record<string, AuthProvider | null> = {
+      google: "google",
+      onedrive: "microsoft",
+      dropbox: "dropbox",
+      box: null, // Not yet supported by Better Auth
+      pcloud: null, // Not yet supported
+      mega: null, // Not yet supported
+    };
+    
+    const authProvider = providerMap[provider];
+    
+    if (!authProvider) {
+      toast({
+        title: "Coming Soon",
+        description: `${provider} integration is coming soon!`,
+        variant: "default",
+      });
+      return;
+    }
+    
+    setLoadingProvider(provider);
+    
+    try {
+      // Start OAuth flow via Better Auth
+      await loginWithOAuth(authProvider);
+      
+      // Check for errors
+      const state = useAuthStore.getState();
+      if (state.error) {
+        toast({
+          title: "Authentication Error",
+          description: state.error,
+          variant: "destructive",
+        });
+      }
+      // Note: On success, the page will redirect to OAuth provider
+      // and return to callback URL, so we don't need to close the modal here
+    } catch (error) {
+      toast({
+        title: "Authentication Error",
+        description: error instanceof Error ? error.message : "Failed to start authentication",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingProvider(null);
+    }
   };
 
   const handleContinueAsGuest = async () => {
@@ -97,102 +150,117 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
               variant="outline"
               type="button"
               onClick={() => handleOAuthSignIn("google")}
+              disabled={loadingProvider !== null}
               className="w-full h-12 relative group overflow-hidden border hover:border-blue-500 hover:shadow-md hover:shadow-[#4285F4]/20 hover:scale-[1.02] transition-all duration-300"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-[#4285F4]/0 via-[#4285F4]/10 to-[#4285F4]/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              <svg
-                className="h-5 w-5 group-hover:scale-110 transition-transform"
-                viewBox="0 0 87.3 78"
-                role="img"
-                aria-label="Google Drive"
-              >
-                <path
-                  fill="#0066DA"
-                  d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L29 52.2H0c0 1.55.4 3.1 1.2 4.5l5.4 10.15z"
-                />
-                <path
-                  fill="#00AC47"
-                  d="M43.65 25.25L29 1.2C27.65 2 26.5 3.1 25.7 4.5L1.2 46.5c-.8 1.4-1.2 2.95-1.2 4.5h29l14.65-25.75z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75L86.1 58.7c.8-1.4 1.2-2.95 1.2-4.5H58.3L43.65 78h16.2c2.65 0 5.2-.7 7.5-2.1l6.2-1.1z"
-                />
-                <path
-                  fill="#00832D"
-                  d="M43.65 25.25L58.3 0H29c-2.65 0-5.2.7-7.5 2.1l22.15 23.15z"
-                />
-                <path
-                  fill="#2684FC"
-                  d="M58.3 52.2H29l-15.25 26.6c2.3 1.4 4.85 2.1 7.5 2.1h44.3c2.65 0 5.2-.7 7.5-2.1L58.3 52.2z"
-                />
-                <path
-                  fill="#FFBA00"
-                  d="M73.35 26.5L58.3 0h-14.65l14.65 25.25L87.3 52.2c0-1.55-.4-3.1-1.2-4.5L73.35 26.5z"
-                />
-              </svg>
+              {loadingProvider === "google" ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                <svg
+                  className="h-5 w-5 group-hover:scale-110 transition-transform"
+                  viewBox="0 0 87.3 78"
+                  role="img"
+                  aria-label="Google Drive"
+                >
+                  <path
+                    fill="#0066DA"
+                    d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L29 52.2H0c0 1.55.4 3.1 1.2 4.5l5.4 10.15z"
+                  />
+                  <path
+                    fill="#00AC47"
+                    d="M43.65 25.25L29 1.2C27.65 2 26.5 3.1 25.7 4.5L1.2 46.5c-.8 1.4-1.2 2.95-1.2 4.5h29l14.65-25.75z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75L86.1 58.7c.8-1.4 1.2-2.95 1.2-4.5H58.3L43.65 78h16.2c2.65 0 5.2-.7 7.5-2.1l6.2-1.1z"
+                  />
+                  <path
+                    fill="#00832D"
+                    d="M43.65 25.25L58.3 0H29c-2.65 0-5.2.7-7.5 2.1l22.15 23.15z"
+                  />
+                  <path
+                    fill="#2684FC"
+                    d="M58.3 52.2H29l-15.25 26.6c2.3 1.4 4.85 2.1 7.5 2.1h44.3c2.65 0 5.2-.7 7.5-2.1L58.3 52.2z"
+                  />
+                  <path
+                    fill="#FFBA00"
+                    d="M73.35 26.5L58.3 0h-14.65l14.65 25.25L87.3 52.2c0-1.55-.4-3.1-1.2-4.5L73.35 26.5z"
+                  />
+                </svg>
+              )}
               <span className="font-medium text-xs ml-1.5">gDrive</span>
             </Button>
             <Button
               variant="outline"
               type="button"
               onClick={() => handleOAuthSignIn("dropbox")}
+              disabled={loadingProvider !== null}
               className="w-full h-12 relative group overflow-hidden border hover:border-blue-600 hover:shadow-md hover:shadow-blue-600/20 hover:scale-[1.02] transition-all duration-300"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600/0 via-blue-600/10 to-blue-600/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              <svg
-                className="h-5 w-5 group-hover:scale-110 transition-transform"
-                viewBox="0 0 256 218"
-                fill="none"
-                role="img"
-                aria-label="Dropbox"
-              >
-                <path
-                  fill="#0061FF"
-                  d="M63.995 0L0 37.368l63.995 37.369 64.005-37.369L63.995 0zm128.01 0l-64.005 37.368 64.005 37.369L256 37.368 192.005 0zM0 112.106l63.995 37.368 64.005-37.368-64.005-37.369L0 112.106zm192.005-37.369l-64.005 37.369 64.005 37.368L256 112.106l-63.995-37.369zm-64.005 100.476l-64.005 37.369-21.328-12.456v13.937l85.333 49.935 85.343-49.935v-13.937l-21.338 12.456-64.005-37.369z"
-                />
-              </svg>
+              {loadingProvider === "dropbox" ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                <svg
+                  className="h-5 w-5 group-hover:scale-110 transition-transform"
+                  viewBox="0 0 256 218"
+                  fill="none"
+                  role="img"
+                  aria-label="Dropbox"
+                >
+                  <path
+                    fill="#0061FF"
+                    d="M63.995 0L0 37.368l63.995 37.369 64.005-37.369L63.995 0zm128.01 0l-64.005 37.368 64.005 37.369L256 37.368 192.005 0zM0 112.106l63.995 37.368 64.005-37.368-64.005-37.369L0 112.106zm192.005-37.369l-64.005 37.369 64.005 37.368L256 112.106l-63.995-37.369zm-64.005 100.476l-64.005 37.369-21.328-12.456v13.937l85.333 49.935 85.343-49.935v-13.937l-21.338 12.456-64.005-37.369z"
+                  />
+                </svg>
+              )}
               <span className="font-medium text-xs ml-1.5">Dropbox</span>
             </Button>
             <Button
               variant="outline"
               type="button"
               onClick={() => handleOAuthSignIn("onedrive")}
+              disabled={loadingProvider !== null}
               className="w-full h-12 relative group overflow-hidden border hover:border-sky-500 hover:shadow-md hover:shadow-sky-500/20 hover:scale-[1.02] transition-all duration-300"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-sky-500/0 via-sky-500/10 to-sky-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              <svg
-                className="h-5 w-5 group-hover:scale-110 transition-transform"
-                viewBox="0 0 256 154"
-                fill="none"
-                role="img"
-                aria-label="OneDrive"
-              >
-                <path
-                  fill="#0364B8"
-                  d="M154.66 110.682L103.573 71.09a54.83 54.83 0 0 1 25.644-6.395c.945 0 1.882.027 2.812.077A54.836 54.836 0 0 1 181.4 109.43l.067.393-26.806.86z"
-                />
-                <path
-                  fill="#0078D4"
-                  d="M104.598 47.468A45.08 45.08 0 0 1 130.71 39.5c16.573 0 31.315 8.974 39.198 22.383a55.243 55.243 0 0 1 11.722-1.255c.944 0 1.881.027 2.811.077l-79.843 49.977V47.468z"
-                />
-                <path
-                  fill="#1490DF"
-                  d="M104.598 110.682v-63.214A45.025 45.025 0 0 0 85.64 114.16l.001.003a44.947 44.947 0 0 0 3.8 4.04l48.03-7.521h-32.873z"
-                />
-                <path
-                  fill="#28A8EA"
-                  d="M181.467 109.823a54.79 54.79 0 0 0-49.438-45.05 45.1 45.1 0 0 0-27.431-17.305v63.214h70.135l6.734-1.259z"
-                />
-                <path
-                  fill="#0078D4"
-                  d="M215.908 82.345c-1.013-.072-2.033-.109-3.06-.109a40.092 40.092 0 0 0-31.381 15.082l-.067-.393a54.87 54.87 0 0 0-49.371-32.152c-.93-.05-1.867-.077-2.812-.077a54.83 54.83 0 0 0-25.644 6.395l51.087 39.591h-50.062l-15.157 2.377a44.91 44.91 0 0 0 .001.003 44.947 44.947 0 0 0 3.8 4.04c.003.003.006.004.009.007a45.019 45.019 0 0 0 30.249 11.611h87.958C231.037 128.72 256 103.757 256 83.235a40.09 40.09 0 0 0-40.092-.89z"
-                />
-                <path
-                  fill="#14447D"
-                  d="M85.64 114.16l.001.003a44.947 44.947 0 0 0 3.8 4.04c.003.003.006.004.009.007a45.019 45.019 0 0 0 30.249 11.611H45.015C20.154 129.82 0 109.665 0 84.804c0-20.65 13.92-38.534 33.85-43.87a64.727 64.727 0 0 0-1.048 11.544A64.962 64.962 0 0 0 85.64 114.16z"
-                />
-              </svg>
+              {loadingProvider === "onedrive" ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                <svg
+                  className="h-5 w-5 group-hover:scale-110 transition-transform"
+                  viewBox="0 0 256 154"
+                  fill="none"
+                  role="img"
+                  aria-label="OneDrive"
+                >
+                  <path
+                    fill="#0364B8"
+                    d="M154.66 110.682L103.573 71.09a54.83 54.83 0 0 1 25.644-6.395c.945 0 1.882.027 2.812.077A54.836 54.836 0 0 1 181.4 109.43l.067.393-26.806.86z"
+                  />
+                  <path
+                    fill="#0078D4"
+                    d="M104.598 47.468A45.08 45.08 0 0 1 130.71 39.5c16.573 0 31.315 8.974 39.198 22.383a55.243 55.243 0 0 1 11.722-1.255c.944 0 1.881.027 2.811.077l-79.843 49.977V47.468z"
+                  />
+                  <path
+                    fill="#1490DF"
+                    d="M104.598 110.682v-63.214A45.025 45.025 0 0 0 85.64 114.16l.001.003a44.947 44.947 0 0 0 3.8 4.04l48.03-7.521h-32.873z"
+                  />
+                  <path
+                    fill="#28A8EA"
+                    d="M181.467 109.823a54.79 54.79 0 0 0-49.438-45.05 45.1 45.1 0 0 0-27.431-17.305v63.214h70.135l6.734-1.259z"
+                  />
+                  <path
+                    fill="#0078D4"
+                    d="M215.908 82.345c-1.013-.072-2.033-.109-3.06-.109a40.092 40.092 0 0 0-31.381 15.082l-.067-.393a54.87 54.87 0 0 0-49.371-32.152c-.93-.05-1.867-.077-2.812-.077a54.83 54.83 0 0 0-25.644 6.395l51.087 39.591h-50.062l-15.157 2.377a44.91 44.91 0 0 0 .001.003 44.947 44.947 0 0 0 3.8 4.04c.003.003.006.004.009.007a45.019 45.019 0 0 0 30.249 11.611h87.958C231.037 128.72 256 103.757 256 83.235a40.09 40.09 0 0 0-40.092-.89z"
+                  />
+                  <path
+                    fill="#14447D"
+                    d="M85.64 114.16l.001.003a44.947 44.947 0 0 0 3.8 4.04c.003.003.006.004.009.007a45.019 45.019 0 0 0 30.249 11.611H45.015C20.154 129.82 0 109.665 0 84.804c0-20.65 13.92-38.534 33.85-43.87a64.727 64.727 0 0 0-1.048 11.544A64.962 64.962 0 0 0 85.64 114.16z"
+                  />
+                </svg>
+              )}
               <span className="font-medium text-xs ml-1.5">OneDrive</span>
             </Button>
           </div>

@@ -1,9 +1,11 @@
 import { createLazyFileRoute, useRouter } from "@tanstack/react-router";
-import { ArrowLeft, RotateCcw } from "lucide-react";
+import { ArrowLeft, Cloud, Folder, LogOut, RotateCcw } from "lucide-react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { useTheme } from "@/app/theme-provider";
 import { DemoModeInfo } from "@/components/features/demo";
+import { FolderPickerDialog } from "@/components/features/cloud-storage/folder-picker-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -17,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useAuthStore, useSettingsStore } from "@/stores";
+import { useCloudStorageStore } from "@/stores/cloud-storage-store";
 
 export const Route = createLazyFileRoute("/settings")({
   component: SettingsComponent,
@@ -29,6 +32,21 @@ function SettingsComponent() {
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation("settings");
   const { t: tCommon } = useTranslation("common");
+  
+  // Cloud storage state
+  const cloudSettings = useCloudStorageStore((state) => state.settings);
+  const cloudUserInfo = useCloudStorageStore((state) => state.userInfo);
+  const isCloudAuthenticated = useCloudStorageStore((state) => state.isAuthenticated);
+  const startAuth = useCloudStorageStore((state) => state.startAuth);
+  const signOut = useCloudStorageStore((state) => state.signOut);
+  const openFolderPicker = useCloudStorageStore((state) => state.openFolderPicker);
+  const updateCloudSettings = useCloudStorageStore((state) => state.updateSettings);
+  const checkAuthStatus = useCloudStorageStore((state) => state.checkAuthStatus);
+
+  // Check auth status on mount
+  React.useEffect(() => {
+    checkAuthStatus();
+  }, [checkAuthStatus]);
 
   const handleThemeChange = (value: "light" | "dark" | "system") => {
     // Update both the theme provider and settings store
@@ -100,6 +118,122 @@ function SettingsComponent() {
           {/* Demo Mode Section */}
           {(isGuest || isDemo) && <DemoModeInfo />}
 
+          {/* Cloud Storage Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Cloud className="h-5 w-5" />
+                Cloud Storage
+              </CardTitle>
+              <CardDescription>
+                Sync your resumes across devices with cloud storage
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {isCloudAuthenticated ? (
+                <>
+                  {/* Connected account info */}
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                    <div className="flex items-center gap-3">
+                      {cloudUserInfo?.picture ? (
+                        <img
+                          src={cloudUserInfo.picture}
+                          alt={cloudUserInfo.name}
+                          className="h-10 w-10 rounded-full"
+                        />
+                      ) : (
+                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Cloud className="h-5 w-5 text-primary" />
+                        </div>
+                      )}
+                      <div>
+                        <p className="font-medium text-sm">{cloudUserInfo?.name || "Google Drive"}</p>
+                        <p className="text-xs text-muted-foreground">{cloudUserInfo?.email}</p>
+                      </div>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={signOut}
+                      className="text-destructive hover:text-destructive"
+                    >
+                      <LogOut className="h-4 w-4 mr-1" />
+                      Disconnect
+                    </Button>
+                  </div>
+
+                  {/* Storage folder */}
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label>Storage Folder</Label>
+                      <p className="text-sm text-muted-foreground">
+                        {cloudSettings.folderName 
+                          ? `Resumes saved to: ${cloudSettings.folderPath || cloudSettings.folderName}`
+                          : "No folder selected"
+                        }
+                      </p>
+                    </div>
+                    <Button variant="outline" size="sm" onClick={openFolderPicker}>
+                      <Folder className="h-4 w-4 mr-1" />
+                      {cloudSettings.folderName ? "Change" : "Select Folder"}
+                    </Button>
+                  </div>
+
+                  {/* Auto-sync toggle */}
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="autoSync">Auto-sync</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Automatically sync changes to cloud storage
+                      </p>
+                    </div>
+                    <Switch
+                      id="autoSync"
+                      checked={cloudSettings.autoSync}
+                      onCheckedChange={(checked: boolean) => updateCloudSettings({ autoSync: checked })}
+                    />
+                  </div>
+
+                  {/* Sync on save toggle */}
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="syncOnSave">Sync on Save</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Save to cloud whenever you save a resume
+                      </p>
+                    </div>
+                    <Switch
+                      id="syncOnSave"
+                      checked={cloudSettings.syncOnSave}
+                      onCheckedChange={(checked: boolean) => updateCloudSettings({ syncOnSave: checked })}
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="text-center py-4">
+                  <Cloud className="h-12 w-12 mx-auto mb-3 text-muted-foreground" />
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Connect a cloud storage provider to sync your resumes
+                  </p>
+                  <Button onClick={() => startAuth("google-drive")}>
+                    <svg className="h-4 w-4 mr-2" viewBox="0 0 87.3 78">
+                      <path fill="#0066DA" d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L29 52.2H0c0 1.55.4 3.1 1.2 4.5l5.4 10.15z"/>
+                      <path fill="#00AC47" d="M43.65 25.25L29 1.2C27.65 2 26.5 3.1 25.7 4.5L1.2 46.5c-.8 1.4-1.2 2.95-1.2 4.5h29l14.65-25.75z"/>
+                      <path fill="#EA4335" d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75L86.1 58.7c.8-1.4 1.2-2.95 1.2-4.5H58.3L43.65 78h16.2c2.65 0 5.2-.7 7.5-2.1l6.2-1.1z"/>
+                      <path fill="#00832D" d="M43.65 25.25L58.3 0H29c-2.65 0-5.2.7-7.5 2.1l22.15 23.15z"/>
+                      <path fill="#2684FC" d="M58.3 52.2H29l-15.25 26.6c2.3 1.4 4.85 2.1 7.5 2.1h44.3c2.65 0 5.2-.7 7.5-2.1L58.3 52.2z"/>
+                      <path fill="#FFBA00" d="M73.35 26.5L58.3 0h-14.65l14.65 25.25L87.3 52.2c0-1.55-.4-3.1-1.2-4.5L73.35 26.5z"/>
+                    </svg>
+                    Connect Google Drive
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Folder Picker Dialog */}
+          <FolderPickerDialog />
+
           {/* Appearance Section */}
           <Card>
             <CardHeader>
@@ -133,19 +267,6 @@ function SettingsComponent() {
                   </p>
                 </div>
                 <LanguageSwitcher variant="outline" size="default" />
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="reducedMotion">{t("sections.appearance.reducedMotion")}</Label>
-                  <p className="text-sm text-muted-foreground">
-                    {t("sections.appearance.reducedMotionDescription")}
-                  </p>
-                </div>
-                <Switch
-                  id="reducedMotion"
-                  checked={settings.reducedMotion}
-                  onCheckedChange={(checked: boolean) => updateSettings({ reducedMotion: checked })}
-                />
               </div>
             </CardContent>
           </Card>
