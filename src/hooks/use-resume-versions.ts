@@ -257,4 +257,3 @@ export function useResumeVersions(resumeId: string) {
     compareVersions,
   };
 }
-
