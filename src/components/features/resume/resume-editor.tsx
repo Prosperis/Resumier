@@ -45,7 +45,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
   // Sidebar state
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [isToolSidebarExpanded, setIsToolSidebarExpanded] = useState(false);
-  
+
   // Ref for the preview container (for navigation)
   const previewContainerRef = useRef<HTMLDivElement>(null);
 
@@ -168,7 +168,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
         )}
       >
         <InteractiveResumePreview resume={resume} template={template} isInteractive={true} />
-        
+
         {/* Floating navigation buttons */}
         <PreviewNavigation containerRef={previewContainerRef} />
       </div>

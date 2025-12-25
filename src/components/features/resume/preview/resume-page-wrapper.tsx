@@ -2,15 +2,23 @@
  * Resume Page Wrapper
  * Wraps resume content with pagination support, showing page breaks
  * and splitting content into standard A4-sized pages.
- * 
+ *
  * This component creates a multi-page view where each page appears as
  * a separate sheet of paper with gaps between them (like viewing a PDF).
- * 
+ *
  * It prevents individual text blocks (paragraphs, list items) from being
  * cut in half across pages by adding minimal padding adjustments.
  */
 
-import { useEffect, useRef, useState, useCallback, cloneElement, isValidElement, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  cloneElement,
+  isValidElement,
+  type ReactNode,
+} from "react";
 import { cn } from "@/lib/utils";
 
 interface ResumePageWrapperProps {
@@ -36,7 +44,7 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
   const getElementPath = useCallback((element: Element, root: Element): string => {
     const path: string[] = [];
     let current: Element | null = element;
-    
+
     while (current && current !== root && current.parentElement) {
       const parent = current.parentElement;
       const siblings = Array.from(parent.children);
@@ -45,7 +53,7 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
       path.unshift(`${tagName}:nth-child(${index + 1})`);
       current = parent;
     }
-    
+
     return path.join(" > ");
   }, []);
 
@@ -62,9 +70,7 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
     if (!contentRoot) return "";
 
     // Find all small text-containing elements that might get cut
-    const textElements = measureRef.current.querySelectorAll(
-      "p, li, h1, h2, h3, h4, h5, h6"
-    );
+    const textElements = measureRef.current.querySelectorAll("p, li, h1, h2, h3, h4, h5, h6");
 
     // Filter to leaf-level text elements
     const leafTextElements: Element[] = [];
@@ -116,8 +122,9 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
     // Generate CSS using structural selectors that work on both hidden and visible content
     // Target .resume-light-mode which is the consistent class on the content root
     const styleString = adjustments
-      .map(({ path, adjustment }) => 
-        `.resume-light-mode ${path} { margin-top: ${adjustment}px !important; }`
+      .map(
+        ({ path, adjustment }) =>
+          `.resume-light-mode ${path} { margin-top: ${adjustment}px !important; }`,
       )
       .join("\n");
 
@@ -136,12 +143,12 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
       // Wait a frame for adjustments to apply, then measure
       requestAnimationFrame(() => {
         if (!measureRef.current) return;
-        
+
         const content = measureRef.current;
         const height = content.scrollHeight || content.offsetHeight;
-        
+
         if (height <= 0) return;
-        
+
         setContentHeight(height);
         const pages = Math.max(1, Math.ceil(height / PAGE_HEIGHT));
         setPageCount(pages);
@@ -185,10 +192,13 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
   }, [calculatePages]);
 
   // Clone children for each page
-  const cloneChildren = useCallback((pageIndex: number) => {
-    if (!isValidElement(children)) return children;
-    return cloneElement(children, { key: `page-content-${pageIndex}` });
-  }, [children]);
+  const cloneChildren = useCallback(
+    (pageIndex: number) => {
+      if (!isValidElement(children)) return children;
+      return cloneElement(children, { key: `page-content-${pageIndex}` });
+    },
+    [children],
+  );
 
   // Calculate last page content height
   const lastPageContentHeight = contentHeight - (pageCount - 1) * PAGE_HEIGHT;
@@ -196,9 +206,7 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
   return (
     <div className={cn("relative flex flex-col items-center gap-4", className)}>
       {/* Inject adjustment styles to prevent text from being cut */}
-      {adjustmentStyles && (
-        <style dangerouslySetInnerHTML={{ __html: adjustmentStyles }} />
-      )}
+      {adjustmentStyles && <style dangerouslySetInnerHTML={{ __html: adjustmentStyles }} />}
 
       {/* Hidden measurement container - positioned outside visible area */}
       <div
@@ -275,9 +283,7 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
                 className="absolute right-4 pointer-events-none print:hidden"
                 data-no-print
                 style={{
-                  top: isLastPage
-                    ? `${visibleContentOnLastPage - 24}px`
-                    : `${PAGE_HEIGHT - 24}px`,
+                  top: isLastPage ? `${visibleContentOnLastPage - 24}px` : `${PAGE_HEIGHT - 24}px`,
                   zIndex: 10,
                 }}
               >
@@ -292,4 +298,3 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
     </div>
   );
 }
-

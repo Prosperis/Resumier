@@ -28,16 +28,16 @@ export function PreviewNavigation({ containerRef, className }: PreviewNavigation
   // Scroll to the top of the last page
   const scrollToLastPage = () => {
     if (!containerRef.current) return;
-    
+
     // Account for padding (p-8 = 32px) and gap between pages (gap-4 = 16px)
     const pageWithGap = PAGE_HEIGHT + 16;
     const totalScrollHeight = containerRef.current.scrollHeight;
-    
+
     // Calculate total pages based on content height
     // Subtract container padding and calculate pages
     const totalPages = Math.ceil((totalScrollHeight - 32) / pageWithGap);
     const lastPageIndex = Math.max(0, totalPages - 1);
-    
+
     containerRef.current.scrollTo({
       top: lastPageIndex * pageWithGap,
       behavior: "smooth",
@@ -47,13 +47,13 @@ export function PreviewNavigation({ containerRef, className }: PreviewNavigation
   // Scroll to the previous page
   const scrollToPreviousPage = () => {
     if (!containerRef.current) return;
-    
+
     const currentScroll = containerRef.current.scrollTop;
     // Account for padding (p-8 = 32px) and gap between pages (gap-4 = 16px)
     const pageWithGap = PAGE_HEIGHT + 16;
     const currentPage = Math.floor((currentScroll + 50) / pageWithGap);
     const targetPage = Math.max(0, currentPage - 1);
-    
+
     containerRef.current.scrollTo({
       top: targetPage * pageWithGap,
       behavior: "smooth",
@@ -63,14 +63,14 @@ export function PreviewNavigation({ containerRef, className }: PreviewNavigation
   // Scroll to the next page
   const scrollToNextPage = () => {
     if (!containerRef.current) return;
-    
+
     const currentScroll = containerRef.current.scrollTop;
     // Account for padding (p-8 = 32px) and gap between pages (gap-4 = 16px)
     const pageWithGap = PAGE_HEIGHT + 16;
     const currentPage = Math.floor((currentScroll + 50) / pageWithGap);
     const maxScroll = containerRef.current.scrollHeight - containerRef.current.clientHeight;
     const targetScroll = Math.min((currentPage + 1) * pageWithGap, maxScroll);
-    
+
     containerRef.current.scrollTo({
       top: targetScroll,
       behavior: "smooth",
@@ -94,13 +94,7 @@ export function PreviewNavigation({ containerRef, className }: PreviewNavigation
   );
 
   return (
-    <div
-      className={cn(
-        "fixed bottom-6 right-28 z-50",
-        "flex flex-col gap-1",
-        className,
-      )}
-    >
+    <div className={cn("fixed bottom-6 right-28 z-50", "flex flex-col gap-1", className)}>
       {/* Jump to First Page */}
       <Tooltip delayDuration={300}>
         <TooltipTrigger asChild>
@@ -171,4 +165,3 @@ export function PreviewNavigation({ containerRef, className }: PreviewNavigation
     </div>
   );
 }
-
