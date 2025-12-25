@@ -32,7 +32,7 @@ function SettingsComponent() {
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation("settings");
   const { t: tCommon } = useTranslation("common");
-  
+
   // Cloud storage state
   const cloudSettings = useCloudStorageStore((state) => state.settings);
   const cloudUserInfo = useCloudStorageStore((state) => state.userInfo);
@@ -125,9 +125,7 @@ function SettingsComponent() {
                 <Cloud className="h-5 w-5" />
                 Cloud Storage
               </CardTitle>
-              <CardDescription>
-                Sync your resumes across devices with cloud storage
-              </CardDescription>
+              <CardDescription>Sync your resumes across devices with cloud storage</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {isCloudAuthenticated ? (
@@ -147,7 +145,9 @@ function SettingsComponent() {
                         </div>
                       )}
                       <div>
-                        <p className="font-medium text-sm">{cloudUserInfo?.name || "Google Drive"}</p>
+                        <p className="font-medium text-sm">
+                          {cloudUserInfo?.name || "Google Drive"}
+                        </p>
                         <p className="text-xs text-muted-foreground">{cloudUserInfo?.email}</p>
                       </div>
                     </div>
@@ -167,10 +167,9 @@ function SettingsComponent() {
                     <div className="space-y-0.5">
                       <Label>Storage Folder</Label>
                       <p className="text-sm text-muted-foreground">
-                        {cloudSettings.folderName 
+                        {cloudSettings.folderName
                           ? `Resumes saved to: ${cloudSettings.folderPath || cloudSettings.folderName}`
-                          : "No folder selected"
-                        }
+                          : "No folder selected"}
                       </p>
                     </div>
                     <Button variant="outline" size="sm" onClick={openFolderPicker}>
@@ -190,7 +189,9 @@ function SettingsComponent() {
                     <Switch
                       id="autoSync"
                       checked={cloudSettings.autoSync}
-                      onCheckedChange={(checked: boolean) => updateCloudSettings({ autoSync: checked })}
+                      onCheckedChange={(checked: boolean) =>
+                        updateCloudSettings({ autoSync: checked })
+                      }
                     />
                   </div>
 
@@ -205,7 +206,9 @@ function SettingsComponent() {
                     <Switch
                       id="syncOnSave"
                       checked={cloudSettings.syncOnSave}
-                      onCheckedChange={(checked: boolean) => updateCloudSettings({ syncOnSave: checked })}
+                      onCheckedChange={(checked: boolean) =>
+                        updateCloudSettings({ syncOnSave: checked })
+                      }
                     />
                   </div>
                 </>
@@ -217,12 +220,30 @@ function SettingsComponent() {
                   </p>
                   <Button onClick={() => startAuth("google-drive")}>
                     <svg className="h-4 w-4 mr-2" viewBox="0 0 87.3 78">
-                      <path fill="#0066DA" d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L29 52.2H0c0 1.55.4 3.1 1.2 4.5l5.4 10.15z"/>
-                      <path fill="#00AC47" d="M43.65 25.25L29 1.2C27.65 2 26.5 3.1 25.7 4.5L1.2 46.5c-.8 1.4-1.2 2.95-1.2 4.5h29l14.65-25.75z"/>
-                      <path fill="#EA4335" d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75L86.1 58.7c.8-1.4 1.2-2.95 1.2-4.5H58.3L43.65 78h16.2c2.65 0 5.2-.7 7.5-2.1l6.2-1.1z"/>
-                      <path fill="#00832D" d="M43.65 25.25L58.3 0H29c-2.65 0-5.2.7-7.5 2.1l22.15 23.15z"/>
-                      <path fill="#2684FC" d="M58.3 52.2H29l-15.25 26.6c2.3 1.4 4.85 2.1 7.5 2.1h44.3c2.65 0 5.2-.7 7.5-2.1L58.3 52.2z"/>
-                      <path fill="#FFBA00" d="M73.35 26.5L58.3 0h-14.65l14.65 25.25L87.3 52.2c0-1.55-.4-3.1-1.2-4.5L73.35 26.5z"/>
+                      <path
+                        fill="#0066DA"
+                        d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L29 52.2H0c0 1.55.4 3.1 1.2 4.5l5.4 10.15z"
+                      />
+                      <path
+                        fill="#00AC47"
+                        d="M43.65 25.25L29 1.2C27.65 2 26.5 3.1 25.7 4.5L1.2 46.5c-.8 1.4-1.2 2.95-1.2 4.5h29l14.65-25.75z"
+                      />
+                      <path
+                        fill="#EA4335"
+                        d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75L86.1 58.7c.8-1.4 1.2-2.95 1.2-4.5H58.3L43.65 78h16.2c2.65 0 5.2-.7 7.5-2.1l6.2-1.1z"
+                      />
+                      <path
+                        fill="#00832D"
+                        d="M43.65 25.25L58.3 0H29c-2.65 0-5.2.7-7.5 2.1l22.15 23.15z"
+                      />
+                      <path
+                        fill="#2684FC"
+                        d="M58.3 52.2H29l-15.25 26.6c2.3 1.4 4.85 2.1 7.5 2.1h44.3c2.65 0 5.2-.7 7.5-2.1L58.3 52.2z"
+                      />
+                      <path
+                        fill="#FFBA00"
+                        d="M73.35 26.5L58.3 0h-14.65l14.65 25.25L87.3 52.2c0-1.55-.4-3.1-1.2-4.5L73.35 26.5z"
+                      />
                     </svg>
                     Connect Google Drive
                   </Button>

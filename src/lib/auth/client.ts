@@ -1,6 +1,6 @@
 /**
  * Better Auth Client Configuration
- * 
+ *
  * This sets up the Better Auth client for the frontend.
  * Handles authentication state, sign in/out, and OAuth flows.
  */
@@ -14,13 +14,13 @@ const getAuthUrl = (): string => {
     // Check for custom auth URL first
     const customUrl = import.meta.env.VITE_AUTH_URL;
     if (customUrl) return customUrl;
-    
+
     // Use current origin in production
     if (import.meta.env.PROD) {
       return window.location.origin;
     }
   }
-  
+
   // Default to localhost in development
   return "http://localhost:5173";
 };
@@ -35,13 +35,7 @@ export const authClient = createAuthClient({
 });
 
 // Export typed hooks and utilities
-export const {
-  signIn,
-  signOut,
-  signUp,
-  useSession,
-  getSession,
-} = authClient;
+export const { signIn, signOut, signUp, useSession, getSession } = authClient;
 
 // Provider-specific sign in functions
 export const signInWithGoogle = () => {
@@ -53,7 +47,7 @@ export const signInWithGoogle = () => {
 
 export const signInWithMicrosoft = () => {
   return signIn.social({
-    provider: "microsoft", 
+    provider: "microsoft",
     callbackURL: `${getAuthUrl()}/auth/callback`,
   });
 };
@@ -94,6 +88,6 @@ export type AuthProvider = "google" | "microsoft" | "dropbox";
 // Map providers to cloud storage
 export const providerToCloudStorage: Record<AuthProvider, string> = {
   google: "google-drive",
-  microsoft: "onedrive", 
+  microsoft: "onedrive",
   dropbox: "dropbox",
 };

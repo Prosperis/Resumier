@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import { authApi } from "@/lib/api/auth";
 import { setUser as setSentryUser } from "@/lib/monitoring/sentry";
-import { 
+import {
   authClient,
   signInWithGoogle,
   signInWithMicrosoft,
@@ -95,7 +95,7 @@ export const useAuthStore = create<AuthStore>()(
 
         loginWithOAuth: async (provider: AuthProvider) => {
           set({ isLoading: true, error: null });
-          
+
           try {
             // Start OAuth flow based on provider
             let result;
@@ -112,11 +112,11 @@ export const useAuthStore = create<AuthStore>()(
               default:
                 throw new Error(`Unsupported provider: ${provider}`);
             }
-            
+
             if (result?.error) {
               throw new Error(result.error.message || "OAuth sign in failed");
             }
-            
+
             // The page will redirect to the OAuth provider
             // Session will be synced after redirect callback
           } catch (error) {
@@ -132,7 +132,7 @@ export const useAuthStore = create<AuthStore>()(
         syncSession: async () => {
           try {
             const session = await authClient.getSession();
-            
+
             if (session?.data?.user) {
               const userData = session.data.user;
               const user: User = {
@@ -143,18 +143,18 @@ export const useAuthStore = create<AuthStore>()(
                 // Access token for API calls
                 accessToken: (session.data as { accessToken?: string }).accessToken,
               };
-              
+
               // Determine provider from session if available
               const account = (session.data as { account?: { provider: string } }).account;
               const provider = account?.provider as AuthProvider | undefined;
-              
+
               // Set user in Sentry
               setSentryUser({
                 id: user.id,
                 email: user.email,
                 name: user.name,
               });
-              
+
               set({
                 user,
                 isAuthenticated: true,

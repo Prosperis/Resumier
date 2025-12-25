@@ -114,14 +114,11 @@ class GoogleDriveService {
       pageSize: "100",
     });
 
-    const response = await fetch(
-      `https://www.googleapis.com/drive/v3/files?${params.toString()}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`https://www.googleapis.com/drive/v3/files?${params.toString()}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to list folders");
@@ -199,14 +196,11 @@ class GoogleDriveService {
       pageSize: "100",
     });
 
-    const response = await fetch(
-      `https://www.googleapis.com/drive/v3/files?${params.toString()}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`https://www.googleapis.com/drive/v3/files?${params.toString()}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to list files");
@@ -223,7 +217,7 @@ class GoogleDriveService {
     name: string,
     content: string | Blob,
     mimeType: string,
-    folderId?: string
+    folderId?: string,
   ): Promise<GoogleDriveFile> {
     const token = this.getAccessToken();
 
@@ -257,7 +251,7 @@ class GoogleDriveService {
           "Content-Type": `multipart/related; boundary=${boundary}`,
         },
         body,
-      }
+      },
     );
 
     if (!response.ok) {
@@ -273,14 +267,11 @@ class GoogleDriveService {
   async downloadFile(fileId: string): Promise<string> {
     const token = this.getAccessToken();
 
-    const response = await fetch(
-      `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to download file");
@@ -292,7 +283,11 @@ class GoogleDriveService {
   /**
    * Update an existing file
    */
-  async updateFile(fileId: string, content: string | Blob, mimeType: string): Promise<GoogleDriveFile> {
+  async updateFile(
+    fileId: string,
+    content: string | Blob,
+    mimeType: string,
+  ): Promise<GoogleDriveFile> {
     const token = this.getAccessToken();
 
     const response = await fetch(
@@ -304,7 +299,7 @@ class GoogleDriveService {
           "Content-Type": mimeType,
         },
         body: content,
-      }
+      },
     );
 
     if (!response.ok) {
@@ -320,15 +315,12 @@ class GoogleDriveService {
   async deleteFile(fileId: string): Promise<void> {
     const token = this.getAccessToken();
 
-    const response = await fetch(
-      `https://www.googleapis.com/drive/v3/files/${fileId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (!response.ok) {
       throw new Error("Failed to delete file");
@@ -341,7 +333,7 @@ class GoogleDriveService {
   async saveResume(resumeId: string, data: unknown): Promise<GoogleDriveFile> {
     const fileName = `resume_${resumeId}.json`;
     const content = JSON.stringify(data, null, 2);
-    
+
     // Check if file already exists
     const folderId = this.selectedFolder?.id;
     if (!folderId) {

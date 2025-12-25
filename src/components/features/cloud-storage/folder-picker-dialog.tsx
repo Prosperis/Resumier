@@ -17,10 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useCloudStorageStore } from "@/stores/cloud-storage-store";
-import {
-  googleDriveService,
-  type GoogleDriveFolder,
-} from "@/lib/services/google-drive-service";
+import { googleDriveService, type GoogleDriveFolder } from "@/lib/services/google-drive-service";
 import { useToast } from "@/hooks/use-toast";
 
 interface BreadcrumbItem {
@@ -47,22 +44,25 @@ export function FolderPickerDialog() {
 
   const currentFolderId = breadcrumbs[breadcrumbs.length - 1].id;
 
-  const loadFolders = useCallback(async (parentId?: string) => {
-    setIsLoading(true);
-    try {
-      const folderList = await googleDriveService.listFolders(parentId || undefined);
-      setFolders(folderList);
-    } catch (error) {
-      console.error("Failed to load folders:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load folders from Google Drive",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [toast]);
+  const loadFolders = useCallback(
+    async (parentId?: string) => {
+      setIsLoading(true);
+      try {
+        const folderList = await googleDriveService.listFolders(parentId || undefined);
+        setFolders(folderList);
+      } catch (error) {
+        console.error("Failed to load folders:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load folders from Google Drive",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [toast],
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -93,7 +93,7 @@ export function FolderPickerDialog() {
     try {
       const newFolder = await googleDriveService.createFolder(
         newFolderName.trim(),
-        currentFolderId || undefined
+        currentFolderId || undefined,
       );
       setFolders([...folders, newFolder]);
       setNewFolderName("");
@@ -152,11 +152,14 @@ export function FolderPickerDialog() {
     // Select the current folder we're viewing (from breadcrumbs)
     const currentBreadcrumb = breadcrumbs[breadcrumbs.length - 1];
     if (currentBreadcrumb.id) {
-      const path = breadcrumbs.slice(1).map((b) => b.name).join("/");
-      setSelectedFolder({ 
-        id: currentBreadcrumb.id, 
+      const path = breadcrumbs
+        .slice(1)
+        .map((b) => b.name)
+        .join("/");
+      setSelectedFolder({
+        id: currentBreadcrumb.id,
         name: currentBreadcrumb.name,
-        path 
+        path,
       });
       toast({
         title: "Folder Selected",
@@ -173,9 +176,7 @@ export function FolderPickerDialog() {
             <Folder className="h-5 w-5 text-blue-500" />
             Select Storage Folder
           </DialogTitle>
-          <DialogDescription>
-            Choose where to save your resumes in Google Drive
-          </DialogDescription>
+          <DialogDescription>Choose where to save your resumes in Google Drive</DialogDescription>
         </DialogHeader>
 
         {/* Quick action: Create Resumier folder */}
@@ -188,11 +189,7 @@ export function FolderPickerDialog() {
                   Create a "Resumier" folder in your Drive root
                 </p>
               </div>
-              <Button
-                size="sm"
-                onClick={handleCreateResumierFolder}
-                disabled={isCreating}
-              >
+              <Button size="sm" onClick={handleCreateResumierFolder} disabled={isCreating}>
                 {isCreating ? (
                   <Loader2 className="h-4 w-4 animate-spin mr-1" />
                 ) : (
@@ -216,7 +213,7 @@ export function FolderPickerDialog() {
                   "hover:text-primary transition-colors flex items-center gap-1 px-1 py-0.5 rounded",
                   index === breadcrumbs.length - 1
                     ? "font-medium text-primary"
-                    : "text-muted-foreground hover:bg-muted"
+                    : "text-muted-foreground hover:bg-muted",
                 )}
               >
                 {index === 0 && <Home className="h-3 w-3" />}
@@ -250,15 +247,13 @@ export function FolderPickerDialog() {
                     "w-full flex items-center gap-2 px-3 py-2 rounded-md text-left transition-colors",
                     selectedFolder?.id === folder.id
                       ? "bg-primary/10 text-primary"
-                      : "hover:bg-muted"
+                      : "hover:bg-muted",
                   )}
                 >
                   <Folder
                     className={cn(
                       "h-4 w-4",
-                      selectedFolder?.id === folder.id
-                        ? "text-primary"
-                        : "text-yellow-500"
+                      selectedFolder?.id === folder.id ? "text-primary" : "text-yellow-500",
                     )}
                   />
                   <span className="text-sm truncate">{folder.name}</span>
@@ -299,11 +294,7 @@ export function FolderPickerDialog() {
           </div>
         ) : (
           <div className="flex gap-2">
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setShowNewFolderInput(true)}
-            >
+            <Button size="sm" variant="outline" onClick={() => setShowNewFolderInput(true)}>
               <FolderPlus className="h-4 w-4 mr-1" />
               New Folder
             </Button>
@@ -322,17 +313,11 @@ export function FolderPickerDialog() {
             Cancel
           </Button>
           {currentFolderId && (
-            <Button
-              variant="secondary"
-              onClick={handleSelectCurrentFolder}
-            >
+            <Button variant="secondary" onClick={handleSelectCurrentFolder}>
               Use This Folder
             </Button>
           )}
-          <Button
-            onClick={handleSelectFolder}
-            disabled={!selectedFolder}
-          >
+          <Button onClick={handleSelectFolder} disabled={!selectedFolder}>
             Select "{selectedFolder?.name || "..."}"
           </Button>
         </DialogFooter>

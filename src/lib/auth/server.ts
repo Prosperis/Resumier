@@ -1,6 +1,6 @@
 /**
  * Better Auth Server Configuration
- * 
+ *
  * This configures Better Auth with OAuth providers for cloud storage integration.
  * Supports: Google Drive, OneDrive, Dropbox, and Box
  */
@@ -18,24 +18,25 @@ const getEnvVar = (key: string): string => {
 
 export const auth = betterAuth({
   // Base URL for the auth server
-  baseURL: process.env.BETTER_AUTH_URL || process.env.VERCEL_URL 
-    ? `https://${process.env.VERCEL_URL}` 
-    : "http://localhost:5173",
-  
+  baseURL:
+    process.env.BETTER_AUTH_URL || process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:5173",
+
   // Secret for signing tokens - MUST be set in production
   secret: process.env.BETTER_AUTH_SECRET,
-  
+
   // Database configuration - using memory adapter for serverless
   // In production, you might want to use a proper database
   database: {
     type: "memory",
   },
-  
+
   // Configure email/password auth (disabled for now, we use OAuth only)
   emailAndPassword: {
     enabled: false,
   },
-  
+
   // OAuth Providers
   socialProviders: {
     // Google - for Google Drive integration
@@ -53,7 +54,7 @@ export const auth = betterAuth({
       // Return access token for API calls
       accessType: "offline",
     },
-    
+
     // Microsoft - for OneDrive integration
     microsoft: {
       clientId: getEnvVar("MICROSOFT_CLIENT_ID"),
@@ -69,7 +70,7 @@ export const auth = betterAuth({
       ],
       tenant: "common", // Allow both personal and work/school accounts
     },
-    
+
     // Dropbox
     dropbox: {
       clientId: getEnvVar("DROPBOX_CLIENT_ID"),
@@ -84,7 +85,7 @@ export const auth = betterAuth({
       ],
     },
   },
-  
+
   // Session configuration
   session: {
     // Use cookie-based sessions for better security
@@ -93,7 +94,7 @@ export const auth = betterAuth({
       maxAge: 60 * 60 * 24 * 7, // 7 days
     },
   },
-  
+
   // Callbacks for customizing behavior
   callbacks: {
     // Called when a user signs in
@@ -101,7 +102,7 @@ export const auth = betterAuth({
       console.log(`User signed in: ${user.email} via ${account?.provider}`);
       return true;
     },
-    
+
     // Called when session is created
     async session({ session, user }) {
       // Add provider info to session if available
@@ -114,7 +115,7 @@ export const auth = betterAuth({
       };
     },
   },
-  
+
   // Advanced options
   advanced: {
     // Generate secure session tokens
@@ -124,4 +125,4 @@ export const auth = betterAuth({
 
 // Export auth types for use in client
 export type Session = typeof auth.$Infer.Session;
-export type User = typeof auth.$Infer.Session["user"];
+export type User = (typeof auth.$Infer.Session)["user"];

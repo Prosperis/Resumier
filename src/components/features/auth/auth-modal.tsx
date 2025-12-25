@@ -43,9 +43,9 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
       pcloud: null, // Not yet supported
       mega: null, // Not yet supported
     };
-    
+
     const authProvider = providerMap[provider];
-    
+
     if (!authProvider) {
       toast({
         title: "Coming Soon",
@@ -54,13 +54,13 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
       });
       return;
     }
-    
+
     setLoadingProvider(provider);
-    
+
     try {
       // Start OAuth flow via Better Auth
       await loginWithOAuth(authProvider);
-      
+
       // Check for errors
       const state = useAuthStore.getState();
       if (state.error) {

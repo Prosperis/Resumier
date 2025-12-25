@@ -3,15 +3,7 @@
  * Dialog for importing profile data from LinkedIn
  */
 
-import {
-  Download,
-  ExternalLink,
-  FileArchive,
-  Linkedin,
-  Loader2,
-  Upload,
-  X,
-} from "lucide-react";
+import { Download, ExternalLink, FileArchive, Linkedin, Loader2, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -134,9 +126,10 @@ export function ImportProfileDialog({ trigger, onSuccess }: ImportProfileDialogP
 
       toast({
         title: "Import Successful",
-        description: linkedInMethod === "file"
-          ? "Your LinkedIn data has been imported. Click 'Create Profile' to save."
-          : "Sample data imported. For your actual data, use the Data Export method.",
+        description:
+          linkedInMethod === "file"
+            ? "Your LinkedIn data has been imported. Click 'Create Profile' to save."
+            : "Sample data imported. For your actual data, use the Data Export method.",
       });
     } catch (error) {
       toast({
@@ -201,7 +194,7 @@ export function ImportProfileDialog({ trigger, onSuccess }: ImportProfileDialogP
             variant: "destructive",
           });
         },
-      }
+      },
     );
   };
 
@@ -437,7 +430,12 @@ export function ImportProfileDialog({ trigger, onSuccess }: ImportProfileDialogP
         )}
 
         <DialogFooter className="gap-2">
-          <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isProcessing}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setOpen(false)}
+            disabled={isProcessing}
+          >
             Cancel
           </Button>
           {importedData ? (

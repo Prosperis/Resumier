@@ -27,16 +27,16 @@ function OAuthCallback() {
         // Better Auth handles the OAuth callback automatically via cookies
         // We just need to sync the session state
         await syncSession();
-        
+
         // Check if authentication was successful
         const authState = useAuthStore.getState();
-        
+
         if (authState.isAuthenticated && authState.user) {
           // Sync cloud storage store with auth store
           syncFromAuthStore();
-          
+
           setStatus("success");
-          
+
           // Redirect to dashboard after success
           setTimeout(() => {
             // Check if we need to open folder picker
@@ -56,7 +56,7 @@ function OAuthCallback() {
           setTimeout(async () => {
             await syncSession();
             const newAuthState = useAuthStore.getState();
-            
+
             if (newAuthState.isAuthenticated) {
               syncFromAuthStore();
               setStatus("success");
@@ -96,7 +96,7 @@ function OAuthCallback() {
             <p className="text-muted-foreground">Please wait while we connect your account.</p>
           </>
         )}
-        
+
         {status === "success" && (
           <>
             <CheckCircle2 className="h-12 w-12 text-green-500 mx-auto" />
@@ -104,7 +104,7 @@ function OAuthCallback() {
             <p className="text-muted-foreground">Redirecting you to the dashboard...</p>
           </>
         )}
-        
+
         {status === "error" && (
           <>
             <XCircle className="h-12 w-12 text-destructive mx-auto" />
@@ -114,9 +114,7 @@ function OAuthCallback() {
               <Button onClick={handleRetry} variant="outline">
                 Try Again
               </Button>
-              <Button onClick={handleGoToDashboard}>
-                Go to Dashboard
-              </Button>
+              <Button onClick={handleGoToDashboard}>Go to Dashboard</Button>
             </div>
           </>
         )}

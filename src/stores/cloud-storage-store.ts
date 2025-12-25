@@ -6,10 +6,7 @@
 
 import { create } from "zustand";
 import { createJSONStorage, devtools, persist } from "zustand/middleware";
-import {
-  googleDriveService,
-  type GoogleDriveFolder,
-} from "@/lib/services/google-drive-service";
+import { googleDriveService, type GoogleDriveFolder } from "@/lib/services/google-drive-service";
 import { useAuthStore } from "./auth-store";
 import { providerToCloudStorage, type AuthProvider } from "@/lib/auth/client";
 
@@ -37,13 +34,13 @@ interface CloudStorageState {
   isAuthenticated: boolean;
   isAuthenticating: boolean;
   authError: string | null;
-  
+
   // User info
   userInfo: CloudUserInfo | null;
-  
+
   // Storage settings
   settings: CloudStorageSettings;
-  
+
   // UI state
   isFolderPickerOpen: boolean;
   isConnecting: boolean;
@@ -54,17 +51,17 @@ interface CloudStorageActions {
   startAuth: (provider: CloudProvider) => Promise<void>;
   signOut: () => void;
   syncFromAuthStore: () => void;
-  
+
   // Folder actions
   setSelectedFolder: (folder: GoogleDriveFolder) => void;
   clearSelectedFolder: () => void;
   openFolderPicker: () => void;
   closeFolderPicker: () => void;
-  
+
   // Settings actions
   updateSettings: (settings: Partial<CloudStorageSettings>) => void;
   resetSettings: () => void;
-  
+
   // State actions
   setAuthenticating: (isAuthenticating: boolean) => void;
   setAuthError: (error: string | null) => void;
@@ -99,36 +96,36 @@ export const useCloudStorageStore = create<CloudStorageStore>()(
         // Auth actions - delegates to Better Auth via auth store
         startAuth: async (provider) => {
           set({ isAuthenticating: true, authError: null });
-          
+
           // Map CloudProvider to AuthProvider
           const authProviderMap: Record<string, AuthProvider | null> = {
             "google-drive": "google",
-            "onedrive": "microsoft",
-            "dropbox": "dropbox",
-            "box": null,
-            "icloud": null,
+            onedrive: "microsoft",
+            dropbox: "dropbox",
+            box: null,
+            icloud: null,
           };
-          
+
           const authProvider = provider ? authProviderMap[provider] : null;
-          
+
           if (!authProvider) {
-            set({ 
+            set({
               authError: `${provider} is not yet supported`,
-              isAuthenticating: false 
+              isAuthenticating: false,
             });
             return;
           }
-          
+
           try {
             // Delegate to auth store which uses Better Auth
             await useAuthStore.getState().loginWithOAuth(authProvider);
-            
+
             // After OAuth redirect, syncFromAuthStore will be called
             // The auth store handles the OAuth flow and session
           } catch (error) {
-            set({ 
+            set({
               authError: error instanceof Error ? error.message : "Failed to start authentication",
-              isAuthenticating: false 
+              isAuthenticating: false,
             });
           }
         },
@@ -136,16 +133,16 @@ export const useCloudStorageStore = create<CloudStorageStore>()(
         // Sync state from auth store after OAuth callback
         syncFromAuthStore: () => {
           const authState = useAuthStore.getState();
-          
+
           if (authState.isAuthenticated && authState.user) {
             const savedFolder = googleDriveService.getSelectedFolder();
             const provider = authState.connectedProvider;
-            
+
             // Map AuthProvider to CloudProvider
-            const cloudProvider: CloudProvider = provider 
+            const cloudProvider: CloudProvider = provider
               ? (providerToCloudStorage[provider] as CloudProvider)
               : null;
-            
+
             set({
               isAuthenticated: true,
               isAuthenticating: false,
@@ -247,10 +244,10 @@ export const useCloudStorageStore = create<CloudStorageStore>()(
         partialize: (state) => ({
           settings: state.settings,
         }),
-      }
+      },
     ),
-    { name: "CloudStorageStore" }
-  )
+    { name: "CloudStorageStore" },
+  ),
 );
 
 // Selectors
