@@ -26,6 +26,7 @@ import {
   DEFAULT_SECTION_ORDER,
   type SectionType,
 } from "../interactive";
+import { ResumePageWrapper } from "../resume-page-wrapper";
 
 // Helper to get skill name from string or SkillWithLevel
 function getSkillName(skill: string | SkillWithLevel): string {
@@ -143,14 +144,17 @@ export function InteractiveModernTemplate({ resume, config }: InteractiveModernT
   };
 
   return (
-    <div
-      className="mx-auto max-w-[21cm] bg-white shadow-lg"
-      style={{
-        colorScheme: "light",
-        color: colors.text,
-        fontFamily: typography.bodyFont,
-      }}
-    >
+    <ResumePageWrapper>
+      <div
+        className="bg-white resume-light-mode"
+        style={{
+          colorScheme: "light",
+          color: colors.text,
+          fontFamily: typography.bodyFont,
+          width: "794px", // A4 width at 96 DPI (21cm)
+          minWidth: "794px",
+        }}
+      >
       {/* Header Section - Personal Info (always visible as it's required) */}
       <EditableSection sectionType="personalInfo" editLabel="Edit personal information">
         <div className="p-8" style={{ backgroundColor: colors.primary, color: "white" }}>
@@ -718,6 +722,7 @@ export function InteractiveModernTemplate({ resume, config }: InteractiveModernT
           })}
         </SortableSectionColumn>
       </div>
-    </div>
+      </div>
+    </ResumePageWrapper>
   );
 }

@@ -10,6 +10,7 @@ import {
   Clock,
   Trash2,
   Layers,
+  Bug,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ import { useVersionStore } from "@/stores/version-store";
 import { useResumeHistory } from "@/hooks/use-resume-history";
 import { VersionPanel } from "./version-panel";
 import { useUIStore } from "@/stores/ui-store";
+import { useDevtools } from "@/app/providers";
 import type { ResumeContent } from "@/lib/api/types";
 
 // Change indicator component
@@ -130,6 +132,36 @@ function HistoryEntryItem({
         </div>
       </div>
     </button>
+  );
+}
+
+// Devtools toggle button component
+function DevtoolsButton() {
+  const { isOpen, toggle } = useDevtools();
+
+  return (
+    <div className="p-2 border-t border-border">
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger asChild>
+          <button
+            type="button"
+            onClick={toggle}
+            className={cn(
+              "flex items-center justify-center w-8 h-8 rounded-md mx-auto",
+              "transition-colors",
+              isOpen
+                ? "text-primary bg-primary/10"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted",
+            )}
+          >
+            <Bug className="h-4 w-4" />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="left" sideOffset={8}>
+          <p>{isOpen ? "Close" : "Open"} React Query Devtools</p>
+        </TooltipContent>
+      </Tooltip>
+    </div>
   );
 }
 
@@ -282,6 +314,9 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
             </TooltipContent>
           </Tooltip>
         </div>
+
+        {/* Devtools button at bottom - only in development */}
+        {import.meta.env.DEV && <DevtoolsButton />}
       </div>
 
       {/* Expanded sidebar content */}

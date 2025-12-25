@@ -41,12 +41,12 @@ function SettingsComponent() {
   const signOut = useCloudStorageStore((state) => state.signOut);
   const openFolderPicker = useCloudStorageStore((state) => state.openFolderPicker);
   const updateCloudSettings = useCloudStorageStore((state) => state.updateSettings);
-  const checkAuthStatus = useCloudStorageStore((state) => state.checkAuthStatus);
+  const syncFromAuthStore = useCloudStorageStore((state) => state.syncFromAuthStore);
 
-  // Check auth status on mount
+  // Sync cloud storage state from auth store on mount
   React.useEffect(() => {
-    checkAuthStatus();
-  }, [checkAuthStatus]);
+    syncFromAuthStore();
+  }, [syncFromAuthStore]);
 
   const handleThemeChange = (value: "light" | "dark" | "system") => {
     // Update both the theme provider and settings store

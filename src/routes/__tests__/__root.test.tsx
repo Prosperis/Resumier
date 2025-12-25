@@ -7,14 +7,6 @@ vi.mock("@tanstack/react-router", () => ({
   Outlet: () => <div data-testid="outlet">Outlet Content</div>,
 }));
 
-vi.mock("@tanstack/react-router-devtools", () => ({
-  TanStackRouterDevtools: ({ position }: { position: string }) => (
-    <div data-testid="router-devtools" data-position={position}>
-      Router Devtools
-    </div>
-  ),
-}));
-
 vi.mock("@/components/layouts/root-layout", () => ({
   RootLayout: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="root-layout">{children}</div>
@@ -56,35 +48,6 @@ describe("Root Route", () => {
     it("renders outlet content", () => {
       renderRootRoute();
       expect(screen.getByText("Outlet Content")).toBeInTheDocument();
-    });
-  });
-
-  describe("Development Tools", () => {
-    it("renders router devtools in development mode", () => {
-      const originalEnv = import.meta.env.DEV;
-      // @ts-expect-error - Mocking env variable
-      import.meta.env.DEV = true;
-
-      renderRootRoute();
-
-      expect(screen.getByTestId("router-devtools")).toBeInTheDocument();
-
-      // @ts-expect-error - Restoring env variable
-      import.meta.env.DEV = originalEnv;
-    });
-
-    it("devtools are positioned at bottom-right", () => {
-      const originalEnv = import.meta.env.DEV;
-      // @ts-expect-error - Mocking env variable
-      import.meta.env.DEV = true;
-
-      renderRootRoute();
-
-      const devtools = screen.getByTestId("router-devtools");
-      expect(devtools).toHaveAttribute("data-position", "bottom-right");
-
-      // @ts-expect-error - Restoring env variable
-      import.meta.env.DEV = originalEnv;
     });
   });
 

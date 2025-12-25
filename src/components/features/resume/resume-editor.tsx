@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   User,
   Briefcase,
@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { InteractiveResumePreview } from "./preview/interactive-resume-preview";
 import { ResumeBuilder } from "./resume-builder";
 import { ToolSidebar } from "./tool-sidebar";
+import { PreviewNavigation } from "./preview/preview-navigation";
 
 // Sidebar section icons mapping
 const sidebarSections = [
@@ -44,6 +45,9 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
   // Sidebar state
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [isToolSidebarExpanded, setIsToolSidebarExpanded] = useState(false);
+  
+  // Ref for the preview container (for navigation)
+  const previewContainerRef = useRef<HTMLDivElement>(null);
 
   // Set/clear the current resume for navbar actions
   // Note: Keyboard shortcuts for undo/redo are handled globally by GlobalUndoProvider
@@ -156,6 +160,7 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
 
       {/* Main Content: Live Preview - Always interactive */}
       <div
+        ref={previewContainerRef}
         className={cn(
           "flex-1 flex items-start justify-center bg-slate-200 dark:bg-slate-800 overflow-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] p-8",
           "[background-image:radial-gradient(circle,_rgba(148,163,184,0.4)_1px,_transparent_1px)] dark:[background-image:radial-gradient(circle,_rgba(71,85,105,0.5)_1px,_transparent_1px)]",
@@ -163,6 +168,9 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
         )}
       >
         <InteractiveResumePreview resume={resume} template={template} isInteractive={true} />
+        
+        {/* Floating navigation buttons */}
+        <PreviewNavigation containerRef={previewContainerRef} />
       </div>
 
       {/* Right Sidebar: Tools */}

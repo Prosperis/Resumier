@@ -1,5 +1,4 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { GlobalUndoProvider } from "@/components/features/global-undo-provider";
 import { RootLayout } from "@/components/layouts/root-layout";
 import { NotFoundError } from "@/components/ui/route-error";
@@ -27,8 +26,6 @@ function RootComponent() {
       <RootLayout>
         <Outlet />
       </RootLayout>
-      {/* Show router devtools only in development, hide in production */}
-      {import.meta.env.MODE !== "production" && <TanStackRouterDevtools position="bottom-right" />}
     </GlobalUndoProvider>
   );
 }

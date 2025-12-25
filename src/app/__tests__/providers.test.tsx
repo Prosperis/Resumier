@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import { Providers } from "../providers";
 
@@ -42,31 +42,15 @@ describe("Providers", () => {
   });
 
   describe("Development Tools", () => {
-    it("should render React Query devtools on hover in development mode", () => {
-      // In test/development mode, devtools should be present but hidden by default
+    it("should not render React Query devtools by default", () => {
       render(
         <Providers>
           <div>Test Content</div>
         </Providers>,
       );
 
-      // The devtools are hidden by default (showDevtools state is false)
-      if (import.meta.env.DEV) {
-        // Devtools should NOT be visible initially
-        expect(screen.queryByTestId("react-query-devtools")).not.toBeInTheDocument();
-
-        // Find the hover trigger div and simulate mouse enter
-        const hoverTrigger = document.querySelector('div[style*="position: fixed"]');
-        expect(hoverTrigger).toBeInTheDocument();
-
-        // Hover over the trigger to show devtools
-        fireEvent.mouseEnter(hoverTrigger!);
-        expect(screen.getByTestId("react-query-devtools")).toBeInTheDocument();
-
-        // Mouse leave should hide devtools
-        fireEvent.mouseLeave(hoverTrigger!);
-        expect(screen.queryByTestId("react-query-devtools")).not.toBeInTheDocument();
-      }
+      // Devtools should NOT be visible initially (controlled by state)
+      expect(screen.queryByTestId("react-query-devtools")).not.toBeInTheDocument();
     });
 
     it("should conditionally render React Query devtools", () => {
@@ -76,7 +60,7 @@ describe("Providers", () => {
         </Providers>,
       );
 
-      // The devtools mock might or might not be present depending on environment
+      // The devtools are hidden by default
       // This test just confirms the component renders without errors
       expect(screen.getByText("Test Content")).toBeInTheDocument();
     });
