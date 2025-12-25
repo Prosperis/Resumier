@@ -37,11 +37,11 @@ export function CreateResumeDialog({
   onOpenChange,
 }: CreateResumeDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
-  
+
   // Use controlled or uncontrolled open state
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
-  const setOpen = isControlled ? (onOpenChange || (() => {})) : setInternalOpen;
+  const setOpen = isControlled ? onOpenChange || (() => {}) : setInternalOpen;
   const [title, setTitle] = useState("");
   const [validationError, setValidationError] = useState("");
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
@@ -67,7 +67,7 @@ export function CreateResumeDialog({
   const { mutate, isPending, error } = useCreateResume();
 
   // Generate a suggested title based on context
-  const suggestedTitle = selectedProfile 
+  const suggestedTitle = selectedProfile
     ? `${selectedProfile.content.personalInfo.firstName || selectedProfile.name}'s Resume`
     : "My Resume";
 
@@ -241,9 +241,7 @@ export function CreateResumeDialog({
                   validationError ? "title-validation-error" : error ? "title-api-error" : undefined
                 }
               />
-              <p className="text-xs text-muted-foreground">
-                Leave empty to use "{suggestedTitle}"
-              </p>
+              <p className="text-xs text-muted-foreground">Leave empty to use "{suggestedTitle}"</p>
               {validationError && (
                 <p id="title-validation-error" className="text-destructive text-sm" role="alert">
                   {validationError}

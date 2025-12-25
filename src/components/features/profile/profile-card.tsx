@@ -36,9 +36,7 @@ export function ProfileCard({
   const experienceCount = content.experience.length;
   const educationCount = content.education.length;
   const skillsCount =
-    content.skills.technical.length +
-    content.skills.tools.length +
-    content.skills.soft.length;
+    content.skills.technical.length + content.skills.tools.length + content.skills.soft.length;
   const languagesCount = content.skills.languages.length;
   const certificationsCount = content.certifications?.length || 0;
   const linksCount = content.links?.length || 0;

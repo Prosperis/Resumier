@@ -270,8 +270,8 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                             </span>
                           </h4>
                           <p className="text-muted-foreground text-sm mt-1">
-                            Upload your LinkedIn data export ZIP file or PDF profile for the most complete and
-                            accurate import.
+                            Upload your LinkedIn data export ZIP file or PDF profile for the most
+                            complete and accurate import.
                           </p>
                         </div>
                       </div>
@@ -285,7 +285,9 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                       </h5>
                       <div className="space-y-3">
                         <div>
-                          <h6 className="text-sm font-medium mb-2">Option 1: Data Export (ZIP) - Most Complete</h6>
+                          <h6 className="text-sm font-medium mb-2">
+                            Option 1: Data Export (ZIP) - Most Complete
+                          </h6>
                           <ol className="text-sm text-muted-foreground space-y-2 ml-4">
                             <li className="flex gap-2">
                               <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
@@ -309,8 +311,8 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                                 2
                               </span>
                               <span>
-                                Select <strong>"Want something in particular?"</strong> and choose the
-                                data you want (Profile, Positions, Education, Skills, etc.)
+                                Select <strong>"Want something in particular?"</strong> and choose
+                                the data you want (Profile, Positions, Education, Skills, etc.)
                               </span>
                             </li>
                             <li className="flex gap-2">
@@ -318,8 +320,8 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                                 3
                               </span>
                               <span>
-                                Click <strong>"Request archive"</strong> - you'll receive an email when
-                                it's ready (usually within minutes)
+                                Click <strong>"Request archive"</strong> - you'll receive an email
+                                when it's ready (usually within minutes)
                               </span>
                             </li>
                             <li className="flex gap-2">
@@ -331,7 +333,9 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                           </ol>
                         </div>
                         <div className="border-t pt-3">
-                          <h6 className="text-sm font-medium mb-2">Option 2: PDF Profile Export - Quick & Easy</h6>
+                          <h6 className="text-sm font-medium mb-2">
+                            Option 2: PDF Profile Export - Quick & Easy
+                          </h6>
                           <ol className="text-sm text-muted-foreground space-y-2 ml-4">
                             <li className="flex gap-2">
                               <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
@@ -343,13 +347,18 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
                               <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
                                 2
                               </span>
-                              <span>Click the <strong>"More"</strong> button (three dots) on your profile</span>
+                              <span>
+                                Click the <strong>"More"</strong> button (three dots) on your
+                                profile
+                              </span>
                             </li>
                             <li className="flex gap-2">
                               <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">
                                 3
                               </span>
-                              <span>Select <strong>"Save to PDF"</strong> from the dropdown menu</span>
+                              <span>
+                                Select <strong>"Save to PDF"</strong> from the dropdown menu
+                              </span>
                             </li>
                             <li className="flex gap-2">
                               <span className="bg-primary/10 text-primary rounded-full h-5 w-5 flex items-center justify-center text-xs shrink-0">

@@ -3,7 +3,17 @@
  * Dialog for importing profile data from LinkedIn
  */
 
-import { Download, ExternalLink, FileArchive, FileText, Linkedin, Loader2, Upload, X, AlertTriangle } from "lucide-react";
+import {
+  Download,
+  ExternalLink,
+  FileArchive,
+  FileText,
+  Linkedin,
+  Loader2,
+  Upload,
+  X,
+  AlertTriangle,
+} from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -255,7 +265,9 @@ export function ImportProfileDialog({ trigger, onSuccess }: ImportProfileDialogP
                     {importedData.skills?.technical?.length || 0} skills,{" "}
                     {importedData.skills?.languages?.length || 0} languages,{" "}
                     {importedData.certifications?.length || 0} certifications
-                    {importedData.links && importedData.links.length > 0 && `, ${importedData.links.length} links`}
+                    {importedData.links &&
+                      importedData.links.length > 0 &&
+                      `, ${importedData.links.length} links`}
                   </p>
                 </div>
                 <Button
@@ -342,13 +354,15 @@ export function ImportProfileDialog({ trigger, onSuccess }: ImportProfileDialogP
                       </h4>
                       <p className="text-green-700 dark:text-green-300 text-sm mt-1">
                         This method imports <strong>all your data</strong> including your complete
-                        work history, education, skills, and certifications. 
+                        work history, education, skills, and certifications.
                       </p>
                       <p className="text-green-700 dark:text-green-300 text-sm mt-2 font-medium">
-                        ⚠️ Important: Select <strong>"Download larger data archive"</strong> option (not the custom file selection) to get all your data.
+                        ⚠️ Important: Select <strong>"Download larger data archive"</strong> option
+                        (not the custom file selection) to get all your data.
                       </p>
                       <p className="text-green-700 dark:text-green-300 text-xs mt-1">
-                        Download from: LinkedIn Settings → Data Privacy → Get a copy of your data → Select "Download larger data archive"
+                        Download from: LinkedIn Settings → Data Privacy → Get a copy of your data →
+                        Select "Download larger data archive"
                       </p>
                     </div>
                   </div>
@@ -364,7 +378,8 @@ export function ImportProfileDialog({ trigger, onSuccess }: ImportProfileDialogP
                         Quick Option: Upload LinkedIn PDF Profile
                       </h4>
                       <p className="text-blue-700 dark:text-blue-300 text-sm mt-1">
-                        Alternatively, you can upload a PDF export of your LinkedIn profile. Go to your profile → More → Save to PDF.
+                        Alternatively, you can upload a PDF export of your LinkedIn profile. Go to
+                        your profile → More → Save to PDF.
                       </p>
                     </div>
                   </div>
@@ -456,8 +471,8 @@ export function ImportProfileDialog({ trigger, onSuccess }: ImportProfileDialogP
                         Import from Profile URL
                       </h4>
                       <p className="text-blue-700 dark:text-blue-300 text-sm mt-1">
-                        Scrapes public LinkedIn data including experiences, education, certifications,
-                        projects, courses, volunteer work, honors, and languages.
+                        Scrapes public LinkedIn data including experiences, education,
+                        certifications, projects, courses, volunteer work, honors, and languages.
                       </p>
                       <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">
                         <strong>Note:</strong> Works best with public profiles. For private profiles

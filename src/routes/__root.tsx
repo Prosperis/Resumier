@@ -28,9 +28,7 @@ function RootComponent() {
         <Outlet />
       </RootLayout>
       {/* Show router devtools only in development, hide in production */}
-      {import.meta.env.MODE !== "production" && (
-        <TanStackRouterDevtools position="bottom-right" />
-      )}
+      {import.meta.env.MODE !== "production" && <TanStackRouterDevtools position="bottom-right" />}
     </GlobalUndoProvider>
   );
 }

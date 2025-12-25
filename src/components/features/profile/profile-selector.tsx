@@ -148,17 +148,17 @@ function getProfileStats(profile: Profile) {
   if (skillCount > 0) {
     stats.push({ label: "skills", count: skillCount });
   }
-  
+
   const langCount = profile.content.skills.languages.length;
   if (langCount > 0) {
     stats.push({ label: "lang", count: langCount });
   }
-  
+
   const certCount = profile.content.certifications?.length || 0;
   if (certCount > 0) {
     stats.push({ label: "certs", count: certCount });
   }
-  
+
   const linkCount = profile.content.links?.length || 0;
   if (linkCount > 0) {
     stats.push({ label: "links", count: linkCount });
@@ -173,7 +173,7 @@ function getProfileStats(profile: Profile) {
 function ProfileStatsCompact({ profile }: { profile: Profile }) {
   const stats = getProfileStats(profile);
   const totalItems = stats.reduce((sum, s) => sum + s.count, 0);
-  
+
   if (totalItems === 0) return null;
 
   return (

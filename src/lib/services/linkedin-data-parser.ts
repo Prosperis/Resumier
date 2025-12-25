@@ -427,13 +427,13 @@ function categorizeSkills(skillNames: string[]): Skills {
     const skillLower = skill.toLowerCase();
 
     // Use word boundary matching to avoid false positives like "digital" matching "git"
-    const matchesKeyword = (keywords: string[]) => 
+    const matchesKeyword = (keywords: string[]) =>
       keywords.some((kw) => {
         // For short keywords (<=3 chars), require word boundary match
         if (kw.length <= 3) {
           // Escape special regex characters
-          const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-          const regex = new RegExp(`\\b${escaped}\\b`, 'i');
+          const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+          const regex = new RegExp(`\\b${escaped}\\b`, "i");
           return regex.test(skillLower);
         }
         return skillLower.includes(kw);
@@ -612,40 +612,53 @@ function convertToResumeContent(data: ParsedLinkedInData): {
   const skillNames = (data.skills || []).map((s) => s["Name"]).filter((s): s is string => !!s);
   console.log("Skills input to categorize:", skillNames);
   const skills = categorizeSkills(skillNames);
-  console.log("Skills after categorize:", { technical: skills.technical, tools: skills.tools, soft: skills.soft });
+  console.log("Skills after categorize:", {
+    technical: skills.technical,
+    tools: skills.tools,
+    soft: skills.soft,
+  });
 
   // Add languages to skills (with proficiency if available)
   if (data.languages && data.languages.length > 0) {
-    skills.languages = data.languages.map((lang) => {
-      const name = lang["Name"];
-      const proficiency = lang["Proficiency"];
-      
-      if (!name) return null;
-      
-      // Convert LinkedIn proficiency to level (1-5 scale)
-      // Native/Full Professional = 5, Professional Working = 4, Limited Working = 3, Elementary = 2
-      if (proficiency) {
-        let level = 3; // Default to Limited Working
-        if (proficiency.toLowerCase().includes("native") || proficiency.toLowerCase().includes("full professional")) {
-          level = 5;
-        } else if (proficiency.toLowerCase().includes("professional working")) {
-          level = 4;
-        } else if (proficiency.toLowerCase().includes("limited")) {
-          level = 3;
-        } else if (proficiency.toLowerCase().includes("elementary")) {
-          level = 2;
+    skills.languages = data.languages
+      .map((lang) => {
+        const name = lang["Name"];
+        const proficiency = lang["Proficiency"];
+
+        if (!name) return null;
+
+        // Convert LinkedIn proficiency to level (1-5 scale)
+        // Native/Full Professional = 5, Professional Working = 4, Limited Working = 3, Elementary = 2
+        if (proficiency) {
+          let level = 3; // Default to Limited Working
+          if (
+            proficiency.toLowerCase().includes("native") ||
+            proficiency.toLowerCase().includes("full professional")
+          ) {
+            level = 5;
+          } else if (proficiency.toLowerCase().includes("professional working")) {
+            level = 4;
+          } else if (proficiency.toLowerCase().includes("limited")) {
+            level = 3;
+          } else if (proficiency.toLowerCase().includes("elementary")) {
+            level = 2;
+          }
+
+          // Return as "Name (Proficiency)" string for better display
+          return `${name} (${proficiency})`;
         }
-        
-        // Return as "Name (Proficiency)" string for better display
-        return `${name} (${proficiency})`;
-      }
-      
-      return name;
-    }).filter((s): s is string => !!s);
+
+        return name;
+      })
+      .filter((s): s is string => !!s);
   }
 
   // Parse certifications
-  console.log("Certifications input:", data.certifications?.length, data.certifications?.map(c => c.Name));
+  console.log(
+    "Certifications input:",
+    data.certifications?.length,
+    data.certifications?.map((c) => c.Name),
+  );
   const certifications: Certification[] = (data.certifications || []).map((cert) => ({
     id: crypto.randomUUID(),
     name: cert["Name"] || "",
@@ -768,7 +781,7 @@ export async function parseLinkedInZip(file: File): Promise<LinkedInParseResult>
 
     // Detect if this is a Basic export (only Profile.csv) vs Complete export
     const isBasicExport = hasProfile && !hasPositions && !hasEducation && !hasSkills;
-    
+
     // Convert to ResumeContent
     const { content, warnings } = convertToResumeContent(parsedData);
 
@@ -777,12 +790,12 @@ export async function parseLinkedInZip(file: File): Promise<LinkedInParseResult>
     if (isBasicExport) {
       allWarnings.push(
         "⚠️ You uploaded a LinkedIn export that only includes profile information. " +
-        "To import your work experience, education, and skills, please request the 'Download larger data archive' option from LinkedIn: " +
-        "Settings → Data Privacy → Get a copy of your data → Select 'Download larger data archive' (not the custom file selection)."
+          "To import your work experience, education, and skills, please request the 'Download larger data archive' option from LinkedIn: " +
+          "Settings → Data Privacy → Get a copy of your data → Select 'Download larger data archive' (not the custom file selection).",
       );
     } else if (hasProfile && !hasPositions) {
       allWarnings.push(
-        "⚠️ No work experience found. If you have work experience on LinkedIn, make sure you selected 'Download larger data archive' (not the custom file selection)."
+        "⚠️ No work experience found. If you have work experience on LinkedIn, make sure you selected 'Download larger data archive' (not the custom file selection).",
       );
     }
 
@@ -852,18 +865,18 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
       // Use local worker file - Vite serves files from public directory at root
       pdfjsLib.GlobalWorkerOptions.workerSrc = `${baseUrl}/pdf.worker.min.js`;
     }
-    
+
     // Load PDF
     const arrayBuffer = await file.arrayBuffer();
-    
+
     // Configure PDF.js with error handling
-    const loadingTask = pdfjsLib.getDocument({ 
+    const loadingTask = pdfjsLib.getDocument({
       data: arrayBuffer,
       useWorkerFetch: false,
       isEvalSupported: false,
       verbosity: 0, // Reduce console warnings
     });
-    
+
     const pdf = await loadingTask.promise;
 
     // Extract text from all pages with improved structure preservation
@@ -871,16 +884,16 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
     for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
       const page = await pdf.getPage(pageNum);
       const textContent = await page.getTextContent();
-      
+
       // Group items by Y position to preserve some line structure
       const items = textContent.items as any[];
       let lastY = -1;
       const pageLines: string[] = [];
       let currentLine = "";
-      
+
       for (const item of items) {
         const y = Math.round(item.transform?.[5] || 0);
-        
+
         // If Y position changed significantly, start new line
         if (lastY !== -1 && Math.abs(y - lastY) > 5) {
           if (currentLine.trim()) {
@@ -892,23 +905,28 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
         }
         lastY = y;
       }
-      
+
       // Add the last line
       if (currentLine.trim()) {
         pageLines.push(currentLine.trim());
       }
-      
+
       fullText += pageLines.join("\n") + "\n";
     }
-    
+
     // Also create a flattened version for fallback parsing
     const flatText = fullText.replace(/\n+/g, " ").replace(/\s+/g, " ");
-    
+
     // Log for debugging (remove in production)
-    console.log("LinkedIn PDF text extracted, length:", fullText.length, "lines:", fullText.split("\n").length);
+    console.log(
+      "LinkedIn PDF text extracted, length:",
+      fullText.length,
+      "lines:",
+      fullText.split("\n").length,
+    );
 
     // Check if this appears to be a LinkedIn profile PDF
-    const isLinkedInPDF = 
+    const isLinkedInPDF =
       fullText.toLowerCase().includes("linkedin") ||
       fullText.toLowerCase().includes("experience") ||
       fullText.toLowerCase().includes("education") ||
@@ -916,31 +934,36 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
 
     if (!isLinkedInPDF && pdf.numPages > 0) {
       // Still try to parse, but warn the user
-      console.warn("PDF doesn't appear to be a LinkedIn profile export, but attempting to parse anyway");
+      console.warn(
+        "PDF doesn't appear to be a LinkedIn profile export, but attempting to parse anyway",
+      );
     }
 
     // Parse LinkedIn PDF using its specific format
     // LinkedIn PDFs use # for name, sections like "Contact", "Top Skills", "Experience", etc.
     const parsedData: ParsedLinkedInData = {};
-    
+
     // Use flatText for pattern matching (more reliable for LinkedIn PDF extraction)
     const textToSearch = flatText || fullText;
 
     // Extract name from LinkedIn PDF
     // LinkedIn PDFs structure: Contact info → Top Skills → Languages → Certifications → Honors → # Name → Job Title → Location
     // IMPORTANT: Exclude common section headers
-    const excludedNames = /^(Top Skills?|Languages?|Certifications?|Honors?|Awards?|Contact|Experience|Education|Summary|Page|Skills|Digital|Automation|Cross|German|Farsi|English|Go Essential|Learning|Node|React|Eagle|Best|2nd|3rd|1st|Place|Scout|Design|Hack|Software|Senior|Jr|Lead)$/i;
-    
+    const excludedNames =
+      /^(Top Skills?|Languages?|Certifications?|Honors?|Awards?|Contact|Experience|Education|Summary|Page|Skills|Digital|Automation|Cross|German|Farsi|English|Go Essential|Learning|Node|React|Eagle|Best|2nd|3rd|1st|Place|Scout|Design|Hack|Software|Senior|Jr|Lead)$/i;
+
     let foundName: { firstName: string; lastName: string } | null = null;
-    
+
     // Pattern 1: Name followed by job title with @ or | (e.g., "Adrian Darian Sr Software Development Engineer @ Roche")
-    const nameWithJobMatch = textToSearch.match(/([A-Z][a-z]+\s+[A-Z][a-z]+)\s+(?:Sr\.?|Senior|Jr\.?|Junior|Lead|Staff|Principal|Associate)?\s*(?:Software|Engineer|Developer|Manager|Director|Analyst|Consultant)/i);
+    const nameWithJobMatch = textToSearch.match(
+      /([A-Z][a-z]+\s+[A-Z][a-z]+)\s+(?:Sr\.?|Senior|Jr\.?|Junior|Lead|Staff|Principal|Associate)?\s*(?:Software|Engineer|Developer|Manager|Director|Analyst|Consultant)/i,
+    );
     if (nameWithJobMatch && !excludedNames.test(nameWithJobMatch[1].split(/\s+/)[0])) {
       const parts = nameWithJobMatch[1].trim().split(/\s+/);
       foundName = { firstName: parts[0], lastName: parts.slice(1).join(" ") };
       console.log("Found name via job title pattern:", foundName);
     }
-    
+
     // Pattern 2: Look for "# Name" pattern
     if (!foundName) {
       const hashNameMatch = textToSearch.match(/#\s*([A-Z][a-z]+\s+[A-Z][a-z]+)/);
@@ -950,20 +973,25 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
         console.log("Found name via # pattern:", foundName);
       }
     }
-    
+
     // Pattern 3: Name followed by location pattern (City, State, Country)
     if (!foundName) {
-      const nameWithLocationMatch = textToSearch.match(/([A-Z][a-z]+\s+[A-Z][a-z]+)\s+[A-Z][a-z]+(?:,\s*[A-Z][a-z]+)*,\s*(?:California|United States|New York|Texas|Washington)/i);
+      const nameWithLocationMatch = textToSearch.match(
+        /([A-Z][a-z]+\s+[A-Z][a-z]+)\s+[A-Z][a-z]+(?:,\s*[A-Z][a-z]+)*,\s*(?:California|United States|New York|Texas|Washington)/i,
+      );
       if (nameWithLocationMatch && !excludedNames.test(nameWithLocationMatch[1].split(/\s+/)[0])) {
         const parts = nameWithLocationMatch[1].trim().split(/\s+/);
         foundName = { firstName: parts[0], lastName: parts.slice(1).join(" ") };
         console.log("Found name via location pattern:", foundName);
       }
     }
-    
+
     // Pattern 4: Look for name after Honors-Awards section using structured text
     if (!foundName) {
-      const lines = fullText.split(/\n/).map(l => l.trim()).filter(l => l.length > 0);
+      const lines = fullText
+        .split(/\n/)
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0);
       let foundHonors = false;
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
@@ -979,7 +1007,7 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
             console.log("Found name after Honors section:", foundName);
             break;
           }
-          // Also look for lines starting with # 
+          // Also look for lines starting with #
           const hashMatch = line.match(/^#\s*([A-Z][a-z]+)\s+([A-Z][a-z]+)/);
           if (hashMatch && !excludedNames.test(hashMatch[1])) {
             foundName = { firstName: hashMatch[1], lastName: hashMatch[2] };
@@ -989,22 +1017,25 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
         }
       }
     }
-    
+
     // Pattern 5: Extract from email address as last resort (e.g., adrian.the.hactus@gmail.com → Adrian)
     const emailForName = textToSearch.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
     if (!foundName && emailForName) {
       const emailParts = emailForName[1].split("@")[0].split(/[._]/);
       if (emailParts.length >= 1 && emailParts[0].length > 2) {
-        const firstName = emailParts[0].charAt(0).toUpperCase() + emailParts[0].slice(1).toLowerCase();
+        const firstName =
+          emailParts[0].charAt(0).toUpperCase() + emailParts[0].slice(1).toLowerCase();
         // Try to find a matching name in the text
-        const emailNameMatch = textToSearch.match(new RegExp(`(${firstName})\\s+([A-Z][a-z]+)`, "i"));
+        const emailNameMatch = textToSearch.match(
+          new RegExp(`(${firstName})\\s+([A-Z][a-z]+)`, "i"),
+        );
         if (emailNameMatch) {
           foundName = { firstName: emailNameMatch[1], lastName: emailNameMatch[2] };
           console.log("Found name via email pattern:", foundName);
         }
       }
     }
-    
+
     if (foundName) {
       parsedData.profile = {
         "First Name": foundName.firstName,
@@ -1018,7 +1049,9 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
 
     // Extract location (usually "City, State, Country" pattern)
     // Be specific about city names to avoid capturing other text like "Data Viz"
-    const locationMatch = textToSearch.match(/\b((?:San Jose|San Francisco|Los Angeles|New York|Seattle|Austin|Boston|Chicago|Denver|Portland|Miami|Atlanta|Dallas|Houston|Phoenix|San Diego|Sacramento|Oakland|Palo Alto|Mountain View|Sunnyvale|Cupertino|Menlo Park|Redwood City|Santa Clara|Fremont|[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s*,\s*(?:California|CA|New York|NY|Texas|TX|Washington|WA|Colorado|CO|Oregon|OR|Florida|FL|Georgia|GA|Massachusetts|MA|Illinois|IL|Arizona|AZ|[A-Z][a-z]+)\s*,\s*(?:United States|USA|US))/i);
+    const locationMatch = textToSearch.match(
+      /\b((?:San Jose|San Francisco|Los Angeles|New York|Seattle|Austin|Boston|Chicago|Denver|Portland|Miami|Atlanta|Dallas|Houston|Phoenix|San Diego|Sacramento|Oakland|Palo Alto|Mountain View|Sunnyvale|Cupertino|Menlo Park|Redwood City|Santa Clara|Fremont|[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s*,\s*(?:California|CA|New York|NY|Texas|TX|Washington|WA|Colorado|CO|Oregon|OR|Florida|FL|Georgia|GA|Massachusetts|MA|Illinois|IL|Arizona|AZ|[A-Z][a-z]+)\s*,\s*(?:United States|USA|US))/i,
+    );
     if (locationMatch) {
       parsedData.profile = {
         ...parsedData.profile,
@@ -1028,33 +1061,42 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
     }
 
     // Extract email from Contact section
-    const extractedEmailMatch = textToSearch.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+    const extractedEmailMatch = textToSearch.match(
+      /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/,
+    );
     if (extractedEmailMatch) {
-      parsedData.emails = [{ "Email Address": extractedEmailMatch[1], Confirmed: "Yes", Primary: "Yes" }];
+      parsedData.emails = [
+        { "Email Address": extractedEmailMatch[1], Confirmed: "Yes", Primary: "Yes" },
+      ];
       console.log("Email:", extractedEmailMatch[1]);
     }
 
     // Extract headline/title - text after name, before location
     // Pattern: "Adrian Darian Sr Software Development Engineer @ Roche | Associate Distinguished Engineer..."
     let headline = "";
-    
+
     // Try to find headline after name pattern
     if (foundName) {
-      const namePattern = new RegExp(`${foundName.firstName}\\s+${foundName.lastName}\\s+(.+?)(?=San Jose|California|United States|#\\s*Summary|Summary)`, "is");
+      const namePattern = new RegExp(
+        `${foundName.firstName}\\s+${foundName.lastName}\\s+(.+?)(?=San Jose|California|United States|#\\s*Summary|Summary)`,
+        "is",
+      );
       const headlineMatch = textToSearch.match(namePattern);
       if (headlineMatch) {
         headline = headlineMatch[1].trim().replace(/\s+/g, " ");
       }
     }
-    
+
     // Fallback: look for job title patterns
     if (!headline) {
-      const titleMatch = textToSearch.match(/(?:Sr\.?|Senior|Jr\.?|Junior|Lead|Staff|Principal|Associate)\s+(?:Software\s+)?(?:Development\s+)?Engineer[^.]*?(?:@|\|)[^#]*/i);
+      const titleMatch = textToSearch.match(
+        /(?:Sr\.?|Senior|Jr\.?|Junior|Lead|Staff|Principal|Associate)\s+(?:Software\s+)?(?:Development\s+)?Engineer[^.]*?(?:@|\|)[^#]*/i,
+      );
       if (titleMatch) {
         headline = titleMatch[0].trim().replace(/\s+/g, " ");
       }
     }
-    
+
     if (headline) {
       parsedData.profile = {
         ...parsedData.profile,
@@ -1064,7 +1106,9 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
     }
 
     // Extract summary - look for text after "# Summary" or "Summary"
-    const summaryMatch = textToSearch.match(/#?\s*Summary\s+(.+?)(?=#\s*Experience|\bExperience\b\s+[A-Z])/is);
+    const summaryMatch = textToSearch.match(
+      /#?\s*Summary\s+(.+?)(?=#\s*Experience|\bExperience\b\s+[A-Z])/is,
+    );
     if (summaryMatch) {
       const summary = summaryMatch[1].trim().replace(/\s+/g, " ").substring(0, 2000);
       parsedData.profile = {
@@ -1088,26 +1132,26 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
 
     // Parse languages
     parsedData.languages = parseLinkedInPDFLanguages(textToSearch);
-    
+
     // Extract URLs/Links - only LinkedIn and GitHub which are standard profile links
     // LinkedIn PDFs may contain many URLs from certifications, courses, etc. - we only want profile links
     const extractedUrls: string[] = [];
-    
+
     // LinkedIn URL - this is the profile URL
     const linkedinMatch = textToSearch.match(/(?:www\.)?linkedin\.com\/in\/([a-zA-Z0-9_-]+)/i);
     if (linkedinMatch) {
       extractedUrls.push(`https://www.linkedin.com/in/${linkedinMatch[1]}`);
     }
-    
+
     // GitHub URL - commonly included in LinkedIn profiles
     const githubMatch = textToSearch.match(/(?:www\.)?github\.com\/([a-zA-Z0-9_-]+)/i);
     if (githubMatch) {
       extractedUrls.push(`https://github.com/${githubMatch[1]}`);
     }
-    
+
     // Note: We intentionally don't extract other URLs as they're typically from
     // certification platforms, courses, or other non-profile content
-    
+
     // Add URLs to profile Websites field
     if (extractedUrls.length > 0) {
       parsedData.profile = {
@@ -1116,7 +1160,7 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
       };
       console.log("Links extracted:", extractedUrls);
     }
-    
+
     // Debug logging
     console.log("LinkedIn PDF parsed:", {
       name: `${parsedData.profile?.["First Name"]} ${parsedData.profile?.["Last Name"]}`,
@@ -1187,54 +1231,64 @@ export async function parseLinkedInPDF(file: File): Promise<LinkedInParseResult>
  * Location - optional
  * Description
  */
-function parseLinkedInPDFExperience(flatText: string, structuredText: string): LinkedInPositionRow[] {
+function parseLinkedInPDFExperience(
+  flatText: string,
+  structuredText: string,
+): LinkedInPositionRow[] {
   const positions: LinkedInPositionRow[] = [];
-  
+
   // Use structured text (with line breaks) for better parsing
   const textToUse = structuredText || flatText;
-  
+
   // Find the Experience section
   const experienceStart = textToUse.search(/#?\s*Experience\b/i);
   if (experienceStart === -1) {
     console.log("No Experience section found");
     return positions;
   }
-  
+
   // Find where Experience section ends (Education section)
   const experienceText = textToUse.substring(experienceStart);
   const educationMatch = experienceText.search(/\bEducation\s*\n/i);
-  const expSection = educationMatch > 0 ? experienceText.substring(0, educationMatch) : experienceText;
-  
+  const expSection =
+    educationMatch > 0 ? experienceText.substring(0, educationMatch) : experienceText;
+
   console.log("Experience section found, length:", expSection.length);
-  
+
   // Split into lines for structured parsing
-  const lines = expSection.split(/\n/).map(l => l.trim()).filter(l => l.length > 0);
-  
+  const lines = expSection
+    .split(/\n/)
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0);
+
   // Date range pattern
-  const datePattern = /^((?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4})\s*[-–]\s*((?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}|Present)/i;
-  
+  const datePattern =
+    /^((?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4})\s*[-–]\s*((?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}|Present)/i;
+
   // Duration pattern (e.g., "4 years 10 months")
   const durationPattern = /^\d+\s+(?:years?|months?)(?:\s+\d+\s+(?:years?|months?))?$/i;
-  
+
   // Job title keywords
-  const titleKeywords = /(?:Engineer|Developer|Manager|Director|Intern|Analyst|Designer|Architect|Consultant|Specialist|Officer|Assistant|Coordinator|President|VP|Executive|Research)/i;
-  
+  const titleKeywords =
+    /(?:Engineer|Developer|Manager|Director|Intern|Analyst|Designer|Architect|Consultant|Specialist|Officer|Assistant|Coordinator|President|VP|Executive|Research)/i;
+
   // Location pattern
-  const locationPattern = /^[A-Z][a-zA-Z\s]+,\s*(?:[A-Z]{2}|[A-Z][a-zA-Z\s]+)(?:,\s*[A-Z][a-zA-Z\s]+)?$/;
-  
+  const locationPattern =
+    /^[A-Z][a-zA-Z\s]+,\s*(?:[A-Z]{2}|[A-Z][a-zA-Z\s]+)(?:,\s*[A-Z][a-zA-Z\s]+)?$/;
+
   let currentCompany = "";
   let currentTitle = "";
   let currentStartDate = "";
   let currentEndDate = "";
   let currentDescription = "";
   let lastLineWasDate = false;
-  
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    
+
     // Skip page markers and section headers
     if (line.match(/^Page\s+\d+|^#|^Experience$|^---/i)) continue;
-    
+
     // Check if this is a date range line
     const dateMatch = line.match(datePattern);
     if (dateMatch) {
@@ -1249,36 +1303,43 @@ function parseLinkedInPDFExperience(flatText: string, structuredText: string): L
         });
         currentDescription = "";
       }
-      
+
       currentStartDate = dateMatch[1];
       currentEndDate = dateMatch[2] === "Present" ? "" : dateMatch[2];
       lastLineWasDate = true;
       continue;
     }
-    
+
     // Check if this is a duration line (indicates new company)
     if (durationPattern.test(line)) {
       // The previous line was likely the company name
       if (i > 0) {
         const prevLine = lines[i - 1];
-        if (!prevLine.match(/^Page|^#|^Experience$|^---/i) && !datePattern.test(prevLine) && !durationPattern.test(prevLine)) {
+        if (
+          !prevLine.match(/^Page|^#|^Experience$|^---/i) &&
+          !datePattern.test(prevLine) &&
+          !durationPattern.test(prevLine)
+        ) {
           currentCompany = prevLine;
         }
       }
       continue;
     }
-    
+
     // Check if this is a job title
     if (titleKeywords.test(line) && !locationPattern.test(line) && line.length < 80) {
       // Check if the previous line (ignoring duration) might be a company
       for (let j = i - 1; j >= 0 && j >= i - 3; j--) {
         const prevLine = lines[j];
-        if (!prevLine.match(/^Page|^#|^Experience$|^---/i) && 
-            !datePattern.test(prevLine) && 
-            !durationPattern.test(prevLine) &&
-            !titleKeywords.test(prevLine) &&
-            !locationPattern.test(prevLine) &&
-            prevLine.length > 2 && prevLine.length < 80) {
+        if (
+          !prevLine.match(/^Page|^#|^Experience$|^---/i) &&
+          !datePattern.test(prevLine) &&
+          !durationPattern.test(prevLine) &&
+          !titleKeywords.test(prevLine) &&
+          !locationPattern.test(prevLine) &&
+          prevLine.length > 2 &&
+          prevLine.length < 80
+        ) {
           currentCompany = prevLine;
           break;
         }
@@ -1286,26 +1347,31 @@ function parseLinkedInPDFExperience(flatText: string, structuredText: string): L
       currentTitle = line;
       continue;
     }
-    
+
     // Check if this is a location line (after date)
     if (lastLineWasDate && locationPattern.test(line)) {
       lastLineWasDate = false;
       continue;
     }
-    
+
     // If we have a title and company, this might be description
-    if (currentTitle && currentCompany && line.length > 20 && 
-        !durationPattern.test(line) && !locationPattern.test(line)) {
+    if (
+      currentTitle &&
+      currentCompany &&
+      line.length > 20 &&
+      !durationPattern.test(line) &&
+      !locationPattern.test(line)
+    ) {
       if (currentDescription) {
         currentDescription += " " + line;
       } else {
         currentDescription = line;
       }
     }
-    
+
     lastLineWasDate = false;
   }
-  
+
   // Don't forget the last position
   if (currentCompany && currentTitle) {
     positions.push({
@@ -1316,36 +1382,42 @@ function parseLinkedInPDFExperience(flatText: string, structuredText: string): L
       Description: currentDescription.trim(),
     });
   }
-  
+
   // If structured parsing didn't work well, try regex on flat text
   if (positions.length < 3) {
     console.log("Falling back to regex parsing, found only:", positions.length);
-    
+
     // Pattern: Title followed by date range
-    const posPattern = /((?:Senior\s+|Sr\.?\s+|Jr\.?\s+|Junior\s+|Lead\s+|Principal\s+|Staff\s+|Associate\s+|Full Stack\s+|Executive\s+|Project\s+|Undergraduate\s+Research\s+|Web\s+)?[A-Za-z\s]+(?:Engineer|Developer|Manager|Director|Intern|Analyst|Designer|Architect|Consultant|Specialist|Officer|Assistant|Coordinator))\s+((?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4})\s*[-–]\s*((?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}|Present)/gi;
-    
+    const posPattern =
+      /((?:Senior\s+|Sr\.?\s+|Jr\.?\s+|Junior\s+|Lead\s+|Principal\s+|Staff\s+|Associate\s+|Full Stack\s+|Executive\s+|Project\s+|Undergraduate\s+Research\s+|Web\s+)?[A-Za-z\s]+(?:Engineer|Developer|Manager|Director|Intern|Analyst|Designer|Architect|Consultant|Specialist|Officer|Assistant|Coordinator))\s+((?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4})\s*[-–]\s*((?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}|Present)/gi;
+
     // Find all companies with duration
     const companyPattern = /([A-Z][A-Za-z\s&.,]+?)\s+(\d+\s+years?\s*(?:\d+\s+months?)?)/g;
     const companies: { name: string; index: number }[] = [];
-    
+
     let match;
     while ((match = companyPattern.exec(flatText)) !== null) {
       const name = match[1].trim();
-      if (name.length > 2 && name.length < 60 && 
-          !name.match(/^(Page|Contact|Top Skills|Languages|Certifications|Experience|Education|Summary|#)/i)) {
+      if (
+        name.length > 2 &&
+        name.length < 60 &&
+        !name.match(
+          /^(Page|Contact|Top Skills|Languages|Certifications|Experience|Education|Summary|#)/i,
+        )
+      ) {
         companies.push({ name, index: match.index });
       }
     }
-    
+
     positions.length = 0; // Clear and re-parse
-    
+
     while ((match = posPattern.exec(flatText)) !== null) {
       const title = match[1].trim();
       const startDate = match[2];
       const endDate = match[3] === "Present" ? "" : match[3];
-      
+
       if (title.match(/^(Experience|Education|Skills|Contact|Summary|Page)/i)) continue;
-      
+
       // Find the closest company before this position
       let company = "Unknown Company";
       for (const comp of companies) {
@@ -1353,7 +1425,7 @@ function parseLinkedInPDFExperience(flatText: string, structuredText: string): L
           company = comp.name;
         }
       }
-      
+
       positions.push({
         "Company Name": company,
         Title: title,
@@ -1363,7 +1435,7 @@ function parseLinkedInPDFExperience(flatText: string, structuredText: string): L
       });
     }
   }
-  
+
   console.log("Total positions found:", positions.length);
   return positions;
 }
@@ -1373,43 +1445,48 @@ function parseLinkedInPDFExperience(flatText: string, structuredText: string): L
  * LinkedIn PDF structure:
  * University of California, Merced
  * Bachelor's degree, Computer Science and Engineering · (2016 - 2021)
- * 
+ *
  * Rancho Bernardo High School
  * Diploma · (2012 - 2016)
  */
 function parseLinkedInPDFEducation(text: string): LinkedInEducationRow[] {
   const education: LinkedInEducationRow[] = [];
-  
+
   // Find Education section
   const eduStart = text.search(/\bEducation\s/i);
   if (eduStart === -1) return education;
-  
+
   const eduSection = text.substring(eduStart);
-  
+
   // Pattern for education with degree and dates
   // "University of California, Merced Bachelor's degree, Computer Science and Engineering · (2016 - 2021)"
   // or "Rancho Bernardo High School Diploma · (2012 - 2016)"
-  const eduPattern = /([A-Z][A-Za-z\s,]+(?:University|College|School|Institute|Academy|High School)[A-Za-z\s,]*?)\s+(Bachelor'?s?\s*degree|Master'?s?\s*degree|PhD|Doctorate|Associate'?s?\s*degree|Diploma|Certificate|B\.?S\.?|M\.?S\.?|B\.?A\.?|M\.?A\.?)?\s*,?\s*([A-Za-z\s&,]+?)?\s*·?\s*\(?\s*(\d{4})\s*[-–]\s*(\d{4})\s*\)?/gi;
-  
+  const eduPattern =
+    /([A-Z][A-Za-z\s,]+(?:University|College|School|Institute|Academy|High School)[A-Za-z\s,]*?)\s+(Bachelor'?s?\s*degree|Master'?s?\s*degree|PhD|Doctorate|Associate'?s?\s*degree|Diploma|Certificate|B\.?S\.?|M\.?S\.?|B\.?A\.?|M\.?A\.?)?\s*,?\s*([A-Za-z\s&,]+?)?\s*·?\s*\(?\s*(\d{4})\s*[-–]\s*(\d{4})\s*\)?/gi;
+
   let match;
   const foundSchools = new Set<string>();
-  
+
   while ((match = eduPattern.exec(eduSection)) !== null) {
     const school = match[1].trim();
     const degree = match[2]?.trim() || "";
     const field = match[3]?.trim() || "";
     const startYear = match[4] || "";
     const endYear = match[5] || "";
-    
+
     // Skip duplicates and invalid entries
-    if (school.length > 2 && !school.match(/^(Page|Contact|Experience)/i) && !foundSchools.has(school)) {
+    if (
+      school.length > 2 &&
+      !school.match(/^(Page|Contact|Experience)/i) &&
+      !foundSchools.has(school)
+    ) {
       foundSchools.add(school);
-      
+
       let degreeName = degree;
       if (field && !field.match(/^·|^\(/)) {
         degreeName = degree ? `${degree}, ${field}` : field;
       }
-      
+
       education.push({
         "School Name": school,
         "Degree Name": degreeName,
@@ -1418,7 +1495,7 @@ function parseLinkedInPDFEducation(text: string): LinkedInEducationRow[] {
       });
     }
   }
-  
+
   console.log("Found education entries:", education.length);
   return education;
 }
@@ -1433,40 +1510,45 @@ function parseLinkedInPDFEducation(text: string): LinkedInEducationRow[] {
  */
 function parseLinkedInPDFSkills(text: string): LinkedInSkillRow[] {
   const skills: LinkedInSkillRow[] = [];
-  
+
   // Find "Top Skills" section - it ends at Languages or Certifications or the name section
-  const skillsMatch = text.match(/Top Skills\s+(.+?)(?=\bLanguages\b|\bCertifications\b|\bHonors\b|#\s+[A-Z])/is);
+  const skillsMatch = text.match(
+    /Top Skills\s+(.+?)(?=\bLanguages\b|\bCertifications\b|\bHonors\b|#\s+[A-Z])/is,
+  );
   if (!skillsMatch) {
     console.log("No Top Skills section found");
     return skills;
   }
-  
+
   const skillsText = skillsMatch[1].trim();
   console.log("Skills text extracted:", JSON.stringify(skillsText));
-  
+
   // LinkedIn "Top Skills" section always has exactly 3 skills
   // Try to split by newlines first (if PDF preserved line breaks)
-  let skillList = skillsText.split(/\n/).map(s => s.trim()).filter(s => s.length > 1);
-  
+  let skillList = skillsText
+    .split(/\n/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 1);
+
   // If newlines didn't work (flat text like "Digital Pathology Automation Cross-platform Development")
   // We need to identify the 3 skill boundaries intelligently
   if (skillList.length <= 1 && skillsText.length > 0) {
     // Known skill patterns from your PDF:
     // 1. "Digital Pathology" - two words
-    // 2. "Automation" - single word  
+    // 2. "Automation" - single word
     // 3. "Cross-platform Development" - hyphenated + word
-    
+
     // Strategy: Find skills that match common patterns
     skillList = [];
     let remaining = skillsText;
-    
+
     // Pattern 1: Hyphenated compound skill (e.g., "Cross-platform Development")
     const hyphenatedMatch = remaining.match(/([A-Z][a-z]+-[a-z]+\s+[A-Z][a-z]+)/);
     if (hyphenatedMatch) {
       skillList.push(hyphenatedMatch[1]);
       remaining = remaining.replace(hyphenatedMatch[1], " ").trim();
     }
-    
+
     // Pattern 2: Two-word skills (e.g., "Digital Pathology")
     const twoWordMatches = remaining.match(/([A-Z][a-z]+\s+[A-Z][a-z]+)/g);
     if (twoWordMatches) {
@@ -1477,30 +1559,34 @@ function parseLinkedInPDFSkills(text: string): LinkedInSkillRow[] {
         }
       }
     }
-    
+
     // Pattern 3: Single-word skills (e.g., "Automation")
     const singleWordMatches = remaining.match(/\b([A-Z][a-z]{3,})\b/g);
     if (singleWordMatches) {
       for (const match of singleWordMatches) {
-        if (skillList.length < 3 && !skillList.some(s => s.includes(match))) {
+        if (skillList.length < 3 && !skillList.some((s) => s.includes(match))) {
           skillList.push(match);
         }
       }
     }
   }
-  
+
   // Exclude section headers and non-skill terms
-  const excludePatterns = /^(Page|Contact|Top|Skills|\d+|Languages|Certifications|Honors|Awards|Summary|Experience|Education|#)$/i;
-  
+  const excludePatterns =
+    /^(Page|Contact|Top|Skills|\d+|Languages|Certifications|Honors|Awards|Summary|Experience|Education|#)$/i;
+
   for (const skill of skillList) {
     const cleanSkill = skill.trim();
-    if (cleanSkill.length > 2 && cleanSkill.length < 60 && 
-        !excludePatterns.test(cleanSkill)) {
+    if (cleanSkill.length > 2 && cleanSkill.length < 60 && !excludePatterns.test(cleanSkill)) {
       skills.push({ Name: cleanSkill });
     }
   }
-  
-  console.log("Found skills:", skills.length, skills.map(s => s.Name));
+
+  console.log(
+    "Found skills:",
+    skills.length,
+    skills.map((s) => s.Name),
+  );
   return skills;
 }
 
@@ -1516,28 +1602,33 @@ function parseLinkedInPDFSkills(text: string): LinkedInSkillRow[] {
  */
 function parseLinkedInPDFCertifications(text: string): LinkedInCertificationRow[] {
   const certifications: LinkedInCertificationRow[] = [];
-  
+
   // Find Certifications section - ends at Honors-Awards or the name section
   const certsMatch = text.match(/\bCertifications\s+(.+?)(?=\bHonors|\bAwards|#\s+[A-Z])/is);
   if (!certsMatch) {
     console.log("No Certifications section found");
     return certifications;
   }
-  
+
   const certsText = certsMatch[1].trim();
   console.log("Certifications text extracted:", JSON.stringify(certsText));
-  
+
   // Try splitting by newlines first (if PDF preserved line breaks)
-  let certList = certsText.split(/\n/).map(s => s.trim()).filter(s => s.length > 3);
-  
+  let certList = certsText
+    .split(/\n/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 3);
+
   // If no newlines (flat text), split at course boundaries
   // Example: "Go Essential Training Learning Data Science: Using Agile Methodology Learning Node.js Node.js: Microservices React: Building Large Apps"
   if (certList.length <= 1 && certsText.length > 0) {
     // Split at boundaries where a new course starts
     // Courses start with: "Learning ", "Go ", "Node.js:", "React:", or other tech names
     // Use lookahead to split but keep the delimiter
-    const parts = certsText.split(/(?=Learning\s)|(?=(?:Node\.js|React|Vue|Angular|TypeScript|JavaScript|Python|Java|Ruby|Swift|Kotlin|Go|AWS|Azure|Docker|Kubernetes)(?::|:\s))/i);
-    
+    const parts = certsText.split(
+      /(?=Learning\s)|(?=(?:Node\.js|React|Vue|Angular|TypeScript|JavaScript|Python|Java|Ruby|Swift|Kotlin|Go|AWS|Azure|Docker|Kubernetes)(?::|:\s))/i,
+    );
+
     certList = [];
     for (const part of parts) {
       const trimmed = part.trim();
@@ -1545,13 +1636,16 @@ function parseLinkedInPDFCertifications(text: string): LinkedInCertificationRow[
         certList.push(trimmed);
       }
     }
-    
+
     console.log("Certifications after split:", certList);
   }
-  
+
   for (const cert of certList) {
-    if (cert.length > 3 && cert.length < 100 && 
-        !cert.match(/^(Page|Contact|\d+|Honors|Awards|#)/i)) {
+    if (
+      cert.length > 3 &&
+      cert.length < 100 &&
+      !cert.match(/^(Page|Contact|\d+|Honors|Awards|#)/i)
+    ) {
       certifications.push({
         Name: cert,
         Authority: "LinkedIn Learning",
@@ -1559,8 +1653,12 @@ function parseLinkedInPDFCertifications(text: string): LinkedInCertificationRow[
       });
     }
   }
-  
-  console.log("Found certifications:", certifications.length, certifications.map(c => c.Name));
+
+  console.log(
+    "Found certifications:",
+    certifications.length,
+    certifications.map((c) => c.Name),
+  );
   return certifications;
 }
 
@@ -1574,24 +1672,24 @@ function parseLinkedInPDFCertifications(text: string): LinkedInCertificationRow[
  */
 function parseLinkedInPDFLanguages(text: string): LinkedInLanguageRow[] {
   const languages: LinkedInLanguageRow[] = [];
-  
+
   // Find Languages section - ends at Certifications
   const langMatch = text.match(/\bLanguages\s+(.+?)(?=\bCertifications\b)/is);
   if (!langMatch) {
     console.log("No Languages section found");
     return languages;
   }
-  
+
   const langText = langMatch[1].trim();
-  
+
   // Pattern: "Language (Proficiency)" - e.g., "German (Limited Working)"
   const langPattern = /([A-Z][a-z]+)\s*\(([^)]+)\)/g;
   let match;
-  
+
   while ((match = langPattern.exec(langText)) !== null) {
     const lang = match[1].trim();
     const prof = match[2]?.trim() || "";
-    
+
     if (lang.length > 2 && !lang.match(/^(Page|Contact|Certifications|Honors)/i)) {
       languages.push({
         Name: lang,
@@ -1599,10 +1697,13 @@ function parseLinkedInPDFLanguages(text: string): LinkedInLanguageRow[] {
       });
     }
   }
-  
+
   // If no matches with proficiency, try splitting by newlines
   if (languages.length === 0) {
-    const langList = langText.split(/\n/).map(s => s.trim()).filter(s => s.length > 2);
+    const langList = langText
+      .split(/\n/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 2);
     for (const lang of langList) {
       if (!lang.match(/^(Page|Contact|Certifications|Honors|\()/i)) {
         languages.push({
@@ -1612,9 +1713,11 @@ function parseLinkedInPDFLanguages(text: string): LinkedInLanguageRow[] {
       }
     }
   }
-  
-  console.log("Found languages:", languages.length, languages.map(l => l.Name));
+
+  console.log(
+    "Found languages:",
+    languages.length,
+    languages.map((l) => l.Name),
+  );
   return languages;
 }
-
-

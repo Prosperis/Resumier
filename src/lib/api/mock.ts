@@ -583,7 +583,7 @@ export const mockApi = {
 
       // Try to get known profile data first (for local development)
       const knownData = getKnownProfileData(profileUrl);
-      
+
       if (knownData) {
         console.log("[Mock API] Using known LinkedIn profile data for:", profileUrl);
         return knownData;

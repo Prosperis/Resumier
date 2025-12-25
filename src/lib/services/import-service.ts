@@ -182,7 +182,8 @@ export async function importFromLinkedIn(input?: string | File): Promise<ImportR
       if (!trimmedUrl.includes("linkedin.com")) {
         return {
           success: false,
-          error: "Please enter a valid LinkedIn profile URL (e.g., https://www.linkedin.com/in/username)",
+          error:
+            "Please enter a valid LinkedIn profile URL (e.g., https://www.linkedin.com/in/username)",
         };
       }
 
@@ -190,21 +191,23 @@ export async function importFromLinkedIn(input?: string | File): Promise<ImportR
       if (!trimmedUrl.includes("/in/") && !trimmedUrl.includes("/pub/")) {
         return {
           success: false,
-          error: "Invalid LinkedIn profile URL format. Expected: https://www.linkedin.com/in/username",
+          error:
+            "Invalid LinkedIn profile URL format. Expected: https://www.linkedin.com/in/username",
         };
       }
 
       // Call backend to scrape and import profile
       try {
-        const data = await apiClient.post<ResumeContent>("/api/linkedin/import", { 
-          profileUrl: trimmedUrl 
+        const data = await apiClient.post<ResumeContent>("/api/linkedin/import", {
+          profileUrl: trimmedUrl,
         });
 
         // Validate that we got some data
         if (!data || (!data.personalInfo && !data.experience?.length && !data.education?.length)) {
           return {
             success: false,
-            error: "No profile data could be extracted from this LinkedIn URL. The profile may be private or the URL may be invalid.",
+            error:
+              "No profile data could be extracted from this LinkedIn URL. The profile may be private or the URL may be invalid.",
           };
         }
 
@@ -215,22 +218,24 @@ export async function importFromLinkedIn(input?: string | File): Promise<ImportR
       } catch (err) {
         // Provide more helpful error messages
         let errorMessage = "Failed to import LinkedIn profile";
-        
+
         if (err instanceof Error) {
           errorMessage = err.message;
-          
+
           // Check for common error patterns
           if (err.message.includes("404") || err.message.includes("Not Found")) {
-            errorMessage = "LinkedIn profile not found. Please check the URL and ensure the profile exists.";
+            errorMessage =
+              "LinkedIn profile not found. Please check the URL and ensure the profile exists.";
           } else if (err.message.includes("403") || err.message.includes("Forbidden")) {
             errorMessage = "Access denied. The profile may be private or require authentication.";
           } else if (err.message.includes("401") || err.message.includes("Unauthorized")) {
-            errorMessage = "Authentication required. The profile may require you to be logged into LinkedIn.";
+            errorMessage =
+              "Authentication required. The profile may require you to be logged into LinkedIn.";
           } else if (err.message.includes("Network") || err.message.includes("fetch")) {
             errorMessage = "Network error. Please check your internet connection and try again.";
           }
         }
-        
+
         return {
           success: false,
           error: errorMessage,
