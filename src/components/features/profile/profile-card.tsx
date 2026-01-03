@@ -8,6 +8,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -50,53 +57,56 @@ export function ProfileCard({
   };
 
   return (
-    <Card className="group relative transition-shadow hover:shadow-md">
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-              <User className="h-5 w-5 text-primary" />
+    <ContextMenu>
+      <ContextMenuTrigger asChild>
+        <Card className="group relative transition-shadow hover:shadow-md cursor-context-menu">
+          <CardHeader className="pb-3">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  <User className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">{profile.name}</CardTitle>
+                  {profile.description && (
+                    <CardDescription className="line-clamp-1">{profile.description}</CardDescription>
+                  )}
+                </div>
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 opacity-0 transition-opacity group-hover:opacity-100"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <MoreHorizontal className="h-4 w-4" />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => onEdit?.(profile)}>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    Edit Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onCreateResume?.(profile)}>
+                    <FileText className="mr-2 h-4 w-4" />
+                    Create Resume from Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => onDelete?.(profile)}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
-            <div>
-              <CardTitle className="text-lg">{profile.name}</CardTitle>
-              {profile.description && (
-                <CardDescription className="line-clamp-1">{profile.description}</CardDescription>
-              )}
-            </div>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 opacity-0 transition-opacity group-hover:opacity-100"
-              >
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onEdit?.(profile)}>
-                <Pencil className="mr-2 h-4 w-4" />
-                Edit Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onCreateResume?.(profile)}>
-                <FileText className="mr-2 h-4 w-4" />
-                Create Resume from Profile
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => onDelete?.(profile)}
-                className="text-destructive focus:text-destructive"
-              >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-3">
+          </CardHeader>
+          <CardContent className="space-y-3">
         {/* Personal info preview */}
         {hasPersonalInfo && (
           <p className="text-sm text-muted-foreground">
@@ -150,5 +160,25 @@ export function ProfileCard({
         </div>
       </CardContent>
     </Card>
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem onClick={() => onEdit?.(profile)}>
+          <Pencil className="mr-2 h-4 w-4" />
+          Edit Profile
+        </ContextMenuItem>
+        <ContextMenuItem onClick={() => onCreateResume?.(profile)}>
+          <FileText className="mr-2 h-4 w-4" />
+          Create Resume from Profile
+        </ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem
+          onClick={() => onDelete?.(profile)}
+          className="text-destructive focus:text-destructive"
+        >
+          <Trash2 className="mr-2 h-4 w-4" />
+          Delete
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 }

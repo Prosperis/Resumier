@@ -13,7 +13,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUpdateProfile } from "@/hooks/api";
 import { useToast } from "@/hooks/use-toast";
-import type { Profile } from "@/lib/api/profile-types";
+import type { Profile, ProfileContent } from "@/lib/api/profile-types";
+import { ProfileContentBuilder } from "./profile-content-builder";
 
 interface ProfileEditorProps {
   profile: Profile;
@@ -24,9 +25,26 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
   const { toast } = useToast();
   const { mutate: updateProfile, isPending } = useUpdateProfile();
 
+  // Clean up description - remove any "imported from" or similar placeholder text
+  const cleanDescription = (desc: string | undefined): string => {
+    if (!desc) return "";
+    const lowerDesc = desc.toLowerCase();
+    // Filter out common placeholder patterns
+    if (
+      lowerDesc.includes("imported from") ||
+      lowerDesc.includes("imported via") ||
+      lowerDesc.includes("linkedin import") ||
+      lowerDesc.trim() === ""
+    ) {
+      return "";
+    }
+    return desc.trim();
+  };
+
   const [name, setName] = useState(profile.name);
-  const [description, setDescription] = useState(profile.description || "");
+  const [description, setDescription] = useState(cleanDescription(profile.description));
   const [activeTab, setActiveTab] = useState("details");
+  const [openSection, setOpenSection] = useState<string | null>("personal");
 
   const handleSaveDetails = () => {
     updateProfile(
@@ -55,11 +73,46 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
     );
   };
 
+  const handleToggleSection = (sectionId: string) => {
+    setOpenSection(openSection === sectionId ? null : sectionId);
+  };
+
+  // Ensure profile.content exists with proper structure
+  // Initialize with empty structure if content is missing or incomplete
+  const defaultContent: ProfileContent = {
+    personalInfo: {
+      firstName: "",
+      lastName: "",
+      nameOrder: "firstLast" as const,
+      email: "",
+      phone: "",
+      location: "",
+      summary: "",
+    },
+    experience: [],
+    education: [],
+    skills: { technical: [], languages: [], tools: [], soft: [] },
+    certifications: [],
+    links: [],
+  };
+
+  // Ensure we have a valid content structure
+  // Handle cases where content might be undefined or incomplete
+  const profileContent: ProfileContent = (profile.content && 
+    profile.content.personalInfo &&
+    Array.isArray(profile.content.experience) &&
+    Array.isArray(profile.content.education) &&
+    Array.isArray(profile.content.certifications) &&
+    Array.isArray(profile.content.links) &&
+    profile.content.skills)
+    ? profile.content
+    : defaultContent;
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex h-full flex-col overflow-hidden bg-background">
       {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur sticky top-0 z-10">
-        <div className="container flex h-14 items-center gap-4">
+      <div className="flex-shrink-0 border-b bg-background/95 backdrop-blur">
+        <div className="flex h-14 items-center gap-4 px-4 sm:px-6 lg:px-8">
           <Button variant="ghost" size="sm" onClick={onBack} className="gap-2">
             <ArrowLeft className="h-4 w-4" />
             Back to Dashboard
@@ -76,87 +129,109 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
         </div>
       </div>
 
-      {/* Main content */}
-      <div className="container py-6">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="mb-6">
-            <TabsTrigger value="details">Profile Details</TabsTrigger>
-            <TabsTrigger value="content">Content</TabsTrigger>
-          </TabsList>
+      {/* Main Content Area */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left Sidebar - Fixed, never scrolls */}
+        <div className="w-64 flex-shrink-0 border-r bg-muted/30 p-4 overflow-y-auto">
+          {/* Tabs */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
+            <TabsList className="w-full">
+              <TabsTrigger value="details" className="flex-1">Details</TabsTrigger>
+              <TabsTrigger value="content" className="flex-1">Content</TabsTrigger>
+            </TabsList>
+          </Tabs>
 
+          {/* Section Navigation - Only show when content tab is active */}
+          {activeTab === "content" && (
+            <nav className="space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 px-3">
+                Sections
+              </p>
+              {[
+                { id: "personal", label: "Personal Information", icon: "👤" },
+                { id: "experience", label: "Work Experience", icon: "💼" },
+                { id: "education", label: "Education", icon: "🎓" },
+                { id: "skills", label: "Skills", icon: "🛠️" },
+                { id: "certifications", label: "Certifications", icon: "🏆" },
+                { id: "links", label: "Links", icon: "🔗" },
+              ].map((section) => (
+                <button
+                  key={section.id}
+                  type="button"
+                  onClick={() => handleToggleSection(section.id)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-colors ${
+                    openSection === section.id
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                >
+                  <span className="text-base">{section.icon}</span>
+                  <span>{section.label}</span>
+                </button>
+              ))}
+            </nav>
+          )}
+        </div>
+
+        {/* Right Content Area - Scrollable */}
+        <div className="flex-1 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] p-6">
           {/* Profile Details Tab */}
-          <TabsContent value="details">
-            <Card className="max-w-2xl">
-              <CardHeader>
-                <CardTitle>Profile Details</CardTitle>
-                <CardDescription>
-                  Basic information about this profile. This helps you organize multiple profiles
-                  for different roles.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="profile-name">Profile Name</Label>
-                  <Input
-                    id="profile-name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g., Software Engineer, Product Manager"
-                  />
-                  <p className="text-xs text-muted-foreground">A name to identify this profile</p>
-                </div>
+          {activeTab === "details" && (
+            <div className="max-w-2xl">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Profile Details</CardTitle>
+                  <CardDescription>
+                    Basic information about this profile. This helps you organize multiple profiles
+                    for different roles.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="profile-name">Profile Name</Label>
+                    <Input
+                      id="profile-name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="e.g., Software Engineer, Product Manager"
+                    />
+                    <p className="text-xs text-muted-foreground">A name to identify this profile</p>
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="profile-description">Description</Label>
-                  <Textarea
-                    id="profile-description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="What is this profile for?"
-                    rows={3}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Optional description to help you remember what this profile is used for
-                  </p>
-                </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="profile-description">Description</Label>
+                    <Textarea
+                      id="profile-description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="e.g., Software Engineer profile for tech roles, Product Manager profile for PM positions"
+                      rows={3}
+                      className="resize-none"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Optional description to help you remember what this profile is used for. This helps organize multiple profiles for different roles or purposes.
+                    </p>
+                  </div>
 
-                <Button onClick={handleSaveDetails} disabled={isPending || !name.trim()}>
-                  <Save className="mr-2 h-4 w-4" />
-                  {isPending ? "Saving..." : "Save Details"}
-                </Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                  <Button onClick={handleSaveDetails} disabled={isPending || !name.trim()}>
+                    <Save className="mr-2 h-4 w-4" />
+                    {isPending ? "Saving..." : "Save Details"}
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
           {/* Content Tab */}
-          <TabsContent value="content">
-            <Card>
-              <CardHeader>
-                <CardTitle>Profile Content</CardTitle>
-                <CardDescription>
-                  Add your professional information here. This content will be available when
-                  creating resumes from this profile.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Note: Profile content editing uses the same interface as resume editing. Changes
-                  are saved to the profile and will be available for all resumes created from this
-                  profile.
-                </p>
-                <div className="border rounded-lg p-4 bg-muted/30">
-                  <p className="text-center text-muted-foreground">
-                    Profile content editor coming soon...
-                  </p>
-                  <p className="text-center text-xs text-muted-foreground mt-2">
-                    For now, create a resume from this profile to add content, then the content will
-                    be saved here.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+          {activeTab === "content" && (
+            <ProfileContentBuilder
+              profileId={profile.id}
+              content={profileContent}
+              openSection={openSection}
+              onToggleSection={handleToggleSection}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

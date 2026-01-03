@@ -183,7 +183,7 @@ export function ImportProfileDialog({ trigger, onSuccess }: ImportProfileDialogP
     createProfile(
       {
         name: profileName.trim(),
-        description: "Imported from LinkedIn",
+        description: undefined, // Let user add their own description
         content: profileContent,
       },
       {
