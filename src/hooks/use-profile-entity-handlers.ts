@@ -140,4 +140,3 @@ export function useProfileEntityHandlers<T extends EntityWithId>({
     handleReorder,
   };
 }
-

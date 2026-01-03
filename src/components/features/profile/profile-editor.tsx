@@ -98,15 +98,16 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
 
   // Ensure we have a valid content structure
   // Handle cases where content might be undefined or incomplete
-  const profileContent: ProfileContent = (profile.content && 
+  const profileContent: ProfileContent =
+    profile.content &&
     profile.content.personalInfo &&
     Array.isArray(profile.content.experience) &&
     Array.isArray(profile.content.education) &&
     Array.isArray(profile.content.certifications) &&
     Array.isArray(profile.content.links) &&
-    profile.content.skills)
-    ? profile.content
-    : defaultContent;
+    profile.content.skills
+      ? profile.content
+      : defaultContent;
 
   return (
     <div className="flex h-full flex-col overflow-hidden bg-background">
@@ -136,8 +137,12 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
             <TabsList className="w-full">
-              <TabsTrigger value="details" className="flex-1">Details</TabsTrigger>
-              <TabsTrigger value="content" className="flex-1">Content</TabsTrigger>
+              <TabsTrigger value="details" className="flex-1">
+                Details
+              </TabsTrigger>
+              <TabsTrigger value="content" className="flex-1">
+                Content
+              </TabsTrigger>
             </TabsList>
           </Tabs>
 
@@ -209,7 +214,8 @@ export function ProfileEditor({ profile, onBack }: ProfileEditorProps) {
                       className="resize-none"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Optional description to help you remember what this profile is used for. This helps organize multiple profiles for different roles or purposes.
+                      Optional description to help you remember what this profile is used for. This
+                      helps organize multiple profiles for different roles or purposes.
                     </p>
                   </div>
 

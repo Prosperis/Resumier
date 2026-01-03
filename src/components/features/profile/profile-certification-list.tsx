@@ -19,4 +19,3 @@ interface ProfileCertificationListProps {
 export function ProfileCertificationList(props: ProfileCertificationListProps) {
   return <CertificationList {...props} resumeId={props.profileId} />;
 }
-

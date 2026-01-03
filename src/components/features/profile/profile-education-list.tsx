@@ -19,4 +19,3 @@ interface ProfileEducationListProps {
 export function ProfileEducationList(props: ProfileEducationListProps) {
   return <EducationList {...props} resumeId={props.profileId} />;
 }
-

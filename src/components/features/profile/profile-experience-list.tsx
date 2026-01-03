@@ -28,4 +28,3 @@ export function ProfileExperienceList(props: ProfileExperienceListProps) {
   // TODO: Create ProfileExperienceInlineForm that uses useUpdateProfile
   return <ExperienceList {...props} resumeId={props.profileId} />;
 }
-

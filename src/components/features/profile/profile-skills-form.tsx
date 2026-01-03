@@ -13,4 +13,3 @@ interface ProfileSkillsFormProps {
 export function ProfileSkillsForm(props: ProfileSkillsFormProps) {
   return <SkillsForm {...props} resumeId={props.profileId} />;
 }
-

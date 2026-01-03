@@ -69,7 +69,9 @@ export function ProfileCard({
                 <div>
                   <CardTitle className="text-lg">{profile.name}</CardTitle>
                   {profile.description && (
-                    <CardDescription className="line-clamp-1">{profile.description}</CardDescription>
+                    <CardDescription className="line-clamp-1">
+                      {profile.description}
+                    </CardDescription>
                   )}
                 </div>
               </div>
@@ -107,59 +109,59 @@ export function ProfileCard({
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
-        {/* Personal info preview */}
-        {hasPersonalInfo && (
-          <p className="text-sm text-muted-foreground">
-            {content.personalInfo.firstName} {content.personalInfo.lastName}
-            {content.personalInfo.title && ` • ${content.personalInfo.title}`}
-          </p>
-        )}
+            {/* Personal info preview */}
+            {hasPersonalInfo && (
+              <p className="text-sm text-muted-foreground">
+                {content.personalInfo.firstName} {content.personalInfo.lastName}
+                {content.personalInfo.title && ` • ${content.personalInfo.title}`}
+              </p>
+            )}
 
-        {/* Content stats */}
-        <div className="flex flex-wrap gap-2">
-          {experienceCount > 0 && (
-            <Badge variant="secondary" className="text-xs">
-              {experienceCount} Experience{experienceCount !== 1 ? "s" : ""}
-            </Badge>
-          )}
-          {educationCount > 0 && (
-            <Badge variant="secondary" className="text-xs">
-              {educationCount} Education{educationCount !== 1 ? "s" : ""}
-            </Badge>
-          )}
-          {skillsCount > 0 && (
-            <Badge variant="secondary" className="text-xs">
-              {skillsCount} Skill{skillsCount !== 1 ? "s" : ""}
-            </Badge>
-          )}
-          {languagesCount > 0 && (
-            <Badge variant="secondary" className="text-xs">
-              {languagesCount} Language{languagesCount !== 1 ? "s" : ""}
-            </Badge>
-          )}
-          {certificationsCount > 0 && (
-            <Badge variant="secondary" className="text-xs">
-              {certificationsCount} Cert{certificationsCount !== 1 ? "s" : ""}
-            </Badge>
-          )}
-          {linksCount > 0 && (
-            <Badge variant="secondary" className="text-xs">
-              {linksCount} Link{linksCount !== 1 ? "s" : ""}
-            </Badge>
-          )}
-        </div>
+            {/* Content stats */}
+            <div className="flex flex-wrap gap-2">
+              {experienceCount > 0 && (
+                <Badge variant="secondary" className="text-xs">
+                  {experienceCount} Experience{experienceCount !== 1 ? "s" : ""}
+                </Badge>
+              )}
+              {educationCount > 0 && (
+                <Badge variant="secondary" className="text-xs">
+                  {educationCount} Education{educationCount !== 1 ? "s" : ""}
+                </Badge>
+              )}
+              {skillsCount > 0 && (
+                <Badge variant="secondary" className="text-xs">
+                  {skillsCount} Skill{skillsCount !== 1 ? "s" : ""}
+                </Badge>
+              )}
+              {languagesCount > 0 && (
+                <Badge variant="secondary" className="text-xs">
+                  {languagesCount} Language{languagesCount !== 1 ? "s" : ""}
+                </Badge>
+              )}
+              {certificationsCount > 0 && (
+                <Badge variant="secondary" className="text-xs">
+                  {certificationsCount} Cert{certificationsCount !== 1 ? "s" : ""}
+                </Badge>
+              )}
+              {linksCount > 0 && (
+                <Badge variant="secondary" className="text-xs">
+                  {linksCount} Link{linksCount !== 1 ? "s" : ""}
+                </Badge>
+              )}
+            </div>
 
-        {/* Footer info */}
-        <div className="flex items-center justify-between pt-2 text-xs text-muted-foreground">
-          <span>Updated {formatDate(profile.updatedAt)}</span>
-          {linkedResumesCount > 0 && (
-            <Badge variant="outline" className="text-xs">
-              {linkedResumesCount} Resume{linkedResumesCount !== 1 ? "s" : ""}
-            </Badge>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+            {/* Footer info */}
+            <div className="flex items-center justify-between pt-2 text-xs text-muted-foreground">
+              <span>Updated {formatDate(profile.updatedAt)}</span>
+              {linkedResumesCount > 0 && (
+                <Badge variant="outline" className="text-xs">
+                  {linkedResumesCount} Resume{linkedResumesCount !== 1 ? "s" : ""}
+                </Badge>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuItem onClick={() => onEdit?.(profile)}>

@@ -19,4 +19,3 @@ interface ProfileLinkListProps {
 export function ProfileLinkList(props: ProfileLinkListProps) {
   return <LinkList {...props} resumeId={props.profileId} />;
 }
-
