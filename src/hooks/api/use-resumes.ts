@@ -3,7 +3,7 @@ import { get, set } from "idb-keyval";
 import { apiClient } from "../../lib/api/client";
 import { getDemoResumes } from "../../lib/api/demo-data";
 import type { Resume } from "../../lib/api/types";
-import { selectIsDemo, selectIsGuest, useAuthStore } from "../../stores/auth-store";
+import { selectIsGuest, useAuthStore } from "../../stores/auth-store";
 
 const IDB_STORE_KEY = "resumier-web-store";
 
@@ -27,7 +27,6 @@ async function saveResumesToIDB(resumes: Resume[]): Promise<void> {
  */
 export function useResumes() {
   const isGuest = useAuthStore(selectIsGuest);
-  const isDemo = useAuthStore(selectIsDemo);
 
   return useQuery({
     queryKey: resumesQueryKey,
@@ -43,13 +42,23 @@ export function useResumes() {
             }
           }
 
-          // If in demo mode and no resumes exist, seed with demo data
-          if (isDemo) {
+          // Only seed demo resumes if explicitly in demo mode
+          // Don't auto-seed for regular guest mode (user chose "local storage only")
+          // Get the current auth state to ensure we're checking the latest value
+          // (not a stale persisted value from localStorage)
+          const currentAuthState = useAuthStore.getState();
+          const isCurrentlyDemo = currentAuthState.isDemo;
+          
+          // Only seed if we're explicitly in demo mode (not just guest mode)
+          if (isCurrentlyDemo) {
+            console.log("Seeding demo resumes for demo mode");
             const demoResumes = getDemoResumes();
             await saveResumesToIDB(demoResumes);
             return demoResumes;
           }
 
+          // Return empty array for guest mode (no auto-generation)
+          // User explicitly chose "local storage only" - don't auto-generate resumes
           return [] as Resume[];
         } catch (error) {
           console.error("Failed to fetch resumes from local storage:", error);

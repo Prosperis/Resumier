@@ -1,11 +1,23 @@
 import { createLazyFileRoute, useRouter } from "@tanstack/react-router";
-import { ArrowLeft, Cloud, Folder, LogOut, RotateCcw } from "lucide-react";
+import { ArrowLeft, Cloud, Folder, LogOut, RotateCcw, Trash2 } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
 import { useTheme } from "@/app/theme-provider";
+import { queryClient } from "@/app/query-client";
 import { DemoModeInfo } from "@/components/features/demo";
 import { FolderPickerDialog } from "@/components/features/cloud-storage/folder-picker-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -18,6 +30,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
+import { clearAllLocalStorage } from "@/lib/utils/guest-storage";
 import { useAuthStore, useSettingsStore } from "@/stores";
 import { useCloudStorageStore } from "@/stores/cloud-storage-store";
 
@@ -32,6 +46,8 @@ function SettingsComponent() {
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation("settings");
   const { t: tCommon } = useTranslation("common");
+  const { toast } = useToast();
+  const [isClearingStorage, setIsClearingStorage] = React.useState(false);
 
   // Cloud storage state
   const cloudSettings = useCloudStorageStore((state) => state.settings);
@@ -65,6 +81,36 @@ function SettingsComponent() {
   const handleGoBack = () => {
     // Use router history to go back to the previous page
     router.history.back();
+  };
+
+  const handleClearLocalStorage = async () => {
+    setIsClearingStorage(true);
+    try {
+      // Clear all localStorage data
+      await clearAllLocalStorage();
+
+      // Invalidate all React Query cache
+      queryClient.clear();
+
+      // Show success toast
+      toast({
+        title: "Local Storage Cleared",
+        description: "All local data has been cleared. You will be redirected to the home page.",
+      });
+
+      // Redirect to home page after a short delay
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1500);
+    } catch (error) {
+      console.error("Failed to clear localStorage:", error);
+      toast({
+        title: "Error",
+        description: "Failed to clear local storage. Please try again.",
+        variant: "destructive",
+      });
+      setIsClearingStorage(false);
+    }
   };
 
   // Get account status text
@@ -352,6 +398,62 @@ function SettingsComponent() {
                 <RotateCcw className="mr-2 h-4 w-4" />
                 {tCommon("actions.reset")}
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Clear Local Storage */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Trash2 className="h-5 w-5 text-destructive" />
+                Clear Local Storage
+              </CardTitle>
+              <CardDescription>
+                Clear all local data including resumes, profiles, settings, and authentication state.
+                This action cannot be undone.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    disabled={isClearingStorage}
+                    className="w-full sm:w-auto"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    {isClearingStorage ? "Clearing..." : "Clear All Local Storage"}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Clear All Local Storage?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will permanently delete all local data including:
+                      <ul className="list-disc list-inside mt-2 space-y-1">
+                        <li>All resumes and resume data</li>
+                        <li>All profiles</li>
+                        <li>Application settings and preferences</li>
+                        <li>Authentication state (you will be logged out)</li>
+                        <li>All cached data</li>
+                      </ul>
+                      <strong className="block mt-3 text-destructive">
+                        This action cannot be undone. Are you sure you want to continue?
+                      </strong>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel disabled={isClearingStorage}>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleClearLocalStorage}
+                      disabled={isClearingStorage}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      {isClearingStorage ? "Clearing..." : "Clear All Data"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </CardContent>
           </Card>
         </div>

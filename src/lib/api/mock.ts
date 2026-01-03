@@ -144,6 +144,27 @@ export const mockApi = {
         if (idbResumes) {
           return idbResumes;
         }
+        
+        // Don't return demo resumes from mockDb for guest mode (local storage only)
+        // Guest users should start with empty data, not demo data
+        // Check if we're in guest mode (but not demo mode)
+        try {
+          const authData = localStorage.getItem("resumier-auth");
+          if (authData) {
+            const auth = JSON.parse(authData);
+            const isGuest = auth?.state?.isGuest === true;
+            const isDemo = auth?.state?.isDemo === true;
+            
+            // If guest mode but NOT demo mode, return empty array
+            if (isGuest && !isDemo) {
+              return [];
+            }
+          }
+        } catch {
+          // Ignore errors, fall through to mockDb
+        }
+        
+        // For authenticated users or demo mode, return mockDb resumes
         return mockDb.getResumes();
       }
 
