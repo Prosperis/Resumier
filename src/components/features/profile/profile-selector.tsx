@@ -6,12 +6,7 @@
 import { Link2, Unlink, User } from "lucide-react";
 import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useProfiles } from "@/hooks/api";
