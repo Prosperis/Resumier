@@ -494,3 +494,4 @@ export function VersionIndicator({ resumeId }: VersionIndicatorProps) {
     </Tooltip>
   );
 }
+
