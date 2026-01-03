@@ -6,8 +6,8 @@
  * This component creates a multi-page view where each page appears as
  * a separate sheet of paper with gaps between them (like viewing a PDF).
  *
- * It prevents individual text blocks (paragraphs, list items) from being
- * cut in half across pages by adding minimal padding adjustments.
+ * It properly splits content across pages and ensures correct alignment
+ * at the top of each page, similar to PDF rendering.
  */
 
 import {
@@ -191,7 +191,7 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
     };
   }, [calculatePages]);
 
-  // Clone children for each page
+  // Clone children for each page - all pages share the same content structure
   const cloneChildren = useCallback(
     (pageIndex: number) => {
       if (!isValidElement(children)) return children;
@@ -224,11 +224,12 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
         {children}
       </div>
 
-      {/* Render each page as a separate container */}
+      {/* Render each page as a separate container with proper clipping */}
       {Array.from({ length: pageCount }, (_, pageIndex) => {
         const isLastPage = pageIndex === pageCount - 1;
         // For the last page, calculate how much content is visible
         const visibleContentOnLastPage = Math.max(50, lastPageContentHeight);
+        const pageTopOffset = pageIndex * PAGE_HEIGHT;
 
         return (
           <div
@@ -236,9 +237,9 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
             className="relative"
             style={{
               width: `${PAGE_WIDTH}px`,
-              height: `${PAGE_HEIGHT}px`,
-              // Use clip-path to only clip top/bottom, allowing left overflow for icons
-              clipPath: "inset(0 -10px 0 -50px)",
+              height: isLastPage ? `${visibleContentOnLastPage}px` : `${PAGE_HEIGHT}px`,
+              overflow: "hidden",
+              position: "relative",
             }}
           >
             {/* Shadow container - full page for regular pages, content height for last page */}
@@ -249,6 +250,7 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
                 height: isLastPage ? `${visibleContentOnLastPage}px` : `${PAGE_HEIGHT}px`,
                 boxShadow:
                   "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.05)",
+                zIndex: 0,
               }}
             />
 
@@ -260,18 +262,21 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
                   width: `${PAGE_WIDTH}px`,
                   top: `${visibleContentOnLastPage}px`,
                   height: `${PAGE_HEIGHT - visibleContentOnLastPage}px`,
+                  zIndex: 0,
                 }}
               />
             )}
 
             {/* Content positioned to show the correct slice for this page */}
+            {/* Content starts at top:0 of each page container, shifted up by the page offset */}
+            {/* This ensures each page shows only its portion, aligned at the top */}
             <div
-              className="absolute"
+              className="absolute top-0 left-0"
               style={{
-                top: `-${pageIndex * PAGE_HEIGHT}px`,
-                left: 0,
+                transform: `translateY(-${pageTopOffset}px)`,
                 width: `${PAGE_WIDTH}px`,
                 zIndex: 1,
+                willChange: "transform",
               }}
             >
               {cloneChildren(pageIndex)}
