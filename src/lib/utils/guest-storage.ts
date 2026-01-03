@@ -182,7 +182,7 @@ export async function migrateGuestDataToUser(userId: string): Promise<void> {
  * - IndexedDB guest data (resumes, profiles, documents)
  * - All Zustand persisted stores (auth, settings, resume, profile, etc.)
  * - Any other localStorage items
- * 
+ *
  * WARNING: This will log the user out and remove all local data!
  */
 export async function clearAllLocalStorage(): Promise<void> {
@@ -193,7 +193,7 @@ export async function clearAllLocalStorage(): Promise<void> {
     // Clear all localStorage items (including Zustand persisted stores)
     // Zustand stores use keys like "resumier-auth", "resumier-settings", etc.
     const keysToRemove: string[] = [];
-    
+
     // Get all localStorage keys
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);

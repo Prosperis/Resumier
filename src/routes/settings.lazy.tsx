@@ -409,8 +409,8 @@ function SettingsComponent() {
                 Clear Local Storage
               </CardTitle>
               <CardDescription>
-                Clear all local data including resumes, profiles, settings, and authentication state.
-                This action cannot be undone.
+                Clear all local data including resumes, profiles, settings, and authentication
+                state. This action cannot be undone.
               </CardDescription>
             </CardHeader>
             <CardContent>

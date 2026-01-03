@@ -48,7 +48,7 @@ export function useResumes() {
           // (not a stale persisted value from localStorage)
           const currentAuthState = useAuthStore.getState();
           const isCurrentlyDemo = currentAuthState.isDemo;
-          
+
           // Only seed if we're explicitly in demo mode (not just guest mode)
           if (isCurrentlyDemo) {
             console.log("Seeding demo resumes for demo mode");
