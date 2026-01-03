@@ -68,7 +68,7 @@ export const auth = betterAuth({
         "Files.ReadWrite.AppFolder",
         "offline_access",
       ],
-      tenant: "common", // Allow both personal and work/school accounts
+      tenantId: "common", // Allow both personal and work/school accounts
     },
 
     // Dropbox
@@ -98,13 +98,13 @@ export const auth = betterAuth({
   // Callbacks for customizing behavior
   callbacks: {
     // Called when a user signs in
-    async onSignIn({ user, account }) {
+    async onSignIn({ user, account }: { user: any; account: any }) {
       console.log(`User signed in: ${user.email} via ${account?.provider}`);
       return true;
     },
 
     // Called when session is created
-    async session({ session, user }) {
+    async session({ session, user }: { session: any; user: any }) {
       // Add provider info to session if available
       return {
         ...session,
@@ -117,10 +117,7 @@ export const auth = betterAuth({
   },
 
   // Advanced options
-  advanced: {
-    // Generate secure session tokens
-    generateId: () => crypto.randomUUID(),
-  },
+  advanced: {},
 });
 
 // Export auth types for use in client

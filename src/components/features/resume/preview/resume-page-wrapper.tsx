@@ -46,7 +46,7 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
     let current: Element | null = element;
 
     while (current && current !== root && current.parentElement) {
-      const parent = current.parentElement;
+      const parent: Element = current.parentElement;
       const siblings = Array.from(parent.children);
       const index = siblings.indexOf(current);
       const tagName = current.tagName.toLowerCase();

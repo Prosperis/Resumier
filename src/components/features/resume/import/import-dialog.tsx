@@ -119,7 +119,7 @@ export function ImportDialog({ trigger, onImportSuccess }: ImportDialogProps) {
         toast({
           title: hasWarnings ? "Import Completed with Warnings" : "Import Successful",
           description: hasWarnings
-            ? `Data imported, but some information is missing. ${result.warnings[0]}`
+            ? `Data imported, but some information is missing. ${result.warnings?.[0] ?? ""}`
             : `Successfully imported data from ${selectedSource.name}`,
           variant: hasWarnings ? "default" : "default",
         });

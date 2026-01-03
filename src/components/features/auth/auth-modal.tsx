@@ -27,8 +27,6 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const loginAsGuest = useAuthStore((state) => state.loginAsGuest);
   const loginAsDemo = useAuthStore((state) => state.loginAsDemo);
   const loginWithOAuth = useAuthStore((state) => state.loginWithOAuth);
-  const isLoading = useAuthStore((state) => state.isLoading);
-  const authError = useAuthStore((state) => state.error);
   const [isLoadingDemo, setIsLoadingDemo] = useState(false);
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
   const { toast } = useToast();

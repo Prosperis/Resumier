@@ -630,20 +630,6 @@ function convertToResumeContent(data: ParsedLinkedInData): {
         // Convert LinkedIn proficiency to level (1-5 scale)
         // Native/Full Professional = 5, Professional Working = 4, Limited Working = 3, Elementary = 2
         if (proficiency) {
-          let level = 3; // Default to Limited Working
-          if (
-            proficiency.toLowerCase().includes("native") ||
-            proficiency.toLowerCase().includes("full professional")
-          ) {
-            level = 5;
-          } else if (proficiency.toLowerCase().includes("professional working")) {
-            level = 4;
-          } else if (proficiency.toLowerCase().includes("limited")) {
-            level = 3;
-          } else if (proficiency.toLowerCase().includes("elementary")) {
-            level = 2;
-          }
-
           // Return as "Name (Proficiency)" string for better display
           return `${name} (${proficiency})`;
         }
