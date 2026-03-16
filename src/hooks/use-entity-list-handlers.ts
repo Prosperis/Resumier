@@ -153,4 +153,3 @@ export function useEntityListHandlers<T extends EntityWithId>({
     handleReorder,
   };
 }
-
