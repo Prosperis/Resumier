@@ -104,7 +104,9 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
             const adjustment = pageBottom - headerTop;
             orphanedSectionIndices.push({ idx: sectionIndex, adjustment });
             cumulativeAdjustment += adjustment;
-            console.warn(`[Page Break] Detected orphaned section #${sectionIndex} ("${headerText}") at ${headerTop.toFixed(0)}px, pushing by ${adjustment.toFixed(0)}px`);
+            console.warn(
+              `[Page Break] Detected orphaned section #${sectionIndex} ("${headerText}") at ${headerTop.toFixed(0)}px, pushing by ${adjustment.toFixed(0)}px`,
+            );
           }
         }
       }
@@ -113,7 +115,10 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
 
     // Build CSS for orphaned sections - use nth-of-type to target specific sections with calculated adjustments
     let orphanedSectionCSS = orphanedSectionIndices
-      .map(({ idx, adjustment }) => `section:nth-of-type(${idx + 1}) { margin-top: ${adjustment}px !important; }`)
+      .map(
+        ({ idx, adjustment }) =>
+          `section:nth-of-type(${idx + 1}) { margin-top: ${adjustment}px !important; }`,
+      )
       .join("\n");
 
     // SECOND: Handle small text-containing elements that might get cut
@@ -176,7 +181,9 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
       .join("\n");
 
     // Combine orphaned section CSS with other adjustments
-    const fullStyleString = [orphanedSectionCSS, mainStyleString].filter((css) => css.length > 0).join("\n");
+    const fullStyleString = [orphanedSectionCSS, mainStyleString]
+      .filter((css) => css.length > 0)
+      .join("\n");
     return fullStyleString;
   }, [getElementPath]);
 
