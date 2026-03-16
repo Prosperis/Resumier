@@ -167,12 +167,23 @@ function DevtoolsButton() {
 
 interface ToolSidebarProps {
   isExpanded: boolean;
+  width?: number;
+  sidebarRef?: React.RefObject<HTMLDivElement | null>;
+  isResizing?: boolean;
   onToggle: () => void;
+  onResizeStart?: (event: React.PointerEvent<HTMLDivElement>) => void;
 }
 
 type ToolTab = "history" | "versions";
 
-export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
+export function ToolSidebar({
+  isExpanded,
+  width,
+  sidebarRef,
+  isResizing = false,
+  onToggle,
+  onResizeStart,
+}: ToolSidebarProps) {
   const [activeTab, setActiveTab] = useState<ToolTab>("history");
 
   const entries = useHistoryStore(selectHistoryEntries);
@@ -216,11 +227,28 @@ export function ToolSidebar({ isExpanded, onToggle }: ToolSidebarProps) {
 
   return (
     <div
+      ref={sidebarRef}
       className={cn(
-        "group/sidebar relative flex flex-col border-l border-border bg-background transition-all duration-300 ease-in-out",
-        isExpanded ? "w-72 min-w-72" : "w-12",
+        "group/sidebar relative flex flex-col border-l border-border bg-background duration-300 ease-in-out",
+        isResizing ? "transition-none" : "transition-all",
+        isExpanded ? "" : "w-12",
       )}
+      style={isExpanded && width ? { width: `${width}px`, minWidth: `${width}px` } : undefined}
     >
+      {isExpanded && onResizeStart && (
+        <div
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize tools sidebar"
+          className={cn(
+            "absolute inset-y-0 -left-1 z-30 w-2 cursor-col-resize",
+            "before:absolute before:inset-y-0 before:left-1/2 before:w-px before:-translate-x-1/2",
+            "before:bg-border/70 hover:before:bg-primary",
+          )}
+          onPointerDown={onResizeStart}
+        />
+      )}
+
       {/* Toggle Handle - Minimal Hover Design */}
       <div
         className={cn(

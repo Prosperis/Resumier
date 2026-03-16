@@ -57,19 +57,66 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
     return path.join(" > ");
   }, []);
 
-  // Calculate adjustments for text blocks that would be cut in half
+  // Calculate adjustments for text blocks and sections that would be cut
   const calculateTextBlockAdjustments = useCallback(() => {
     if (!measureRef.current) return "";
 
     const containerRect = measureRef.current.getBoundingClientRect();
-    const adjustments: Array<{ path: string; adjustment: number }> = [];
+    const adjustments: Array<{ selector: string; adjustment: number }> = [];
     let cumulativeAdjustment = 0;
 
     // Find the resume content root (first child of measure container)
     const contentRoot = measureRef.current.firstElementChild;
     if (!contentRoot) return "";
 
-    // Find all small text-containing elements that might get cut
+    // FIRST: Handle orphaned section headers (headers near page breaks without content below)
+    const sections = measureRef.current.querySelectorAll("section");
+    const orphanedSectionIndices: Array<{ idx: number; adjustment: number }> = [];
+
+    let sectionIndex = 0;
+    for (const section of sections) {
+      const sectionRect = section.getBoundingClientRect();
+      const sectionTop = sectionRect.top - containerRect.top + cumulativeAdjustment;
+      const sectionHeight = sectionRect.height;
+      const sectionBottom = sectionTop + sectionHeight;
+
+      // Check if this section starts and ends on the same page
+      const startPage = Math.floor(sectionTop / PAGE_HEIGHT);
+      const endPage = Math.floor((sectionBottom - 1) / PAGE_HEIGHT);
+
+      // If section already spans multiple pages, skip it
+      if (startPage === endPage) {
+        const header = section.querySelector("h2");
+        if (header) {
+          const headerRect = header.getBoundingClientRect();
+          const headerTop = headerRect.top - containerRect.top + cumulativeAdjustment;
+          const headerHeight = headerRect.height;
+          const headerBottom = headerTop + headerHeight;
+          const headerText = header.textContent?.trim() || "";
+
+          // How much space is left on this page after the header?
+          const pageBottom = (startPage + 1) * PAGE_HEIGHT;
+          const spaceAfterHeader = pageBottom - headerBottom;
+          const minContentSpace = 120; // Require more space - about 5 lines minimum
+
+          // If header is too close to page bottom, push entire section to next page
+          if (spaceAfterHeader < minContentSpace) {
+            const adjustment = pageBottom - headerTop;
+            orphanedSectionIndices.push({ idx: sectionIndex, adjustment });
+            cumulativeAdjustment += adjustment;
+            console.warn(`[Page Break] Detected orphaned section #${sectionIndex} ("${headerText}") at ${headerTop.toFixed(0)}px, pushing by ${adjustment.toFixed(0)}px`);
+          }
+        }
+      }
+      sectionIndex++;
+    }
+
+    // Build CSS for orphaned sections - use nth-of-type to target specific sections with calculated adjustments
+    let orphanedSectionCSS = orphanedSectionIndices
+      .map(({ idx, adjustment }) => `section:nth-of-type(${idx + 1}) { margin-top: ${adjustment}px !important; }`)
+      .join("\n");
+
+    // SECOND: Handle small text-containing elements that might get cut
     const textElements = measureRef.current.querySelectorAll("p, li, h1, h2, h3, h4, h5, h6");
 
     // Filter to leaf-level text elements
@@ -120,15 +167,17 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
     }
 
     // Generate CSS using structural selectors that work on both hidden and visible content
-    // Target .resume-light-mode which is the consistent class on the content root
-    const styleString = adjustments
-      .map(
-        ({ path, adjustment }) =>
-          `.resume-light-mode ${path} { margin-top: ${adjustment}px !important; }`,
-      )
+    const mainStyleString = adjustments
+      .map(({ selector, path, adjustment }) => {
+        const target = selector || (path ? `.resume-light-mode ${path}` : null);
+        return target ? `${target} { margin-top: ${adjustment}px !important; }` : "";
+      })
+      .filter((css) => css.length > 0)
       .join("\n");
 
-    return styleString;
+    // Combine orphaned section CSS with other adjustments
+    const fullStyleString = [orphanedSectionCSS, mainStyleString].filter((css) => css.length > 0).join("\n");
+    return fullStyleString;
   }, [getElementPath]);
 
   // Calculate pages based on content height
@@ -273,6 +322,7 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
         return (
           <div
             key={`page-${pageIndex}`}
+            data-resume-page
             className="relative"
             style={{
               width: `${PAGE_WIDTH}px`,

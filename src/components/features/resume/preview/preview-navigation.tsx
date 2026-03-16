@@ -23,6 +23,17 @@ export function PreviewNavigation({
   rightSidebarOffsetRem = 4,
   className,
 }: PreviewNavigationProps) {
+  const getPageOffsets = () => {
+    if (!containerRef.current) return [];
+
+    const container = containerRef.current;
+    const containerRect = container.getBoundingClientRect();
+
+    return Array.from(container.querySelectorAll<HTMLElement>("[data-resume-page]"))
+      .map((page) => page.getBoundingClientRect().top - containerRect.top + container.scrollTop)
+      .sort((a, b) => a - b);
+  };
+
   // Scroll to the first page (top of document)
   const scrollToFirstPage = () => {
     containerRef.current?.scrollTo({
@@ -35,17 +46,14 @@ export function PreviewNavigation({
   const scrollToLastPage = () => {
     if (!containerRef.current) return;
 
-    // Account for padding (p-8 = 32px) and gap between pages (gap-4 = 16px)
-    const pageWithGap = PAGE_HEIGHT + 16;
-    const totalScrollHeight = containerRef.current.scrollHeight;
-
-    // Calculate total pages based on content height
-    // Subtract container padding and calculate pages
-    const totalPages = Math.ceil((totalScrollHeight - 32) / pageWithGap);
-    const lastPageIndex = Math.max(0, totalPages - 1);
+    const pageOffsets = getPageOffsets();
+    const lastPageOffset =
+      pageOffsets.length > 0
+        ? pageOffsets[pageOffsets.length - 1]
+        : Math.max(0, containerRef.current.scrollHeight - containerRef.current.clientHeight);
 
     containerRef.current.scrollTo({
-      top: lastPageIndex * pageWithGap,
+      top: lastPageOffset,
       behavior: "smooth",
     });
   };
@@ -54,10 +62,21 @@ export function PreviewNavigation({
   const scrollToPreviousPage = () => {
     if (!containerRef.current) return;
 
-    const currentScroll = containerRef.current.scrollTop;
-    // Account for padding (p-8 = 32px) and gap between pages (gap-4 = 16px)
+    const pageOffsets = getPageOffsets();
+    if (pageOffsets.length > 0) {
+      const currentScroll = containerRef.current.scrollTop;
+      const currentPage = pageOffsets.findLastIndex((offset) => offset <= currentScroll + 50);
+      const targetPage = Math.max(0, currentPage - 1);
+
+      containerRef.current.scrollTo({
+        top: pageOffsets[targetPage] ?? 0,
+        behavior: "smooth",
+      });
+      return;
+    }
+
     const pageWithGap = PAGE_HEIGHT + 16;
-    const currentPage = Math.floor((currentScroll + 50) / pageWithGap);
+    const currentPage = Math.floor((containerRef.current.scrollTop + 50) / pageWithGap);
     const targetPage = Math.max(0, currentPage - 1);
 
     containerRef.current.scrollTo({
@@ -70,8 +89,21 @@ export function PreviewNavigation({
   const scrollToNextPage = () => {
     if (!containerRef.current) return;
 
+    const pageOffsets = getPageOffsets();
+    if (pageOffsets.length > 0) {
+      const currentScroll = containerRef.current.scrollTop;
+      const nextPageOffset = pageOffsets.find((offset) => offset > currentScroll + 50);
+
+      containerRef.current.scrollTo({
+        top:
+          nextPageOffset ??
+          Math.max(0, containerRef.current.scrollHeight - containerRef.current.clientHeight),
+        behavior: "smooth",
+      });
+      return;
+    }
+
     const currentScroll = containerRef.current.scrollTop;
-    // Account for padding (p-8 = 32px) and gap between pages (gap-4 = 16px)
     const pageWithGap = PAGE_HEIGHT + 16;
     const currentPage = Math.floor((currentScroll + 50) / pageWithGap);
     const maxScroll = containerRef.current.scrollHeight - containerRef.current.clientHeight;

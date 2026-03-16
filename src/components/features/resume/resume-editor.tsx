@@ -22,6 +22,21 @@ import { InteractiveResumePreview } from "./preview/interactive-resume-preview";
 import { ResumeBuilder } from "./resume-builder";
 import { ToolSidebar } from "./tool-sidebar";
 import { PreviewNavigation } from "./preview/preview-navigation";
+import { PAGE_WIDTH } from "./preview/resume-page-wrapper";
+
+const PREVIEW_HORIZONTAL_PADDING = 64;
+const LEFT_SIDEBAR_DEFAULT_WIDTH = 320;
+const LEFT_SIDEBAR_MIN_WIDTH = 280;
+const LEFT_SIDEBAR_MAX_WIDTH = 440;
+const RIGHT_SIDEBAR_DEFAULT_WIDTH = 288;
+const RIGHT_SIDEBAR_MIN_WIDTH = 240;
+const RIGHT_SIDEBAR_MAX_WIDTH = 420;
+
+type ResizeSide = "left" | "right";
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
 
 // Sidebar section icons mapping
 const sidebarSections = [
@@ -45,10 +60,24 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
   // Sidebar state
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const [isToolSidebarExpanded, setIsToolSidebarExpanded] = useState(false);
-  const toolSidebarOffsetRem = isToolSidebarExpanded ? 19 : 4;
+  const [leftSidebarWidth, setLeftSidebarWidth] = useState(LEFT_SIDEBAR_DEFAULT_WIDTH);
+  const [rightSidebarWidth, setRightSidebarWidth] = useState(RIGHT_SIDEBAR_DEFAULT_WIDTH);
+  const [activeResize, setActiveResize] = useState<{
+    side: ResizeSide;
+    pointerId: number;
+    startX: number;
+    startWidth: number;
+  } | null>(null);
+  const toolSidebarOffsetRem = isToolSidebarExpanded ? rightSidebarWidth / 16 + 1 : 4;
+
+  const leftSidebarRef = useRef<HTMLDivElement>(null);
+  const previewScaleRef = useRef<HTMLDivElement>(null);
+  const pendingResizeWidthRef = useRef<number | null>(null);
+  const resizeFrameRef = useRef<number | null>(null);
 
   // Ref for the preview container (for navigation)
   const previewContainerRef = useRef<HTMLDivElement>(null);
+  const rightSidebarRef = useRef<HTMLDivElement>(null);
 
   // Set/clear the current resume for navbar actions
   // Note: Keyboard shortcuts for undo/redo are handled globally by GlobalUndoProvider
@@ -56,6 +85,125 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
     setCurrentResume(resume);
     return () => setCurrentResume(null);
   }, [resume, setCurrentResume]);
+
+  useEffect(() => {
+    const container = previewContainerRef.current;
+    if (!container) return;
+
+    const updatePreviewScale = () => {
+      const availableWidth = Math.max(0, container.clientWidth - PREVIEW_HORIZONTAL_PADDING);
+      const nextScale = availableWidth > 0 ? Math.min(1, availableWidth / PAGE_WIDTH) : 1;
+      if (previewScaleRef.current) {
+        previewScaleRef.current.style.zoom = `${nextScale}`;
+      }
+    };
+
+    updatePreviewScale();
+
+    const resizeObserver = new ResizeObserver(updatePreviewScale);
+    resizeObserver.observe(container);
+    window.addEventListener("resize", updatePreviewScale);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updatePreviewScale);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!activeResize) return;
+
+    const applyResizedWidth = (width: number) => {
+      const sidebar =
+        activeResize.side === "left" ? leftSidebarRef.current : rightSidebarRef.current;
+      if (!sidebar) return;
+
+      sidebar.style.width = `${width}px`;
+      sidebar.style.minWidth = `${width}px`;
+    };
+
+    const flushPendingResize = () => {
+      resizeFrameRef.current = null;
+      if (pendingResizeWidthRef.current === null) return;
+      applyResizedWidth(pendingResizeWidthRef.current);
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const nextWidth =
+        activeResize.side === "left"
+          ? clamp(
+              activeResize.startWidth + (event.clientX - activeResize.startX),
+              LEFT_SIDEBAR_MIN_WIDTH,
+              LEFT_SIDEBAR_MAX_WIDTH,
+            )
+          : clamp(
+              activeResize.startWidth - (event.clientX - activeResize.startX),
+              RIGHT_SIDEBAR_MIN_WIDTH,
+              RIGHT_SIDEBAR_MAX_WIDTH,
+            );
+
+      pendingResizeWidthRef.current = nextWidth;
+      if (resizeFrameRef.current === null) {
+        resizeFrameRef.current = window.requestAnimationFrame(flushPendingResize);
+      }
+    };
+
+    const handlePointerUp = (event: PointerEvent) => {
+      if (event.pointerId === activeResize.pointerId) {
+        if (resizeFrameRef.current !== null) {
+          window.cancelAnimationFrame(resizeFrameRef.current);
+          flushPendingResize();
+        }
+
+        const finalWidth = pendingResizeWidthRef.current ?? activeResize.startWidth;
+        if (activeResize.side === "left") {
+          setLeftSidebarWidth(finalWidth);
+        } else {
+          setRightSidebarWidth(finalWidth);
+        }
+
+        pendingResizeWidthRef.current = null;
+        setActiveResize(null);
+      }
+    };
+
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "col-resize";
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerUp);
+
+    return () => {
+      if (resizeFrameRef.current !== null) {
+        window.cancelAnimationFrame(resizeFrameRef.current);
+        resizeFrameRef.current = null;
+      }
+      pendingResizeWidthRef.current = null;
+      document.body.style.userSelect = "";
+      document.body.style.cursor = "";
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
+    };
+  }, [activeResize]);
+
+  const handleLeftResizeStart = (event: React.PointerEvent<HTMLDivElement>) => {
+    setActiveResize({
+      side: "left",
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startWidth: leftSidebarWidth,
+    });
+  };
+
+  const handleRightResizeStart = (event: React.PointerEvent<HTMLDivElement>) => {
+    setActiveResize({
+      side: "right",
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startWidth: rightSidebarWidth,
+    });
+  };
 
   // Handle clicking a section icon - opens that section and expands sidebar
   const handleSectionClick = (sectionId: string) => {
@@ -79,11 +227,32 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
     <div className="flex h-full">
       {/* Collapsible Sidebar */}
       <div
+        ref={leftSidebarRef}
         className={cn(
-          "group/sidebar relative flex flex-col border-r border-border bg-background transition-all duration-300 ease-in-out",
-          isSidebarExpanded ? "w-80 min-w-80" : "w-12",
+          "group/sidebar relative flex flex-col border-r border-border bg-background duration-300 ease-in-out",
+          activeResize?.side === "left" ? "transition-none" : "transition-all",
+          isSidebarExpanded ? "" : "w-12",
         )}
+        style={
+          isSidebarExpanded
+            ? { width: `${leftSidebarWidth}px`, minWidth: `${leftSidebarWidth}px` }
+            : undefined
+        }
       >
+        {isSidebarExpanded && (
+          <div
+            role="separator"
+            aria-orientation="vertical"
+            aria-label="Resize editor sidebar"
+            className={cn(
+              "absolute inset-y-0 -right-1 z-30 w-2 cursor-col-resize",
+              "before:absolute before:inset-y-0 before:left-1/2 before:w-px before:-translate-x-1/2",
+              "before:bg-border/70 hover:before:bg-primary",
+            )}
+            onPointerDown={handleLeftResizeStart}
+          />
+        )}
+
         {/* Expand/Collapse Arrow - Minimal Hover Design */}
         <div
           className={cn(
@@ -163,12 +332,16 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
       <div
         ref={previewContainerRef}
         className={cn(
-          "flex-1 flex items-start justify-center bg-slate-200 dark:bg-slate-800 overflow-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] p-8",
+          "min-w-0 flex-1 flex items-start justify-center bg-slate-200 dark:bg-slate-800 overflow-auto scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] p-8",
           "[background-image:radial-gradient(circle,_rgba(148,163,184,0.4)_1px,_transparent_1px)] dark:[background-image:radial-gradient(circle,_rgba(71,85,105,0.5)_1px,_transparent_1px)]",
           "[background-size:16px_16px]",
         )}
       >
-        <InteractiveResumePreview resume={resume} template={template} isInteractive={true} />
+        <div className="flex w-full justify-center">
+          <div ref={previewScaleRef} style={{ zoom: 1 }}>
+            <InteractiveResumePreview resume={resume} template={template} isInteractive={true} />
+          </div>
+        </div>
 
         {/* Floating navigation buttons */}
         <PreviewNavigation
@@ -178,7 +351,14 @@ export function ResumeEditor({ resume }: ResumeEditorProps) {
       </div>
 
       {/* Right Sidebar: Tools */}
-      <ToolSidebar isExpanded={isToolSidebarExpanded} onToggle={handleToggleToolSidebar} />
+      <ToolSidebar
+        isExpanded={isToolSidebarExpanded}
+        width={rightSidebarWidth}
+        sidebarRef={rightSidebarRef}
+        isResizing={activeResize?.side === "right"}
+        onToggle={handleToggleToolSidebar}
+        onResizeStart={handleRightResizeStart}
+      />
     </div>
   );
 }
