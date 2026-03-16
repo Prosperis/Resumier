@@ -205,8 +205,47 @@ export function ResumePageWrapper({ children, className }: ResumePageWrapperProp
 
   return (
     <div className={cn("relative flex flex-col items-center gap-4", className)}>
-      {/* Inject adjustment styles to prevent text from being cut */}
-      {adjustmentStyles && <style dangerouslySetInnerHTML={{ __html: adjustmentStyles }} />}
+      {/* Inject page break prevention styles */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            /* Prevent sections from breaking inside (keeps header + content together) */
+            section {
+              break-inside: avoid;
+              page-break-inside: avoid;
+            }
+
+            /* Prevent section headers from breaking away from content */
+            section h2,
+            div > h2 {
+              break-after: avoid;
+              page-break-after: avoid;
+              orphans: 3;
+              widows: 3;
+            }
+
+            /* Prevent individual items from breaking if possible */
+            section > div > div {
+              break-inside: avoid;
+              page-break-inside: avoid;
+            }
+
+            /* Prevent containers from breaking (for non-section templates) */
+            .resume-light-mode > div {
+              break-inside: avoid;
+              page-break-inside: avoid;
+            }
+
+            /* Allow list items to break if the container does */
+            li {
+              break-inside: auto;
+              page-break-inside: auto;
+            }
+
+            ${adjustmentStyles}
+          `,
+        }}
+      />
 
       {/* Hidden measurement container - positioned outside visible area */}
       <div

@@ -12,11 +12,17 @@ import { PAGE_HEIGHT } from "./resume-page-wrapper";
 interface PreviewNavigationProps {
   /** Reference to the scrollable container */
   containerRef: React.RefObject<HTMLDivElement | null>;
+  /** Width of the right sidebar in rem so the controls can stay clear of it */
+  rightSidebarOffsetRem?: number;
   /** Optional additional className */
   className?: string;
 }
 
-export function PreviewNavigation({ containerRef, className }: PreviewNavigationProps) {
+export function PreviewNavigation({
+  containerRef,
+  rightSidebarOffsetRem = 4,
+  className,
+}: PreviewNavigationProps) {
   // Scroll to the first page (top of document)
   const scrollToFirstPage = () => {
     containerRef.current?.scrollTo({
@@ -94,7 +100,10 @@ export function PreviewNavigation({ containerRef, className }: PreviewNavigation
   );
 
   return (
-    <div className={cn("fixed bottom-6 right-28 z-50", "flex flex-col gap-1", className)}>
+    <div
+      className={cn("fixed bottom-6 z-50 flex flex-col gap-1", className)}
+      style={{ right: `${rightSidebarOffsetRem}rem` }}
+    >
       {/* Jump to First Page */}
       <Tooltip delayDuration={300}>
         <TooltipTrigger asChild>

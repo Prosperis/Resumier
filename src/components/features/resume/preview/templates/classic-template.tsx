@@ -40,7 +40,7 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
 
       {/* Summary */}
       {personalInfo.summary && (
-        <section className="mb-6">
+        <section className="mb-6" style={{ breakInside: "avoid" }}>
           <h2 className="mb-2 border-b border-black text-lg font-bold uppercase">
             Professional Summary
           </h2>
@@ -56,7 +56,7 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
           exp.description ||
           (exp.highlights && exp.highlights.length > 0),
       ).length > 0 && (
-        <section className="mb-6">
+        <section className="mb-6" style={{ breakInside: "avoid" }}>
           <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">
             Professional Experience
           </h2>
@@ -98,7 +98,7 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
 
       {/* Education */}
       {education.filter((edu) => edu.degree || edu.institution || edu.field).length > 0 && (
-        <section className="mb-6">
+        <section className="mb-6" style={{ breakInside: "avoid" }}>
           <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">Education</h2>
           <div className="space-y-3">
             {education
@@ -136,7 +136,7 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
         skills.languages?.length > 0 ||
         skills.tools?.length > 0 ||
         skills.soft?.length > 0) && (
-        <section className="mb-6">
+        <section className="mb-6" style={{ breakInside: "avoid" }}>
           <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">Skills</h2>
           <div className="space-y-2">
             {skills.technical && skills.technical.length > 0 && (
@@ -169,7 +169,7 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
 
       {/* Certifications */}
       {certifications.filter((cert) => cert.name || cert.issuer || cert.date).length > 0 && (
-        <section className="mb-6">
+        <section className="mb-6" style={{ breakInside: "avoid" }}>
           <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">Certifications</h2>
           <div className="space-y-2">
             {certifications
@@ -191,7 +191,7 @@ export function ClassicTemplate({ resume }: ClassicTemplateProps) {
 
       {/* Links */}
       {links.filter((link) => link.label || link.url).length > 0 && (
-        <section className="mb-6">
+        <section className="mb-6" style={{ breakInside: "avoid" }}>
           <h2 className="mb-3 border-b border-black text-lg font-bold uppercase">
             Professional Links
           </h2>

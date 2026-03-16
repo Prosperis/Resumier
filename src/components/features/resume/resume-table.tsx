@@ -139,7 +139,11 @@ export function ResumeTable({ resumes, onEdit, onDuplicate }: ResumeTableProps) 
                     onEdit={onEdit}
                     onDuplicate={onDuplicate}
                   >
-                    <TableRow data-state={row.getIsSelected() && "selected"}>
+                    <TableRow
+                      data-state={row.getIsSelected() && "selected"}
+                      onDoubleClick={() => onEdit(resume)}
+                      className="cursor-pointer"
+                    >
                       {row.getVisibleCells().map((cell) => {
                         const isSelect = cell.column.id === "select";
                         const isTitle = cell.column.id === "title";
