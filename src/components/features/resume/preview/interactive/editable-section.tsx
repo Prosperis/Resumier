@@ -356,11 +356,11 @@ export function SectionWrapper({
       )}
 
       {/* Invisible hover bridge - extends hover area to include the controls */}
-      <div className="absolute -left-12 top-0 bottom-0 w-12 pointer-events-auto" />
+      <div className="absolute -left-8 top-0 bottom-0 w-8 pointer-events-auto" />
       {/* Section management controls - appear on the left on hover */}
       <div
         className={cn(
-          "absolute -left-10 top-0 bottom-0 flex flex-col items-center justify-start pt-1 gap-0.5",
+          "absolute -left-7 top-0 bottom-0 flex flex-col items-center justify-start pt-1 gap-0.5",
           "opacity-0 group-hover/section:opacity-100 transition-opacity",
           "pointer-events-auto",
           isDragging && "opacity-100",
